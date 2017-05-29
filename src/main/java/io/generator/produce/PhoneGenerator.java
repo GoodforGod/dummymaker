@@ -1,7 +1,5 @@
-package io.generator.stock;
+package io.generator.produce;
 
-
-import io.generator.IGenerator;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 

@@ -1,4 +1,4 @@
-package io.generator.stock;
+package io.generator.produce;
 
 
 import java.util.concurrent.ThreadLocalRandom;

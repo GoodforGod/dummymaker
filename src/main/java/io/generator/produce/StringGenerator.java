@@ -1,6 +1,4 @@
-package io.generator.stock;
-
-import io.generator.IGenerator;
+package io.generator.produce;
 
 import java.util.UUID;
 

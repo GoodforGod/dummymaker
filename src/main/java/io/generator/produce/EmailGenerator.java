@@ -1,4 +1,4 @@
-package io.generator.stock;
+package io.generator.produce;
 
 /**
  * Default Comment
@@ -6,9 +6,8 @@ package io.generator.stock;
  * @author @GoodforGod
  * @since 26.05.2017
  */
-public class NameGenerator extends StringGenerator {
+public class EmailGenerator extends StringGenerator {
 
-    @Override
     public String generate() {
         return null;
     }
