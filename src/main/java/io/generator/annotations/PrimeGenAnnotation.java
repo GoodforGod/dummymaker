@@ -1,12 +1,9 @@
 package io.generator.annotations;
 
 import io.generator.produce.IGenerator;
-import io.generator.produce.StringGenerator;
+import io.generator.produce.NullGenerator;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Default Comment
@@ -14,8 +11,9 @@ import java.lang.annotation.Target;
  * @author @GoodforGod
  * @since 28.05.2017
  */
-@Target(value = ElementType.ANNOTATION_TYPE)
+@Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
+@Target(value = ElementType.ANNOTATION_TYPE)
 public @interface PrimeGenAnnotation {
-    Class<? extends IGenerator> value() default StringGenerator.class;
+    Class<? extends IGenerator> value() default NullGenerator.class;
 }

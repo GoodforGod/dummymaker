@@ -15,6 +15,12 @@ public class EntityGenFactory<T> implements IGenFactory<T>, IPopulator<T> {
 
     private final GenPopulator<T> populateFactory = new GenPopulator<>();
 
+    private Class<T> primeClass;
+
+    public EntityGenFactory(Class<T> primeClass) {
+        this.primeClass = primeClass;
+    }
+
     @Override
     public T populate(T t) {
         return populateFactory.populate(t);
@@ -22,8 +28,15 @@ public class EntityGenFactory<T> implements IGenFactory<T>, IPopulator<T> {
 
     @Override
     public T produce() {
+        T instance = null;
 
-        return null;
+        try {
+            instance = primeClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return instance;
     }
 
     @Override

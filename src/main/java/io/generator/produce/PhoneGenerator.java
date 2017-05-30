@@ -9,7 +9,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * @author @GoodforGod
  * @since 26.05.2017
  */
-public class PhoneGenerator implements IGenerator<String> {
+public class PhoneGenerator extends StringGenerator {
 
     @Override
     public String generate() {
