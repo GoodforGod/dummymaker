@@ -3,7 +3,9 @@ package io.generator.scan;
 import io.generator.annotations.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -15,9 +17,10 @@ import java.util.stream.Collectors;
 public class GenAnnotationScanner extends AnnotationScanner {
 
     @Override
-    public List<Annotation> scan(Class t) {
-        return super.scan(t).stream()
-                .filter(a -> a.annotationType().isAnnotationPresent(PrimeGenAnnotation.class))
-                .collect(Collectors.toList());
+    public Map<Field, Set<Annotation>> scan(Class t) {
+        return super.scan(t).entrySet().stream()
+                .filter(set -> set.getValue()
+                        .stream().anyMatch(a -> a.getClass().equals(PrimeGenAnnotation.class)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

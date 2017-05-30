@@ -1,7 +1,9 @@
 package io.generator.scan;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Default Comment
@@ -10,5 +12,5 @@ import java.util.List;
  * @since 30.05.2017
  */
 public interface IScanner {
-    List<Annotation> scan(Class t);
+    Map<Field, Set<Annotation>> scan(Class t);
 }
