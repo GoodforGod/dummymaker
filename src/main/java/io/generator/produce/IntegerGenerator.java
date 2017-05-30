@@ -14,5 +14,4 @@ public class IntegerGenerator implements IGenerator<Integer> {
     public Integer generate() {
         return ThreadLocalRandom.current().nextInt();
     }
-
 }

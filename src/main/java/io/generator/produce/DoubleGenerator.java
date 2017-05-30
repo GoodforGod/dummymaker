@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class DoubleGenerator implements IGenerator<Double> {
 
+    @Override
     public Double generate() {
         return ThreadLocalRandom.current().nextDouble();
     }

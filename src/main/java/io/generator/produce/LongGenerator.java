@@ -14,5 +14,4 @@ public class LongGenerator implements IGenerator<Long> {
     public Long generate() {
         return ThreadLocalRandom.current().nextLong();
     }
-
 }

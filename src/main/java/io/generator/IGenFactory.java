@@ -8,8 +8,8 @@ import java.util.List;
  * @author @GoodforGod
  * @since 28.05.2017
  */
-public interface IGeneratorFactory<T> {
-    T produce(T t);
+public interface IGenFactory<T> {
+    T produce();
 
-    List<T> produce(T t, int amount);
+    List<T> produce(int amount);
 }

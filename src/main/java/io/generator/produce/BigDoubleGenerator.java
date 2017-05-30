@@ -1,5 +1,7 @@
 package io.generator.produce;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
+
 /**
  * Default Comment
  *
@@ -8,8 +10,8 @@ package io.generator.produce;
  */
 public class BigDoubleGenerator extends DoubleGenerator {
 
+    @Override
     public Double generate() {
-        return super.generate() * 1000000;
+        return super.generate() * current().nextInt(100, 1000000);
     }
-
 }

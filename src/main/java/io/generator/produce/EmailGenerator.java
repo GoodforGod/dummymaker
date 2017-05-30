@@ -8,6 +8,7 @@ package io.generator.produce;
  */
 public class EmailGenerator extends StringGenerator {
 
+    @Override
     public String generate() {
         return null;
     }

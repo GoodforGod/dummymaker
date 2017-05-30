@@ -12,6 +12,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class DateGenerator implements IGenerator<LocalDateTime> {
 
+    @Override
     public LocalDateTime generate() {
         int year        = current().nextInt(1970, 3000);
         int month       = current().nextInt(1, 12);
@@ -23,5 +24,4 @@ public class DateGenerator implements IGenerator<LocalDateTime> {
 
         return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond);
     }
-
 }
