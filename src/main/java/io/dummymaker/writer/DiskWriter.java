@@ -4,7 +4,7 @@ import io.dummymaker.export.ExportType;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Default Comment
@@ -12,41 +12,26 @@ import java.util.List;
  * @author @GoodforGod
  * @since 31.05.2017
  */
-public class DiskWriter<T> implements IWriter<T> {
+public class DiskWriter<T> implements IWriter {
 
-    private Class<T> primeClass;
+    private BufferedWriter writer = null;
 
-    private DiskWriter() { }
-
-    public DiskWriter(Class<T> primeClass) {
-        this.primeClass = primeClass;
-    }
-
-    @Override
-    public boolean flush(T t, ExportType type) {
-        return false;
-    }
-
-    @Override
-    public boolean flush(List<T> t, ExportType type) {
-        return false;
-    }
-
-    @Override
-    public boolean flush(String str, ExportType type) {
-
+    public DiskWriter(Class<T> primeClass, String path, ExportType type) throws IOException {
         String fileType = (type != null)
                 ? type.getType()
                 : ".exported";
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("\\" + primeClass.getName() + fileType));
-            writer.write(str);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.writer = new BufferedWriter(new FileWriter(path + primeClass.getName() + fileType));
+    }
 
-        return false;
+    @Override
+    public void writeLine(String value) throws IOException, NullPointerException {
+        writer.write(value);
+        writer.newLine();
+    }
+
+    @Override
+    public void flush() throws IOException, NullPointerException {
+        writer.close();
     }
 }

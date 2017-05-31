@@ -1,8 +1,6 @@
 package io.dummymaker.writer;
 
-import io.dummymaker.export.ExportType;
-
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Default Comment
@@ -10,10 +8,9 @@ import java.util.List;
  * @author @GoodforGod
  * @since 31.05.2017
  */
-public interface IWriter<T> {
-    boolean flush(T t, ExportType type);
+public interface IWriter {
 
-    boolean flush(List<T> t, ExportType type);
+    void writeLine(String value) throws IOException;
 
-    boolean flush(String value, ExportType type);
+    void flush() throws IOException;
 }

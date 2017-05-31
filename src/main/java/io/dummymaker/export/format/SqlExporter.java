@@ -1,7 +1,9 @@
 package io.dummymaker.export.format;
 
+import io.dummymaker.export.ExportType;
 import io.dummymaker.export.IAbstractExporter;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,21 +33,25 @@ public class SqlExporter<T> extends IAbstractExporter<T> {
     }
 
     private String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `$0` ($1)";
-
     private String SQL_INSERT = "INSERT INTO `$0` (`$1`) VALUES";
 
-    public SqlExporter(Class<T> primeClass) {
-        super(primeClass);
+    public SqlExporter(Class<T> primeClass) throws IOException {
+        super(primeClass, "~/", ExportType.SQL);
+    }
+
+    public SqlExporter(Class<T> primeClass, String path) throws IOException {
+        super(primeClass, path, ExportType.SQL);
     }
 
     @Override
-    public String export(T t) {
-        return null;
+    public boolean export(T t) {
+
+        return false;
     }
 
     @Override
-    public String export(List<T> t) {
+    public boolean export(List<T> t) {
 
-        return null;
+        return false;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  * @since 26.05.2017
  */
 public interface IExporter<T> {
-    String export(T t);
+    boolean export(T t);
 
-    String export(List<T> t);
+    boolean export(List<T> t);
 }

@@ -1,5 +1,8 @@
 package io.dummymaker.export;
 
+import io.dummymaker.writer.DiskWriter;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -8,19 +11,18 @@ import java.util.List;
  * @author @GoodforGod
  * @since 31.05.2017
  */
-public abstract class IAbstractExporter<T> implements IExporter<T> {
+public abstract class IAbstractExporter<T> extends DiskWriter<T> implements IExporter<T> {
 
     protected Class<T> primeClass;
 
-    private IAbstractExporter() { }
-
-    public IAbstractExporter(Class<T> primeClass) {
+    public IAbstractExporter(Class<T> primeClass, String path, ExportType type) throws IOException {
+        super(primeClass, path, type);
         this.primeClass = primeClass;
     }
 
     @Override
-    public abstract String export(T t);
+    public abstract boolean export(T t);
 
     @Override
-    public abstract String export(List<T> t);
+    public abstract boolean export(List<T> t);
 }

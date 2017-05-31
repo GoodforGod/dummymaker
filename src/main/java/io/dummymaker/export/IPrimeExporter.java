@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface IPrimeExporter<T> {
     boolean export(T t, ExportType type);
+    boolean export(T t, String path, ExportType type);
 
     boolean export(List<T> t, ExportType type);
+    boolean export(List<T> t, String path, ExportType type);
 }

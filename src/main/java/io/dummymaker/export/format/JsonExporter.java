@@ -1,7 +1,7 @@
 package io.dummymaker.export.format;
 
+import io.dummymaker.export.ExportType;
 import io.dummymaker.export.IAbstractExporter;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,23 +14,24 @@ import java.util.List;
  */
 public class JsonExporter<T> extends IAbstractExporter<T> {
 
-    public JsonExporter(Class<T> primeClass) {
-        super(primeClass);
+    public JsonExporter(Class<T> primeClass) throws IOException {
+        super(primeClass, "~/", ExportType.JSON);
+    }
+
+    public JsonExporter(Class<T> primeClass, String path) throws IOException {
+        super(primeClass, path, ExportType.JSON);
     }
 
     @Override
-    public String export(T t) {
-        try {
-            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(t);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean export(T t) {
 
-        return null;
+        return false;
     }
 
     @Override
-    public String export(List<T> t) {
-        return null;
+    public boolean export(List<T> t) {
+
+        return false;
     }
+
 }
