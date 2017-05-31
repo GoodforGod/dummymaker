@@ -1,4 +1,6 @@
-package io.dummymaker.export;
+package io.dummymaker.export.format;
+
+import io.dummymaker.export.IExporter;
 
 /**
  * Default Comment

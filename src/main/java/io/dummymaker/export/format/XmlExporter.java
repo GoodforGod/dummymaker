@@ -1,4 +1,6 @@
-package io.dummymaker.export;
+package io.dummymaker.export.format;
+
+import io.dummymaker.export.IExporter;
 
 /**
  * Default Comment
@@ -6,7 +8,7 @@ package io.dummymaker.export;
  * @author @GoodforGod
  * @since 26.05.2017
  */
-public class JsonExporter<T> implements IExporter<T> {
+public class XmlExporter<T> implements IExporter<T> {
 
     @Override
     public String export(T t) {
