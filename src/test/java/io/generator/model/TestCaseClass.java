@@ -1,4 +1,4 @@
-package io.generator;
+package io.generator.model;
 
 import io.generator.annotation.GenDouble;
 import io.generator.annotation.GenString;

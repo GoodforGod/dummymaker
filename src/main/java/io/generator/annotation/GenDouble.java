@@ -1,5 +1,6 @@
-package io.generator.annotations;
+package io.generator.annotation;
 
+import io.generator.annotation.prime.PrimeGenAnnotation;
 import io.generator.produce.DoubleGenerator;
 
 import java.lang.annotation.ElementType;

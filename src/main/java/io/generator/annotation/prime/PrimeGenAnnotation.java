@@ -1,4 +1,4 @@
-package io.generator.annotations;
+package io.generator.annotation.prime;
 
 import io.generator.produce.IGenerator;
 import io.generator.produce.NullGenerator;

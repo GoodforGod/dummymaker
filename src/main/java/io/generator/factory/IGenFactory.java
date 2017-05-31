@@ -1,4 +1,4 @@
-package io.generator;
+package io.generator.factory;
 
 import java.util.List;
 

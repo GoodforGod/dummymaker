@@ -1,8 +1,9 @@
-package io.generator;
+package io.generator.factory;
 
 import io.generator.populate.GenPopulator;
 import io.generator.populate.IPopulator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class EntityGenFactory<T> implements IGenFactory<T>, IPopulator<T> {
 
-    private final GenPopulator<T> populateFactory = new GenPopulator<>();
+    private final IPopulator<T> populateFactory = new GenPopulator<>();
 
     private Class<T> primeClass;
 
@@ -31,7 +32,7 @@ public class EntityGenFactory<T> implements IGenFactory<T>, IPopulator<T> {
         T instance = null;
 
         try {
-            instance = primeClass.newInstance();
+            instance = populate(primeClass.newInstance());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,7 +42,19 @@ public class EntityGenFactory<T> implements IGenFactory<T>, IPopulator<T> {
 
     @Override
     public List<T> produce(int amount) {
+        List<T> produced = new ArrayList<>();
 
-        return null;
+        int realAmount = (amount > 0) ? amount : 0;
+
+        while (realAmount > 0) {
+            T t = produce();
+
+            if(t != null)
+                produced.add(t);
+
+            realAmount--;
+        }
+
+        return produced;
     }
 }

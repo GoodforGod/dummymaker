@@ -1,11 +1,12 @@
 package io.generator.scan;
 
-import io.generator.annotations.PrimeGenAnnotation;
+import io.generator.annotation.prime.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -16,11 +17,22 @@ import java.util.stream.Collectors;
  */
 public class GenAnnotationScanner extends AnnotationScanner {
 
+    private Predicate<Annotation> primePredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
+
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
-        return super.scan(t).entrySet().stream()
-                .filter(set -> set.getValue()
-                        .stream().anyMatch(a -> a.getClass().equals(PrimeGenAnnotation.class)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+
+        return (!mapToFilter.isEmpty())
+                    ? mapToFilter.entrySet().stream()
+                        .filter(set -> set.getValue()
+                                .stream().anyMatch(primePredicate))
+                        .map(set -> {
+                            set.setValue(set.getValue().stream().filter(primePredicate).collect(Collectors.toSet()));
+                            return set;
+                        })
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+
+                    : mapToFilter;
     }
 }

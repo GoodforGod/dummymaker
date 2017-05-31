@@ -1,17 +1,19 @@
 package io.generator;
 
+import io.generator.factory.EntityGenFactory;
+
 /**
- * Hello world!
+ * Hello Generator Factory!
  *
  */
 public class App {
 
     public static void main( String[] args ) {
 
-        TestCaseClass a = new TestCaseClass();
         EntityGenFactory<TestCaseClass> factory = new EntityGenFactory<>(TestCaseClass.class);
 
-        a = factory.populate(a);
+        TestCaseClass a = factory.populate(new TestCaseClass());
+        TestCaseClass t = factory.produce();
 
         System.out.println( "Hello World!" );
     }

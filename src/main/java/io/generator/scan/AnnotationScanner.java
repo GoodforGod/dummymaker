@@ -39,7 +39,7 @@ public class AnnotationScanner implements IScanner {
             }
         }
 
-        return null;
+        return map;
     }
 
     private Set<Annotation> createNode(Annotation a) {

@@ -12,6 +12,6 @@ public class StringGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return UUID.randomUUID().toString().replace('-', ' ');
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }

@@ -1,6 +1,7 @@
-package io.generator.annotations;
+package io.generator.annotation;
 
 
+import io.generator.annotation.prime.PrimeGenAnnotation;
 import io.generator.produce.StringGenerator;
 
 import java.lang.annotation.ElementType;
