@@ -6,11 +6,11 @@ import java.util.ArrayList;
  * Default Comment
  *
  * @author @GoodforGod
- * @since 30.05.2017
+ * @since 31.05.2017
  */
-class SurnamePresetBundle extends IPresetBundle<String> {
+public class EmailEndingPresetBundle extends IPresetBundle<String> {
 
-    public SurnamePresetBundle() {
+    public EmailEndingPresetBundle() {
         super(new ArrayList<String>() {{
             add("");
         }});

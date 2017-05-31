@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author @GoodforGod
  * @since 30.05.2017
  */
-class SurnamePresetBundle extends IPresetBundle<String> {
+class EmailPrefixPresetBundle extends IPresetBundle<String> {
 
-    public SurnamePresetBundle() {
+    public EmailPrefixPresetBundle() {
         super(new ArrayList<String>() {{
             add("");
         }});
