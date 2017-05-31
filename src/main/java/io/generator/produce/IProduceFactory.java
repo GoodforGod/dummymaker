@@ -1,4 +1,4 @@
-package io.generator.factory;
+package io.generator.produce;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author @GoodforGod
  * @since 28.05.2017
  */
-public interface IGenFactory<T> {
+public interface IProduceFactory<T> {
     T produce();
 
     List<T> produce(int amount);

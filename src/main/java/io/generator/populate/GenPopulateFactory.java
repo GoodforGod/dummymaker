@@ -5,8 +5,10 @@ import io.generator.scan.GenAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Default Comment
@@ -14,7 +16,7 @@ import java.util.Set;
  * @author @GoodforGod
  * @since 30.05.2017
  */
-public class GenPopulator<T> implements IPopulator<T> {
+public class GenPopulateFactory<T> implements IPopulateFactory<T> {
 
     private final GenAnnotationScanner genScanner = new GenAnnotationScanner();
 
@@ -33,5 +35,10 @@ public class GenPopulator<T> implements IPopulator<T> {
         }
 
         return t;
+    }
+
+    @Override
+    public List<T> populate(List<T> t) {
+        return t.stream().map(this::populate).collect(Collectors.toList());
     }
 }

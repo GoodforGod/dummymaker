@@ -4,8 +4,8 @@ package io.generator.produce;
  * Default Comment
  *
  * @author @GoodforGod
- * @since 26.05.2017
+ * @since 31.05.2017
  */
-public interface IGenerator<T> {
-    public T generate();
+public class TestGenFactory {
+
 }

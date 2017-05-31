@@ -1,7 +1,7 @@
 package io.generator.annotation.prime;
 
-import io.generator.produce.IGenerator;
-import io.generator.produce.NullGenerator;
+import io.generator.generate.IGenerator;
+import io.generator.generate.NullGenerator;
 
 import java.lang.annotation.*;
 

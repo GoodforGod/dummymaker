@@ -1,6 +1,6 @@
 package io.generator;
 
-import io.generator.factory.EntityGenFactory;
+import java.util.List;
 
 /**
  * Hello Generator Factory!
@@ -10,10 +10,10 @@ public class App {
 
     public static void main( String[] args ) {
 
-        EntityGenFactory<TestCaseClass> factory = new EntityGenFactory<>(TestCaseClass.class);
+        IPrimeFactory<TestCaseClass> factory = new GenPrimeFactory<>(TestCaseClass.class);
 
-        TestCaseClass a = factory.populate(new TestCaseClass());
         TestCaseClass t = factory.produce();
+        List<TestCaseClass> tList = factory.produce(10);
 
         System.out.println( "Hello World!" );
     }

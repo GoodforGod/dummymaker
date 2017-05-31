@@ -1,4 +1,4 @@
-package io.generator.produce;
+package io.generator.generate;
 
 /**
  * Default Comment

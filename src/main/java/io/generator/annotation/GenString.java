@@ -2,7 +2,7 @@ package io.generator.annotation;
 
 
 import io.generator.annotation.prime.PrimeGenAnnotation;
-import io.generator.produce.StringGenerator;
+import io.generator.generate.StringGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
