@@ -2,20 +2,41 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.generator</groupId>
-    <artifactId>generator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>io.dummymaker</groupId>
+    <artifactId>dummymaker</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>generator</name>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Project provides factories to populate or produce POJOs with filled fields (Dummies)</description>
     <url>http://maven.apache.org</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Anton Kurako</name>
+            <email>goodforgod.dev@gmail.com</email>
+            <organizationUrl>https://github.com/GoodforGod</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/GoodforGod/dummymaker.git</connection>
+        <developerConnection>scm:git:ssh://GoodforGod/dummymaker.git</developerConnection>
+        <url>https://github.com/GoodforGod/dummymaker/tree/master</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
