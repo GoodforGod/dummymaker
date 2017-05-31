@@ -1,5 +1,7 @@
 package io.dummymaker.export;
 
+import java.util.List;
+
 /**
  * Default Comment
  *
@@ -7,5 +9,7 @@ package io.dummymaker.export;
  * @since 26.05.2017
  */
 public interface IExporter<T> {
-    public String export(T t);
+    String export(T t);
+
+    String export(List<T> t);
 }
