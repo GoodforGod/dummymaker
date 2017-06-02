@@ -17,22 +17,22 @@ import java.util.stream.Collectors;
  */
 public class PopulateAnnotationScanner extends AnnotationScanner {
 
-    private Predicate<Annotation> primePredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
+    private final Predicate<Annotation> acceptPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
         Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
 
         return (!mapToFilter.isEmpty())
-                    ? mapToFilter.entrySet().stream()
-                        .filter(set -> set.getValue()
-                                .stream().anyMatch(primePredicate))
-                        .map(set -> {
-                            set.setValue(set.getValue().stream().filter(primePredicate).collect(Collectors.toSet()));
-                            return set;
-                        })
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                ? mapToFilter.entrySet().stream()
+                    .filter(set -> set.getValue()
+                            .stream().anyMatch(acceptPredicate))
+                    .map(set -> {
+                        set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet()));
+                        return set;
+                    })
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
 
-                    : mapToFilter;
+                : mapToFilter;
     }
 }
