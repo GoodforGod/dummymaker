@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Default Comment
@@ -18,11 +19,11 @@ import java.util.Map;
 public class SqlExporter<T> extends OriginExporter<T> {
 
     private enum DataType {
-        LONG    ("BIGINT",  Long.class.getSimpleName()),
-        DOUBLE  ("DOUBLE",  Double.class.getSimpleName()),
-        STRING  ("VARCHAR", String.class.getSimpleName()),
-        INTEGER ("INT",     Integer.class.getSimpleName()),
-        LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getSimpleName());
+        LONG    ("BIGINT",  Long.class.getName()),
+        DOUBLE  ("DOUBLE",  Double.class.getName()),
+        STRING  ("VARCHAR", String.class.getName()),
+        INTEGER ("INT",     Integer.class.getName()),
+        LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getName());
 
         DataType(String sql, String java) {
             this.sql = sql;
@@ -49,18 +50,22 @@ public class SqlExporter<T> extends OriginExporter<T> {
         super(primeClass, path, ExportType.SQL);
     }
 
-    private String toSqlDataType(String typeName) {
-        if(typeName.equals(DataType.DOUBLE.java))
-            return DataType.DOUBLE.sql;
+    private String toSqlDataType(String fieldName) {
+        Optional<String> fieldType = fieldsToExport.stream().filter(field -> field.getName().equals(fieldName)).map(field -> field.getType().getName()).findAny();
 
-        if(typeName.equals(DataType.INTEGER.java))
-            return DataType.INTEGER.sql;
+        if(fieldType.isPresent()) {
+            if (fieldType.get().equals(DataType.DOUBLE.getJava()))
+                return DataType.DOUBLE.getSql();
 
-        if(typeName.equals(DataType.LOCAL_DATE_TIME.java))
-            return DataType.LOCAL_DATE_TIME.sql;
+            if (fieldType.get().equals(DataType.INTEGER.getJava()))
+                return DataType.INTEGER.getSql();
 
-        if(typeName.equals(DataType.LONG.java))
-            return DataType.LONG.sql;
+            if (fieldType.get().equals(DataType.LOCAL_DATE_TIME.getJava()))
+                return DataType.LOCAL_DATE_TIME.getSql();
+
+            if (fieldType.get().equals(DataType.LONG.getJava()))
+                return DataType.LONG.getSql();
+        }
 
         return DataType.STRING.sql;
     }
@@ -98,6 +103,10 @@ public class SqlExporter<T> extends OriginExporter<T> {
         return field.getKey() + "\t" + toSqlDataType(field.getKey());
     }
 
+    private String wrapWithComma(String value) {
+        return "'" + value + "'";
+    }
+
     /**
      * Insert query
      */
@@ -105,7 +114,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
         StringBuilder builder = new StringBuilder();
 
-        builder.append("INSERT INTO").append(" '").append(primeClass.getSimpleName()).append("' (");
+        builder.append("INSERT INTO ").append(primeClass.getSimpleName()).append(" (");
 
         while (iterator.hasNext()) {
 
@@ -123,8 +132,25 @@ public class SqlExporter<T> extends OriginExporter<T> {
     /**
      * Creates insert query field name
      */
-    private String sqlValuesInsert(Map.Entry<String, String> field) {
-        return "'" + field.getKey() + "'";
+    private String sqlValuesInsert(T t) {
+        StringBuilder builder = new StringBuilder();
+
+        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+
+        if(iterator.hasNext()) {
+            builder.append("(");
+
+            while (iterator.hasNext()) {
+                builder.append(wrapWithComma(iterator.next().getValue()));
+
+                if (iterator.hasNext())
+                    builder.append(", ");
+            }
+
+            builder.append(")");
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -132,6 +158,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         try {
             writeLine(sqlTableCreate(t));
             writeLine(sqlInsertIntoQuery(t));
+            writeLine(sqlValuesInsert(t) + ";");
         }
         catch (IOException e) {
             logger.warning(e.getMessage());
