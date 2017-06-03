@@ -11,6 +11,13 @@ import java.util.Set;
  * @author @GoodforGod
  * @since 30.05.2017
  */
-public interface IScanner {
+public interface IFieldScanner {
+
+    /**
+     * Scan class for field annotations
+     *
+     * @param t class to scan
+     * @return Returns Map with field and annotations associated with that field
+     */
     Map<Field, Set<Annotation>> scan(Class t);
 }

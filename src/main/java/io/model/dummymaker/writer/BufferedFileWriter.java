@@ -15,15 +15,15 @@ import java.util.logging.Logger;
  * @author @GoodforGod
  * @since 31.05.2017
  */
-public class DiskWriter<T> implements IWriter {
+public class BufferedFileWriter<T> implements IWriter {
 
-    private final Logger logger = Logger.getLogger(DiskWriter.class.getName());
+    private final Logger logger = Logger.getLogger(BufferedFileWriter.class.getName());
 
     private BufferedWriter writer = null;
 
     protected final String HOME_PATH = "";
 
-    public DiskWriter(Class<T> primeClass, String path, ExportType type) {
+    public BufferedFileWriter(Class<T> primeClass, String path, ExportType type) {
         String fileType = (type != null)
                 ? type.getValue()
                 : ".exported";

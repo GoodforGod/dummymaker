@@ -31,7 +31,9 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
             Object objValue = null;
             try {
                 annotatedField.getKey().setAccessible(true);
+
                 objValue = ((PrimeGenAnnotation) annotatedField.getValue().iterator().next()).value().newInstance().generate();
+
                 annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
             }
             catch (IllegalAccessException e) {

@@ -13,7 +13,7 @@ import java.util.Set;
  * @author @GoodforGod
  * @since 30.05.2017
  */
-public class AnnotationScanner implements IScanner {
+public class AnnotationScanner implements IFieldScanner {
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {

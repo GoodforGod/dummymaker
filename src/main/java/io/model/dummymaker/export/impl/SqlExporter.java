@@ -3,6 +3,7 @@ package io.model.dummymaker.export.impl;
 import io.model.dummymaker.export.ExportType;
 import io.model.dummymaker.export.OriginExporter;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,13 +43,47 @@ public class SqlExporter<T> extends OriginExporter<T> {
         super(primeClass, path, ExportType.SQL);
     }
 
+    private String objToSql(T t) {
+        StringBuilder builder = new StringBuilder();
+
+        return builder.toString();
+    }
+
     @Override
     public void export(T t) {
-
+        try {
+            writeLine(objToSql(t));
+        }
+        catch (IOException e) {
+            logger.warning(e.getMessage());
+        }
+        finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage());
+            }
+        }
     }
 
     @Override
     public void export(List<T> t) {
+        try {
+            writeLine("");
 
+            t.forEach(this::objToSql);
+
+            writeLine("");
+        }
+        catch (IOException e) {
+            logger.warning(e.getMessage());
+        }
+        finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage());
+            }
+        }
     }
 }

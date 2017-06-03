@@ -29,6 +29,10 @@ public class JsonExporter<T> extends OriginExporter<T> {
         super(primeClass, path, ExportType.JSON);
     }
 
+    private String wrapWithComma(String value) {
+        return "\"" + value + "\"";
+    }
+
     /**
      * Translate object to Json String
      *
@@ -39,7 +43,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
     private StringBuilder objectToJson(T t, Mode mode) {
         Map<String, String> values = getExportValues(t);
 
-        String tabs = (mode == Mode.SINGLE)
+        String fieldTabs = (mode == Mode.SINGLE)
                 ? "\t"
                 : "\t\t\t";
 
@@ -50,15 +54,15 @@ public class JsonExporter<T> extends OriginExporter<T> {
         StringBuilder builder = new StringBuilder("");
 
         if(!values.isEmpty()) {
-
             Iterator<Map.Entry<String, String>> iterator = values.entrySet().iterator();
 
             builder.append(bracketTabs).append("{\n");
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
-                builder.append(tabs).append("\"").append(field.getKey()).append("\"")
+                builder.append(fieldTabs)
+                        .append(wrapWithComma(field.getKey()))
                         .append(": ")
-                        .append("\"").append(field.getValue()).append("\"");
+                        .append(wrapWithComma(field.getValue()));
 
                 if (iterator.hasNext())
                     builder.append(",");
@@ -77,9 +81,15 @@ public class JsonExporter<T> extends OriginExporter<T> {
     public void export(T t) {
         try {
             writeLine(objectToJson(t, Mode.SINGLE).toString());
-            flush();
         } catch (IOException e) {
             logger.warning(e.getMessage());
+        }
+        finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+            }
         }
     }
 
@@ -105,11 +115,16 @@ public class JsonExporter<T> extends OriginExporter<T> {
             // Close JSON Object List
             String jsonListClose = "\t]\n}";
             writeLine(jsonListClose);
-
-            flush();
         }
         catch (IOException e) {
             logger.warning(e.getMessage());
+        }
+        finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+            }
         }
     }
 

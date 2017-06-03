@@ -3,7 +3,10 @@ package io.model.dummymaker.export.impl;
 import io.model.dummymaker.export.ExportType;
 import io.model.dummymaker.export.OriginExporter;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Default Comment
@@ -13,51 +16,77 @@ import java.util.List;
  */
 public class CsvExporter<T> extends OriginExporter<T> {
 
-    private final char DEFAULT_SEPARATOR = ';';
+    private final char DEFAULT_SEPARATOR = ',';
 
     private char SEPARATOR = DEFAULT_SEPARATOR;
 
     //<editor-fold desc="Constructors">
 
     public CsvExporter(Class<T> primeClass) {
-        super(primeClass, ExportType.JSON);
+        this(primeClass, null, ' ');
     }
 
     public CsvExporter(Class<T> primeClass, char separator) {
-        super(primeClass, ExportType.JSON);
-        SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
+        this(primeClass, null, separator);
     }
 
     public CsvExporter(Class<T> primeClass, String path) {
-        super(primeClass, path, ExportType.JSON);
+        this(primeClass, path, ' ');
     }
 
     public CsvExporter(Class<T> primeClass, String path, char separator) {
-        super(primeClass, path, ExportType.JSON);
+        super(primeClass, path, ExportType.CSV);
         SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
 
     //</editor-fold>
 
-    private String followCSVFormat(String value) {
-        return (value.contains("\""))
-                ? value.replace("\"", "\"\"")
-                : value;
-    }
-
-    private StringBuilder objectToCsv(T t) {
+    private String objectToCsv(T t) {
         StringBuilder builder = new StringBuilder("");
 
-        return builder;
+        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+
+        while (iterator.hasNext()) {
+
+            Map.Entry<String, String> obj = iterator.next();
+            builder.append(obj.getValue());
+
+            if (iterator.hasNext())
+                builder.append(SEPARATOR);
+        }
+
+        return builder.toString();
     }
 
     @Override
     public void export(T t) {
-
+        try {
+            writeLine(objectToCsv(t));
+        } catch (IOException e) {
+            logger.warning(e.getMessage());
+        }
+        finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+            }
+        }
     }
 
     @Override
     public void export(List<T> t) {
-        t.forEach(this::export);
+        t.forEach(obj -> {
+            try {
+                writeLine(objectToCsv(obj));
+            } catch (IOException e) {
+                logger.warning(e.getMessage());
+            }
+        });
+        try {
+            flush();
+        } catch (IOException e) {
+            logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+        }
     }
 }

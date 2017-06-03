@@ -10,7 +10,17 @@ import java.io.IOException;
  */
 public interface IWriter {
 
+    /**
+     * Writes string and add newline symbol to the end
+     *
+     * @param value string to write
+     * @throws IOException
+     */
     void writeLine(String value) throws IOException;
 
+    /**
+     * Closes write stream
+     * @throws IOException
+     */
     void flush() throws IOException;
 }
