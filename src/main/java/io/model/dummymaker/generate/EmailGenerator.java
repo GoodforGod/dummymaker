@@ -1,5 +1,9 @@
 package io.model.dummymaker.generate;
 
+import io.model.dummymaker.bundle.DomainExtensionPresetBundle;
+import io.model.dummymaker.bundle.EmailServicesPresetBundle;
+import io.model.dummymaker.bundle.NicknamesPresentBundle;
+
 /**
  * Default Comment
  *
@@ -10,6 +14,9 @@ public class EmailGenerator extends StringGenerator {
 
     @Override
     public String generate() {
-        return null;
+        return new NicknamesPresentBundle().getRandom()
+                + "@"
+                + new EmailServicesPresetBundle().getRandom()
+                + new DomainExtensionPresetBundle().getRandom();
     }
 }

@@ -10,4 +10,6 @@ public interface IBundle<T> {
     T get(int index);
 
     T getRandom();
+
+    int size();
 }

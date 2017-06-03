@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author @GoodforGod
  * @since 30.05.2017
  */
-class MaleNamePresetBandle extends IPresetBundle<String> {
+public class MaleNamePresetBundle extends IPresetBundle<String> {
 
-    public MaleNamePresetBandle() {
+    public MaleNamePresetBundle() {
         super(new ArrayList<String>() {{
             add("JAMES");
             add("JOHN");

@@ -31,4 +31,9 @@ public abstract class IPresetBundle<T> implements IBundle<T> {
     public T getRandom() {
         return preset.get(current().nextInt(0, preset.size() - 1));
     }
+
+    @Override
+    public int size() {
+        return preset.size();
+    }
 }

@@ -1,5 +1,10 @@
 package io.model.dummymaker.generate;
 
+import io.model.dummymaker.bundle.FemaleNamePresetBundle;
+import io.model.dummymaker.bundle.MaleNamePresetBundle;
+
+import static java.util.concurrent.ThreadLocalRandom.current;
+
 /**
  * Default Comment
  *
@@ -10,6 +15,10 @@ public class NameGenerator extends StringGenerator {
 
     @Override
     public String generate() {
-        return null;
+        int gender = current().nextInt(100);
+
+        return (gender > 50)
+                ? new MaleNamePresetBundle().getRandom()
+                : new FemaleNamePresetBundle().getRandom();
     }
 }

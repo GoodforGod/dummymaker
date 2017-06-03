@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author @GoodforGod
  * @since 31.05.2017
  */
-public class DomainExtentionPresetBundle extends IPresetBundle<String> {
+public class DomainExtensionPresetBundle extends IPresetBundle<String> {
 
-    public DomainExtentionPresetBundle() {
+    public DomainExtensionPresetBundle() {
         super(new ArrayList<String>() {{
             add(".com");
             add(".co");
