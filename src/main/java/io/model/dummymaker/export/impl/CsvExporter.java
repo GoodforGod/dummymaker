@@ -20,23 +20,24 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     //<editor-fold desc="Constructors">
 
-    public CsvExporter(Class<T> primeClass) throws IOException {
-        super(primeClass, "~/", ExportType.JSON);
+    public CsvExporter(Class<T> primeClass) {
+        super(primeClass, ExportType.JSON);
     }
 
-    public CsvExporter(Class<T> primeClass, char separator) throws IOException {
-        super(primeClass, "~/", ExportType.JSON);
+    public CsvExporter(Class<T> primeClass, char separator) {
+        super(primeClass, ExportType.JSON);
         SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
 
-    public CsvExporter(Class<T> primeClass, String path) throws IOException {
+    public CsvExporter(Class<T> primeClass, String path) {
         super(primeClass, path, ExportType.JSON);
     }
 
-    public CsvExporter(Class<T> primeClass, String path, char separator) throws IOException {
+    public CsvExporter(Class<T> primeClass, String path, char separator) {
         super(primeClass, path, ExportType.JSON);
         SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
+
     //</editor-fold>
 
     private String followCSVFormat(String value) {

@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
  */
 public class GenPopulateFactory<T> implements IPopulateFactory<T> {
 
-    private final PopulateAnnotationScanner genScanner = new PopulateAnnotationScanner();
+    private final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
+
+    private final PopulateAnnotationScanner populateScanner = new PopulateAnnotationScanner();
 
     @Override
     public T populate(T t) {
-        Map<Field, Set<Annotation>> classAnnotatedFields = genScanner.scan(t.getClass());
+        Map<Field, Set<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
 
         for(Map.Entry<Field, Set<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             Object objValue = null;
@@ -32,22 +35,21 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
                 annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
             }
             catch (IllegalAccessException e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
             catch (ClassCastException e) {
-                e.printStackTrace();
+                logger.info("CAN NOT CAST FIELD TYPE");
 
                 try {
-                    if(annotatedField.getKey().getType().isAssignableFrom(String.class)) {
+                    if(annotatedField.getKey().getType().isAssignableFrom(String.class))
                         annotatedField.getKey().set(t, String.valueOf(objValue));
-                    }
                 }
                 catch (Exception ex) {
-                    e.printStackTrace();
+                    logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE");
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
             finally {
                 annotatedField.getKey().setAccessible(false);

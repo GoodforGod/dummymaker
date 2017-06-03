@@ -3,7 +3,6 @@ package io.model.dummymaker.export.impl;
 import io.model.dummymaker.export.ExportType;
 import io.model.dummymaker.export.OriginExporter;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,11 +13,11 @@ import java.util.List;
  */
 public class XmlExporter<T>  extends OriginExporter<T> {
 
-    public XmlExporter(Class<T> primeClass) throws IOException {
-        super(primeClass, "~/", ExportType.XML);
+    public XmlExporter(Class<T> primeClass) {
+        super(primeClass, ExportType.XML);
     }
 
-    public XmlExporter(Class<T> primeClass, String path) throws IOException {
+    public XmlExporter(Class<T> primeClass, String path) {
         super(primeClass, path, ExportType.XML);
     }
 

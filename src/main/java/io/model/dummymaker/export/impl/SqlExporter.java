@@ -3,7 +3,6 @@ package io.model.dummymaker.export.impl;
 import io.model.dummymaker.export.ExportType;
 import io.model.dummymaker.export.OriginExporter;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -35,11 +34,11 @@ public class SqlExporter<T> extends OriginExporter<T> {
     private String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `$0` ($1)";
     private String SQL_INSERT = "INSERT INTO `$0` (`$1`) VALUES";
 
-    public SqlExporter(Class<T> primeClass) throws IOException {
-        super(primeClass, "~/", ExportType.SQL);
+    public SqlExporter(Class<T> primeClass) {
+        super(primeClass, ExportType.SQL);
     }
 
-    public SqlExporter(Class<T> primeClass, String path) throws IOException {
+    public SqlExporter(Class<T> primeClass, String path) {
         super(primeClass, path, ExportType.SQL);
     }
 

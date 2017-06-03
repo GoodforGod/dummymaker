@@ -3,8 +3,11 @@ package io.model.dummymaker.writer;
 import io.model.dummymaker.export.ExportType;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Default Comment
@@ -14,24 +17,51 @@ import java.io.IOException;
  */
 public class DiskWriter<T> implements IWriter {
 
+    private final Logger logger = Logger.getLogger(DiskWriter.class.getName());
+
     private BufferedWriter writer = null;
 
-    public DiskWriter(Class<T> primeClass, String path, ExportType type) throws IOException {
+    protected final String HOME_PATH = "";
+
+    public DiskWriter(Class<T> primeClass, String path, ExportType type) {
         String fileType = (type != null)
                 ? type.getValue()
                 : ".exported";
 
-        this.writer = new BufferedWriter(new FileWriter(path + primeClass.getName() + fileType));
+        String writePath = (path == null || path.trim().isEmpty())
+                ? HOME_PATH
+                : path;
+
+        try {
+            this.writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(writePath+ primeClass.getName() + fileType), "UTF-8"));
+        } catch (IOException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
     }
 
     @Override
     public void writeLine(String value) throws IOException, NullPointerException {
-        writer.write(value);
-        writer.newLine();
+        try {
+            writer.write(value);
+            writer.newLine();
+        } catch (Exception e) {
+            logger.log(Level.WARNING, e.getMessage());
+
+            try {
+                if(writer != null)
+                    writer.close();
+            } catch (IOException e1) { }
+        }
     }
 
     @Override
     public void flush() throws IOException, NullPointerException {
-        writer.close();
+        try {
+            writer.close();
+        } catch (Exception e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
     }
 }
