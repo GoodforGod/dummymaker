@@ -35,7 +35,7 @@ public class DiskWriter<T> implements IWriter {
         try {
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(writePath+ primeClass.getName() + fileType), "UTF-8"));
+                            new FileOutputStream(writePath+ primeClass.getSimpleName() + fileType), "UTF-8"));
         } catch (IOException e) {
             logger.log(Level.WARNING, e.getMessage());
         }

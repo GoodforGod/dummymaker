@@ -29,19 +29,31 @@ public class JsonExporter<T> extends OriginExporter<T> {
         super(primeClass, path, ExportType.JSON);
     }
 
-    private String objectToJson(T t, Mode mode) {
+    /**
+     * Translate object to Json String
+     *
+     * @param t object to get values from
+     * @param mode represent Single JSON object or List of objects
+     * @return StringBuilder of Object as JSON String
+     */
+    private StringBuilder objectToJson(T t, Mode mode) {
         Map<String, String> values = getExportValues(t);
 
         String tabs = (mode == Mode.SINGLE)
                 ? "\t"
                 : "\t\t\t";
 
+        String bracketTabs = (mode == Mode.SINGLE)
+                ? ""
+                : "\t\t";
+
+        StringBuilder builder = new StringBuilder("");
+
         if(!values.isEmpty()) {
-            StringBuilder builder = new StringBuilder();
 
             Iterator<Map.Entry<String, String>> iterator = values.entrySet().iterator();
 
-            builder.append("{\n");
+            builder.append(bracketTabs).append("{\n");
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
                 builder.append(tabs).append("\"").append(field.getKey()).append("\"")
@@ -53,21 +65,18 @@ public class JsonExporter<T> extends OriginExporter<T> {
 
                 builder.append("\n");
             }
-            builder.append("}");
+            builder.append(bracketTabs).append("}");
 
-            return builder.toString();
+            return builder;
         }
 
-        return "";
+        return builder;
     }
 
     @Override
     public void export(T t) {
         try {
-            String obj = objectToJson(t, Mode.SINGLE);
-            logger.warning(obj);
-            writeLine(obj);
-
+            writeLine(objectToJson(t, Mode.SINGLE).toString());
             flush();
         } catch (IOException e) {
             logger.warning(e.getMessage());
@@ -77,13 +86,24 @@ public class JsonExporter<T> extends OriginExporter<T> {
     @Override
     public void export(List<T> objects) {
         try {
-            String jsonListOpen = "{\n" + "\t\"" + primeClass.getName() + "\"" + ": " + "[\n";
+            // Open JSON Object List
+            String jsonListOpen = "{\n" + "\t\"" + primeClass.getSimpleName() + "\"" + ": " + "[";
             writeLine(jsonListOpen);
 
-            for(T t : objects)
-                writeLine(objectToJson(t, Mode.LIST));
+            Iterator<T> iterator = objects.iterator();
+            while(iterator.hasNext()) {
+                T t = iterator.next();
+                StringBuilder write = objectToJson(t, Mode.LIST);
 
-            String jsonListClose = "\n\t]\n}";
+                // Write , to the end of the object
+                if(iterator.hasNext())
+                    write.append(",");
+
+                writeLine(write.toString());
+            }
+
+            // Close JSON Object List
+            String jsonListClose = "\t]\n}";
             writeLine(jsonListClose);
 
             flush();

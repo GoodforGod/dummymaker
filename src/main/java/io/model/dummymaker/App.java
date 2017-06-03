@@ -19,7 +19,7 @@ public class App {
         TestCaseClass t = factory.produce();
         List<TestCaseClass> tList = factory.produce(10);
 
-        exporter.export(t);
+        exporter.export(tList);
 
         System.out.println( "Hello World!" );
     }

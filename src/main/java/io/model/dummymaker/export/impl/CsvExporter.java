@@ -3,7 +3,6 @@ package io.model.dummymaker.export.impl;
 import io.model.dummymaker.export.ExportType;
 import io.model.dummymaker.export.OriginExporter;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,29 +45,10 @@ public class CsvExporter<T> extends OriginExporter<T> {
                 : value;
     }
 
-    private void writeLine(List<String> values, char customQuote) {
+    private StringBuilder objectToCsv(T t) {
+        StringBuilder builder = new StringBuilder("");
 
-        boolean first = true;
-
-        StringBuilder sb = new StringBuilder();
-
-        for (String value : values) {
-            if (!first)
-                sb.append(SEPARATOR);
-
-            if (customQuote == ' ')
-                sb.append(followCSVFormat(value));
-            else
-                sb.append(customQuote).append(followCSVFormat(value)).append(customQuote);
-
-            first = false;
-        }
-
-        try {
-            writeLine(sb.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return builder;
     }
 
     @Override
