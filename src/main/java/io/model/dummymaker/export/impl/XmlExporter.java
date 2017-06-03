@@ -21,8 +21,6 @@ public class XmlExporter<T>  extends OriginExporter<T> {
         LIST
     }
 
-    private final String XML_LIST_SUFFIX = "List";
-
     public XmlExporter(Class<T> primeClass) {
         super(primeClass, ExportType.XML);
     }
@@ -87,12 +85,14 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     }
 
     @Override
-    public void export(List<T> t) {
+    public void export(List<T> list) {
         try {
+            String XML_LIST_SUFFIX = "List";
             String superList = primeClass.getSimpleName() + XML_LIST_SUFFIX;
             writeLine(wrapOpenXmlTag(superList));
 
-            t.forEach(obj -> objectToXml(obj, Mode.LIST));
+            for(T t : list)
+                writeLine(objectToXml(t, Mode.LIST));
 
             writeLine(wrapCloseXmlTag(superList));
         }

@@ -26,11 +26,6 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
 
     protected final List<Field> fieldsToExport = new ArrayList<>();
 
-    /**
-     * Value to be exported if object value is Null or Empty
-     */
-    private final String EMPTY_VALUE = "null";
-
     public OriginExporter(Class<T> primeClass, ExportType type) {
         this(primeClass, null, type);
     }
@@ -43,6 +38,9 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
     }
 
     protected String convertToEmptyValue(String value) {
+        // Value to be exported if object value is Null or Empty
+
+        String EMPTY_VALUE = "null";
         return (value != null && !value.trim().isEmpty())
                 ? value
                 : EMPTY_VALUE;

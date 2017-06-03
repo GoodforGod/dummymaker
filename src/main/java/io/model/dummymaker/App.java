@@ -27,7 +27,8 @@ public class App {
 
         jsonExporter.export(tList);
         csvExporter.export(tList);
-        xmlExporter.export(t);
+        xmlExporter.export(tList);
+        sqlExporter.export(t);
 
         System.out.println( "Hello World!" );
     }
