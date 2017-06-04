@@ -30,7 +30,6 @@ public class GenPrimeFactory<T> implements IPrimeFactory<T>{
         return produceFactory.produce();
     }
 
-
     @Override
     public List<T> produce(int amount) {
         return produceFactory.produce(amount);

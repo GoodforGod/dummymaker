@@ -40,14 +40,14 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
                 logger.warning(e.getMessage());
             }
             catch (ClassCastException e) {
-                logger.info("CAN NOT CAST FIELD TYPE");
+                logger.info("CAN NOT CAST FIELD TYPE.. TRYING TO CONVERT TO STRING TYPE.");
 
                 try {
                     if(annotatedField.getKey().getType().isAssignableFrom(String.class))
                         annotatedField.getKey().set(t, String.valueOf(objValue));
                 }
                 catch (Exception ex) {
-                    logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE");
+                    logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE AND CAN NOT BE CONVERTED TO STRING.");
                 }
             }
             catch (Exception e) {

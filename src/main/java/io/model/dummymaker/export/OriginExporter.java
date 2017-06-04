@@ -4,7 +4,6 @@ import io.model.dummymaker.scan.ExportAnnotationScanner;
 import io.model.dummymaker.writer.BufferedFileWriter;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,9 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
 
     protected final ExportAnnotationScanner exportScanner = new ExportAnnotationScanner();
 
-    protected final List<Field> fieldsToExport = new ArrayList<>();
+//    protected final List<Field> fieldsToExport = new ArrayList<>();
+
+    protected final Map<String, Field> fieldsToExport = new HashMap<>();
 
     public OriginExporter(Class<T> primeClass, ExportType type) {
         this(primeClass, null, type);
@@ -34,7 +35,7 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
         super(primeClass, path, type);
         this.primeClass = primeClass;
 
-        exportScanner.scan(primeClass).entrySet().forEach(set -> fieldsToExport.add(set.getKey()));
+        exportScanner.scan(primeClass).entrySet().forEach(set -> fieldsToExport.put(set.getKey().getName(), set.getKey()));
     }
 
     protected String convertToEmptyValue(String value) {
@@ -48,9 +49,9 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
 
     protected Map<String, String> getExportValues(T t) {
         Map<String, String> exports = new HashMap<>();
-        for(Field field : fieldsToExport) {
+        for(Map.Entry<String, Field> field : fieldsToExport.entrySet()) {
             try {
-                Field exportField = t.getClass().getDeclaredField(field.getName());
+                Field exportField = t.getClass().getDeclaredField(field.getKey());
                 if(exportField != null) {
                     exportField.setAccessible(true);
                     exports.put(exportField.getName(), String.valueOf(exportField.get(t)));

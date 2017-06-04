@@ -1,7 +1,6 @@
 package io.model.dummymaker;
 
 import io.model.dummymaker.annotation.GenDouble;
-import io.model.dummymaker.annotation.GenEmail;
 
 /**
  * Default Comment
@@ -11,7 +10,7 @@ import io.model.dummymaker.annotation.GenEmail;
  */
 public class TestCaseClass {
 
-    @GenEmail
+    @GenDouble
     private String str;
 
     @GenDouble

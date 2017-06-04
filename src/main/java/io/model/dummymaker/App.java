@@ -17,6 +17,7 @@ public class App {
     public static void main(String[] args) {
 
         IPrimeFactory<TestCaseClass> factory = new GenPrimeFactory<>(TestCaseClass.class);
+
         IExporter<TestCaseClass> jsonExporter = new JsonExporter<>(TestCaseClass.class);
         IExporter<TestCaseClass> csvExporter = new CsvExporter<>(TestCaseClass.class);
         IExporter<TestCaseClass> xmlExporter = new XmlExporter<>(TestCaseClass.class);
@@ -28,7 +29,7 @@ public class App {
         jsonExporter.export(tList);
         csvExporter.export(tList);
         xmlExporter.export(tList);
-        sqlExporter.export(t);
+        sqlExporter.export(tList);
 
         System.out.println( "Hello World!" );
     }
