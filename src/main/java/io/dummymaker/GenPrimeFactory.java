@@ -18,8 +18,6 @@ public class GenPrimeFactory<T> implements IPrimeFactory<T>{
     private IProduceFactory<T> produceFactory;
     private IPopulateFactory<T> populateFactory;
 
-    private GenPrimeFactory() {}
-
     public GenPrimeFactory(Class<T> primeClass) {
         produceFactory = new GenProduceFactory<>(primeClass);
         populateFactory = new GenPopulateFactory<>();
