@@ -11,24 +11,24 @@ import io.model.dummymaker.annotation.GenDouble;
 public class TestCaseClass {
 
     @GenDouble
-    private String str;
+    private String name;
 
     @GenDouble
-    private Double aDouble;
+    private Double value;
 
-    public String getStr() {
-        return str;
+    public String getName() {
+        return name;
     }
 
-    public void setStr(String str) {
-        this.str = str;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Double getaDouble() {
-        return aDouble;
+    public Double getValue() {
+        return value;
     }
 
-    public void setaDouble(Double aDouble) {
-        this.aDouble = aDouble;
+    public void setValue(Double value) {
+        this.value = value;
     }
 }

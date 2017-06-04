@@ -16,6 +16,31 @@ public class App {
 
     public static void main(String[] args) {
 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void init() {
         IPrimeFactory<TestCaseClass> factory = new GenPrimeFactory<>(TestCaseClass.class);
 
         IExporter<TestCaseClass> jsonExporter = new JsonExporter<>(TestCaseClass.class);
@@ -30,7 +55,5 @@ public class App {
         csvExporter.export(tList);
         xmlExporter.export(tList);
         sqlExporter.export(tList);
-
-        System.out.println( "Hello World!" );
     }
 }
