@@ -16,7 +16,9 @@ public class LocalDateTimeGenerator implements IGenerator<LocalDateTime> {
     public LocalDateTime generate() {
         int year        = current().nextInt(1970, 3000);
         int month       = current().nextInt(1, 12);
-        int dayOfMonth  = current().nextInt(1, 31);
+        int dayOfMonth  = (month == 2)
+                ? current().nextInt(1,27)
+                : current().nextInt(1, 31);
         int hour        = current().nextInt(1, 24);
         int minute      = current().nextInt(1, 60);
         int second      = current().nextInt(1, 60);
