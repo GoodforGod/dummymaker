@@ -3,7 +3,7 @@ package io.dummymaker.bundle;
 import java.util.ArrayList;
 
 /**
- * Default Comment
+ * Contains female names as string
  *
  * @author GoodforGod
  * @since 31.05.2017

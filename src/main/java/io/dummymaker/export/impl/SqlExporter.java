@@ -1,6 +1,6 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.ExportType;
+import io.dummymaker.export.ExportFormat;
 import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Default Comment
+ * Export objects as SQL insert query
  *
  * @author GoodforGod
  * @since 31.05.2017
@@ -46,11 +46,11 @@ public class SqlExporter<T> extends OriginExporter<T> {
     }
 
     public SqlExporter(Class<T> primeClass) {
-        super(primeClass, ExportType.SQL);
+        super(primeClass, ExportFormat.SQL);
     }
 
     public SqlExporter(Class<T> primeClass, String path) {
-        super(primeClass, path, ExportType.SQL);
+        super(primeClass, path, ExportFormat.SQL);
     }
 
     /**
@@ -120,7 +120,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
         StringBuilder builder = new StringBuilder();
 
-        builder.append("INSERT INTO ").append(primeClass.getSimpleName()).append(" (");
+        builder.append("INSERT INTO ").append(exportClass.getSimpleName()).append(" (");
 
         while (iterator.hasNext()) {
 

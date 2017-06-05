@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Default Comment
+ * Generates LocalDateTime from 1970 to 3000 Year with nanoseconds precision
  *
  * @author GoodforGod
  * @since 26.05.2017

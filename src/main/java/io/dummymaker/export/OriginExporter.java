@@ -10,34 +10,41 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Default Comment
+ * Prime (Parent) exporter for all others, provides core methods
  *
  * @author GoodforGod
  * @since 31.05.2017
  */
 public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExporter<T> {
 
-    protected final Class<T> primeClass;
+    /**
+     * Class type to export
+     */
+    protected final Class<T> exportClass;
 
     protected final Logger logger = Logger.getLogger(OriginExporter.class.getName());
 
     protected final ExportAnnotationScanner exportScanner = new ExportAnnotationScanner();
 
-//    protected final List<Field> fieldsToExport = new ArrayList<>();
-
+    /**
+     * Field name as a key, and field values as a values
+     */
     protected final Map<String, Field> fieldsToExport = new HashMap<>();
 
-    public OriginExporter(Class<T> primeClass, ExportType type) {
-        this(primeClass, null, type);
+    public OriginExporter(Class<T> exportClass, ExportFormat type) {
+        this(exportClass, null, type);
     }
 
-    public OriginExporter(Class<T> primeClass, String path, ExportType type) {
-        super(primeClass, path, type);
-        this.primeClass = primeClass;
+    public OriginExporter(Class<T> exportClass, String path, ExportFormat type) {
+        super(exportClass, path, type);
+        this.exportClass = exportClass;
 
-        exportScanner.scan(primeClass).entrySet().forEach(set -> fieldsToExport.put(set.getKey().getName(), set.getKey()));
+        exportScanner.scan(exportClass).entrySet().forEach(set -> fieldsToExport.put(set.getKey().getName(), set.getKey()));
     }
 
+    /**
+     * Reserved functional
+     */
     protected String convertToEmptyValue(String value) {
         // Value to be exported if object value is Null or Empty
 
@@ -47,6 +54,11 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
                 : EMPTY_VALUE;
     }
 
+    /**
+     * Generates class export field map
+     * @param t class to export
+     * @return map of field name as a key and fields string values as a values
+     */
     protected Map<String, String> getExportValues(T t) {
         Map<String, String> exports = new HashMap<>();
         for(Map.Entry<String, Field> field : fieldsToExport.entrySet()) {

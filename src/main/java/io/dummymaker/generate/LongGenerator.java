@@ -3,7 +3,7 @@ package io.dummymaker.generate;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Default Comment
+ * Generates long values
  *
  * @author GoodforGod
  * @since 26.05.2017

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Default Comment
+ * Scan for all annotated fields, is prime (parent) scanner for others
  *
  * @author GoodforGod
  * @since 30.05.2017

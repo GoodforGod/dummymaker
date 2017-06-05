@@ -14,13 +14,13 @@ public interface IWriter {
      * Writes string and add newline symbol to the end
      *
      * @param value string to write
-     * @throws IOException
+     * @throws IOException when unable to write line
      */
     void writeLine(String value) throws IOException;
 
     /**
      * Closes write stream
-     * @throws IOException
+     * @throws IOException when can't close buffer writter
      */
     void flush() throws IOException;
 }

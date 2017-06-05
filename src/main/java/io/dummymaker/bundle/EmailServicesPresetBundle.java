@@ -3,7 +3,7 @@ package io.dummymaker.bundle;
 import java.util.ArrayList;
 
 /**
- * Default Comment
+ * Contains EMAIL service provides as string
  *
  * @author GoodforGod
  * @since 30.05.2017

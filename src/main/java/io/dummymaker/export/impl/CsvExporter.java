@@ -1,6 +1,6 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.ExportType;
+import io.dummymaker.export.ExportFormat;
 import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Default Comment
+ * Export objects in CSV format
  *
  * @author GoodforGod
  * @since 26.05.2017
@@ -35,7 +35,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     public CsvExporter(Class<T> primeClass, String path, char separator) {
-        super(primeClass, path, ExportType.CSV);
+        super(primeClass, path, ExportFormat.CSV);
         SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
 

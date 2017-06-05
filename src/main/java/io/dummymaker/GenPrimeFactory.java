@@ -8,15 +8,17 @@ import io.dummymaker.produce.IProduceFactory;
 import java.util.List;
 
 /**
- * Default Comment
+ * Prime factory implementation
+ *
+ * @see IPrimeFactory
  *
  * @author GoodforGod
  * @since 31.05.2017
  */
 public class GenPrimeFactory<T> implements IPrimeFactory<T>{
 
-    private IProduceFactory<T> produceFactory;
-    private IPopulateFactory<T> populateFactory;
+    private final IProduceFactory<T> produceFactory;
+    private final IPopulateFactory<T> populateFactory;
 
     public GenPrimeFactory(Class<T> primeClass) {
         produceFactory = new GenProduceFactory<>(primeClass);

@@ -3,7 +3,7 @@ package io.dummymaker.generate;
 import java.util.UUID;
 
 /**
- * Default Comment
+ * Generates random string 36 character length
  *
  * @author GoodforGod
  * @since 26.05.2017

@@ -6,7 +6,7 @@ import io.dummymaker.generate.NullGenerator;
 import java.lang.annotation.*;
 
 /**
- * Default Comment
+ * Prime annotations, used to create new annotations of specific generator provided type
  *
  * @author GoodforGod
  * @since 28.05.2017
@@ -15,5 +15,10 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.ANNOTATION_TYPE)
 public @interface PrimeGenAnnotation {
+
+    /**
+     * Contains generator class to be called to generate values
+     * @return generator
+     */
     Class<? extends IGenerator> value() default NullGenerator.class;
 }

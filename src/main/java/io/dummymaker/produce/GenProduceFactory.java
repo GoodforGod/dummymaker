@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Default Comment
+ * Produce Dummy Objects and populate them via PrimeGenAnnotation generators included
+ *
+ * @see io.dummymaker.annotation.prime.PrimeGenAnnotation
  *
  * @author GoodforGod
  * @since 26.05.2017

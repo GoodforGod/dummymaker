@@ -3,7 +3,9 @@ package io.dummymaker.annotation.prime;
 import java.lang.annotation.*;
 
 /**
- * Default Comment
+ * Force object field to export, despite it been annotated with generate annotations
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 31.05.2017

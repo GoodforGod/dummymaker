@@ -5,7 +5,7 @@ import io.dummymaker.bundle.EmailServicesPresetBundle;
 import io.dummymaker.bundle.NicknamesPresentBundle;
 
 /**
- * Default Comment
+ * Generates email as a string
  *
  * @author GoodforGod
  * @since 26.05.2017

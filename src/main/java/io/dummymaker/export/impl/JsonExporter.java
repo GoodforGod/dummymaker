@@ -1,6 +1,6 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.ExportType;
+import io.dummymaker.export.ExportFormat;
 import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Default Comment
+ * Export objects in JSON format
  *
  * @author GoodforGod
  * @since 26.05.2017
@@ -22,11 +22,11 @@ public class JsonExporter<T> extends OriginExporter<T> {
     }
 
     public JsonExporter(Class<T> primeClass) {
-        super(primeClass, ExportType.JSON);
+        super(primeClass, ExportFormat.JSON);
     }
 
     public JsonExporter(Class<T> primeClass, String path) {
-        super(primeClass, path, ExportType.JSON);
+        super(primeClass, path, ExportFormat.JSON);
     }
 
     private String wrapWithComma(String value) {
@@ -97,7 +97,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
     public void export(List<T> objects) {
         try {
             // Open JSON Object List
-            String jsonListOpen = "{\n" + "\t\"" + primeClass.getSimpleName() + "\"" + ": " + "[";
+            String jsonListOpen = "{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[";
             writeLine(jsonListOpen);
 
             Iterator<T> iterator = objects.iterator();

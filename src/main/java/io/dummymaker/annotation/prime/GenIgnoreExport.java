@@ -3,7 +3,9 @@ package io.dummymaker.annotation.prime;
 import java.lang.annotation.*;
 
 /**
- * Default Comment
+ * Ignores object field during export
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 03.06.2017

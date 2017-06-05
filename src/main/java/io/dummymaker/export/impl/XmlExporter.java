@@ -1,6 +1,6 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.ExportType;
+import io.dummymaker.export.ExportFormat;
 import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Default Comment
+ * Export objects is XML format
  *
  * @author GoodforGod
  * @since 26.05.2017
@@ -22,11 +22,11 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     }
 
     public XmlExporter(Class<T> primeClass) {
-        super(primeClass, ExportType.XML);
+        super(primeClass, ExportFormat.XML);
     }
 
     public XmlExporter(Class<T> primeClass, String path) {
-        super(primeClass, path, ExportType.XML);
+        super(primeClass, path, ExportFormat.XML);
     }
 
     private String wrapOpenXmlTag(String value) {
@@ -52,7 +52,7 @@ public class XmlExporter<T>  extends OriginExporter<T> {
 
         if(iterator.hasNext()) {
 
-            builder.append(tabObject).append(wrapOpenXmlTag(primeClass.getSimpleName()));
+            builder.append(tabObject).append(wrapOpenXmlTag(exportClass.getSimpleName()));
 
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
@@ -62,7 +62,7 @@ public class XmlExporter<T>  extends OriginExporter<T> {
                                     .append(wrapCloseXmlTag(field.getKey()));
             }
 
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(primeClass.getSimpleName()));
+            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(exportClass.getSimpleName()));
         }
 
         return builder.toString();
@@ -88,7 +88,7 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     public void export(List<T> list) {
         try {
             String XML_LIST_SUFFIX = "List";
-            String superList = primeClass.getSimpleName() + XML_LIST_SUFFIX;
+            String superList = exportClass.getSimpleName() + XML_LIST_SUFFIX;
             writeLine(wrapOpenXmlTag(superList));
 
             for(T t : list)

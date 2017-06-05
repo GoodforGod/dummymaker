@@ -1,18 +1,20 @@
 package io.dummymaker.export;
 
 /**
- * Default Comment
+ * Available export types, used by writer
+ *
+ * @see io.dummymaker.writer.BufferedFileWriter
  *
  * @author GoodforGod
  * @since 31.05.2017
  */
-public enum ExportType {
+public enum ExportFormat {
     CSV(".csv"),
     JSON(".json"),
     XML(".xml"),
     SQL(".sql");
 
-    ExportType(String value) {
+    ExportFormat(String value) {
         this.value = value;
     }
 

@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Default Comment
+ * @see DoubleGenerator
  *
  * @author GoodforGod
  * @since 30.05.2017

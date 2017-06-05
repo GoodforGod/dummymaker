@@ -1,7 +1,9 @@
 package io.dummymaker.generate;
 
 /**
- * Default Comment
+ * Generator used by PrimeGenAnnotation to populate field
+ *
+ * @see io.dummymaker.annotation.prime.PrimeGenAnnotation
  *
  * @author GoodforGod
  * @since 26.05.2017

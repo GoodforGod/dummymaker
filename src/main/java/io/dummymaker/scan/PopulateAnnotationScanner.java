@@ -10,7 +10,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Default Comment
+ * Scans for all fields annotated with super PrimeGenAnnotation annotations
+ *
+ * @see PrimeGenAnnotation
  *
  * @author GoodforGod
  * @since 29.05.2017

@@ -5,16 +5,17 @@ import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Default Comment
+ * Prime (Parent) bundle implementation
  *
  * @author GoodforGod
  * @since 31.05.2017
  */
 public abstract class IPresetBundle<T> implements IBundle<T> {
 
-    protected List<T> preset;
-
-    private IPresetBundle() { }
+    /**
+     * Bundle value collection
+     */
+    protected final List<T> preset;
 
     public IPresetBundle(List<T> preset) {
         this.preset = preset;

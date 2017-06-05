@@ -3,7 +3,7 @@ package io.dummymaker.generate;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Default Comment
+ * Generates big double from 100 to 1000000 value
  *
  * @author GoodforGod
  * @since 26.05.2017

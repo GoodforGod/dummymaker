@@ -1,7 +1,7 @@
 package io.dummymaker.generate;
 
 /**
- * Default Comment
+ * Generates null values
  *
  * @author GoodforGod
  * @since 31.05.2017

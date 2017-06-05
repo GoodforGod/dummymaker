@@ -3,7 +3,7 @@ package io.dummymaker.bundle;
 import java.util.ArrayList;
 
 /**
- * Default Comment
+ * Contains nicknames as string
  *
  * @author GoodforGod
  * @since 03.06.2017

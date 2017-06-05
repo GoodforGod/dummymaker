@@ -1,6 +1,6 @@
 package io.dummymaker.writer;
 
-import io.dummymaker.export.ExportType;
+import io.dummymaker.export.ExportFormat;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -23,7 +23,7 @@ public class BufferedFileWriter<T> implements IWriter {
 
     protected final String HOME_PATH = "";
 
-    public BufferedFileWriter(Class<T> primeClass, String path, ExportType type) {
+    public BufferedFileWriter(Class<T> primeClass, String path, ExportFormat type) {
         String fileType = (type != null)
                 ? type.getValue()
                 : ".exported";

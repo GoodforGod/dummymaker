@@ -4,7 +4,7 @@ package io.dummymaker.generate;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Default Comment
+ * Generates simple mobile phone as a string
  *
  * @author GoodforGod
  * @since 26.05.2017
