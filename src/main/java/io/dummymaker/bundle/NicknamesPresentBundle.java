@@ -31,7 +31,7 @@ public class NicknamesPresentBundle extends IPresetBundle<String> {
             add("Jigsaw");
             add("Prometheus");
             add("BeardedAngler");
-            add("Joker'sGrin");
+            add("JokersGrin");
             add("PsychoThinker");
             add("BeetleKing");
             add("Judge");
