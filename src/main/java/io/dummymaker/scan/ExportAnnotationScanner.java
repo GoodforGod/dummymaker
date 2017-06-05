@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Can scan for annotations to export (Like all PrimeGenAnnotation annotations & ForceImport) also excludes fields with IgnoreExport
+ * Can scan for annotations to export Like all PrimeGenAnnotation annotations and ForceImport also excludes fields with IgnoreExport
  *
  * @see PrimeGenAnnotation
  * @see GenIgnoreExport

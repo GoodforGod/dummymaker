@@ -6,7 +6,7 @@ import io.dummymaker.bundle.MaleNamePresetBundle;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Generates names (male & female) as a string
+ * Generates names male and female as a string
  *
  * @author GoodforGod
  * @since 26.05.2017

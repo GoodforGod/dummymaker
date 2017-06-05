@@ -4,7 +4,7 @@ import io.dummymaker.populate.IPopulateFactory;
 import io.dummymaker.produce.IProduceFactory;
 
 /**
- * Prime factory that provides populate & produce methods
+ * Prime factory that provides populate and produce methods
  *
  * @see IPopulateFactory
  * @see IProduceFactory

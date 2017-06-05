@@ -43,7 +43,9 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
     }
 
     /**
-     * Reserved functional
+     * Convert string values to empty if needed
+     * @param value string to convert
+     * @return return origin value or empty converted one
      */
     protected String convertToEmptyValue(String value) {
         // Value to be exported if object value is Null or Empty
