@@ -29,7 +29,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
         super(primeClass, path, ExportFormat.JSON);
     }
 
-    private String wrapWithComma(String value) {
+    private String wrapWithQuotes(String value) {
         return "\"" + value + "\"";
     }
 
@@ -60,9 +60,9 @@ public class JsonExporter<T> extends OriginExporter<T> {
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
                 builder.append(fieldTabs)
-                        .append(wrapWithComma(field.getKey()))
+                        .append(wrapWithQuotes(field.getKey()))
                         .append(": ")
-                        .append(wrapWithComma(field.getValue()));
+                        .append(wrapWithQuotes(field.getValue()));
 
                 if (iterator.hasNext())
                     builder.append(",");

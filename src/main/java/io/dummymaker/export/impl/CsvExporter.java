@@ -20,26 +20,50 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     private char SEPARATOR = DEFAULT_SEPARATOR;
 
+    private final boolean wrapText;
+
     //<editor-fold desc="Constructors">
 
     public CsvExporter(Class<T> primeClass) {
         this(primeClass, null, ' ');
     }
 
+    public CsvExporter(Class<T> primeClass, boolean wrapText) {
+        this(primeClass, null, ' ', wrapText);
+    }
+
     public CsvExporter(Class<T> primeClass, char separator) {
         this(primeClass, null, separator);
+    }
+
+    public CsvExporter(Class<T> primeClass, char separator, boolean wrapText) {
+        this(primeClass, null, separator, wrapText);
     }
 
     public CsvExporter(Class<T> primeClass, String path) {
         this(primeClass, path, ' ');
     }
 
+    public CsvExporter(Class<T> primeClass, String path, boolean wrapText) {
+        this(primeClass, path, ' ', wrapText);
+    }
+
     public CsvExporter(Class<T> primeClass, String path, char separator) {
+        this(primeClass, path, separator, false);
+        SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
+    }
+
+    public CsvExporter(Class<T> primeClass, String path, char separator, boolean wrapText) {
         super(primeClass, path, ExportFormat.CSV);
+        this.wrapText = wrapText;
         SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
 
     //</editor-fold>
+
+    private String wrapWithQuotes(String value) {
+        return "'" + value + "'";
+    }
 
     private String objectToCsv(T t) {
         StringBuilder builder = new StringBuilder("");
@@ -49,7 +73,10 @@ public class CsvExporter<T> extends OriginExporter<T> {
         while (iterator.hasNext()) {
 
             Map.Entry<String, String> obj = iterator.next();
-            builder.append(obj.getValue());
+            if(fieldsToExport.get(obj.getKey()).getType().equals(String.class))
+                builder.append(wrapWithQuotes(obj.getValue()));
+            else
+                builder.append(obj.getValue());
 
             if (iterator.hasNext())
                 builder.append(SEPARATOR);
