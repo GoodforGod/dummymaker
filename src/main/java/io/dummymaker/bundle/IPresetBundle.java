@@ -7,7 +7,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 31.05.2017
  */
 public abstract class IPresetBundle<T> implements IBundle<T> {

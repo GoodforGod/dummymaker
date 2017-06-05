@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 31.05.2017
  */
 public class GenPrimeFactory<T> implements IPrimeFactory<T>{

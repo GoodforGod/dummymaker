@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 28.05.2017
  */
 public interface IProduceFactory<T> {

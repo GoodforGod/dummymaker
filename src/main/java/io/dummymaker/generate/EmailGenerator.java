@@ -7,7 +7,7 @@ import io.dummymaker.bundle.NicknamesPresentBundle;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 26.05.2017
  */
 public class EmailGenerator extends StringGenerator {

@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 28.05.2017
  */
 @Inherited

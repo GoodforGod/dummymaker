@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 03.06.2017
  */
 public class ExportAnnotationScanner extends AnnotationScanner {

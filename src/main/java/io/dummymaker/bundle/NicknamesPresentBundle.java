@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 03.06.2017
  */
 public class NicknamesPresentBundle extends IPresetBundle<String> {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 30.05.2017
  */
 public class MaleNamePresetBundle extends IPresetBundle<String> {

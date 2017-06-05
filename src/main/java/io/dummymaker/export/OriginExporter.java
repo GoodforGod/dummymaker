@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 31.05.2017
  */
 public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExporter<T> {

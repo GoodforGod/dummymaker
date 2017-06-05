@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 30.05.2017
  */
 @PrimeGenAnnotation(StringGenerator.class)

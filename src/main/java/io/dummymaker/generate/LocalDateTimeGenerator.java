@@ -7,7 +7,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 26.05.2017
  */
 public class LocalDateTimeGenerator implements IGenerator<LocalDateTime> {

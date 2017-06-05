@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 30.05.2017
  */
 public interface IFieldScanner {

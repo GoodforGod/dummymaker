@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 26.05.2017
  */
 public class GenProduceFactory<T> implements IProduceFactory<T> {

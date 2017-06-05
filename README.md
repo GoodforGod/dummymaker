@@ -2,6 +2,8 @@
 
 Allow you to create/populate dummy POJOs and export them.
 
+Use annotations to populate POJOs fields with values, and then populate/produce POJos (Dummy objects) via factory to export them in desired format.
+
 ## Install
 Get via **Maven** Dependency.
 ```
@@ -33,9 +35,9 @@ Give the example
 
 ### ***Annotations***
 
-Let user declare fields with Annotations to generate values for that field for dummy object for populate/produce.
+Let user declare fields with Annotations to generate values for dummy object's field to populate/produce it via specific factory.
 
-User can user ***GenForceExport*** or ***GenIgnoreExport*** to force/ignore export object's field.
+User can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to force/ignore export object's field.
 
 #### 
 ![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
@@ -126,6 +128,9 @@ public class TestCaseClass {
 ```
 
 ### *SQL*
+
+Each insert query can contains max ***950*** rows (Due to ***1000*** row limit in SQL).
+
 ```
 CREATE TABLE IF NOT EXISTS TestCaseClass(
 	str	VARCHAR,
@@ -141,7 +146,7 @@ INSERT INTO TestCaseClass (str, aDouble) VALUES
 
 ## Author
 
-**Kurako Anton** (*@GoodforGod*)
+***Anton Kurako*** (***GoodforGod***).
 
 ## License
 

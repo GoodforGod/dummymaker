@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 29.05.2017
  */
 public class PopulateAnnotationScanner extends AnnotationScanner {

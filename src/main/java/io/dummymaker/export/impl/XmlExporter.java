@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 26.05.2017
  */
 public class XmlExporter<T>  extends OriginExporter<T> {

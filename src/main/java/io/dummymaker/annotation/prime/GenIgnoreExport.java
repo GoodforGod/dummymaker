@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * Default Comment
  *
- * @author @GoodforGod
+ * @author GoodforGod
  * @since 03.06.2017
  */
 @Inherited
