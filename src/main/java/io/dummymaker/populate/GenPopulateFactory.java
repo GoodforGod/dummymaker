@@ -42,8 +42,6 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
                 logger.warning(e.getMessage());
             }
             catch (ClassCastException e) {
-                logger.info("CAN NOT CAST FIELD TYPE.. TRYING TO CONVERT TO STRING TYPE.");
-
                 try {
                     if(annotatedField.getKey().getType().isAssignableFrom(String.class))
                         annotatedField.getKey().set(t, String.valueOf(objValue));

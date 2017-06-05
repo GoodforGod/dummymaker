@@ -9,6 +9,7 @@ import java.util.List;
  * @since 26.05.2017
  */
 public interface IExporter<T> {
+
     /**
      * Allow to export single object
      * @param t object to export
@@ -17,7 +18,7 @@ public interface IExporter<T> {
 
     /**
      * Allow to export list of objects
-     * @param t objects to export
+     * @param tList objects to export
      */
-    void export(List<T> t);
+    void export(List<T> tList);
 }
