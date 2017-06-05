@@ -7,17 +7,25 @@ Use annotations to populate POJOs fields with values, and then populate/produce 
 ## Install
 Get via **Maven** Dependency.
 ```
-Give the example
+<dependency>
+    <groupId>com.github.goodforgod</groupId>
+    <artifactId>dummymaker</artifactId>
+    <version>1.0.0</version>
+</dependency>
 ```
 
 Get via **Gradle** Dependency.
 ```
-Give the example
+dependencies {
+    compile 'com.github.goodforgod:dummymaker:1.0.0'
+}
 ```
 
 ## Methods
 
 ### **Factories**
+
+Used to produce/populate dummies.
 
 * *IPrimeFactory* - provides (**produce** & **populate** methods)
 
@@ -26,6 +34,8 @@ Give the example
 * *IPopulateFactory* - provides (**populate** methods)
 
 ### **Exporter**
+
+Used to export dummies.
 
 * *IPrimeExporter* - **CSV/XML/JSON/SQL** export methods.
 

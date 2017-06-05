@@ -5,7 +5,7 @@ import io.dummymaker.bundle.NicknamesPresentBundle;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Default Comment
+ * Generates nicknames as a string
  *
  * @author GoodforGod (Anton Kurako)
  * @since 05.06.2017
