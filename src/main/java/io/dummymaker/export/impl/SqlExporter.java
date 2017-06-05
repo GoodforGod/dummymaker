@@ -4,6 +4,7 @@ import io.dummymaker.export.ExportType;
 import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
      */
     private enum DataType {
         LONG    ("BIGINT",  Long.class.getName()),
-        DOUBLE  ("DOUBLE",  Double.class.getName()),
+        DOUBLE  ("DOUBLE PRECISION",  Double.class.getName()),
         STRING  ("VARCHAR", String.class.getName()),
         INTEGER ("INT",     Integer.class.getName()),
         LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getName());
@@ -150,6 +151,8 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
                 if(fieldsToExport.get(field.getKey()).getType().equals(String.class))
                     builder.append(wrapWithComma(field.getValue()));
+                else if(fieldsToExport.get(field.getKey()).getType().equals(LocalDateTime.class))
+                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
                 else
                     builder.append(field.getValue());
 
