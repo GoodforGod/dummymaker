@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -76,53 +75,32 @@ public class JsonExporter<T> extends OriginExporter<T> {
 
     @Override
     public void export(T t) {
-        try {
-            writeLine(objectToJson(t, Mode.SINGLE).toString());
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
-            }
-        }
+        writeLine(objectToJson(t, Mode.SINGLE).toString());
+        flush();
     }
 
     @Override
     public void export(List<T> objects) {
-        try {
-            // Open JSON Object List
-            String jsonListOpen = "{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[";
-            writeLine(jsonListOpen);
+        // Open JSON Object List
+        String jsonListOpen = "{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[";
+        writeLine(jsonListOpen);
 
-            Iterator<T> iterator = objects.iterator();
-            while(iterator.hasNext()) {
-                T t = iterator.next();
-                StringBuilder write = objectToJson(t, Mode.LIST);
+        Iterator<T> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            T t = iterator.next();
+            StringBuilder write = objectToJson(t, Mode.LIST);
 
-                // Write , to the end of the object
-                if(iterator.hasNext())
-                    write.append(",");
+            // Write , to the end of the object
+            if (iterator.hasNext())
+                write.append(",");
 
-                writeLine(write.toString());
-            }
-
-            // Close JSON Object List
-            String jsonListClose = "\t]\n}";
-            writeLine(jsonListClose);
+            writeLine(write.toString());
         }
-        catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
-            }
-        }
+
+        // Close JSON Object List
+        String jsonListClose = "\t]\n}";
+        writeLine(jsonListClose);
+        flush();
     }
 
 }

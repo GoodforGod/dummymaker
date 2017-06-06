@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -67,41 +66,20 @@ public class XmlExporter<T>  extends OriginExporter<T> {
 
     @Override
     public void export(T t) {
-        try {
-            writeLine(objectToXml(t, Mode.SINGLE));
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage());
-            }
-        }
+        writeLine(objectToXml(t, Mode.SINGLE));
+        flush();
     }
 
     @Override
     public void export(List<T> list) {
-        try {
-            String XML_LIST_SUFFIX = "List";
-            String superList = exportClass.getSimpleName() + XML_LIST_SUFFIX;
-            writeLine(wrapOpenXmlTag(superList));
+        String superList = exportClass.getSimpleName() + "List";
+        writeLine(wrapOpenXmlTag(superList));
 
-            for(T t : list)
-                writeLine(objectToXml(t, Mode.LIST));
+        for (T t : list)
+            writeLine(objectToXml(t, Mode.LIST));
 
-            writeLine(wrapCloseXmlTag(superList));
-        }
-        catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage());
-            }
-        }
+        writeLine(wrapCloseXmlTag(superList));
+
+        flush();
     }
 }

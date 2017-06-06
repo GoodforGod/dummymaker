@@ -32,7 +32,7 @@ abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExpor
     protected final Map<String, Field> fieldsToExport = new HashMap<>();
 
     public OriginExporter(Class<T> exportClass, String path, ExportFormat type) {
-        super(exportClass, path, type);
+        super(exportClass, path, type.getValue());
         this.exportClass = exportClass;
 
         exportScanner.scan(exportClass).entrySet().forEach(set -> fieldsToExport.put(set.getKey().getName(), set.getKey()));

@@ -1,12 +1,9 @@
 package io.dummymaker.writer;
 
-import io.dummymaker.export.ExportFormat;
-
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -21,47 +18,43 @@ public class BufferedFileWriter<T> implements IWriter {
 
     private BufferedWriter writer = null;
 
-    protected final String HOME_PATH = "";
-
-    public BufferedFileWriter(Class<T> primeClass, String path, ExportFormat type) {
-        String fileType = (type != null)
-                ? type.getValue()
-                : ".exported";
-
-        String writePath = (path == null || path.trim().isEmpty())
-                ? HOME_PATH
+    public BufferedFileWriter(Class<T> primeClass, String path, String fileType) {
+        String filePath = (path == null || path.trim().isEmpty())
+                ? "."
                 : path;
 
         try {
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(writePath+ primeClass.getSimpleName() + fileType), "UTF-8"));
+                            new FileOutputStream(filePath + primeClass.getSimpleName() + fileType), "UTF-8"));
         } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage());
+            logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER");
         }
     }
 
     @Override
-    public void writeLine(String value) throws IOException, NullPointerException {
+    public void writeLine(String value) {
         try {
             writer.write(value);
             writer.newLine();
         } catch (Exception e) {
-            logger.log(Level.WARNING, e.getMessage());
+            logger.warning(e.getMessage());
 
             try {
                 if(writer != null)
                     writer.close();
-            } catch (IOException e1) { }
+            } catch (IOException e1) {
+                logger.warning(e1.getMessage() + " | CAN NOT CLOSE WRITER");
+            }
         }
     }
 
     @Override
-    public void flush() throws IOException, NullPointerException {
+    public void flush() {
         try {
             writer.close();
         } catch (Exception e) {
-            logger.log(Level.WARNING, e.getMessage());
+            logger.warning(e.getMessage() + " | CAN NOT CLOSE WRITER");
         }
     }
 }

@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Iterator;
@@ -30,8 +29,8 @@ public class SqlExporter<T> extends OriginExporter<T> {
             this.java = java;
         }
 
-        private String sql;
-        private String java;
+        private final String sql;
+        private final String java;
 
         public String getSql() {
             return sql;
@@ -168,76 +167,55 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
     @Override
     public void export(T t) {
-        try {
-            writeLine(sqlTableCreate(t));
-            writeLine(sqlInsertIntoQuery(t));
-            writeLine(sqlValuesInsert(t) + ";");
-        }
-        catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage());
-            }
-        }
+        writeLine(sqlTableCreate(t));
+        writeLine(sqlInsertIntoQuery(t));
+        writeLine(sqlValuesInsert(t) + ";");
+        flush();
     }
 
     @Override
     public void export(List<T> list) {
-        try {
-            final int max = 950;
-            int i = max;
+        final int max = 950;
+        int i = max;
 
-            // Check for nonNull list
-            if(list == null || list.isEmpty())
-                return;
+        // Check for nonNull list
+        if (list == null || list.isEmpty())
+            return;
 
-            Iterator<T> iterator = list.iterator();
+        Iterator<T> iterator = list.iterator();
 
-            // Create Table Query
-            writeLine(sqlTableCreate(list.get(0)));
+        // Create Table Query
+        writeLine(sqlTableCreate(list.get(0)));
 
-            while (iterator.hasNext()) {
-                T t = iterator.next();
+        while (iterator.hasNext()) {
+            T t = iterator.next();
 
-                // Insert Values Query
-                if(i == max)
-                    writeLine(sqlInsertIntoQuery(t));
+            // Insert Values Query
+            if (i == max)
+                writeLine(sqlInsertIntoQuery(t));
 
-                i--;
+            i--;
 
-                StringBuilder valueToWrite = sqlValuesInsert(t);
+            StringBuilder valueToWrite = sqlValuesInsert(t);
 
-                if(iterator.hasNext() && i != 0)
-                    valueToWrite.append(",");
+            if (iterator.hasNext() && i != 0)
+                valueToWrite.append(",");
 
-                writeLine(valueToWrite.toString());
+            writeLine(valueToWrite.toString());
 
-                // End insert Query if no elements left or need to organize next batch
-                if(i == 0 || !iterator.hasNext()) {
-                    writeLine(";");
+            // End insert Query if no elements left or need to organize next batch
+            if (i == 0 || !iterator.hasNext()) {
+                writeLine(";");
 
-                    if(!iterator.hasNext())
-                        break;
-                    else {
-                        writeLine("\n");
-                        i = max;
-                    }
+                if (!iterator.hasNext())
+                    break;
+                else {
+                    writeLine("\n");
+                    i = max;
                 }
             }
         }
-        catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage());
-            }
-        }
+
+        flush();
     }
 }

@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
@@ -132,41 +131,20 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     @Override
     public void export(T t) {
-        try {
-            if(withHeader)
-                writeLine(generateCsvHeader());
+        if (withHeader)
+            writeLine(generateCsvHeader());
 
-            writeLine(objectToCsv(t));
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
-            }
-        }
+        writeLine(objectToCsv(t));
+        flush();
     }
 
     @Override
     public void export(List<T> tList) {
-        try {
-            if(withHeader)
-                writeLine(generateCsvHeader());
+        if (withHeader)
+            writeLine(generateCsvHeader());
 
-            for (T t : tList)
-                writeLine(objectToCsv(t));
-
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
-        } finally {
-            try {
-                flush();
-            } catch (IOException e) {
-                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
-            }
-        }
+        for (T t : tList)
+            writeLine(objectToCsv(t));
+        flush();
     }
-
 }
