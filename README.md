@@ -28,9 +28,7 @@ dependencies {
 
 ### **Factories**
 
-Used to produce/populate dummies.
-
-* *IPrimeFactory* - contains both factories (**produce** & **populate** methods)
+Allow user populate or produce Dummy Object(s).
 
 * *IProduceFactory* - allow you to produce new Dummies (**produce** methods)
 
@@ -56,9 +54,9 @@ User can use special annotations like ***GenForceExport*** or ***GenIgnoreExport
 #### 
 ![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
 
-### ***IPrimeFactory/IProvideFactory***
+### ***IPopulateFactory/IProvideFactory***
 
-Let user populate dummy object(s) or produce dummy object(s).
+Allow user populate or produce Dummy Object(s).
 
 #### *You can produce 1 or more dummies.*
 
