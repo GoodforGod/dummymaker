@@ -5,6 +5,7 @@ import io.dummymaker.populate.IPopulateFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Produce Dummy Objects and populate them via PrimeGenAnnotation generators included
@@ -16,11 +17,11 @@ import java.util.List;
  */
 public class GenProduceFactory<T> implements IProduceFactory<T> {
 
+    private final Logger logger = Logger.getLogger(GenProduceFactory.class.getName());
+
     private final IPopulateFactory<T> populateFactory = new GenPopulateFactory<>();
 
-    private Class<T> primeClass;
-
-    private GenProduceFactory() {}
+    private final Class<T> primeClass;
 
     public GenProduceFactory(Class<T> primeClass) {
         this.primeClass = primeClass;
@@ -33,7 +34,7 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
         try {
             instance = populateFactory.populate(primeClass.newInstance());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT PRODUCE INSTANTIATE!");
         }
 
         return instance;

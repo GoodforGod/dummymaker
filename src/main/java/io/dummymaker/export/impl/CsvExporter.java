@@ -1,9 +1,9 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.ExportFormat;
-import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,49 +18,52 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     private final char DEFAULT_SEPARATOR = ',';
 
+    /**
+     * CSV format separator
+     */
     private char SEPARATOR = DEFAULT_SEPARATOR;
 
-    private final boolean wrapText;
+    /**
+     * Flag to indicate wrap text (String) fields with quotes
+     */
+    private boolean wrapText = false;
+
+    /**
+     * Generate header for CSV file
+     */
+    private boolean withHeader = false;
 
     //<editor-fold desc="Constructors">
 
     public CsvExporter(Class<T> primeClass) {
-        this(primeClass, null, ' ');
-    }
-
-    public CsvExporter(Class<T> primeClass, boolean wrapText) {
-        this(primeClass, null, ' ', wrapText);
-    }
-
-    public CsvExporter(Class<T> primeClass, char separator) {
-        this(primeClass, null, separator);
-    }
-
-    public CsvExporter(Class<T> primeClass, char separator, boolean wrapText) {
-        this(primeClass, null, separator, wrapText);
+        this(primeClass, null);
     }
 
     public CsvExporter(Class<T> primeClass, String path) {
-        this(primeClass, path, ' ');
-    }
-
-    public CsvExporter(Class<T> primeClass, String path, boolean wrapText) {
-        this(primeClass, path, ' ', wrapText);
-    }
-
-    public CsvExporter(Class<T> primeClass, String path, char separator) {
-        this(primeClass, path, separator, false);
-        SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
-    }
-
-    public CsvExporter(Class<T> primeClass, String path, char separator, boolean wrapText) {
         super(primeClass, path, ExportFormat.CSV);
-        this.wrapText = wrapText;
-        SEPARATOR = (separator == ' ') ? DEFAULT_SEPARATOR : separator;
     }
 
     //</editor-fold>
 
+    public void setSeparator(char separator) {
+        this.SEPARATOR = (separator == ' ')
+                ? DEFAULT_SEPARATOR
+                : separator;
+    }
+
+    public void setWrapText(boolean wrapText) {
+        this.wrapText = wrapText;
+    }
+
+    public void setWithHeader(boolean withHeader) {
+        this.withHeader = withHeader;
+    }
+
+    /**
+     * Wraps text values (String) with quotes '
+     * @param value values to wrap
+     * @return wrapped values
+     */
     private String wrapWithQuotes(String value) {
         return "'" + value + "'";
     }
@@ -85,9 +88,30 @@ public class CsvExporter<T> extends OriginExporter<T> {
         return builder.toString();
     }
 
+    /**
+     * Generates header for CSV file
+     * @return csv header
+     */
+    private String generateCsvHeader() {
+        String header = "";
+        Iterator<Map.Entry<String, Field>> iterator = fieldsToExport.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            header += iterator.next().getKey();
+
+            if(iterator.hasNext())
+                header += SEPARATOR;
+        }
+
+        return header;
+    }
+
     @Override
     public void export(T t) {
         try {
+            if(withHeader)
+                writeLine(generateCsvHeader());
+
             writeLine(objectToCsv(t));
         } catch (IOException e) {
             logger.warning(e.getMessage());
@@ -102,18 +126,23 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     @Override
-    public void export(List<T> t) {
-        t.forEach(obj -> {
-            try {
-                writeLine(objectToCsv(obj));
-            } catch (IOException e) {
-                logger.warning(e.getMessage());
-            }
-        });
+    public void export(List<T> tList) {
         try {
-            flush();
+            if(withHeader)
+                writeLine(generateCsvHeader());
+
+            for (T t : tList)
+                writeLine(objectToCsv(t));
+
         } catch (IOException e) {
-            logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+            logger.warning(e.getMessage());
+        } finally {
+            try {
+                flush();
+            } catch (IOException e) {
+                logger.warning(e.getMessage() + " | CAN NOT FLUSH FILE WRITER");
+            }
         }
     }
+
 }

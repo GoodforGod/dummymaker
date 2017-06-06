@@ -1,7 +1,6 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.ExportFormat;
-import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,7 +21,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
     }
 
     public JsonExporter(Class<T> primeClass) {
-        super(primeClass, ExportFormat.JSON);
+        this(primeClass, null);
     }
 
     public JsonExporter(Class<T> primeClass, String path) {

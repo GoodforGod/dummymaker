@@ -1,5 +1,7 @@
-package io.dummymaker.export;
+package io.dummymaker.export.impl;
 
+import io.dummymaker.export.ExportFormat;
+import io.dummymaker.export.IExporter;
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.writer.BufferedFileWriter;
 
@@ -15,7 +17,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExporter<T> {
+abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExporter<T> {
 
     /**
      * Class type to export
@@ -30,10 +32,6 @@ public abstract class OriginExporter<T> extends BufferedFileWriter<T> implements
      * Field name as a key, and field values as a values
      */
     protected final Map<String, Field> fieldsToExport = new HashMap<>();
-
-    public OriginExporter(Class<T> exportClass, ExportFormat type) {
-        this(exportClass, null, type);
-    }
 
     public OriginExporter(Class<T> exportClass, String path, ExportFormat type) {
         super(exportClass, path, type);

@@ -1,7 +1,6 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.ExportFormat;
-import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,7 +21,7 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     }
 
     public XmlExporter(Class<T> primeClass) {
-        super(primeClass, ExportFormat.XML);
+        this(primeClass, null);
     }
 
     public XmlExporter(Class<T> primeClass, String path) {

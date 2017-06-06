@@ -1,7 +1,6 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.ExportFormat;
-import io.dummymaker.export.OriginExporter;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -46,7 +45,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
     }
 
     public SqlExporter(Class<T> primeClass) {
-        super(primeClass, ExportFormat.SQL);
+        this(primeClass, null);
     }
 
     public SqlExporter(Class<T> primeClass, String path) {
