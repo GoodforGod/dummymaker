@@ -8,7 +8,7 @@ package io.dummymaker.export;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public enum ExportFormat {
+enum ExportFormat {
     CSV(".csv"),
     JSON(".json"),
     XML(".xml"),

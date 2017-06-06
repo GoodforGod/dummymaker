@@ -1,7 +1,7 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.annotation.prime.PrimeGenAnnotation;
-import io.dummymaker.generate.LongGenerator;
+import io.dummymaker.generator.LongGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

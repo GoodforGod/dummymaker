@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.prime;
 
-import io.dummymaker.generate.IGenerator;
-import io.dummymaker.generate.NullGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.NullGenerator;
 
 import java.lang.annotation.*;
 

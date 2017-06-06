@@ -3,7 +3,7 @@ package io.dummymaker;
 /**
  * Hello Generator Factory!
  */
-public class App {
+class App {
 
     public static void main(String[] args) {
 

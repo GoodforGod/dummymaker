@@ -2,7 +2,7 @@ package io.dummymaker.annotation;
 
 
 import io.dummymaker.annotation.prime.PrimeGenAnnotation;
-import io.dummymaker.generate.StringGenerator;
+import io.dummymaker.generator.StringGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
