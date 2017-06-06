@@ -1,6 +1,7 @@
 # DummyMaker :hotsprings:
 
-Allow you to create/populate Dummy POJOs and export them in desired format.
+Library allow you to produce Dummy Objects (POJOs) by using *Factories* and populate their fields with random values by using *Annotations*.
+And then *Export* them in **CSV/JSON/XML/SQL** format.
 
 Steps to do:
 1) *Annotate* your Dummy Object fields with generators annotations.

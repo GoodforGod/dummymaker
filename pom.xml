@@ -4,11 +4,11 @@
 
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Library allow you to create dummies (POJOs) and populate their fields with generators by using annotations.</description>
+    <description>Library allow you to produce Dummy Objects (POJOs) and populate their fields with random values by using annotations. And then export them in CSV/JSON/XML/SQL format.</description>
     <url>http://maven.apache.org</url>
 
     <licenses>
