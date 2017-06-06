@@ -1,23 +1,26 @@
-# DummyMaker
+# DummyMaker :hotsprings:
 
-Allow you to create/populate dummy POJOs and export them.
+Allow you to create/populate Dummy POJOs and export them in desired format.
 
-Use annotations to populate POJOs fields with values, and then populate/produce POJos (Dummy objects) via factory to export them in desired format.
+Steps to do:
+1) *Annotate* your Dummy Object fields with generators annotations.
+2) Tell *Factory* to populate/produce you Dummy Object.
+3) Export your Dummy Objects by using *Exporter*.
 
-## Install
-Get via **Maven** Dependency.
+## Install :rocket:
+Get via **Maven**
 ```
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
-Get via **Gradle** Dependency.
+Get via **Gradle**
 ```
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.0.0'
+    compile 'com.github.goodforgod:dummymaker:1.0.1'
 }
 ```
 
@@ -27,27 +30,28 @@ dependencies {
 
 Used to produce/populate dummies.
 
-* *IPrimeFactory* - provides (**produce** & **populate** methods)
+* *IPrimeFactory* - contains both factories (**produce** & **populate** methods)
 
-* *IProduceFactory* - provides (**produce** methods)
+* *IProduceFactory* - allow you to produce new Dummies (**produce** methods)
 
-* *IPopulateFactory* - provides (**populate** methods)
+* *IPopulateFactory* - allow you to populate your Dummies fields (**populate** methods)
 
 ### **Exporter**
 
-Used to export dummies.
+Allow you to export your Dummies.
 
-* *IPrimeExporter* - **CSV/XML/JSON/SQL** export methods.
+* *IExporter* - export contracts.
 
-* *IExporter* - export methods.
+* ***{CSV/XML/JSON/SQL}** Exporter* - IExporter implementations.
 
 ## *Getting Started with examples*
 
 ### ***Annotations***
 
-Let user declare fields with Annotations to generate values for dummy object's field to populate/produce it via specific factory.
+Allow your declare Dummy fields with generator annotations.
+Annotations will generate values during by using *factories*.
 
-User can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to force/ignore export object's field.
+User can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to *force/ignore* export object's field.
 
 #### 
 ![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
@@ -83,7 +87,7 @@ Let user populate dummy object(s) or produce dummy object(s).
 
 ## Export File Structures
 
-Examples of exported dummies of each type.
+Examples of exported Dummies in each format.
 
 ### Test Class
 ```
@@ -101,6 +105,9 @@ public class TestCaseClass {
 ```
 
 ### *CSV*
+
+Can be used to import data in ***Cassandra, Mongo, Neo4j, etc...*** 
+
 ```
 0.03967295259868164,0.30227242830001944
 0.8408601054584944,0.7401367963737594
@@ -108,6 +115,9 @@ public class TestCaseClass {
 ```
 
 ### *JSON*
+
+Can be used to import data in ***Mongo, MySQL, etc...***
+
 ```
 {
 	"TestCaseClass": [
@@ -124,6 +134,9 @@ public class TestCaseClass {
 ```
 
 ### *XML*
+
+Can be used to import data in ***MySQL, SQL Server, etc...***
+
 ```
 <TestCaseClassList>
 	<TestCaseClass>
@@ -138,6 +151,8 @@ public class TestCaseClass {
 ```
 
 ### *SQL*
+
+Don't forget about Primary Key!
 
 Each insert query can contains max ***950*** rows (Due to ***1000*** row limit in SQL).
 
@@ -154,9 +169,13 @@ INSERT INTO TestCaseClass (str, aDouble) VALUES
 ;
 ```
 
-## Author
+## Version
 
-***Anton Kurako*** (***GoodforGod***).
+Last stable release **1.0.1**.
+
+## Author :octocat:
+
+***Anton Kurako*** (***@GoodforGod***)
 
 ## License
 

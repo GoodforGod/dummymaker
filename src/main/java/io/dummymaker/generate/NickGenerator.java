@@ -1,6 +1,6 @@
 package io.dummymaker.generate;
 
-import io.dummymaker.bundle.NicknamesPresentBundle;
+import io.dummymaker.bundle.NicknamesPresetBundle;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 
@@ -14,7 +14,7 @@ public class NickGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        NicknamesPresentBundle bundle = new NicknamesPresentBundle();
+        NicknamesPresetBundle bundle = new NicknamesPresetBundle();
         boolean revert = current().nextBoolean();
         boolean tuple = current().nextBoolean();
 

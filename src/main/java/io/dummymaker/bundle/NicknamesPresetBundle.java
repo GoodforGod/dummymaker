@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author GoodforGod
  * @since 03.06.2017
  */
-public class NicknamesPresentBundle extends IPresetBundle<String> {
+public class NicknamesPresetBundle extends IPresetBundle<String> {
 
-    public NicknamesPresentBundle() {
+    public NicknamesPresetBundle() {
         super(new ArrayList<String>() {{
             add("3DWaffle");
             add("Hightower");

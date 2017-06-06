@@ -90,6 +90,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
             builder.append("\t").append(sqlCreateInsert(field));
 
+            if(field.getKey().equals("id"))
+                builder.append(" PRIMARY KEY");
+
             if(iterator.hasNext())
                 builder.append(",");
 

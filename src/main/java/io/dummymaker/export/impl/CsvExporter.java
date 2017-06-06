@@ -39,8 +39,34 @@ public class CsvExporter<T> extends OriginExporter<T> {
         this(primeClass, null);
     }
 
+    public CsvExporter(Class<T> primeClass, boolean wrapText, boolean withHeader) {
+        this(primeClass, null);
+        this.wrapText = wrapText;
+        this.withHeader = withHeader;
+    }
+
+    public CsvExporter(Class<T> primeClass, boolean wrapText, boolean withHeader, char separator) {
+        this(primeClass, null);
+        this.wrapText = wrapText;
+        this.withHeader = withHeader;
+        setSeparator(separator);
+    }
+
     public CsvExporter(Class<T> primeClass, String path) {
         super(primeClass, path, ExportFormat.CSV);
+    }
+
+    public CsvExporter(Class<T> primeClass, String path, boolean wrapText, boolean withHeader) {
+        this(primeClass, path);
+        this.wrapText = wrapText;
+        this.withHeader = withHeader;
+    }
+
+    public CsvExporter(Class<T> primeClass, String path, boolean wrapText, boolean withHeader, char separator) {
+        this(primeClass, path);
+        this.wrapText = wrapText;
+        this.withHeader = withHeader;
+        setSeparator(separator);
     }
 
     //</editor-fold>
@@ -60,7 +86,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     /**
-     * Wraps text values (String) with quotes '
+     * Wraps text values (String) with quotes like 'value'
      * @param value values to wrap
      * @return wrapped values
      */
@@ -76,7 +102,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         while (iterator.hasNext()) {
 
             Map.Entry<String, String> obj = iterator.next();
-            if(fieldsToExport.get(obj.getKey()).getType().equals(String.class))
+            if(wrapText && fieldsToExport.get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
                 builder.append(obj.getValue());

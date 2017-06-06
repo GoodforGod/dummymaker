@@ -2,7 +2,7 @@ package io.dummymaker.generate;
 
 import io.dummymaker.bundle.DomainExtensionPresetBundle;
 import io.dummymaker.bundle.EmailServicesPresetBundle;
-import io.dummymaker.bundle.NicknamesPresentBundle;
+import io.dummymaker.bundle.NicknamesPresetBundle;
 
 /**
  * Generates email as a string
@@ -14,7 +14,7 @@ public class EmailGenerator extends StringGenerator {
 
     @Override
     public String generate() {
-        return new NicknamesPresentBundle().getRandom()
+        return new NicknamesPresetBundle().getRandom()
                 + "@"
                 + new EmailServicesPresetBundle().getRandom()
                 + new DomainExtensionPresetBundle().getRandom();

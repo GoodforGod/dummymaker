@@ -31,6 +31,30 @@ public class DomainExtensionPresetBundle extends IPresetBundle<String> {
             add(".company");
             add(".person");
             add(".de");
+            add(".site");
+            add(".online");
+            add(".us");
+            add(".am");
+            add(".be");
+            add(".bio");
+            add(".blog");
+            add(".bz");
+            add(".cl");
+            add(".cz");
+            add(".ec");
+            add(".eu");
+            add(".es");
+            add(".fr");
+            add(".gg");
+            add(".gr");
+            add(".help");
+            add(".im");
+            add(".in");
+            add(".ink");
+            add(".is");
+            add(".life");
+            add(".pl");
+            add(".sg");
         }});
     }
 }
