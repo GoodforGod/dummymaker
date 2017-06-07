@@ -50,7 +50,10 @@ Allow you to export your Dummies.
 Allow your declare Dummy fields with generator annotations.
 Annotations will generate values during by using *factories*.
 
-User can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to *force/ignore* export object's field.
+You can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to *force/ignore* export object's field.
+
+Also you can use annotations ***GenNumerate*** with option (*from*) to numerate populated/produced Dummies fields.
+
 
 #### 
 ![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
