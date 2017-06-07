@@ -4,8 +4,8 @@ Library allow you to produce Dummy Objects (POJOs) by using *Factories* and popu
 And then *Export* them in **CSV/JSON/XML/SQL** format.
 
 Steps to do:
-1) *Annotate* your Dummy Object fields with generators annotations.
-2) Tell *Factory* to populate/produce you Dummy Object.
+1) *Annotate* your Dummy Object fields with special *Gen* annotations.
+2) Use *Factory* to populate/produce you Dummy Objects.
 3) Export your Dummy Objects by using *Exporter*.
 
 ## Install :rocket:
