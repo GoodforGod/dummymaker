@@ -18,10 +18,10 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
     private final IPopulateFactory<T> populateFactory = new GenPopulateFactory<>();
 
-    private final Class<T> primeClass;
+    private final Class<T> produceClass;
 
-    public GenProduceFactory(Class<T> primeClass) {
-        this.primeClass = primeClass;
+    public GenProduceFactory(Class<T> produceClass) {
+        this.produceClass = produceClass;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
         T instance = null;
 
         try {
-            instance = populateFactory.populate(primeClass.newInstance());
+            instance = populateFactory.populate(produceClass.newInstance());
         } catch (Exception e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT PRODUCE INSTANTIATE!");
         }
@@ -43,15 +43,15 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
         int realAmount = (amount > 0) ? amount : 0;
 
-        while (realAmount > 0) {
-            T t = produce();
+        try {
+            for(int i = 0; i < realAmount; i++)
+                produced.add(produceClass.newInstance());
 
-            if(t != null)
-                produced.add(t);
-
-            realAmount--;
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE OBJECT!");
+            return new ArrayList<>();
         }
 
-        return produced;
+        return populateFactory.populate(produced);
     }
 }

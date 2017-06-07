@@ -20,7 +20,7 @@ public class BufferedFileWriter<T> implements IWriter {
 
     public BufferedFileWriter(Class<T> primeClass, String path, String fileType) {
         String filePath = (path == null || path.trim().isEmpty())
-                ? "."
+                ? ""
                 : path;
 
         try {

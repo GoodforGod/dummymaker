@@ -1,7 +1,7 @@
 package io.dummymaker;
 
 /**
- * Hello Generator Factory!
+ * Hello Dummy Maker!
  */
 class App {
 
