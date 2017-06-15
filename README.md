@@ -9,7 +9,7 @@ Steps to do:
 3) Export your Dummy Objects by using *Exporter*.
 
 ## Install :rocket:
-Get via **Maven**
+**Maven**
 ```
 <dependency>
     <groupId>com.github.goodforgod</groupId>
@@ -18,7 +18,7 @@ Get via **Maven**
 </dependency>
 ```
 
-Get via **Gradle**
+**Gradle**
 ```
 dependencies {
     compile 'com.github.goodforgod:dummymaker:1.0.1'
@@ -31,17 +31,17 @@ dependencies {
 
 Allow user populate or produce Dummy Object(s).
 
-* *IProduceFactory* - allow you to produce new Dummies (**produce** methods)
+* *IProduceFactory* - allow you to produce new Dummies.
 
-* *IPopulateFactory* - allow you to populate your Dummies fields (**populate** methods)
+* *IPopulateFactory* - allow you to populate Dummies fields.
 
 ### **Exporter**
 
 Allow you to export your Dummies.
 
-* *IExporter* - export contracts.
+* *IExporter* - available export methods.
 
-* ***{CSV/XML/JSON/SQL}** Exporter* - IExporter implementations.
+* ***{CSV/XML/JSON/SQL}** Exporter* - *IExporter* implementations.
 
 ## *Getting Started with examples*
 
@@ -52,7 +52,7 @@ Annotations will generate values during by using *factories*.
 
 You can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to *force/ignore* export object's field.
 
-Also you can use annotations ***GenNumerate*** with option (*from*) to numerate populated/produced Dummies fields.
+Also you can use annotations ***GenNumerate*** with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
 
 
 #### 
@@ -154,9 +154,9 @@ Can be used to import data in ***MySQL, SQL Server, etc...***
 
 ### *SQL*
 
-Don't forget about Primary Key!
+Don't forget about **Primary Key**!
 
-Each insert query can contains max ***950*** rows (Due to ***1000*** row limit in SQL).
+Each insert query can contains max ***950*** rows (Due to ***1000*** insert row limit in *SQL*).
 
 ```
 CREATE TABLE IF NOT EXISTS TestCaseClass(
@@ -171,13 +171,15 @@ INSERT INTO TestCaseClass (str, aDouble) VALUES
 ;
 ```
 
-## Version
+## Version History
 
-Last stable release **1.0.1**.
+**1.0.1** - Added generate new annotations, GenNumerate, fixed SQL export bug, other minor fixes.
+
+**1.0.0** - Initial project with core functions.
 
 ## Author :octocat:
 
-***Anton Kurako*** (***@GoodforGod***)
+***Anton Kurako '@GoodforGod***'
 
 ## License
 
