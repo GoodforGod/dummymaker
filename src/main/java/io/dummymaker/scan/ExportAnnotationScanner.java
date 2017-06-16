@@ -1,8 +1,8 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.prime.GenForceExport;
-import io.dummymaker.annotation.prime.GenIgnoreExport;
-import io.dummymaker.annotation.prime.PrimeGenAnnotation;
+import io.dummymaker.annotation.special.GenForceExport;
+import io.dummymaker.annotation.special.GenIgnoreExport;
+import io.dummymaker.annotation.util.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -23,14 +23,27 @@ import java.util.stream.Collectors;
  */
 public class ExportAnnotationScanner extends AnnotationScanner {
 
+    /**
+     * Check for accepted for export annotations
+     *
+     * @see GenForceExport
+     * @see PrimeGenAnnotation
+     */
     private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGenAnnotation.class)
-                                                                || a.annotationType().equals(GenForceExport.class));
+                                                                || (a.annotationType().equals(GenForceExport.class))
+                                                                            && ((GenForceExport) a).value());
 
-    private final Predicate<Annotation> ignorePredicate = (a) -> a.annotationType().equals(GenIgnoreExport.class);
+    /**
+     * Check for ignorable annotations
+     *
+     * @see GenIgnoreExport
+     */
+    private final Predicate<Annotation> ignorePredicate = (a) -> (a.annotationType().equals(GenIgnoreExport.class)
+                                                                            && ((GenIgnoreExport) a).value());
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
-        Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+        final Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
 
         return (!mapToFilter.isEmpty())
                 ? mapToFilter.entrySet().stream()

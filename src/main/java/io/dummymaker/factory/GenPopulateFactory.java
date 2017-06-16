@@ -1,7 +1,7 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.annotation.GenNumerate;
-import io.dummymaker.annotation.prime.PrimeGenAnnotation;
+import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.scan.IFieldScanner;
 import io.dummymaker.scan.NumerateAnnotationScanner;
 import io.dummymaker.scan.PopulateAnnotationScanner;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Populates objects via PrimeGenAnnotation generators included
  *
  * @see PrimeGenAnnotation
- * @see io.dummymaker.annotation.GenNumerate
+ * @see GenEnumerate
  *
  * @author GoodforGod
  * @since 30.05.2017
@@ -33,7 +33,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
 
     @Override
     public T populate(T t) {
-        Map<Field, Set<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
+        final Map<Field, Set<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
 
         for(Map.Entry<Field, Set<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             Object objValue = null;
@@ -95,13 +95,13 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
      * @param t class to scan for numerate fields
      */
     private void setupNumerateMap(Class t) {
-        Map<Field, Set<Annotation>> numerateAnnotations = numerateAnnotationScanner.scan(t);
+        final Map<Field, Set<Annotation>> numerateAnnotations = numerateAnnotationScanner.scan(t);
 
         if(numerateAnnotations != null && !numerateAnnotations.isEmpty()) {
             this.enableNumeration = true;
 
             for(Map.Entry<Field, Set<Annotation>> numerated : numerateAnnotations.entrySet()) {
-                Long numerateValue = ((GenNumerate) numerated.getValue().iterator().next()).from();
+                Long numerateValue = ((GenEnumerate) numerated.getValue().iterator().next()).from();
                 this.numerateFields.put(numerated.getKey(), numerateValue);
             }
         }

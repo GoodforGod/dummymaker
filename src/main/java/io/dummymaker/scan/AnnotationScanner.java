@@ -17,19 +17,19 @@ public class AnnotationScanner implements IFieldScanner {
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
-        Map<Field, Set<Annotation>> map = new HashMap<>();
+        final Map<Field, Set<Annotation>> map = new HashMap<>();
 
         for(Field field : t.getDeclaredFields()) {
             for(Annotation annotation : field.getAnnotations()) {
-                Set<Annotation> fieldAnnotated = map.putIfAbsent(field, createNode(annotation));
+                final Set<Annotation> annotatedField = map.putIfAbsent(field, createNode(annotation));
 
-                if(fieldAnnotated != null) {
-                    fieldAnnotated.add(annotation);
-                    map.replace(field, fieldAnnotated);
+                if(annotatedField != null) {
+                    annotatedField.add(annotation);
+                    map.replace(field, annotatedField);
                 }
 
                 for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
-                    Set<Annotation> fieldPrimeAnnotated = map.putIfAbsent(field, createNode(primeAnnotation));
+                    final Set<Annotation> fieldPrimeAnnotated = map.putIfAbsent(field, createNode(primeAnnotation));
 
                     if(fieldPrimeAnnotated != null) {
                         fieldPrimeAnnotated.add(primeAnnotation);

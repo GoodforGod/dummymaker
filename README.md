@@ -52,7 +52,7 @@ Annotations will generate values during by using *factories*.
 
 You can use special annotations like ***GenForceExport*** or ***GenIgnoreExport*** to *force/ignore* export object's field.
 
-Also you can use annotations ***GenNumerate*** with option (*from*) to numerate populated/produced Dummies fields.
+Also you can use annotations ***GenEnumerate*** with option (*from*) to numerate populated/produced Dummies fields.
 
 
 #### 

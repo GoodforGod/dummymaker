@@ -37,17 +37,17 @@ public class JsonExporter<T> extends OriginExporter<T> {
      * @return StringBuilder of Object as JSON String
      */
     private StringBuilder objectToJson(T t, Mode mode) {
-        Map<String, String> values = getExportValues(t);
+        final Map<String, String> values = getExportValues(t);
 
-        String fieldTabs = (mode == Mode.SINGLE)
+        final StringBuilder builder = new StringBuilder("");
+
+        final String fieldTabs = (mode == Mode.SINGLE)
                 ? "\t"
                 : "\t\t\t";
 
-        String bracketTabs = (mode == Mode.SINGLE)
+        final String bracketTabs = (mode == Mode.SINGLE)
                 ? ""
                 : "\t\t";
-
-        StringBuilder builder = new StringBuilder("");
 
         if(!values.isEmpty()) {
             Iterator<Map.Entry<String, String>> iterator = values.entrySet().iterator();

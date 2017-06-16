@@ -34,20 +34,19 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     }
 
     private String objectToXml(T t, Mode mode) {
-        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
-        StringBuilder builder = new StringBuilder("");
+        final StringBuilder builder = new StringBuilder("");
 
-        String tabObject = (mode == Mode.SINGLE)
+        final String tabObject = (mode == Mode.SINGLE)
                 ? ""
                 : "\t";
 
-        String tabField = (mode == Mode.SINGLE)
+        final String tabField = (mode == Mode.SINGLE)
                 ? "\t"
                 : "\t\t";
 
         if(iterator.hasNext()) {
-
             builder.append(tabObject).append(wrapOpenXmlTag(exportClass.getSimpleName()));
 
             while (iterator.hasNext()) {
@@ -57,7 +56,6 @@ public class XmlExporter<T>  extends OriginExporter<T> {
                                     .append(field.getValue())
                                     .append(wrapCloseXmlTag(field.getKey()));
             }
-
             builder.append("\n").append(tabObject).append(wrapCloseXmlTag(exportClass.getSimpleName()));
         }
 

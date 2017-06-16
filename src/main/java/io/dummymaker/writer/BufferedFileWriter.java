@@ -12,21 +12,21 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class BufferedFileWriter<T> implements IWriter {
+public class BufferedFileWriter implements IWriter {
 
     private final Logger logger = Logger.getLogger(BufferedFileWriter.class.getName());
 
     private BufferedWriter writer = null;
 
-    public BufferedFileWriter(Class<T> primeClass, String path, String fileType) {
-        String filePath = (path == null || path.trim().isEmpty())
+    public BufferedFileWriter(String fileName, String path, String fileType) {
+        final String filePath = (path == null || path.trim().isEmpty())
                 ? ""
                 : path;
 
         try {
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(filePath + primeClass.getSimpleName() + fileType), "UTF-8"));
+                            new FileOutputStream(filePath + fileName + fileType), "UTF-8"));
         } catch (IOException e) {
             logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER");
         }

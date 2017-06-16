@@ -92,14 +92,13 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     private String objectToCsv(T t) {
-        StringBuilder builder = new StringBuilder("");
-
-        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final StringBuilder builder = new StringBuilder("");
+        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
         while (iterator.hasNext()) {
 
             Map.Entry<String, String> obj = iterator.next();
-            if(wrapText && fieldsToExport.get(obj.getKey()).getType().equals(String.class))
+            if(wrapText && exportFields.get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
                 builder.append(obj.getValue());
@@ -116,17 +115,17 @@ public class CsvExporter<T> extends OriginExporter<T> {
      * @return csv header
      */
     private String generateCsvHeader() {
-        String header = "";
-        Iterator<Map.Entry<String, Field>> iterator = fieldsToExport.entrySet().iterator();
+        final StringBuilder header = new StringBuilder("");
+        final Iterator<Map.Entry<String, Field>> iterator = exportFields.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            header += iterator.next().getKey();
+            header.append(iterator.next().getKey());
 
             if(iterator.hasNext())
-                header += SEPARATOR;
+                header.append(SEPARATOR);
         }
 
-        return header;
+        return header.toString();
     }
 
     @Override

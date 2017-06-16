@@ -1,6 +1,6 @@
 package io.dummymaker.annotation;
 
-import io.dummymaker.annotation.prime.PrimeGenAnnotation;
+import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.generator.PhoneGenerator;
 
 import java.lang.annotation.ElementType;

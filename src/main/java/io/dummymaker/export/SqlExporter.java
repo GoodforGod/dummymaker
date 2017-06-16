@@ -53,7 +53,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
      * convert Java Field Type to Sql Data Type
      */
     private String toSqlDataType(String fieldName) {
-        String fieldType = fieldsToExport.get(fieldName).getType().getName();
+        String fieldType = exportFields.get(fieldName).getType().getName();
 
         if(fieldType != null) {
             if (fieldType.equals(DataType.DOUBLE.getJava()))
@@ -148,9 +148,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
 
-                if(fieldsToExport.get(field.getKey()).getType().equals(String.class))
+                if(exportFields.get(field.getKey()).getType().equals(String.class))
                     builder.append(wrapWithComma(field.getValue()));
-                else if(fieldsToExport.get(field.getKey()).getType().equals(LocalDateTime.class))
+                else if(exportFields.get(field.getKey()).getType().equals(LocalDateTime.class))
                     builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
                 else
                     builder.append(field.getValue());

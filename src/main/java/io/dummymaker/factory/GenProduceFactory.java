@@ -1,5 +1,7 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.annotation.util.PrimeGenAnnotation;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -7,7 +9,7 @@ import java.util.logging.Logger;
 /**
  * Produce Dummy Objects and populate them via PrimeGenAnnotation generators included
  *
- * @see io.dummymaker.annotation.prime.PrimeGenAnnotation
+ * @see PrimeGenAnnotation
  *
  * @author GoodforGod
  * @since 26.05.2017
@@ -30,8 +32,11 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
         try {
             instance = populateFactory.populate(produceClass.newInstance());
-        } catch (Exception e) {
-            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT PRODUCE INSTANTIATE!");
+        } catch (InstantiationException e) {
+            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE NEW OBJECT!");
+        }
+        catch (IllegalAccessException e) {
+            logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
         }
 
         return instance;
@@ -39,7 +44,7 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
     @Override
     public List<T> produce(int amount) {
-        List<T> produced = new ArrayList<>();
+        final List<T> produced = new ArrayList<>();
 
         int realAmount = (amount > 0) ? amount : 0;
 

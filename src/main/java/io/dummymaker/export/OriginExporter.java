@@ -1,12 +1,16 @@
 package io.dummymaker.export;
 
+import io.dummymaker.annotation.special.GenForceExport;
+import io.dummymaker.annotation.special.GenIgnoreExport;
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.writer.BufferedFileWriter;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -15,27 +19,29 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExporter<T> {
+abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter<T> {
 
     /**
      * Class type to export
      */
-    protected final Class<T> exportClass;
+    final Class<T> exportClass;
 
-    protected final Logger logger = Logger.getLogger(OriginExporter.class.getName());
+    private final Logger logger = Logger.getLogger(OriginExporter.class.getName());
 
-    protected final ExportAnnotationScanner exportScanner = new ExportAnnotationScanner();
+    private final Predicate<Annotation> forcePredicate = (a) -> a.annotationType().equals(GenForceExport.class);
+
+    private final Predicate<Annotation> ignorePredicate = (a) -> a.annotationType().equals(GenIgnoreExport.class);
 
     /**
      * Field name as a key, and field values as a values
      */
-    protected final Map<String, Field> fieldsToExport = new HashMap<>();
+    final Map<String, Field> exportFields = new HashMap<>();
 
-    public OriginExporter(Class<T> exportClass, String path, ExportFormat type) {
-        super(exportClass, path, type.getValue());
+    OriginExporter(Class<T> exportClass, String path, ExportFormat type) {
+        super(exportClass.getSimpleName(), path, type.getValue());
         this.exportClass = exportClass;
 
-        exportScanner.scan(exportClass).entrySet().forEach(set -> fieldsToExport.put(set.getKey().getName(), set.getKey()));
+        new ExportAnnotationScanner().scan(exportClass).forEach((key, value) -> exportFields.put(key.getName(), key));
     }
 
     /**
@@ -44,12 +50,9 @@ abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExpor
      * @return return origin value or empty converted one
      */
     protected String convertToEmptyValue(String value) {
-        // Value to be exported if object value is Null or Empty
-
-        String EMPTY_VALUE = "null";
         return (value != null && !value.trim().isEmpty())
                 ? value
-                : EMPTY_VALUE;
+                : "null";
     }
 
     /**
@@ -57,15 +60,17 @@ abstract class OriginExporter<T> extends BufferedFileWriter<T> implements IExpor
      * @param t class to export
      * @return map of field name as a key and fields string values as a values
      */
-    protected Map<String, String> getExportValues(T t) {
-        Map<String, String> exports = new HashMap<>();
-        for(Map.Entry<String, Field> field : fieldsToExport.entrySet()) {
+    Map<String, String> getExportValues(T t) {
+        final Map<String, String> exports = new HashMap<>();
+
+        for(Map.Entry<String, Field> field : exportFields.entrySet()) {
             try {
-                Field exportField = t.getClass().getDeclaredField(field.getKey());
-                if(exportField != null) {
-                    exportField.setAccessible(true);
-                    exports.put(exportField.getName(), String.valueOf(exportField.get(t)));
-                    exportField.setAccessible(false);
+                Field fieldToExport = t.getClass().getDeclaredField(field.getKey());
+
+                if(fieldToExport != null) {
+                    fieldToExport.setAccessible(true);
+                    exports.put(fieldToExport.getName(), String.valueOf(fieldToExport.get(t)));
+                    fieldToExport.setAccessible(false);
                 }
             }
             catch (IllegalAccessException e) {

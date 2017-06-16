@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.GenNumerate;
+import io.dummymaker.annotation.special.GenEnumerate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -17,16 +17,21 @@ import java.util.stream.Collectors;
  */
 public class NumerateAnnotationScanner extends AnnotationScanner {
 
-    private final Predicate<Annotation> numeratePredicate = (a) -> a.annotationType().equals(GenNumerate.class);
+    private final Predicate<Annotation> numeratePredicate = (a) -> a.annotationType().equals(GenEnumerate.class);
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
-        return super.scan(t).entrySet().stream()
-                .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
-                .map(set -> {
-                    set.setValue(set.getValue().stream().filter(numeratePredicate).collect(Collectors.toSet()));
-                    return set;
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        final Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+
+        return (!mapToFilter.isEmpty())
+                ? mapToFilter.entrySet().stream()
+                    .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
+                    .map(set -> {
+                        set.setValue(set.getValue().stream().filter(numeratePredicate).collect(Collectors.toSet()));
+                        return set;
+                    })
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+
+                : mapToFilter;
     }
 }

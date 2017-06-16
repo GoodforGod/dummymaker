@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.prime.PrimeGenAnnotation;
+import io.dummymaker.annotation.util.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -23,7 +23,7 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
 
     @Override
     public Map<Field, Set<Annotation>> scan(Class t) {
-        Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+        final Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
 
         return (!mapToFilter.isEmpty())
                 ? mapToFilter.entrySet().stream()

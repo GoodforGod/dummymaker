@@ -1,4 +1,4 @@
-package io.dummymaker.annotation.prime;
+package io.dummymaker.annotation.special;
 
 import java.lang.annotation.*;
 
