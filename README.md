@@ -31,17 +31,15 @@ dependencies {
 
 Allow user populate or produce Dummy Object(s).
 
-* *IProduceFactory* - allow you to produce new Dummies.
+* ***GenProduceFactory*** - allow you to produce new Dummies with populated fields.
 
-* *IPopulateFactory* - allow you to populate Dummies fields.
+* ***GenPopulateFactory*** - allow you to populate fields of already created Dummies.
 
-### **Exporter**
+### **Export**
 
 Allow you to export your Dummies.
 
-* *IExporter* - available export methods.
-
-* ***{CSV/XML/JSON/SQL}** Exporter* - *IExporter* implementations.
+* ***CsvExporter/XmlExporter/JsonExporter/SqlExporter*** - export format implementations.
 
 ## *Getting Started with examples*
 
