@@ -18,10 +18,8 @@ public class BufferedFileWriter implements IWriter {
 
     private BufferedWriter writer = null;
 
-    public BufferedFileWriter(String fileName, String path, String fileType) {
-        final String filePath = (path == null || path.trim().isEmpty())
-                ? ""
-                : path;
+    public BufferedFileWriter(final String fileName, final String path, final String fileType) {
+        final String filePath = (path == null || path.trim().isEmpty()) ? "" : path;
 
         try {
             this.writer = new BufferedWriter(
@@ -33,28 +31,27 @@ public class BufferedFileWriter implements IWriter {
     }
 
     @Override
-    public void writeLine(String value) {
+    public boolean writeLine(final String value) {
         try {
             writer.write(value);
             writer.newLine();
+            return true;
         } catch (Exception e) {
             logger.warning(e.getMessage());
-
-            try {
-                if(writer != null)
-                    writer.close();
-            } catch (IOException e1) {
-                logger.warning(e1.getMessage() + " | CAN NOT CLOSE WRITER");
-            }
+            flush();
+            return false;
         }
     }
 
     @Override
-    public void flush() {
+    public boolean flush() {
         try {
-            writer.close();
+            if (writer != null)
+                writer.close();
+            return true;
         } catch (Exception e) {
             logger.warning(e.getMessage() + " | CAN NOT CLOSE WRITER");
+            return false;
         }
     }
 }

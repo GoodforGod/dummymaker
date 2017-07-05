@@ -13,10 +13,10 @@ public interface IWriter {
      *
      * @param value string to write
      */
-    void writeLine(String value);
+    boolean writeLine(String value);
 
     /**
      * Closes write stream
      */
-    void flush();
+    boolean flush();
 }

@@ -17,15 +17,15 @@ public class JsonExporter<T> extends OriginExporter<T> {
         LIST
     }
 
-    public JsonExporter(Class<T> primeClass) {
+    public JsonExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
 
-    public JsonExporter(Class<T> primeClass, String path) {
+    public JsonExporter(final Class<T> primeClass, final String path) {
         super(primeClass, path, ExportFormat.JSON);
     }
 
-    private String wrapWithQuotes(String value) {
+    private String wrapWithQuotes(final String value) {
         return "\"" + value + "\"";
     }
 
@@ -36,7 +36,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
      * @param mode represent Single JSON object or List of objects
      * @return StringBuilder of Object as JSON String
      */
-    private StringBuilder objectToJson(T t, Mode mode) {
+    private String objectToJson(final T t, final Mode mode) {
         final Map<String, String> values = getExportValues(t);
 
         final StringBuilder builder = new StringBuilder("");
@@ -67,40 +67,64 @@ public class JsonExporter<T> extends OriginExporter<T> {
             }
             builder.append(bracketTabs).append("}");
 
-            return builder;
+            return builder.toString();
         }
 
-        return builder;
+        return builder.toString();
     }
 
     @Override
-    public void export(T t) {
-        writeLine(objectToJson(t, Mode.SINGLE).toString());
-        flush();
+    public boolean export(final T t) {
+        return (t != null) && (writeLine(objectToJson(t, Mode.SINGLE)) && flush());
     }
 
     @Override
-    public void export(List<T> objects) {
+    public boolean export(final List<T> list) {
+        if(list == null || list.isEmpty())
+            return false;
+
         // Open JSON Object List
-        String jsonListOpen = "{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[";
-        writeLine(jsonListOpen);
+        writeLine("{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[");
 
-        Iterator<T> iterator = objects.iterator();
+        final Iterator<T> iterator = list.iterator();
         while (iterator.hasNext()) {
-            T t = iterator.next();
-            StringBuilder write = objectToJson(t, Mode.LIST);
+            final T t = iterator.next();
+            final String write = objectToJson(t, Mode.LIST);
 
-            // Write , to the end of the object
-            if (iterator.hasNext())
-                write.append(",");
-
-            writeLine(write.toString());
+            // Write , symbol to the end of the object
+            writeLine((iterator.hasNext()) ? write + "," : write);
         }
 
         // Close JSON Object List
-        String jsonListClose = "\t]\n}";
-        writeLine(jsonListClose);
-        flush();
+        return writeLine("\t]\n}") && flush();
     }
 
+    @Override
+    public String exportAsString(final T t) {
+        return (t != null)
+                ? objectToJson(t, Mode.SINGLE)
+                : "";
+    }
+
+    @Override
+    public String exportAsString(final List<T> list) {
+        if(list == null || list.isEmpty())
+            return "";
+
+        final StringBuilder result = new StringBuilder();
+        // Open JSON Object List
+        result.append("{\n" + "\t\"").append(exportClass.getSimpleName()).append("\"").append(": ").append("[");
+
+        final Iterator<T> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            final T t = iterator.next();
+            final String write = objectToJson(t, Mode.LIST);
+
+            // Write , symbol to the end of the object
+            result.append((iterator.hasNext()) ? write + "," : write);
+        }
+
+        // Close JSON Object List
+        return result.append("\t]\n}").toString();
+    }
 }

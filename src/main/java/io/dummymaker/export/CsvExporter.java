@@ -32,54 +32,55 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     //<editor-fold desc="Constructors">
 
-    public CsvExporter(Class<T> primeClass) {
+    public CsvExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
 
-    public CsvExporter(Class<T> primeClass, boolean wrapText, boolean withHeader) {
-        this(primeClass, null);
-        this.wrapText = wrapText;
-        this.withHeader = withHeader;
-    }
-
-    public CsvExporter(Class<T> primeClass, boolean wrapText, boolean withHeader, char separator) {
-        this(primeClass, null);
-        this.wrapText = wrapText;
-        this.withHeader = withHeader;
-        setSeparator(separator);
-    }
-
-    public CsvExporter(Class<T> primeClass, String path) {
+    public CsvExporter(final Class<T> primeClass,
+                       final String path) {
         super(primeClass, path, ExportFormat.CSV);
     }
 
-    public CsvExporter(Class<T> primeClass, String path, boolean wrapText, boolean withHeader) {
+    public CsvExporter(final Class<T> primeClass,
+                       final boolean wrapText,
+                       final boolean withHeader) {
+        this(primeClass);
+        this.wrapText = wrapText;
+        this.withHeader = withHeader;
+    }
+
+    public CsvExporter(final Class<T> primeClass,
+                       final boolean wrapText,
+                       final boolean withHeader,
+                       final char separator) {
+        this(primeClass, wrapText, withHeader);
+        setSeparator(separator);
+    }
+
+    public CsvExporter(final Class<T> primeClass,
+                       final String path,
+                       final boolean wrapText,
+                       final boolean withHeader) {
         this(primeClass, path);
         this.wrapText = wrapText;
         this.withHeader = withHeader;
     }
 
-    public CsvExporter(Class<T> primeClass, String path, boolean wrapText, boolean withHeader, char separator) {
-        this(primeClass, path);
-        this.wrapText = wrapText;
-        this.withHeader = withHeader;
+    public CsvExporter(final Class<T> primeClass,
+                       final String path,
+                       final boolean wrapText,
+                       final boolean withHeader,
+                       final char separator) {
+        this(primeClass, path, wrapText, withHeader);
         setSeparator(separator);
     }
 
     //</editor-fold>
 
-    public void setSeparator(char separator) {
+    private void setSeparator(final char separator) {
         this.SEPARATOR = (separator == ' ')
                 ? DEFAULT_SEPARATOR
                 : separator;
-    }
-
-    public void setWrapText(boolean wrapText) {
-        this.wrapText = wrapText;
-    }
-
-    public void setWithHeader(boolean withHeader) {
-        this.withHeader = withHeader;
     }
 
     /**
@@ -87,17 +88,17 @@ public class CsvExporter<T> extends OriginExporter<T> {
      * @param value values to wrap
      * @return wrapped values
      */
-    private String wrapWithQuotes(String value) {
+    private String wrapWithQuotes(final String value) {
         return "'" + value + "'";
     }
 
-    private String objectToCsv(T t) {
+    private String objectToCsv(final T t) {
         final StringBuilder builder = new StringBuilder("");
         final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
         while (iterator.hasNext()) {
 
-            Map.Entry<String, String> obj = iterator.next();
+            final Map.Entry<String, String> obj = iterator.next();
             if(wrapText && exportFields.get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
@@ -124,26 +125,57 @@ public class CsvExporter<T> extends OriginExporter<T> {
             if(iterator.hasNext())
                 header.append(SEPARATOR);
         }
-
         return header.toString();
     }
 
     @Override
-    public void export(T t) {
+    public boolean export(final T t) {
+        if(t == null)
+            return false;
+
         if (withHeader)
             writeLine(generateCsvHeader());
 
-        writeLine(objectToCsv(t));
-        flush();
+        return writeLine(objectToCsv(t)) && flush();
     }
 
     @Override
-    public void export(List<T> tList) {
+    public boolean export(final List<T> list) {
+        if(list == null || list.isEmpty())
+            return false;
+
         if (withHeader)
             writeLine(generateCsvHeader());
 
-        for (T t : tList)
+        for (T t : list)
             writeLine(objectToCsv(t));
-        flush();
+        return flush();
+    }
+
+    @Override
+    public String exportAsString(T t) {
+        if(t == null)
+            return "";
+
+        final StringBuilder result = new StringBuilder();
+
+        if (withHeader)
+            result.append(generateCsvHeader());
+
+        return result.append(objectToCsv(t)).toString();
+    }
+
+    @Override
+    public String exportAsString(List<T> list) {
+        if(list == null || list.isEmpty())
+            return "";
+
+        final StringBuilder result = new StringBuilder();
+        if (withHeader)
+            result.append(generateCsvHeader());
+
+        for (T t : list)
+            result.append(objectToCsv(t));
+        return result.toString();
     }
 }

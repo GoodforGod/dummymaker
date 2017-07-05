@@ -1,5 +1,6 @@
 package io.dummymaker.export;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Iterator;
@@ -24,7 +25,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         INTEGER ("INT",     Integer.class.getName()),
         LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getName());
 
-        DataType(String sql, String java) {
+        DataType(final String sql, final String java) {
             this.sql = sql;
             this.java = java;
         }
@@ -41,19 +42,19 @@ public class SqlExporter<T> extends OriginExporter<T> {
         }
     }
 
-    public SqlExporter(Class<T> primeClass) {
+    public SqlExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
 
-    public SqlExporter(Class<T> primeClass, String path) {
+    public SqlExporter(final Class<T> primeClass, final String path) {
         super(primeClass, path, ExportFormat.SQL);
     }
 
     /**
      * convert Java Field Type to Sql Data Type
      */
-    private String toSqlDataType(String fieldName) {
-        String fieldType = exportFields.get(fieldName).getType().getName();
+    private String javaToSqlFieldType(final String fieldName) {
+        final String fieldType = exportFields.get(fieldName).getType().getName();
 
         if(fieldType != null) {
             if (fieldType.equals(DataType.DOUBLE.getJava()))
@@ -75,17 +76,15 @@ public class SqlExporter<T> extends OriginExporter<T> {
     /**
      * Create String of Create Table Query
      */
-    private String sqlTableCreate(T t) {
-        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+    private String sqlTableCreate() {
+        final StringBuilder builder = new StringBuilder();
+        final Iterator<Map.Entry<String, Field>> iterator = exportFields.entrySet().iterator();
 
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("CREATE TABLE IF NOT EXISTS ").append(t.getClass().getSimpleName()).append("(\n");
+        builder.append("CREATE TABLE IF NOT EXISTS ").append(exportClass.getSimpleName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
-            Map.Entry<String, String> field = iterator.next();
-
-            builder.append("\t").append(sqlCreateInsert(field));
+            final Map.Entry<String, Field> field = iterator.next();
+            builder.append("\t").append(sqlCreateInsertNameType(field.getKey()));
 
             if(field.getKey().equals("id"))
                 builder.append(" PRIMARY KEY");
@@ -104,25 +103,24 @@ public class SqlExporter<T> extends OriginExporter<T> {
     /**
      * Creates String of Create Table Insert Field
      */
-    private String sqlCreateInsert(Map.Entry<String, String> field) {
-        return field.getKey() + "\t" + toSqlDataType(field.getKey());
+    private String sqlCreateInsertNameType(final String field) {
+        return field.toLowerCase() + "\t" + javaToSqlFieldType(field);
     }
 
-    private String wrapWithComma(String value) {
+    private String wrapWithComma(final String value) {
         return "'" + value + "'";
     }
 
     /**
      * Insert query
      */
-    private String sqlInsertIntoQuery(T t) {
-        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
-        StringBuilder builder = new StringBuilder();
+    private String sqlInsertIntoQuery(final T t) {
+        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final StringBuilder builder = new StringBuilder();
 
         builder.append("INSERT INTO ").append(exportClass.getSimpleName()).append(" (");
 
         while (iterator.hasNext()) {
-
             builder.append(iterator.next().getKey());
 
             if(iterator.hasNext())
@@ -137,10 +135,10 @@ public class SqlExporter<T> extends OriginExporter<T> {
     /**
      * Creates insert query field name
      */
-    private StringBuilder sqlValuesInsert(T t) {
-        StringBuilder builder = new StringBuilder();
+    private StringBuilder sqlValuesInsert(final T t) {
+        final StringBuilder builder = new StringBuilder();
 
-        Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
         if(iterator.hasNext()) {
             builder.append("(");
@@ -166,56 +164,104 @@ public class SqlExporter<T> extends OriginExporter<T> {
     }
 
     @Override
-    public void export(T t) {
-        writeLine(sqlTableCreate(t));
-        writeLine(sqlInsertIntoQuery(t));
-        writeLine(sqlValuesInsert(t) + ";");
-        flush();
+    public boolean export(final T t) {
+        return t != null
+                && writeLine(sqlTableCreate())
+                && writeLine(sqlInsertIntoQuery(t))
+                && writeLine(sqlValuesInsert(t) + ";")
+                && flush();
     }
 
     @Override
-    public void export(List<T> list) {
-        final int max = 950;
-        int i = max;
-
-        // Check for nonNull list
+    public boolean export(final List<T> list) {
         if (list == null || list.isEmpty())
-            return;
+            return false;
 
-        Iterator<T> iterator = list.iterator();
+        final Integer maxInsertValuesPerQuery = 995;
+        Integer i = maxInsertValuesPerQuery;
+
+        final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        writeLine(sqlTableCreate(list.get(0)));
+        writeLine(sqlTableCreate());
 
         while (iterator.hasNext()) {
-            T t = iterator.next();
+            final T t = iterator.next();
 
             // Insert Values Query
-            if (i == max)
+            if (i.equals(maxInsertValuesPerQuery))
                 writeLine(sqlInsertIntoQuery(t));
 
             i--;
 
-            StringBuilder valueToWrite = sqlValuesInsert(t);
+            final StringBuilder valueToWrite = sqlValuesInsert(t);
 
             if (iterator.hasNext() && i != 0)
                 valueToWrite.append(",");
+            else if (i == 0 || !iterator.hasNext())
+                valueToWrite.append(";");
 
             writeLine(valueToWrite.toString());
 
             // End insert Query if no elements left or need to organize next batch
-            if (i == 0 || !iterator.hasNext()) {
-                writeLine(";");
-
-                if (!iterator.hasNext())
-                    break;
-                else {
+            if (i == 0) {
+                if (iterator.hasNext()) {
                     writeLine("\n");
-                    i = max;
-                }
+                    i = maxInsertValuesPerQuery;
+                } else break;
+            }
+        }
+        return flush();
+    }
+
+    @Override
+    public String exportAsString(final T t) {
+        return (t != null)
+                ? sqlTableCreate() + sqlInsertIntoQuery(t) + sqlValuesInsert(t) + ";"
+                : "";
+    }
+
+    @Override
+    public String exportAsString(final List<T> list) {
+        if(list == null || list.isEmpty())
+            return "";
+
+        final StringBuilder result = new StringBuilder();
+        final Integer maxInsertValuesPerQuery = 955;
+        Integer i = maxInsertValuesPerQuery;
+
+        final Iterator<T> iterator = list.iterator();
+
+        // Create Table Query
+        result.append(sqlTableCreate());
+
+        while (iterator.hasNext()) {
+            final T t = iterator.next();
+
+            // Insert Values Query
+            if (i.equals(maxInsertValuesPerQuery))
+                result.append(sqlInsertIntoQuery(t));
+
+            i--;
+
+            final StringBuilder valueToWrite = sqlValuesInsert(t);
+
+            if (iterator.hasNext() && i != 0)
+                valueToWrite.append(",");
+            else if (i == 0 || !iterator.hasNext())
+                valueToWrite.append(";");
+
+            result.append(valueToWrite.toString());
+
+            // End insert Query if no elements left or need to organize next batch
+            if (i == 0) {
+                if (iterator.hasNext()) {
+                    result.append("\n");
+                    i = maxInsertValuesPerQuery;
+                } else break;
             }
         }
 
-        flush();
+        return result.toString();
     }
 }

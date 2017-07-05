@@ -10,30 +10,30 @@ import java.util.Map;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class XmlExporter<T>  extends OriginExporter<T> {
+public class XmlExporter<T> extends OriginExporter<T> {
 
     private enum Mode {
         SINGLE,
         LIST
     }
 
-    public XmlExporter(Class<T> primeClass) {
+    public XmlExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
 
-    public XmlExporter(Class<T> primeClass, String path) {
+    public XmlExporter(final Class<T> primeClass, final String path) {
         super(primeClass, path, ExportFormat.XML);
     }
 
-    private String wrapOpenXmlTag(String value) {
+    private String wrapOpenXmlTag(final String value) {
         return "<" + value + ">";
     }
 
-    private String wrapCloseXmlTag(String value) {
+    private String wrapCloseXmlTag(final String value) {
         return "</" + value + ">";
     }
 
-    private String objectToXml(T t, Mode mode) {
+    private String objectToXml(final T t, final Mode mode) {
         final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
         final StringBuilder builder = new StringBuilder("");
@@ -63,14 +63,13 @@ public class XmlExporter<T>  extends OriginExporter<T> {
     }
 
     @Override
-    public void export(T t) {
-        writeLine(objectToXml(t, Mode.SINGLE));
-        flush();
+    public boolean export(final T t) {
+        return writeLine(objectToXml(t, Mode.SINGLE)) && flush();
     }
 
     @Override
-    public void export(List<T> list) {
-        String superList = exportClass.getSimpleName() + "List";
+    public boolean export(final List<T> list) {
+        final String superList = exportClass.getSimpleName() + "List";
         writeLine(wrapOpenXmlTag(superList));
 
         for (T t : list)
@@ -78,6 +77,25 @@ public class XmlExporter<T>  extends OriginExporter<T> {
 
         writeLine(wrapCloseXmlTag(superList));
 
-        flush();
+        return flush();
+    }
+
+    @Override
+    public String exportAsString(final T t) {
+        return objectToXml(t, Mode.SINGLE);
+    }
+
+    @Override
+    public String exportAsString(final List<T> list) {
+        final String superList = exportClass.getSimpleName() + "List";
+        final StringBuilder result = new StringBuilder();
+        result.append(wrapOpenXmlTag(superList));
+
+        for (T t : list)
+            result.append(objectToXml(t, Mode.LIST));
+
+        result.append(wrapCloseXmlTag(superList));
+
+        return result.toString();
     }
 }
