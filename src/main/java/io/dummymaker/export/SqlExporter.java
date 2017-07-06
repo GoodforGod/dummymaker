@@ -42,6 +42,11 @@ public class SqlExporter<T> extends OriginExporter<T> {
         }
     }
 
+    /**
+     * Insert values limit per single insert query (due to 1000 row limit in SQL)
+     */
+    private final Integer INSERT_QUERY_LIMIT = 995;
+
     public SqlExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
@@ -177,8 +182,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         if (!isExportStateValid(list))
             return false;
 
-        final Integer maxInsertValuesPerQuery = 995;
-        Integer i = maxInsertValuesPerQuery;
+        Integer i = INSERT_QUERY_LIMIT;
 
         final Iterator<T> iterator = list.iterator();
 
@@ -189,7 +193,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
             final T t = iterator.next();
 
             // Insert Values Query
-            if (i.equals(maxInsertValuesPerQuery))
+            if (i.equals(INSERT_QUERY_LIMIT))
                 writeLine(sqlInsertIntoQuery(t));
 
             i--;
@@ -207,7 +211,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
             if (i == 0) {
                 if (iterator.hasNext()) {
                     writeLine("\n");
-                    i = maxInsertValuesPerQuery;
+                    i = INSERT_QUERY_LIMIT;
                 } else break;
             }
         }
@@ -227,8 +231,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
             return "";
 
         final StringBuilder result = new StringBuilder();
-        final Integer maxInsertValuesPerQuery = 955;
-        Integer i = maxInsertValuesPerQuery;
+        Integer i = INSERT_QUERY_LIMIT;
 
         final Iterator<T> iterator = list.iterator();
 
@@ -239,7 +242,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
             final T t = iterator.next();
 
             // Insert Values Query
-            if (i.equals(maxInsertValuesPerQuery))
+            if (i.equals(INSERT_QUERY_LIMIT))
                 result.append(sqlInsertIntoQuery(t)).append("\n");
 
             i--;
@@ -257,7 +260,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
             if (i == 0) {
                 if (iterator.hasNext()) {
                     result.append("\n\n");
-                    i = maxInsertValuesPerQuery;
+                    i = INSERT_QUERY_LIMIT;
                 } else break;
             }
         }

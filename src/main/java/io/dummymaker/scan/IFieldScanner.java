@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Default Comment
+ * Field scanner contract
  *
  * @author GoodforGod
  * @since 30.05.2017
