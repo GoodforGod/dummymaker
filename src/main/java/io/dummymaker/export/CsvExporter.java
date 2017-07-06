@@ -23,12 +23,12 @@ public class CsvExporter<T> extends OriginExporter<T> {
     /**
      * Flag to indicate wrap text (String) fields with quotes
      */
-    private boolean wrapText = false;
+    private boolean wrapTextValues = false;
 
     /**
      * Generate header for CSV file
      */
-    private boolean withHeader = false;
+    private boolean generateHeader = false;
 
     //<editor-fold desc="Constructors">
 
@@ -42,36 +42,36 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     public CsvExporter(final Class<T> primeClass,
-                       final boolean wrapText,
-                       final boolean withHeader) {
+                       final boolean wrapTextValues,
+                       final boolean generateHeader) {
         this(primeClass);
-        this.wrapText = wrapText;
-        this.withHeader = withHeader;
+        this.wrapTextValues = wrapTextValues;
+        this.generateHeader = generateHeader;
     }
 
     public CsvExporter(final Class<T> primeClass,
-                       final boolean wrapText,
-                       final boolean withHeader,
+                       final boolean wrapTextValues,
+                       final boolean generateHeader,
                        final char separator) {
-        this(primeClass, wrapText, withHeader);
+        this(primeClass, wrapTextValues, generateHeader);
         setSeparator(separator);
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
-                       final boolean wrapText,
-                       final boolean withHeader) {
+                       final boolean wrapTextValues,
+                       final boolean generateHeader) {
         this(primeClass, path);
-        this.wrapText = wrapText;
-        this.withHeader = withHeader;
+        this.wrapTextValues = wrapTextValues;
+        this.generateHeader = generateHeader;
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
-                       final boolean wrapText,
-                       final boolean withHeader,
+                       final boolean wrapTextValues,
+                       final boolean generateHeader,
                        final char separator) {
-        this(primeClass, path, wrapText, withHeader);
+        this(primeClass, path, wrapTextValues, generateHeader);
         setSeparator(separator);
     }
 
@@ -99,7 +99,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         while (iterator.hasNext()) {
             final Map.Entry<String, String> obj = iterator.next();
 
-            if(wrapText && exportRenamedFields.get(obj.getKey()).getType().equals(String.class))
+            if(wrapTextValues && exportRenamedFields.get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
                 builder.append(obj.getValue());
@@ -133,7 +133,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         if(!isExportStateValid(t))
             return false;
 
-        if (withHeader)
+        if (generateHeader)
             writeLine(generateCsvHeader());
 
         return writeLine(objectToCsv(t)) && flush();
@@ -144,7 +144,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         if(!isExportStateValid(list))
             return false;
 
-        if (withHeader)
+        if (generateHeader)
             writeLine(generateCsvHeader());
 
         for (final T t : list)
@@ -160,7 +160,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
         final StringBuilder result = new StringBuilder();
 
-        if (withHeader)
+        if (generateHeader)
             result.append(generateCsvHeader()).append("\n");
 
         return result.append(objectToCsv(t)).toString();
@@ -173,7 +173,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
         final StringBuilder result = new StringBuilder();
 
-        if (withHeader)
+        if (generateHeader)
             result.append(generateCsvHeader()).append("\n");
 
         for (final T t : list)

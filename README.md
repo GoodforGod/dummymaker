@@ -38,9 +38,22 @@ Allow to populate or produce Dummy Objects.
 
 ### **Export**
 
-Allow to export Dummy objects.
+Allow to export Dummy objects in specific format.
 
-***CsvExporter/XmlExporter/JsonExporter/SqlExporter*** - export format implementations.
+#### ***CsvExporter Options***
+* *Path* - set path for export file.
+* *WrapTextValues* - will wrap String values with commas like 'this'.
+* *GenerateHeader* - will generate CSV header.
+* *Separator* - set CSV format separator.
+
+#### ***XmlExporter Options***
+* *Path* - set path for export file.
+
+#### ***SqlExporter Options***
+* *Path* - set path for export file.
+
+#### ***JsonExporter Options***
+* *Path* - set path for export file.
 
 ### **Annotations**
 
@@ -63,28 +76,25 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 
 ### ***Annotations***
 
-####  **
+####  *POJO annotate demonstration*
 ![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
 
 ### ***GenPopulateFactory/GenProvideFactory***
 
 Allow user populate or produce Dummy Object(s).
 
-#### *You can produce 1 or more Dummies.*
+#### *Produce 1 or more Dummy objects demonstration*
 ![](https://media.giphy.com/media/r2q6kaeasKRQ4/giphy.gif)
 
-#### *You can manually populate 1 or more Dummies.*
+#### *Populate 1 or more Dummy objects demonstration*
 ![](https://media.giphy.com/media/cajTTyUltm9qg/giphy.gif)
 
 ### ***Exporters***
 
-#### 
-![](https://media.giphy.com/media/f1jM0efW6WpY4/giphy.gif)
-
 #### *Export **CSV/XML/JSON/SQL** Demonstration*
 ![](https://media.giphy.com/media/xUA7aPXaWZENNUGXbq/giphy.gif)
 
-#### *Exporters options*
+#### *Exporters options demonstration*
 ![](https://media.giphy.com/media/g3efqXIblykCs/giphy.gif)
 
 ## Export File Structures
