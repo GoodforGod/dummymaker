@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -33,14 +34,14 @@ abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter
     private final Map<String, Field> exportOriginFields;
 
     /**
-     *
+     * Fields to export with origin names, Key is renamed (or origin) field name, Value is field
      */
     final Map<String, Field> exportRenamedFields;
 
     /**
-     *
+     * Renamed fields to export, Key is renamed (or origin) field name, Value is field
      */
-    private final Map<String, String> renamedFields = new HashMap<>();
+    private final Map<String, String> renamedFields = new TreeMap<>();
 
     OriginExporter(final Class<T> exportClass,
                    final String path,
@@ -63,7 +64,7 @@ abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter
         // Setup class name, renamed or origin
         this.exportClassName = (renamedMap.containsKey(null))
                 ? renamedMap.get(null)
-                : exportClass.getName();
+                : exportClass.getSimpleName();
     }
 
     /**
@@ -131,13 +132,23 @@ abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter
             }
         }
 
-        return exports;
+        return new HashMap<>(exports);
     }
 
+    /**
+     * Validate export arguments and export fields of class
+     * @param t class to validate
+     * @return validation result
+     */
     boolean isExportStateValid(final T t) {
         return !exportOriginFields.isEmpty() && t != null;
     }
 
+    /**
+     * Validate export arguments and export fields of class
+     * @param t class to validate
+     * @return validation result
+     */
     boolean isExportStateValid(final List<T> t) {
         return !exportOriginFields.isEmpty() && t != null && !t.isEmpty();
     }

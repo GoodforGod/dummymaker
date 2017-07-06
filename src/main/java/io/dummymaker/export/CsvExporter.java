@@ -161,7 +161,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         final StringBuilder result = new StringBuilder();
 
         if (withHeader)
-            result.append(generateCsvHeader());
+            result.append(generateCsvHeader()).append("\n");
 
         return result.append(objectToCsv(t)).toString();
     }
@@ -174,7 +174,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
         final StringBuilder result = new StringBuilder();
 
         if (withHeader)
-            result.append(generateCsvHeader());
+            result.append(generateCsvHeader()).append("\n");
 
         for (final T t : list)
             result.append(objectToCsv(t));

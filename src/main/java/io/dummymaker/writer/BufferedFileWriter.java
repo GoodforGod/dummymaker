@@ -26,7 +26,7 @@ public class BufferedFileWriter implements IWriter {
                     new OutputStreamWriter(
                             new FileOutputStream(filePath + fileName + fileType), "UTF-8"));
         } catch (IOException e) {
-            logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER");
+            logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
         }
     }
 
