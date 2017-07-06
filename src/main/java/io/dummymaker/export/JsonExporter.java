@@ -73,18 +73,26 @@ public class JsonExporter<T> extends OriginExporter<T> {
         return builder.toString();
     }
 
+    private String openJsonList() {
+        return "{\n" + "\t\"" + exportClassName + "\"" + ": " + "[";
+    }
+
+    private String closeJsonList() {
+        return "\t]\n}";
+    }
+
     @Override
     public boolean export(final T t) {
-        return (t != null) && (writeLine(objectToJson(t, Mode.SINGLE)) && flush());
+        return (isExportStateValid(t)) && (writeLine(objectToJson(t, Mode.SINGLE)) && flush());
     }
 
     @Override
     public boolean export(final List<T> list) {
-        if(list == null || list.isEmpty())
+        if(!isExportStateValid(list))
             return false;
 
         // Open JSON Object List
-        writeLine("{\n" + "\t\"" + exportClass.getSimpleName() + "\"" + ": " + "[");
+        writeLine(openJsonList());
 
         final Iterator<T> iterator = list.iterator();
         while (iterator.hasNext()) {
@@ -96,24 +104,24 @@ public class JsonExporter<T> extends OriginExporter<T> {
         }
 
         // Close JSON Object List
-        return writeLine("\t]\n}") && flush();
+        return writeLine(closeJsonList()) && flush();
     }
 
     @Override
     public String exportAsString(final T t) {
-        return (t != null)
-                ? objectToJson(t, Mode.SINGLE)
-                : "";
+        return (!isExportStateValid(t))
+                ? ""
+                : objectToJson(t, Mode.SINGLE);
     }
 
     @Override
     public String exportAsString(final List<T> list) {
-        if(list == null || list.isEmpty())
+        if(!isExportStateValid(list))
             return "";
 
         final StringBuilder result = new StringBuilder();
         // Open JSON Object List
-        result.append("{\n" + "\t\"").append(exportClass.getSimpleName()).append("\"").append(": ").append("[");
+        result.append(openJsonList());
 
         final Iterator<T> iterator = list.iterator();
         while (iterator.hasNext()) {
@@ -125,6 +133,6 @@ public class JsonExporter<T> extends OriginExporter<T> {
         }
 
         // Close JSON Object List
-        return result.append("\t]\n}").toString();
+        return result.append(closeJsonList()).toString();
     }
 }

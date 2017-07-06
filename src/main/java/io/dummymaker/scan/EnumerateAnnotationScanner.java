@@ -10,28 +10,32 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Default Comment
+ * Scanner to filter fields for enumerate annotation fields
  *
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-public class NumerateAnnotationScanner extends AnnotationScanner {
+public class EnumerateAnnotationScanner extends AnnotationScanner {
 
+    /**
+     * Predicate to check for enumerate annotation
+     *
+     * @see GenEnumerate
+     */
     private final Predicate<Annotation> numeratePredicate = (a) -> a.annotationType().equals(GenEnumerate.class);
 
     @Override
-    public Map<Field, Set<Annotation>> scan(Class t) {
-        final Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+    public Map<Field, Set<Annotation>> scan(final Class t) {
+        final Map<Field, Set<Annotation>> classFieldAnnotations = super.scan(t);
 
-        return (!mapToFilter.isEmpty())
-                ? mapToFilter.entrySet().stream()
+        return (classFieldAnnotations.isEmpty())
+                ? classFieldAnnotations
+                : classFieldAnnotations.entrySet().stream()
                     .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
                     .map(set -> {
                         set.setValue(set.getValue().stream().filter(numeratePredicate).collect(Collectors.toSet()));
                         return set;
                     })
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-
-                : mapToFilter;
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

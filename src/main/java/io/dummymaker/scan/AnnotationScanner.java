@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Scan for all annotated fields, is prime (parent) scanner for others
@@ -15,34 +16,40 @@ import java.util.Set;
  */
 public class AnnotationScanner implements IFieldScanner {
 
+    private final Logger logger = Logger.getLogger(AnnotationScanner.class.getSimpleName());
+
     @Override
-    public Map<Field, Set<Annotation>> scan(Class t) {
-        final Map<Field, Set<Annotation>> map = new HashMap<>();
+    public Map<Field, Set<Annotation>> scan(final Class t) {
+        final Map<Field, Set<Annotation>> classFieldAnnotations = new HashMap<>();
 
-        for(Field field : t.getDeclaredFields()) {
-            for(Annotation annotation : field.getAnnotations()) {
-                final Set<Annotation> annotatedField = map.putIfAbsent(field, createNode(annotation));
+        try {
+            for(final Field field : t.getDeclaredFields()) {
+                for(final Annotation annotation : field.getAnnotations()) {
+                    final Set<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNode(annotation));
 
-                if(annotatedField != null) {
-                    annotatedField.add(annotation);
-                    map.replace(field, annotatedField);
-                }
+                    if(annotatedField != null) {
+                        annotatedField.add(annotation);
+                        classFieldAnnotations.replace(field, annotatedField);
+                    }
 
-                for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
-                    final Set<Annotation> fieldPrimeAnnotated = map.putIfAbsent(field, createNode(primeAnnotation));
+                    for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
+                        final Set<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNode(primeAnnotation));
 
-                    if(fieldPrimeAnnotated != null) {
-                        fieldPrimeAnnotated.add(primeAnnotation);
-                        map.replace(field, fieldPrimeAnnotated);
+                        if(fieldPrimeAnnotated != null) {
+                            fieldPrimeAnnotated.add(primeAnnotation);
+                            classFieldAnnotations.replace(field, fieldPrimeAnnotated);
+                        }
                     }
                 }
             }
+        } catch (SecurityException e) {
+            logger.warning(e.toString());
         }
 
-        return map;
+        return classFieldAnnotations;
     }
 
-    private Set<Annotation> createNode(Annotation a) {
+    private Set<Annotation> createNode(final Annotation a) {
         return new HashSet<Annotation>() {{ add(a); }};
     }
 }

@@ -54,7 +54,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
      * convert Java Field Type to Sql Data Type
      */
     private String javaToSqlFieldType(final String fieldName) {
-        final String fieldType = exportFields.get(fieldName).getType().getName();
+        final String fieldType = exportRenamedFields.get(fieldName).getType().getName();
 
         if(fieldType != null) {
             if (fieldType.equals(DataType.DOUBLE.getJava()))
@@ -78,9 +78,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, Field>> iterator = exportFields.entrySet().iterator();
+        final Iterator<Map.Entry<String, Field>> iterator = exportRenamedFields.entrySet().iterator();
 
-        builder.append("CREATE TABLE IF NOT EXISTS ").append(exportClass.getSimpleName().toLowerCase()).append("(\n");
+        builder.append("CREATE TABLE IF NOT EXISTS ").append(exportClassName.toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
             final Map.Entry<String, Field> field = iterator.next();
@@ -118,7 +118,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
         final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("INSERT INTO ").append(exportClass.getSimpleName()).append(" (");
+        builder.append("INSERT INTO ").append(exportClassName.toLowerCase()).append(" (");
 
         while (iterator.hasNext()) {
             builder.append(iterator.next().getKey());
@@ -146,9 +146,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
 
-                if(exportFields.get(field.getKey()).getType().equals(String.class))
+                if(exportRenamedFields.get(field.getKey()).getType().equals(String.class))
                     builder.append(wrapWithComma(field.getValue()));
-                else if(exportFields.get(field.getKey()).getType().equals(LocalDateTime.class))
+                else if(exportRenamedFields.get(field.getKey()).getType().equals(LocalDateTime.class))
                     builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
                 else
                     builder.append(field.getValue());
@@ -165,7 +165,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        return t != null
+        return isExportStateValid(t)
                 && writeLine(sqlTableCreate())
                 && writeLine(sqlInsertIntoQuery(t))
                 && writeLine(sqlValuesInsert(t) + ";")
@@ -174,7 +174,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
     @Override
     public boolean export(final List<T> list) {
-        if (list == null || list.isEmpty())
+        if (!isExportStateValid(list))
             return false;
 
         final Integer maxInsertValuesPerQuery = 995;
@@ -216,14 +216,14 @@ public class SqlExporter<T> extends OriginExporter<T> {
 
     @Override
     public String exportAsString(final T t) {
-        return (t != null)
-                ? sqlTableCreate() + sqlInsertIntoQuery(t) + sqlValuesInsert(t) + ";"
+        return (!isExportStateValid(t))
+                ? sqlTableCreate() + "\n" + sqlInsertIntoQuery(t) + "\n" + sqlValuesInsert(t) + ";"
                 : "";
     }
 
     @Override
     public String exportAsString(final List<T> list) {
-        if(list == null || list.isEmpty())
+        if(!isExportStateValid(list))
             return "";
 
         final StringBuilder result = new StringBuilder();
@@ -233,14 +233,14 @@ public class SqlExporter<T> extends OriginExporter<T> {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        result.append(sqlTableCreate());
+        result.append(sqlTableCreate()).append("\n");
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(maxInsertValuesPerQuery))
-                result.append(sqlInsertIntoQuery(t));
+                result.append(sqlInsertIntoQuery(t)).append("\n");
 
             i--;
 
@@ -251,12 +251,12 @@ public class SqlExporter<T> extends OriginExporter<T> {
             else if (i == 0 || !iterator.hasNext())
                 valueToWrite.append(";");
 
-            result.append(valueToWrite.toString());
+            result.append(valueToWrite.toString()).append("\n");
 
             // End insert Query if no elements left or need to organize next batch
             if (i == 0) {
                 if (iterator.hasNext()) {
-                    result.append("\n");
+                    result.append("\n\n");
                     i = maxInsertValuesPerQuery;
                 } else break;
             }

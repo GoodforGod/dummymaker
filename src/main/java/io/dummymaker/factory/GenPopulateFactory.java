@@ -2,8 +2,8 @@ package io.dummymaker.factory;
 
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.util.PrimeGenAnnotation;
+import io.dummymaker.scan.EnumerateAnnotationScanner;
 import io.dummymaker.scan.IFieldScanner;
-import io.dummymaker.scan.NumerateAnnotationScanner;
 import io.dummymaker.scan.PopulateAnnotationScanner;
 
 import java.lang.annotation.Annotation;
@@ -26,7 +26,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
     private final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
     private final IFieldScanner populateScanner = new PopulateAnnotationScanner();
-    private final IFieldScanner numerateAnnotationScanner = new NumerateAnnotationScanner();
+    private final IFieldScanner numerateAnnotationScanner = new EnumerateAnnotationScanner();
 
     private final Map<Field, Long> numerateFields = new HashMap<>();
     private boolean enableNumeration = false;

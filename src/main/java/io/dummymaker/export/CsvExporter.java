@@ -97,9 +97,9 @@ public class CsvExporter<T> extends OriginExporter<T> {
         final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
 
         while (iterator.hasNext()) {
-
             final Map.Entry<String, String> obj = iterator.next();
-            if(wrapText && exportFields.get(obj.getKey()).getType().equals(String.class))
+
+            if(wrapText && exportRenamedFields.get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
                 builder.append(obj.getValue());
@@ -117,7 +117,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, Field>> iterator = exportFields.entrySet().iterator();
+        final Iterator<Map.Entry<String, Field>> iterator = exportRenamedFields.entrySet().iterator();
 
         while (iterator.hasNext()) {
             header.append(iterator.next().getKey());
@@ -130,7 +130,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        if(t == null)
+        if(!isExportStateValid(t))
             return false;
 
         if (withHeader)
@@ -141,20 +141,21 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     @Override
     public boolean export(final List<T> list) {
-        if(list == null || list.isEmpty())
+        if(!isExportStateValid(list))
             return false;
 
         if (withHeader)
             writeLine(generateCsvHeader());
 
-        for (T t : list)
+        for (final T t : list)
             writeLine(objectToCsv(t));
+
         return flush();
     }
 
     @Override
-    public String exportAsString(T t) {
-        if(t == null)
+    public String exportAsString(final T t) {
+        if(!isExportStateValid(t))
             return "";
 
         final StringBuilder result = new StringBuilder();
@@ -166,16 +167,18 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     @Override
-    public String exportAsString(List<T> list) {
-        if(list == null || list.isEmpty())
+    public String exportAsString(final List<T> list) {
+        if(!isExportStateValid(list))
             return "";
 
         final StringBuilder result = new StringBuilder();
+
         if (withHeader)
             result.append(generateCsvHeader());
 
-        for (T t : list)
+        for (final T t : list)
             result.append(objectToCsv(t));
+
         return result.toString();
     }
 }

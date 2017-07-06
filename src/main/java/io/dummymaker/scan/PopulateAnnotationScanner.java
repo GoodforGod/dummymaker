@@ -19,22 +19,25 @@ import java.util.stream.Collectors;
  */
 public class PopulateAnnotationScanner extends AnnotationScanner {
 
+    /**
+     * Predicate to check for core prime gen annotation
+     *
+     * @see PrimeGenAnnotation
+     */
     private final Predicate<Annotation> acceptPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
 
     @Override
-    public Map<Field, Set<Annotation>> scan(Class t) {
-        final Map<Field, Set<Annotation>> mapToFilter = super.scan(t);
+    public Map<Field, Set<Annotation>> scan(final Class t) {
+        final Map<Field, Set<Annotation>> classFieldAnnotations = super.scan(t);
 
-        return (!mapToFilter.isEmpty())
-                ? mapToFilter.entrySet().stream()
-                    .filter(set -> set.getValue()
-                            .stream().anyMatch(acceptPredicate))
+        return (classFieldAnnotations.isEmpty())
+                ? classFieldAnnotations
+                : classFieldAnnotations.entrySet().stream()
+                    .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
                     .map(set -> {
                         set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet()));
                         return set;
                     })
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-
-                : mapToFilter;
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

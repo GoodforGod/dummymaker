@@ -47,7 +47,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
                 : "\t\t";
 
         if(iterator.hasNext()) {
-            builder.append(tabObject).append(wrapOpenXmlTag(exportClass.getSimpleName()));
+            builder.append(tabObject).append(wrapOpenXmlTag(exportClassName));
 
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
@@ -56,7 +56,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
                                     .append(field.getValue())
                                     .append(wrapCloseXmlTag(field.getKey()));
             }
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(exportClass.getSimpleName()));
+            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(exportClassName));
         }
 
         return builder.toString();
@@ -64,15 +64,18 @@ public class XmlExporter<T> extends OriginExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        return writeLine(objectToXml(t, Mode.SINGLE)) && flush();
+        return isExportStateValid(t) && writeLine(objectToXml(t, Mode.SINGLE)) && flush();
     }
 
     @Override
     public boolean export(final List<T> list) {
-        final String superList = exportClass.getSimpleName() + "List";
+        if(!isExportStateValid(list))
+            return false;
+
+        final String superList = exportClassName + "List";
         writeLine(wrapOpenXmlTag(superList));
 
-        for (T t : list)
+        for (final T t : list)
             writeLine(objectToXml(t, Mode.LIST));
 
         writeLine(wrapCloseXmlTag(superList));
@@ -82,17 +85,22 @@ public class XmlExporter<T> extends OriginExporter<T> {
 
     @Override
     public String exportAsString(final T t) {
-        return objectToXml(t, Mode.SINGLE);
+        return (!isExportStateValid(t))
+                ? ""
+                : objectToXml(t, Mode.SINGLE);
     }
 
     @Override
     public String exportAsString(final List<T> list) {
+        if(!isExportStateValid(list))
+            return "";
+
         final String superList = exportClass.getSimpleName() + "List";
         final StringBuilder result = new StringBuilder();
-        result.append(wrapOpenXmlTag(superList));
+        result.append(wrapOpenXmlTag(superList)).append("\n");
 
-        for (T t : list)
-            result.append(objectToXml(t, Mode.LIST));
+        for (final T t : list)
+            result.append(objectToXml(t, Mode.LIST)).append("\n");
 
         result.append(wrapCloseXmlTag(superList));
 
