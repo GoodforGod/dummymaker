@@ -4,24 +4,25 @@ Library allow you to produce Dummy Objects (POJOs) by using *Factories* and popu
 And then *Export* them in **CSV/JSON/XML/SQL** format.
 
 Steps to do:
-1) *Annotate* your Dummy Object fields with special *Gen* annotations.
-2) Use *Factory* to populate/produce you Dummy Objects.
-3) Export your Dummy Objects by using *Exporter*.
+1) Create Dummy (POJO). 
+2) *Annotate* your Dummy's fields with special *Gen* annotations.
+3) Use *Factory* to populate/produce your Dummy Objects.
+4) Export your Dummy Objects by using special *Exporter*.
 
-## Install :rocket:
+## Dependency :rocket:
 **Maven**
 ```
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 **Gradle**
 ```
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.0.1'
+    compile 'com.github.goodforgod:dummymaker:1.0.2'
 }
 ```
 

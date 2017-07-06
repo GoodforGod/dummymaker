@@ -33,7 +33,10 @@ public class RenameAnnotationScanner implements IScanner<String, String> {
     private final Predicate<Annotation> renameField = (a) -> a.annotationType().equals(GenRenameExport.class);
 
     /**
-     * Scan for export & renamed fields
+     * Scan for renamed fields
+     *
+     * @see GenRenameExport
+     *
      * @param t class to scan
      * @return Map where Key is old field value, and Value is new renamed value
      */

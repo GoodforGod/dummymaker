@@ -13,12 +13,14 @@ public interface IExporter<T> {
     /**
      * Allow to export single object
      * @param t object to export
+     * @return indicates was export successful
      */
     boolean export(final T t);
 
     /**
      * Allow to export list of objects
      * @param tList objects to export
+     * @return indicates was export successful
      */
     boolean export(final List<T> tList);
 
