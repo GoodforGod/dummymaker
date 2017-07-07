@@ -9,7 +9,7 @@ Steps to do:
 3) Use *Factory* to populate/produce your Dummy Objects.
 4) Export your Dummy Objects by using special *Exporter*.
 
-![](https://media.giphy.com/media/qLoC4kKAxwaME/giphy.gif)
+![](https://media.giphy.com/media/3oKIPtueKtS0GqDKtq/giphy.gif)
 
 ## Dependency :rocket:
 **Maven**
@@ -83,16 +83,19 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 ![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
 
 #### *Force and Ignore annotation demonstration*
-![](https://media.giphy.com/media/KwbdVnms5CdWw/giphy.gif)
+![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
 
 #### *Enumerate and Field Rename demonstration*
 *GenEnumerate* annotation will enumerate Dummy field starting from 10.
+
 *GenRenameExport* annotation will change field export name.
 
 ![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
 
 #### *Class export rename demonstration*
+
 *GenRenameExport* annotation will change class export name.
+
 ![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
 
 ### ***GenPopulateFactory/GenProvideFactory***
@@ -111,7 +114,7 @@ Allow user populate or produce Dummy objects.
 ![](https://media.giphy.com/media/AmCVhBu4aOjFS/giphy.gif)
 
 #### *Exporters options set example*
-![](https://media.giphy.com/media/nM1NeqALwhOHS/giphy.gif)
+![](https://media.giphy.com/media/l0Iyb3Q8Rn6iDFFeg/giphy.gif)
 
 #### *Export as a string value demonstration*
 ![](https://media.giphy.com/media/CnQ0MV17s9ypi/giphy.gif)
