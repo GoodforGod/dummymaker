@@ -22,7 +22,7 @@ abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter
     /**
      * Class type to export
      */
-    final Class<T> exportClass;
+    private final Class<T> exportClass;
 
     final String exportClassName;
 

@@ -95,7 +95,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
         if(!isExportStateValid(list))
             return "";
 
-        final String superList = exportClass.getSimpleName() + "List";
+        final String superList = exportClassName + "List";
         final StringBuilder result = new StringBuilder();
         result.append(wrapOpenXmlTag(superList)).append("\n");
 

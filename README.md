@@ -38,22 +38,23 @@ Allow to populate or produce Dummy Objects.
 
 ### **Export**
 
-Allow to export Dummy objects in specific format.
+Allow to export Dummy objects in specific format into file.
+Also allow to export Dummy objects as a string value.
 
 #### ***CsvExporter Options***
-* *Path* - set path for export file.
-* *WrapTextValues* - will wrap String values with commas like 'this'.
-* *GenerateHeader* - will generate CSV header.
-* *Separator* - set CSV format separator.
+* *Path* - set path for export file, default directory where app is started.
+* *WrapTextValues* - if true will wrap String values with commas like 'this', default False.
+* *GenerateHeader* - if true will generate CSV header, default False.
+* *Separator* - set CSV format separator, default is '**,**' comma.
 
 #### ***XmlExporter Options***
-* *Path* - set path for export file.
+* *Path* - set path for export file, default directory where app is started.
 
 #### ***SqlExporter Options***
-* *Path* - set path for export file.
+* *Path* - set path for export file, default directory where app is started.
 
 #### ***JsonExporter Options***
-* *Path* - set path for export file.
+* *Path* - set path for export file, default directory where app is started.
 
 ### **Annotations**
 
@@ -181,9 +182,9 @@ INSERT INTO user (name, id) VALUES
 
 ## Version History
 
-**1.0.2** - new GenRename annotation, export as string, exporters value order fix, minor fixes and improvements.
+**1.0.2** - Added special *GenRenameExport* annotation, export as single string, export values order fix, minor fixes and improvements.
 
-**1.0.1** - Added generate new annotations, GenNumerate, fixed SQL export bug, other minor fixes.
+**1.0.1** - Added new generator and annotations, special *GenEnumerate* annotation, other minor fixes (Like SQL export).
 
 **1.0.0** - Initial project with core functions.
 
