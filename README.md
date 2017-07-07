@@ -9,6 +9,8 @@ Steps to do:
 3) Use *Factory* to populate/produce your Dummy Objects.
 4) Export your Dummy Objects by using special *Exporter*.
 
+![](https://media.giphy.com/media/qLoC4kKAxwaME/giphy.gif)
+
 ## Dependency :rocket:
 **Maven**
 ```
@@ -78,25 +80,41 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 ### ***Annotations***
 
 ####  *POJO annotate demonstration*
-![](https://media.giphy.com/media/xUA7aPwZO871rrTkT6/giphy.gif)
+![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
+
+#### *Force and Ignore annotation demonstration*
+![](https://media.giphy.com/media/KwbdVnms5CdWw/giphy.gif)
+
+#### *Enumerate and Field Rename demonstration*
+*GenEnumerate* annotation will enumerate Dummy field starting from 10.
+*GenRenameExport* annotation will change field export name.
+
+![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
+
+#### *Class export rename demonstration*
+*GenRenameExport* annotation will change class export name.
+![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
 
 ### ***GenPopulateFactory/GenProvideFactory***
 
-Allow user populate or produce Dummy Object(s).
+Allow user populate or produce Dummy objects.
 
 #### *Produce 1 or more Dummy objects demonstration*
-![](https://media.giphy.com/media/r2q6kaeasKRQ4/giphy.gif)
+![](https://media.giphy.com/media/FCdSHjcQpE5aM/giphy.gif)
 
 #### *Populate 1 or more Dummy objects demonstration*
-![](https://media.giphy.com/media/cajTTyUltm9qg/giphy.gif)
+![](https://media.giphy.com/media/PQ747tM0KTZTi/giphy.gif)
 
 ### ***Exporters***
 
-#### *Export **CSV/XML/JSON/SQL** Demonstration*
-![](https://media.giphy.com/media/xUA7aPXaWZENNUGXbq/giphy.gif)
+#### *Export demonstration*
+![](https://media.giphy.com/media/AmCVhBu4aOjFS/giphy.gif)
 
-#### *Exporters options demonstration*
-![](https://media.giphy.com/media/g3efqXIblykCs/giphy.gif)
+#### *Exporters options set example*
+![](https://media.giphy.com/media/nM1NeqALwhOHS/giphy.gif)
+
+#### *Export as a string value demonstration*
+![](https://media.giphy.com/media/CnQ0MV17s9ypi/giphy.gif)
 
 ## Export File Structures
 
