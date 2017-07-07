@@ -15,12 +15,12 @@ public interface IPopulateFactory<T> {
      * @param t object to populate
      * @return Populated Object
      */
-    T populate(T t);
+    T populate(final T t);
 
     /**
      * Populates objects via generators
      * @param t list of object to populate
      * @return Populated list of objects
      */
-    List<T> populate(List<T> t);
+    List<T> populate(final List<T> t);
 }

@@ -22,34 +22,32 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
     private final Class<T> produceClass;
 
-    public GenProduceFactory(Class<T> produceClass) {
+    public GenProduceFactory(final Class<T> produceClass) {
         this.produceClass = produceClass;
     }
 
     @Override
     public T produce() {
-        T instance = null;
-
         try {
-            instance = populateFactory.populate(produceClass.newInstance());
+            return populateFactory.populate(produceClass.newInstance());
         } catch (InstantiationException e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE NEW OBJECT!");
         }
         catch (IllegalAccessException e) {
             logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
         }
-
-        return instance;
+        return null;
     }
 
     @Override
-    public List<T> produce(int amount) {
+    public List<T> produce(final int amount) {
         final List<T> produced = new ArrayList<>();
 
-        int realAmount = (amount > 0) ? amount : 0;
+        if(amount < 1)
+            return produced;
 
         try {
-            for(int i = 0; i < realAmount; i++)
+            for(int i = 0; i < amount; i++)
                 produced.add(produceClass.newInstance());
 
         } catch (InstantiationException | IllegalAccessException e) {

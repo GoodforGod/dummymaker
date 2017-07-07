@@ -21,5 +21,5 @@ public interface IProduceFactory<T> {
      * @param amount amount of dummies to produce and populate
      * @return List of populated dummies
      */
-    List<T> produce(int amount);
+    List<T> produce(final int amount);
 }

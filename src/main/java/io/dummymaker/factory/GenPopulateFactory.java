@@ -32,7 +32,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
     private boolean enableNumeration = false;
 
     @Override
-    public T populate(T t) {
+    public T populate(final T t) {
         final Map<Field, Set<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
 
         for(Map.Entry<Field, Set<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
@@ -77,13 +77,13 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
     }
 
     @Override
-    public List<T> populate(List<T> t) {
+    public List<T> populate(final List<T> t) {
         if(t == null || t.isEmpty())
             return new ArrayList<>();
 
         setupNumerateMap(t.get(0).getClass());
 
-        List<T> tList = t.stream().map(this::populate).collect(Collectors.toList());
+        final List<T> tList = t.stream().map(this::populate).collect(Collectors.toList());
 
         numerateFields.clear();
 
@@ -94,7 +94,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
      * Setup map
      * @param t class to scan for numerate fields
      */
-    private void setupNumerateMap(Class t) {
+    private void setupNumerateMap(final Class t) {
         final Map<Field, Set<Annotation>> numerateAnnotations = numerateAnnotationScanner.scan(t);
 
         if(numerateAnnotations != null && !numerateAnnotations.isEmpty()) {
@@ -111,7 +111,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
      * Increment numerate number for generated field
      * @param field field to increment
      */
-    private void incrementNumerateValue(Field field) {
+    private void incrementNumerateValue(final Field field) {
         Long numerateValue = numerateFields.get(field);
         numerateValue++;
         numerateFields.replace(field, numerateValue);
