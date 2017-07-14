@@ -83,10 +83,15 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 ![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
 
 #### *Force and Ignore annotation demonstration*
+
+In this case, field city will be export despite that there is not generator field for it, value will be "Saint-Petersburg".
+And firld *id* will **NOT** be export if *ignore* annotation will have true (*default*) value.
+
 ![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
 
 #### *Enumerate and Field Rename demonstration*
 *GenEnumerate* annotation will enumerate Dummy field starting from 10.
+It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 19.
 
 *GenRenameExport* annotation will change field export name.
 
@@ -106,6 +111,9 @@ Allow user populate or produce Dummy objects.
 ![](https://media.giphy.com/media/FCdSHjcQpE5aM/giphy.gif)
 
 #### *Populate 1 or more Dummy objects demonstration*
+
+It will be useful in case, you have complex created objects and you want just to populate some of their fields.
+
 ![](https://media.giphy.com/media/PQ747tM0KTZTi/giphy.gif)
 
 ### ***Exporters***
@@ -117,6 +125,9 @@ Allow user populate or produce Dummy objects.
 ![](https://media.giphy.com/media/l0Iyb3Q8Rn6iDFFeg/giphy.gif)
 
 #### *Export as a string value demonstration*
+
+Is useful in save you have custom writer or need to send it over network.
+
 ![](https://media.giphy.com/media/CnQ0MV17s9ypi/giphy.gif)
 
 ## Export File Structures
