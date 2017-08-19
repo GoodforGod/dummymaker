@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker.scan;
 
 /**
  * Default Comment
@@ -6,6 +6,6 @@ package io.dummymaker.factory;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class TestGenFactory {
+public class ScannerImplTest {
 
 }

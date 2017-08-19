@@ -1,4 +1,4 @@
-package io.dummymaker.export;
+package io.dummymaker.generator;
 
 /**
  * Default Comment
@@ -6,6 +6,6 @@ package io.dummymaker.export;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class TestCsvExport {
+public class GeneratorImplTest {
 
 }
