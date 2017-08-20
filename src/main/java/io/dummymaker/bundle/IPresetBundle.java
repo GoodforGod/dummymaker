@@ -15,7 +15,7 @@ abstract class IPresetBundle<T> implements IBundle<T> {
     /**
      * Bundle value collection
      */
-    protected final List<T> preset;
+    final List<T> preset;
 
     public IPresetBundle(List<T> preset) {
         this.preset = preset;

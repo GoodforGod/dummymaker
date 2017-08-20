@@ -109,7 +109,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
      * Creates String of Create Table Insert Field
      */
     private String sqlCreateInsertNameType(final String field) {
-        return field.toLowerCase() + "\t" + javaToSqlFieldType(field);
+        return field + "\t" + javaToSqlFieldType(field);
     }
 
     private String wrapWithComma(final String value) {
