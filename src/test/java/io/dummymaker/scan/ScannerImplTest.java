@@ -1,6 +1,7 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.Dummy;
+import io.dummymaker.DummyNotPopulateFields;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.util.PrimeGenAnnotation;
@@ -130,5 +131,27 @@ public class ScannerImplTest {
         assertTrue(cityAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
         assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
         assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+    }
+
+    @Test
+    public void scanForPopulateAnnotationsWhereThereNoOne() {
+        IFieldScanner scanner = new PopulateAnnotationScanner();
+
+        Map<Field, Set<Annotation>> fields = scanner.scan(DummyNotPopulateFields.class);
+
+        // Check for correct fields number in map
+        assertNotNull(fields);
+        assertTrue(fields.isEmpty());
+    }
+
+    @Test
+    public void scanForEnumerateWhereThereNoOne() {
+        IFieldScanner scanner = new EnumerateAnnotationScanner();
+
+        Map<Field, Set<Annotation>> fields = scanner.scan(DummyNotPopulateFields.class);
+
+        // Check for correct fields number in map
+        assertNotNull(fields);
+        assertTrue(fields.isEmpty());
     }
 }
