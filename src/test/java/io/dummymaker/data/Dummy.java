@@ -1,4 +1,4 @@
-package io.dummymaker;
+package io.dummymaker.data;
 
 import io.dummymaker.annotation.GenCity;
 import io.dummymaker.annotation.GenName;

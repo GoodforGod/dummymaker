@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
  * Created by GoodforGod on 20.08.2017.
  */
 @Suite.SuiteClasses({
-        PopulateSuite.class,
+        FactorySuite.class,
         ExportImplTest.class,
         ExportAsStringImplTest.class
 })

@@ -13,6 +13,6 @@ import org.junit.runners.Suite;
         GenFactoriesImplTest.class,
         GenFactoriesImplTest.class
 })
-public class PopulateSuite {
+public class FactorySuite {
 
 }
