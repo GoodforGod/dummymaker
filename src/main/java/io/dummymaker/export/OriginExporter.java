@@ -20,6 +20,28 @@ import java.util.logging.Logger;
 abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter<T> {
 
     /**
+     * Available export types, used by writer
+     *
+     * @see io.dummymaker.writer.BufferedFileWriter
+     */
+    enum ExportFormat {
+        CSV(".csv"),
+        JSON(".json"),
+        XML(".xml"),
+        SQL(".sql");
+
+        ExportFormat(String value) {
+            this.value = value;
+        }
+
+        private final String value;
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    /**
      * Class type to export
      */
     private final Class<T> exportClass;

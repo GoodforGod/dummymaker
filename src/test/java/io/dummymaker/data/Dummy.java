@@ -15,7 +15,7 @@ import java.util.Set;
  * Dummy Object used as data to proceed in tests
  *
  * @author GoodforGod
- * @since 31.05.2017
+ * @since 17.08.2017
  */
 public class Dummy {
 
