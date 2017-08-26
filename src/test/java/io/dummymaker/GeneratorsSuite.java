@@ -1,7 +1,8 @@
 package io.dummymaker;
 
 import io.dummymaker.bundle.BundleImplTest;
-import io.dummymaker.generator.GeneratorImplTest;
+import io.dummymaker.generator.GeneratorPatternValidateTest;
+import io.dummymaker.generator.UniqueGeneratorsTest;
 import org.junit.runners.Suite;
 
 /**
@@ -9,7 +10,8 @@ import org.junit.runners.Suite;
  */
 @Suite.SuiteClasses({
         BundleImplTest.class,
-        GeneratorImplTest.class
+        UniqueGeneratorsTest.class,
+        GeneratorPatternValidateTest.class
 })
 public class GeneratorsSuite {
 

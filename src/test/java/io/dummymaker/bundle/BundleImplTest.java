@@ -24,7 +24,7 @@ public class BundleImplTest {
         this.bundle = bundle;
     }
 
-    @Parameters(name = "{index}: ({0})")
+    @Parameters(name = "{index}: Bundle - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new TagPresetBundle() },
