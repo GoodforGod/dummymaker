@@ -129,7 +129,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
             final String write = objectToJson(t, Mode.LIST);
 
             // Write , symbol to the end of the object
-            result.append((iterator.hasNext()) ? write + "," : write);
+            result.append("\n").append((iterator.hasNext()) ? write + "," : write);
         }
 
         // Close JSON Object List

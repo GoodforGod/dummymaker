@@ -5,12 +5,12 @@ import org.junit.Test;
 public class SqlExportAsStringTest {
 
     @Test
-    public void exportSingleDummyInSqlAsString() {
+    public void exportSingleDummyInSql() {
 
     }
 
     @Test
-    public void exportListOfDummiesInSqlAsString() {
+    public void exportListOfDummiesInSql() {
 
     }
 }

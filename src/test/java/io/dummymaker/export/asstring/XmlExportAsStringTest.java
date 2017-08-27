@@ -5,12 +5,12 @@ import org.junit.Test;
 public class XmlExportAsStringTest {
 
     @Test
-    public void exportSingleDummyInXmlAsString() {
+    public void exportSingleDummyInXml() {
 
     }
 
     @Test
-    public void exportListOfDummiesInXmlAsString() {
+    public void exportListOfDummiesInXml() {
 
     }
 }

@@ -35,10 +35,10 @@ public class ScannerImplTest {
         assertEquals(4, fields.size());
 
         // Check for map values
-        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(CITY.getFieldName())));
-        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(GROUP.getFieldName())));
-        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NUM.getFieldName())));
-        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NAME.getFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(CITY.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(GROUP.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NUM.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NAME.getOriginFieldName())));
     }
 
     @Test
@@ -53,9 +53,9 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        Set<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getFieldName()));
-        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getFieldName()));
-        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getFieldName()));
+        Set<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
+        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);
@@ -79,7 +79,7 @@ public class ScannerImplTest {
         assertEquals(1, fields.size());
 
         // Check for correct map values
-        Set<Annotation> numAnnotations = fields.get(Dummy.class.getDeclaredField(NUM.getFieldName()));
+        Set<Annotation> numAnnotations = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
 
         assertNotNull(numAnnotations);
 
@@ -99,7 +99,7 @@ public class ScannerImplTest {
         assertEquals(1, fields.size());
 
         // Check for correct map values
-        String groupFieldRenamedValue = fields.get(GROUP.getFieldName());
+        String groupFieldRenamedValue = fields.get(GROUP.getOriginFieldName());
 
         assertNotNull(groupFieldRenamedValue);
 
@@ -119,9 +119,9 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        Set<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getFieldName()));
-        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getFieldName()));
-        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getFieldName()));
+        Set<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
+        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);

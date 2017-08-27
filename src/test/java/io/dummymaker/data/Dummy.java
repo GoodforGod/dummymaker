@@ -25,21 +25,27 @@ public class Dummy {
      * @see io.dummymaker.scan.ScannerImplTest
      */
     public enum DummyFieldNames {
-        GROUP("group", GenRenameExport.class),
-        CITY("city", GenCity.class, GenIgnoreExport.class),
-        NUM("num", GenEnumerate.class),
-        NAME("name", GenName.class);
+        GROUP("group",  "socialGroup",  GenRenameExport.class),
+        CITY( "city",   "city",         GenCity.class, GenIgnoreExport.class),
+        NUM(  "num",    "num",          GenEnumerate.class),
+        NAME( "name",   "name",         GenName.class);
 
-        private String fieldName;
+        private String originFieldName;
+        private String exportFieldName;
         private Set<Class> annotations = new HashSet<>();
 
-        DummyFieldNames(final String fieldName, Class... annotations) {
-            this.fieldName = fieldName;
+        DummyFieldNames(final String originFieldName, final String exportFieldName, Class... annotations) {
+            this.originFieldName = originFieldName;
+            this.exportFieldName = exportFieldName;
             this.annotations.addAll(Arrays.asList(annotations));
         }
 
-        public String getFieldName() {
-            return fieldName;
+        public String getExportFieldName() {
+            return exportFieldName;
+        }
+
+        public String getOriginFieldName() {
+            return originFieldName;
         }
 
         public Set<Class> getAnnotations() {

@@ -42,22 +42,6 @@ public class CsvExporter<T> extends OriginExporter<T> {
     }
 
     public CsvExporter(final Class<T> primeClass,
-                       final boolean wrapTextValues,
-                       final boolean generateHeader) {
-        this(primeClass);
-        this.wrapTextValues = wrapTextValues;
-        this.generateHeader = generateHeader;
-    }
-
-    public CsvExporter(final Class<T> primeClass,
-                       final boolean wrapTextValues,
-                       final boolean generateHeader,
-                       final char separator) {
-        this(primeClass, wrapTextValues, generateHeader);
-        setSeparator(separator);
-    }
-
-    public CsvExporter(final Class<T> primeClass,
                        final String path,
                        final boolean wrapTextValues,
                        final boolean generateHeader) {

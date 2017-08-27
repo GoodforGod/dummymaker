@@ -18,6 +18,11 @@ public class BufferedFileWriter implements IWriter {
 
     private BufferedWriter writer = null;
 
+    /**
+     * @param fileName file name
+     * @param path path where to create file (NULL IF HOME DIR)
+     * @param fileType file extension
+     */
     public BufferedFileWriter(final String fileName, final String path, final String fileType) {
         final String filePath = (path == null || path.trim().isEmpty()) ? "" : path;
 

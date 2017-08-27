@@ -65,10 +65,15 @@ abstract class OriginExporter<T> extends BufferedFileWriter implements IExporter
      */
     private final Map<String, String> renamedFields = new TreeMap<>();
 
+    /**
+     * @param exportClass class to export
+     * @param path path where to export (NULL IF HOME DIR)
+     * @param format export format
+     */
     OriginExporter(final Class<T> exportClass,
                    final String path,
-                   final ExportFormat type) {
-        super(exportClass.getSimpleName(), path, type.getValue());
+                   final ExportFormat format) {
+        super(exportClass.getSimpleName(), path, format.getValue());
         this.exportClass = exportClass;
 
         // Fill export origin fields

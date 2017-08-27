@@ -5,12 +5,17 @@ import org.junit.Test;
 public class CsvExportAsStringTest {
 
     @Test
-    public void exportSingleDummyInCsvAsString() {
+    public void exportSingleDummyInCsv() {
 
     }
 
     @Test
-    public void exportListOfDummiesInCsvAsString() {
+    public void exportSingleDummyWithStringWrapAndHeader() {
+
+    }
+
+    @Test
+    public void exportListOfDummiesInCsv() {
 
     }
 }
