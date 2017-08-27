@@ -1,7 +1,7 @@
 package io.dummymaker;
 
-import io.dummymaker.export.ExportAsStringImplTest;
 import io.dummymaker.export.ExportImplTest;
+import io.dummymaker.export.asstring.JsonExportAsStringTest;
 
 import static org.junit.runners.Suite.SuiteClasses;
 
@@ -11,7 +11,7 @@ import static org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
         FactorySuite.class,
         ExportImplTest.class,
-        ExportAsStringImplTest.class
+        JsonExportAsStringTest.class
 })
 class ExportSuite {
 
