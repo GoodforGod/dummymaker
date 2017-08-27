@@ -23,4 +23,24 @@ public class DummyNoPopulateFields {
     private Integer num;
 
     private String name;
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

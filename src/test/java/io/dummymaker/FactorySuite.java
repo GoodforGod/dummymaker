@@ -2,17 +2,17 @@ package io.dummymaker;
 
 import io.dummymaker.factory.GenFactoriesImplTest;
 import io.dummymaker.scan.ScannerImplTest;
-import org.junit.runners.Suite;
+
+import static org.junit.runners.Suite.SuiteClasses;
 
 /**
  * Created by GoodforGod on 20.08.2017.
  */
-@Suite.SuiteClasses({
+@SuiteClasses({
         GeneratorsSuite.class,
         ScannerImplTest.class,
-        GenFactoriesImplTest.class,
         GenFactoriesImplTest.class
 })
-public class FactorySuite {
+class FactorySuite {
 
 }

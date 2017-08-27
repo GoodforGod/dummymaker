@@ -60,4 +60,24 @@ public class Dummy {
 
     @GenName
     private String name;
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
