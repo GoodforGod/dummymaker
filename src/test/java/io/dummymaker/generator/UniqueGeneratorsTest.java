@@ -6,6 +6,12 @@ import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
 
+/**
+ * "Default Description"
+ *
+ * @author GoodforGod
+ * @since 20.08.2017
+ */
 public class UniqueGeneratorsTest {
 
     @Test

@@ -1,6 +1,9 @@
 language: java
 
+sudo: required
+
 jdk:
   - oraclejdk8
-
-script: mvn test
+  - openjdk8
+  - oraclejdk7
+  - openjdk7

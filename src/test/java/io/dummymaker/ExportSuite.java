@@ -6,7 +6,10 @@ import io.dummymaker.export.asstring.JsonExportAsStringTest;
 import static org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Created by GoodforGod on 20.08.2017.
+ * "Default Description"
+ *
+ * @author GoodforGod
+ * @since 20.08.2017
  */
 @SuiteClasses({
         FactorySuite.class,

@@ -13,7 +13,10 @@ import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.*;
 
 /**
- * Created by GoodforGod on 20.08.2017.
+ * "Default Description"
+ *
+ * @author GoodforGod
+ * @since 20.08.2017
  */
 public class JsonExportAsStringTest {
 
@@ -37,6 +40,7 @@ public class JsonExportAsStringTest {
         assertTrue(jsonArray[4].matches("}"));
     }
 
+    //TODO
     @Test
     public void exportListOfDummiesInJson() {
         List<Dummy> dummy = produceFactory.produce(2);

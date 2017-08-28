@@ -3,6 +3,12 @@ package io.dummymaker.export.container;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * "Default Description"
+ *
+ * @author GoodforGod
+ * @since 28.08.2017
+ */
 public class OriginContainer implements IContainer {
 
     protected final List<String> values = new ArrayList<>();

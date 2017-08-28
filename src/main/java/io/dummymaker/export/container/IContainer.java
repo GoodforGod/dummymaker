@@ -3,9 +3,10 @@ package io.dummymaker.export.container;
 import java.util.List;
 
 /**
- * Container class stores exported data
+ * "Default Description"
  *
- * Used to easily manipulate and store data
+ * @author GoodforGod
+ * @since 28.08.2017
  */
 public interface IContainer {
     List<String> values();
