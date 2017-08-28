@@ -11,7 +11,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class CsvExporter<T> extends OriginExporter<T> {
+public class CsvExporter<T> extends BaseExporter<T> {
 
     private final char DEFAULT_SEPARATOR = ',';
 
@@ -78,12 +78,12 @@ public class CsvExporter<T> extends OriginExporter<T> {
 
     private String objectToCsv(final T t) {
         final StringBuilder builder = new StringBuilder("");
-        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         while (iterator.hasNext()) {
             final Map.Entry<String, String> obj = iterator.next();
 
-            if(wrapTextValues && exportRenamedFields.get(obj.getKey()).getType().equals(String.class))
+            if(wrapTextValues && classContainer.finalFields().get(obj.getKey()).getType().equals(String.class))
                 builder.append(wrapWithQuotes(obj.getValue()));
             else
                 builder.append(obj.getValue());
@@ -101,7 +101,7 @@ public class CsvExporter<T> extends OriginExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, Field>> iterator = exportRenamedFields.entrySet().iterator();
+        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
 
         while (iterator.hasNext()) {
             header.append(iterator.next().getKey());

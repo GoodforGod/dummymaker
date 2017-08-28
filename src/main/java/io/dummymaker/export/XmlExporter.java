@@ -10,7 +10,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class XmlExporter<T> extends OriginExporter<T> {
+public class XmlExporter<T> extends BaseExporter<T> {
 
     private enum Mode {
         SINGLE,
@@ -34,7 +34,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
     }
 
     private String objectToXml(final T t, final Mode mode) {
-        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         final StringBuilder builder = new StringBuilder("");
 
@@ -47,7 +47,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
                 : "\t\t";
 
         if(iterator.hasNext()) {
-            builder.append(tabObject).append(wrapOpenXmlTag(exportClassName));
+            builder.append(tabObject).append(wrapOpenXmlTag(classContainer.finalClassName()));
 
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
@@ -56,7 +56,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
                                     .append(field.getValue())
                                     .append(wrapCloseXmlTag(field.getKey()));
             }
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(exportClassName));
+            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(classContainer.finalClassName()));
         }
 
         return builder.toString();
@@ -72,7 +72,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
         if(!isExportStateValid(list))
             return false;
 
-        final String superList = exportClassName + "List";
+        final String superList = classContainer.finalClassName() + "List";
         writeLine(wrapOpenXmlTag(superList));
 
         for (final T t : list)
@@ -95,7 +95,7 @@ public class XmlExporter<T> extends OriginExporter<T> {
         if(!isExportStateValid(list))
             return "";
 
-        final String superList = exportClassName + "List";
+        final String superList = classContainer.finalClassName() + "List";
         final StringBuilder result = new StringBuilder();
         result.append(wrapOpenXmlTag(superList)).append("\n");
 

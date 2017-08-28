@@ -1,4 +1,4 @@
-package io.dummymaker.export.container;
+package io.dummymaker.export.container.format;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author GoodforGod
  * @since 28.08.2017
  */
-public interface IContainer {
+public interface IFormatContainer {
     List<String> values();
 
     String value(final int index);

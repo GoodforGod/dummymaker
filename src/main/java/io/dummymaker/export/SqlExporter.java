@@ -13,7 +13,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class SqlExporter<T> extends OriginExporter<T> {
+public class SqlExporter<T> extends BaseExporter<T> {
 
     /**
      * Java & Sql Type Representation
@@ -59,7 +59,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
      * convert Java Field Type to Sql Data Type
      */
     private String javaToSqlFieldType(final String fieldName) {
-        final String fieldType = exportRenamedFields.get(fieldName).getType().getName();
+        final String fieldType = classContainer.finalFields().get(fieldName).getType().getName();
 
         if(fieldType != null) {
             if (fieldType.equals(DataType.DOUBLE.getJava()))
@@ -83,9 +83,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, Field>> iterator = exportRenamedFields.entrySet().iterator();
+        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
 
-        builder.append("CREATE TABLE IF NOT EXISTS ").append(exportClassName.toLowerCase()).append("(\n");
+        builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.finalClassName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
             final Map.Entry<String, Field> field = iterator.next();
@@ -120,10 +120,10 @@ public class SqlExporter<T> extends OriginExporter<T> {
      * Insert query
      */
     private String sqlInsertIntoQuery(final T t) {
-        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("INSERT INTO ").append(exportClassName.toLowerCase()).append(" (");
+        builder.append("INSERT INTO ").append(classContainer.finalClassName().toLowerCase()).append(" (");
 
         while (iterator.hasNext()) {
             builder.append(iterator.next().getKey());
@@ -143,7 +143,7 @@ public class SqlExporter<T> extends OriginExporter<T> {
     private StringBuilder sqlValuesInsert(final T t) {
         final StringBuilder builder = new StringBuilder();
 
-        final Iterator<Map.Entry<String, String>> iterator = getExportValues(t).entrySet().iterator();
+        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         if(iterator.hasNext()) {
             builder.append("(");
@@ -151,9 +151,9 @@ public class SqlExporter<T> extends OriginExporter<T> {
             while (iterator.hasNext()) {
                 Map.Entry<String, String> field = iterator.next();
 
-                if(exportRenamedFields.get(field.getKey()).getType().equals(String.class))
+                if(classContainer.finalFields().get(field.getKey()).getType().equals(String.class))
                     builder.append(wrapWithComma(field.getValue()));
-                else if(exportRenamedFields.get(field.getKey()).getType().equals(LocalDateTime.class))
+                else if(classContainer.finalFields().get(field.getKey()).getType().equals(LocalDateTime.class))
                     builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
                 else
                     builder.append(field.getValue());

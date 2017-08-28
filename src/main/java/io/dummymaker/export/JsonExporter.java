@@ -10,7 +10,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class JsonExporter<T> extends OriginExporter<T> {
+public class JsonExporter<T> extends BaseExporter<T> {
 
     private enum Mode {
         SINGLE,
@@ -37,7 +37,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
      * @return StringBuilder of Object as JSON String
      */
     private String objectToJson(final T t, final Mode mode) {
-        final Map<String, String> values = getExportValues(t);
+        final Map<String, String> values = extractExportValues(t);
 
         final StringBuilder builder = new StringBuilder("");
 
@@ -74,7 +74,7 @@ public class JsonExporter<T> extends OriginExporter<T> {
     }
 
     private String openJsonList() {
-        return "{\n" + "\t\"" + exportClassName + "\"" + ": " + "[";
+        return "{\n" + "\t\"" + classContainer.finalClassName() + "\"" + ": " + "[";
     }
 
     private String closeJsonList() {

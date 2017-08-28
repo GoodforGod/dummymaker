@@ -1,4 +1,4 @@
-package io.dummymaker.export.container;
+package io.dummymaker.export.container.format;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author GoodforGod
  * @since 28.08.2017
  */
-public class OriginContainer implements IContainer {
+public class BaseFormatContainer implements IFormatContainer {
 
     protected final List<String> values = new ArrayList<>();
 
