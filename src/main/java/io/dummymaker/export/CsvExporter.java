@@ -158,10 +158,17 @@ public class CsvExporter<T> extends BaseExporter<T> {
         final StringBuilder result = new StringBuilder();
 
         if (generateHeader)
-            result.append(generateCsvHeader());
+            result.append(generateCsvHeader()).append("\n");
 
-        for (final T t : list)
-            result.append("\n").append(objectToCsv(t));
+        final Iterator<T> iterator = list.iterator();
+
+        while (iterator.hasNext()) {
+            final T t = iterator.next();
+            result.append(objectToCsv(t));
+
+            if(iterator.hasNext())
+                result.append("\n");
+        }
 
         return result.toString();
     }

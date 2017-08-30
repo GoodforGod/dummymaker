@@ -66,6 +66,23 @@ public class CsvExportAsStringTest {
         List<Dummy> dummies = produceFactory.produce(2);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
 
+        String dummyAsJsonString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsJsonString);
+
+        String[] csvArray = dummyAsJsonString.split("\n");
+        assertEquals(2, csvArray.length);
+
+        String[] valueArray1 = csvArray[0].split(",");
+        assertEquals(3, valueArray1.length);
+        assertTrue(valueArray1[0].matches("[a-zA-Z0-9]+"));
+        assertTrue(valueArray1[1].matches("[0-9]+"));
+        assertTrue(valueArray1[2].matches("[0-9]+"));
+
+        String[] valueArray2 = csvArray[1].split(",");
+        assertEquals(3, valueArray2.length);
+        assertTrue(valueArray2[0].matches("[a-zA-Z0-9]+"));
+        assertTrue(valueArray2[1].matches("[0-9]+"));
+        assertTrue(valueArray2[2].matches("[0-9]+"));
     }
 
     @Test
