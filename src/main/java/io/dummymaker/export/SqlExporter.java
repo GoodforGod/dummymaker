@@ -43,7 +43,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
     }
 
     /**
-     * Insert values limit per single insert query (due to 1000 row limit in SQL)
+     * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
      */
     private final Integer INSERT_QUERY_LIMIT = 995;
 

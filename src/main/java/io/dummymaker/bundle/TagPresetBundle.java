@@ -81,10 +81,10 @@ public class TagPresetBundle extends IPresetBundle<String> {
             add("#photooftheday");
             add("#instagood");
             add("#love");
-            add("#movies ");
-            add("#theatre ");
+            add("#movies");
+            add("#theatre");
             add("#video");
-            add("#TagsForLikes ");
+            add("#TagsForLikes");
             add("#movies");
             add("#theatre");
             add("#video");
