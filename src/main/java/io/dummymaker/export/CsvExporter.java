@@ -117,6 +117,8 @@ public class CsvExporter<T> extends BaseExporter<T> {
         if(!isExportStateValid(t))
             return false;
 
+        init();
+
         if (generateHeader)
             writeLine(generateCsvHeader());
 
@@ -127,6 +129,8 @@ public class CsvExporter<T> extends BaseExporter<T> {
     public boolean export(final List<T> list) {
         if(!isExportStateValid(list))
             return false;
+
+        init();
 
         if (generateHeader)
             writeLine(generateCsvHeader());

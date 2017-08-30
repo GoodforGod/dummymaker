@@ -1,6 +1,8 @@
 package io.dummymaker;
 
 import io.dummymaker.export.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import static org.junit.runners.Suite.SuiteClasses;
 
@@ -10,6 +12,7 @@ import static org.junit.runners.Suite.SuiteClasses;
  * @author GoodforGod
  * @since 31.08.2017
  */
+@RunWith(Suite.class)
 @SuiteClasses({
         CsvExportTest.class,
         JsonExportTest.class,
@@ -17,6 +20,6 @@ import static org.junit.runners.Suite.SuiteClasses;
         XmlExportTest.class,
         SpecialAnnotationExportTest.class
 })
-class ExportAsFileSuite {
+public class ExportAsFileSuite {
 
 }

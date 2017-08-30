@@ -64,6 +64,7 @@ public class XmlExporter<T> extends BaseExporter<T> {
 
     @Override
     public boolean export(final T t) {
+        init();
         return isExportStateValid(t) && writeLine(objectToXml(t, Mode.SINGLE)) && flush();
     }
 
@@ -71,6 +72,8 @@ public class XmlExporter<T> extends BaseExporter<T> {
     public boolean export(final List<T> list) {
         if(!isExportStateValid(list))
             return false;
+
+        init();
 
         final String superList = classContainer.finalClassName() + "List";
         writeLine(wrapOpenXmlTag(superList));

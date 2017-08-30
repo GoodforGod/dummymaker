@@ -83,6 +83,7 @@ public class JsonExporter<T> extends BaseExporter<T> {
 
     @Override
     public boolean export(final T t) {
+        init();
         return (isExportStateValid(t)) && (writeLine(objectToJson(t, Mode.SINGLE)) && flush());
     }
 
@@ -90,6 +91,8 @@ public class JsonExporter<T> extends BaseExporter<T> {
     public boolean export(final List<T> list) {
         if(!isExportStateValid(list))
             return false;
+
+        init();
 
         // Open JSON Object List
         writeLine(openJsonList());

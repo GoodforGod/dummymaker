@@ -170,6 +170,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     @Override
     public boolean export(final T t) {
+        init();
         return isExportStateValid(t)
                 && writeLine(sqlTableCreate())
                 && writeLine(sqlInsertIntoQuery(t))
@@ -181,6 +182,8 @@ public class SqlExporter<T> extends BaseExporter<T> {
     public boolean export(final List<T> list) {
         if (!isExportStateValid(list))
             return false;
+
+        init();
 
         Integer i = INSERT_QUERY_LIMIT;
 

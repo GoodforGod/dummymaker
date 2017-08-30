@@ -18,20 +18,31 @@ public class BufferedFileWriter implements IWriter {
 
     private BufferedWriter writer = null;
 
+    private String path;
+
     /**
      * @param fileName file name
      * @param path path where to create file (NULL IF HOME DIR)
      * @param fileType file extension
      */
     public BufferedFileWriter(final String fileName, final String path, final String fileType) {
-        final String filePath = (path == null || path.trim().isEmpty()) ? "" : path;
+        this.path = (path == null || path.trim().isEmpty())
+                ? ""
+                : path;
 
+        this.path += fileName + fileType;
+    }
+
+    @Override
+    public boolean init() {
         try {
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(filePath + fileName + fileType), "UTF-8"));
+                            new FileOutputStream(path), "UTF-8"));
+            return true;
         } catch (IOException e) {
             logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
+            return false;
         }
     }
 
