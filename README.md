@@ -1,4 +1,4 @@
-# DummyMaker :hotsprings:
+# :hotsprings: DummyMaker ![](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)
 
 Library allow you to produce Dummy Objects (POJOs) by using *Factories* and populate their fields with random values by using *Annotations*.
 And then *Export* them in **CSV/JSON/XML/SQL** format.
