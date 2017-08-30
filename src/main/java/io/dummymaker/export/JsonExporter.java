@@ -133,6 +133,6 @@ public class JsonExporter<T> extends BaseExporter<T> {
         }
 
         // Close JSON Object List
-        return result.append(closeJsonList()).toString();
+        return result.append("\n").append(closeJsonList()).toString();
     }
 }

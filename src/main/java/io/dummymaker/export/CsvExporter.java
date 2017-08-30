@@ -158,10 +158,10 @@ public class CsvExporter<T> extends BaseExporter<T> {
         final StringBuilder result = new StringBuilder();
 
         if (generateHeader)
-            result.append(generateCsvHeader()).append("\n");
+            result.append(generateCsvHeader());
 
         for (final T t : list)
-            result.append(objectToCsv(t));
+            result.append("\n").append(objectToCsv(t));
 
         return result.toString();
     }

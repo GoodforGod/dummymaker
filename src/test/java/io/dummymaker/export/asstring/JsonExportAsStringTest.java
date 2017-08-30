@@ -40,7 +40,6 @@ public class JsonExportAsStringTest {
         assertTrue(jsonArray[4].matches("}"));
     }
 
-    //TODO
     @Test
     public void exportListOfDummiesInJson() {
         List<Dummy> dummy = produceFactory.produce(2);
@@ -50,12 +49,24 @@ public class JsonExportAsStringTest {
         assertNotNull(dummyAsJsonString);
 
         String[] jsonArray = dummyAsJsonString.split("\n");
-        assertEquals(13, jsonArray.length);
+        assertEquals(14, jsonArray.length);
 
         assertTrue(jsonArray[0].matches("\\{"));
-        assertTrue(jsonArray[1].matches("\\t\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
-        assertTrue(jsonArray[2].matches("\\t\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
-        assertTrue(jsonArray[3].matches("\\t\"" + NUM.getExportFieldName()  + "\":\\s\"null\""));
-        assertTrue(jsonArray[4].matches("}"));
+        assertTrue(jsonArray[1].matches("\\t\"[a-zA-Z]+\": \\["));
+
+        assertTrue(jsonArray[2].matches("\\t{2}\\{"));
+        assertTrue(jsonArray[3].matches("\\t{3}\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
+        assertTrue(jsonArray[4].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
+        assertTrue(jsonArray[5].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\""));
+        assertTrue(jsonArray[6].matches("\\t{2}},"));
+
+        assertTrue(jsonArray[7].matches("\\t{2}\\{"));
+        assertTrue(jsonArray[8].matches("\\t{3}\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
+        assertTrue(jsonArray[9].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
+        assertTrue(jsonArray[10].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\""));
+        assertTrue(jsonArray[11].matches("\\t{2}}"));
+
+        assertTrue(jsonArray[12].matches("\\t]"));
+        assertTrue(jsonArray[13].matches("}"));
     }
 }

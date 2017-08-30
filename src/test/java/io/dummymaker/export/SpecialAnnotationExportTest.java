@@ -6,6 +6,6 @@ package io.dummymaker.export;
  * @author GoodforGod
  * @since 31.07.2017
  */
-public class ExportImplTest {
+public class SpecialAnnotationExportTest {
 
 }
