@@ -1,5 +1,6 @@
-package io.dummymaker.export.util;
+package io.dummymaker.export.validation;
 
+import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -16,7 +17,7 @@ public class CsvValidation implements IValidation {
         assertTrue(dummy[0].matches("[a-zA-Z0-9]+"));
         assertTrue(dummy[1].matches("[0-9]+"));
         assertTrue(dummy[2].matches("null"));
-}
+    }
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
@@ -33,29 +34,30 @@ public class CsvValidation implements IValidation {
         assertTrue(valueArray2[2].matches("[0-9]+"));
     }
 
-    public void isSingleDummyValidWithHeader(String[] dummy) {
-        String[] headerArray = dummy[0].split(",");
-        assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[1].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[2].matches("[a-zA-Z0-9]+"));
+    public void isSingleDummyValidWithHeader(String[] dummy, char separator) {
+        String[] headerArray = dummy[0].split(String.valueOf(separator));
+        String[] valueArray = dummy[1].split(String.valueOf(separator));
 
-        String[] valueArray = dummy[1].split(",");
+        assertEquals(3, headerArray.length);
+        assertTrue(headerArray[0].matches(NAME.getExportFieldName()));
+        assertTrue(headerArray[1].matches(GROUP.getExportFieldName()));
+        assertTrue(headerArray[2].matches(NUM.getExportFieldName()));
+
         assertEquals(3, valueArray.length);
         assertTrue(valueArray[0].matches("\'[a-zA-Z0-9]+\'"));
         assertTrue(valueArray[1].matches("\'[0-9]+\'"));
         assertTrue(valueArray[2].matches("null"));
     }
 
-    public void isTwoDummiesValidWithHeader(String[] dummies) {
-        String[] headerArray = dummies[0].split(",");
-        String[] valueArray1 = dummies[1].split(",");
-        String[] valueArray2 = dummies[2].split(",");
+    public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
+        String[] headerArray = dummies[0].split(String.valueOf(separator));
+        String[] valueArray1 = dummies[1].split(String.valueOf(separator));
+        String[] valueArray2 = dummies[2].split(String.valueOf(separator));
 
         assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[1].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[2].matches("[a-zA-Z0-9]+"));
+        assertTrue(headerArray[0].matches(NAME.getExportFieldName()));
+        assertTrue(headerArray[1].matches(GROUP.getExportFieldName()));
+        assertTrue(headerArray[2].matches(NUM.getExportFieldName()));
 
         assertEquals(3, valueArray1.length);
         assertTrue(valueArray1[0].matches("\'[a-zA-Z0-9]+\'"));

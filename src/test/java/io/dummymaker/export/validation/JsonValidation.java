@@ -1,4 +1,4 @@
-package io.dummymaker.export.util;
+package io.dummymaker.export.validation;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;

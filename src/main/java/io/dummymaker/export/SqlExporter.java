@@ -223,7 +223,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     @Override
     public String exportAsString(final T t) {
-        return (!isExportStateValid(t))
+        return (isExportStateValid(t))
                 ? sqlTableCreate() + "\n" + sqlInsertIntoQuery(t) + "\n" + sqlValuesInsert(t) + ";"
                 : "";
     }

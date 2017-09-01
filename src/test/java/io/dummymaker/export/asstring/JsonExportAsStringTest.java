@@ -3,7 +3,7 @@ package io.dummymaker.export.asstring;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.JsonExporter;
-import io.dummymaker.export.util.JsonValidation;
+import io.dummymaker.export.validation.JsonValidation;
 import io.dummymaker.factory.GenProduceFactory;
 import io.dummymaker.factory.IProduceFactory;
 import org.junit.Test;
@@ -30,10 +30,10 @@ public class JsonExportAsStringTest {
         Dummy dummy = produceFactory.produce();
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
-        String dummyAsJsonString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
 
-        String[] jsonArray = dummyAsJsonString.split("\n");
+        String[] jsonArray = dummyAsString.split("\n");
         assertEquals(5, jsonArray.length);
 
         validation.isSingleDummyValid(jsonArray);
@@ -44,10 +44,10 @@ public class JsonExportAsStringTest {
         List<Dummy> dummy = produceFactory.produce(2);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
-        String dummyAsJsonString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
 
-        String[] jsonArray = dummyAsJsonString.split("\n");
+        String[] jsonArray = dummyAsString.split("\n");
         assertEquals(14, jsonArray.length);
 
         validation.isTwoDummiesValid(jsonArray);
