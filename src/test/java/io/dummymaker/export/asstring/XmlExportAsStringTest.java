@@ -48,7 +48,7 @@ public class XmlExportAsStringTest {
         assertNotNull(dummyAsString);
 
         String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(8, xmlArray.length);
+        assertEquals(12, xmlArray.length);
 
         validation.isTwoDummiesValid(xmlArray);
     }
