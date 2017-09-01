@@ -3,14 +3,15 @@ package io.dummymaker.export.asstring;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.JsonExporter;
+import io.dummymaker.export.util.JsonValidation;
 import io.dummymaker.factory.GenProduceFactory;
 import io.dummymaker.factory.IProduceFactory;
 import org.junit.Test;
 
 import java.util.List;
 
-import static io.dummymaker.data.Dummy.DummyFieldNames.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * "Default Description"
@@ -21,6 +22,8 @@ import static org.junit.Assert.*;
 public class JsonExportAsStringTest {
 
     private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+
+    private JsonValidation validation = new JsonValidation();
 
     @Test
     public void exportSingleDummyInJson() {
@@ -33,11 +36,7 @@ public class JsonExportAsStringTest {
         String[] jsonArray = dummyAsJsonString.split("\n");
         assertEquals(5, jsonArray.length);
 
-        assertTrue(jsonArray[0].matches("\\{"));
-        assertTrue(jsonArray[1].matches("\\t\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
-        assertTrue(jsonArray[2].matches("\\t\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
-        assertTrue(jsonArray[3].matches("\\t\"" + NUM.getExportFieldName()  + "\":\\s\"null\""));
-        assertTrue(jsonArray[4].matches("}"));
+        validation.isSingleDummyValid(jsonArray);
     }
 
     @Test
@@ -51,22 +50,6 @@ public class JsonExportAsStringTest {
         String[] jsonArray = dummyAsJsonString.split("\n");
         assertEquals(14, jsonArray.length);
 
-        assertTrue(jsonArray[0].matches("\\{"));
-        assertTrue(jsonArray[1].matches("\\t\"[a-zA-Z]+\": \\["));
-
-        assertTrue(jsonArray[2].matches("\\t{2}\\{"));
-        assertTrue(jsonArray[3].matches("\\t{3}\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
-        assertTrue(jsonArray[4].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
-        assertTrue(jsonArray[5].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\""));
-        assertTrue(jsonArray[6].matches("\\t{2}},"));
-
-        assertTrue(jsonArray[7].matches("\\t{2}\\{"));
-        assertTrue(jsonArray[8].matches("\\t{3}\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
-        assertTrue(jsonArray[9].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\","));
-        assertTrue(jsonArray[10].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\""));
-        assertTrue(jsonArray[11].matches("\\t{2}}"));
-
-        assertTrue(jsonArray[12].matches("\\t]"));
-        assertTrue(jsonArray[13].matches("}"));
+        validation.isTwoDummiesValid(jsonArray);
     }
 }

@@ -3,6 +3,7 @@ package io.dummymaker.export.asstring;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.CsvExporter;
 import io.dummymaker.export.IExporter;
+import io.dummymaker.export.util.CsvValidation;
 import io.dummymaker.factory.GenProduceFactory;
 import io.dummymaker.factory.IProduceFactory;
 import org.junit.Test;
@@ -20,6 +21,8 @@ import static org.junit.Assert.*;
 public class CsvExportAsStringTest {
 
     private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+
+    private CsvValidation validation = new CsvValidation();
 
     @Test
     public void exportSingleDummyInCsv() {
