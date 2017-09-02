@@ -94,21 +94,22 @@ public class SqlExporter<T> extends BaseExporter<T> {
             if (field.getKey().equalsIgnoreCase("id"))
                 primaryKeyField = field.getKey();
 
-            if (iterator.hasNext())
-                builder.append(",");
+            builder.append(",");
 
             builder.append("\n");
         }
 
-        builder.append(",");
-
         // Write primary key constraint
-        builder.append("\n").append(
-                (primaryKeyField.isEmpty())
-                        ? classContainer.finalFields().keySet().iterator().next()
-                        : primaryKeyField);
+        builder.append("\t").append("PRIMARY KEY (");
 
-        builder.append(");\n");
+        if(primaryKeyField.isEmpty())
+            builder.append(classContainer.finalFields().keySet().iterator().next());
+        else
+            builder.append(primaryKeyField);
+
+        builder.append(")");
+
+        builder.append("\n").append(");\n");
 
         return builder.toString();
     }

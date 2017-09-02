@@ -34,7 +34,7 @@ public class SqlExportAsStringTest {
         assertNotNull(dummyAsString);
 
         String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(8, sqlArray.length);
+        assertEquals(9, sqlArray.length);
 
         validation.isSingleDummyValid(sqlArray);
     }
@@ -48,7 +48,7 @@ public class SqlExportAsStringTest {
         assertNotNull(dummyAsString);
 
         String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(9, sqlArray.length);
+        assertEquals(10, sqlArray.length);
 
         validation.isTwoDummiesValid(sqlArray);
     }
