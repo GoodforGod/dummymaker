@@ -14,7 +14,23 @@ public interface IClassContainer {
     String originClassName();
     String finalClassName();
 
-    String convertUsingNamingStrategy(final String value);
+    /**
+     * Convert field origin name to export field name
+     *
+     * @param originFieldName origin class field name
+     * @return export field name
+     */
+    String convertToExportFieldName(final String originFieldName);
+
+    /**
+     * Convert string value via choose NameStrategy
+     *
+     * @param value value to convert
+     * @return converted value
+     *
+     * @see io.dummymaker.util.NameStrategist
+     */
+    String convertByNamingStrategy(final String value);
 
     Map<String, Field> originFields();
     Map<String, Field> finalFields();

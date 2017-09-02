@@ -26,12 +26,12 @@ public class XmlValidation implements IValidation {
         assertTrue(dummies[1].matches("\\t<[a-zA-Z]+>"));
         assertTrue(dummies[2].matches("\\t{2}<" + NAME.getExportFieldName()   + ">" + "[a-zA-Z]+" + "</" + NAME.getExportFieldName() + ">"));
         assertTrue(dummies[3].matches("\\t{2}<" + GROUP.getExportFieldName()  + ">" + "[0-9]+"    + "</" + GROUP.getExportFieldName() + ">"));
-        assertTrue(dummies[4].matches("\\t{2}<" + NUM.getExportFieldName()    + ">" + "[0-9]+"      + "</" + NUM.getExportFieldName() + ">"));
+        assertTrue(dummies[4].matches("\\t{2}<" + NUM.getExportFieldName()    + ">" + "[0-9]+"    + "</" + NUM.getExportFieldName() + ">"));
         assertTrue(dummies[5].matches("\\t</[a-zA-Z]+>"));
         assertTrue(dummies[6].matches("\\t<[a-zA-Z]+>"));
         assertTrue(dummies[7].matches("\\t{2}<" + NAME.getExportFieldName()   + ">" + "[a-zA-Z]+" + "</" + NAME.getExportFieldName() + ">"));
         assertTrue(dummies[8].matches("\\t{2}<" + GROUP.getExportFieldName()  + ">" + "[0-9]+"    + "</" + GROUP.getExportFieldName() + ">"));
-        assertTrue(dummies[9].matches("\\t{2}<" + NUM.getExportFieldName()    + ">" + "[0-9]+"      + "</" + NUM.getExportFieldName() + ">"));
+        assertTrue(dummies[9].matches("\\t{2}<" + NUM.getExportFieldName()    + ">" + "[0-9]+"    + "</" + NUM.getExportFieldName() + ">"));
         assertTrue(dummies[10].matches("\\t</[a-zA-Z]+>"));
         assertTrue(dummies[11].matches("</[a-zA-Z]+List>"));
     }

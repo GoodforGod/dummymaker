@@ -91,12 +91,12 @@ public class CsvExporter<T> extends BaseExporter<T> {
         final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         while (iterator.hasNext()) {
-            final Map.Entry<String, String> obj = iterator.next();
+            final Map.Entry<String, String> exportPair = iterator.next();
 
-            if(wrapTextValues && classContainer.finalFields().get(obj.getKey()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(obj.getValue()));
+            if(wrapTextValues && classContainer.finalFields().get(exportPair.getKey()).getType().equals(String.class))
+                builder.append(wrapWithQuotes(exportPair.getValue()));
             else
-                builder.append(obj.getValue());
+                builder.append(exportPair.getValue());
 
             if (iterator.hasNext())
                 builder.append(SEPARATOR);

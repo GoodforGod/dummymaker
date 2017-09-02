@@ -2,6 +2,8 @@ package io.dummymaker.export.container;
 
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.scan.RenameAnnotationScanner;
+import io.dummymaker.util.INameStrategist;
+import io.dummymaker.util.NameStrategist;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -24,51 +26,49 @@ public class BaseClassContainer implements IClassContainer {
 
     private final NamingStrategy strategy;
 
+    private final INameStrategist strategist = new NameStrategist();
+
     /**
      * Field origin name as a 'key', field as 'value'
      */
     private final Map<String, Field> originFields;
 
     /**
-     * Field renamed (or origin) field name as 'key', fields as a 'value'
+     * Field renamed (or converted via NameStrategy) field name as 'key', fields as a 'value'
      */
     private final Map<String, Field> finalFields;
 
     /**
-     * Renamed fields to export, Key is renamed (or origin) field name, Value is field
+     * Renamed fields, 'Key' is origin field name, 'Value' is new field name
      */
     private final Map<String, String> renamedFields; //TreeMap
 
     public BaseClassContainer(final Class exportClass,
-                       final NamingStrategy strategy) {
+                              final NamingStrategy strategy) {
         this.exportClass = exportClass;
         this.strategy = strategy;
+        this.originClassName = exportClass.getSimpleName();
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
         this.originFields = fillExportOriginFields();
         this.finalFields = fillExportRenamedFields();
 
-        this.originClassName = exportClass.getSimpleName();
         this.finalClassName = (renamedFields.containsKey(null))
                 ? renamedFields.get(null)
-                : exportClass.getSimpleName();
+                : convertByNamingStrategy(originClassName);
 
         this.renamedFields.remove(null);
     }
 
-    public String convertUsingNamingStrategy(final String value) {
-        switch (strategy) {
-            case LOW_CASE:
-                return value.toLowerCase();
-            case UPPER_CASE:
-                return value.toUpperCase();
-            case INITIAL_LOW_CASE:
-                return value.substring(0, 1);
-            case DEFAULT:
-            default:
-                return value;
-        }
+    @Override
+    public String convertByNamingStrategy(final String value) {
+        return strategist.toNamingStrategy(value, strategy);
+    }
+
+    @Override
+    public String convertToExportFieldName(final String originFieldName) {
+        return renamedFields.getOrDefault(originFieldName, convertByNamingStrategy(originFieldName));
     }
 
     @Override
@@ -102,11 +102,11 @@ public class BaseClassContainer implements IClassContainer {
      * @return map with field name as 'key', field as 'value'
      */
     private Map<String, Field> fillExportOriginFields() {
-        return new ExportAnnotationScanner().scan(exportClass)
-                .entrySet().stream().collect(HashMap<String, Field>::new,
+        return new ExportAnnotationScanner().scan(exportClass).entrySet()
+                .stream()
+                .collect(HashMap<String, Field>::new,
                         (m, c) -> m.put(c.getKey().getName(), c.getKey()),
-                        (m, u) -> {
-                        });
+                        (m, u) -> { });
     }
 
     /**
@@ -115,17 +115,19 @@ public class BaseClassContainer implements IClassContainer {
      * @return map with renamed or origin field name as 'key', field as a 'value'
      */
     private Map<String, Field> fillExportRenamedFields() {
-        final Map<String, Field> returnFields = new HashMap<>(originFields);
+        final Map<String, Field> fields = new HashMap<>();
+
+        originFields.entrySet().stream().filter(f -> !renamedFields.containsKey(f.getKey())).forEach(f -> fields.put(convertByNamingStrategy(f.getKey()), f.getValue()));
 
         for(final Map.Entry<String, String> renamed : renamedFields.entrySet()) {
-            final Field field = returnFields.get(renamed.getKey());
+            final Field field = fields.get(renamed.getKey());
 
             if(field != null) {
-                returnFields.remove(renamed.getKey());
-                returnFields.put(renamed.getValue(), field);
+                fields.remove(renamed.getKey());
+                fields.put(renamed.getValue(), field);
             }
         }
 
-        return returnFields;
+        return fields;
     }
 }

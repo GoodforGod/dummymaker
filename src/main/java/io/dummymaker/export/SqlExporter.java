@@ -23,15 +23,15 @@ public class SqlExporter<T> extends BaseExporter<T> {
      *
      * Map is used to convert Java Field Data Type to Sql Data Type
      */
-    private final Map<String, String> dataTypeMap;
+    private final Map<Class, String> dataTypeMap;
 
-    private HashMap<String, String> buildDefaultDataTypeMap() {
-        return new HashMap<String, String>() {{
-            put(Long.class.getName(), "BIGINT");
-            put(Double.class.getName(), "DOUBLE PRECISION");
-            put(String.class.getName(), "VARCHAR");
-            put(Integer.class.getName(), "INT");
-            put(LocalDateTime.class.getName(), "TIMESTAMP");
+    private HashMap<Class, String> buildDefaultDataTypeMap() {
+        return new HashMap<Class, String>() {{
+            put(Long.class, "BIGINT");
+            put(Double.class, "DOUBLE PRECISION");
+            put(String.class, "VARCHAR");
+            put(Integer.class, "INT");
+            put(LocalDateTime.class, "TIMESTAMP");
         }};
     }
 
@@ -59,7 +59,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
     public SqlExporter(final Class<T> primeClass,
                        final String path,
                        final NamingStrategy strategy,
-                       final Map<String, String> dataTypeMap) {
+                       final Map<Class, String> dataTypeMap) {
         super(primeClass, path, ExportFormat.SQL, strategy);
         this.dataTypeMap = buildDefaultDataTypeMap();
 
@@ -68,10 +68,12 @@ public class SqlExporter<T> extends BaseExporter<T> {
     }
 
     /**
-     * convert Java Field Type to Sql Data Type
+     * Convert Java Field Type to Sql Data Type
+     * @param finalFieldName final field name
+     * @return sql data type
      */
-    private String javaToSqlDataType(final String fieldName) {
-        return dataTypeMap.getOrDefault(classContainer.finalFields().get(fieldName).getType().getName(), "VARCHAR");
+    private String javaToSqlDataType(final String finalFieldName) {
+        return dataTypeMap.getOrDefault(classContainer.finalFields().get(finalFieldName).getType(), "VARCHAR");
     }
 
     /**
@@ -103,9 +105,11 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     /**
      * Creates String of Create Table Insert Field
+     * @param finalFieldName final field name
+     * @return sql create table (name - type)
      */
-    private String sqlCreateInsertNameType(final String field) {
-        return field + "\t" + javaToSqlDataType(field);
+    private String sqlCreateInsertNameType(final String finalFieldName) {
+        return finalFieldName + "\t" + javaToSqlDataType(finalFieldName);
     }
 
     private String wrapWithComma(final String value) {

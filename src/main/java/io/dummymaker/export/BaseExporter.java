@@ -74,9 +74,9 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
                 if(fieldToExport != null) {
                     fieldToExport.setAccessible(true);
 
-                    final String renamedValue = classContainer.renamedFields().getOrDefault(fieldToExport.getName(), fieldToExport.getName());
+                    final String exportFieldName = classContainer.convertToExportFieldName(fieldToExport.getName());
+                    exports.put(exportFieldName, fieldToExport.get(t).toString());
 
-                    exports.put(renamedValue, String.valueOf(fieldToExport.get(t)));
                     fieldToExport.setAccessible(false);
                 }
             }
