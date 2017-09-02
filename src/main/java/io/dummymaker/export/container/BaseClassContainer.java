@@ -117,17 +117,12 @@ public class BaseClassContainer implements IClassContainer {
     private Map<String, Field> fillExportRenamedFields() {
         final Map<String, Field> fields = new HashMap<>();
 
-        originFields.entrySet().stream().filter(f -> !renamedFields.containsKey(f.getKey())).forEach(f -> fields.put(convertByNamingStrategy(f.getKey()), f.getValue()));
-
-        for(final Map.Entry<String, String> renamed : renamedFields.entrySet()) {
-            final Field field = fields.get(renamed.getKey());
-
-            if(field != null) {
-                fields.remove(renamed.getKey());
-                fields.put(renamed.getValue(), field);
-            }
+        for(Map.Entry<String, Field> entry : originFields.entrySet()) {
+                fields.put((renamedFields.containsKey(entry.getKey()))
+                        ? renamedFields.get(entry.getKey())
+                        : convertByNamingStrategy(entry.getKey()), entry.getValue());
         }
 
-        return fields;
+        return new HashMap<>(fields);
     }
 }

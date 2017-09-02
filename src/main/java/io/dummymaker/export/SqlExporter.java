@@ -83,20 +83,30 @@ public class SqlExporter<T> extends BaseExporter<T> {
         final StringBuilder builder = new StringBuilder();
         final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
 
+        String primaryKeyField = "";
+
         builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.finalClassName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
             final Map.Entry<String, Field> field = iterator.next();
             builder.append("\t").append(sqlCreateInsertNameType(field.getKey()));
 
-            if(field.getKey().equals("id"))
-                builder.append(" PRIMARY KEY");
+            if (field.getKey().equalsIgnoreCase("id"))
+                primaryKeyField = field.getKey();
 
-            if(iterator.hasNext())
+            if (iterator.hasNext())
                 builder.append(",");
 
             builder.append("\n");
         }
+
+        builder.append(",");
+
+        // Write primary key constraint
+        builder.append("\n").append(
+                (primaryKeyField.isEmpty())
+                        ? classContainer.finalFields().keySet().iterator().next()
+                        : primaryKeyField);
 
         builder.append(");\n");
 
