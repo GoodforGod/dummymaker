@@ -32,7 +32,7 @@ public class NameStrategist implements INameStrategist {
 
         /** Each upper letter separated with underscore symbol, and transform to upper case
          *
-         * EXCLUDE FIRST LETTER, first letter to low case
+         * EXCLUDING FIRST LETTER, first letter to low case
          *
          * Example: ( DummyList - DUMMY_LIST ) */
         UNDERSCORED_UPPER_CASE,
@@ -73,14 +73,32 @@ public class NameStrategist implements INameStrategist {
     }
 
     public String toUnderscoredLowCase(final String value) {
-        return null;
+        final StringBuilder underscored = new StringBuilder();
+
+        for(final char letter : value.toCharArray()) {
+            if (Character.isUpperCase(letter) && underscored.length() != 0)
+                underscored.append("_");
+
+            underscored.append(Character.toLowerCase(letter));
+        }
+
+        return underscored.toString();
     }
 
     public String toUnderscoredUpperCase(final String value) {
-        return null;
+        final StringBuilder underscored = new StringBuilder();
+
+        for(final char letter : value.toCharArray()) {
+            if (Character.isUpperCase(letter) && underscored.length() != 0)
+                underscored.append("_");
+
+            underscored.append(Character.toUpperCase(letter));
+        }
+
+        return underscored.toString();
     }
 
     public String toInitialLowCase(final String value) {
-        return null;
+        return value.substring(0, 1).toLowerCase() + value.substring(1, value.length());
     }
 }
