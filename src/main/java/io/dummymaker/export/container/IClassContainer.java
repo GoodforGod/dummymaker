@@ -14,6 +14,8 @@ public interface IClassContainer {
     String originClassName();
     String finalClassName();
 
+    String convertUsingNamingStrategy(final String value);
+
     Map<String, Field> originFields();
     Map<String, Field> finalFields();
 

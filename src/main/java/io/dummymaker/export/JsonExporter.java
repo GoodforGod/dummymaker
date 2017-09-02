@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
+
 /**
  * Export objects in JSON format
  *
@@ -21,8 +23,15 @@ public class JsonExporter<T> extends BaseExporter<T> {
         this(primeClass, null);
     }
 
-    public JsonExporter(final Class<T> primeClass, final String path) {
-        super(primeClass, path, ExportFormat.JSON);
+    public JsonExporter(final Class<T> primeClass,
+                        final String path) {
+        super(primeClass, path, ExportFormat.JSON, NamingStrategy.DEFAULT);
+    }
+
+    public JsonExporter(final Class<T> primeClass,
+                        final String path,
+                        final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.JSON, strategy);
     }
 
     private String wrapWithQuotes(final String value) {

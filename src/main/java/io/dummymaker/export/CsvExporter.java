@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
+
 /**
  * Export objects in CSV format
  *
@@ -38,24 +40,32 @@ public class CsvExporter<T> extends BaseExporter<T> {
 
     public CsvExporter(final Class<T> primeClass,
                        final String path) {
-        super(primeClass, path, ExportFormat.CSV);
+        super(primeClass, path, ExportFormat.CSV, NamingStrategy.DEFAULT);
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
+                       final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.CSV, strategy);
+    }
+
+    public CsvExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader) {
-        this(primeClass, path);
+        this(primeClass, path, strategy);
         this.wrapTextValues = wrapTextValues;
         this.generateHeader = generateHeader;
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
+                       final NamingStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader,
                        final char separator) {
-        this(primeClass, path, wrapTextValues, generateHeader);
+        this(primeClass, path, strategy, wrapTextValues, generateHeader);
         setSeparator(separator);
     }
 

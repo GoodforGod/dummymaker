@@ -3,9 +3,12 @@ package io.dummymaker.export;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects as SQL insert query
@@ -17,29 +20,19 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     /**
      * Java & Sql Type Representation
+     *
+     * Map is used to convert Java Field Data Type to Sql Data Type
      */
-    private enum DataType {
-        LONG    ("BIGINT",  Long.class.getName()),
-        DOUBLE  ("DOUBLE PRECISION",  Double.class.getName()),
-        STRING  ("VARCHAR", String.class.getName()),
-        INTEGER ("INT",     Integer.class.getName()),
-        LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getName());
+    private final Map<String, String> dataTypeMap;
 
-        DataType(final String sql, final String java) {
-            this.sql = sql;
-            this.java = java;
-        }
-
-        private final String sql;
-        private final String java;
-
-        public String getSql() {
-            return sql;
-        }
-
-        public String getJava() {
-            return java;
-        }
+    private HashMap<String, String> buildDefaultDataTypeMap() {
+        return new HashMap<String, String>() {{
+            put(Long.class.getName(), "BIGINT");
+            put(Double.class.getName(), "DOUBLE PRECISION");
+            put(String.class.getName(), "VARCHAR");
+            put(Integer.class.getName(), "INT");
+            put(LocalDateTime.class.getName(), "TIMESTAMP");
+        }};
     }
 
     /**
@@ -51,31 +44,34 @@ public class SqlExporter<T> extends BaseExporter<T> {
         this(primeClass, null);
     }
 
-    public SqlExporter(final Class<T> primeClass, final String path) {
-        super(primeClass, path, ExportFormat.SQL);
+    public SqlExporter(final Class<T> primeClass,
+                       final String path) {
+        this(primeClass, path, NamingStrategy.DEFAULT);
+    }
+
+    public SqlExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.SQL, strategy);
+        this.dataTypeMap = buildDefaultDataTypeMap();
+    }
+
+    public SqlExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy,
+                       final Map<String, String> dataTypeMap) {
+        super(primeClass, path, ExportFormat.SQL, strategy);
+        this.dataTypeMap = buildDefaultDataTypeMap();
+
+        if(dataTypeMap != null && !dataTypeMap.isEmpty())
+            this.dataTypeMap.putAll(dataTypeMap);
     }
 
     /**
      * convert Java Field Type to Sql Data Type
      */
-    private String javaToSqlFieldType(final String fieldName) {
-        final String fieldType = classContainer.finalFields().get(fieldName).getType().getName();
-
-        if(fieldType != null) {
-            if (fieldType.equals(DataType.DOUBLE.getJava()))
-                return DataType.DOUBLE.getSql();
-
-            if (fieldType.equals(DataType.INTEGER.getJava()))
-                return DataType.INTEGER.getSql();
-
-            if (fieldType.equals(DataType.LOCAL_DATE_TIME.getJava()))
-                return DataType.LOCAL_DATE_TIME.getSql();
-
-            if (fieldType.equals(DataType.LONG.getJava()))
-                return DataType.LONG.getSql();
-        }
-
-        return DataType.STRING.sql;
+    private String javaToSqlDataType(final String fieldName) {
+        return dataTypeMap.getOrDefault(classContainer.finalFields().get(fieldName).getType().getName(), "VARCHAR");
     }
 
     /**
@@ -109,7 +105,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Creates String of Create Table Insert Field
      */
     private String sqlCreateInsertNameType(final String field) {
-        return field + "\t" + javaToSqlFieldType(field);
+        return field + "\t" + javaToSqlDataType(field);
     }
 
     private String wrapWithComma(final String value) {

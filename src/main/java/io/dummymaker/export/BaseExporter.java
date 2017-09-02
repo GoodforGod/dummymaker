@@ -2,6 +2,7 @@ package io.dummymaker.export;
 
 import io.dummymaker.export.container.BaseClassContainer;
 import io.dummymaker.export.container.IClassContainer;
+import io.dummymaker.util.NameStrategist;
 import io.dummymaker.writer.BufferedFileWriter;
 
 import java.lang.reflect.Field;
@@ -51,10 +52,11 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      */
     BaseExporter(final Class<T> exportClass,
                  final String path,
-                 final ExportFormat format) {
+                 final ExportFormat format,
+                 final NameStrategist.NamingStrategy strategy) {
         super(exportClass.getSimpleName(), path, format.getValue());
 
-        this.classContainer = new BaseClassContainer(exportClass);
+        this.classContainer = new BaseClassContainer(exportClass, strategy);
     }
 
     /**
@@ -72,9 +74,7 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
                 if(fieldToExport != null) {
                     fieldToExport.setAccessible(true);
 
-                    final String renamedValue = (classContainer.renamedFields().containsKey(fieldToExport.getName()))
-                            ? classContainer.renamedFields().get(fieldToExport.getName())
-                            : fieldToExport.getName();
+                    final String renamedValue = classContainer.renamedFields().getOrDefault(fieldToExport.getName(), fieldToExport.getName());
 
                     exports.put(renamedValue, String.valueOf(fieldToExport.get(t)));
                     fieldToExport.setAccessible(false);

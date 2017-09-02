@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
+
 /**
  * "Default Description"
  *
@@ -19,6 +21,8 @@ public class BaseClassContainer implements IClassContainer {
 
     private final String originClassName;
     private final String finalClassName;
+
+    private final NamingStrategy strategy;
 
     /**
      * Field origin name as a 'key', field as 'value'
@@ -35,8 +39,10 @@ public class BaseClassContainer implements IClassContainer {
      */
     private final Map<String, String> renamedFields; //TreeMap
 
-    public BaseClassContainer(final Class exportClass) {
+    public BaseClassContainer(final Class exportClass,
+                       final NamingStrategy strategy) {
         this.exportClass = exportClass;
+        this.strategy = strategy;
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
@@ -49,6 +55,20 @@ public class BaseClassContainer implements IClassContainer {
                 : exportClass.getSimpleName();
 
         this.renamedFields.remove(null);
+    }
+
+    public String convertUsingNamingStrategy(final String value) {
+        switch (strategy) {
+            case LOW_CASE:
+                return value.toLowerCase();
+            case UPPER_CASE:
+                return value.toUpperCase();
+            case INITIAL_LOW_CASE:
+                return value.substring(0, 1);
+            case DEFAULT:
+            default:
+                return value;
+        }
     }
 
     @Override

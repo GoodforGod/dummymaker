@@ -51,6 +51,7 @@ Also allow to export Dummy objects as a string value.
 
 #### ***XmlExporter Options***
 * *Path* - set path for export file, default directory where app is started.
+* *ExportClassListName* - export xml list name value (example: if class is Dummy, default list name will be DummyList)
 
 #### ***SqlExporter Options***
 * *Path* - set path for export file, default directory where app is started.
