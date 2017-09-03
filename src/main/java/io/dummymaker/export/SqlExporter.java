@@ -1,5 +1,8 @@
 package io.dummymaker.export;
 
+import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.container.FieldContainer;
+
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -73,7 +76,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * @return sql data type
      */
     private String javaToSqlDataType(final String finalFieldName) {
-        return dataTypeMap.getOrDefault(classContainer.finalFields().get(finalFieldName).getType(), "VARCHAR");
+        return dataTypeMap.getOrDefault(classContainer.getFieldByFinalName(finalFieldName).getType(), "VARCHAR");
     }
 
     /**
@@ -81,18 +84,18 @@ public class SqlExporter<T> extends BaseExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
 
         String primaryKeyField = "";
 
         builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.finalClassName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
-            final Map.Entry<String, Field> field = iterator.next();
-            builder.append("\t").append(sqlCreateInsertNameType(field.getKey()));
+            final String finaFieldName = iterator.next().getValue().getFinalFieldName();
+            builder.append("\t").append(sqlCreateInsertNameType(finaFieldName));
 
-            if (field.getKey().equalsIgnoreCase("id"))
-                primaryKeyField = field.getKey();
+            if (finaFieldName.equalsIgnoreCase("id"))
+                primaryKeyField = finaFieldName;
 
             builder.append(",");
 
@@ -103,7 +106,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
         builder.append("\t").append("PRIMARY KEY (");
 
         if(primaryKeyField.isEmpty())
-            builder.append(classContainer.finalFields().keySet().iterator().next());
+            builder.append(classContainer.fieldContainerMap().values().iterator().next().getFinalFieldName());
         else
             builder.append(primaryKeyField);
 
@@ -131,13 +134,13 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Insert query
      */
     private String sqlInsertIntoQuery(final T t) {
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
         final StringBuilder builder = new StringBuilder();
 
         builder.append("INSERT INTO ").append(classContainer.finalClassName().toLowerCase()).append(" (");
 
         while (iterator.hasNext()) {
-            builder.append(iterator.next().getKey());
+            builder.append(iterator.next().getFieldName());
 
             if(iterator.hasNext())
                 builder.append(", ");
@@ -152,22 +155,23 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Creates insert query field name
      */
     private StringBuilder sqlValuesInsert(final T t) {
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
         final StringBuilder builder = new StringBuilder();
-
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         if(iterator.hasNext()) {
             builder.append("(");
 
             while (iterator.hasNext()) {
-                Map.Entry<String, String> field = iterator.next();
+                final ExportContainer container = iterator.next();
 
-                if(classContainer.finalFields().get(field.getKey()).getType().equals(String.class))
-                    builder.append(wrapWithComma(field.getValue()));
-                else if(classContainer.finalFields().get(field.getKey()).getType().equals(LocalDateTime.class))
-                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
+                final Field fieldType = classContainer.getFieldByFinalName(container.getFieldName());
+
+                if(fieldType.getType().equals(String.class))
+                    builder.append(wrapWithComma(container.getFieldValue()));
+                else if(fieldType.getType().equals(LocalDateTime.class))
+                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(container.getFieldValue())).toString()));
                 else
-                    builder.append(field.getValue());
+                    builder.append(container.getFieldValue());
 
                 if (iterator.hasNext())
                     builder.append(", ");

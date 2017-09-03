@@ -1,8 +1,9 @@
 package io.dummymaker.export;
 
+import io.dummymaker.export.container.ExportContainer;
+
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static io.dummymaker.util.NameStrategist.NamingStrategy.DEFAULT;
@@ -50,7 +51,7 @@ public class XmlExporter<T> extends BaseExporter<T> {
     }
 
     private String objectToXml(final T t, final Mode mode) {
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
 
         final StringBuilder builder = new StringBuilder("");
 
@@ -66,11 +67,11 @@ public class XmlExporter<T> extends BaseExporter<T> {
             builder.append(tabObject).append(wrapOpenXmlTag(classContainer.finalClassName()));
 
             while (iterator.hasNext()) {
-                Map.Entry<String, String> field = iterator.next();
+                final ExportContainer container = iterator.next();
                 builder.append("\n").append(tabField)
-                                    .append(wrapOpenXmlTag(field.getKey()))
-                                    .append(field.getValue())
-                                    .append(wrapCloseXmlTag(field.getKey()));
+                                    .append(wrapOpenXmlTag(container.getFieldName()))
+                                    .append(container.getFieldValue())
+                                    .append(wrapCloseXmlTag(container.getFieldName()));
             }
             builder.append("\n").append(tabObject).append(wrapCloseXmlTag(classContainer.finalClassName()));
         }

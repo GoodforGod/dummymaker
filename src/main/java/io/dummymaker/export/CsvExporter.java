@@ -1,6 +1,8 @@
 package io.dummymaker.export;
 
-import java.lang.reflect.Field;
+import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.container.FieldContainer;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,15 +90,15 @@ public class CsvExporter<T> extends BaseExporter<T> {
 
     private String objectToCsv(final T t) {
         final StringBuilder builder = new StringBuilder("");
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
 
         while (iterator.hasNext()) {
-            final Map.Entry<String, String> exportPair = iterator.next();
+            final ExportContainer container = iterator.next();
 
-            if(wrapTextValues && classContainer.finalFields().get(exportPair.getKey()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(exportPair.getValue()));
+            if(wrapTextValues && classContainer.getFieldByFinalName(container.getFieldName()).getType().equals(String.class))
+                builder.append(wrapWithQuotes(container.getFieldValue()));
             else
-                builder.append(exportPair.getValue());
+                builder.append(container.getFieldValue());
 
             if (iterator.hasNext())
                 builder.append(SEPARATOR);
@@ -111,10 +113,10 @@ public class CsvExporter<T> extends BaseExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            header.append(iterator.next().getKey());
+            header.append(iterator.next().getValue().getFinalFieldName());
 
             if(iterator.hasNext())
                 header.append(SEPARATOR);

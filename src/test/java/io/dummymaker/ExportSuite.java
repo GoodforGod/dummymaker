@@ -14,8 +14,7 @@ import static org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
         FactorySuite.class,
-        ExportAsStringSuite.class,
-        ExportAsFileSuite.class,
+        ExportAsStringSuite.class
 })
 class ExportSuite {
 

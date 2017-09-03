@@ -29,14 +29,9 @@ public class BaseClassContainer implements IClassContainer {
     private final INameStrategist strategist = new NameStrategist();
 
     /**
-     * Field origin name as a 'key', field as 'value'
+     * Field origin name as a 'key', fieldContainer as 'value'
      */
-    private final Map<String, Field> originFields;
-
-    /**
-     * Field renamed (or converted via NameStrategy) field name as 'key', fields as a 'value'
-     */
-    private final Map<String, Field> finalFields;
+    private final Map<String, FieldContainer> fieldContainerMap;
 
     /**
      * Renamed fields, 'Key' is origin field name, 'Value' is new field name
@@ -51,8 +46,7 @@ public class BaseClassContainer implements IClassContainer {
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
-        this.originFields = fillExportOriginFields();
-        this.finalFields = fillExportRenamedFields();
+        this.fieldContainerMap = fillExportFieldContainerMap();
 
         this.finalClassName = (renamedFields.containsKey(null))
                 ? renamedFields.get(null)
@@ -67,8 +61,13 @@ public class BaseClassContainer implements IClassContainer {
     }
 
     @Override
-    public String convertToExportFieldName(final String originFieldName) {
-        return renamedFields.getOrDefault(originFieldName, convertByNamingStrategy(originFieldName));
+    public String getExportFieldName(final String originFieldName) {
+//        return renamedFields.getOrDefault(originFieldName, convertByNamingStrategy(originFieldName));
+        return fieldContainerMap.get(originFieldName).getFinalFieldName();
+    }
+
+    public Field getFieldByFinalName(final String finalFieldName) {
+        return fieldContainerMap.entrySet().stream().filter(e -> e.getValue().getFinalFieldName().equals(finalFieldName)).findFirst().get().getValue().getField();
     }
 
     @Override
@@ -82,18 +81,33 @@ public class BaseClassContainer implements IClassContainer {
     }
 
     @Override
-    public Map<String, Field> originFields() {
-        return originFields;
-    }
-
-    @Override
-    public Map<String, Field> finalFields() {
-        return finalFields;
+    public Map<String, FieldContainer> fieldContainerMap() {
+        return fieldContainerMap;
     }
 
     @Override
     public Map<String, String> renamedFields() {
         return renamedFields;
+    }
+
+    /**
+     *
+     * @return final fields container map
+     */
+    private Map<String, FieldContainer> fillExportFieldContainerMap() {
+        final Map<String, FieldContainer> fieldContainerMap = new HashMap<>();
+        final Map<String, Field> originExportFields = fillExportOriginFields();
+
+        for(Map.Entry<String, Field> fieldEntry : originExportFields.entrySet()) {
+            final FieldContainer container = new FieldContainer(fieldEntry.getValue(),
+                    (renamedFields.containsKey(fieldEntry.getKey()))
+                            ? renamedFields.get(fieldEntry.getKey())
+                            : convertByNamingStrategy(fieldEntry.getKey()));
+
+            fieldContainerMap.put(fieldEntry.getKey(), container);
+        }
+
+        return new HashMap<>(fieldContainerMap);
     }
 
     /**
@@ -114,10 +128,10 @@ public class BaseClassContainer implements IClassContainer {
      *
      * @return map with renamed or origin field name as 'key', field as a 'value'
      */
-    private Map<String, Field> fillExportRenamedFields() {
+    private Map<String, Field> fillExportFinalFields() {
         final Map<String, Field> fields = new HashMap<>();
 
-        for(Map.Entry<String, Field> entry : originFields.entrySet()) {
+        for(Map.Entry<String, Field> entry : fillExportOriginFields().entrySet()) {
                 fields.put((renamedFields.containsKey(entry.getKey()))
                         ? renamedFields.get(entry.getKey())
                         : convertByNamingStrategy(entry.getKey()), entry.getValue());

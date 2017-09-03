@@ -4,6 +4,7 @@ import io.dummymaker.export.asstring.CsvExportAsStringTest;
 import io.dummymaker.export.asstring.JsonExportAsStringTest;
 import io.dummymaker.export.asstring.SqlExportAsStringTest;
 import io.dummymaker.export.asstring.XmlExportAsStringTest;
+import io.dummymaker.util.NameStrategistTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -17,6 +18,7 @@ import static org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
+        NameStrategistTest.class,
         CsvExportAsStringTest.class,
         JsonExportAsStringTest.class,
         SqlExportAsStringTest.class,

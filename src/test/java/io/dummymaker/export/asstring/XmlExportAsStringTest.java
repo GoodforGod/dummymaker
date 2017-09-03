@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -51,5 +52,21 @@ public class XmlExportAsStringTest {
         assertEquals(12, xmlArray.length);
 
         validation.isTwoDummiesValid(xmlArray);
+    }
+
+    @Test
+    public void exportListOfDummiesInXmlWithNamingStrategy() {
+        final NamingStrategy strategy = NamingStrategy.INITIAL_LOW_CASE;
+
+        List<Dummy> dummies = produceFactory.produce(2);
+        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class, null, strategy);
+
+        String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
+
+        String[] xmlArray = dummyAsString.split("\n");
+        assertEquals(12, xmlArray.length);
+
+        validation.isTwoDummiesValidWithNamingStrategy(xmlArray, strategy);
     }
 }

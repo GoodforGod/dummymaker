@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -51,5 +52,21 @@ public class JsonExportAsStringTest {
         assertEquals(14, jsonArray.length);
 
         validation.isTwoDummiesValid(jsonArray);
+    }
+
+    @Test
+    public void exportListOfDummiesInJsonWithNamingStrategy() {
+        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_UPPER_CASE;
+
+        List<Dummy> dummy = produceFactory.produce(2);
+        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class, null, strategy);
+
+        String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
+
+        String[] jsonArray = dummyAsString.split("\n");
+        assertEquals(14, jsonArray.length);
+
+        validation.isTwoDummiesValidWithNamingStrategy(jsonArray, strategy);
     }
 }

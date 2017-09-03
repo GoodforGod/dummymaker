@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -41,6 +42,22 @@ public class SqlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInSql() {
+        List<Dummy> dummies = produceFactory.produce(2);
+        IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
+
+        String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
+
+        String[] sqlArray = dummyAsString.split("\n");
+        assertEquals(10, sqlArray.length);
+
+        validation.isTwoDummiesValid(sqlArray);
+    }
+
+    @Test
+    public void exportListOfDummiesInSqlWithNamingStrategy() {
+        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_LOW_CASE;
+
         List<Dummy> dummies = produceFactory.produce(2);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 

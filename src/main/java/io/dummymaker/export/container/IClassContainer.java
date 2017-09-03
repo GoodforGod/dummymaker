@@ -20,7 +20,14 @@ public interface IClassContainer {
      * @param originFieldName origin class field name
      * @return export field name
      */
-    String convertToExportFieldName(final String originFieldName);
+    String getExportFieldName(final String originFieldName);
+
+    /**
+     *
+     * @param finalFieldName field container with final name and
+     * @return
+     */
+    Field getFieldByFinalName(final String finalFieldName);
 
     /**
      * Convert string value via choose NameStrategy
@@ -32,8 +39,7 @@ public interface IClassContainer {
      */
     String convertByNamingStrategy(final String value);
 
-    Map<String, Field> originFields();
-    Map<String, Field> finalFields();
+    Map<String, FieldContainer> fieldContainerMap();
 
     Map<String, String> renamedFields();
 }
