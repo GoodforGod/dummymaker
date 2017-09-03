@@ -45,7 +45,7 @@ public class GeneratorPatternValidateTest {
                 { new IntegerGenerator(),   Integer.class,  Pattern.compile("-?[0-9]+") },
                 { new LongGenerator(),      Long.class,     Pattern.compile("-?[0-9]+") },
                 { new NameGenerator(),      String.class,   Pattern.compile("[a-zA-Z]+") },
-                { new NickGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new NickGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z\\-]+") },
                 { new PassGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(),     String.class,   Pattern.compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
                 { new PhraseGenerator(),    String.class,   Pattern.compile(".+(\\t.+)?") },
