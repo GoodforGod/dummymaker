@@ -30,6 +30,8 @@ dependencies {
 
 ## Functionality
 
+You can easily create your own annotations and generators which will be supported by Scanners and Export classes, so it is easy extendable library.
+
 ### **Factories**
 
 Allow to populate or produce Dummy Objects.
@@ -43,21 +45,33 @@ Allow to populate or produce Dummy Objects.
 Allow to export Dummy objects in specific format into file.
 Also allow to export Dummy objects as a string value.
 
-#### ***CsvExporter Options***
+#### ***BaseExporter Options***
+Constructor basic parameters available for all exporters.
+
+* *ExportClass* - class to export.
 * *Path* - set path for export file, default directory where app is started.
-* *WrapTextValues* - if true will wrap String values with commas like 'this', default False.
-* *GenerateHeader* - if true will generate CSV header, default False.
+* *NameStrategy* - naming strategy applied to all origin fields (fields which are not *@GenRenameExport*), default value is *DEFAULT*.
+
+**NamingStrategies**
+* *DEFAULT* - origin name, as is.
+* *UPPER_CASE* - name in upper case, like *DummyList - DUMMYLIST*
+* *LOW_CASE* - name in low case, like *DummyList - dummylist*
+* *UNDERSCORED_LOW_CASE* - name in upper case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
+* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
+* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
+
+#### ***CsvExporter Specific Options***
+* *WrapTextValues* - if true will wrap String values with commas like 'this', default *False*.
+* *GenerateHeader* - if true will generate CSV header, default *False*.
 * *Separator* - set CSV format separator, default is '**,**' comma.
 
-#### ***XmlExporter Options***
-* *Path* - set path for export file, default directory where app is started.
-* *ExportClassListName* - export xml list name value (example: if class is Dummy, default list name will be DummyList)
+#### ***XmlExporter Specific Options***
+* *ExportClassListName* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
 
-#### ***SqlExporter Options***
-* *Path* - set path for export file, default directory where app is started.
+#### ***SqlExporter Specific Options***
+* *dataTypeMap* - map with *key* as a class, and sql data type as string as map *value*.
 
-#### ***JsonExporter Options***
-* *Path* - set path for export file, default directory where app is started.
+*DataTypeMap* is used to extend your data types to export in sql format.
 
 ### **Annotations**
 
@@ -86,7 +100,7 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 #### *Force and Ignore annotation demonstration*
 
 In this case, field city will be export despite that there is not generator field for it, value will be "Saint-Petersburg".
-And firld *id* will **NOT** be export if *ignore* annotation will have true (*default*) value.
+And field *id* will **NOT** be export if *ignore* annotation will have true (*default*) value.
 
 ![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
 
@@ -135,7 +149,7 @@ Is useful in save you have custom writer or need to send it over network.
 
 Examples of exported Dummy object in each format.
 
-### POJO
+### Dummy Object Class
 ```
 public class User {
 
@@ -205,7 +219,8 @@ Each insert query can contains max ***995*** rows (Due to ***1000*** insert row 
 ```
 CREATE TABLE IF NOT EXISTS user(
 	name	VARCHAR,
-	id	INT PRIMARY KEY
+	id  INT,
+	PRIMARY KEY (id)
 );
 
 INSERT INTO user (name, id) VALUES 
