@@ -41,7 +41,7 @@ public class GeneratorPatternValidateTest {
                 { new CompanyGenerator(),   String.class,   Pattern.compile(".+(\\t.+)?") },
                 { new CountryGenerator(),   String.class,   Pattern.compile("[a-zA-Z]+(\\s[a-zA-Z]+)*") },
                 { new DoubleGenerator(),    Double.class,   Pattern.compile("1|0.[0-9]+.") },
-                { new EmailGenerator(),     String.class,   Pattern.compile("^[a-zA-Z0-9%_]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]{1,6}$") },
+                { new EmailGenerator(),     String.class,   Pattern.compile("^[0-9a-zA-Z]+@[a-zA-Z]+\\.[a-zA-Z]+$") },
                 { new IntegerGenerator(),   Integer.class,  Pattern.compile("-?[0-9]+") },
                 { new LongGenerator(),      Long.class,     Pattern.compile("-?[0-9]+") },
                 { new NameGenerator(),      String.class,   Pattern.compile("[a-zA-Z]+") },
