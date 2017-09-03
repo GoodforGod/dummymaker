@@ -3,7 +3,9 @@ package io.dummymaker.util;
 import io.dummymaker.export.IExporter;
 
 /**
- * "Default Description"
+ * Implementation of INameStrategist
+ *
+ * @see INameStrategist
  *
  * @author GoodforGod
  * @since 02.09.2017
@@ -64,15 +66,15 @@ public class NameStrategist implements INameStrategist {
         }
     }
 
-    public String toLowCase(final String value) {
+    private String toLowCase(final String value) {
         return value.toLowerCase();
     }
 
-    public String toUpperCase(final String value) {
+    private String toUpperCase(final String value) {
         return value.toUpperCase();
     }
 
-    public String toUnderscoredLowCase(final String value) {
+    private String toUnderscoredLowCase(final String value) {
         final StringBuilder underscored = new StringBuilder();
 
         for(final char letter : value.toCharArray()) {
@@ -85,7 +87,7 @@ public class NameStrategist implements INameStrategist {
         return underscored.toString();
     }
 
-    public String toUnderscoredUpperCase(final String value) {
+    private String toUnderscoredUpperCase(final String value) {
         final StringBuilder underscored = new StringBuilder();
 
         for(final char letter : value.toCharArray()) {
@@ -98,7 +100,7 @@ public class NameStrategist implements INameStrategist {
         return underscored.toString();
     }
 
-    public String toInitialLowCase(final String value) {
+    private String toInitialLowCase(final String value) {
         return value.substring(0, 1).toLowerCase() + value.substring(1, value.length());
     }
 }

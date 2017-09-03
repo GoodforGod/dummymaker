@@ -1,7 +1,7 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.annotation.base.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.scan.EnumerateAnnotationScanner;
 import io.dummymaker.scan.IFieldScanner;
 import io.dummymaker.scan.PopulateAnnotationScanner;

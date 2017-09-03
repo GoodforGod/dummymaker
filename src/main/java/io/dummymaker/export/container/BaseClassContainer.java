@@ -36,7 +36,7 @@ public class BaseClassContainer implements IClassContainer {
     /**
      * Renamed fields, 'Key' is origin field name, 'Value' is new field name
      */
-    private final Map<String, String> renamedFields; //TreeMap
+    private final Map<String, String> renamedFields;
 
     public BaseClassContainer(final Class exportClass,
                               final NamingStrategy strategy) {
@@ -62,7 +62,6 @@ public class BaseClassContainer implements IClassContainer {
 
     @Override
     public String getExportFieldName(final String originFieldName) {
-//        return renamedFields.getOrDefault(originFieldName, convertByNamingStrategy(originFieldName));
         return fieldContainerMap.get(originFieldName).getFinalFieldName();
     }
 

@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
+import io.dummymaker.annotation.base.PrimeGenAnnotation;
 
 import java.util.ArrayList;
 import java.util.List;

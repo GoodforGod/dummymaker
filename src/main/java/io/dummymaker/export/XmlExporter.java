@@ -35,8 +35,14 @@ public class XmlExporter<T> extends BaseExporter<T> {
         this(primeClass, path, namingStrategy, null);
     }
 
-    public XmlExporter(final Class<T> primeClass, final String path, final NamingStrategy namingStrategy, final String exportClassListName) {
-        super(primeClass, path, ExportFormat.XML, namingStrategy);
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     * @param exportClassListName class top name wrapper for XML file, or default [YourClassName]List
+     */
+    public XmlExporter(final Class<T> primeClass, final String path, final NamingStrategy strategy, final String exportClassListName) {
+        super(primeClass, path, ExportFormat.XML, strategy);
         this.exportClassListName = (exportClassListName == null || exportClassListName.trim().isEmpty())
                 ? classContainer.finalClassName() + "List"
                 : exportClassListName;

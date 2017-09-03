@@ -1,8 +1,8 @@
 package io.dummymaker.scan;
 
+import io.dummymaker.annotation.base.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -50,10 +50,7 @@ public class ExportAnnotationScanner extends AnnotationScanner {
                 : classFieldAnnotations.entrySet().stream()
                     .filter(set -> set.getValue().stream().noneMatch(ignorePredicate))
                     .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
-                    .map(set -> {
-                        set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet()));
-                        return set;
-                    })
+                    .peek(set -> set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -3,7 +3,9 @@ package io.dummymaker.util;
 import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
- * "Default Description"
+ * Contact for strategist, which convert string value with chosen name strategy
+ *
+ * @see NameStrategist.NamingStrategy
  *
  * @author GoodforGod
  * @since 02.09.2017

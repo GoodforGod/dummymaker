@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * "Default Description"
+ * Class Container for class origin/final name
+ * Fields origin/final names
+ * Fields values as Field type
  *
  * @author GoodforGod
  * @since 29.08.2017
@@ -25,7 +27,7 @@ public interface IClassContainer {
     /**
      *
      * @param finalFieldName field container with final name and
-     * @return
+     * @return field value
      */
     Field getFieldByFinalName(final String finalFieldName);
 
@@ -41,5 +43,8 @@ public interface IClassContainer {
 
     Map<String, FieldContainer> fieldContainerMap();
 
+    /**
+     * @return renamed field map
+     */
     Map<String, String> renamedFields();
 }

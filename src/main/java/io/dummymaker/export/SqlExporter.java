@@ -25,6 +25,8 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Java & Sql Type Representation
      *
      * Map is used to convert Java Field Data Type to Sql Data Type
+     *
+     * You can add your specific values here by using constructor with Map'String, String'
      */
     private final Map<Class, String> dataTypeMap;
 
@@ -59,6 +61,14 @@ public class SqlExporter<T> extends BaseExporter<T> {
         this.dataTypeMap = buildDefaultDataTypeMap();
     }
 
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     * @param dataTypeMap map with user custom types for 'dataTypeMap'
+     *
+     * @see io.dummymaker.util.INameStrategist
+     */
     public SqlExporter(final Class<T> primeClass,
                        final String path,
                        final NamingStrategy strategy,

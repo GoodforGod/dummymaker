@@ -1,8 +1,8 @@
 package io.dummymaker.scan;
 
+import io.dummymaker.annotation.base.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
 import org.junit.Test;

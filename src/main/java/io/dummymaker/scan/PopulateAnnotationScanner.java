@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
+import io.dummymaker.annotation.base.PrimeGenAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -34,10 +34,7 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
                 ? classFieldAnnotations
                 : classFieldAnnotations.entrySet().stream()
                     .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
-                    .map(set -> {
-                        set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet()));
-                        return set;
-                    })
+                    .peek(set -> set.setValue(set.getValue().stream().filter(acceptPredicate).collect(Collectors.toSet())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -29,6 +29,11 @@ public class JsonExporter<T> extends BaseExporter<T> {
         super(primeClass, path, ExportFormat.JSON, NamingStrategy.DEFAULT);
     }
 
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     */
     public JsonExporter(final Class<T> primeClass,
                         final String path,
                         final NamingStrategy strategy) {

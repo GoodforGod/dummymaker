@@ -34,8 +34,6 @@ public class CsvExporter<T> extends BaseExporter<T> {
      */
     private boolean generateHeader = false;
 
-    //<editor-fold desc="Constructors">
-
     public CsvExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
@@ -60,7 +58,14 @@ public class CsvExporter<T> extends BaseExporter<T> {
         this.wrapTextValues = wrapTextValues;
         this.generateHeader = generateHeader;
     }
-
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     * @param wrapTextValues to force wrap string type field values with commas, like - 'string'
+     * @param generateHeader generate header for export file, with field names as headers
+     * @param separator csv format separator, default is comma ,
+     */
     public CsvExporter(final Class<T> primeClass,
                        final String path,
                        final NamingStrategy strategy,
@@ -70,8 +75,6 @@ public class CsvExporter<T> extends BaseExporter<T> {
         this(primeClass, path, strategy, wrapTextValues, generateHeader);
         setSeparator(separator);
     }
-
-    //</editor-fold>
 
     private void setSeparator(final char separator) {
         this.SEPARATOR = (separator == ' ')
