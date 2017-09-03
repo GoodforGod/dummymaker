@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T> {
+public abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T> {
 
     private final Logger logger = Logger.getLogger(BaseExporter.class.getName());
 
