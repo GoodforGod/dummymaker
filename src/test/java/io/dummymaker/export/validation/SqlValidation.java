@@ -25,8 +25,8 @@ public class SqlValidation {
 
         assertTrue(dummy[6].matches(""));
 
-        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + NAME.getExportFieldName() + ", " + GROUP.getExportFieldName() + ", " + NUM.getExportFieldName() + "\\) VALUES "));
-        assertTrue(dummy[8].matches("\\('[a-zA-Z]+', '[0-9]+', null\\);"));
+        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + NAME.getExportFieldName() + ", " + NUM.getExportFieldName() + ", " + GROUP.getExportFieldName() + "\\) VALUES "));
+        assertTrue(dummy[8].matches("\\('[a-zA-Z]+', null, '[0-9]+'\\);"));
     }
 
     public void isTwoDummiesValid(String[] dummies) {
@@ -39,9 +39,9 @@ public class SqlValidation {
 
         assertTrue(dummies[6].matches(""));
 
-        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + NAME.getExportFieldName() + ", " + GROUP.getExportFieldName() + ", " + NUM.getExportFieldName() + "\\) VALUES "));
-        assertTrue(dummies[8].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\),"));
-        assertTrue(dummies[9].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\);"));
+        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + NAME.getExportFieldName() + ", " + NUM.getExportFieldName() + ", " + GROUP.getExportFieldName() + "\\) VALUES "));
+        assertTrue(dummies[8].matches("\\('[a-zA-Z]+', [0-9]+, '[0-9]+'\\),"));
+        assertTrue(dummies[9].matches("\\('[a-zA-Z]+', [0-9]+, '[0-9]+'\\);"));
     }
 
     public void isTwoDummiesValidithNamingStratery(String[] dummies, NamingStrategy strategy) {
@@ -60,8 +60,8 @@ public class SqlValidation {
 
         assertTrue(dummies[6].matches(""));
 
-        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedNameField + ", " + expectedGroupField + ", " + expectedNumField + "\\) VALUES "));
-        assertTrue(dummies[8].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\),"));
-        assertTrue(dummies[9].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\);"));
+        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedNameField + ", " + expectedNumField + ", " + expectedGroupField + "\\) VALUES "));
+        assertTrue(dummies[8].matches("\\('[a-zA-Z]+', [0-9]+, '[0-9]+'\\),"));
+        assertTrue(dummies[9].matches("\\('[a-zA-Z]+', [0-9]+, '[0-9]+'\\);"));
     }
 }

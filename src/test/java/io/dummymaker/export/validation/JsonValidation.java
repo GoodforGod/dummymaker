@@ -35,8 +35,8 @@ public class JsonValidation {
 
         assertTrue(dummies[7].matches("\\t{2}\\{"));
         assertTrue(dummies[8].matches("\\t{3}\"" + NAME.getExportFieldName() + "\":\\s\"[a-zA-Z0-9]+\","));
-        assertTrue(dummies[10].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\","));
-        assertTrue(dummies[9].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\""));
+        assertTrue(dummies[9].matches("\\t{3}\"" + NUM.getExportFieldName()  + "\":\\s\"[0-9]+\","));
+        assertTrue(dummies[10].matches("\\t{3}\"" + GROUP.getExportFieldName() + "\":\\s\"[0-9]+\""));
         assertTrue(dummies[11].matches("\\t{2}}"));
 
         assertTrue(dummies[12].matches("\\t]"));
