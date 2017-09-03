@@ -39,7 +39,7 @@ public class GeneratorPatternValidateTest {
                 { new BigDoubleGenerator(), Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
                 { new CityGenerator(),      String.class,   Pattern.compile("[a-zA-Z\\-]+") },
                 { new CompanyGenerator(),   String.class,   Pattern.compile(".+(\\t.+)?") },
-                { new CountryGenerator(),   String.class,   Pattern.compile("[a-zA-Z]+(\\s[a-zA-Z]+)*") },
+                { new CountryGenerator(),   String.class,   Pattern.compile("[a-zA-Z]+(\\s+[a-zA-Z]+)*") },
                 { new DoubleGenerator(),    Double.class,   Pattern.compile("1|0.[0-9]+.") },
                 { new EmailGenerator(),     String.class,   Pattern.compile("^[0-9a-zA-Z]+@[a-zA-Z]+\\.[a-zA-Z]+$") },
                 { new IntegerGenerator(),   Integer.class,  Pattern.compile("-?[0-9]+") },

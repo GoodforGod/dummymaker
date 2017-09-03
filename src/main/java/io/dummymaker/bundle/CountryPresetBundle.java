@@ -81,7 +81,7 @@ public class CountryPresetBundle extends IPresetBundle<String> {
             add("Grenada");
             add("Guatemala");
             add("Guinea");
-            add("Guinea-Bissau");
+            add("Guinea Bissau");
             add("Guyana");
             add("Haiti");
             add("Honduras");
