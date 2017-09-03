@@ -17,14 +17,14 @@ Steps to do:
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
 **Gradle**
 ```
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.0.2'
+    compile 'com.github.goodforgod:dummymaker:1.0.3'
 }
 ```
 
@@ -45,8 +45,8 @@ Allow to populate or produce Dummy Objects.
 Allow to export Dummy objects in specific format into file.
 Also allow to export Dummy objects as a string value.
 
-#### ***BaseExporter Options***
-Constructor basic parameters available for all exporters.
+#### ***BaseExporter Parameters***
+Constructor parameters available for all exporters.
 
 * *ExportClass* - class to export.
 * *Path* - set path for export file, default directory where app is started.
@@ -60,15 +60,15 @@ Constructor basic parameters available for all exporters.
 * *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
 * *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
 
-#### ***CsvExporter Specific Options***
+#### ***CsvExporter Specific Parameters***
 * *WrapTextValues* - if true will wrap String values with commas like 'this', default *False*.
 * *GenerateHeader* - if true will generate CSV header, default *False*.
 * *Separator* - set CSV format separator, default is '**,**' comma.
 
-#### ***XmlExporter Specific Options***
+#### ***XmlExporter Specific Parameters***
 * *ExportClassListName* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
 
-#### ***SqlExporter Specific Options***
+#### ***SqlExporter Specific Parameters***
 * *dataTypeMap* - map with *key* as a class, and sql data type as string as map *value*.
 
 *DataTypeMap* is used to extend your data types to export in sql format.
@@ -229,6 +229,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.0.3** - Lots of tests for all functionality, Added *DataTypeMap* parameter for users in SqlExporter (expandable data type for sql), *NamingStrategy* for exporters, bug fixes.
 
 **1.0.2** - Added special *GenRenameExport* annotation, export as single string, export values order fix, minor fixes and improvements.
 
