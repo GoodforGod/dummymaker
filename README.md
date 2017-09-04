@@ -52,13 +52,13 @@ Constructor parameters available for all exporters.
 * *Path* - set path for export file, default directory where app is started.
 * *NameStrategy* - naming strategy applied to all origin fields (fields which are not *@GenRenameExport*), default value is *DEFAULT*.
 
-**NamingStrategies**
-* *DEFAULT* - origin name, as is.
-* *UPPER_CASE* - name in upper case, like *DummyList - DUMMYLIST*
-* *LOW_CASE* - name in low case, like *DummyList - dummylist*
-* *UNDERSCORED_LOW_CASE* - name in upper case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
+	**NamingStrategies**
+	* *DEFAULT* - origin name, as is.
+	* *UPPER_CASE* - name in upper case, like *DummyList - DUMMYLIST*
+	* *LOW_CASE* - name in low case, like *DummyList - dummylist*
+	* *UNDERSCORED_LOW_CASE* - name in upper case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
+	* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
+	* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
 
 #### ***CsvExporter Specific Parameters***
 * *WrapTextValues* - if true will wrap String values with commas like 'this', default *False*.
