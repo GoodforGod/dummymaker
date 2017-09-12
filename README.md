@@ -50,8 +50,7 @@ dependencies {
   - [JSON](#json)
   - [XML](#xml)
   - [SQL](#sql)  
-- [Version History](#games)
-- [Test Telegram Bot API](#test-telegram-bot-api)
+- [Version History](#version-history)
 
 ## Functionality
 
