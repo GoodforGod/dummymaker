@@ -17,7 +17,6 @@ public class CityPresetBundle extends IPresetBundle<String> {
             add("Algiers");
             add("Andorra");
             add("Luanda");
-            add("and");
             add("Buenos");
             add("Yerevan");
             add("Canberra");
@@ -49,7 +48,7 @@ public class CityPresetBundle extends IPresetBundle<String> {
             add("Djamena");
             add("Santiago");
             add("Beijing");
-            add("Bogotá");
+            add("Bogota");
             add("Moroni");
             add("Rica");
             add("Ivoire");
@@ -143,7 +142,7 @@ public class CityPresetBundle extends IPresetBundle<String> {
             add("Jerusalem");
             add("Panama");
             add("New");
-            add("Asunción");
+            add("Asuncion");
             add("Lima");
             add("Manila");
             add("Warsaw");
@@ -181,7 +180,7 @@ public class CityPresetBundle extends IPresetBundle<String> {
             add("Dodoma");
             add("Bangkok");
             add("Dili");
-            add("Lomé");
+            add("Lome");
             add("and");
             add("Tunis");
             add("Ankara");
