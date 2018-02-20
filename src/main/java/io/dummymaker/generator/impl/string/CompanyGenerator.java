@@ -1,5 +1,6 @@
 package io.dummymaker.generator.impl.string;
 
+import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CompanyPresetBundle;
 import io.dummymaker.generator.IGenerator;
 
@@ -11,8 +12,10 @@ import io.dummymaker.generator.IGenerator;
  */
 public class CompanyGenerator implements IGenerator<String> {
 
+    private final IBundle<String> bundle = new CompanyPresetBundle();
+
     @Override
     public String generate() {
-        return new CompanyPresetBundle().getRandom();
+        return bundle.getRandom();
     }
 }

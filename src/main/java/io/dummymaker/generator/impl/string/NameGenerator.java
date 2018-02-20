@@ -1,5 +1,6 @@
 package io.dummymaker.generator.impl.string;
 
+import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FemaleNamePresetBundle;
 import io.dummymaker.bundle.impl.MaleNamePresetBundle;
 
@@ -13,12 +14,15 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class NameGenerator extends BigIdGenerator {
 
+    private final IBundle<String> maleBundle = new MaleNamePresetBundle();
+    private final IBundle<String> femaleBundle = new FemaleNamePresetBundle();
+
     @Override
     public String generate() {
         int gender = current().nextInt(100);
 
         return (gender > 50)
-                ? new MaleNamePresetBundle().getRandom()
-                : new FemaleNamePresetBundle().getRandom();
+                ? maleBundle.getRandom()
+                : femaleBundle.getRandom();
     }
 }

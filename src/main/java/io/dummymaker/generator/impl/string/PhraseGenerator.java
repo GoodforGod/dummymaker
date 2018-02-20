@@ -1,5 +1,6 @@
 package io.dummymaker.generator.impl.string;
 
+import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.PhrasePresetBundle;
 import io.dummymaker.generator.IGenerator;
 
@@ -11,8 +12,10 @@ import io.dummymaker.generator.IGenerator;
  */
 public class PhraseGenerator implements IGenerator<String> {
 
+    private final IBundle<String> bundle = new PhrasePresetBundle();
+
     @Override
     public String generate() {
-        return new PhrasePresetBundle().getRandom();
+        return bundle.getRandom();
     }
 }

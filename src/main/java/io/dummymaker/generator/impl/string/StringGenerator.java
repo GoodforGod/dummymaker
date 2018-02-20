@@ -3,12 +3,12 @@ package io.dummymaker.generator.impl.string;
 import io.dummymaker.generator.IGenerator;
 
 /**
- * Generates dummy JSON object as String
+ * Generates random string like "aag2151tgdsfa9352tf"
  *
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class JsonGenerator implements IGenerator<String> {
+public class StringGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {

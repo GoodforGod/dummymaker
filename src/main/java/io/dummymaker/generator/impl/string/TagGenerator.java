@@ -1,5 +1,6 @@
 package io.dummymaker.generator.impl.string;
 
+import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.TagPresetBundle;
 import io.dummymaker.generator.IGenerator;
 
@@ -11,8 +12,10 @@ import io.dummymaker.generator.IGenerator;
  */
 public class TagGenerator implements IGenerator<String> {
 
+    private final IBundle<String> bundle = new TagPresetBundle();
+
     @Override
     public String generate() {
-        return new TagPresetBundle().getRandom();
+        return bundle.getRandom();
     }
 }

@@ -4,7 +4,6 @@ import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.factory.IProduceFactory;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,12 +24,6 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
     private final IPopulateFactory<T> populateFactory = new GenPopulateFactory<>();
 
     private final Class<T> produceClass;
-
-    @SuppressWarnings("unchecked")
-    public GenProduceFactory() {
-        this.produceClass = ((Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0]);
-    }
 
     public GenProduceFactory(final Class<T> produceClass) {
         this.produceClass = produceClass;

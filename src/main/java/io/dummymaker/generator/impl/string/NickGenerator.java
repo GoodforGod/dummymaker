@@ -13,14 +13,15 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class NickGenerator implements IGenerator<String> {
 
+    private final NicknamesPresetBundle bundle = new NicknamesPresetBundle();
+
     @Override
     public String generate() {
-        NicknamesPresetBundle bundle = new NicknamesPresetBundle();
         boolean revert = current().nextBoolean();
         boolean tuple = current().nextBoolean();
 
-        String first = bundle.getRandom();
-        String second = bundle.getRandom();
+        final String first = bundle.getRandom();
+        final String second = bundle.getRandom();
 
         return (!tuple)
                 ? first

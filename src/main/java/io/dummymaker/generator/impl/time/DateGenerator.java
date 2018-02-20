@@ -2,30 +2,20 @@ package io.dummymaker.generator.impl.time;
 
 import io.dummymaker.generator.IGenerator;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * "default comment"
+ * generates old Date format object
  *
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class DateGenerator implements IGenerator<LocalDateTime> {
+public class DateGenerator implements IGenerator<Date> {
 
     @Override
-    public LocalDateTime generate() {
-        int year        = current().nextInt(1970, 3000);
-        int month       = current().nextInt(1, 12);
-        int dayOfMonth  = (month == 2)
-                ? current().nextInt(1,27)
-                : current().nextInt(1, 31);
-        int hour        = current().nextInt(1, 24);
-        int minute      = current().nextInt(1, 60);
-        int second      = current().nextInt(1, 60);
-        int nanoOfSecond = current().nextInt(1, 999999999);
-
-        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond);
+    public Date generate() {
+        return new Date(System.currentTimeMillis() - current().nextLong(0, 100000));
     }
 }

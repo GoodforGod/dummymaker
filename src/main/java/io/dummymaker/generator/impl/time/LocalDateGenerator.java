@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * "default comment"
+ * Generates LocalDate objects with range from 1970 to 3000
  *
  * @author GoodforGod
  * @since 21.02.2018
