@@ -1,16 +1,16 @@
 package io.dummymaker.scan;
 
+import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class ScannerImplTest {
     public void baseScannerFindAllAnnotations() throws NoSuchFieldException {
         IFieldScanner scanner = new AnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -45,7 +45,7 @@ public class ScannerImplTest {
     public void exportAnnotationScannerTest() throws NoSuchFieldException {
         IFieldScanner scanner = new ExportAnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -53,9 +53,9 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        Set<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
-        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        List<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
+        List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);
@@ -71,7 +71,7 @@ public class ScannerImplTest {
     public void scannerForEnumerateAnnotations() throws NoSuchFieldException {
         IFieldScanner scanner = new EnumerateAnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -79,7 +79,7 @@ public class ScannerImplTest {
         assertEquals(1, fields.size());
 
         // Check for correct map values
-        Set<Annotation> numAnnotations = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        List<Annotation> numAnnotations = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
 
         assertNotNull(numAnnotations);
 
@@ -111,7 +111,7 @@ public class ScannerImplTest {
     public void scannerForPopulateAnnotations() throws NoSuchFieldException {
         IFieldScanner scanner = new PopulateAnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -119,9 +119,9 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        Set<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
-        Set<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        Set<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        List<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
+        List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);
@@ -137,7 +137,7 @@ public class ScannerImplTest {
     public void scanForPopulateAnnotationsWhereThereNoOne() {
         IFieldScanner scanner = new PopulateAnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -148,7 +148,7 @@ public class ScannerImplTest {
     public void scanForEnumerateWhereThereNoOne() {
         IFieldScanner scanner = new EnumerateAnnotationScanner();
 
-        Map<Field, Set<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
+        Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);

@@ -5,7 +5,7 @@ import io.dummymaker.annotation.special.GenRenameExport;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -44,7 +44,7 @@ public class RenameAnnotationScanner implements IScanner<String, String> {
      */
     @Override
     public Map<String, String> scan(final Class t) {
-        final Map<String, String> renameMap = new HashMap<>();
+        final Map<String, String> renameMap = new LinkedHashMap<>();
         try {
             Arrays.stream(t.getConstructors())
                     .map(c -> Arrays.stream(c.getAnnotations())

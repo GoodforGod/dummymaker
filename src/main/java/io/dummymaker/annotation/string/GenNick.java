@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.string;
 
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.generator.impl.string.NickGenerator;
 
 import java.lang.annotation.ElementType;

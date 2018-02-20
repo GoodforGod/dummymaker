@@ -1,6 +1,5 @@
 package io.dummymaker.annotation;
 
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
 import io.dummymaker.generator.impl.NullGenerator;
 
 import java.lang.annotation.ElementType;

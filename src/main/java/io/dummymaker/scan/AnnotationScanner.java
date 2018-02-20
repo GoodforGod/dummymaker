@@ -2,10 +2,10 @@ package io.dummymaker.scan;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -19,13 +19,13 @@ public class AnnotationScanner implements IFieldScanner {
     private final Logger logger = Logger.getLogger(AnnotationScanner.class.getSimpleName());
 
     @Override
-    public Map<Field, Set<Annotation>> scan(final Class t) {
-        final Map<Field, Set<Annotation>> classFieldAnnotations = new HashMap<>();
+    public Map<Field, List<Annotation>> scan(final Class t) {
+        final Map<Field, List<Annotation>> classFieldAnnotations = new LinkedHashMap<>();
 
         try {
             for(final Field field : t.getDeclaredFields()) {
                 for(final Annotation annotation : field.getAnnotations()) {
-                    final Set<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNode(annotation));
+                    final List<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNode(annotation));
 
                     if(annotatedField != null) {
                         annotatedField.add(annotation);
@@ -33,7 +33,7 @@ public class AnnotationScanner implements IFieldScanner {
                     }
 
                     for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
-                        final Set<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNode(primeAnnotation));
+                        final List<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNode(primeAnnotation));
 
                         if(fieldPrimeAnnotated != null) {
                             fieldPrimeAnnotated.add(primeAnnotation);
@@ -49,7 +49,9 @@ public class AnnotationScanner implements IFieldScanner {
         return classFieldAnnotations;
     }
 
-    private Set<Annotation> createNode(final Annotation a) {
-        return new HashSet<Annotation>() {{ add(a); }};
+    private List<Annotation> createNode(final Annotation a) {
+        final List<Annotation> annotations = new ArrayList<>();
+        annotations.add(a);
+        return annotations;
     }
 }

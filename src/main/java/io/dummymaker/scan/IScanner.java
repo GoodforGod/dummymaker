@@ -8,7 +8,7 @@ import java.util.Map;
  * @author GoodforGod (Anton Kurako)
  * @since 06.07.2017
  */
-public interface IScanner<KEY, VALUE> {
+public interface IScanner<K, V> {
 
     /**
      * Base class scanner contract
@@ -16,5 +16,5 @@ public interface IScanner<KEY, VALUE> {
      * @param t class to scan
      * @return Returns Map with KEY and VALUES associated with annotated class
      */
-    Map<KEY, VALUE> scan(final Class t);
+    Map<K, V> scan(final Class t);
 }

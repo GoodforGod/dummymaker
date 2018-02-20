@@ -1,10 +1,12 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.util.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.factory.IProduceFactory;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,6 +25,12 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
     private final IPopulateFactory<T> populateFactory = new GenPopulateFactory<>();
 
     private final Class<T> produceClass;
+
+    @SuppressWarnings("unchecked")
+    public GenProduceFactory() {
+        this.produceClass = ((Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
 
     public GenProduceFactory(final Class<T> produceClass) {
         this.produceClass = produceClass;
@@ -43,20 +51,18 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
 
     @Override
     public List<T> produce(final int amount) {
-        final List<T> produced = new ArrayList<>();
-
         if(amount < 1)
-            return produced;
+            return Collections.emptyList();
 
         try {
+            final List<T> produced = new ArrayList<>();
             for(int i = 0; i < amount; i++)
                 produced.add(produceClass.newInstance());
+            return populateFactory.populate(produced);
 
         } catch (InstantiationException | IllegalAccessException e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE OBJECT!");
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-
-        return populateFactory.populate(produced);
     }
 }
