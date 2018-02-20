@@ -1,5 +1,10 @@
 package io.dummymaker.generator;
 
+import io.dummymaker.generator.impl.number.BigDoubleGenerator;
+import io.dummymaker.generator.impl.number.DoubleGenerator;
+import io.dummymaker.generator.impl.number.IntegerGenerator;
+import io.dummymaker.generator.impl.number.LongGenerator;
+import io.dummymaker.generator.impl.string.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -49,7 +54,7 @@ public class GeneratorPatternValidateTest {
                 { new PassGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(),     String.class,   Pattern.compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
                 { new PhraseGenerator(),    String.class,   Pattern.compile(".+(\\t.+)?") },
-                { new StringGenerator(),    String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new BigIdGenerator(),    String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new TagGenerator(),       String.class,   Pattern.compile("#[0-9a-zA-Z]+") }
         });
     }

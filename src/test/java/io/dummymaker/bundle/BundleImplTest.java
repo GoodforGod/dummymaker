@@ -1,5 +1,6 @@
 package io.dummymaker.bundle;
 
+import io.dummymaker.bundle.impl.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -21,9 +22,9 @@ import static org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class BundleImplTest {
 
-    private IPresetBundle bundle;
+    private BasicBundle bundle;
 
-    public BundleImplTest(IPresetBundle bundle) {
+    public BundleImplTest(BasicBundle bundle) {
         this.bundle = bundle;
     }
 
@@ -44,13 +45,13 @@ public class BundleImplTest {
 
     @Test
     public void bundlePresentSizeCheck() {
-        assertEquals(bundle.preset.size(), bundle.size());
+        assertEquals(bundle.getAll().size(), bundle.size());
     }
 
     @Test
     public void bundlePresentIndexGet() {
         Integer index = current().nextInt(0, bundle.size() - 1);
-        assertEquals(bundle.preset.get(index), bundle.get(index));
+        assertEquals(bundle.getAll().get(index), bundle.get(index));
     }
 
     @Test

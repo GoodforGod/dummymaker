@@ -2,6 +2,8 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.factory.impl.GenPopulateFactory;
+import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;

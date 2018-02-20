@@ -1,7 +1,7 @@
-package io.dummymaker.annotation;
+package io.dummymaker.annotation.string;
 
 import io.dummymaker.annotation.util.PrimeGenAnnotation;
-import io.dummymaker.generator.impl.NullGenerator;
+import io.dummymaker.generator.impl.string.CompanyGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,14 +9,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see NullGenerator
+ * @see CompanyGenerator
  *
- * @author GoodforGod
- * @since 31.05.2017
+ * @author GoodforGod (Anton Kurako)
+ * @since 07.06.2017
  */
-@PrimeGenAnnotation(NullGenerator.class)
+@PrimeGenAnnotation(CompanyGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenNull {
+public @interface GenCompany {
 
 }

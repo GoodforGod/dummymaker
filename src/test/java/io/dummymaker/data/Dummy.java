@@ -1,11 +1,11 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.GenCity;
-import io.dummymaker.annotation.GenName;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
 import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.string.GenCity;
+import io.dummymaker.annotation.string.GenName;
 
 import java.util.Arrays;
 import java.util.HashSet;

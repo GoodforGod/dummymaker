@@ -1,7 +1,7 @@
-package io.dummymaker.annotation;
+package io.dummymaker.annotation.number;
 
 import io.dummymaker.annotation.util.PrimeGenAnnotation;
-import io.dummymaker.generator.impl.NullGenerator;
+import io.dummymaker.generator.impl.number.BigDoubleGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,14 +9,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see NullGenerator
+ * @see BigDoubleGenerator
  *
  * @author GoodforGod
  * @since 31.05.2017
  */
-@PrimeGenAnnotation(NullGenerator.class)
+@PrimeGenAnnotation(BigDoubleGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenNull {
+public @interface GenBigDouble {
 
 }
