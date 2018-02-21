@@ -13,7 +13,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 29.08.2017
  */
-public class BasicClassContainer implements IClassContainer {
+public class BaseClassContainer implements IClassContainer {
 
     private final Class exportClass;
 
@@ -35,7 +35,7 @@ public class BasicClassContainer implements IClassContainer {
      */
     private final Map<String, String> renamedFields; //TreeMap
 
-    public BasicClassContainer(final Class exportClass) {
+    public BaseClassContainer(final Class exportClass) {
         this.exportClass = exportClass;
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
@@ -82,10 +82,11 @@ public class BasicClassContainer implements IClassContainer {
      * @return map with field name as 'key', field as 'value'
      */
     private Map<String, Field> fillExportOriginFields() {
-        return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
-                .collect(HashMap<String, Field>::new,
+        return new ExportAnnotationScanner().scan(exportClass)
+                .entrySet().stream().collect(HashMap<String, Field>::new,
                         (m, c) -> m.put(c.getKey().getName(), c.getKey()),
-                        (m, u) -> { });
+                        (m, u) -> {
+                        });
     }
 
     /**

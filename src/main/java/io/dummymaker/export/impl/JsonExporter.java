@@ -1,8 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.container.ExportContainer;
+
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects in JSON format
@@ -21,8 +24,20 @@ public class JsonExporter<T> extends BaseExporter<T> {
         this(primeClass, null);
     }
 
-    public JsonExporter(final Class<T> primeClass, final String path) {
-        super(primeClass, path, ExportFormat.JSON);
+    public JsonExporter(final Class<T> primeClass,
+                        final String path) {
+        super(primeClass, path, ExportFormat.JSON, NamingStrategy.DEFAULT);
+    }
+
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     */
+    public JsonExporter(final Class<T> primeClass,
+                        final String path,
+                        final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.JSON, strategy);
     }
 
     private String wrapWithQuotes(final String value) {
@@ -37,7 +52,7 @@ public class JsonExporter<T> extends BaseExporter<T> {
      * @return StringBuilder of Object as JSON String
      */
     private String objectToJson(final T t, final Mode mode) {
-        final Map<String, String> values = extractExportValues(t);
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
 
         final StringBuilder builder = new StringBuilder("");
 
@@ -49,16 +64,14 @@ public class JsonExporter<T> extends BaseExporter<T> {
                 ? ""
                 : "\t\t";
 
-        if(!values.isEmpty()) {
-            Iterator<Map.Entry<String, String>> iterator = values.entrySet().iterator();
-
+        if(iterator.hasNext()) {
             builder.append(bracketTabs).append("{\n");
             while (iterator.hasNext()) {
-                Map.Entry<String, String> field = iterator.next();
+                final ExportContainer container = iterator.next();
                 builder.append(fieldTabs)
-                        .append(wrapWithQuotes(field.getKey()))
+                        .append(wrapWithQuotes(container.getFieldName()))
                         .append(": ")
-                        .append(wrapWithQuotes(field.getValue()));
+                        .append(wrapWithQuotes(container.getFieldValue()));
 
                 if (iterator.hasNext())
                     builder.append(",");

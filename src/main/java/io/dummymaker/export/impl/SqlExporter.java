@@ -1,11 +1,17 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.container.FieldContainer;
+
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects as SQL insert query
@@ -17,29 +23,21 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     /**
      * Java & Sql Type Representation
+     *
+     * Map is used to convert Java Field Data Type to Sql Data Type
+     *
+     * You can add your specific values here by using constructor with Map'String, String'
      */
-    private enum DataType {
-        LONG    ("BIGINT",  Long.class.getName()),
-        DOUBLE  ("DOUBLE PRECISION",  Double.class.getName()),
-        STRING  ("VARCHAR", String.class.getName()),
-        INTEGER ("INT",     Integer.class.getName()),
-        LOCAL_DATE_TIME("TIMESTAMP", LocalDateTime.class.getName());
+    private final Map<Class, String> dataTypeMap;
 
-        DataType(final String sql, final String java) {
-            this.sql = sql;
-            this.java = java;
-        }
-
-        private final String sql;
-        private final String java;
-
-        public String getSql() {
-            return sql;
-        }
-
-        public String getJava() {
-            return java;
-        }
+    private HashMap<Class, String> buildDefaultDataTypeMap() {
+        return new HashMap<Class, String>() {{
+            put(Long.class, "BIGINT");
+            put(Double.class, "DOUBLE PRECISION");
+            put(String.class, "VARCHAR");
+            put(Integer.class, "INT");
+            put(LocalDateTime.class, "TIMESTAMP");
+        }};
     }
 
     /**
@@ -51,31 +49,44 @@ public class SqlExporter<T> extends BaseExporter<T> {
         this(primeClass, null);
     }
 
-    public SqlExporter(final Class<T> primeClass, final String path) {
-        super(primeClass, path, ExportFormat.SQL);
+    public SqlExporter(final Class<T> primeClass,
+                       final String path) {
+        this(primeClass, path, NamingStrategy.DEFAULT);
+    }
+
+    public SqlExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.SQL, strategy);
+        this.dataTypeMap = buildDefaultDataTypeMap();
     }
 
     /**
-     * convert Java Field Type to Sql Data Type
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     * @param dataTypeMap map with user custom types for 'dataTypeMap'
+     *
+     * @see io.dummymaker.util.INameStrategist
      */
-    private String javaToSqlFieldType(final String fieldName) {
-        final String fieldType = classContainer.finalFields().get(fieldName).getType().getName();
+    public SqlExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy,
+                       final Map<Class, String> dataTypeMap) {
+        super(primeClass, path, ExportFormat.SQL, strategy);
+        this.dataTypeMap = buildDefaultDataTypeMap();
 
-        if(fieldType != null) {
-            if (fieldType.equals(DataType.DOUBLE.getJava()))
-                return DataType.DOUBLE.getSql();
+        if(dataTypeMap != null && !dataTypeMap.isEmpty())
+            this.dataTypeMap.putAll(dataTypeMap);
+    }
 
-            if (fieldType.equals(DataType.INTEGER.getJava()))
-                return DataType.INTEGER.getSql();
-
-            if (fieldType.equals(DataType.LOCAL_DATE_TIME.getJava()))
-                return DataType.LOCAL_DATE_TIME.getSql();
-
-            if (fieldType.equals(DataType.LONG.getJava()))
-                return DataType.LONG.getSql();
-        }
-
-        return DataType.STRING.sql;
+    /**
+     * Convert Java Field Type to Sql Data Type
+     * @param finalFieldName final field name
+     * @return sql data type
+     */
+    private String javaToSqlDataType(final String finalFieldName) {
+        return dataTypeMap.getOrDefault(classContainer.getFieldByFinalName(finalFieldName).getType(), "VARCHAR");
     }
 
     /**
@@ -83,33 +94,46 @@ public class SqlExporter<T> extends BaseExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
+
+        String primaryKeyField = "";
 
         builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.finalClassName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
-            final Map.Entry<String, Field> field = iterator.next();
-            builder.append("\t").append(sqlCreateInsertNameType(field.getKey()));
+            final String finaFieldName = iterator.next().getValue().getFinalFieldName();
+            builder.append("\t").append(sqlCreateInsertNameType(finaFieldName));
 
-            if(field.getKey().equals("id"))
-                builder.append(" PRIMARY KEY");
+            if (finaFieldName.equalsIgnoreCase("id"))
+                primaryKeyField = finaFieldName;
 
-            if(iterator.hasNext())
-                builder.append(",");
+            builder.append(",");
 
             builder.append("\n");
         }
 
-        builder.append(");\n");
+        // Write primary key constraint
+        builder.append("\t").append("PRIMARY KEY (");
+
+        if(primaryKeyField.isEmpty())
+            builder.append(classContainer.fieldContainerMap().values().iterator().next().getFinalFieldName());
+        else
+            builder.append(primaryKeyField);
+
+        builder.append(")");
+
+        builder.append("\n").append(");\n");
 
         return builder.toString();
     }
 
     /**
      * Creates String of Create Table Insert Field
+     * @param finalFieldName final field name
+     * @return sql create table (name - type)
      */
-    private String sqlCreateInsertNameType(final String field) {
-        return field + "\t" + javaToSqlFieldType(field);
+    private String sqlCreateInsertNameType(final String finalFieldName) {
+        return finalFieldName + "\t" + javaToSqlDataType(finalFieldName);
     }
 
     private String wrapWithComma(final String value) {
@@ -120,13 +144,13 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Insert query
      */
     private String sqlInsertIntoQuery(final T t) {
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
         final StringBuilder builder = new StringBuilder();
 
         builder.append("INSERT INTO ").append(classContainer.finalClassName().toLowerCase()).append(" (");
 
         while (iterator.hasNext()) {
-            builder.append(iterator.next().getKey());
+            builder.append(iterator.next().getFieldName());
 
             if(iterator.hasNext())
                 builder.append(", ");
@@ -141,22 +165,23 @@ public class SqlExporter<T> extends BaseExporter<T> {
      * Creates insert query field name
      */
     private StringBuilder sqlValuesInsert(final T t) {
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
         final StringBuilder builder = new StringBuilder();
-
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
 
         if(iterator.hasNext()) {
             builder.append("(");
 
             while (iterator.hasNext()) {
-                Map.Entry<String, String> field = iterator.next();
+                final ExportContainer container = iterator.next();
 
-                if(classContainer.finalFields().get(field.getKey()).getType().equals(String.class))
-                    builder.append(wrapWithComma(field.getValue()));
-                else if(classContainer.finalFields().get(field.getKey()).getType().equals(LocalDateTime.class))
-                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(field.getValue())).toString()));
+                final Field fieldType = classContainer.getFieldByFinalName(container.getFieldName());
+
+                if(fieldType.getType().equals(String.class))
+                    builder.append(wrapWithComma(container.getFieldValue()));
+                else if(fieldType.getType().equals(LocalDateTime.class))
+                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(container.getFieldValue())).toString()));
                 else
-                    builder.append(field.getValue());
+                    builder.append(container.getFieldValue());
 
                 if (iterator.hasNext())
                     builder.append(", ");
@@ -223,7 +248,7 @@ public class SqlExporter<T> extends BaseExporter<T> {
 
     @Override
     public String exportAsString(final T t) {
-        return (!isExportStateValid(t))
+        return (isExportStateValid(t))
                 ? sqlTableCreate() + "\n" + sqlInsertIntoQuery(t) + "\n" + sqlValuesInsert(t) + ";"
                 : "";
     }

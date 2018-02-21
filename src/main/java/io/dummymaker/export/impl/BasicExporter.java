@@ -1,12 +1,14 @@
-package io.dummymaker.export.impl;
+package io.dummymaker.export;
 
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.BasicClassContainer;
+import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.container.FieldContainer;
 import io.dummymaker.export.container.IClassContainer;
+import io.dummymaker.util.NameStrategist;
 import io.dummymaker.writer.BufferedFileWriter;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T> {
+public abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T> {
 
     private final Logger logger = Logger.getLogger(BaseExporter.class.getName());
 
@@ -26,7 +28,7 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      *
      * @see io.dummymaker.writer.BufferedFileWriter
      */
-    enum ExportFormat {
+    public enum ExportFormat {
         CSV(".csv"),
         JSON(".json"),
         XML(".xml"),
@@ -52,10 +54,11 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      */
     BaseExporter(final Class<T> exportClass,
                  final String path,
-                 final ExportFormat format) {
+                 final ExportFormat format,
+                 final NameStrategist.NamingStrategy strategy) {
         super(exportClass.getSimpleName(), path, format.getValue());
 
-        this.classContainer = new BasicClassContainer(exportClass);
+        this.classContainer = new BasicClassContainer(exportClass, strategy);
     }
 
     /**
@@ -63,33 +66,30 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      * @param t class to export
      * @return map of field name as a 'key' and fields string value as a 'values'
      */
-    Map<String, String> extractExportValues(final T t) {
-        final Map<String, String> exports = new HashMap<>();
+    List<ExportContainer> extractExportValues(final T t) {
+        final List<ExportContainer> exports = new ArrayList<>();
 
-        for(Map.Entry<String, Field> field : classContainer.originFields().entrySet()) {
+        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.fieldContainerMap().entrySet()) {
             try {
-                final Field fieldToExport = t.getClass().getDeclaredField(field.getKey());
+                final Field field = t.getClass().getDeclaredField(fieldEntry.getKey());
 
-                if(fieldToExport != null) {
-                    fieldToExport.setAccessible(true);
+                if(field != null) {
+                    field.setAccessible(true);
 
-                    final String renamedValue = (classContainer.renamedFields().containsKey(fieldToExport.getName()))
-                            ? classContainer.renamedFields().get(fieldToExport.getName())
-                            : fieldToExport.getName();
+                    final String exportFieldName = classContainer.getExportFieldName(field.getName());
+                    exports.add(new ExportContainer(exportFieldName, String.valueOf(field.get(t))));
 
-                    exports.put(renamedValue, String.valueOf(fieldToExport.get(t)));
-                    fieldToExport.setAccessible(false);
+                    field.setAccessible(false);
                 }
             }
             catch (IllegalAccessException e) {
                 logger.info(e.getMessage());
-            }
-            catch (NoSuchFieldException e) {
+            } catch (Exception e) {
                 logger.warning(e.getMessage());
             }
         }
 
-        return new HashMap<>(exports);
+        return exports;
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      * @return validation result
      */
     boolean isExportStateValid(final T t) {
-        return !classContainer.originFields().isEmpty() && t != null;
+        return !classContainer.fieldContainerMap().isEmpty() && t != null;
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T
      * @return validation result
      */
     boolean isExportStateValid(final List<T> t) {
-        return !classContainer.originFields().isEmpty() && t != null && !t.isEmpty();
+        return !classContainer.fieldContainerMap().isEmpty() && t != null && !t.isEmpty();
     }
 
     @Override

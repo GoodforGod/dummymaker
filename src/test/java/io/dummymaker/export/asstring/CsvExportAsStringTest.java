@@ -1,15 +1,19 @@
 package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
+import io.dummymaker.export.CsvExporter;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.impl.CsvExporter;
+import io.dummymaker.export.validation.CsvValidation;
+import io.dummymaker.factory.GenProduceFactory;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
+import static io.dummymaker.util.NameStrategist.NamingStrategy.DEFAULT;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * "Default Description"
@@ -21,44 +25,36 @@ public class CsvExportAsStringTest {
 
     private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
 
+    private CsvValidation validation = new CsvValidation();
+
+    private final char SEPARATOR = ',';
+
     @Test
     public void exportSingleDummyInCsv() {
         Dummy dummy = produceFactory.produce();
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
 
-        String dummyAsJsonString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsJsonString.split(",");
+        String[] csvArray = dummyAsString.split(",");
         assertEquals(3, csvArray.length);
 
-        assertTrue(csvArray[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(csvArray[1].matches("[0-9]+"));
-        assertTrue(csvArray[2].matches("null"));
+        validation.isSingleDummyValid(csvArray);
     }
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() {
         Dummy dummy = produceFactory.produce();
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, true, true);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, DEFAULT, true, true, SEPARATOR);
 
-        String dummyAsJsonString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsJsonString.split("\n");
+        String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        String[] headerArray = csvArray[0].split(",");
-        assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[1].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[2].matches("[a-zA-Z0-9]+"));
-
-        String[] valueArray = csvArray[1].split(",");
-        assertEquals(3, valueArray.length);
-        assertTrue(valueArray[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray[2].matches("null"));
+        validation.isSingleDummyValidWithHeader(csvArray, SEPARATOR);
     }
 
     @Test
@@ -66,52 +62,42 @@ public class CsvExportAsStringTest {
         List<Dummy> dummies = produceFactory.produce(2);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
 
-        String dummyAsJsonString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsJsonString.split("\n");
+        String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        String[] valueArray1 = csvArray[0].split(",");
-        assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(valueArray1[1].matches("[0-9]+"));
-        assertTrue(valueArray1[2].matches("[0-9]+"));
-
-        String[] valueArray2 = csvArray[1].split(",");
-        assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(valueArray2[1].matches("[0-9]+"));
-        assertTrue(valueArray2[2].matches("[0-9]+"));
+        validation.isTwoDummiesValid(csvArray);
     }
 
     @Test
     public void exportListDummyWithStringWrapAndHeader() {
         List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, true, true);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, DEFAULT,true, true, SEPARATOR);
 
-        String dummyAsJsonString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsJsonString);
+        String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsJsonString.split("\n");
+        String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        String[] headerArray = csvArray[0].split(",");
-        assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[1].matches("[a-zA-Z0-9]+"));
-        assertTrue(headerArray[2].matches("[a-zA-Z0-9]+"));
+        validation.isTwoDummiesValidWithHeader(csvArray, SEPARATOR);
+    }
 
-        String[] valueArray1 = csvArray[1].split(",");
-        assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray1[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray1[2].matches("[0-9]+"));
+    @Test
+    public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
+        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_UPPER_CASE;
 
-        String[] valueArray2 = csvArray[2].split(",");
-        assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray2[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray2[2].matches("[0-9]+"));
+        List<Dummy> dummies = produceFactory.produce(2);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, strategy,true, true, SEPARATOR);
+
+        String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
+
+        String[] csvArray = dummyAsString.split("\n");
+        assertEquals(3, csvArray.length);
+
+        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, SEPARATOR, strategy);
     }
 }

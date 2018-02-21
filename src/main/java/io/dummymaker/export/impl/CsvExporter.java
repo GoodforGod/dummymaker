@@ -1,9 +1,13 @@
 package io.dummymaker.export.impl;
 
-import java.lang.reflect.Field;
+import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.container.FieldContainer;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects in CSV format
@@ -30,36 +34,47 @@ public class CsvExporter<T> extends BaseExporter<T> {
      */
     private boolean generateHeader = false;
 
-    //<editor-fold desc="Constructors">
-
     public CsvExporter(final Class<T> primeClass) {
         this(primeClass, null);
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path) {
-        super(primeClass, path, ExportFormat.CSV);
+        super(primeClass, path, ExportFormat.CSV, NamingStrategy.DEFAULT);
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
+                       final NamingStrategy strategy) {
+        super(primeClass, path, ExportFormat.CSV, strategy);
+    }
+
+    public CsvExporter(final Class<T> primeClass,
+                       final String path,
+                       final NamingStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader) {
-        this(primeClass, path);
+        this(primeClass, path, strategy);
         this.wrapTextValues = wrapTextValues;
         this.generateHeader = generateHeader;
     }
-
+    /**
+     * @param primeClass export class
+     * @param path path where to export, 'null' for project HOME path
+     * @param strategy naming strategy
+     * @param wrapTextValues to force wrap string type field values with commas, like - 'string'
+     * @param generateHeader generate header for export file, with field names as headers
+     * @param separator csv format separator, default is comma ,
+     */
     public CsvExporter(final Class<T> primeClass,
                        final String path,
+                       final NamingStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader,
                        final char separator) {
-        this(primeClass, path, wrapTextValues, generateHeader);
+        this(primeClass, path, strategy, wrapTextValues, generateHeader);
         setSeparator(separator);
     }
-
-    //</editor-fold>
 
     private void setSeparator(final char separator) {
         this.SEPARATOR = (separator == ' ')
@@ -78,15 +93,15 @@ public class CsvExporter<T> extends BaseExporter<T> {
 
     private String objectToCsv(final T t) {
         final StringBuilder builder = new StringBuilder("");
-        final Iterator<Map.Entry<String, String>> iterator = extractExportValues(t).entrySet().iterator();
+        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
 
         while (iterator.hasNext()) {
-            final Map.Entry<String, String> obj = iterator.next();
+            final ExportContainer container = iterator.next();
 
-            if(wrapTextValues && classContainer.finalFields().get(obj.getKey()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(obj.getValue()));
+            if(wrapTextValues && classContainer.getFieldByFinalName(container.getFieldName()).getType().equals(String.class))
+                builder.append(wrapWithQuotes(container.getFieldValue()));
             else
-                builder.append(obj.getValue());
+                builder.append(container.getFieldValue());
 
             if (iterator.hasNext())
                 builder.append(SEPARATOR);
@@ -101,10 +116,10 @@ public class CsvExporter<T> extends BaseExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, Field>> iterator = classContainer.finalFields().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            header.append(iterator.next().getKey());
+            header.append(iterator.next().getValue().getFinalFieldName());
 
             if(iterator.hasNext())
                 header.append(SEPARATOR);
