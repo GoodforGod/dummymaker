@@ -1,9 +1,13 @@
 package io.dummymaker.export.container;
 
+import io.dummymaker.export.naming.PresetStrategies;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
+ * Container class used to store class field information and different field states
+ *
  * Class Container for class origin/final name
  * Fields origin/final names
  * Fields values as Field type
@@ -37,7 +41,7 @@ public interface IClassContainer {
      * @param value value to convert
      * @return converted value
      *
-     * @see io.dummymaker.export.NamingStrategy
+     * @see PresetStrategies
      */
     String convertByNamingStrategy(final String value);
 

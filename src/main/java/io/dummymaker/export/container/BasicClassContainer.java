@@ -1,6 +1,6 @@
 package io.dummymaker.export.container;
 
-import io.dummymaker.export.NamingStrategy;
+import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.scan.RenameAnnotationScanner;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * "Default Description"
+ * @see IClassContainer
  *
  * @author GoodforGod
  * @since 29.08.2017
@@ -21,7 +21,7 @@ public class BasicClassContainer implements IClassContainer {
     private final String originClassName;
     private final String finalClassName;
 
-    private final NamingStrategy strategy;
+    private final IStrategy strategy;
 
     /**
      * Field origin name as a 'key', fieldContainer as 'value'
@@ -34,7 +34,7 @@ public class BasicClassContainer implements IClassContainer {
     private final Map<String, String> renamedFields;
 
     public BasicClassContainer(final Class exportClass,
-                               final NamingStrategy strategy) {
+                               final IStrategy strategy) {
         this.exportClass = exportClass;
         this.strategy = strategy;
         this.originClassName = exportClass.getSimpleName();

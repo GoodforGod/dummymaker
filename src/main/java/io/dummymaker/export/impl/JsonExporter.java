@@ -1,7 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
 
     public JsonExporter(final Class<T> primeClass,
                         final String path) {
-        super(primeClass, path, ExportFormat.JSON, NamingStrategy.DEFAULT);
+        super(primeClass, path, ExportFormat.JSON, PresetStrategies.DEFAULT.getStrategy());
     }
 
     /**
@@ -36,7 +37,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
      */
     public JsonExporter(final Class<T> primeClass,
                         final String path,
-                        final NamingStrategy strategy) {
+                        final IStrategy strategy) {
         super(primeClass, path, ExportFormat.JSON, strategy);
     }
 
@@ -96,16 +97,16 @@ public class JsonExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        init();
-        return (isExportStateValid(t)) && (writeLine(objectToJson(t, Mode.SINGLE)) && flush());
+        return isExportStateValid(t)
+                && initWriter()
+                && writeLine(objectToJson(t, Mode.SINGLE))
+                && flush();
     }
 
     @Override
     public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
+        if(!isExportStateValid(list) || !initWriter())
             return false;
-
-        init();
 
         // Open JSON Object List
         writeLine(openJsonList());

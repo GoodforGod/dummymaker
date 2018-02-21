@@ -1,11 +1,12 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.BasicClassContainer;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
 import io.dummymaker.export.container.IClassContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.BufferedFileWriter;
 
 import java.lang.reflect.Field;
@@ -56,10 +57,18 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
     BasicExporter(final Class<T> exportClass,
                   final String path,
                   final ExportFormat format,
-                  final NamingStrategy strategy) {
+                  final IStrategy strategy) {
         super(exportClass.getSimpleName(), path, format.getValue());
 
-        this.classContainer = new BasicClassContainer(exportClass, strategy);
+        if(strategy == null) {
+            logger.warning("NamingStrategy in nullable.. Using default strategy.");
+        }
+
+        final IStrategy strategyInUse = (strategy == null)
+                ? PresetStrategies.DEFAULT.getStrategy()
+                : strategy;
+
+        this.classContainer = new BasicClassContainer(exportClass, strategyInUse);
     }
 
     /**

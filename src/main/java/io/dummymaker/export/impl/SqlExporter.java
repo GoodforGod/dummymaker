@@ -1,8 +1,9 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
@@ -50,12 +51,12 @@ public class SqlExporter<T> extends BasicExporter<T> {
 
     public SqlExporter(final Class<T> primeClass,
                        final String path) {
-        this(primeClass, path, NamingStrategy.DEFAULT);
+        this(primeClass, path, PresetStrategies.DEFAULT.getStrategy());
     }
 
     public SqlExporter(final Class<T> primeClass,
                        final String path,
-                       final NamingStrategy strategy) {
+                       final IStrategy strategy) {
         super(primeClass, path, ExportFormat.SQL, strategy);
         this.dataTypeMap = buildDefaultDataTypeMap();
     }
@@ -66,11 +67,11 @@ public class SqlExporter<T> extends BasicExporter<T> {
      * @param strategy naming strategy
      * @param dataTypeMap map with user custom types for 'dataTypeMap'
      *
-     * @see io.dummymaker.export.NamingStrategy
+     * @see PresetStrategies
      */
     public SqlExporter(final Class<T> primeClass,
                        final String path,
-                       final NamingStrategy strategy,
+                       final IStrategy strategy,
                        final Map<Class, String> dataTypeMap) {
         super(primeClass, path, ExportFormat.SQL, strategy);
         this.dataTypeMap = buildDefaultDataTypeMap();
@@ -194,8 +195,8 @@ public class SqlExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        init();
         return isExportStateValid(t)
+                && initWriter()
                 && writeLine(sqlTableCreate())
                 && writeLine(sqlInsertIntoQuery(t))
                 && writeLine(sqlValuesInsert(t) + ";")
@@ -204,10 +205,8 @@ public class SqlExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final List<T> list) {
-        if (!isExportStateValid(list))
+        if (!isExportStateValid(list) || !initWriter())
             return false;
-
-        init();
 
         Integer i = INSERT_QUERY_LIMIT;
 

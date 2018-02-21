@@ -2,8 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.impl.CsvExporter;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.CsvValidation;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -45,7 +45,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() {
         Dummy dummy = produceFactory.produce();
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, NamingStrategy.DEFAULT, true, true, SEPARATOR);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(), true, true, SEPARATOR);
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -73,7 +73,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportListDummyWithStringWrapAndHeader() {
         List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, NamingStrategy.DEFAULT,true, true, SEPARATOR);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(),true, true, SEPARATOR);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -86,10 +86,10 @@ public class CsvExportAsStringTest {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
-        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_UPPER_CASE;
+        final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
 
         List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, strategy,true, true, SEPARATOR);
+        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, strategy.getStrategy(),true, true, SEPARATOR);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

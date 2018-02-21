@@ -2,8 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.impl.XmlExporter;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.XmlValidation;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -56,10 +56,10 @@ public class XmlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInXmlWithNamingStrategy() {
-        final NamingStrategy strategy = NamingStrategy.INITIAL_LOW_CASE;
+        final PresetStrategies strategy = PresetStrategies.INITIAL_LOW_CASE;
 
         List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class, null, strategy);
+        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class, null, strategy.getStrategy());
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

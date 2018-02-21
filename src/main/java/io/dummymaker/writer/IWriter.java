@@ -13,7 +13,7 @@ public interface IWriter {
      *
      * @return operation result status
      */
-    boolean init();
+    boolean initWriter();
 
     /**
      * Writes string and add newline symbol to the end

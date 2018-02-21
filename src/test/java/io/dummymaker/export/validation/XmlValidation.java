@@ -1,6 +1,6 @@
 package io.dummymaker.export.validation;
 
-import io.dummymaker.export.NamingStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -36,10 +36,10 @@ public class XmlValidation {
         assertTrue(dummies[11].matches("</[a-zA-Z]+List>"));
     }
 
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, PresetStrategies strategy) {
+        final String expectedNameField = strategy.getStrategy().toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.getStrategy().toStrategy(NUM.getExportFieldName());
 
         assertTrue(dummies[0].matches("<[a-zA-Z]+List>"));
         assertTrue(dummies[1].matches("\\t<[a-zA-Z]+>"));

@@ -1,8 +1,9 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 
 import java.util.Iterator;
 import java.util.List;
@@ -40,18 +41,18 @@ public class CsvExporter<T> extends BasicExporter<T> {
 
     public CsvExporter(final Class<T> primeClass,
                        final String path) {
-        super(primeClass, path, ExportFormat.CSV, NamingStrategy.DEFAULT);
+        super(primeClass, path, ExportFormat.CSV, PresetStrategies.DEFAULT.getStrategy());
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
-                       final NamingStrategy strategy) {
+                       final IStrategy strategy) {
         super(primeClass, path, ExportFormat.CSV, strategy);
     }
 
     public CsvExporter(final Class<T> primeClass,
                        final String path,
-                       final NamingStrategy strategy,
+                       final IStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader) {
         this(primeClass, path, strategy);
@@ -68,7 +69,7 @@ public class CsvExporter<T> extends BasicExporter<T> {
      */
     public CsvExporter(final Class<T> primeClass,
                        final String path,
-                       final NamingStrategy strategy,
+                       final IStrategy strategy,
                        final boolean wrapTextValues,
                        final boolean generateHeader,
                        final char separator) {
@@ -129,10 +130,8 @@ public class CsvExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        if(!isExportStateValid(t))
+        if(!isExportStateValid(t) || !initWriter())
             return false;
-
-        init();
 
         if (generateHeader)
             writeLine(generateCsvHeader());
@@ -142,10 +141,8 @@ public class CsvExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
+        if(!isExportStateValid(list) || !initWriter())
             return false;
-
-        init();
 
         if (generateHeader)
             writeLine(generateCsvHeader());

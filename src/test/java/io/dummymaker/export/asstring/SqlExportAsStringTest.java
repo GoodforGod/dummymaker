@@ -2,8 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.impl.SqlExporter;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.SqlValidation;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -56,7 +56,7 @@ public class SqlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInSqlWithNamingStrategy() {
-        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_LOW_CASE;
+        final PresetStrategies strategy = PresetStrategies.UNDERSCORED_LOW_CASE;
 
         List<Dummy> dummies = produceFactory.produce(2);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);

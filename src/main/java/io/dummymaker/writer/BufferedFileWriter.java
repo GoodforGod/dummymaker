@@ -22,7 +22,7 @@ public class BufferedFileWriter implements IWriter {
 
     /**
      * @param fileName file name
-     * @param path path where to create file (NULL IF HOME DIR)
+     * @param path     path where to create file (NULL IF HOME DIR)
      * @param fileType file extension
      */
     public BufferedFileWriter(final String fileName, final String path, final String fileType) {
@@ -34,11 +34,12 @@ public class BufferedFileWriter implements IWriter {
     }
 
     @Override
-    public boolean init() {
+    public boolean initWriter() {
         try {
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(path), "UTF-8"));
+                            new FileOutputStream(path), "UTF-8")
+            );
             return true;
         } catch (IOException e) {
             logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");

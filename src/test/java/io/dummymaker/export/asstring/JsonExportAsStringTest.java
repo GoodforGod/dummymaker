@@ -2,8 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.impl.JsonExporter;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.JsonValidation;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -56,10 +56,10 @@ public class JsonExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() {
-        final NamingStrategy strategy = NamingStrategy.UNDERSCORED_UPPER_CASE;
+        final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
 
         List<Dummy> dummy = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class, null, strategy);
+        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class, null, strategy.getStrategy());
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);

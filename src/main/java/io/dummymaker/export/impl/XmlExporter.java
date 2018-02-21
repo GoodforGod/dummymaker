@@ -1,7 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,12 +27,15 @@ public class XmlExporter<T> extends BasicExporter<T> {
         this(primeClass, null);
     }
 
-    public XmlExporter(final Class<T> primeClass, final String path) {
-        this(primeClass, path, NamingStrategy.DEFAULT, null);
+    public XmlExporter(final Class<T> primeClass,
+                       final String path) {
+        this(primeClass, path, PresetStrategies.DEFAULT.getStrategy(), null);
     }
 
-    public XmlExporter(final Class<T> primeClass, final String path, final NamingStrategy namingStrategy) {
-        this(primeClass, path, namingStrategy, null);
+    public XmlExporter(final Class<T> primeClass,
+                       final String path,
+                       final IStrategy strategy) {
+        this(primeClass, path, strategy, null);
     }
 
     /**
@@ -40,7 +44,10 @@ public class XmlExporter<T> extends BasicExporter<T> {
      * @param strategy naming strategy
      * @param exportClassListName class top name wrapper for XML file, or default [YourClassName]List
      */
-    public XmlExporter(final Class<T> primeClass, final String path, final NamingStrategy strategy, final String exportClassListName) {
+    public XmlExporter(final Class<T> primeClass,
+                       final String path,
+                       final IStrategy strategy,
+                       final String exportClassListName) {
         super(primeClass, path, ExportFormat.XML, strategy);
         this.exportClassListName = (exportClassListName == null || exportClassListName.trim().isEmpty())
                 ? classContainer.finalClassName() + "List"
@@ -86,16 +93,16 @@ public class XmlExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final T t) {
-        init();
-        return isExportStateValid(t) && writeLine(objectToXml(t, Mode.SINGLE)) && flush();
+        return isExportStateValid(t)
+                && initWriter()
+                && writeLine(objectToXml(t, Mode.SINGLE))
+                && flush();
     }
 
     @Override
     public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
+        if(!isExportStateValid(list) || !initWriter())
             return false;
-
-        init();
 
         writeLine(wrapOpenXmlTag(exportClassListName));
 
