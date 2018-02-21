@@ -32,12 +32,9 @@ public class EnumerateAnnotationScanner extends AnnotationScanner {
                 ? classFieldAnnotations
                 : classFieldAnnotations.entrySet().stream()
                     .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
-                    .map(e -> {
-                        e.setValue(e.getValue().stream()
-                                .filter(numeratePredicate)
-                                .collect(Collectors.toList()));
-                        return e;
-                    })
+                    .peek(e -> e.setValue(e.getValue().stream()
+                            .filter(numeratePredicate)
+                            .collect(Collectors.toList())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
