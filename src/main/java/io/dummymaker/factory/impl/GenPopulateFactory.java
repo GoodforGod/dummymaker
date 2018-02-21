@@ -3,9 +3,9 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.factory.IPopulateFactory;
-import io.dummymaker.scan.EnumerateAnnotationScanner;
 import io.dummymaker.scan.IFieldScanner;
-import io.dummymaker.scan.PopulateAnnotationScanner;
+import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
+import io.dummymaker.scan.impl.PopulateAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

@@ -59,7 +59,7 @@ public class SqlExportAsStringTest {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_LOW_CASE;
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
+        IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class, null, strategy.getStrategy());
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

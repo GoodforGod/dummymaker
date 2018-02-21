@@ -1,4 +1,4 @@
-package io.dummymaker.scan;
+package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.special.GenForceExport;

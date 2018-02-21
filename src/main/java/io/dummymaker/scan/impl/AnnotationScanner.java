@@ -1,4 +1,6 @@
-package io.dummymaker.scan;
+package io.dummymaker.scan.impl;
+
+import io.dummymaker.scan.IFieldScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

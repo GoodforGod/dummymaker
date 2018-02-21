@@ -5,6 +5,7 @@ import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.scan.impl.*;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;

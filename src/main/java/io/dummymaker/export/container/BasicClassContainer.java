@@ -1,8 +1,8 @@
 package io.dummymaker.export.container;
 
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.scan.ExportAnnotationScanner;
-import io.dummymaker.scan.RenameAnnotationScanner;
+import io.dummymaker.scan.impl.ExportAnnotationScanner;
+import io.dummymaker.scan.impl.RenameAnnotationScanner;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

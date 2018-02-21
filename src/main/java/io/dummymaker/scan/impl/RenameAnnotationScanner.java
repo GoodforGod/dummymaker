@@ -1,6 +1,7 @@
-package io.dummymaker.scan;
+package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.scan.IScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
