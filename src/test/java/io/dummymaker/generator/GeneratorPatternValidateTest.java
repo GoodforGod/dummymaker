@@ -1,16 +1,24 @@
 package io.dummymaker.generator;
 
+import io.dummymaker.generator.impl.UuidGenerator;
 import io.dummymaker.generator.impl.number.BigDoubleGenerator;
 import io.dummymaker.generator.impl.number.DoubleGenerator;
 import io.dummymaker.generator.impl.number.IntegerGenerator;
 import io.dummymaker.generator.impl.number.LongGenerator;
 import io.dummymaker.generator.impl.string.*;
+import io.dummymaker.generator.impl.time.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertNotNull;
@@ -41,21 +49,31 @@ public class GeneratorPatternValidateTest {
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
     public static Collection<Object> data() {
         return Arrays.asList(new Object[][] {
-                { new BigDoubleGenerator(), Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
-                { new CityGenerator(),      String.class,   Pattern.compile("[a-zA-Z\\-]+") },
-                { new CompanyGenerator(),   String.class,   Pattern.compile(".+(\\t.+)?") },
-                { new CountryGenerator(),   String.class,   Pattern.compile("[a-zA-Z]+(\\s+[a-zA-Z]+)*") },
-                { new DoubleGenerator(),    Double.class,   Pattern.compile("1|0.[0-9]+.") },
-                { new EmailGenerator(),     String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+@[a-zA-Z]+\\.[a-zA-Z]+") },
-                { new IntegerGenerator(),   Integer.class,  Pattern.compile("-?[0-9]+") },
-                { new LongGenerator(),      Long.class,     Pattern.compile("-?[0-9]+") },
-                { new NameGenerator(),      String.class,   Pattern.compile("[a-zA-Z]+") },
-                { new NickGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+") },
-                { new PassGenerator(),      String.class,   Pattern.compile("[0-9a-zA-Z]{6,}") },
-                { new PhoneGenerator(),     String.class,   Pattern.compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
-                { new PhraseGenerator(),    String.class,   Pattern.compile(".+(\\t.+)?") },
-                { new BigIdGenerator(),    String.class,   Pattern.compile("[0-9a-zA-Z]+") },
-                { new TagGenerator(),       String.class,   Pattern.compile("#[0-9a-zA-Z]+") }
+                { new BigDoubleGenerator(),     Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
+                { new CityGenerator(),          String.class,   Pattern.compile("[a-zA-Z\\-]+") },
+                { new CompanyGenerator(),       String.class,   Pattern.compile(".+(\\t.+)?") },
+                { new CountryGenerator(),       String.class,   Pattern.compile("[a-zA-Z]+(\\s+[a-zA-Z]+)*") },
+                { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0.[0-9]+.") },
+                { new EmailGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+@[a-zA-Z]+\\.[a-zA-Z]+") },
+                { new IntegerGenerator(),       Integer.class,  Pattern.compile("-?[0-9]+") },
+                { new LongGenerator(),          Long.class,     Pattern.compile("-?[0-9]+") },
+                { new NameGenerator(),          String.class,   Pattern.compile("[a-zA-Z]+") },
+                { new NickGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+") },
+                { new PassGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z]{6,}") },
+                { new PhoneGenerator(),         String.class,   Pattern.compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
+                { new PhraseGenerator(),        String.class,   Pattern.compile(".+(\\t.+)?") },
+                { new BigIdGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new IdGenerator(),            String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new NounGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new JsonGenerator(),          String.class,   Pattern.compile("\\{.*:.*}") },
+                { new StringGenerator(),        String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
+                { new TagGenerator(),           String.class,   Pattern.compile("#[0-9a-zA-Z]+") },
+                { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3} \\d{4}") },
+                { new LocalDateGenerator(),     LocalDate.class, Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
+                { new LocalTimeGenerator(),     LocalTime.class, Pattern.compile("\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") },
+                { new TimestampGenerator(),     Timestamp.class, Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") },
+                { new LocalDateTimeGenerator(), LocalDateTime.class,   Pattern.compile("\\d{4}-\\d{2}-\\d{2}[A-Z]\\d{2}:\\d{2}:\\d{2}\\.\\d{1,10}") }
         });
     }
 
