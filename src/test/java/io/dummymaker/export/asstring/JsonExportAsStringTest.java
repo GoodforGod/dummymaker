@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotNull;
  */
 public class JsonExportAsStringTest {
 
-    private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+    private IProduceFactory produceFactory = new GenProduceFactory();
 
     private JsonValidation validation = new JsonValidation();
 
     @Test
     public void exportSingleDummyInJson() {
-        Dummy dummy = produceFactory.produce();
+        Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummy);
@@ -42,7 +42,7 @@ public class JsonExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInJson() {
-        List<Dummy> dummy = produceFactory.produce(2);
+        List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummy);
@@ -58,7 +58,7 @@ public class JsonExportAsStringTest {
     public void exportListOfDummiesInJsonWithNamingStrategy() {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
 
-        List<Dummy> dummy = produceFactory.produce(2);
+        List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class, null, strategy.getStrategy());
 
         String dummyAsString = exporter.exportAsString(dummy);

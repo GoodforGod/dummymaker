@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotNull;
  */
 public class SqlExportAsStringTest {
 
-    private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+    private IProduceFactory produceFactory = new GenProduceFactory();
 
     private SqlValidation validation = new SqlValidation();
 
     @Test
     public void exportSingleDummyInSql() {
-        Dummy dummy = produceFactory.produce();
+        Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummy);
@@ -42,7 +42,7 @@ public class SqlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInSql() {
-        List<Dummy> dummies = produceFactory.produce(2);
+        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummies);
@@ -58,7 +58,7 @@ public class SqlExportAsStringTest {
     public void exportListOfDummiesInSqlWithNamingStrategy() {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_LOW_CASE;
 
-        List<Dummy> dummies = produceFactory.produce(2);
+        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummies);

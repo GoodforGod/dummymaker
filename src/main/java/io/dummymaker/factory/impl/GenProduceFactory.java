@@ -17,22 +17,16 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class GenProduceFactory<T> implements IProduceFactory<T> {
+public class GenProduceFactory implements IProduceFactory {
 
-    private final Logger logger = Logger.getLogger(GenProduceFactory.class.getName());
+    private static final Logger logger = Logger.getLogger(GenProduceFactory.class.getName());
 
-    private final IPopulateFactory<T> populateFactory = new GenPopulateFactory<>();
-
-    private final Class<T> produceClass;
-
-    public GenProduceFactory(final Class<T> produceClass) {
-        this.produceClass = produceClass;
-    }
+    private static final IPopulateFactory populateFactory = new GenPopulateFactory();
 
     @Override
-    public T produce() {
+    public <T> T produce(Class<T> tClass) {
         try {
-            return populateFactory.populate(produceClass.newInstance());
+            return populateFactory.populate(tClass.newInstance());
         } catch (InstantiationException e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE NEW OBJECT!");
         }
@@ -43,14 +37,14 @@ public class GenProduceFactory<T> implements IProduceFactory<T> {
     }
 
     @Override
-    public List<T> produce(final int amount) {
+    public <T> List<T> produce(Class<T> tClass, final int amount) {
         if(amount < 1)
             return Collections.emptyList();
 
         try {
             final List<T> produced = new ArrayList<>();
             for(int i = 0; i < amount; i++)
-                produced.add(produceClass.newInstance());
+                produced.add(tClass.newInstance());
             return populateFactory.populate(produced);
 
         } catch (InstantiationException | IllegalAccessException e) {

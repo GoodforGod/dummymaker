@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotNull;
  */
 public class XmlExportAsStringTest {
 
-    private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+    private IProduceFactory produceFactory = new GenProduceFactory();
 
     private XmlValidation validation = new XmlValidation();
 
     @Test
     public void exportSingleDummyInXml() {
-        Dummy dummy = produceFactory.produce();
+        Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummy);
@@ -42,7 +42,7 @@ public class XmlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInXml() {
-        List<Dummy> dummies = produceFactory.produce(2);
+        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
 
         String dummyAsString = exporter.exportAsString(dummies);
@@ -58,7 +58,7 @@ public class XmlExportAsStringTest {
     public void exportListOfDummiesInXmlWithNamingStrategy() {
         final PresetStrategies strategy = PresetStrategies.INITIAL_LOW_CASE;
 
-        List<Dummy> dummies = produceFactory.produce(2);
+        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class, null, strategy.getStrategy());
 
         String dummyAsString = exporter.exportAsString(dummies);

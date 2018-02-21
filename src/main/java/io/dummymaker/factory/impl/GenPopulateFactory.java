@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
  * @author GoodforGod
  * @since 30.05.2017
  */
-public class GenPopulateFactory<T> implements IPopulateFactory<T> {
+public class GenPopulateFactory implements IPopulateFactory {
 
-    private final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
+    private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
-    private final IFieldScanner populateScanner = new PopulateAnnotationScanner();
-    private final IFieldScanner numerateAnnotationScanner = new EnumerateAnnotationScanner();
+    private static final IFieldScanner populateScanner = new PopulateAnnotationScanner();
+    private static final IFieldScanner numerateAnnotationScanner = new EnumerateAnnotationScanner();
 
     /**
      * Populate single entity
@@ -38,7 +38,7 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
      * @param enumerateMap map of enumerated marked fields
      * @return populated entity
      */
-    private T populateEntity(final T t, Map<Field, Long> enumerateMap) {
+    private static <T> T populateEntity(final T t, Map<Field, Long> enumerateMap) {
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
 
         for(Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
@@ -91,12 +91,12 @@ public class GenPopulateFactory<T> implements IPopulateFactory<T> {
     }
 
     @Override
-    public T populate(final T t) {
+    public <T> T populate(final T t) {
         return populateEntity(t, null);
     }
 
     @Override
-    public List<T> populate(final List<T> list) {
+    public <T> List<T> populate(final List<T> list) {
         if(list == null || list.isEmpty())
             return Collections.emptyList();
 

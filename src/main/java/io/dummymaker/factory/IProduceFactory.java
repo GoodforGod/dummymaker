@@ -8,18 +8,18 @@ import java.util.List;
  * @author GoodforGod
  * @since 28.05.2017
  */
-public interface IProduceFactory<T> {
+public interface IProduceFactory {
 
     /**
      * Produce and populates one dummy object
      * @return Populated dummy object
      */
-    T produce();
+    <T> T produce(Class<T> tClass);
 
     /**
      *
      * @param amount amount of dummies to produce and populate
      * @return List of populated dummies
      */
-    List<T> produce(final int amount);
+    <T> List<T> produce(Class<T> tClass, final int amount);
 }

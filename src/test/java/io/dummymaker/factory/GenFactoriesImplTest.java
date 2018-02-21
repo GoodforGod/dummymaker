@@ -32,7 +32,7 @@ public class GenFactoriesImplTest {
         dummies.get(0).setGroup(group1);
         dummies.get(1).setGroup(group2);
 
-        IPopulateFactory<Dummy> dummyGenPopulateFactory = new GenPopulateFactory<>();
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
         dummies = dummyGenPopulateFactory.populate(dummies);
 
         assertNotNull(dummies);
@@ -60,7 +60,7 @@ public class GenFactoriesImplTest {
         Dummy dummy = new Dummy();
         dummy.setGroup(group);
 
-        IPopulateFactory<Dummy> dummyGenPopulateFactory = new GenPopulateFactory<>();
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
         dummy = dummyGenPopulateFactory.populate(dummy);
 
         assertNotNull(dummy);
@@ -72,8 +72,8 @@ public class GenFactoriesImplTest {
 
     @Test
     public void genProduceFactoryListTest() {
-        IProduceFactory<Dummy> dummyGenPopulateFactory = new GenProduceFactory<>(Dummy.class);
-        List<Dummy> dummies = dummyGenPopulateFactory.produce(2);
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        List<Dummy> dummies = dummyGenPopulateFactory.produce(Dummy.class, 2);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -95,8 +95,8 @@ public class GenFactoriesImplTest {
 
     @Test
     public void genProduceFactorySingleDummyTest() {
-        IProduceFactory<Dummy> dummyGenPopulateFactory = new GenProduceFactory<>(Dummy.class);
-        Dummy dummy = dummyGenPopulateFactory.produce();
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        Dummy dummy = dummyGenPopulateFactory.produce(Dummy.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -112,7 +112,7 @@ public class GenFactoriesImplTest {
         DummyNoPopulateFields dummy = new DummyNoPopulateFields();
         dummy.setGroup(group);
 
-        IPopulateFactory<DummyNoPopulateFields> dummyGenPopulateFactory = new GenPopulateFactory<>();
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
         dummy = dummyGenPopulateFactory.populate(dummy);
 
         assertNotNull(dummy);
@@ -124,8 +124,8 @@ public class GenFactoriesImplTest {
 
     @Test
     public void genProduceWithNoPopulateFields() {
-        IProduceFactory<DummyNoPopulateFields> dummyGenPopulateFactory = new GenProduceFactory<>(DummyNoPopulateFields.class);
-        DummyNoPopulateFields dummy = dummyGenPopulateFactory.produce();
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        DummyNoPopulateFields dummy = dummyGenPopulateFactory.produce(DummyNoPopulateFields.class);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());
