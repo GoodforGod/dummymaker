@@ -2,6 +2,11 @@ package io.dummymaker.generator.impl.string;
 
 import io.dummymaker.generator.IGenerator;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * Generates random string like "aag2151tgdsfa9352tf"
  *
@@ -12,6 +17,16 @@ public class StringGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return null;
+        final String result = UUID.randomUUID().toString().replace("-", "")
+                + UUID.randomUUID().toString().replace("-", "");
+
+        final List<String> letters = Arrays.asList(result.split(""));
+        Collections.shuffle(letters);
+
+        final StringBuilder shuffled = new StringBuilder();
+        for (String letter : letters)
+            shuffled.append(letter);
+
+        return shuffled.toString();
     }
 }

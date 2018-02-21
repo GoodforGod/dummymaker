@@ -15,37 +15,26 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class JsonGenerator implements IGenerator<String> {
 
-    private final IGenerator<String> stringGenerator = new StringGenerator();
+    private final IGenerator<String> idGenerator = new IdGenerator();
     private final IGenerator<String> nickGenerator = new NickGenerator();
     private final IGenerator<String> fieldGenerator = new NounGenerator();
 
     @Override
     public String generate() {
-        final StringBuilder builder = new StringBuilder("{");
+        final StringBuilder builder = new StringBuilder();
 
         final int depth = current().nextInt(1, 6);
         for (int i = 0; i < depth; i++) {
-            if (i != 0) {
-                builder.append(",");
-            }
-
+            final boolean lastDepth = (i == (depth - 1));
             builder.append("{");
 
             final int lines = current().nextInt(1, 5);
             final Set<String> usedFieldNames = new HashSet<>();
             for (int j = 0; j < lines; j++) {
-                String fieldName;
-                while (true) {
-                    fieldName = fieldGenerator.generate();
-                    if (!usedFieldNames.contains(fieldName)) {
-                        usedFieldNames.add(fieldName);
-                        break;
-                    }
-                }
-
+                final String fieldName = generateFieldName(usedFieldNames);
                 final String fieldValue = nickGenerator.generate()
                         + "-"
-                        + stringGenerator.generate();
+                        + idGenerator.generate();
 
                 builder.append("\"")
                         .append(fieldName)
@@ -55,16 +44,38 @@ public class JsonGenerator implements IGenerator<String> {
                         .append(fieldValue)
                         .append("\"");
 
-                if (j < lines - 1) {
+                final boolean lastLine = (j == (lines - 1));
+
+                if (!lastLine)
                     builder.append(",");
+
+                if (lastLine && !lastDepth) {
+                    final String objectName = generateFieldName(usedFieldNames);
+                    builder.append(",")
+                            .append("\"")
+                            .append(objectName)
+                            .append("\"")
+                            .append(":");
                 }
             }
         }
 
-        for ( int i = -1; i < depth; i++) {
+        for (int i = 0; i < depth; i++)
             builder.append("}");
-        }
 
         return builder.toString();
+    }
+
+    private String generateFieldName(Set<String> used) {
+        String fieldName;
+        while (true) {
+            fieldName = fieldGenerator.generate();
+            if (!used.contains(fieldName)) {
+                used.add(fieldName);
+                break;
+            }
+        }
+
+        return fieldName;
     }
 }
