@@ -1,5 +1,6 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
 
@@ -7,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects in CSV format

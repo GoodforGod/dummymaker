@@ -1,10 +1,8 @@
 package io.dummymaker.export.container;
 
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.scan.RenameAnnotationScanner;
-import io.dummymaker.util.INameStrategist;
-import io.dummymaker.util.NameStrategist;
-import io.dummymaker.util.NameStrategist.NamingStrategy;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -24,8 +22,6 @@ public class BasicClassContainer implements IClassContainer {
     private final String finalClassName;
 
     private final NamingStrategy strategy;
-
-    private final INameStrategist strategist = new NameStrategist();
 
     /**
      * Field origin name as a 'key', fieldContainer as 'value'
@@ -56,7 +52,7 @@ public class BasicClassContainer implements IClassContainer {
 
     @Override
     public String convertByNamingStrategy(final String value) {
-        return strategist.toNamingStrategy(value, strategy);
+        return strategy.toStrategy(value);
     }
 
     @Override
@@ -120,8 +116,8 @@ public class BasicClassContainer implements IClassContainer {
                 .stream()
                 .collect(HashMap<String, Field>::new,
                         (m, c) -> m.put(c.getKey().getName(), c.getKey()),
-                        (m, u) -> {
-                        });
+                        (m, u) -> { }
+                        );
     }
 
     /**

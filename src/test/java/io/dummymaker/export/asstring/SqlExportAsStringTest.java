@@ -2,6 +2,7 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.validation.SqlValidation;
 import io.dummymaker.factory.IProduceFactory;
@@ -10,7 +11,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

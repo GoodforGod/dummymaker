@@ -1,50 +1,42 @@
-package io.dummymaker.util;
-
-import io.dummymaker.export.IExporter;
+package io.dummymaker.export;
 
 /**
- * Implementation of INameStrategist
+ * Naming strategy for class and field names
  *
- * @see INameStrategist
+ * Used in all exporters
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
- * @since 02.09.2017
+ * @since 21.02.2018
  */
-public class NameStrategist implements INameStrategist {
-    /**
-     * Naming strategy for class and field names
+public enum NamingStrategy {
+
+    /** Naming as is */
+    DEFAULT,
+
+    UPPER_CASE,
+    LOW_CASE,
+
+    /** Each upper letter separated with underscore symbol, and transform to low case
      *
-     * Used in all exporters
+     * EXCLUDE FIRST LETTER, first letter to low case
      *
-     * @see IExporter
-     */
-    public enum NamingStrategy {
-        /** Naming as is */
-        DEFAULT,
+     * Example: ( DummyList - dummy_list ) */
+    UNDERSCORED_LOW_CASE,
 
-        UPPER_CASE,
-        LOW_CASE,
+    /** Each upper letter separated with underscore symbol, and transform to upper case
+     *
+     * EXCLUDING FIRST LETTER, first letter to low case
+     *
+     * Example: ( DummyList - DUMMY_LIST ) */
+    UNDERSCORED_UPPER_CASE,
 
-        /** Each upper letter separated with underscore symbol, and transform to low case
-         *
-         * EXCLUDE FIRST LETTER, first letter to low case
-         *
-         * Example: ( DummyList - dummy_list ) */
-        UNDERSCORED_LOW_CASE,
+    /** First letter is low case, next letters are as is */
+    INITIAL_LOW_CASE;
 
-        /** Each upper letter separated with underscore symbol, and transform to upper case
-         *
-         * EXCLUDING FIRST LETTER, first letter to low case
-         *
-         * Example: ( DummyList - DUMMY_LIST ) */
-        UNDERSCORED_UPPER_CASE,
-
-        /** First letter is low case, next letters are as is */
-        INITIAL_LOW_CASE,
-    }
-
-    public String toNamingStrategy(final String value, final NamingStrategy strategy) {
-        switch (strategy) {
+    public String toStrategy(final String value) {
+        switch (this) {
             case LOW_CASE:
                 return toLowCase(value);
 
@@ -62,7 +54,7 @@ public class NameStrategist implements INameStrategist {
 
             case DEFAULT:
             default:
-                    return value;
+                return value;
         }
     }
 

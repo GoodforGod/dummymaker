@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+import io.dummymaker.export.NamingStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -7,7 +8,6 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.Parameterized.Parameters;
 
@@ -18,16 +18,14 @@ import static org.junit.runners.Parameterized.Parameters;
  * @since 02.09.2017
  */
 @RunWith(Parameterized.class)
-public class NameStrategistTest {
+public class NameStrategyTest {
 
     private final NamingStrategy strategy;
 
     private final String originLook;
     private final String expectedLook;
 
-    private final INameStrategist strategist = new NameStrategist();
-
-    public NameStrategistTest(NamingStrategy strategy, String originLook, String expectedLook) {
+    public NameStrategyTest(NamingStrategy strategy, String originLook, String expectedLook) {
         this.strategy = strategy;
         this.originLook = originLook;
         this.expectedLook = expectedLook;
@@ -47,7 +45,7 @@ public class NameStrategistTest {
 
     @Test
     public void checkNameStrategistConverters() {
-        final String converted = strategist.toNamingStrategy(originLook, strategy);
+        final String converted = strategy.toStrategy(originLook);
         assertEquals(expectedLook, converted);
     }
 }

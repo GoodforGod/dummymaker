@@ -1,10 +1,8 @@
 package io.dummymaker.export.validation;
 
-import io.dummymaker.util.INameStrategist;
-import io.dummymaker.util.NameStrategist;
+import io.dummymaker.export.NamingStrategy;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -82,11 +80,9 @@ public class CsvValidation {
     }
 
     public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, NamingStrategy strategy) {
-        final INameStrategist strategist = new NameStrategist();
-
-        final String expectedNameField = strategist.toNamingStrategy(NAME.getExportFieldName(), strategy);
+        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategist.toNamingStrategy(NUM.getExportFieldName(), strategy);
+        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));

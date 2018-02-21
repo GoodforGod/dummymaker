@@ -1,5 +1,6 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
 
@@ -10,8 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects as SQL insert query
@@ -67,7 +66,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
      * @param strategy naming strategy
      * @param dataTypeMap map with user custom types for 'dataTypeMap'
      *
-     * @see io.dummymaker.util.INameStrategist
+     * @see io.dummymaker.export.NamingStrategy
      */
     public SqlExporter(final Class<T> primeClass,
                        final String path,

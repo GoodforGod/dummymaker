@@ -37,7 +37,7 @@ public interface IClassContainer {
      * @param value value to convert
      * @return converted value
      *
-     * @see io.dummymaker.util.NameStrategist
+     * @see io.dummymaker.export.NamingStrategy
      */
     String convertByNamingStrategy(final String value);
 

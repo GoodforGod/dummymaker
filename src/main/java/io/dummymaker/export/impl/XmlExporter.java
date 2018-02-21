@@ -1,12 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
-import static io.dummymaker.util.NameStrategist.NamingStrategy.DEFAULT;
 
 /**
  * Export objects is XML format
@@ -28,7 +27,7 @@ public class XmlExporter<T> extends BasicExporter<T> {
     }
 
     public XmlExporter(final Class<T> primeClass, final String path) {
-        this(primeClass, path, DEFAULT, null);
+        this(primeClass, path, NamingStrategy.DEFAULT, null);
     }
 
     public XmlExporter(final Class<T> primeClass, final String path, final NamingStrategy namingStrategy) {

@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.NamingStrategy;
 import io.dummymaker.export.container.ExportContainer;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
 
 /**
  * Export objects in JSON format
