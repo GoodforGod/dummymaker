@@ -2,10 +2,10 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.XmlExporter;
+import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validation.XmlValidation;
-import io.dummymaker.factory.GenProduceFactory;
 import io.dummymaker.factory.IProduceFactory;
+import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
 import java.util.List;

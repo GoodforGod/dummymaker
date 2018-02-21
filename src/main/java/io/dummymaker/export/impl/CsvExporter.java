@@ -15,7 +15,7 @@ import static io.dummymaker.util.NameStrategist.NamingStrategy;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class CsvExporter<T> extends BaseExporter<T> {
+public class CsvExporter<T> extends BasicExporter<T> {
 
     private final char DEFAULT_SEPARATOR = ',';
 

@@ -1,5 +1,6 @@
-package io.dummymaker.export;
+package io.dummymaker.export.impl;
 
+import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.BasicClassContainer;
 import io.dummymaker.export.container.ExportContainer;
 import io.dummymaker.export.container.FieldContainer;
@@ -19,9 +20,9 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public abstract class BaseExporter<T> extends BufferedFileWriter implements IExporter<T> {
+public abstract class BasicExporter<T> extends BufferedFileWriter implements IExporter<T> {
 
-    private final Logger logger = Logger.getLogger(BaseExporter.class.getName());
+    private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
 
     /**
      * Available export types, used by writer
@@ -52,10 +53,10 @@ public abstract class BaseExporter<T> extends BufferedFileWriter implements IExp
      * @param path path where to export (NULL IF HOME DIR)
      * @param format export format
      */
-    BaseExporter(final Class<T> exportClass,
-                 final String path,
-                 final ExportFormat format,
-                 final NameStrategist.NamingStrategy strategy) {
+    BasicExporter(final Class<T> exportClass,
+                  final String path,
+                  final ExportFormat format,
+                  final NameStrategist.NamingStrategy strategy) {
         super(exportClass.getSimpleName(), path, format.getValue());
 
         this.classContainer = new BasicClassContainer(exportClass, strategy);

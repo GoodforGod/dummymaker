@@ -14,7 +14,7 @@ import static io.dummymaker.util.NameStrategist.NamingStrategy.DEFAULT;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class XmlExporter<T> extends BaseExporter<T> {
+public class XmlExporter<T> extends BasicExporter<T> {
 
     private enum Mode {
         SINGLE,

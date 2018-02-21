@@ -2,6 +2,9 @@ package io.dummymaker.export.container;
 
 import io.dummymaker.scan.ExportAnnotationScanner;
 import io.dummymaker.scan.RenameAnnotationScanner;
+import io.dummymaker.util.INameStrategist;
+import io.dummymaker.util.NameStrategist;
+import io.dummymaker.util.NameStrategist.NamingStrategy;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -13,42 +16,59 @@ import java.util.Map;
  * @author GoodforGod
  * @since 29.08.2017
  */
-public class BaseClassContainer implements IClassContainer {
+public class BasicClassContainer implements IClassContainer {
 
     private final Class exportClass;
 
     private final String originClassName;
     private final String finalClassName;
 
-    /**
-     * Field origin name as a 'key', field as 'value'
-     */
-    private final Map<String, Field> originFields;
+    private final NamingStrategy strategy;
+
+    private final INameStrategist strategist = new NameStrategist();
 
     /**
-     * Field renamed (or origin) field name as 'key', fields as a 'value'
+     * Field origin name as a 'key', fieldContainer as 'value'
      */
-    private final Map<String, Field> finalFields;
+    private final Map<String, FieldContainer> fieldContainerMap;
 
     /**
-     * Renamed fields to export, Key is renamed (or origin) field name, Value is field
+     * Renamed fields, 'Key' is origin field name, 'Value' is new field name
      */
-    private final Map<String, String> renamedFields; //TreeMap
+    private final Map<String, String> renamedFields;
 
-    public BaseClassContainer(final Class exportClass) {
+    public BasicClassContainer(final Class exportClass,
+                               final NamingStrategy strategy) {
         this.exportClass = exportClass;
+        this.strategy = strategy;
+        this.originClassName = exportClass.getSimpleName();
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
-        this.originFields = fillExportOriginFields();
-        this.finalFields = fillExportRenamedFields();
+        this.fieldContainerMap = fillExportFieldContainerMap();
 
-        this.originClassName = exportClass.getSimpleName();
         this.finalClassName = (renamedFields.containsKey(null))
                 ? renamedFields.get(null)
-                : exportClass.getSimpleName();
+                : convertByNamingStrategy(originClassName);
 
         this.renamedFields.remove(null);
+    }
+
+    @Override
+    public String convertByNamingStrategy(final String value) {
+        return strategist.toNamingStrategy(value, strategy);
+    }
+
+    @Override
+    public String getExportFieldName(final String originFieldName) {
+        return fieldContainerMap.get(originFieldName).getFinalFieldName();
+    }
+
+    public Field getFieldByFinalName(final String finalFieldName) {
+        return fieldContainerMap.entrySet().stream()
+                .filter(e -> e.getValue().getFinalFieldName().equals(finalFieldName))
+                .findFirst()
+                .orElseThrow(NullPointerException::new).getValue().getField();
     }
 
     @Override
@@ -62,13 +82,8 @@ public class BaseClassContainer implements IClassContainer {
     }
 
     @Override
-    public Map<String, Field> originFields() {
-        return originFields;
-    }
-
-    @Override
-    public Map<String, Field> finalFields() {
-        return finalFields;
+    public Map<String, FieldContainer> fieldContainerMap() {
+        return fieldContainerMap;
     }
 
     @Override
@@ -77,13 +92,33 @@ public class BaseClassContainer implements IClassContainer {
     }
 
     /**
+     * @return final fields container map
+     */
+    private Map<String, FieldContainer> fillExportFieldContainerMap() {
+        final Map<String, FieldContainer> fieldContainerMap = new HashMap<>();
+        final Map<String, Field> originExportFields = fillExportOriginFields();
+
+        for (Map.Entry<String, Field> fieldEntry : originExportFields.entrySet()) {
+            final FieldContainer container = new FieldContainer(fieldEntry.getValue(),
+                    (renamedFields.containsKey(fieldEntry.getKey()))
+                            ? renamedFields.get(fieldEntry.getKey())
+                            : convertByNamingStrategy(fieldEntry.getKey()));
+
+            fieldContainerMap.put(fieldEntry.getKey(), container);
+        }
+
+        return new HashMap<>(fieldContainerMap);
+    }
+
+    /**
      * Construct map where key is field name and field as value
      *
      * @return map with field name as 'key', field as 'value'
      */
     private Map<String, Field> fillExportOriginFields() {
-        return new ExportAnnotationScanner().scan(exportClass)
-                .entrySet().stream().collect(HashMap<String, Field>::new,
+        return new ExportAnnotationScanner().scan(exportClass).entrySet()
+                .stream()
+                .collect(HashMap<String, Field>::new,
                         (m, c) -> m.put(c.getKey().getName(), c.getKey()),
                         (m, u) -> {
                         });
@@ -94,18 +129,15 @@ public class BaseClassContainer implements IClassContainer {
      *
      * @return map with renamed or origin field name as 'key', field as a 'value'
      */
-    private Map<String, Field> fillExportRenamedFields() {
-        final Map<String, Field> returnFields = new HashMap<>(originFields);
+    private Map<String, Field> fillExportFinalFields() {
+        final Map<String, Field> fields = new HashMap<>();
 
-        for(final Map.Entry<String, String> renamed : renamedFields.entrySet()) {
-            final Field field = returnFields.get(renamed.getKey());
-
-            if(field != null) {
-                returnFields.remove(renamed.getKey());
-                returnFields.put(renamed.getValue(), field);
-            }
+        for (Map.Entry<String, Field> entry : fillExportOriginFields().entrySet()) {
+            fields.put((renamedFields.containsKey(entry.getKey()))
+                    ? renamedFields.get(entry.getKey())
+                    : convertByNamingStrategy(entry.getKey()), entry.getValue());
         }
 
-        return returnFields;
+        return new HashMap<>(fields);
     }
 }

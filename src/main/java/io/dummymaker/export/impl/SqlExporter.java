@@ -19,7 +19,7 @@ import static io.dummymaker.util.NameStrategist.NamingStrategy;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class SqlExporter<T> extends BaseExporter<T> {
+public class SqlExporter<T> extends BasicExporter<T> {
 
     /**
      * Java & Sql Type Representation

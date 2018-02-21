@@ -13,7 +13,7 @@ import static io.dummymaker.util.NameStrategist.NamingStrategy;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class JsonExporter<T> extends BaseExporter<T> {
+public class JsonExporter<T> extends BasicExporter<T> {
 
     private enum Mode {
         SINGLE,
