@@ -21,7 +21,7 @@ public class MapLongLongGenerator implements IGenerator<Map<Long, Long>> {
     @Override
     public Map<Long, Long> generate() {
         final Map<Long, Long> objectsMap = new HashMap<>();
-        final int amount = current().nextInt(10);
+        final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)
             objectsMap.put(generator.generate(), generator.generate());

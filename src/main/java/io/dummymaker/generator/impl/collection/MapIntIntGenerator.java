@@ -21,7 +21,7 @@ public class MapIntIntGenerator implements IGenerator<Map<Integer, Integer>> {
     @Override
     public Map<Integer, Integer> generate() {
         final Map<Integer, Integer> objectsMap = new HashMap<>();
-        final int amount = current().nextInt(10);
+        final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)
             objectsMap.put(generator.generate(), generator.generate());

@@ -23,7 +23,7 @@ public class ListObjectGenerator implements IGenerator<List<Object>> {
     @Override
     public List<Object> generate() {
         final List<Object> objects = new ArrayList<>();
-        final int amount = current().nextInt(10);
+        final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)
             objects.add(generator.generate());

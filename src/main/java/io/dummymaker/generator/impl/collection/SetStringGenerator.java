@@ -23,7 +23,7 @@ public class SetStringGenerator implements IGenerator<Set<String>> {
     @Override
     public Set<String> generate() {
         final Set<String> strings = new HashSet<>();
-        final int amount = current().nextInt(10);
+        final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)
             strings.add(generator.generate());

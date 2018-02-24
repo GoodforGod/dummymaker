@@ -1,6 +1,6 @@
 package io.dummymaker;
 
-import io.dummymaker.factory.GenFactoriesImplTest;
+import io.dummymaker.factory.GenProduceFactoryTest;
 import io.dummymaker.scan.ScannerImplTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -17,7 +17,7 @@ import static org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
         GeneratorsSuite.class,
         ScannerImplTest.class,
-        GenFactoriesImplTest.class
+        GenProduceFactoryTest.class
 })
 class FactorySuite {
 

@@ -31,7 +31,6 @@ public class BundleImplTest {
     @Parameters(name = "{index}: Bundle - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new TagPresetBundle() },
                 { new CityPresetBundle() },
                 { new CompanyPresetBundle() },
                 { new CountryPresetBundle() },
@@ -39,7 +38,10 @@ public class BundleImplTest {
                 { new EmailServicesPresetBundle() },
                 { new FemaleNamePresetBundle() },
                 { new MaleNamePresetBundle() },
-                { new NicknamesPresetBundle() }
+                { new NicknamesPresetBundle() },
+                { new NounPresetBundle() },
+                { new PhrasePresetBundle() },
+                { new TagPresetBundle() }
         });
     }
 

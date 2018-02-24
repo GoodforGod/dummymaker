@@ -23,7 +23,7 @@ public class MapLongStringGenerator implements IGenerator<Map<Long, String>> {
     @Override
     public Map<Long, String> generate() {
         final Map<Long, String> objectsMap = new HashMap<>();
-        final int amount = current().nextInt(10);
+        final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)
             objectsMap.put(keyGenerator.generate(), valueGenerator.generate());
