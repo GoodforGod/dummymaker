@@ -29,6 +29,16 @@ public class CsvExportAsStringTest {
     private final char SEPARATOR = ',';
 
     @Test
+    public void te() {
+        IProduceFactory factory = new GenProduceFactory();
+        Dummy d = factory.produce(Dummy.class);
+        assertNotNull(d);
+
+        List<Dummy> ds = factory.produce(Dummy.class, 10);
+        assertNotNull(ds);
+    }
+
+    @Test
     public void exportSingleDummyInCsv() {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
