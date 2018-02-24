@@ -1,7 +1,7 @@
 package io.dummymaker.generator.impl.collection;
 
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.string.JsonGenerator;
+import io.dummymaker.generator.impl.number.IntegerGenerator;
 import io.dummymaker.generator.impl.string.StringGenerator;
 
 import java.util.HashMap;
@@ -10,19 +10,19 @@ import java.util.Map;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * "default comment"
+ * "Default Description"
  *
  * @author GoodforGod
- * @since 21.02.2018
+ * @since 24.02.2018
  */
-public class MapStringStringGenerator implements IGenerator<Map<Object, Object>> {
+public class MapIntStringGenerator implements IGenerator<Map<Integer, String>> {
 
-    private final IGenerator<String> keyGenerator = new StringGenerator();
-    private final IGenerator<String> valueGenerator = new JsonGenerator();
+    private final IGenerator<Integer> keyGenerator = new IntegerGenerator();
+    private final IGenerator<String> valueGenerator = new StringGenerator();
 
     @Override
-    public Map<Object, Object> generate() {
-        final Map<Object, Object> objectsMap = new HashMap<>();
+    public Map<Integer, String> generate() {
+        final Map<Integer, String> objectsMap = new HashMap<>();
         final int amount = current().nextInt(10);
 
         for(int i = 0; i < amount; i++)
