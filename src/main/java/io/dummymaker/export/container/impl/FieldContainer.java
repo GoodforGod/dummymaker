@@ -20,18 +20,18 @@ public class FieldContainer {
     /**
      * Final field name (renamed or converted by naming strategy)
      */
-    private final String finalFieldName;
+    private final String exportName;
 
     public FieldContainer(Field field, String finalFieldName) {
         this.field = field;
-        this.finalFieldName = finalFieldName;
+        this.exportName = finalFieldName;
     }
 
     public Field getField() {
         return field;
     }
 
-    public String getFinalFieldName() {
-        return finalFieldName;
+    public String getExportName() {
+        return exportName;
     }
 }

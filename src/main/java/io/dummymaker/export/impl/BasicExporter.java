@@ -79,7 +79,7 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
     List<ExportContainer> extractExportValues(final T t) {
         final List<ExportContainer> exports = new ArrayList<>();
 
-        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.fieldContainerMap().entrySet()) {
+        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.getFieldContainers().entrySet()) {
             try {
                 final Field field = t.getClass().getDeclaredField(fieldEntry.getKey());
 
@@ -108,7 +108,7 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
      * @return validation result
      */
     boolean isExportStateValid(final T t) {
-        return !classContainer.fieldContainerMap().isEmpty() && t != null;
+        return !classContainer.getFieldContainers().isEmpty() && t != null;
     }
 
     /**
@@ -117,7 +117,7 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
      * @return validation result
      */
     boolean isExportStateValid(final List<T> t) {
-        return !classContainer.fieldContainerMap().isEmpty() && t != null && !t.isEmpty();
+        return !classContainer.getFieldContainers().isEmpty() && t != null && !t.isEmpty();
     }
 
     @Override

@@ -99,10 +99,10 @@ public class CsvExporter<T> extends BasicExporter<T> {
         while (iterator.hasNext()) {
             final ExportContainer container = iterator.next();
 
-            if(wrapTextValues && classContainer.getFieldByFinalName(container.getFieldName()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(container.getFieldValue()));
+            if(wrapTextValues && classContainer.getField(container.getExportName()).getType().equals(String.class))
+                builder.append(wrapWithQuotes(container.getExportValue()));
             else
-                builder.append(container.getFieldValue());
+                builder.append(container.getExportValue());
 
             if (iterator.hasNext())
                 builder.append(SEPARATOR);
@@ -117,10 +117,10 @@ public class CsvExporter<T> extends BasicExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getFieldContainers().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            header.append(iterator.next().getValue().getFinalFieldName());
+            header.append(iterator.next().getValue().getExportName());
 
             if(iterator.hasNext())
                 header.append(SEPARATOR);
@@ -134,9 +134,9 @@ public class CsvExporter<T> extends BasicExporter<T> {
             return false;
 
         if (generateHeader)
-            writeLine(generateCsvHeader());
+            write(generateCsvHeader());
 
-        return writeLine(objectToCsv(t)) && flush();
+        return write(objectToCsv(t)) && flush();
     }
 
     @Override
@@ -145,10 +145,10 @@ public class CsvExporter<T> extends BasicExporter<T> {
             return false;
 
         if (generateHeader)
-            writeLine(generateCsvHeader());
+            write(generateCsvHeader());
 
         for (final T t : list)
-            writeLine(objectToCsv(t));
+            write(objectToCsv(t));
 
         return flush();
     }

@@ -16,44 +16,41 @@ public class BufferedFileWriter implements IWriter {
 
     private final Logger logger = Logger.getLogger(BufferedFileWriter.class.getName());
 
-    private BufferedWriter writer = null;
-
-    private String path;
+    private BufferedWriter writer;
 
     /**
      * @param fileName file name
-     * @param path     path where to create file (NULL IF HOME DIR)
-     * @param fileType file extension
+     * @param path     path where to create file (NULL or EMPTY for home dir)
+     * @param extension file extension
      */
-    public BufferedFileWriter(final String fileName, final String path, final String fileType) {
-        this.path = (path == null || path.trim().isEmpty())
-                ? ""
-                : path;
-
-        this.path += fileName + fileType;
-    }
-
-    @Override
-    public boolean initWriter() {
+    public BufferedFileWriter(final String fileName, final String path, final String extension) throws IOException {
         try {
+            final String workPath = buildPath(fileName, path, extension);
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(path), "UTF-8")
+                            new FileOutputStream(workPath), "UTF-8")
             );
-            return true;
         } catch (IOException e) {
             logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
-            return false;
+            throw e;
         }
     }
 
+    private String buildPath(final String fileName, final String path, final String extension) {
+        final String workPath = (path == null || path.trim().isEmpty())
+                ? ""
+                : path;
+
+        return workPath + fileName + extension;
+    }
+
     @Override
-    public boolean writeLine(final String value) {
+    public boolean write(final String value) {
         try {
             writer.write(value);
             writer.newLine();
             return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.warning(e.getMessage());
             flush();
             return false;
@@ -66,7 +63,7 @@ public class BufferedFileWriter implements IWriter {
             if (writer != null)
                 writer.close();
             return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.warning(e.getMessage() + " | CAN NOT CLOSE WRITER");
             return false;
         }

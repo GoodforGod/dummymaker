@@ -70,9 +70,9 @@ public class JsonExporter<T> extends BasicExporter<T> {
             while (iterator.hasNext()) {
                 final ExportContainer container = iterator.next();
                 builder.append(fieldTabs)
-                        .append(wrapWithQuotes(container.getFieldName()))
+                        .append(wrapWithQuotes(container.getExportName()))
                         .append(": ")
-                        .append(wrapWithQuotes(container.getFieldValue()));
+                        .append(wrapWithQuotes(container.getExportValue()));
 
                 if (iterator.hasNext())
                     builder.append(",");
@@ -88,7 +88,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
     }
 
     private String openJsonList() {
-        return "{\n" + "\t\"" + classContainer.finalClassName() + "\"" + ": " + "[";
+        return "{\n" + "\t\"" + classContainer.exportClassName() + "\"" + ": " + "[";
     }
 
     private String closeJsonList() {
@@ -99,7 +99,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
     public boolean export(final T t) {
         return isExportStateValid(t)
                 && initWriter()
-                && writeLine(objectToJson(t, Mode.SINGLE))
+                && write(objectToJson(t, Mode.SINGLE))
                 && flush();
     }
 
@@ -109,7 +109,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
             return false;
 
         // Open JSON Object List
-        writeLine(openJsonList());
+        write(openJsonList());
 
         final Iterator<T> iterator = list.iterator();
         while (iterator.hasNext()) {
@@ -117,11 +117,11 @@ public class JsonExporter<T> extends BasicExporter<T> {
             final String write = objectToJson(t, Mode.LIST);
 
             // Write , symbol to the end of the object
-            writeLine((iterator.hasNext()) ? write + "," : write);
+            write((iterator.hasNext()) ? write + "," : write);
         }
 
         // Close JSON Object List
-        return writeLine(closeJsonList()) && flush();
+        return write(closeJsonList()) && flush();
     }
 
     @Override

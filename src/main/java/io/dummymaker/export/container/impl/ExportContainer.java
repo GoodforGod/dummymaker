@@ -12,19 +12,26 @@ import io.dummymaker.export.impl.BasicExporter;
  */
 public class ExportContainer {
 
-    private final String finalFieldName;
-    private final String fieldValue;
+    /**
+     * Export field name
+     */
+    private final String exportName;
 
-    public ExportContainer(String finalFieldName, String fieldValue) {
-        this.finalFieldName = finalFieldName;
-        this.fieldValue = fieldValue;
+    /**
+     * Export field value
+     */
+    private final String exportValue;
+
+    public ExportContainer(String exportFieldName, String fieldValue) {
+        this.exportName = exportFieldName;
+        this.exportValue = fieldValue;
     }
 
-    public String getFieldName() {
-        return finalFieldName;
+    public String getExportName() {
+        return exportName;
     }
 
-    public String getFieldValue() {
-        return fieldValue;
+    public String getExportValue() {
+        return exportValue;
     }
 }

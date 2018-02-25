@@ -50,7 +50,7 @@ public class XmlExporter<T> extends BasicExporter<T> {
                        final String exportClassListName) {
         super(primeClass, path, ExportFormat.XML, strategy);
         this.exportClassListName = (exportClassListName == null || exportClassListName.trim().isEmpty())
-                ? classContainer.finalClassName() + "List"
+                ? classContainer.exportClassName() + "List"
                 : exportClassListName;
     }
 
@@ -76,16 +76,16 @@ public class XmlExporter<T> extends BasicExporter<T> {
                 : "\t\t";
 
         if(iterator.hasNext()) {
-            builder.append(tabObject).append(wrapOpenXmlTag(classContainer.finalClassName()));
+            builder.append(tabObject).append(wrapOpenXmlTag(classContainer.exportClassName()));
 
             while (iterator.hasNext()) {
                 final ExportContainer container = iterator.next();
                 builder.append("\n").append(tabField)
-                                    .append(wrapOpenXmlTag(container.getFieldName()))
-                                    .append(container.getFieldValue())
-                                    .append(wrapCloseXmlTag(container.getFieldName()));
+                                    .append(wrapOpenXmlTag(container.getExportName()))
+                                    .append(container.getExportValue())
+                                    .append(wrapCloseXmlTag(container.getExportName()));
             }
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(classContainer.finalClassName()));
+            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(classContainer.exportClassName()));
         }
 
         return builder.toString();
@@ -95,7 +95,7 @@ public class XmlExporter<T> extends BasicExporter<T> {
     public boolean export(final T t) {
         return isExportStateValid(t)
                 && initWriter()
-                && writeLine(objectToXml(t, Mode.SINGLE))
+                && write(objectToXml(t, Mode.SINGLE))
                 && flush();
     }
 
@@ -104,12 +104,12 @@ public class XmlExporter<T> extends BasicExporter<T> {
         if(!isExportStateValid(list) || !initWriter())
             return false;
 
-        writeLine(wrapOpenXmlTag(exportClassListName));
+        write(wrapOpenXmlTag(exportClassListName));
 
         for (final T t : list)
-            writeLine(objectToXml(t, Mode.LIST));
+            write(objectToXml(t, Mode.LIST));
 
-        writeLine(wrapCloseXmlTag(exportClassListName));
+        write(wrapCloseXmlTag(exportClassListName));
 
         return flush();
     }

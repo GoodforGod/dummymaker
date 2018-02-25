@@ -1,7 +1,6 @@
 package io.dummymaker.export.container;
 
 import io.dummymaker.export.container.impl.FieldContainer;
-import io.dummymaker.export.naming.PresetStrategies;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -18,11 +17,23 @@ import java.util.Map;
  */
 public interface IClassContainer {
 
-    String originClassName();
-    String finalClassName();
+    /**
+     * Show whenever export values are presented
+     */
+    boolean isExportable();
 
     /**
-     * Convert field origin name to export field name
+     * Origin class name
+     */
+    String originClassName();
+
+    /**
+     * Export class name (after naming strategy applied or renamed)
+     */
+    String exportClassName();
+
+    /**
+     * Retrieve export field name by its origin name
      *
      * @param originFieldName origin class field name
      * @return export field name
@@ -30,26 +41,22 @@ public interface IClassContainer {
     String getExportFieldName(final String originFieldName);
 
     /**
+     * Retrieve field by its export name
      *
-     * @param finalFieldName field container with final name and
+     * @see io.dummymaker.export.naming.IStrategy
+     * @see io.dummymaker.annotation.special.GenRenameExport
+     *
+     * @param exportFieldName field container with final name
      * @return field value
      */
-    Field getFieldByFinalName(final String finalFieldName);
+    Field getField(final String exportFieldName);
 
     /**
-     * Convert string value via choose NameStrategy
+     * Map with origin field name as 'key', value as 'field container'
      *
-     * @param value value to convert
-     * @return converted value
+     * @see FieldContainer
      *
-     * @see PresetStrategies
+     * @return export containers
      */
-    String convertByNamingStrategy(final String value);
-
-    Map<String, FieldContainer> fieldContainerMap();
-
-    /**
-     * @return renamed field map
-     */
-    Map<String, String> renamedFields();
+    Map<String, FieldContainer> getFieldContainers();
 }

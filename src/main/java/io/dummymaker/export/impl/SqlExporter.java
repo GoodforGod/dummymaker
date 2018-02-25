@@ -86,7 +86,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
      * @return sql data type
      */
     private String javaToSqlDataType(final String finalFieldName) {
-        return dataTypeMap.getOrDefault(classContainer.getFieldByFinalName(finalFieldName).getType(), "VARCHAR");
+        return dataTypeMap.getOrDefault(classContainer.getField(finalFieldName).getType(), "VARCHAR");
     }
 
     /**
@@ -94,14 +94,14 @@ public class SqlExporter<T> extends BasicExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.fieldContainerMap().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getFieldContainers().entrySet().iterator();
 
         String primaryKeyField = "";
 
-        builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.finalClassName().toLowerCase()).append("(\n");
+        builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.exportClassName().toLowerCase()).append("(\n");
 
         while (iterator.hasNext()) {
-            final String finaFieldName = iterator.next().getValue().getFinalFieldName();
+            final String finaFieldName = iterator.next().getValue().getExportName();
             builder.append("\t").append(sqlCreateInsertNameType(finaFieldName));
 
             if (finaFieldName.equalsIgnoreCase("id"))
@@ -116,7 +116,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
         builder.append("\t").append("PRIMARY KEY (");
 
         if(primaryKeyField.isEmpty())
-            builder.append(classContainer.fieldContainerMap().values().iterator().next().getFinalFieldName());
+            builder.append(classContainer.getFieldContainers().values().iterator().next().getFinalFieldName());
         else
             builder.append(primaryKeyField);
 
@@ -147,10 +147,10 @@ public class SqlExporter<T> extends BasicExporter<T> {
         final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
         final StringBuilder builder = new StringBuilder();
 
-        builder.append("INSERT INTO ").append(classContainer.finalClassName().toLowerCase()).append(" (");
+        builder.append("INSERT INTO ").append(classContainer.exportClassName().toLowerCase()).append(" (");
 
         while (iterator.hasNext()) {
-            builder.append(iterator.next().getFieldName());
+            builder.append(iterator.next().getExportName());
 
             if(iterator.hasNext())
                 builder.append(", ");
@@ -174,14 +174,14 @@ public class SqlExporter<T> extends BasicExporter<T> {
             while (iterator.hasNext()) {
                 final ExportContainer container = iterator.next();
 
-                final Field fieldType = classContainer.getFieldByFinalName(container.getFieldName());
+                final Field fieldType = classContainer.getField(container.getExportName());
 
                 if(fieldType.getType().equals(String.class))
-                    builder.append(wrapWithComma(container.getFieldValue()));
+                    builder.append(wrapWithComma(container.getExportValue()));
                 else if(fieldType.getType().equals(LocalDateTime.class))
-                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(container.getFieldValue())).toString()));
+                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(container.getExportValue())).toString()));
                 else
-                    builder.append(container.getFieldValue());
+                    builder.append(container.getExportValue());
 
                 if (iterator.hasNext())
                     builder.append(", ");
@@ -197,9 +197,9 @@ public class SqlExporter<T> extends BasicExporter<T> {
     public boolean export(final T t) {
         return isExportStateValid(t)
                 && initWriter()
-                && writeLine(sqlTableCreate())
-                && writeLine(sqlInsertIntoQuery(t))
-                && writeLine(sqlValuesInsert(t) + ";")
+                && write(sqlTableCreate())
+                && write(sqlInsertIntoQuery(t))
+                && write(sqlValuesInsert(t) + ";")
                 && flush();
     }
 
@@ -213,14 +213,14 @@ public class SqlExporter<T> extends BasicExporter<T> {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        writeLine(sqlTableCreate());
+        write(sqlTableCreate());
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(INSERT_QUERY_LIMIT))
-                writeLine(sqlInsertIntoQuery(t));
+                write(sqlInsertIntoQuery(t));
 
             i--;
 
@@ -231,12 +231,12 @@ public class SqlExporter<T> extends BasicExporter<T> {
             else if (i == 0 || !iterator.hasNext())
                 valueToWrite.append(";");
 
-            writeLine(valueToWrite.toString());
+            write(valueToWrite.toString());
 
             // End insert Query if no elements left or need to organize next batch
             if (i == 0) {
                 if (iterator.hasNext()) {
-                    writeLine("\n");
+                    write("\n");
                     i = INSERT_QUERY_LIMIT;
                 } else break;
             }

@@ -1,7 +1,9 @@
 package io.dummymaker.export.naming;
 
 /**
- * Contract for naming strategy used in exporters
+ * Allow to apply naming strategy for field names or class name during export
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 21.02.2018
@@ -9,10 +11,10 @@ package io.dummymaker.export.naming;
 public interface IStrategy {
 
     /**
-     * Convert value using naming strategy
+     * Format value using naming strategy
      *
-     * @param value value to convert via strategy
-     * @return converted value
+     * @param value value to formatted via strategy
+     * @return formatted value
      */
     String toStrategy(final String value);
 }

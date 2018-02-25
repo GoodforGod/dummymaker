@@ -10,11 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * "Default Description"
+ *
  * @author GoodforGod
- * @see IClassContainer
- * @since 29.08.2017
+ * @since 25.02.2018
  */
-public class BasicClassContainer<T> implements IClassContainer {
+public class BasicStaticClassContainer implements IClassContainer {
 
     private final Class exportClass;
 
@@ -33,21 +34,25 @@ public class BasicClassContainer<T> implements IClassContainer {
      */
     private final Map<String, String> renamedFields;
 
-    public BasicClassContainer(final Class exportClass,
-                               final IStrategy strategy) {
-        this.exportClass = exportClass;
+    public <T> BasicStaticClassContainer(final T t,
+                                         final IStrategy strategy) {
+        this.exportClass = t.getClass();
         this.strategy = strategy;
-        this.originClassName = exportClass.getSimpleName();
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
-        this.fieldContainerMap = fillExportFieldContainerMap();
+        this.originClassName = exportClass.getSimpleName();
+        this.finalClassName = renamedFields.getOrDefault(null, strategy.toStrategy(originClassName));
 
-        this.finalClassName = (renamedFields.containsKey(null))
-                ? renamedFields.get(null)
-                : strategy.toStrategy(originClassName);
-
+        this.fieldContainerMap = buildExportFieldContainerMap();
         this.renamedFields.remove(null);
+    }
+
+    /**
+     * If empty then no export values are present and export is pointless
+     */
+    public boolean isExportable() {
+        return !fieldContainerMap.isEmpty();
     }
 
     @Override
@@ -82,23 +87,10 @@ public class BasicClassContainer<T> implements IClassContainer {
      *
      * @return final fields container map
      */
-    private Map<String, FieldContainer> fillExportFieldContainerMap() {
-        return fillExportOriginFields().entrySet().stream()
-                .collect(LinkedHashMap<String, FieldContainer>::new,
-                        (m, e) -> m.put(e.getKey(), new FieldContainer(e.getValue(), getRenamedFieldOrConverted(e.getKey()))),
-                        (m, u) -> { }
-                );
-    }
-
-    /**
-     * Construct map where key is field name and field as value
-     *
-     * @return map with field name as 'key', field as 'value'
-     */
-    private Map<String, Field> fillExportOriginFields() {
+    private Map<String, FieldContainer> buildExportFieldContainerMap() {
         return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
-                .collect(LinkedHashMap<String, Field>::new,
-                        (m, e) -> m.put(e.getKey().getName(), e.getKey()),
+                .collect(LinkedHashMap<String, FieldContainer>::new,
+                        (m, e) -> m.put(e.getKey().getName(), buildFieldContainer(e.getKey())),
                         (m, u) -> { }
                 );
     }
@@ -111,5 +103,9 @@ public class BasicClassContainer<T> implements IClassContainer {
      */
     private String getRenamedFieldOrConverted(String name) {
         return renamedFields.getOrDefault(name, strategy.toStrategy(name));
+    }
+
+    private FieldContainer buildFieldContainer(Field field) {
+        return new FieldContainer(field, getRenamedFieldOrConverted(field.getName()));
     }
 }
