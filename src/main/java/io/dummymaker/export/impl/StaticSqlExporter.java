@@ -33,9 +33,9 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
     /**
      * Java & Sql Type Representation
-     * <p>
+     *
      * Map is used to convert Java Field Data Type to Sql Data Type
-     * <p>
+     *
      * You can add your specific values here by using constructor with Map'String, String'
      */
     private Map<Class, String> dataTypes;
@@ -80,48 +80,44 @@ public class StaticSqlExporter extends BasicStaticExporter {
         }};
     }
 
+    private String wrapWithComma(final String value) {
+        return "'" + value + "'";
+    }
+
     /**
      * Convert Java Field Type to Sql Data Type
      *
      * @param exportFieldName final field name
      * @return sql data type
      */
-    private String javaToSqlDataType(final String exportFieldName, IClassContainer container) {
+    private String translateJavaTypeToSqlType(final String exportFieldName, IClassContainer container) {
         return dataTypes.getOrDefault(container.getField(exportFieldName).getType(), "VARCHAR");
     }
 
     /**
      * Create String of Create Table Query
      */
-    private String sqlTableCreate(IClassContainer container) {
-        String primaryKeyField = "";
+    private String buildSqlCreateTableQuery(IClassContainer container) {
+        final Map<String, FieldContainer> containerMap = container.getFieldContainers();
+        final String primaryKeyField = containerMap.entrySet().stream()
+                .filter(e -> e.getKey().equalsIgnoreCase("id") || e.getKey().equalsIgnoreCase("uid"))
+                .map(Map.Entry::getKey)
+                .findAny().orElse(containerMap.values().iterator().next().getExportName());
+
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(container.exportClassName().toLowerCase()).append("(\n");
 
-        for(Map.Entry<String, FieldContainer> entry : container.getFieldContainers().entrySet()) {
-            final String exportFieldName = entry.getValue().getExportName();
-            builder.append("\t").append(sqlCreateInsertNameType(exportFieldName, container));
+        final String resultValues = containerMap.entrySet().stream()
+                .map(e -> buildSqlInsertNameTypeQueryPart(e.getValue().getExportName(), container))
+                .collect(Collectors.joining(",\n", "\t", ""));
 
-            if (exportFieldName.equalsIgnoreCase("id"))
-                primaryKeyField = exportFieldName;
-
-            builder.append(",").append("\n");
-        }
+        builder.append(resultValues);
 
         // Write primary key constraint
-        builder.append("\t")
-                .append("PRIMARY KEY (");
-
-        if (primaryKeyField.isEmpty())
-            builder.append(container.getFieldContainers().values().iterator().next().getExportName());
-        else
-            builder.append(primaryKeyField);
-
-        builder.append(")")
-                .append("\n")
-                .append(");\n");
-
-        return builder.toString();
+        return builder.append("\tPRIMARY KEY (")
+                .append(primaryKeyField)
+                .append(")\n);\n")
+                .toString();
     }
 
     /**
@@ -130,18 +126,15 @@ public class StaticSqlExporter extends BasicStaticExporter {
      * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String sqlCreateInsertNameType(final String finalFieldName, IClassContainer container) {
-        return finalFieldName + "\t" + javaToSqlDataType(finalFieldName, container);
+    private String buildSqlInsertNameTypeQueryPart(final String finalFieldName, IClassContainer container) {
+        return finalFieldName + "\t" + translateJavaTypeToSqlType(finalFieldName, container);
     }
 
-    private String wrapWithComma(final String value) {
-        return "'" + value + "'";
-    }
 
     /**
      * Build insert query part with values
      */
-    private <T> String sqlInsertIntoQuery(final T t, IClassContainer container) {
+    private <T> String buildSqlInsertQuery(final T t, IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
                 .append(container.exportClassName().toLowerCase()).append(" (");
@@ -224,8 +217,8 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
         final IWriter writer = buildWriter(container);
         return writer != null
-                && writer.write(sqlTableCreate(container))
-                && writer.write(sqlInsertIntoQuery(t, container))
+                && writer.write(buildSqlCreateTableQuery(container))
+                && writer.write(buildSqlInsertQuery(t, container))
                 && writer.write(format(t, container) + ";")
                 && writer.flush();
 
@@ -249,14 +242,14 @@ public class StaticSqlExporter extends BasicStaticExporter {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        writer.write(sqlTableCreate(container));
+        writer.write(buildSqlCreateTableQuery(container));
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(INSERT_QUERY_LIMIT))
-                writer.write(sqlInsertIntoQuery(t, container));
+                writer.write(buildSqlInsertQuery(t, container));
 
             i--;
 
@@ -289,8 +282,8 @@ public class StaticSqlExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        return sqlTableCreate(container) + "\n"
-                + sqlInsertIntoQuery(t, container) + "\n"
+        return buildSqlCreateTableQuery(container) + "\n"
+                + buildSqlInsertQuery(t, container) + "\n"
                 + format(t, container) + ";";
     }
 
@@ -309,14 +302,14 @@ public class StaticSqlExporter extends BasicStaticExporter {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        result.append(sqlTableCreate(container)).append("\n");
+        result.append(buildSqlCreateTableQuery(container)).append("\n");
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(INSERT_QUERY_LIMIT))
-                result.append(sqlInsertIntoQuery(t, container)).append("\n");
+                result.append(buildSqlInsertQuery(t, container)).append("\n");
 
             i--;
 
