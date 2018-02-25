@@ -57,7 +57,7 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
     BasicExporter(final Class<T> exportClass,
                   final String path,
                   final ExportFormat format,
-                  final IStrategy strategy) {
+                  final IStrategy strategy) throws Exception {
         super(exportClass.getSimpleName(), path, format.getValue());
 
         if(strategy == null) {

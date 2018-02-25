@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.dummymaker.util.BasicDateUtils.*;
 
@@ -86,31 +86,26 @@ public class StaticSqlExporter extends BasicStaticExporter {
      * @param exportFieldName final field name
      * @return sql data type
      */
-    private String javaToSqlDataType(final String exportFieldName) {
-        return dataTypes.getOrDefault(classContainer.getField(exportFieldName).getType(), "VARCHAR");
+    private String javaToSqlDataType(final String exportFieldName, IClassContainer container) {
+        return dataTypes.getOrDefault(container.getField(exportFieldName).getType(), "VARCHAR");
     }
 
     /**
      * Create String of Create Table Query
      */
-    private String sqlTableCreate() {
-        final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getFieldContainers().entrySet().iterator();
-
+    private String sqlTableCreate(IClassContainer container) {
         String primaryKeyField = "";
+        final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
+                .append(container.exportClassName().toLowerCase()).append("(\n");
 
-        builder.append("CREATE TABLE IF NOT EXISTS ").append(classContainer.exportClassName().toLowerCase()).append("(\n");
+        for(Map.Entry<String, FieldContainer> entry : container.getFieldContainers().entrySet()) {
+            final String exportFieldName = entry.getValue().getExportName();
+            builder.append("\t").append(sqlCreateInsertNameType(exportFieldName, container));
 
-        while (iterator.hasNext()) {
-            final String finaFieldName = iterator.next().getValue().getExportName();
-            builder.append("\t").append(sqlCreateInsertNameType(finaFieldName));
+            if (exportFieldName.equalsIgnoreCase("id"))
+                primaryKeyField = exportFieldName;
 
-            if (finaFieldName.equalsIgnoreCase("id"))
-                primaryKeyField = finaFieldName;
-
-            builder.append(",");
-
-            builder.append("\n");
+            builder.append(",").append("\n");
         }
 
         // Write primary key constraint
@@ -118,7 +113,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
                 .append("PRIMARY KEY (");
 
         if (primaryKeyField.isEmpty())
-            builder.append(classContainer.getFieldContainers().values().iterator().next().getFinalFieldName());
+            builder.append(container.getFieldContainers().values().iterator().next().getExportName());
         else
             builder.append(primaryKeyField);
 
@@ -135,8 +130,8 @@ public class StaticSqlExporter extends BasicStaticExporter {
      * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String sqlCreateInsertNameType(final String finalFieldName) {
-        return finalFieldName + "\t" + javaToSqlDataType(finalFieldName);
+    private String sqlCreateInsertNameType(final String finalFieldName, IClassContainer container) {
+        return finalFieldName + "\t" + javaToSqlDataType(finalFieldName, container);
     }
 
     private String wrapWithComma(final String value) {
@@ -144,86 +139,77 @@ public class StaticSqlExporter extends BasicStaticExporter {
     }
 
     /**
-     * Insert query
+     * Build insert query part with values
      */
-    private <T> String sqlInsertIntoQuery(final T t) {
-        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
-        final StringBuilder builder = new StringBuilder();
+    private <T> String sqlInsertIntoQuery(final T t, IClassContainer container) {
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        final StringBuilder builder = new StringBuilder("INSERT INTO ")
+                .append(container.exportClassName().toLowerCase()).append(" (");
 
-        builder.append("INSERT INTO ").append(classContainer.exportClassName().toLowerCase()).append(" (");
+        final String names = exportContainers.stream()
+                .map(ExportContainer::getExportName)
+                .collect(Collectors.joining(", "));
 
-        while (iterator.hasNext()) {
-            builder.append(iterator.next().getExportName());
-
-            if (iterator.hasNext())
-                builder.append(", ");
-        }
-
-        builder.append(") ").append("VALUES ");
-
-        return builder.toString();
+        return builder.append(names)
+                .append(") ")
+                .append("VALUES ")
+                .toString();
     }
 
     /**
      * Creates insert query field name
      */
-    private <T> StringBuilder format(final T t, final IClassContainer container) {
-        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
-        final StringBuilder builder = new StringBuilder();
+    private <T> String format(final T t, final IClassContainer container) {
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if(exportContainers.isEmpty())
+            return "";
 
-        if (iterator.hasNext()) {
-            builder.append("(");
+        final StringBuilder builder = new StringBuilder("(");
+        final String resultValues = exportContainers.stream()
+                .map(c -> convertFieldValue(container.getField(c.getExportName()), c))
+                .collect(Collectors.joining(", "));
 
-            while (iterator.hasNext()) {
-                final ExportContainer exportContainer = iterator.next();
-
-                final Field fieldType = container.getField(exportContainer.getExportName());
-
-                if (fieldType.getType().equals(String.class))
-                    builder.append(wrapWithComma(exportContainer.getExportValue()));
-                else if (fieldType.getType().equals(LocalDateTime.class))
-                    builder.append(wrapWithComma(Timestamp.valueOf(LocalDateTime.parse(exportContainer.getExportValue())).toString()));
-                else
-                    builder.append(exportContainer.getExportValue());
-
-                if (iterator.hasNext())
-                    builder.append(", ");
-            }
-
-            builder.append(")");
-        }
-
-        return builder;
+        return builder.append(resultValues)
+                .append(")")
+                .toString();
     }
 
-    private Timestamp convertToTimestamp(Field field, ExportContainer exportContainer) {
+    /**
+     * Check data types for field class compatibility with Timestamp class
+     */
+    private boolean isTypeTimestampConvertible(Field field) {
+        return dataTypes.entrySet().stream()
+                .anyMatch(e -> e.getValue().equals("TIMESTAMP") && e.getKey().equals(field.getType()));
+    }
+
+    /**
+     * Convert container value to Sql specific value type
+     */
+    private String convertFieldValue(Field field, ExportContainer container) {
+        if (field.getType().equals(String.class))
+            return wrapWithComma(container.getExportValue());
+        else if (isTypeTimestampConvertible(field))
+            return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
+        else
+            return container.getExportValue();
+
+    }
+
+    /**
+     * Convert container export value to timestamp value type
+     */
+    private Timestamp convertFieldValueToTimestamp(Field field, ExportContainer exportContainer) {
         if (field.getType().equals(LocalDateTime.class)) {
             return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
         } else if (field.getType().equals(LocalDate.class)) {
-            convertToTimestamp(parseDate(exportContainer.getExportValue()));
+            return convertToTimestamp(parseDate(exportContainer.getExportValue()));
         } else if (field.getType().equals(LocalTime.class)) {
-            convertToTimestamp(parseTime(exportContainer.getExportValue()));
+            return convertToTimestamp(parseTime(exportContainer.getExportValue()));
         } else if (field.getType().equals(Date.class)) {
-            convertToTimestamp(parseDate(exportContainer.getExportValue()));
+            return convertToTimestamp(parseSimpleDate(exportContainer.getExportValue()));
         } else if (field.getType().equals(Timestamp.class)) {
-            Timestamp.valueOf(exportContainer.getExportValue());
+            return Timestamp.valueOf(exportContainer.getExportValue());
         }
-        return null;
-    }
-
-    private Timestamp convertToTimestamp(Date date) {
-        return Timestamp.valueOf(LocalDateTime.ofEpochSecond(date.getTime(), 0, ZoneOffset.UTC));
-    }
-
-    private Timestamp convertToTimestamp(LocalDate localDate) {
-        return Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(0, 0)));
-    }
-
-    private Timestamp convertToTimestamp(LocalTime localTime) {
-        return Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
-    }
-
-    private Timestamp convertToTimestamp(LocalDateTime localDateTime) {
         return null;
     }
 
@@ -238,9 +224,9 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
         final IWriter writer = buildWriter(container);
         return writer != null
-                && writer.write(sqlTableCreate())
-                && writer.write(sqlInsertIntoQuery(t))
-                && writer.write(format(t) + ";")
+                && writer.write(sqlTableCreate(container))
+                && writer.write(sqlInsertIntoQuery(t, container))
+                && writer.write(format(t, container) + ";")
                 && writer.flush();
 
     }
@@ -263,18 +249,18 @@ public class StaticSqlExporter extends BasicStaticExporter {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        writer.write(sqlTableCreate());
+        writer.write(sqlTableCreate(container));
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(INSERT_QUERY_LIMIT))
-                writer.write(sqlInsertIntoQuery(t));
+                writer.write(sqlInsertIntoQuery(t, container));
 
             i--;
 
-            final StringBuilder valueToWrite = format(t);
+            final StringBuilder valueToWrite = new StringBuilder(format(t, container));
 
             if (iterator.hasNext() && i != 0)
                 valueToWrite.append(",");
@@ -291,7 +277,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
                 } else break;
             }
         }
-        return flush();
+        return writer.flush();
     }
 
     @Override
@@ -303,9 +289,9 @@ public class StaticSqlExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        return sqlTableCreate() + "\n"
-                + sqlInsertIntoQuery(t) + "\n"
-                + format(t) + ";";
+        return sqlTableCreate(container) + "\n"
+                + sqlInsertIntoQuery(t, container) + "\n"
+                + format(t, container) + ";";
     }
 
     @Override
@@ -323,18 +309,18 @@ public class StaticSqlExporter extends BasicStaticExporter {
         final Iterator<T> iterator = list.iterator();
 
         // Create Table Query
-        result.append(sqlTableCreate()).append("\n");
+        result.append(sqlTableCreate(container)).append("\n");
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
             if (i.equals(INSERT_QUERY_LIMIT))
-                result.append(sqlInsertIntoQuery(t)).append("\n");
+                result.append(sqlInsertIntoQuery(t, container)).append("\n");
 
             i--;
 
-            final StringBuilder valueToWrite = format(t);
+            final StringBuilder valueToWrite = new StringBuilder(format(t, container));
 
             if (iterator.hasNext() && i != 0)
                 valueToWrite.append(",");

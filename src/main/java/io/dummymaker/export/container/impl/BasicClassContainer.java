@@ -51,6 +51,11 @@ public class BasicClassContainer<T> implements IClassContainer {
     }
 
     @Override
+    public boolean isExportable() {
+        return !fieldContainerMap.isEmpty();
+    }
+
+    @Override
     public String getExportFieldName(final String originFieldName) {
         return fieldContainerMap.get(originFieldName).getExportName();
     }

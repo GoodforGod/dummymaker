@@ -1,5 +1,9 @@
 package io.dummymaker.util;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,13 +30,38 @@ public class BasicDateUtils {
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.yyyy");
     public static final DateTimeFormatter DATE_SHORT_FORMATTER = DateTimeFormatter.ofPattern("d.M");
 
+    public static final DateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("d-MMM-yyyy,HH:mm:ss aaa");
+
     private static Calendar genCalendar() {
         return Calendar.getInstance();
     }
 
-    public static Date parseSimpleDate(String date) {
+    public static Timestamp convertToTimestamp(Date date) {
+        final Calendar cal = genCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.MILLISECOND, 0);
+        return new Timestamp(date.getTime());
+    }
 
+    public static Timestamp convertToTimestamp(LocalDate localDate) {
+        return Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(0, 0)));
+    }
+
+    public static Timestamp convertToTimestamp(LocalTime localTime) {
+        return Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
+    }
+
+    public static Timestamp convertToTimestamp(LocalDateTime localDateTime) {
         return null;
+    }
+
+    public static Date parseSimpleDate(String date) {
+        try {
+            return SIMPLE_DATE_FORMATTER.parse(date);
+        } catch (ParseException e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
     }
 
     public static LocalDateTime parseDateTime(String dateTime) {
