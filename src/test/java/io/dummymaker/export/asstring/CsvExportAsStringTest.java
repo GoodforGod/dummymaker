@@ -29,7 +29,7 @@ public class CsvExportAsStringTest {
     private final char SEPARATOR = ',';
 
     @Test
-    public void exportSingleDummyInCsv() {
+    public void exportSingleDummyInCsv() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
 
@@ -43,7 +43,7 @@ public class CsvExportAsStringTest {
     }
 
     @Test
-    public void exportSingleDummyWithStringWrapAndHeader() {
+    public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(), true, true, SEPARATOR);
 
@@ -57,7 +57,7 @@ public class CsvExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInCsv() {
+    public void exportListOfDummiesInCsv() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
 
@@ -71,7 +71,7 @@ public class CsvExportAsStringTest {
     }
 
     @Test
-    public void exportListDummyWithStringWrapAndHeader() {
+    public void exportListDummyWithStringWrapAndHeader() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(),true, true, SEPARATOR);
 
@@ -85,7 +85,7 @@ public class CsvExportAsStringTest {
     }
 
     @Test
-    public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
+    public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);

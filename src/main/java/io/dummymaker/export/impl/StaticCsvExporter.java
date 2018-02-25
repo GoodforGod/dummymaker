@@ -74,9 +74,9 @@ public class StaticCsvExporter extends BasicStaticExporter {
         return "'" + value + "'";
     }
 
-    <T> String format(T t, IClassContainer container) {
+    private <T> String format(T t, IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if(exportContainers.isEmpty())
+        if (exportContainers.isEmpty())
             return "";
 
         final String separatorAsStr = String.valueOf(separator);
@@ -139,10 +139,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
                 return false;
         }
 
-        final boolean result = list.stream()
-                .map(t -> writer.write(format(t, container)))
-                .anyMatch((r) -> !r);
-
+        final boolean result = list.stream().anyMatch(t -> !writer.write(format(t, container)));
         return result && writer.flush();
     }
 

@@ -6,6 +6,7 @@ import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.impl.DefaultStrategy;
+import io.dummymaker.util.BasicStreamUtils;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -33,9 +34,9 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
     /**
      * Java & Sql Type Representation
-     *
+     * <p>
      * Map is used to convert Java Field Data Type to Sql Data Type
-     *
+     * <p>
      * You can add your specific values here by using constructor with Map'String, String'
      */
     private Map<Class, String> dataTypes;
@@ -154,7 +155,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
      */
     private <T> String format(final T t, final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if(exportContainers.isEmpty())
+        if (exportContainers.isEmpty())
             return "";
 
         final StringBuilder builder = new StringBuilder("(");
@@ -221,7 +222,6 @@ public class StaticSqlExporter extends BasicStaticExporter {
                 && writer.write(buildSqlInsertQuery(t, container))
                 && writer.write(format(t, container) + ";")
                 && writer.flush();
-
     }
 
     @Override
@@ -237,40 +237,39 @@ public class StaticSqlExporter extends BasicStaticExporter {
         if (writer == null)
             return false;
 
-        Integer i = INSERT_QUERY_LIMIT;
+        int i = INSERT_QUERY_LIMIT;
 
         final Iterator<T> iterator = list.iterator();
+        final StringBuilder builder = new StringBuilder();
 
         // Create Table Query
-        writer.write(buildSqlCreateTableQuery(container));
+        builder.append(buildSqlCreateTableQuery(container));
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
 
             // Insert Values Query
-            if (i.equals(INSERT_QUERY_LIMIT))
-                writer.write(buildSqlInsertQuery(t, container));
+            if (i == INSERT_QUERY_LIMIT) {
+                builder.append(buildSqlInsertQuery(t, container));
+            }
 
             i--;
-
-            final StringBuilder valueToWrite = new StringBuilder(format(t, container));
-
-            if (iterator.hasNext() && i != 0)
-                valueToWrite.append(",");
-            else if (i == 0 || !iterator.hasNext())
-                valueToWrite.append(";");
-
-            writer.write(valueToWrite.toString());
+            builder.append(format(t, container));
+            builder.append((iterator.hasNext() && i != 0)
+                    ? ","
+                    : ";");
 
             // End insert Query if no elements left or need to organize next batch
             if (i == 0) {
-                if (iterator.hasNext()) {
-                    writer.write("\n");
-                    i = INSERT_QUERY_LIMIT;
-                } else break;
+                if (!iterator.hasNext())
+                    break;
+
+                builder.append("\n");
+                i = INSERT_QUERY_LIMIT;
             }
         }
-        return writer.flush();
+
+        return writer.write(builder.toString()) && writer.flush();
     }
 
     @Override
@@ -296,41 +295,18 @@ public class StaticSqlExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder result = new StringBuilder();
-        Integer i = INSERT_QUERY_LIMIT;
-
-        final Iterator<T> iterator = list.iterator();
-
         // Create Table Query
-        result.append(buildSqlCreateTableQuery(container)).append("\n");
+        final StringBuilder builder = new StringBuilder(buildSqlCreateTableQuery(container)).append("\n");
 
-        while (iterator.hasNext()) {
-            final T t = iterator.next();
+        final List<List<T>> lists = list.stream().collect(BasicStreamUtils.subSplitCollector(INSERT_QUERY_LIMIT));
 
-            // Insert Values Query
-            if (i.equals(INSERT_QUERY_LIMIT))
-                result.append(buildSqlInsertQuery(t, container)).append("\n");
+        final String resultValues = lists.stream()
+                .map(tList -> tList.stream()
+                        .map(t -> builder.append(buildSqlInsertQuery(t, container)))
+                        .collect(Collectors.joining("\n,", "", "\n")))
+                .collect(Collectors.joining("\n"));
 
-            i--;
-
-            final StringBuilder valueToWrite = new StringBuilder(format(t, container));
-
-            if (iterator.hasNext() && i != 0)
-                valueToWrite.append(",");
-            else if (i == 0 || !iterator.hasNext())
-                valueToWrite.append(";");
-
-            result.append(valueToWrite.toString()).append("\n");
-
-            // End insert Query if no elements left or need to organize next batch
-            if (i == 0) {
-                if (iterator.hasNext()) {
-                    result.append("\n\n");
-                    i = INSERT_QUERY_LIMIT;
-                } else break;
-            }
-        }
-
-        return result.toString();
+        return builder.append(resultValues)
+                .toString();
     }
 }

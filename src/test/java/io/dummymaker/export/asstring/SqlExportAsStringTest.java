@@ -27,7 +27,7 @@ public class SqlExportAsStringTest {
     private SqlValidation validation = new SqlValidation();
 
     @Test
-    public void exportSingleDummyInSql() {
+    public void exportSingleDummyInSql() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 
@@ -41,7 +41,7 @@ public class SqlExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInSql() {
+    public void exportListOfDummiesInSql() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new SqlExporter<>(Dummy.class);
 
@@ -55,7 +55,7 @@ public class SqlExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInSqlWithNamingStrategy() {
+    public void exportListOfDummiesInSqlWithNamingStrategy() throws Exception {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_LOW_CASE;
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);

@@ -27,7 +27,7 @@ public class JsonExportAsStringTest {
     private JsonValidation validation = new JsonValidation();
 
     @Test
-    public void exportSingleDummyInJson() {
+    public void exportSingleDummyInJson() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
@@ -41,7 +41,7 @@ public class JsonExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInJson() {
+    public void exportListOfDummiesInJson() throws Exception {
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
 
@@ -55,7 +55,7 @@ public class JsonExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInJsonWithNamingStrategy() {
+    public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
         final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
 
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);

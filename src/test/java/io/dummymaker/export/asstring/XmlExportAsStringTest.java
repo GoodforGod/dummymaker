@@ -27,7 +27,7 @@ public class XmlExportAsStringTest {
     private XmlValidation validation = new XmlValidation();
 
     @Test
-    public void exportSingleDummyInXml() {
+    public void exportSingleDummyInXml() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
         IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
 
@@ -41,7 +41,7 @@ public class XmlExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInXml() {
+    public void exportListOfDummiesInXml() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
 
@@ -55,7 +55,7 @@ public class XmlExportAsStringTest {
     }
 
     @Test
-    public void exportListOfDummiesInXmlWithNamingStrategy() {
+    public void exportListOfDummiesInXmlWithNamingStrategy() throws Exception {
         final PresetStrategies strategy = PresetStrategies.INITIAL_LOW_CASE;
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);

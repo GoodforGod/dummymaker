@@ -23,18 +23,18 @@ public class XmlExporter<T> extends BasicExporter<T> {
 
     private final String exportClassListName;
 
-    public XmlExporter(final Class<T> primeClass) {
+    public XmlExporter(final Class<T> primeClass) throws Exception {
         this(primeClass, null);
     }
 
     public XmlExporter(final Class<T> primeClass,
-                       final String path) {
+                       final String path) throws Exception {
         this(primeClass, path, PresetStrategies.DEFAULT.getStrategy(), null);
     }
 
     public XmlExporter(final Class<T> primeClass,
                        final String path,
-                       final IStrategy strategy) {
+                       final IStrategy strategy) throws Exception {
         this(primeClass, path, strategy, null);
     }
 
@@ -47,7 +47,7 @@ public class XmlExporter<T> extends BasicExporter<T> {
     public XmlExporter(final Class<T> primeClass,
                        final String path,
                        final IStrategy strategy,
-                       final String exportClassListName) {
+                       final String exportClassListName) throws Exception {
         super(primeClass, path, ExportFormat.XML, strategy);
         this.exportClassListName = (exportClassListName == null || exportClassListName.trim().isEmpty())
                 ? classContainer.exportClassName() + "List"
@@ -94,14 +94,13 @@ public class XmlExporter<T> extends BasicExporter<T> {
     @Override
     public boolean export(final T t) {
         return isExportStateValid(t)
-                && initWriter()
                 && write(objectToXml(t, Mode.SINGLE))
                 && flush();
     }
 
     @Override
     public boolean export(final List<T> list) {
-        if(!isExportStateValid(list) || !initWriter())
+        if(!isExportStateValid(list))
             return false;
 
         write(wrapOpenXmlTag(exportClassListName));

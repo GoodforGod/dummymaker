@@ -45,18 +45,18 @@ public class SqlExporter<T> extends BasicExporter<T> {
      */
     private final Integer INSERT_QUERY_LIMIT = 995;
 
-    public SqlExporter(final Class<T> primeClass) {
+    public SqlExporter(final Class<T> primeClass) throws Exception {
         this(primeClass, null);
     }
 
     public SqlExporter(final Class<T> primeClass,
-                       final String path) {
+                       final String path) throws Exception {
         this(primeClass, path, PresetStrategies.DEFAULT.getStrategy());
     }
 
     public SqlExporter(final Class<T> primeClass,
                        final String path,
-                       final IStrategy strategy) {
+                       final IStrategy strategy) throws Exception {
         super(primeClass, path, ExportFormat.SQL, strategy);
         this.dataTypeMap = buildDefaultDataTypeMap();
     }
@@ -72,7 +72,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
     public SqlExporter(final Class<T> primeClass,
                        final String path,
                        final IStrategy strategy,
-                       final Map<Class, String> dataTypeMap) {
+                       final Map<Class, String> dataTypeMap) throws Exception {
         super(primeClass, path, ExportFormat.SQL, strategy);
         this.dataTypeMap = buildDefaultDataTypeMap();
 
@@ -116,7 +116,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
         builder.append("\t").append("PRIMARY KEY (");
 
         if(primaryKeyField.isEmpty())
-            builder.append(classContainer.getFieldContainers().values().iterator().next().getFinalFieldName());
+            builder.append(classContainer.getFieldContainers().values().iterator().next().getExportName());
         else
             builder.append(primaryKeyField);
 
@@ -196,7 +196,6 @@ public class SqlExporter<T> extends BasicExporter<T> {
     @Override
     public boolean export(final T t) {
         return isExportStateValid(t)
-                && initWriter()
                 && write(sqlTableCreate())
                 && write(sqlInsertIntoQuery(t))
                 && write(sqlValuesInsert(t) + ";")
@@ -205,7 +204,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
 
     @Override
     public boolean export(final List<T> list) {
-        if (!isExportStateValid(list) || !initWriter())
+        if (!isExportStateValid(list))
             return false;
 
         Integer i = INSERT_QUERY_LIMIT;

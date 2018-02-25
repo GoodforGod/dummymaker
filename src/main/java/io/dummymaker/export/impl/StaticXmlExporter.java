@@ -1,11 +1,14 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.impl.DefaultStrategy;
 import io.dummymaker.writer.IWriter;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * "Default Description"
@@ -20,7 +23,32 @@ public class StaticXmlExporter extends BasicStaticExporter {
         LIST
     }
 
-    private final String exportClassListName;
+    private String exportClassEnding = "List";
+    private String exportClassFullName = null;
+
+    public StaticXmlExporter() {
+        super(null, Format.XML, new DefaultStrategy());
+    }
+
+    public StaticXmlExporter withPath(String path) {
+        setPath(path);
+        return this;
+    }
+
+    public StaticXmlExporter withStrategy(IStrategy strategy) {
+        setStrategy(strategy);
+        return this;
+    }
+
+    public StaticXmlExporter withFullname(String fullname) {
+        this.exportClassFullName = fullname;
+        return this;
+    }
+
+    public StaticXmlExporter withEnding(String ending) {
+        this.exportClassEnding = ending;
+        return this;
+    }
 
     private String wrapOpenXmlTag(final String value) {
         return "<" + value + ">";
@@ -31,9 +59,9 @@ public class StaticXmlExporter extends BasicStaticExporter {
     }
 
     private <T> String format(final T t, final IClassContainer container, final Mode mode) {
-        final Iterator<ExportContainer> iterator = extractExportContainers(t, container).iterator();
-
-        final StringBuilder builder = new StringBuilder("");
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if (exportContainers.isEmpty())
+            return "";
 
         final String tabObject = (mode == Mode.SINGLE)
                 ? ""
@@ -43,20 +71,23 @@ public class StaticXmlExporter extends BasicStaticExporter {
                 ? "\t"
                 : "\t\t";
 
-        if(iterator.hasNext()) {
-            builder.append(tabObject).append(wrapOpenXmlTag(container.exportClassName()));
+        final StringBuilder builder = new StringBuilder().append(tabObject).append(wrapOpenXmlTag(container.exportClassName())).append("\n");
 
-            while (iterator.hasNext()) {
-                final ExportContainer exportContainer = iterator.next();
-                builder.append("\n").append(tabField)
-                        .append(wrapOpenXmlTag(exportContainer.getExportName()))
-                        .append(exportContainer.getExportValue())
-                        .append(wrapCloseXmlTag(exportContainer.getExportName()));
-            }
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(container.exportClassName()));
-        }
+        final String resultValues = exportContainers.stream()
+                .map(c -> wrapOpenXmlTag(c.getExportName()) + c.getExportValue() + wrapCloseXmlTag(c.getExportName()))
+                .collect(Collectors.joining("\n", tabField, ""));
 
-        return builder.toString();
+        builder.append(resultValues).append("\n");
+
+        return builder.append(tabObject)
+                .append(wrapCloseXmlTag(container.exportClassName()))
+                .toString();
+    }
+
+    private <T> String buildClassListTag(T t) {
+        return (exportClassFullName != null)
+                ? exportClassFullName
+                : t.getClass().getSimpleName() + exportClassEnding;
     }
 
     @Override
@@ -69,10 +100,8 @@ public class StaticXmlExporter extends BasicStaticExporter {
             return false;
 
         final IWriter writer = buildWriter(container);
-        if (writer == null)
-            return false;
-
-        return writer.write(format(t, container, Mode.SINGLE))
+        return (writer != null)
+                && writer.write(format(t, container, Mode.SINGLE))
                 && writer.flush();
     }
 
@@ -89,14 +118,15 @@ public class StaticXmlExporter extends BasicStaticExporter {
         if (writer == null)
             return false;
 
-        writer.write(wrapOpenXmlTag(exportClassListName));
+        final String classListTag = buildClassListTag(list.get(0));
+        if (!writer.write(wrapOpenXmlTag(classListTag)))
+            return false;
 
-        for (final T t : list)
-            writer.write(format(t, container, Mode.LIST));
+        final boolean writerResult = list.stream().anyMatch(t -> !writer.write(format(t, container, Mode.LIST)));
 
-        writer.write(wrapCloseXmlTag(exportClassListName));
-
-        return writer.flush();
+        return writerResult
+                && writer.write(wrapCloseXmlTag(classListTag))
+                && writer.flush();
     }
 
     @Override
@@ -120,14 +150,15 @@ public class StaticXmlExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder result = new StringBuilder();
-        result.append(wrapOpenXmlTag(exportClassListName)).append("\n");
+        final String classListTag = buildClassListTag(list.get(0));
 
-        for (final T t : list)
-            result.append(format(t, container, Mode.LIST)).append("\n");
+        final StringBuilder builder = new StringBuilder(wrapOpenXmlTag(classListTag)).append("\n");
+        final String result = list.stream()
+                .map(t -> format(t, container, Mode.LIST))
+                .collect(Collectors.joining());
 
-        result.append(wrapCloseXmlTag(exportClassListName));
-
-        return result.toString();
+        return builder.append(result)
+                .append(wrapCloseXmlTag(classListTag))
+                .toString();
     }
 }

@@ -21,12 +21,12 @@ public class JsonExporter<T> extends BasicExporter<T> {
         LIST
     }
 
-    public JsonExporter(final Class<T> primeClass) {
+    public JsonExporter(final Class<T> primeClass) throws Exception {
         this(primeClass, null);
     }
 
     public JsonExporter(final Class<T> primeClass,
-                        final String path) {
+                        final String path) throws Exception {
         super(primeClass, path, ExportFormat.JSON, PresetStrategies.DEFAULT.getStrategy());
     }
 
@@ -37,7 +37,7 @@ public class JsonExporter<T> extends BasicExporter<T> {
      */
     public JsonExporter(final Class<T> primeClass,
                         final String path,
-                        final IStrategy strategy) {
+                        final IStrategy strategy) throws Exception {
         super(primeClass, path, ExportFormat.JSON, strategy);
     }
 
@@ -98,14 +98,13 @@ public class JsonExporter<T> extends BasicExporter<T> {
     @Override
     public boolean export(final T t) {
         return isExportStateValid(t)
-                && initWriter()
                 && write(objectToJson(t, Mode.SINGLE))
                 && flush();
     }
 
     @Override
     public boolean export(final List<T> list) {
-        if(!isExportStateValid(list) || !initWriter())
+        if(!isExportStateValid(list))
             return false;
 
         // Open JSON Object List

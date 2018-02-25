@@ -41,7 +41,7 @@ public class StaticJsonExporter extends BasicStaticExporter {
         return "\"" + value + "\"";
     }
 
-    <T> String format(T t, IClassContainer container, Mode mode) {
+    private <T> String format(T t, IClassContainer container, Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
             return "";
