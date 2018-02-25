@@ -22,9 +22,20 @@ public class FieldContainer {
      */
     private final String exportName;
 
+    private final boolean isEnumeratable;
+
     public FieldContainer(Field field, String finalFieldName) {
+        this(field, finalFieldName, false);
+    }
+
+    public FieldContainer(Field field, String finalFieldName, boolean isEnumeratable) {
         this.field = field;
         this.exportName = finalFieldName;
+        this.isEnumeratable = isEnumeratable;
+    }
+
+    public boolean isEnumeratable() {
+        return isEnumeratable;
     }
 
     public Field getField() {

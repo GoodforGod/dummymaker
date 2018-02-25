@@ -31,9 +31,8 @@ public abstract class BasicStaticExporter {
 
     /**
      * @param strategy naming strategy
-     * @param path   path where to export (NULL IF HOME DIR)
-     * @param format export format
-     *
+     * @param path     path where to export (NULL IF HOME DIR)
+     * @param format   export format
      * @see IStrategy
      * @see Format
      */
@@ -68,6 +67,15 @@ public abstract class BasicStaticExporter {
      */
     <T> IClassContainer buildClassContainer(T t) {
         return new BasicStaticClassContainer(t, strategy);
+    }
+
+    /**
+     * Build class container with export entity parameters
+     */
+    <T> IClassContainer buildClassContainer(List<T> list) {
+        return (list != null && !list.isEmpty())
+                ? buildClassContainer(list.get(0))
+                : null;
     }
 
     /**

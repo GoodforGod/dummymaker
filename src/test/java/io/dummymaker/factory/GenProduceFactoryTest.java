@@ -2,7 +2,6 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
-import io.dummymaker.export.impl.StaticSqlExporter;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
@@ -17,14 +16,6 @@ import static org.junit.Assert.*;
  * @since 31.07.2017
  */
 public class GenProduceFactoryTest {
-
-    @Test
-    public void tt(){
-        Dummy d = new Dummy();
-        String s = new StaticSqlExporter().exportAsString(new GenProduceFactory().produce(Dummy.class, 10000));
-        assertNotNull(d);
-        assertNotNull(s);
-    }
 
     @Test
     public void genProduceFactoryListTest() {

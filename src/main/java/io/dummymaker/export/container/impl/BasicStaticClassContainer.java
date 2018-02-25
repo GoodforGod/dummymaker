@@ -1,12 +1,16 @@
 package io.dummymaker.export.container.impl;
 
+import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.generator.impl.EnumerateGenerator;
 import io.dummymaker.scan.impl.ExportAnnotationScanner;
 import io.dummymaker.scan.impl.RenameAnnotationScanner;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,8 +94,9 @@ public class BasicStaticClassContainer implements IClassContainer {
     private Map<String, FieldContainer> buildExportFieldContainerMap() {
         return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
                 .collect(LinkedHashMap<String, FieldContainer>::new,
-                        (m, e) -> m.put(e.getKey().getName(), buildFieldContainer(e.getKey())),
-                        (m, u) -> { }
+                        (m, e) -> m.put(e.getKey().getName(), buildFieldContainer(e.getKey(), e.getValue())),
+                        (m, u) -> {
+                        }
                 );
     }
 
@@ -101,11 +106,22 @@ public class BasicStaticClassContainer implements IClassContainer {
      * @param name origin field name
      * @return renamed field name
      */
-    private String getRenamedFieldOrConverted(String name) {
+    private String getRenamedFieldOrConverted(final String name) {
         return renamedFields.getOrDefault(name, strategy.toStrategy(name));
     }
 
-    private FieldContainer buildFieldContainer(Field field) {
-        return new FieldContainer(field, getRenamedFieldOrConverted(field.getName()));
+    private FieldContainer buildFieldContainer(final Field field,
+                                               final List<Annotation> fieldAnnotations) {
+        return new FieldContainer(
+                field,
+                getRenamedFieldOrConverted(field.getName()),
+                isAnnotationEnumerable(fieldAnnotations)
+        );
+    }
+
+    private boolean isAnnotationEnumerable(List<Annotation> annotations) {
+        return annotations.stream()
+                .anyMatch(a -> a.annotationType().equals(PrimeGenAnnotation.class)
+                        && ((PrimeGenAnnotation) a).value().equals(EnumerateGenerator.class));
     }
 }

@@ -6,7 +6,6 @@ import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.impl.DefaultStrategy;
-import io.dummymaker.util.BasicStreamUtils;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -30,13 +29,11 @@ public class StaticSqlExporter extends BasicStaticExporter {
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
      */
-    private final Integer INSERT_QUERY_LIMIT = 999;
+    private static final Integer INSERT_QUERY_LIMIT = 999;
 
     /**
      * Java & Sql Type Representation
-     * <p>
      * Map is used to convert Java Field Data Type to Sql Data Type
-     * <p>
      * You can add your specific values here by using constructor with Map'String, String'
      */
     private Map<Class, String> dataTypes;
@@ -91,43 +88,44 @@ public class StaticSqlExporter extends BasicStaticExporter {
      * @param exportFieldName final field name
      * @return sql data type
      */
-    private String translateJavaTypeToSqlType(final String exportFieldName, IClassContainer container) {
+    private String translateJavaTypeToSqlType(final String exportFieldName,
+                                              final IClassContainer container) {
         return dataTypes.getOrDefault(container.getField(exportFieldName).getType(), "VARCHAR");
     }
 
     /**
      * Create String of Create Table Query
      */
-    private String buildSqlCreateTableQuery(IClassContainer container) {
+    private String buildCreateTableQuery(final IClassContainer container,
+                                         final String primaryKeyField) {
         final Map<String, FieldContainer> containerMap = container.getFieldContainers();
-        final String primaryKeyField = containerMap.entrySet().stream()
-                .filter(e -> e.getKey().equalsIgnoreCase("id") || e.getKey().equalsIgnoreCase("uid"))
-                .map(Map.Entry::getKey)
-                .findAny().orElse(containerMap.values().iterator().next().getExportName());
 
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(container.exportClassName().toLowerCase()).append("(\n");
+                .append(container.exportClassName().toLowerCase())
+                .append("(\n");
 
         final String resultValues = containerMap.entrySet().stream()
-                .map(e -> buildSqlInsertNameTypeQueryPart(e.getValue().getExportName(), container))
-                .collect(Collectors.joining(",\n", "\t", ""));
+                .map(e -> "\t" + buildInsertNameTypeQuery(e.getValue().getExportName(), container))
+                .collect(Collectors.joining(",\n"));
 
         builder.append(resultValues);
 
         // Write primary key constraint
-        return builder.append("\tPRIMARY KEY (")
+        return builder.append(",\n")
+                .append("\tPRIMARY KEY (")
                 .append(primaryKeyField)
                 .append(")\n);\n")
                 .toString();
     }
 
     /**
-     * Creates String of Create Table Insert Field
+     * Creates String of Create Table Insert Quert
      *
      * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String buildSqlInsertNameTypeQueryPart(final String finalFieldName, IClassContainer container) {
+    private String buildInsertNameTypeQuery(final String finalFieldName,
+                                            final IClassContainer container) {
         return finalFieldName + "\t" + translateJavaTypeToSqlType(finalFieldName, container);
     }
 
@@ -135,10 +133,12 @@ public class StaticSqlExporter extends BasicStaticExporter {
     /**
      * Build insert query part with values
      */
-    private <T> String buildSqlInsertQuery(final T t, IClassContainer container) {
+    private <T> String buildInsertQuery(final T t,
+                                        final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
-                .append(container.exportClassName().toLowerCase()).append(" (");
+                .append(container.exportClassName().toLowerCase())
+                .append(" (");
 
         final String names = exportContainers.stream()
                 .map(ExportContainer::getExportName)
@@ -153,19 +153,40 @@ public class StaticSqlExporter extends BasicStaticExporter {
     /**
      * Creates insert query field name
      */
-    private <T> String format(final T t, final IClassContainer container) {
+    private <T> String format(final T t,
+                              final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
             return "";
 
-        final StringBuilder builder = new StringBuilder("(");
         final String resultValues = exportContainers.stream()
                 .map(c -> convertFieldValue(container.getField(c.getExportName()), c))
                 .collect(Collectors.joining(", "));
 
-        return builder.append(resultValues)
-                .append(")")
-                .toString();
+        return "(" + resultValues + ")";
+    }
+
+    /**
+     * Search for primary key entity candidate field and retrieve its export field name
+     *
+     * Primary key is field that (in that order):
+     * - Have ID or UID name (case ignored)
+     * - Is marked with enumerate gen annotation
+     * - Randomly selected
+     */
+    private String buildPrimaryKey(final IClassContainer container) {
+        final Map<String, FieldContainer> containerMap = container.getFieldContainers();
+        return containerMap.entrySet().stream()
+                .filter(e -> e.getKey().equalsIgnoreCase("id")
+                        || e.getKey().equalsIgnoreCase("uid"))
+                .map(Map.Entry::getKey)
+                .findAny()
+                .orElse(containerMap.entrySet().stream()
+                        .filter(c -> c.getValue().isEnumeratable())
+                        .map(Map.Entry::getKey)
+                        .findAny()
+                        .orElse(containerMap.entrySet().iterator().next().getKey())
+                );
     }
 
     /**
@@ -217,9 +238,10 @@ public class StaticSqlExporter extends BasicStaticExporter {
             return false;
 
         final IWriter writer = buildWriter(container);
+        final String primaryKey = buildPrimaryKey(container);
         return writer != null
-                && writer.write(buildSqlCreateTableQuery(container))
-                && writer.write(buildSqlInsertQuery(t, container))
+                && writer.write(buildCreateTableQuery(container, primaryKey))
+                && writer.write(buildInsertQuery(t, container))
                 && writer.write(format(t, container) + ";")
                 && writer.flush();
     }
@@ -240,36 +262,34 @@ public class StaticSqlExporter extends BasicStaticExporter {
         int i = INSERT_QUERY_LIMIT;
 
         final Iterator<T> iterator = list.iterator();
-        final StringBuilder builder = new StringBuilder();
+        final String primaryKey = buildPrimaryKey(container);
 
         // Create Table Query
-        builder.append(buildSqlCreateTableQuery(container));
+        if (!writer.write(buildCreateTableQuery(container, primaryKey)))
+            return false;
 
         while (iterator.hasNext()) {
             final T t = iterator.next();
-
-            // Insert Values Query
+            final StringBuilder builder = new StringBuilder();
             if (i == INSERT_QUERY_LIMIT) {
-                builder.append(buildSqlInsertQuery(t, container));
+                builder.append("\n").append(buildInsertQuery(t, container));
             }
 
-            i--;
             builder.append(format(t, container));
-            builder.append((iterator.hasNext() && i != 0)
-                    ? ","
-                    : ";");
 
             // End insert Query if no elements left or need to organize next batch
-            if (i == 0) {
-                if (!iterator.hasNext())
-                    break;
-
-                builder.append("\n");
-                i = INSERT_QUERY_LIMIT;
+            final boolean hasNext = iterator.hasNext();
+            if (i < 0 || !hasNext) {
+                builder.append(";\n");
+            } else {
+                builder.append(",\n");
             }
+
+            i = nextInsertValue(i);
+            writer.write(builder.toString());
         }
 
-        return writer.write(builder.toString()) && writer.flush();
+        return writer.flush();
     }
 
     @Override
@@ -281,8 +301,9 @@ public class StaticSqlExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        return buildSqlCreateTableQuery(container) + "\n"
-                + buildSqlInsertQuery(t, container) + "\n"
+        final String primaryKey = buildPrimaryKey(container);
+        return buildCreateTableQuery(container, primaryKey) + "\n"
+                + buildInsertQuery(t, container) + "\n"
                 + format(t, container) + ";";
     }
 
@@ -296,17 +317,36 @@ public class StaticSqlExporter extends BasicStaticExporter {
             return "";
 
         // Create Table Query
-        final StringBuilder builder = new StringBuilder(buildSqlCreateTableQuery(container)).append("\n");
+        final String primaryKey = buildPrimaryKey(container);
+        final StringBuilder builder = new StringBuilder(buildCreateTableQuery(container, primaryKey));
+        final Iterator<T> iterator = list.iterator();
+        int i = INSERT_QUERY_LIMIT;
 
-        final List<List<T>> lists = list.stream().collect(BasicStreamUtils.subSplitCollector(INSERT_QUERY_LIMIT));
+        while (iterator.hasNext()) {
+            final T t = iterator.next();
+            if (i == INSERT_QUERY_LIMIT) {
+                builder.append("\n").append(buildInsertQuery(t, container));
+            }
 
-        final String resultValues = lists.stream()
-                .map(tList -> tList.stream()
-                        .map(t -> builder.append(buildSqlInsertQuery(t, container)))
-                        .collect(Collectors.joining("\n,", "", "\n")))
-                .collect(Collectors.joining("\n"));
+            builder.append(format(t, container));
 
-        return builder.append(resultValues)
-                .toString();
+            // End insert Query if no elements left or need to organize next batch
+            final boolean hasNext = iterator.hasNext();
+            if (i < 0 || !hasNext) {
+                builder.append(";\n");
+            } else {
+                builder.append(",\n");
+            }
+
+            i = nextInsertValue(i);
+        }
+
+        return builder.toString();
+    }
+
+    private int nextInsertValue(int current) {
+        return (current <= 0)
+                ? INSERT_QUERY_LIMIT
+                : current - 1;
     }
 }
