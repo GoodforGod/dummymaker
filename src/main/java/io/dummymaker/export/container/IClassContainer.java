@@ -1,5 +1,6 @@
 package io.dummymaker.export.container;
 
+import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.PresetStrategies;
 
 import java.lang.reflect.Field;

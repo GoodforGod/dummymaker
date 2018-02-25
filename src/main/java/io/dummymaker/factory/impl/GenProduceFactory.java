@@ -12,9 +12,8 @@ import java.util.logging.Logger;
 /**
  * Produce Dummy Objects and populate them via PrimeGenAnnotation generators included
  *
- * @see PrimeGenAnnotation
- *
  * @author GoodforGod
+ * @see PrimeGenAnnotation
  * @since 26.05.2017
  */
 public class GenProduceFactory implements IProduceFactory {
@@ -29,27 +28,31 @@ public class GenProduceFactory implements IProduceFactory {
             return populateFactory.populate(tClass.newInstance());
         } catch (InstantiationException e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE NEW OBJECT!");
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
         }
+
         return null;
     }
 
     @Override
     public <T> List<T> produce(Class<T> tClass, final int amount) {
-        if(amount < 1)
+        if (amount < 1)
             return Collections.emptyList();
 
         try {
             final List<T> produced = new ArrayList<>();
-            for(int i = 0; i < amount; i++)
+            for (int i = 0; i < amount; i++)
                 produced.add(tClass.newInstance());
+
             return populateFactory.populate(produced);
 
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException e) {
             logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE OBJECT!");
-            return Collections.emptyList();
+        } catch (IllegalAccessException e) {
+            logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
         }
+
+        return Collections.emptyList();
     }
 }

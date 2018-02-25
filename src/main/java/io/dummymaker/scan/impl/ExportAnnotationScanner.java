@@ -48,9 +48,9 @@ public class ExportAnnotationScanner extends AnnotationScanner {
         return (classFieldAnnotations.isEmpty())
                 ? classFieldAnnotations
                 : classFieldAnnotations.entrySet().stream()
-                    .filter(set -> set.getValue().stream().noneMatch(ignorePredicate))
-                    .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
-                    .peek(set -> set.setValue(set.getValue().stream()
+                    .filter(e -> e.getValue().stream().noneMatch(ignorePredicate))
+                    .filter(e -> e.getValue().stream().anyMatch(acceptPredicate))
+                    .peek(e -> e.setValue(e.getValue().stream()
                             .filter(acceptPredicate)
                             .collect(Collectors.toList())))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

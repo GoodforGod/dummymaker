@@ -20,10 +20,9 @@ import java.util.stream.Collectors;
 /**
  * Populates objects via PrimeGenAnnotation generators included
  *
+ * @author GoodforGod
  * @see PrimeGenAnnotation
  * @see GenEnumerate
- *
- * @author GoodforGod
  * @since 30.05.2017
  */
 public class GenPopulateFactory implements IPopulateFactory {
@@ -40,14 +39,14 @@ public class GenPopulateFactory implements IPopulateFactory {
     /**
      * Populate single entity
      *
-     * @param t entity to populate
+     * @param t            entity to populate
      * @param enumerateMap map of enumerated marked fields
      * @param generatorMap map where generator is assigned to each entity field
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
-                                        Map<Field, Long> enumerateMap,
-                                        Map<Field, ? extends IGenerator> generatorMap) {
+                                 Map<Field, Long> enumerateMap,
+                                 Map<Field, ? extends IGenerator> generatorMap) {
         final boolean haveEnumerateFields = (enumerateMap != null && !enumerateMap.isEmpty());
 
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
@@ -55,17 +54,17 @@ public class GenPopulateFactory implements IPopulateFactory {
                 ? buildGeneratorsMap(classAnnotatedFields)
                 : generatorMap;
 
-        for(Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
+        for (Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             Object objValue = null;
             try {
                 annotatedField.getKey().setAccessible(true);
 
-                if(haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey())) {
+                if (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey())) {
                     objValue = enumerateMap.get(annotatedField.getKey());
 
-                    if(annotatedField.getKey().getType().isAssignableFrom(Integer.class))
+                    if (annotatedField.getKey().getType().isAssignableFrom(Integer.class))
                         objValue = Integer.valueOf(String.valueOf(objValue));
-                    else if(annotatedField.getKey().getType().isAssignableFrom(Long.class))
+                    else if (annotatedField.getKey().getType().isAssignableFrom(Long.class))
                         objValue = Long.valueOf(String.valueOf(objValue));
 
                     // Increment numerate number for generated field
@@ -75,24 +74,19 @@ public class GenPopulateFactory implements IPopulateFactory {
                 }
 
                 annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
-            }
-            catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 logger.warning(e.getMessage());
-            }
-            catch (ClassCastException e) {
+            } catch (ClassCastException e) {
                 try {
-                    if(annotatedField.getKey().getType().isAssignableFrom(String.class)) {
+                    if (annotatedField.getKey().getType().isAssignableFrom(String.class)) {
                         annotatedField.getKey().set(t, String.valueOf(objValue));
                     }
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE AND CAN NOT BE CONVERTED TO STRING.");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 logger.warning(e.getMessage());
-            }
-            finally {
+            } finally {
                 annotatedField.getKey().setAccessible(false);
             }
         }
@@ -107,7 +101,7 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> List<T> populate(final List<T> list) {
-        if(list == null || list.isEmpty())
+        if (list == null || list.isEmpty())
             return Collections.emptyList();
 
         // Set up map for enumerated fields before population

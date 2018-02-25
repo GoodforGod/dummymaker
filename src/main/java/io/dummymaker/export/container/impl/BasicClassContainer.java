@@ -1,17 +1,17 @@
-package io.dummymaker.export.container;
+package io.dummymaker.export.container.impl;
 
+import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.scan.impl.ExportAnnotationScanner;
 import io.dummymaker.scan.impl.RenameAnnotationScanner;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @see IClassContainer
- *
  * @author GoodforGod
+ * @see IClassContainer
  * @since 29.08.2017
  */
 public class BasicClassContainer implements IClassContainer {
@@ -88,22 +88,16 @@ public class BasicClassContainer implements IClassContainer {
     }
 
     /**
+     * Map with origin field name as 'key', fieldContainer as 'value'
+     *
      * @return final fields container map
      */
     private Map<String, FieldContainer> fillExportFieldContainerMap() {
-        final Map<String, FieldContainer> fieldContainerMap = new HashMap<>();
-        final Map<String, Field> originExportFields = fillExportOriginFields();
-
-        for (Map.Entry<String, Field> fieldEntry : originExportFields.entrySet()) {
-            final FieldContainer container = new FieldContainer(fieldEntry.getValue(),
-                    (renamedFields.containsKey(fieldEntry.getKey()))
-                            ? renamedFields.get(fieldEntry.getKey())
-                            : convertByNamingStrategy(fieldEntry.getKey()));
-
-            fieldContainerMap.put(fieldEntry.getKey(), container);
-        }
-
-        return new HashMap<>(fieldContainerMap);
+        return fillExportOriginFields().entrySet().stream()
+                .collect(LinkedHashMap<String, FieldContainer>::new,
+                        (m, e) -> m.put(e.getKey(), new FieldContainer(e.getValue(), getRenamedFieldOrConverted(e.getKey()))),
+                        (m, u) -> { }
+                );
     }
 
     /**
@@ -112,28 +106,20 @@ public class BasicClassContainer implements IClassContainer {
      * @return map with field name as 'key', field as 'value'
      */
     private Map<String, Field> fillExportOriginFields() {
-        return new ExportAnnotationScanner().scan(exportClass).entrySet()
-                .stream()
-                .collect(HashMap<String, Field>::new,
-                        (m, c) -> m.put(c.getKey().getName(), c.getKey()),
+        return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
+                .collect(LinkedHashMap<String, Field>::new,
+                        (m, e) -> m.put(e.getKey().getName(), e.getKey()),
                         (m, u) -> { }
-                        );
+                );
     }
 
     /**
-     * Construct map with renamed fields names as keys if presented (or origin)
+     * Return renamed field name if exist or converted origin by via name strategy
      *
-     * @return map with renamed or origin field name as 'key', field as a 'value'
+     * @param name origin field name
+     * @return renamed field name
      */
-    private Map<String, Field> fillExportFinalFields() {
-        final Map<String, Field> fields = new HashMap<>();
-
-        for (Map.Entry<String, Field> entry : fillExportOriginFields().entrySet()) {
-            fields.put((renamedFields.containsKey(entry.getKey()))
-                    ? renamedFields.get(entry.getKey())
-                    : convertByNamingStrategy(entry.getKey()), entry.getValue());
-        }
-
-        return new HashMap<>(fields);
+    private String getRenamedFieldOrConverted(String name) {
+        return renamedFields.getOrDefault(name, convertByNamingStrategy(name));
     }
 }

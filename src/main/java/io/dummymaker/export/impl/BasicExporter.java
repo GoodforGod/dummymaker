@@ -1,10 +1,10 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.container.BasicClassContainer;
-import io.dummymaker.export.container.ExportContainer;
-import io.dummymaker.export.container.FieldContainer;
 import io.dummymaker.export.container.IClassContainer;
+import io.dummymaker.export.container.impl.BasicClassContainer;
+import io.dummymaker.export.container.impl.ExportContainer;
+import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.BufferedFileWriter;
