@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import static io.dummymaker.util.BasicStringUtils.isNotBlank;
 
 /**
- * "Default Description"
+ * Contains basic date util methods and functions
  *
  * @author GoodforGod
  * @since 25.02.2018

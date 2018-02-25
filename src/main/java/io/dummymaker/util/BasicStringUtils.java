@@ -1,7 +1,7 @@
 package io.dummymaker.util;
 
 /**
- * "Default Description"
+ * Contains basic string util methods
  *
  * @author GoodforGod
  * @since 25.02.2018
