@@ -7,7 +7,6 @@ import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.impl.DefaultStrategy;
 import io.dummymaker.writer.IWriter;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * @author GoodforGod
  * @since 25.02.2018
  */
-public class CsvStaticExporter extends BasicStaticExporter {
+public class StaticCsvExporter extends BasicStaticExporter {
 
     private final char DEFAULT_SEPARATOR = ',';
 
@@ -36,31 +35,31 @@ public class CsvStaticExporter extends BasicStaticExporter {
      */
     private boolean generateHeader = false;
 
-    public CsvStaticExporter() {
+    public StaticCsvExporter() {
         super(null, Format.CSV, new DefaultStrategy());
     }
 
-    public CsvStaticExporter withPath(String path) {
+    public StaticCsvExporter withPath(String path) {
         setPath(path);
         return this;
     }
 
-    public CsvStaticExporter withStrategy(IStrategy strategy) {
+    public StaticCsvExporter withStrategy(IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
 
-    public CsvStaticExporter withTextWrap() {
+    public StaticCsvExporter withTextWrap() {
         this.wrapTextValues = true;
         return this;
     }
 
-    public CsvStaticExporter withHeader() {
+    public StaticCsvExporter withHeader() {
         this.generateHeader = true;
         return this;
     }
 
-    public CsvStaticExporter withSeparator(char separator) {
+    public StaticCsvExporter withSeparator(char separator) {
         this.separator = separator;
         return this;
     }
@@ -75,24 +74,17 @@ public class CsvStaticExporter extends BasicStaticExporter {
         return "'" + value + "'";
     }
 
-    @Override
     <T> String format(T t, IClassContainer container) {
-        final StringBuilder builder = new StringBuilder("");
-        final Iterator<ExportContainer> iterator = extractExportContainers(t, container).iterator();
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if(exportContainers.isEmpty())
+            return "";
 
-        while (iterator.hasNext()) {
-            final ExportContainer exportContainer = iterator.next();
-
-            if (wrapTextValues && container.getField(exportContainer.getExportName()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(exportContainer.getExportValue()));
-            else
-                builder.append(exportContainer.getExportValue());
-
-            if (iterator.hasNext())
-                builder.append(separator);
-        }
-
-        return builder.toString();
+        final String separatorAsStr = String.valueOf(separator);
+        return exportContainers.stream()
+                .map(c -> (wrapTextValues && container.getField(c.getExportName()).getType().equals(String.class))
+                        ? wrapWithQuotes(c.getExportValue())
+                        : c.getExportValue())
+                .collect(Collectors.joining(separatorAsStr));
     }
 
     /**
@@ -101,9 +93,10 @@ public class CsvStaticExporter extends BasicStaticExporter {
      * @return csv header
      */
     private String generateCsvHeader(IClassContainer container) {
+        final String separatorAsStr = String.valueOf(separator);
         return container.getFieldContainers().entrySet().stream()
                 .map(e -> e.getValue().getExportName())
-                .collect(Collectors.joining(String.valueOf(separator)));
+                .collect(Collectors.joining(separatorAsStr));
     }
 
     @Override

@@ -137,8 +137,6 @@ public abstract class BasicStaticExporter {
         return t == null || t.isEmpty() || isExportEntityInvalid(t.get(0));
     }
 
-    abstract <T> String format(T t, IClassContainer container);
-
     public abstract <T> boolean export(final T t);
 
     public abstract <T> boolean export(final List<T> t);
