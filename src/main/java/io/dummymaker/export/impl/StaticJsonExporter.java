@@ -182,12 +182,13 @@ public class StaticJsonExporter extends BasicStaticExporter {
             return false;
 
         // Open JSON Object List
-        writer.write(openJsonListTag(container.exportClassName()));
+        writer.write(openJsonListTag(container.exportClassName()) + "\n");
 
-        final boolean writerHadError = list.stream()
-                .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + ","));
+        final String result = list.stream()
+                .map(t -> format(t, container, Mode.LIST))
+                .collect(Collectors.joining(",\n"));
 
-        return !writerHadError
+        return writer.write(result)
                 && writer.write(closeJsonListTag())
                 && writer.flush();
     }

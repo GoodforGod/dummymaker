@@ -164,7 +164,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
         }
 
         final boolean writerHadError = list.stream()
-                .anyMatch(t -> !writer.write(format(t, container) + "\n"));
+                .anyMatch(t -> !writer.write("\n" + format(t, container)));
 
         return !writerHadError && writer.flush();
     }

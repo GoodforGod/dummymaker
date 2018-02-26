@@ -176,7 +176,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
                 .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + "\n"));
 
         return !writerHadErrors
-                && writer.write("\n" + wrapCloseXmlTag(classListTag))
+                && writer.write(wrapCloseXmlTag(classListTag))
                 && writer.flush();
     }
 
