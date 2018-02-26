@@ -19,7 +19,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 25.02.2018
  */
-public class BasicStaticClassContainer implements IClassContainer {
+public class ClassContainer implements IClassContainer {
 
     /**
      * Export dummy object class
@@ -48,8 +48,8 @@ public class BasicStaticClassContainer implements IClassContainer {
      */
     private final Map<String, String> renamedFields;
 
-    public <T> BasicStaticClassContainer(final T t,
-                                         final IStrategy strategy) {
+    public <T> ClassContainer(final T t,
+                              final IStrategy strategy) {
         this.exportClass = t.getClass();
         this.strategy = strategy;
 

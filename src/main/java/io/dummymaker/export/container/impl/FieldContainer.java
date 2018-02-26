@@ -3,9 +3,9 @@ package io.dummymaker.export.container.impl;
 import java.lang.reflect.Field;
 
 /**
- * Used by BasicClassContainer to contain field value, and final field name
+ * Used by ClassContainer to contain field value, and final field name
  *
- * @see BasicClassContainer
+ * @see ClassContainer
  *
  * @author GoodforGod
  * @since 03.09.2017

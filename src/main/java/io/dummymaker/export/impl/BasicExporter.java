@@ -3,7 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.BasicStaticClassContainer;
+import io.dummymaker.export.container.impl.ClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
@@ -67,7 +67,7 @@ public abstract class BasicExporter implements IExporter {
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(T t) {
-        return new BasicStaticClassContainer(t, strategy);
+        return new ClassContainer(t, strategy);
     }
 
     /**
