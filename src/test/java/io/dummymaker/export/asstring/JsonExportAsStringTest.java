@@ -2,7 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.impl.JsonExporter;
+import io.dummymaker.export.impl.StaticJsonExporter;
+import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.JsonValidation;
 import io.dummymaker.factory.IProduceFactory;
@@ -29,7 +30,7 @@ public class JsonExportAsStringTest {
     @Test
     public void exportSingleDummyInJson() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
+        IExporter exporter = new StaticJsonExporter();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -43,7 +44,7 @@ public class JsonExportAsStringTest {
     @Test
     public void exportListOfDummiesInJson() throws Exception {
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class);
+        IExporter exporter = new StaticJsonExporter();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -56,10 +57,10 @@ public class JsonExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
-        final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
+        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new JsonExporter<>(Dummy.class, null, strategy.getStrategy());
+        IExporter exporter = new StaticJsonExporter().withStrategy(strategy);
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);

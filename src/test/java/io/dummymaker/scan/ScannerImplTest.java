@@ -26,7 +26,7 @@ public class ScannerImplTest {
 
     @Test
     public void baseScannerFindAllAnnotations() throws NoSuchFieldException {
-        IFieldScanner scanner = new AnnotationScanner();
+        IAnnotationScanner scanner = new AnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -44,7 +44,7 @@ public class ScannerImplTest {
 
     @Test
     public void exportAnnotationScannerTest() throws NoSuchFieldException {
-        IFieldScanner scanner = new ExportAnnotationScanner();
+        IAnnotationScanner scanner = new ExportAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -70,7 +70,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForEnumerateAnnotations() throws NoSuchFieldException {
-        IFieldScanner scanner = new EnumerateAnnotationScanner();
+        IAnnotationScanner scanner = new EnumerateAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -110,7 +110,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForPopulateAnnotations() throws NoSuchFieldException {
-        IFieldScanner scanner = new PopulateAnnotationScanner();
+        IAnnotationScanner scanner = new PopulateAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -136,7 +136,7 @@ public class ScannerImplTest {
 
     @Test
     public void scanForPopulateAnnotationsWhereThereNoOne() {
-        IFieldScanner scanner = new PopulateAnnotationScanner();
+        IAnnotationScanner scanner = new PopulateAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 
@@ -147,7 +147,7 @@ public class ScannerImplTest {
 
     @Test
     public void scanForEnumerateWhereThereNoOne() {
-        IFieldScanner scanner = new EnumerateAnnotationScanner();
+        IAnnotationScanner scanner = new EnumerateAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 

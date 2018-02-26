@@ -117,7 +117,7 @@ public class CsvExporter<T> extends BasicExporter<T> {
      */
     private String generateCsvHeader() {
         final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getFieldContainers().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getContainers().entrySet().iterator();
 
         while (iterator.hasNext()) {
             header.append(iterator.next().getValue().getExportName());

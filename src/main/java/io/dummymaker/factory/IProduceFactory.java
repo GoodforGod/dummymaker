@@ -12,11 +12,17 @@ public interface IProduceFactory {
 
     /**
      * Produce and populates one dummy object
+     *
+     * @see IPopulateFactory
+     *
      * @return Populated dummy object
      */
     <T> T produce(Class<T> tClass);
 
     /**
+     * Produce chosen amount of populated dummy objects
+     *
+     * @see IPopulateFactory
      *
      * @param amount amount of dummies to produce and populate
      * @return List of populated dummies

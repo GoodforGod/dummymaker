@@ -13,13 +13,15 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
- * Scanner to find rename annotation for fields and constructor
+ * Scanner for renameExport annotation only
  *
- * NULL key in map indicates constructor (class) new name
+ * NULL key in map indicates constructor/class new name
  *
  * @see GenRenameExport
  *
- * @author GoodforGod (Anton Kurako)
+ * @see AnnotationScanner
+ *
+ * @author GoodforGod
  * @since 06.07.2017
  */
 public class RenameAnnotationScanner implements IScanner<String, String> {

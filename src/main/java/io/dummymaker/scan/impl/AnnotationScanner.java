@@ -1,45 +1,47 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.IFieldScanner;
+import io.dummymaker.scan.IAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * Scan for all annotated fields, is prime (parent) scanner for others
+ * Scan for all annotated fields
+ * Core scanner implementation
+ *
+ * @see IAnnotationScanner
  *
  * @author GoodforGod
  * @since 30.05.2017
  */
-public class AnnotationScanner implements IFieldScanner {
+public class AnnotationScanner implements IAnnotationScanner {
 
     private final Logger logger = Logger.getLogger(AnnotationScanner.class.getSimpleName());
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> classFieldAnnotations = new LinkedHashMap<>();
+    public Map<Field, Set<Annotation>> scan(final Class t) {
+        final Map<Field, Set<Annotation>> classFieldAnnotations = new LinkedHashMap<>();
 
         try {
             for(final Field field : t.getDeclaredFields()) {
                 for(final Annotation annotation : field.getAnnotations()) {
-                    final List<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNode(annotation));
 
+                    // Retrieve prev field annotation list or associate new annotation with it
+                    final Set<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNewList(annotation));
                     if(annotatedField != null) {
                         annotatedField.add(annotation);
-                        classFieldAnnotations.replace(field, annotatedField);
                     }
 
+                    // Do the same for declared annotations on field
                     for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
-                        final List<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNode(primeAnnotation));
-
+                        final Set<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNewList(primeAnnotation));
                         if(fieldPrimeAnnotated != null) {
                             fieldPrimeAnnotated.add(primeAnnotation);
-                            classFieldAnnotations.replace(field, fieldPrimeAnnotated);
                         }
                     }
                 }
@@ -51,8 +53,8 @@ public class AnnotationScanner implements IFieldScanner {
         return classFieldAnnotations;
     }
 
-    private List<Annotation> createNode(final Annotation a) {
-        final List<Annotation> annotations = new ArrayList<>();
+    private Set<Annotation> createNewList(Annotation a) {
+        final Set<Annotation> annotations = new HashSet<>();
         annotations.add(a);
         return annotations;
     }

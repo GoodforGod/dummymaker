@@ -1,6 +1,7 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.export.Format;
+import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.BasicStaticClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 25.02.2018
  */
-public abstract class BasicStaticExporter {
+public abstract class BasicStaticExporter implements IExporter {
 
     private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
 
@@ -86,7 +87,7 @@ public abstract class BasicStaticExporter {
      */
     IWriter buildWriter(IClassContainer classContainer) {
         try {
-            return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtention());
+            return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtension());
         } catch (IOException e) {
             logger.warning(e.getMessage());
             return null;
@@ -103,7 +104,7 @@ public abstract class BasicStaticExporter {
     <T> List<ExportContainer> extractExportContainers(final T t, final IClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
-        classContainer.getFieldContainers().forEach((key, value) -> {
+        classContainer.getContainers().forEach((key, value) -> {
             try {
                 final Field field = t.getClass().getDeclaredField(key);
 

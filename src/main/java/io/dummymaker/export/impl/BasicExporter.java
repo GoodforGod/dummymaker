@@ -1,6 +1,5 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.BasicClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public abstract class BasicExporter<T> extends BufferedFileWriter implements IExporter<T> {
+public abstract class BasicExporter<T> extends BufferedFileWriter {
 
     private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
 
@@ -79,14 +78,14 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
     List<ExportContainer> extractExportValues(final T t) {
         final List<ExportContainer> exports = new ArrayList<>();
 
-        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.getFieldContainers().entrySet()) {
+        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.getContainers().entrySet()) {
             try {
                 final Field field = t.getClass().getDeclaredField(fieldEntry.getKey());
 
                 if(field != null) {
                     field.setAccessible(true);
 
-                    final String exportFieldName = classContainer.getExportFieldName(field.getName());
+                    final String exportFieldName = classContainer.getFieldExportName(field.getName());
                     exports.add(new ExportContainer(exportFieldName, String.valueOf(field.get(t))));
 
                     field.setAccessible(false);
@@ -108,7 +107,7 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
      * @return validation result
      */
     boolean isExportStateValid(final T t) {
-        return !classContainer.getFieldContainers().isEmpty() && t != null;
+        return !classContainer.getContainers().isEmpty() && t != null;
     }
 
     /**
@@ -117,18 +116,14 @@ public abstract class BasicExporter<T> extends BufferedFileWriter implements IEx
      * @return validation result
      */
     boolean isExportStateValid(final List<T> t) {
-        return !classContainer.getFieldContainers().isEmpty() && t != null && !t.isEmpty();
+        return !classContainer.getContainers().isEmpty() && t != null && !t.isEmpty();
     }
 
-    @Override
     public abstract boolean export(final T t);
 
-    @Override
     public abstract boolean export(final List<T> t);
 
-    @Override
     public abstract String exportAsString(final T t);
 
-    @Override
     public abstract String exportAsString(final List<T> list);
 }

@@ -12,7 +12,11 @@ import java.util.stream.Collectors;
 /**
  * Scanner to filter fields for enumerate annotation fields
  *
- * @author GoodforGod (Anton Kurako)
+ * @see GenEnumerate
+ *
+ * @see AnnotationScanner
+ *
+ * @author GoodforGod
  * @since 07.06.2017
  */
 public class EnumerateAnnotationScanner extends AnnotationScanner {

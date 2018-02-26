@@ -4,61 +4,84 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.impl.DefaultStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * "Default Description"
+ * Export objects in CSV format
  *
  * @author GoodforGod
  * @since 25.02.2018
  */
 public class StaticCsvExporter extends BasicStaticExporter {
 
-    private final char DEFAULT_SEPARATOR = ',';
+    private static final char DEFAULT_SEPARATOR = ',';
 
     /**
-     * CSV format separator
+     * CSV format separator for values: value1,value2,value3 ...
      */
     private char separator = DEFAULT_SEPARATOR;
 
     /**
      * Flag to indicate wrap text (String) fields with quotes
      */
-    private boolean wrapTextValues = false;
+    private boolean areTextValuesWrapped = false;
 
     /**
      * Generate header for CSV file
      */
-    private boolean generateHeader = false;
+    private boolean hasHeader = false;
 
     public StaticCsvExporter() {
-        super(null, Format.CSV, new DefaultStrategy());
+        super(null, Format.CSV, PresetStrategies.DEFAULT.getStrategy());
     }
 
+    /**
+     * Build exporter with path value
+     *
+     * @param path path for export file
+     */
     public StaticCsvExporter withPath(String path) {
         setPath(path);
         return this;
     }
 
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     *
+     * @param strategy naming strategy for exporter
+     */
     public StaticCsvExporter withStrategy(IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
 
+    /**
+     * @see #areTextValuesWrapped
+     */
     public StaticCsvExporter withTextWrap() {
-        this.wrapTextValues = true;
+        this.areTextValuesWrapped = true;
         return this;
     }
 
+    /**
+     * @see #hasHeader
+     */
     public StaticCsvExporter withHeader() {
-        this.generateHeader = true;
+        this.hasHeader = true;
         return this;
     }
 
+    /**
+     * @see #separator
+     *
+     * @param separator char separator for CSV values
+     */
     public StaticCsvExporter withSeparator(char separator) {
         this.separator = separator;
         return this;
@@ -81,7 +104,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
 
         final String separatorAsStr = String.valueOf(separator);
         return exportContainers.stream()
-                .map(c -> (wrapTextValues && container.getField(c.getExportName()).getType().equals(String.class))
+                .map(c -> (areTextValuesWrapped && container.getField(c.getExportName()).getType().equals(String.class))
                         ? wrapWithQuotes(c.getExportValue())
                         : c.getExportValue())
                 .collect(Collectors.joining(separatorAsStr));
@@ -94,7 +117,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
      */
     private String generateCsvHeader(IClassContainer container) {
         final String separatorAsStr = String.valueOf(separator);
-        return container.getFieldContainers().entrySet().stream()
+        return container.getContainers().entrySet().stream()
                 .map(e -> e.getValue().getExportName())
                 .collect(Collectors.joining(separatorAsStr));
     }
@@ -112,7 +135,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
         if (writer == null)
             return false;
 
-        if (generateHeader) {
+        if (hasHeader) {
             if (!writer.write(generateCsvHeader(container)))
                 return false;
         }
@@ -134,7 +157,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
         if (writer == null)
             return false;
 
-        if (generateHeader) {
+        if (hasHeader) {
             if (!writer.write(generateCsvHeader(container)))
                 return false;
         }
@@ -155,7 +178,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
             return "";
 
         final StringBuilder builder = new StringBuilder("");
-        if (generateHeader) {
+        if (hasHeader) {
             builder.append(generateCsvHeader(container)).append("\n");
         }
 
@@ -172,7 +195,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
             return "";
 
         final StringBuilder builder = new StringBuilder("");
-        if (generateHeader) {
+        if (hasHeader) {
             builder.append(generateCsvHeader(container)).append("\n");
         }
 

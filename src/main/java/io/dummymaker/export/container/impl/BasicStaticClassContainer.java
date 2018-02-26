@@ -14,18 +14,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * "Default Description"
+ * @see IClassContainer
  *
  * @author GoodforGod
  * @since 25.02.2018
  */
 public class BasicStaticClassContainer implements IClassContainer {
 
+    /**
+     * Export dummy object class
+     */
     private final Class exportClass;
 
     private final String originClassName;
+
+    /**
+     * Export dummy object class name (renamed or formatted)
+     */
     private final String finalClassName;
 
+    /**
+     * Naming strategy applied to field names and class name
+     */
     private final IStrategy strategy;
 
     /**
@@ -60,10 +70,11 @@ public class BasicStaticClassContainer implements IClassContainer {
     }
 
     @Override
-    public String getExportFieldName(final String originFieldName) {
+    public String getFieldExportName(final String originFieldName) {
         return fieldContainerMap.get(originFieldName).getExportName();
     }
 
+    @Override
     public Field getField(final String exportFieldName) {
         return fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
@@ -82,7 +93,7 @@ public class BasicStaticClassContainer implements IClassContainer {
     }
 
     @Override
-    public Map<String, FieldContainer> getFieldContainers() {
+    public Map<String, FieldContainer> getContainers() {
         return fieldContainerMap;
     }
 
@@ -110,6 +121,12 @@ public class BasicStaticClassContainer implements IClassContainer {
         return renamedFields.getOrDefault(name, strategy.toStrategy(name));
     }
 
+    /**
+     * @see io.dummymaker.annotation.special.GenEnumerate
+     *
+     * @param fieldAnnotations used to set field container enumerate flag
+     * @return build field container
+     */
     private FieldContainer buildFieldContainer(final Field field,
                                                final List<Annotation> fieldAnnotations) {
         return new FieldContainer(
@@ -119,6 +136,11 @@ public class BasicStaticClassContainer implements IClassContainer {
         );
     }
 
+    /**
+     * Indicates is field enumerated or not
+     *
+     * @see io.dummymaker.annotation.special.GenEnumerate
+     */
     private boolean isAnnotationEnumerable(List<Annotation> annotations) {
         return annotations.stream()
                 .anyMatch(a -> a.annotationType().equals(PrimeGenAnnotation.class)

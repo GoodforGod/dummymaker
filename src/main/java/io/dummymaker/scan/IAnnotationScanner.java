@@ -2,16 +2,19 @@ package io.dummymaker.scan;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Field scanner contract
+ * Field scanner used to scan for field annotations
+ * Mostly used by factories to retrieve info for them
+ *
+ * @see io.dummymaker.factory.IPopulateFactory
  *
  * @author GoodforGod
  * @since 30.05.2017
  */
-public interface IFieldScanner extends IScanner<Field, List<Annotation>> {
+public interface IAnnotationScanner extends IScanner<Field, Set<Annotation>> {
 
     /**
      * Scan class for field annotations
@@ -20,5 +23,5 @@ public interface IFieldScanner extends IScanner<Field, List<Annotation>> {
      * @return Returns Map with field and annotations associated with that field
      */
     @Override
-    Map<Field, List<Annotation>> scan(final Class t);
+    Map<Field, Set<Annotation>> scan(final Class t);
 }

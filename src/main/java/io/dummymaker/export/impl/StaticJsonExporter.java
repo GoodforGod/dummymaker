@@ -4,42 +4,65 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.impl.DefaultStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * "Default Description"
+ * Export objects in JSON format
  *
  * @author GoodforGod
  * @since 25.02.2018
  */
 public class StaticJsonExporter extends BasicStaticExporter {
 
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
     private enum Mode {
         SINGLE,
         LIST
     }
 
+    /**
+     * Should export in json pretty mode or raw
+     */
     private boolean isPretty;
 
     public StaticJsonExporter() {
-        super(null, Format.JSON, new DefaultStrategy());
+        super(null, Format.JSON, PresetStrategies.DEFAULT.getStrategy());
         this.isPretty = false;
     }
 
+    /**
+     * Build exporter with path value
+     *
+     * @param path path for export file
+     */
     public StaticJsonExporter withPath(String path) {
         setPath(path);
         return this;
     }
 
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     * @see PresetStrategies
+     *
+     * @param strategy naming strategy for exporter
+     */
     public StaticJsonExporter withStrategy(IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
 
+    /**
+     * @see #isPretty
+     */
     public StaticJsonExporter withPretty() {
         this.isPretty = true;
         return this;
@@ -49,6 +72,9 @@ public class StaticJsonExporter extends BasicStaticExporter {
         return "\"" + value + "\"";
     }
 
+    /**
+     * Tabs between newline and JSON value fields
+     */
     private String buildFieldTab(Mode mode) {
         if(isPretty) {
             return (mode == Mode.SINGLE)
@@ -59,6 +85,9 @@ public class StaticJsonExporter extends BasicStaticExporter {
         return "";
     }
 
+    /**
+     * Tabs between newline and brackets
+     */
     private String buildBracketTabs(Mode mode) {
         if(isPretty) {
             return (mode == Mode.SINGLE)
@@ -69,6 +98,11 @@ public class StaticJsonExporter extends BasicStaticExporter {
         return "";
     }
 
+    /**
+     * Format single T value to JSON format
+     *
+     * @param mode represent Single JSON object or List of objects
+     */
     private <T> String format(T t, IClassContainer container, Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())

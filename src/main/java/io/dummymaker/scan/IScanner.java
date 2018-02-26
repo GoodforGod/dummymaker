@@ -3,15 +3,15 @@ package io.dummymaker.scan;
 import java.util.Map;
 
 /**
- * Base scanner contract
+ * Base scanner
  *
- * @author GoodforGod (Anton Kurako)
+ * @author GoodforGod
  * @since 06.07.2017
  */
 public interface IScanner<K, V> {
 
     /**
-     * Base class scanner contract
+     * Base class scanner
      *
      * @param t class to scan
      * @return Returns Map with KEY and VALUES associated with annotated class

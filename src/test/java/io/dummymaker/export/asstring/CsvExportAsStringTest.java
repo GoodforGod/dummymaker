@@ -2,7 +2,8 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.impl.CsvExporter;
+import io.dummymaker.export.impl.StaticCsvExporter;
+import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.CsvValidation;
 import io.dummymaker.factory.IProduceFactory;
@@ -31,7 +32,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportSingleDummyInCsv() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
+        IExporter exporter = new StaticCsvExporter();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -45,7 +46,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(), true, true, SEPARATOR);
+        IExporter exporter = new StaticCsvExporter().withTextWrap().withHeader();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -59,7 +60,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportListOfDummiesInCsv() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class);
+        IExporter exporter = new StaticCsvExporter();
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -73,7 +74,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, PresetStrategies.DEFAULT.getStrategy(),true, true, SEPARATOR);
+        IExporter exporter = new StaticCsvExporter().withHeader().withTextWrap();
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -86,10 +87,10 @@ public class CsvExportAsStringTest {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
-        final PresetStrategies strategy = PresetStrategies.UNDERSCORED_UPPER_CASE;
+        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter<Dummy> exporter = new CsvExporter<>(Dummy.class, null, strategy.getStrategy(),true, true, SEPARATOR);
+        IExporter exporter = new StaticCsvExporter().withHeader().withTextWrap().withStrategy(strategy);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

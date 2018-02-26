@@ -22,20 +22,25 @@ public class FieldContainer {
      */
     private final String exportName;
 
-    private final boolean isEnumeratable;
+    /**
+     * Is field enumerable or not
+     *
+     * @see io.dummymaker.annotation.special.GenEnumerate
+     */
+    private final boolean isEnumerable;
 
-    public FieldContainer(Field field, String finalFieldName) {
+    FieldContainer(Field field, String finalFieldName) {
         this(field, finalFieldName, false);
     }
 
-    public FieldContainer(Field field, String finalFieldName, boolean isEnumeratable) {
+    FieldContainer(Field field, String finalFieldName, boolean isEnumerable) {
         this.field = field;
         this.exportName = finalFieldName;
-        this.isEnumeratable = isEnumeratable;
+        this.isEnumerable = isEnumerable;
     }
 
-    public boolean isEnumeratable() {
-        return isEnumeratable;
+    public boolean isEnumerable() {
+        return isEnumerable;
     }
 
     public Field getField() {

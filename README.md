@@ -247,7 +247,7 @@ Can be used to import data in ***MySQL, SQL Server, etc...***
 
 Don't forget about **Primary Key**!
 
-Each insert query can contains max ***995*** rows (Due to ***1000*** insert row limit in *SQL*).
+Each insert query can contains max ***999*** rows (Due to ***1000*** insert row limit in *SQL*).
 
 ```sql
 CREATE TABLE IF NOT EXISTS user(

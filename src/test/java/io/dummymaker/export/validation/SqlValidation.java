@@ -1,6 +1,6 @@
 package io.dummymaker.export.validation;
 
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.IStrategy;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -42,10 +42,10 @@ public class SqlValidation {
         assertTrue(dummies[9].matches("\\('[a-zA-Z]+', [0-9]+, '[0-9]+'\\);"));
     }
 
-    public void isTwoDummiesValidithNamingStratery(String[] dummies, PresetStrategies strategy) {
-        final String expectedNameField = strategy.getStrategy().toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidithNamingStratery(String[] dummies, IStrategy strategy) {
+        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.getStrategy().toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummies[1].matches("\\t" + expectedNameField + "\\tVARCHAR,"));

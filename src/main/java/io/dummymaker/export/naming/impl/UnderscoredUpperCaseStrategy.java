@@ -16,15 +16,15 @@ public class UnderscoredUpperCaseStrategy implements IStrategy {
 
     @Override
     public String toStrategy(String value) {
-        final StringBuilder underscored = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
         for(final char letter : value.toCharArray()) {
-            if (Character.isUpperCase(letter) && underscored.length() != 0)
-                underscored.append("_");
+            if (Character.isUpperCase(letter) && builder.length() != 0)
+                builder.append("_");
 
-            underscored.append(Character.toUpperCase(letter));
+            builder.append(Character.toUpperCase(letter));
         }
 
-        return underscored.toString();
+        return builder.toString();
     }
 }

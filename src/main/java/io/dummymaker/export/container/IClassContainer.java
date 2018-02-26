@@ -29,6 +29,9 @@ public interface IClassContainer {
 
     /**
      * Export class name (after naming strategy applied or renamed)
+     *
+     * @see io.dummymaker.export.naming.IStrategy
+     * @see io.dummymaker.annotation.special.GenRenameExport
      */
     String exportClassName();
 
@@ -38,10 +41,10 @@ public interface IClassContainer {
      * @param originFieldName origin class field name
      * @return export field name
      */
-    String getExportFieldName(final String originFieldName);
+    String getFieldExportName(final String originFieldName);
 
     /**
-     * Retrieve field by its export name
+     * Retrieve field by its export name (formatted via strategy or renamed via annotation)
      *
      * @see io.dummymaker.export.naming.IStrategy
      * @see io.dummymaker.annotation.special.GenRenameExport
@@ -52,11 +55,14 @@ public interface IClassContainer {
     Field getField(final String exportFieldName);
 
     /**
-     * Map with origin field name as 'key', value as 'field container'
+     * Return map of field containers
+     *
+     * KEY - 'origin field'
+     * VALUE - 'field container'
      *
      * @see FieldContainer
      *
      * @return export containers
      */
-    Map<String, FieldContainer> getFieldContainers();
+    Map<String, FieldContainer> getContainers();
 }

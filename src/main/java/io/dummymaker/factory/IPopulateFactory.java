@@ -11,14 +11,20 @@ import java.util.List;
 public interface IPopulateFactory {
 
     /**
-     * Populates object via generators
+     * Populates dummy object fields
+     *
+     * @see io.dummymaker.annotation.PrimeGenAnnotation
+     *
      * @param t object to populate
      * @return Populated Object
      */
     <T> T populate(final T t);
 
     /**
-     * Populates objects via generators
+     * Populates dummy objects fields
+     *
+     * @see io.dummymaker.annotation.PrimeGenAnnotation
+     *
      * @param t list of object to populate
      * @return Populated list of objects
      */

@@ -5,7 +5,7 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.impl.DefaultStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 import static io.dummymaker.util.BasicDateUtils.*;
 
 /**
- * "Default Description"
+ * Export objects as SQL insert query.
+ *
+ * @see Format
  *
  * @author GoodforGod
  * @since 25.02.2018
@@ -39,12 +41,15 @@ public class StaticSqlExporter extends BasicStaticExporter {
     private Map<Class, String> dataTypes;
 
     public StaticSqlExporter() {
-        super(null, Format.SQL, new DefaultStrategy());
+        super(null, Format.SQL, PresetStrategies.DEFAULT.getStrategy());
         this.dataTypes = buildDefaultDataTypeMap();
     }
 
+    /**
+     * @param dataTypes map with user custom types for 'dataTypeMap'
+     */
     public StaticSqlExporter(Map<Class, String> dataTypes) {
-        super(null, Format.SQL, new DefaultStrategy());
+        super(null, Format.SQL, PresetStrategies.DEFAULT.getStrategy());
         final Map<Class, String> dataTypesTemp = buildDefaultDataTypeMap();
         if (dataTypes == null || dataTypes.isEmpty()) {
             this.dataTypes = dataTypesTemp;
@@ -54,16 +59,34 @@ public class StaticSqlExporter extends BasicStaticExporter {
         }
     }
 
+    /**
+     * Build exporter with path value
+     *
+     * @param path path for export file
+     */
     public StaticSqlExporter withPath(String path) {
         setPath(path);
         return this;
     }
 
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     * @see PresetStrategies
+     *
+     * @param strategy naming strategy for exporter
+     */
     public StaticSqlExporter withStrategy(IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
 
+    /**
+     * Build default data types
+     *
+     * @see #dataTypes
+     */
     private HashMap<Class, String> buildDefaultDataTypeMap() {
         return new HashMap<Class, String>() {{
             put(Long.class, "BIGINT");
@@ -98,7 +121,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
      */
     private String buildCreateTableQuery(final IClassContainer container,
                                          final String primaryKeyField) {
-        final Map<String, FieldContainer> containerMap = container.getFieldContainers();
+        final Map<String, FieldContainer> containerMap = container.getContainers();
 
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(container.exportClassName().toLowerCase())
@@ -175,14 +198,14 @@ public class StaticSqlExporter extends BasicStaticExporter {
      * - Randomly selected
      */
     private String buildPrimaryKey(final IClassContainer container) {
-        final Map<String, FieldContainer> containerMap = container.getFieldContainers();
+        final Map<String, FieldContainer> containerMap = container.getContainers();
         return containerMap.entrySet().stream()
                 .filter(e -> e.getKey().equalsIgnoreCase("id")
                         || e.getKey().equalsIgnoreCase("uid"))
                 .map(Map.Entry::getKey)
                 .findAny()
                 .orElse(containerMap.entrySet().stream()
-                        .filter(c -> c.getValue().isEnumeratable())
+                        .filter(c -> c.getValue().isEnumerable())
                         .map(Map.Entry::getKey)
                         .findAny()
                         .orElse(containerMap.entrySet().iterator().next().getKey())

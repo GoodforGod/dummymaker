@@ -4,47 +4,83 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.impl.DefaultStrategy;
+import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * "Default Description"
+ * Export objects is XML format
+ *
+ * @see Format
  *
  * @author GoodforGod
  * @since 25.02.2018
  */
 public class StaticXmlExporter extends BasicStaticExporter {
 
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
     private enum Mode {
         SINGLE,
         LIST
     }
 
+    /**
+     * Is used with className for XML list tag
+     */
     private String exportClassEnding = "List";
+
+    /**
+     * Is used instead of class name + ending if set
+     *
+     * @see #exportClassEnding
+     */
     private String exportClassFullName = null;
 
     public StaticXmlExporter() {
-        super(null, Format.XML, new DefaultStrategy());
+        super(null, Format.XML, PresetStrategies.DEFAULT.getStrategy());
     }
 
+    /**
+     * Build exporter with path value
+     *
+     * @param path path for export file
+     */
     public StaticXmlExporter withPath(String path) {
         setPath(path);
         return this;
     }
 
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     * @see PresetStrategies
+     *
+     * @param strategy naming strategy for exporter
+     */
     public StaticXmlExporter withStrategy(IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
 
-    public StaticXmlExporter withFullname(String fullname) {
-        this.exportClassFullName = fullname;
+    /**
+     * @see #exportClassFullName
+     * @param fullName full name for XML list tag
+     */
+    public StaticXmlExporter withFullname(String fullName) {
+        this.exportClassFullName = fullName;
         return this;
     }
 
+    /**
+     * @see #exportClassEnding
+     * @param ending custom ending for XML list tag
+     */
     public StaticXmlExporter withEnding(String ending) {
         this.exportClassEnding = ending;
         return this;
@@ -58,6 +94,11 @@ public class StaticXmlExporter extends BasicStaticExporter {
         return "</" + value + ">";
     }
 
+    /**
+     * Format single T value to JSON format
+     *
+     * @param mode represent Single JSON object or List of objects
+     */
     private <T> String format(final T t, final IClassContainer container, final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
@@ -83,6 +124,14 @@ public class StaticXmlExporter extends BasicStaticExporter {
                 .toString();
     }
 
+    /**
+     * Build XML list tag determined by fullname status and ending class phrase
+     *
+     * @see #exportClassEnding
+     * @see #exportClassFullName
+     *
+     * @return XML list tag
+     */
     private <T> String buildClassListTag(T t) {
         return (exportClassFullName != null)
                 ? exportClassFullName

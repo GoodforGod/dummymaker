@@ -94,7 +94,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
      */
     private String sqlTableCreate() {
         final StringBuilder builder = new StringBuilder();
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getFieldContainers().entrySet().iterator();
+        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getContainers().entrySet().iterator();
 
         String primaryKeyField = "";
 
@@ -116,7 +116,7 @@ public class SqlExporter<T> extends BasicExporter<T> {
         builder.append("\t").append("PRIMARY KEY (");
 
         if(primaryKeyField.isEmpty())
-            builder.append(classContainer.getFieldContainers().values().iterator().next().getExportName());
+            builder.append(classContainer.getContainers().values().iterator().next().getExportName());
         else
             builder.append(primaryKeyField);
 

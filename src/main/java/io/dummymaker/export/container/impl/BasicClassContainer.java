@@ -56,7 +56,7 @@ public class BasicClassContainer<T> implements IClassContainer {
     }
 
     @Override
-    public String getExportFieldName(final String originFieldName) {
+    public String getFieldExportName(final String originFieldName) {
         return fieldContainerMap.get(originFieldName).getExportName();
     }
 
@@ -78,7 +78,7 @@ public class BasicClassContainer<T> implements IClassContainer {
     }
 
     @Override
-    public Map<String, FieldContainer> getFieldContainers() {
+    public Map<String, FieldContainer> getContainers() {
         return fieldContainerMap;
     }
 

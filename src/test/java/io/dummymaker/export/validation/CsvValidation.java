@@ -1,6 +1,6 @@
 package io.dummymaker.export.validation;
 
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.IStrategy;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertEquals;
@@ -79,10 +79,10 @@ public class CsvValidation {
         assertTrue(valueArray2[2].matches("\'[0-9]+\'"));
     }
 
-    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, PresetStrategies strategy) {
-        final String expectedNameField = strategy.getStrategy().toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, IStrategy strategy) {
+        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.getStrategy().toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));

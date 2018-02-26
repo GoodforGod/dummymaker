@@ -1,7 +1,9 @@
 package io.dummymaker.export;
 
 /**
- * "Default Description"
+ * All available export types for exporters
+ *
+ * @see IExporter
  *
  * @author GoodforGod
  * @since 25.02.2018
@@ -12,13 +14,13 @@ public enum Format {
     XML(".xml"),
     SQL(".sql");
 
-    Format(final String extention) {
-        this.extention = extention;
+    Format(final String extension) {
+        this.extension = extension;
     }
 
-    private final String extention;
+    private final String extension;
 
-    public String getExtention() {
-        return extention;
+    public String getExtension() {
+        return extension;
     }
 }
