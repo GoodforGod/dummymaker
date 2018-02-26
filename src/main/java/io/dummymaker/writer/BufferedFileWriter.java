@@ -48,7 +48,6 @@ public class BufferedFileWriter implements IWriter {
     public boolean write(final String value) {
         try {
             writer.write(value);
-            writer.newLine();
             return true;
         } catch (IOException e) {
             logger.warning(e.getMessage());

@@ -23,8 +23,11 @@ public class StaticJsonExporter extends BasicStaticExporter {
         LIST
     }
 
+    private boolean isPretty;
+
     public StaticJsonExporter() {
         super(null, Format.JSON, new DefaultStrategy());
+        this.isPretty = false;
     }
 
     public StaticJsonExporter withPath(String path) {
@@ -37,8 +40,33 @@ public class StaticJsonExporter extends BasicStaticExporter {
         return this;
     }
 
+    public StaticJsonExporter withPretty() {
+        this.isPretty = true;
+        return this;
+    }
+
     private String wrapWithQuotes(final String value) {
         return "\"" + value + "\"";
+    }
+
+    private String buildFieldTab(Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? "\t"
+                    : "\t\t\t";
+        }
+
+        return "";
+    }
+
+    private String buildBracketTabs(Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? ""
+                    : "\t\t";
+        }
+
+        return "";
     }
 
     private <T> String format(T t, IClassContainer container, Mode mode) {
@@ -46,34 +74,38 @@ public class StaticJsonExporter extends BasicStaticExporter {
         if (exportContainers.isEmpty())
             return "";
 
-        final String fieldTabs = (mode == Mode.SINGLE)
-                ? "\t"
-                : "\t\t\t";
+        final String fieldTabs = buildFieldTab(mode);
+        final String bracketTabs = buildBracketTabs(mode);
 
-        final String bracketTabs = (mode == Mode.SINGLE)
-                ? ""
-                : "\t\t";
+        final String openValueBracket = (isPretty) ? "\n" + bracketTabs + "{\n" : "{";
+        final String closeValueBracket = (isPretty) ? "\n" + bracketTabs + "}" : "}";
+        final String valueDelimiter = (isPretty) ? ",\n" : ",";
 
-        final StringBuilder builder = new StringBuilder();
-        builder.append(bracketTabs).append("{\n");
+
+        final StringBuilder builder = new StringBuilder(bracketTabs)
+                .append(openValueBracket);
 
         final String valueResult = exportContainers.stream()
                 .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c.getExportValue()))
-                .collect(Collectors.joining(",\n"));
+                .collect(Collectors.joining(valueDelimiter));
 
         builder.append(valueResult)
                 .append(bracketTabs)
-                .append("}");
+                .append(closeValueBracket);
 
         return builder.toString();
     }
 
     private String openJsonList(String exportClassName) {
-        return "{\n" + "\t\"" + exportClassName + "\"" + ": " + "[";
+        return (isPretty)
+                ? "{\n\t\"" + exportClassName + "\": ["
+                : "{\"" + exportClassName + "\": [";
     }
 
     private String closeJsonList() {
-        return "\t]\n}";
+        return (isPretty)
+                ? "\n\t]\n}"
+                : "]}";
     }
 
     @Override

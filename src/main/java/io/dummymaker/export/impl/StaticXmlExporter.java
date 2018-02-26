@@ -63,21 +63,20 @@ public class StaticXmlExporter extends BasicStaticExporter {
         if (exportContainers.isEmpty())
             return "";
 
-        final String tabObject = (mode == Mode.SINGLE)
-                ? ""
-                : "\t";
+        final String tabObject = (mode == Mode.SINGLE) ? "" : "\t";
+        final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
 
-        final String tabField = (mode == Mode.SINGLE)
-                ? "\t"
-                : "\t\t";
-
-        final StringBuilder builder = new StringBuilder().append(tabObject).append(wrapOpenXmlTag(container.exportClassName())).append("\n");
+        final StringBuilder builder = new StringBuilder()
+                .append(tabObject)
+                .append(wrapOpenXmlTag(container.exportClassName()))
+                .append("\n");
 
         final String resultValues = exportContainers.stream()
-                .map(c -> wrapOpenXmlTag(c.getExportName()) + c.getExportValue() + wrapCloseXmlTag(c.getExportName()))
-                .collect(Collectors.joining("\n", tabField, ""));
+                .map(c -> tabField + wrapOpenXmlTag(c.getExportName()) + c.getExportValue() + wrapCloseXmlTag(c.getExportName()))
+                .collect(Collectors.joining("\n"));
 
-        builder.append(resultValues).append("\n");
+        builder.append(resultValues)
+                .append("\n");
 
         return builder.append(tabObject)
                 .append(wrapCloseXmlTag(container.exportClassName()))
@@ -119,12 +118,13 @@ public class StaticXmlExporter extends BasicStaticExporter {
             return false;
 
         final String classListTag = buildClassListTag(list.get(0));
-        if (!writer.write(wrapOpenXmlTag(classListTag)))
+        if (!writer.write(wrapOpenXmlTag(classListTag) + "\n"))
             return false;
 
-        final boolean writerResult = list.stream().anyMatch(t -> !writer.write(format(t, container, Mode.LIST)));
+        final boolean writerHadErrors = list.stream()
+                .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + "\n"));
 
-        return writerResult
+        return !writerHadErrors
                 && writer.write(wrapCloseXmlTag(classListTag))
                 && writer.flush();
     }

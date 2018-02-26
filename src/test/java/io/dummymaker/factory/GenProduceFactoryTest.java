@@ -2,6 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.export.impl.StaticXmlExporter;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
@@ -16,6 +17,14 @@ import static org.junit.Assert.*;
  * @since 31.07.2017
  */
 public class GenProduceFactoryTest {
+
+    @Test
+    public void tt() throws Exception {
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        List<Dummy> dummies = dummyGenPopulateFactory.produce(Dummy.class, 100);
+        new StaticXmlExporter().export(dummies);
+//        new JsonExporter<>(Dummy.class).export(dummies);
+    }
 
     @Test
     public void genProduceFactoryListTest() {
