@@ -30,7 +30,7 @@ public class JsonExportAsStringTest {
     @Test
     public void exportSingleDummyInJson() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new StaticJsonExporter();
+        IExporter exporter = new StaticJsonExporter().withPretty();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -44,7 +44,7 @@ public class JsonExportAsStringTest {
     @Test
     public void exportListOfDummiesInJson() throws Exception {
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new StaticJsonExporter();
+        IExporter exporter = new StaticJsonExporter().withPretty();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -60,7 +60,7 @@ public class JsonExportAsStringTest {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new StaticJsonExporter().withStrategy(strategy);
+        IExporter exporter = new StaticJsonExporter().withStrategy(strategy).withPretty();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);

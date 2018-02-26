@@ -4,14 +4,12 @@ import io.dummymaker.scan.IAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
- * Scan for all annotated fields
+ * Scan for all annotated fields (without duplicates)
  * Core scanner implementation
  *
  * @see IAnnotationScanner
@@ -24,38 +22,29 @@ public class AnnotationScanner implements IAnnotationScanner {
     private final Logger logger = Logger.getLogger(AnnotationScanner.class.getSimpleName());
 
     @Override
-    public Map<Field, Set<Annotation>> scan(final Class t) {
-        final Map<Field, Set<Annotation>> classFieldAnnotations = new LinkedHashMap<>();
+    public Map<Field, List<Annotation>> scan(final Class t) {
+        final Map<Field, List<Annotation>> fieldScanMap = new LinkedHashMap<>();
 
         try {
             for(final Field field : t.getDeclaredFields()) {
-                for(final Annotation annotation : field.getAnnotations()) {
 
-                    // Retrieve prev field annotation list or associate new annotation with it
-                    final Set<Annotation> annotatedField = classFieldAnnotations.putIfAbsent(field, createNewList(annotation));
-                    if(annotatedField != null) {
-                        annotatedField.add(annotation);
-                    }
+                // So we can avoid duplicates but not to use Set in contract for scanner
+                final Set<Annotation> annotations = Arrays.stream(field.getAnnotations())
+                        .map(a -> {
+                            final Set<Annotation> set = Arrays.stream(a.annotationType().getDeclaredAnnotations())
+                                    .collect(Collectors.toSet());
+                            set.add(a);
+                            return set;
+                        })
+                        .flatMap(Set::stream)
+                        .collect(Collectors.toSet());
 
-                    // Do the same for declared annotations on field
-                    for(Annotation primeAnnotation : annotation.annotationType().getDeclaredAnnotations()) {
-                        final Set<Annotation> fieldPrimeAnnotated = classFieldAnnotations.putIfAbsent(field, createNewList(primeAnnotation));
-                        if(fieldPrimeAnnotated != null) {
-                            fieldPrimeAnnotated.add(primeAnnotation);
-                        }
-                    }
-                }
+                fieldScanMap.put(field, new ArrayList<>(annotations));
             }
         } catch (SecurityException e) {
             logger.warning(e.toString());
         }
 
-        return classFieldAnnotations;
-    }
-
-    private Set<Annotation> createNewList(Annotation a) {
-        final Set<Annotation> annotations = new HashSet<>();
-        annotations.add(a);
-        return annotations;
+        return fieldScanMap;
     }
 }

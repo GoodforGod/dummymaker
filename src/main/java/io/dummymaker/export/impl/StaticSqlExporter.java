@@ -169,7 +169,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
         return builder.append(names)
                 .append(") ")
-                .append("VALUES ")
+                .append("VALUES\n")
                 .toString();
     }
 
@@ -326,7 +326,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
 
         final String primaryKey = buildPrimaryKey(container);
         return buildCreateTableQuery(container, primaryKey) + "\n"
-                + buildInsertQuery(t, container) + "\n"
+                + buildInsertQuery(t, container)
                 + format(t, container) + ";";
     }
 
@@ -367,7 +367,7 @@ public class StaticSqlExporter extends BasicStaticExporter {
         return builder.toString();
     }
 
-    private int nextInsertValue(int current) {
+    private int nextInsertValue(final int current) {
         return (current <= 0)
                 ? INSERT_QUERY_LIMIT
                 : current - 1;

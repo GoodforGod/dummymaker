@@ -50,7 +50,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
      *
      * @param path path for export file
      */
-    public StaticXmlExporter withPath(String path) {
+    public StaticXmlExporter withPath(final String path) {
         setPath(path);
         return this;
     }
@@ -63,7 +63,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
      *
      * @param strategy naming strategy for exporter
      */
-    public StaticXmlExporter withStrategy(IStrategy strategy) {
+    public StaticXmlExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
@@ -72,7 +72,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
      * @see #exportClassFullName
      * @param fullName full name for XML list tag
      */
-    public StaticXmlExporter withFullname(String fullName) {
+    public StaticXmlExporter withFullname(final String fullName) {
         this.exportClassFullName = fullName;
         return this;
     }
@@ -81,7 +81,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
      * @see #exportClassEnding
      * @param ending custom ending for XML list tag
      */
-    public StaticXmlExporter withEnding(String ending) {
+    public StaticXmlExporter withEnding(final String ending) {
         this.exportClassEnding = ending;
         return this;
     }
@@ -99,7 +99,9 @@ public class StaticXmlExporter extends BasicStaticExporter {
      *
      * @param mode represent Single JSON object or List of objects
      */
-    private <T> String format(final T t, final IClassContainer container, final Mode mode) {
+    private <T> String format(final T t,
+                              final IClassContainer container,
+                              final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
             return "";
@@ -132,7 +134,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
      *
      * @return XML list tag
      */
-    private <T> String buildClassListTag(T t) {
+    private <T> String buildClassListTag(final T t) {
         return (exportClassFullName != null)
                 ? exportClassFullName
                 : t.getClass().getSimpleName() + exportClassEnding;
@@ -174,7 +176,7 @@ public class StaticXmlExporter extends BasicStaticExporter {
                 .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + "\n"));
 
         return !writerHadErrors
-                && writer.write(wrapCloseXmlTag(classListTag))
+                && writer.write("\n" + wrapCloseXmlTag(classListTag))
                 && writer.flush();
     }
 
@@ -201,12 +203,15 @@ public class StaticXmlExporter extends BasicStaticExporter {
 
         final String classListTag = buildClassListTag(list.get(0));
 
-        final StringBuilder builder = new StringBuilder(wrapOpenXmlTag(classListTag)).append("\n");
+        final StringBuilder builder = new StringBuilder(wrapOpenXmlTag(classListTag))
+                .append("\n");
+
         final String result = list.stream()
                 .map(t -> format(t, container, Mode.LIST))
-                .collect(Collectors.joining());
+                .collect(Collectors.joining("\n"));
 
         return builder.append(result)
+                .append("\n")
                 .append(wrapCloseXmlTag(classListTag))
                 .toString();
     }

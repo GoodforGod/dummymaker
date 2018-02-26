@@ -42,7 +42,7 @@ public class StaticJsonExporter extends BasicStaticExporter {
      *
      * @param path path for export file
      */
-    public StaticJsonExporter withPath(String path) {
+    public StaticJsonExporter withPath(final String path) {
         setPath(path);
         return this;
     }
@@ -55,7 +55,7 @@ public class StaticJsonExporter extends BasicStaticExporter {
      *
      * @param strategy naming strategy for exporter
      */
-    public StaticJsonExporter withStrategy(IStrategy strategy) {
+    public StaticJsonExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
@@ -75,7 +75,7 @@ public class StaticJsonExporter extends BasicStaticExporter {
     /**
      * Tabs between newline and JSON value fields
      */
-    private String buildFieldTab(Mode mode) {
+    private String buildFieldTab(final Mode mode) {
         if(isPretty) {
             return (mode == Mode.SINGLE)
                     ? "\t"
@@ -86,16 +86,29 @@ public class StaticJsonExporter extends BasicStaticExporter {
     }
 
     /**
-     * Tabs between newline and brackets
+     * Build JSON open entity tag
      */
-    private String buildBracketTabs(Mode mode) {
+    private String buildOpenTag(final Mode mode) {
         if(isPretty) {
             return (mode == Mode.SINGLE)
-                    ? ""
-                    : "\t\t";
+                    ? "{\n"
+                    : "\t\t{\n";
         }
 
-        return "";
+        return "{";
+    }
+
+    /**
+     * Build JSON close entity tag
+     */
+    private String buildCloseTag(final Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? "\n}"
+                    : "\n\t\t}";
+        }
+
+        return "}";
     }
 
     /**
@@ -103,40 +116,38 @@ public class StaticJsonExporter extends BasicStaticExporter {
      *
      * @param mode represent Single JSON object or List of objects
      */
-    private <T> String format(T t, IClassContainer container, Mode mode) {
+    private <T> String format(final T t,
+                              final IClassContainer container,
+                              final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
             return "";
 
         final String fieldTabs = buildFieldTab(mode);
-        final String bracketTabs = buildBracketTabs(mode);
 
-        final String openValueBracket = (isPretty) ? "\n" + bracketTabs + "{\n" : "{";
-        final String closeValueBracket = (isPretty) ? "\n" + bracketTabs + "}" : "}";
+        final String openValueTag = buildOpenTag(mode);
+        final String closeValueTag = buildCloseTag(mode);
         final String valueDelimiter = (isPretty) ? ",\n" : ",";
 
-
-        final StringBuilder builder = new StringBuilder(bracketTabs)
-                .append(openValueBracket);
+        final StringBuilder builder = new StringBuilder(openValueTag);
 
         final String valueResult = exportContainers.stream()
                 .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c.getExportValue()))
                 .collect(Collectors.joining(valueDelimiter));
 
         builder.append(valueResult)
-                .append(bracketTabs)
-                .append(closeValueBracket);
+                .append(closeValueTag);
 
         return builder.toString();
     }
 
-    private String openJsonList(String exportClassName) {
+    private String openJsonListTag(final String exportClassName) {
         return (isPretty)
                 ? "{\n\t\"" + exportClassName + "\": ["
                 : "{\"" + exportClassName + "\": [";
     }
 
-    private String closeJsonList() {
+    private String closeJsonListTag() {
         return (isPretty)
                 ? "\n\t]\n}"
                 : "]}";
@@ -171,14 +182,13 @@ public class StaticJsonExporter extends BasicStaticExporter {
             return false;
 
         // Open JSON Object List
-        writer.write(openJsonList(container.exportClassName()));
+        writer.write(openJsonListTag(container.exportClassName()));
 
-        final String result = list.stream()
-                .map(t -> format(t, container, Mode.LIST))
-                .collect(Collectors.joining(","));
+        final boolean writerHadError = list.stream()
+                .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + ","));
 
-        return writer.write(result)
-                && writer.write(closeJsonList())
+        return !writerHadError
+                && writer.write(closeJsonListTag())
                 && writer.flush();
     }
 
@@ -203,14 +213,15 @@ public class StaticJsonExporter extends BasicStaticExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder builder = new StringBuilder(openJsonList(container.exportClassName()));
+        final StringBuilder builder = new StringBuilder(openJsonListTag(container.exportClassName()))
+                .append("\n");
+
         final String result = list.stream()
                 .map(t -> format(t, container, Mode.LIST))
-                .collect(Collectors.joining("\n,"));
+                .collect(Collectors.joining(",\n"));
 
         return builder.append(result)
-                .append("\n")
-                .append(closeJsonList())
+                .append(closeJsonListTag())
                 .toString();
     }
 }

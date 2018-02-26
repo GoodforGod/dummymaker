@@ -68,6 +68,6 @@ public class SqlExportAsStringTest {
         String[] sqlArray = dummyAsString.split("\n");
         assertEquals(10, sqlArray.length);
 
-        validation.isTwoDummiesValidithNamingStratery(sqlArray, strategy);
+        validation.isTwoDummiesValidWithNamingStrategy(sqlArray, strategy);
     }
 }

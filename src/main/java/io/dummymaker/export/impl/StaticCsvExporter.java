@@ -44,7 +44,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
      *
      * @param path path for export file
      */
-    public StaticCsvExporter withPath(String path) {
+    public StaticCsvExporter withPath(final String path) {
         setPath(path);
         return this;
     }
@@ -56,7 +56,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
      *
      * @param strategy naming strategy for exporter
      */
-    public StaticCsvExporter withStrategy(IStrategy strategy) {
+    public StaticCsvExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
@@ -82,7 +82,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
      *
      * @param separator char separator for CSV values
      */
-    public StaticCsvExporter withSeparator(char separator) {
+    public StaticCsvExporter withSeparator(final char separator) {
         this.separator = separator;
         return this;
     }
@@ -97,7 +97,8 @@ public class StaticCsvExporter extends BasicStaticExporter {
         return "'" + value + "'";
     }
 
-    private <T> String format(T t, IClassContainer container) {
+    private <T> String format(final T t,
+                              final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         if (exportContainers.isEmpty())
             return "";
@@ -115,7 +116,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
      *
      * @return csv header
      */
-    private String generateCsvHeader(IClassContainer container) {
+    private String generateCsvHeader(final IClassContainer container) {
         final String separatorAsStr = String.valueOf(separator);
         return container.getContainers().entrySet().stream()
                 .map(e -> e.getValue().getExportName())
@@ -170,7 +171,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
 
     @Override
     public <T> String exportAsString(final T t) {
-        if (!isExportEntityInvalid(t))
+        if (isExportEntityInvalid(t))
             return "";
 
         final IClassContainer container = buildClassContainer(t);
@@ -187,7 +188,7 @@ public class StaticCsvExporter extends BasicStaticExporter {
 
     @Override
     public <T> String exportAsString(final List<T> list) {
-        if (!isExportEntityInvalid(list))
+        if (isExportEntityInvalid(list))
             return "";
 
         final IClassContainer container = buildClassContainer(list.get(0));
