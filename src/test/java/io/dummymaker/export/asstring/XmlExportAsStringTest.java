@@ -2,7 +2,7 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.impl.StaticXmlExporter;
+import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.export.validation.XmlValidation;
@@ -30,7 +30,7 @@ public class XmlExportAsStringTest {
     @Test
     public void exportSingleDummyInXml() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new StaticXmlExporter();
+        IExporter exporter = new XmlExporter();
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -44,7 +44,7 @@ public class XmlExportAsStringTest {
     @Test
     public void exportListOfDummiesInXml() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new StaticXmlExporter();
+        IExporter exporter = new XmlExporter();
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -60,7 +60,7 @@ public class XmlExportAsStringTest {
         final IStrategy strategy = PresetStrategies.INITIAL_LOW_CASE.getStrategy();
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new StaticXmlExporter().withStrategy(strategy);
+        IExporter exporter = new XmlExporter().withStrategy(strategy);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

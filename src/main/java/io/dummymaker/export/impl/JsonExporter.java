@@ -1,44 +1,71 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Format;
+import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.writer.IWriter;
 
-import java.util.Iterator;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 /**
  * Export objects in JSON format
  *
  * @author GoodforGod
- * @since 26.05.2017
+ * @since 25.02.2018
  */
-public class JsonExporter<T> extends BasicExporter<T> {
+public class JsonExporter extends BasicExporter {
 
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
     private enum Mode {
         SINGLE,
         LIST
     }
 
-    public JsonExporter(final Class<T> primeClass) throws Exception {
-        this(primeClass, null);
-    }
+    /**
+     * Should export in json pretty mode or raw
+     */
+    private boolean isPretty;
 
-    public JsonExporter(final Class<T> primeClass,
-                        final String path) throws Exception {
-        super(primeClass, path, ExportFormat.JSON, PresetStrategies.DEFAULT.getStrategy());
+    public JsonExporter() {
+        super(null, Format.JSON, PresetStrategies.DEFAULT.getStrategy());
+        this.isPretty = false;
     }
 
     /**
-     * @param primeClass export class
-     * @param path path where to export, 'null' for project HOME path
-     * @param strategy naming strategy
+     * Build exporter with path value
+     *
+     * @param path path for export file
      */
-    public JsonExporter(final Class<T> primeClass,
-                        final String path,
-                        final IStrategy strategy) throws Exception {
-        super(primeClass, path, ExportFormat.JSON, strategy);
+    public JsonExporter withPath(final String path) {
+        setPath(path);
+        return this;
+    }
+
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     * @see PresetStrategies
+     *
+     * @param strategy naming strategy for exporter
+     */
+    public JsonExporter withStrategy(final IStrategy strategy) {
+        setStrategy(strategy);
+        return this;
+    }
+
+    /**
+     * @see #isPretty
+     */
+    public JsonExporter withPretty() {
+        this.isPretty = true;
+        return this;
     }
 
     private String wrapWithQuotes(final String value) {
@@ -46,109 +73,156 @@ public class JsonExporter<T> extends BasicExporter<T> {
     }
 
     /**
-     * Translate object to Json String
-     *
-     * @param t object to get values from
-     * @param mode represent Single JSON object or List of objects
-     * @return StringBuilder of Object as JSON String
+     * Tabs between newline and JSON value fields
      */
-    private String objectToJson(final T t, final Mode mode) {
-        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
-
-        final StringBuilder builder = new StringBuilder("");
-
-        final String fieldTabs = (mode == Mode.SINGLE)
-                ? "\t"
-                : "\t\t\t";
-
-        final String bracketTabs = (mode == Mode.SINGLE)
-                ? ""
-                : "\t\t";
-
-        if(iterator.hasNext()) {
-            builder.append(bracketTabs).append("{\n");
-            while (iterator.hasNext()) {
-                final ExportContainer container = iterator.next();
-                builder.append(fieldTabs)
-                        .append(wrapWithQuotes(container.getExportName()))
-                        .append(": ")
-                        .append(wrapWithQuotes(container.getExportValue()));
-
-                if (iterator.hasNext())
-                    builder.append(",");
-
-                builder.append("\n");
-            }
-            builder.append(bracketTabs).append("}");
-
-            return builder.toString();
+    private String buildFieldTab(final Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? "\t"
+                    : "\t\t\t";
         }
+
+        return "";
+    }
+
+    /**
+     * Build JSON open entity tag
+     */
+    private String buildOpenTag(final Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? "{\n"
+                    : "\t\t{\n";
+        }
+
+        return "{";
+    }
+
+    /**
+     * Build JSON close entity tag
+     */
+    private String buildCloseTag(final Mode mode) {
+        if(isPretty) {
+            return (mode == Mode.SINGLE)
+                    ? "\n}"
+                    : "\n\t\t}";
+        }
+
+        return "}";
+    }
+
+    /**
+     * Format single T value to JSON format
+     *
+     * @param mode represent Single JSON object or List of objects
+     */
+    private <T> String format(final T t,
+                              final IClassContainer container,
+                              final Mode mode) {
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if (exportContainers.isEmpty())
+            return "";
+
+        final String fieldTabs = buildFieldTab(mode);
+
+        final String openValueTag = buildOpenTag(mode);
+        final String closeValueTag = buildCloseTag(mode);
+        final String valueDelimiter = (isPretty) ? ",\n" : ",";
+
+        final StringBuilder builder = new StringBuilder(openValueTag);
+
+        final String valueResult = exportContainers.stream()
+                .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c.getExportValue()))
+                .collect(Collectors.joining(valueDelimiter));
+
+        builder.append(valueResult)
+                .append(closeValueTag);
 
         return builder.toString();
     }
 
-    private String openJsonList() {
-        return "{\n" + "\t\"" + classContainer.exportClassName() + "\"" + ": " + "[";
+    private String openJsonListTag(final String exportClassName) {
+        return (isPretty)
+                ? "{\n\t\"" + exportClassName + "\": ["
+                : "{\"" + exportClassName + "\": [";
     }
 
-    private String closeJsonList() {
-        return "\t]\n}";
-    }
-
-    @Override
-    public boolean export(final T t) {
-        return isExportStateValid(t)
-                && write(objectToJson(t, Mode.SINGLE))
-                && flush();
+    private String closeJsonListTag() {
+        return (isPretty)
+                ? "\n\t]\n}"
+                : "]}";
     }
 
     @Override
-    public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
+    public <T> boolean export(final T t) {
+        if (isExportEntityInvalid(t))
+            return false;
+
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
+            return false;
+
+        final IWriter writer = buildWriter(container);
+        return writer != null
+                && writer.write(format(t, container, Mode.SINGLE))
+                && writer.flush();
+    }
+
+    @Override
+    public <T> boolean export(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return false;
+
+        final IClassContainer container = buildClassContainer(list);
+        if (!container.isExportable())
+            return false;
+
+        final IWriter writer = buildWriter(container);
+        if (writer == null)
             return false;
 
         // Open JSON Object List
-        write(openJsonList());
+        writer.write(openJsonListTag(container.exportClassName()) + "\n");
 
-        final Iterator<T> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            final T t = iterator.next();
-            final String write = objectToJson(t, Mode.LIST);
+        final String result = list.stream()
+                .map(t -> format(t, container, Mode.LIST))
+                .collect(Collectors.joining(",\n"));
 
-            // Write , symbol to the end of the object
-            write((iterator.hasNext()) ? write + "," : write);
-        }
-
-        // Close JSON Object List
-        return write(closeJsonList()) && flush();
+        return writer.write(result)
+                && writer.write(closeJsonListTag())
+                && writer.flush();
     }
 
     @Override
-    public String exportAsString(final T t) {
-        return (!isExportStateValid(t))
-                ? ""
-                : objectToJson(t, Mode.SINGLE);
-    }
-
-    @Override
-    public String exportAsString(final List<T> list) {
-        if(!isExportStateValid(list))
+    public <T> String exportAsString(final T t) {
+        if (isExportEntityInvalid(t))
             return "";
 
-        final StringBuilder result = new StringBuilder();
-        // Open JSON Object List
-        result.append(openJsonList());
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
+            return "";
 
-        final Iterator<T> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            final T t = iterator.next();
-            final String write = objectToJson(t, Mode.LIST);
+        return format(t, container, Mode.SINGLE);
+    }
 
-            // Write , symbol to the end of the object
-            result.append("\n").append((iterator.hasNext()) ? write + "," : write);
-        }
+    @Override
+    public <T> String exportAsString(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return "";
 
-        // Close JSON Object List
-        return result.append("\n").append(closeJsonList()).toString();
+        final IClassContainer container = buildClassContainer(list);
+        if (!container.isExportable())
+            return "";
+
+        final StringBuilder builder = new StringBuilder(openJsonListTag(container.exportClassName()))
+                .append("\n");
+
+        final String result = list.stream()
+                .map(t -> format(t, container, Mode.LIST))
+                .collect(Collectors.joining(",\n"));
+
+        return builder.append(result)
+                .append(closeJsonListTag())
+                .toString();
     }
 }

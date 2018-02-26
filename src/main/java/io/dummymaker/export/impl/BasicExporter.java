@@ -1,129 +1,156 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Format;
+import io.dummymaker.export.IExporter;
 import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.BasicClassContainer;
+import io.dummymaker.export.container.impl.BasicStaticClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.BufferedFileWriter;
+import io.dummymaker.writer.IWriter;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Prime (Parent) exporter for all others, provides core methods
+ * Basic abstract exporter implementation
  *
  * @author GoodforGod
- * @since 31.05.2017
+ * @since 25.02.2018
  */
-public abstract class BasicExporter<T> extends BufferedFileWriter {
+public abstract class BasicExporter implements IExporter {
 
     private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
 
-    /**
-     * Available export types, used by writer
-     *
-     * @see io.dummymaker.writer.BufferedFileWriter
-     */
-    public enum ExportFormat {
-        CSV(".csv"),
-        JSON(".json"),
-        XML(".xml"),
-        SQL(".sql");
-
-        ExportFormat(String value) {
-            this.value = value;
-        }
-
-        private final String value;
-
-        public String getValue() {
-            return value;
-        }
-    }
-
-    final IClassContainer classContainer;
+    private String path;
+    private Format format;
+    private IStrategy strategy;
 
     /**
-     * @param exportClass class to export
-     * @param path path where to export (NULL IF HOME DIR)
-     * @param format export format
+     * @param strategy naming strategy
+     * @param path     path where to export (NULL IF HOME DIR)
+     * @param format   export format
+     * @see IStrategy
+     * @see Format
      */
-    BasicExporter(final Class<T> exportClass,
-                  final String path,
-                  final ExportFormat format,
-                  final IStrategy strategy) throws Exception {
-        super(exportClass.getSimpleName(), path, format.getValue());
+    BasicExporter(final String path,
+                  final Format format,
+                  final IStrategy strategy) {
 
-        if(strategy == null) {
+        if (strategy == null)
             logger.warning("NamingStrategy in nullable.. Using default strategy.");
-        }
 
-        final IStrategy strategyInUse = (strategy == null)
+        this.path = path;
+        this.format = format;
+        this.strategy = (strategy == null)
                 ? PresetStrategies.DEFAULT.getStrategy()
                 : strategy;
+    }
 
-        this.classContainer = new BasicClassContainer(exportClass, strategyInUse);
+    void setPath(String path) {
+        this.path = (path == null || path.trim().isEmpty())
+                ? null
+                : path;
+    }
+
+    void setStrategy(IStrategy strategy) {
+        this.strategy = (strategy == null)
+                ? this.strategy
+                : strategy;
+    }
+
+    /**
+     * Build class container with export entity parameters
+     */
+    <T> IClassContainer buildClassContainer(T t) {
+        return new BasicStaticClassContainer(t, strategy);
+    }
+
+    /**
+     * Build class container with export entity parameters
+     */
+    <T> IClassContainer buildClassContainer(List<T> list) {
+        return (list != null && !list.isEmpty())
+                ? buildClassContainer(list.get(0))
+                : null;
+    }
+
+    /**
+     * Build buffered writer for export
+     *
+     * @see #export(Object)
+     * @see #export(List)
+     */
+    IWriter buildWriter(IClassContainer classContainer) {
+        try {
+            return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtension());
+        } catch (IOException e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
     }
 
     /**
      * Generates class export field-value map
+     *
      * @param t class to export
-     * @return map of field name as a 'key' and fields string value as a 'values'
+     * @return export containers
+     * @see ExportContainer
      */
-    List<ExportContainer> extractExportValues(final T t) {
+    <T> List<ExportContainer> extractExportContainers(final T t, final IClassContainer classContainer) {
+
         final List<ExportContainer> exports = new ArrayList<>();
-
-        for(Map.Entry<String, FieldContainer> fieldEntry : classContainer.getContainers().entrySet()) {
+        classContainer.getContainers().forEach((key, value) -> {
             try {
-                final Field field = t.getClass().getDeclaredField(fieldEntry.getKey());
+                final Field field = t.getClass().getDeclaredField(key);
 
-                if(field != null) {
+                if (field != null) {
                     field.setAccessible(true);
 
-                    final String exportFieldName = classContainer.getFieldExportName(field.getName());
+                    final String exportFieldName = value.getExportName();
                     exports.add(new ExportContainer(exportFieldName, String.valueOf(field.get(t))));
 
                     field.setAccessible(false);
                 }
-            }
-            catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 logger.info(e.getMessage());
             } catch (Exception e) {
                 logger.warning(e.getMessage());
             }
-        }
+        });
 
         return exports;
     }
 
     /**
-     * Validate export arguments and export fields of class
+     * Validate export argument
+     *
      * @param t class to validate
      * @return validation result
      */
-    boolean isExportStateValid(final T t) {
-        return !classContainer.getContainers().isEmpty() && t != null;
+    <T> boolean isExportEntityInvalid(final T t) {
+        return t == null;
     }
 
     /**
-     * Validate export arguments and export fields of class
+     * Validate export arguments
+     *
      * @param t class to validate
      * @return validation result
      */
-    boolean isExportStateValid(final List<T> t) {
-        return !classContainer.getContainers().isEmpty() && t != null && !t.isEmpty();
+    <T> boolean isExportEntityInvalid(final List<T> t) {
+        return t == null || t.isEmpty() || isExportEntityInvalid(t.get(0));
     }
 
-    public abstract boolean export(final T t);
+    public abstract <T> boolean export(final T t);
 
-    public abstract boolean export(final List<T> t);
+    public abstract <T> boolean export(final List<T> t);
 
-    public abstract String exportAsString(final T t);
+    public abstract <T> String exportAsString(final T t);
 
-    public abstract String exportAsString(final List<T> list);
+    public abstract <T> String exportAsString(final List<T> list);
 }

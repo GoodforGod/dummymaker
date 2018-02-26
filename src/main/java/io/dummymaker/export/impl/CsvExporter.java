@@ -1,90 +1,95 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Format;
+import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.writer.IWriter;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
+import java.util.stream.Collectors;
 
 /**
  * Export objects in CSV format
  *
  * @author GoodforGod
- * @since 26.05.2017
+ * @since 25.02.2018
  */
-public class CsvExporter<T> extends BasicExporter<T> {
+public class CsvExporter extends BasicExporter {
 
-    private final char DEFAULT_SEPARATOR = ',';
+    private static final char DEFAULT_SEPARATOR = ',';
 
     /**
-     * CSV format separator
+     * CSV format separator for values: value1,value2,value3 ...
      */
-    private char SEPARATOR = DEFAULT_SEPARATOR;
+    private char separator = DEFAULT_SEPARATOR;
 
     /**
      * Flag to indicate wrap text (String) fields with quotes
      */
-    private boolean wrapTextValues = false;
+    private boolean areTextValuesWrapped = false;
 
     /**
      * Generate header for CSV file
      */
-    private boolean generateHeader = false;
+    private boolean hasHeader = false;
 
-    public CsvExporter(final Class<T> primeClass) throws Exception {
-        this(primeClass, null);
+    public CsvExporter() {
+        super(null, Format.CSV, PresetStrategies.DEFAULT.getStrategy());
     }
 
-    public CsvExporter(final Class<T> primeClass,
-                       final String path) throws Exception {
-        super(primeClass, path, ExportFormat.CSV, PresetStrategies.DEFAULT.getStrategy());
-    }
-
-    public CsvExporter(final Class<T> primeClass,
-                       final String path,
-                       final IStrategy strategy) throws Exception {
-        super(primeClass, path, ExportFormat.CSV, strategy);
-    }
-
-    public CsvExporter(final Class<T> primeClass,
-                       final String path,
-                       final IStrategy strategy,
-                       final boolean wrapTextValues,
-                       final boolean generateHeader) throws Exception {
-        this(primeClass, path, strategy);
-        this.wrapTextValues = wrapTextValues;
-        this.generateHeader = generateHeader;
-    }
     /**
-     * @param primeClass export class
-     * @param path path where to export, 'null' for project HOME path
-     * @param strategy naming strategy
-     * @param wrapTextValues to force wrap string type field values with commas, like - 'string'
-     * @param generateHeader generate header for export file, with field names as headers
-     * @param separator csv format separator, default is comma ,
+     * Build exporter with path value
+     *
+     * @param path path for export file
      */
-    public CsvExporter(final Class<T> primeClass,
-                       final String path,
-                       final IStrategy strategy,
-                       final boolean wrapTextValues,
-                       final boolean generateHeader,
-                       final char separator) throws Exception {
-        this(primeClass, path, strategy, wrapTextValues, generateHeader);
-        setSeparator(separator);
-    }
-
-    private void setSeparator(final char separator) {
-        this.SEPARATOR = (separator == ' ')
-                ? DEFAULT_SEPARATOR
-                : separator;
+    public CsvExporter withPath(final String path) {
+        setPath(path);
+        return this;
     }
 
     /**
-     * Wraps text values (String) with quotes like 'value'
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     *
+     * @param strategy naming strategy for exporter
+     */
+    public CsvExporter withStrategy(final IStrategy strategy) {
+        setStrategy(strategy);
+        return this;
+    }
+
+    /**
+     * @see #areTextValuesWrapped
+     */
+    public CsvExporter withTextWrap() {
+        this.areTextValuesWrapped = true;
+        return this;
+    }
+
+    /**
+     * @see #hasHeader
+     */
+    public CsvExporter withHeader() {
+        this.hasHeader = true;
+        return this;
+    }
+
+    /**
+     * @see #separator
+     *
+     * @param separator char separator for CSV values
+     */
+    public CsvExporter withSeparator(final char separator) {
+        this.separator = separator;
+        return this;
+    }
+
+    /**
+     * Wraps text values (String) with quotes like: value - 'value'
+     *
      * @param value values to wrap
      * @return wrapped values
      */
@@ -92,100 +97,113 @@ public class CsvExporter<T> extends BasicExporter<T> {
         return "'" + value + "'";
     }
 
-    private String objectToCsv(final T t) {
-        final StringBuilder builder = new StringBuilder("");
-        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
+    private <T> String format(final T t,
+                              final IClassContainer container) {
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if (exportContainers.isEmpty())
+            return "";
 
-        while (iterator.hasNext()) {
-            final ExportContainer container = iterator.next();
-
-            if(wrapTextValues && classContainer.getField(container.getExportName()).getType().equals(String.class))
-                builder.append(wrapWithQuotes(container.getExportValue()));
-            else
-                builder.append(container.getExportValue());
-
-            if (iterator.hasNext())
-                builder.append(SEPARATOR);
-        }
-
-        return builder.toString();
+        final String separatorAsStr = String.valueOf(separator);
+        return exportContainers.stream()
+                .map(c -> (areTextValuesWrapped && container.getField(c.getExportName()).getType().equals(String.class))
+                        ? wrapWithQuotes(c.getExportValue())
+                        : c.getExportValue())
+                .collect(Collectors.joining(separatorAsStr));
     }
 
     /**
      * Generates header for CSV file
+     *
      * @return csv header
      */
-    private String generateCsvHeader() {
-        final StringBuilder header = new StringBuilder("");
-        final Iterator<Map.Entry<String, FieldContainer>> iterator = classContainer.getContainers().entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            header.append(iterator.next().getValue().getExportName());
-
-            if(iterator.hasNext())
-                header.append(SEPARATOR);
-        }
-        return header.toString();
+    private String generateCsvHeader(final IClassContainer container) {
+        final String separatorAsStr = String.valueOf(separator);
+        return container.getContainers().entrySet().stream()
+                .map(e -> e.getValue().getExportName())
+                .collect(Collectors.joining(separatorAsStr));
     }
 
     @Override
-    public boolean export(final T t) {
-        if(!isExportStateValid(t))
+    public <T> boolean export(final T t) {
+        if (isExportEntityInvalid(t))
             return false;
 
-        if (generateHeader)
-            write(generateCsvHeader());
-
-        return write(objectToCsv(t)) && flush();
-    }
-
-    @Override
-    public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
             return false;
 
-        if (generateHeader)
-            write(generateCsvHeader());
+        final IWriter writer = buildWriter(container);
+        if (writer == null)
+            return false;
 
-        for (final T t : list)
-            write(objectToCsv(t));
-
-        return flush();
-    }
-
-    @Override
-    public String exportAsString(final T t) {
-        if(!isExportStateValid(t))
-            return "";
-
-        final StringBuilder result = new StringBuilder();
-
-        if (generateHeader)
-            result.append(generateCsvHeader()).append("\n");
-
-        return result.append(objectToCsv(t)).toString();
-    }
-
-    @Override
-    public String exportAsString(final List<T> list) {
-        if(!isExportStateValid(list))
-            return "";
-
-        final StringBuilder result = new StringBuilder();
-
-        if (generateHeader)
-            result.append(generateCsvHeader()).append("\n");
-
-        final Iterator<T> iterator = list.iterator();
-
-        while (iterator.hasNext()) {
-            final T t = iterator.next();
-            result.append(objectToCsv(t));
-
-            if(iterator.hasNext())
-                result.append("\n");
+        if (hasHeader) {
+            if (!writer.write(generateCsvHeader(container)))
+                return false;
         }
 
-        return result.toString();
+        return writer.write(format(t, container))
+                && writer.flush();
+    }
+
+    @Override
+    public <T> boolean export(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return false;
+
+        final IClassContainer container = buildClassContainer(list.get(0));
+        if (!container.isExportable())
+            return false;
+
+        final IWriter writer = buildWriter(container);
+        if (writer == null)
+            return false;
+
+        if (hasHeader) {
+            if (!writer.write(generateCsvHeader(container)))
+                return false;
+        }
+
+        final boolean writerHadError = list.stream()
+                .anyMatch(t -> !writer.write("\n" + format(t, container)));
+
+        return !writerHadError && writer.flush();
+    }
+
+    @Override
+    public <T> String exportAsString(final T t) {
+        if (isExportEntityInvalid(t))
+            return "";
+
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
+            return "";
+
+        final StringBuilder builder = new StringBuilder("");
+        if (hasHeader) {
+            builder.append(generateCsvHeader(container)).append("\n");
+        }
+
+        return builder.append(format(t, container)).toString();
+    }
+
+    @Override
+    public <T> String exportAsString(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return "";
+
+        final IClassContainer container = buildClassContainer(list.get(0));
+        if (!container.isExportable())
+            return "";
+
+        final StringBuilder builder = new StringBuilder("");
+        if (hasHeader) {
+            builder.append(generateCsvHeader(container)).append("\n");
+        }
+
+        final String result = list.stream()
+                .map(t -> format(t, container))
+                .collect(Collectors.joining("\n"));
+
+        return builder.append(result).toString();
     }
 }

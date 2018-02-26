@@ -1,57 +1,89 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Format;
+import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.writer.IWriter;
 
-import java.util.Iterator;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 /**
  * Export objects is XML format
  *
+ * @see Format
+ *
  * @author GoodforGod
- * @since 26.05.2017
+ * @since 25.02.2018
  */
-public class XmlExporter<T> extends BasicExporter<T> {
+public class XmlExporter extends BasicExporter {
 
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
     private enum Mode {
         SINGLE,
         LIST
     }
 
-    private final String exportClassListName;
+    /**
+     * Is used with className for XML list tag
+     */
+    private String exportClassEnding = "List";
 
-    public XmlExporter(final Class<T> primeClass) throws Exception {
-        this(primeClass, null);
-    }
+    /**
+     * Is used instead of class name + ending if set
+     *
+     * @see #exportClassEnding
+     */
+    private String exportClassFullName = null;
 
-    public XmlExporter(final Class<T> primeClass,
-                       final String path) throws Exception {
-        this(primeClass, path, PresetStrategies.DEFAULT.getStrategy(), null);
-    }
-
-    public XmlExporter(final Class<T> primeClass,
-                       final String path,
-                       final IStrategy strategy) throws Exception {
-        this(primeClass, path, strategy, null);
+    public XmlExporter() {
+        super(null, Format.XML, PresetStrategies.DEFAULT.getStrategy());
     }
 
     /**
-     * @param primeClass export class
-     * @param path path where to export, 'null' for project HOME path
-     * @param strategy naming strategy
-     * @param exportClassListName class top name wrapper for XML file, or default [YourClassName]List
+     * Build exporter with path value
+     *
+     * @param path path for export file
      */
-    public XmlExporter(final Class<T> primeClass,
-                       final String path,
-                       final IStrategy strategy,
-                       final String exportClassListName) throws Exception {
-        super(primeClass, path, ExportFormat.XML, strategy);
-        this.exportClassListName = (exportClassListName == null || exportClassListName.trim().isEmpty())
-                ? classContainer.exportClassName() + "List"
-                : exportClassListName;
+    public XmlExporter withPath(final String path) {
+        setPath(path);
+        return this;
+    }
+
+    /**
+     * Build exporter with naming strategy
+     *
+     * @see IStrategy
+     * @see PresetStrategies
+     *
+     * @param strategy naming strategy for exporter
+     */
+    public XmlExporter withStrategy(final IStrategy strategy) {
+        setStrategy(strategy);
+        return this;
+    }
+
+    /**
+     * @see #exportClassFullName
+     * @param fullName full name for XML list tag
+     */
+    public XmlExporter withFullname(final String fullName) {
+        this.exportClassFullName = fullName;
+        return this;
+    }
+
+    /**
+     * @see #exportClassEnding
+     * @param ending custom ending for XML list tag
+     */
+    public XmlExporter withEnding(final String ending) {
+        this.exportClassEnding = ending;
+        return this;
     }
 
     private String wrapOpenXmlTag(final String value) {
@@ -62,77 +94,125 @@ public class XmlExporter<T> extends BasicExporter<T> {
         return "</" + value + ">";
     }
 
-    private String objectToXml(final T t, final Mode mode) {
-        final Iterator<ExportContainer> iterator = extractExportValues(t).iterator();
-
-        final StringBuilder builder = new StringBuilder("");
-
-        final String tabObject = (mode == Mode.SINGLE)
-                ? ""
-                : "\t";
-
-        final String tabField = (mode == Mode.SINGLE)
-                ? "\t"
-                : "\t\t";
-
-        if(iterator.hasNext()) {
-            builder.append(tabObject).append(wrapOpenXmlTag(classContainer.exportClassName()));
-
-            while (iterator.hasNext()) {
-                final ExportContainer container = iterator.next();
-                builder.append("\n").append(tabField)
-                                    .append(wrapOpenXmlTag(container.getExportName()))
-                                    .append(container.getExportValue())
-                                    .append(wrapCloseXmlTag(container.getExportName()));
-            }
-            builder.append("\n").append(tabObject).append(wrapCloseXmlTag(classContainer.exportClassName()));
-        }
-
-        return builder.toString();
-    }
-
-    @Override
-    public boolean export(final T t) {
-        return isExportStateValid(t)
-                && write(objectToXml(t, Mode.SINGLE))
-                && flush();
-    }
-
-    @Override
-    public boolean export(final List<T> list) {
-        if(!isExportStateValid(list))
-            return false;
-
-        write(wrapOpenXmlTag(exportClassListName));
-
-        for (final T t : list)
-            write(objectToXml(t, Mode.LIST));
-
-        write(wrapCloseXmlTag(exportClassListName));
-
-        return flush();
-    }
-
-    @Override
-    public String exportAsString(final T t) {
-        return (!isExportStateValid(t))
-                ? ""
-                : objectToXml(t, Mode.SINGLE);
-    }
-
-    @Override
-    public String exportAsString(final List<T> list) {
-        if(!isExportStateValid(list))
+    /**
+     * Format single T value to JSON format
+     *
+     * @param mode represent Single JSON object or List of objects
+     */
+    private <T> String format(final T t,
+                              final IClassContainer container,
+                              final Mode mode) {
+        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+        if (exportContainers.isEmpty())
             return "";
 
-        final StringBuilder result = new StringBuilder();
-        result.append(wrapOpenXmlTag(exportClassListName)).append("\n");
+        final String tabObject = (mode == Mode.SINGLE) ? "" : "\t";
+        final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
 
-        for (final T t : list)
-            result.append(objectToXml(t, Mode.LIST)).append("\n");
+        final StringBuilder builder = new StringBuilder()
+                .append(tabObject)
+                .append(wrapOpenXmlTag(container.exportClassName()))
+                .append("\n");
 
-        result.append(wrapCloseXmlTag(exportClassListName));
+        final String resultValues = exportContainers.stream()
+                .map(c -> tabField + wrapOpenXmlTag(c.getExportName()) + c.getExportValue() + wrapCloseXmlTag(c.getExportName()))
+                .collect(Collectors.joining("\n"));
 
-        return result.toString();
+        builder.append(resultValues)
+                .append("\n");
+
+        return builder.append(tabObject)
+                .append(wrapCloseXmlTag(container.exportClassName()))
+                .toString();
+    }
+
+    /**
+     * Build XML list tag determined by fullname status and ending class phrase
+     *
+     * @see #exportClassEnding
+     * @see #exportClassFullName
+     *
+     * @return XML list tag
+     */
+    private <T> String buildClassListTag(final T t) {
+        return (exportClassFullName != null)
+                ? exportClassFullName
+                : t.getClass().getSimpleName() + exportClassEnding;
+    }
+
+    @Override
+    public <T> boolean export(final T t) {
+        if (isExportEntityInvalid(t))
+            return false;
+
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
+            return false;
+
+        final IWriter writer = buildWriter(container);
+        return (writer != null)
+                && writer.write(format(t, container, Mode.SINGLE))
+                && writer.flush();
+    }
+
+    @Override
+    public <T> boolean export(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return false;
+
+        final IClassContainer container = buildClassContainer(list);
+        if (!container.isExportable())
+            return false;
+
+        final IWriter writer = buildWriter(container);
+        if (writer == null)
+            return false;
+
+        final String classListTag = buildClassListTag(list.get(0));
+        if (!writer.write(wrapOpenXmlTag(classListTag) + "\n"))
+            return false;
+
+        final boolean writerHadErrors = list.stream()
+                .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + "\n"));
+
+        return !writerHadErrors
+                && writer.write(wrapCloseXmlTag(classListTag))
+                && writer.flush();
+    }
+
+    @Override
+    public <T> String exportAsString(final T t) {
+        if (isExportEntityInvalid(t))
+            return "";
+
+        final IClassContainer container = buildClassContainer(t);
+        if (!container.isExportable())
+            return "";
+
+        return format(t, container, Mode.SINGLE);
+    }
+
+    @Override
+    public <T> String exportAsString(final List<T> list) {
+        if (isExportEntityInvalid(list))
+            return "";
+
+        final IClassContainer container = buildClassContainer(list);
+        if (!container.isExportable())
+            return "";
+
+        final String classListTag = buildClassListTag(list.get(0));
+
+        final StringBuilder builder = new StringBuilder(wrapOpenXmlTag(classListTag))
+                .append("\n");
+
+        final String result = list.stream()
+                .map(t -> format(t, container, Mode.LIST))
+                .collect(Collectors.joining("\n"));
+
+        return builder.append(result)
+                .append("\n")
+                .append(wrapCloseXmlTag(classListTag))
+                .toString();
     }
 }
