@@ -55,11 +55,12 @@ dependencies {
 
 ## Functionality
 
-You can easily create your own annotations and generators which will be supported by Scanners and Export classes, so it is easy extendable library.
+You can produce or populate Dummy objects and export them in desired format.
+Also it is easily for you to create custom *Gen* annotations or generators to fulfill your needs.
 
 ### **Factories**
 
-Allow to populate or produce Dummy Objects.
+Factories to populate/produce Dummy Objects.
 
 * ***GenProduceFactory*** - allow you to produce new Dummies with populated fields.
 
@@ -67,8 +68,7 @@ Allow to populate or produce Dummy Objects.
 
 ### **Export**
 
-Allow to export Dummy objects in specific format into file.
-Also allow to export Dummy objects as a string value.
+Exporters allow you to export Dummy objects to the shown format via file or as a string.
 
 #### ***BaseExporter Parameters***
 Constructor parameters available for all exporters.
@@ -100,10 +100,10 @@ Constructor parameters available for all exporters.
 
 ### **Annotations**
 
-Allow to declare Dummy fields with generator annotations.
-*Factories* will generate values by using their provided methods.
+Annotations allow you to declare Dummy fields with generator annotations.
+*Factories* will generate values using their *generate* methods.
 
-Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
+Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail, etc*).
 
 #### ***Special Annotations***
 
@@ -124,39 +124,47 @@ Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail*).
 
 #### *Force and Ignore annotation demonstration*
 
-In this case, field city will be export despite that there is not generator field for it, value will be "Saint-Petersburg".
-And field *id* will **NOT** be export if *ignore* annotation will have true (*default*) value.
+In this case, field city will be export despite it isn't marked with *Gen* annotation, value will be "Saint-Petersburg".
+And field *id* will **NOT** be export if *ignore* annotation will have *true* (*default*) value.
 
 ![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
 
 #### *Enumerate and Field Rename demonstration*
-*GenEnumerate* annotation will enumerate Dummy field starting from 10.
+*GenEnumerate* annotation will enumerate Dummy field starting from 10 in this case (*from 0 is default*).
 It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 19.
 
-*GenRenameExport* annotation will change field export name.
+*GenRenameExport* annotation will change *field* export name or *class* name.
 
 ![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
 
 #### *Class export rename demonstration*
 
-*GenRenameExport* annotation will change class export name.
+*GenRenameExport* annotation will change *class* export name.in this case.
 
 ![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
 
 ### ***Factories***
-Available GenPopulateFactory/GenProvideFactory.
-Allow user populate or produce Dummy objects.
+
+*GenPopulateFactory/GenProvideFactory* this factories allow you to populate/produce Dummy objects.
 
 #### *Produce 1 or more Dummy objects demonstration*
 ![](https://media.giphy.com/media/FCdSHjcQpE5aM/giphy.gif)
 
 #### *Populate 1 or more Dummy objects demonstration*
 
-It will be useful in case, you have complex created objects and you want just to populate some of their fields.
+*GenPopulateFactory* will be useful in case, you already have complex objects and you want just to populate some of their fields.
 
 ![](https://media.giphy.com/media/PQ747tM0KTZTi/giphy.gif)
 
 ### ***Exporters***
+
+Exporters allow you to export Dummy objects to shown format as a *file* or *string*.
+
+Available formats:
+- [CSV](#csv)
+- [JSON](#json)
+- [XML](#xml)
+- [SQL](#sql)
 
 #### *Export demonstration*
 ![](https://media.giphy.com/media/AmCVhBu4aOjFS/giphy.gif)
@@ -166,7 +174,7 @@ It will be useful in case, you have complex created objects and you want just to
 
 #### *Export as a string value demonstration*
 
-Is useful in save you have custom writer or need to send it over network.
+*Export as string* useful in save you have custom writer or need to send it over network.
 
 ![](https://media.giphy.com/media/CnQ0MV17s9ypi/giphy.gif)
 
