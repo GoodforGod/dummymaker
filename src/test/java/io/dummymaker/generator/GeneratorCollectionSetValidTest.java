@@ -33,7 +33,7 @@ public class GeneratorCollectionSetValidTest extends Assert {
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
     public static Collection<Object> data() {
         return Arrays.asList(new Object[][] {
-                { new SetObjectGenerator(), Object.class },
+                { new SetObjectGenerator(), String.class },
                 { new SetStringGenerator(), String.class }
         });
     }
@@ -42,5 +42,11 @@ public class GeneratorCollectionSetValidTest extends Assert {
     public void checkNotEmpty() {
         Set list = generator.generate();
         assertFalse(list.isEmpty());
+    }
+
+    @Test
+    public void checkValueClassEquals() {
+        Set set = generator.generate();
+        assertTrue(collectionValueClass.equals(set.iterator().next().getClass()));
     }
 }
