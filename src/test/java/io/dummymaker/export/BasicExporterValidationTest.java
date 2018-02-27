@@ -43,7 +43,6 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNotExportable() {
-        IExporter exporter = new CsvExporter();
         DummyNoZeroContr d = new DummyNoZeroContr(1);
         String s = exporter.exportAsString(d);
         assertTrue(s.isEmpty());
@@ -51,7 +50,6 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNotExportableList() {
-        IExporter exporter = new CsvExporter();
         List<DummyNoZeroContr> dummyNoZeroContrs = new ArrayList<>();
         dummyNoZeroContrs.add(new DummyNoZeroContr(1));
         dummyNoZeroContrs.add(new DummyNoZeroContr(1));
@@ -61,21 +59,18 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNullableDummyReturnEmpty() {
-        IExporter exporter = new CsvExporter();
         String s = exporter.exportAsString(null);
         assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportNullableDummiesReturnEmptyList() {
-        IExporter exporter = new CsvExporter();
         String s = exporter.exportAsString((List) null);
         assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportEmptyDummiesReturnEmptyList() {
-        IExporter exporter = new CsvExporter();
         String s = exporter.exportAsString(new ArrayList<>());
         assertTrue(s.isEmpty());
     }
