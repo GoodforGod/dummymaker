@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * Scanner annotations that utilize primeGenAnnotation only
  *
  * @see PrimeGenAnnotation
- *
  * @see AnnotationScanner
  *
  * @author GoodforGod
@@ -32,13 +31,11 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
     public Map<Field, List<Annotation>> scan(final Class t) {
         final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
 
-        return (classFieldAnnotations.isEmpty())
-                ? classFieldAnnotations
-                : classFieldAnnotations.entrySet().stream()
-                    .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
-                    .peek(set -> set.setValue(set.getValue().stream()
-                            .filter(acceptPredicate)
-                            .collect(Collectors.toList())))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return classFieldAnnotations.entrySet().stream()
+                .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
+                .peek(set -> set.setValue(set.getValue().stream()
+                        .filter(acceptPredicate)
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

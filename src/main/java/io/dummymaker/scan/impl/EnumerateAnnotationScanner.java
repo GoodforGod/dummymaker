@@ -32,13 +32,11 @@ public class EnumerateAnnotationScanner extends AnnotationScanner {
     public Map<Field, List<Annotation>> scan(final Class t) {
         final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
 
-        return (classFieldAnnotations.isEmpty())
-                ? classFieldAnnotations
-                : classFieldAnnotations.entrySet().stream()
-                    .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
-                    .peek(e -> e.setValue(e.getValue().stream()
-                            .filter(numeratePredicate)
-                            .collect(Collectors.toList())))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return classFieldAnnotations.entrySet().stream()
+                .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
+                .peek(e -> e.setValue(e.getValue().stream()
+                        .filter(numeratePredicate)
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -57,6 +57,12 @@ public class BundleImplTest {
     }
 
     @Test
+    public void testIndexOutOfBound() {
+        Integer integer = -1;
+        assertNotNull(bundle.get(integer));
+    }
+
+    @Test
     public void bundlePresentRandomGet() {
         assertNotNull(bundle.getRandom());
     }

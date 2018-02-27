@@ -135,8 +135,6 @@ public class GenPopulateFactory implements IPopulateFactory {
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
         final Map<Field, List<Annotation>> numerateAnnotations = numerateAnnotationScanner.scan(t);
-        if (numerateAnnotations == null || numerateAnnotations.isEmpty())
-            return Collections.emptyMap();
 
         return numerateAnnotations.entrySet().stream()
                 .collect(Collectors.toMap(

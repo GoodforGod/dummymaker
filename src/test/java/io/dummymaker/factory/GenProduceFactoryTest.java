@@ -2,6 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.data.DummyNoZeroContr;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
@@ -16,6 +17,27 @@ import static org.junit.Assert.*;
  * @since 31.07.2017
  */
 public class GenProduceFactoryTest {
+
+    @Test
+    public void produceLessThanZeroAmount() {
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        List<Dummy> dummies = dummyGenPopulateFactory.produce(Dummy.class, -20);
+        assertTrue(dummies.isEmpty());
+    }
+
+    @Test
+    public void noZeroConstructorErrorList() {
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        List<DummyNoZeroContr> dummies = dummyGenPopulateFactory.produce(DummyNoZeroContr.class, 20);
+        assertTrue(dummies.isEmpty());
+    }
+
+    @Test
+    public void noZeroConstructorError() {
+        IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
+        DummyNoZeroContr dummy = dummyGenPopulateFactory.produce(DummyNoZeroContr.class);
+        assertNull(dummy);
+    }
 
     @Test
     public void genProduceFactoryListTest() {

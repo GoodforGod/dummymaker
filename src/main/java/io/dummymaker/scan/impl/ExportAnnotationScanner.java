@@ -32,8 +32,8 @@ public class ExportAnnotationScanner extends AnnotationScanner {
      * @see PrimeGenAnnotation
      */
     private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGenAnnotation.class)
-                                                                || (a.annotationType().equals(GenForceExport.class))
-                                                                            && ((GenForceExport) a).value());
+            || (a.annotationType().equals(GenForceExport.class))
+            && ((GenForceExport) a).value());
 
     /**
      * Check for ignorable annotations
@@ -41,20 +41,18 @@ public class ExportAnnotationScanner extends AnnotationScanner {
      * @see GenIgnoreExport
      */
     private final Predicate<Annotation> ignorePredicate = (a) -> (a.annotationType().equals(GenIgnoreExport.class)
-                                                                            && ((GenIgnoreExport) a).value());
+            && ((GenIgnoreExport) a).value());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
         final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
 
-        return (classFieldAnnotations.isEmpty())
-                ? classFieldAnnotations
-                : classFieldAnnotations.entrySet().stream()
-                    .filter(e -> e.getValue().stream().noneMatch(ignorePredicate))
-                    .filter(e -> e.getValue().stream().anyMatch(acceptPredicate))
-                    .peek(e -> e.setValue(e.getValue().stream()
-                            .filter(acceptPredicate)
-                            .collect(Collectors.toList())))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return classFieldAnnotations.entrySet().stream()
+                .filter(e -> e.getValue().stream().noneMatch(ignorePredicate))
+                .filter(e -> e.getValue().stream().anyMatch(acceptPredicate))
+                .peek(e -> e.setValue(e.getValue().stream()
+                        .filter(acceptPredicate)
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

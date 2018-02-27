@@ -1,5 +1,7 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.ArrayList;
+
 /**
  * Contains EMAIL service provides as string
  *
@@ -9,21 +11,22 @@ package io.dummymaker.bundle.impl;
 public class EmailServicesPresetBundle extends BasicBundle<String> {
 
     public EmailServicesPresetBundle() {
-        super(
-            "zoho",
-            "yandex",
-            "mail",
-            "gmail",
-            "outlook",
-            "proton",
-            "aim",
-            "icloud",
-            "yahoo",
-            "custom",
-            "aol",
-            "gmx",
-            "hotmail",
-            "inbox"
+        super(new ArrayList<String>() {{
+            add("zoho");
+            add("yandex");
+            add("mail");
+            add("gmail");
+            add("outlook");
+            add("proton");
+            add("aim");
+            add("icloud");
+            add("yahoo");
+            add("custom");
+            add("aol");
+            add("gmx");
+            add("hotmail");
+            add("inbox");
+        }}
         );
     }
 }

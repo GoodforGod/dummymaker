@@ -6,6 +6,7 @@ import io.dummymaker.factory.impl.GenPopulateFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -18,15 +19,28 @@ import static org.junit.Assert.*;
  */
 public class GenPopulateFactoryTest {
 
+
+
+    @Test
+    public void genPopulateTestEmptyList() {
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
+        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void genPopulateTestNullList() {
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
+        assertTrue(dummyGenPopulateFactory.populate(null).isEmpty());
+    }
+
     @Test
     public void genPopulateFactoryListTest() {
         String group1 = "300";
         String group2 = "400";
 
-        List<Dummy> dummies = new ArrayList<Dummy>() {{
-            add(new Dummy());
-            add(new Dummy());
-        }};
+        List<Dummy> dummies = new ArrayList<>();
+        dummies.add(new Dummy());
+        dummies.add(new Dummy());
 
         dummies.get(0).setGroup(group1);
         dummies.get(1).setGroup(group2);
