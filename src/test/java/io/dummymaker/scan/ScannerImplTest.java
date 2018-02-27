@@ -33,13 +33,16 @@ public class ScannerImplTest {
         // Check for correct fields number in map
         assertNotNull(fields);
         assertFalse(fields.isEmpty());
-        assertEquals(4, fields.size());
+        assertEquals(7, fields.size());
 
         // Check for map values
         assertTrue(fields.containsKey(Dummy.class.getDeclaredField(CITY.getOriginFieldName())));
         assertTrue(fields.containsKey(Dummy.class.getDeclaredField(GROUP.getOriginFieldName())));
         assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NUM.getOriginFieldName())));
         assertTrue(fields.containsKey(Dummy.class.getDeclaredField(NAME.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(LNG.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(BIGD.getOriginFieldName())));
+        assertTrue(fields.containsKey(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName())));
     }
 
     @Test
@@ -57,6 +60,7 @@ public class ScannerImplTest {
         List<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
         List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
         List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);
@@ -77,7 +81,7 @@ public class ScannerImplTest {
         // Check for correct fields number in map
         assertNotNull(fields);
         assertFalse(fields.isEmpty());
-        assertEquals(1, fields.size());
+        assertEquals(2, fields.size());
 
         // Check for correct map values
         List<Annotation> numAnnotations = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
@@ -117,21 +121,30 @@ public class ScannerImplTest {
         // Check for correct fields number in map
         assertNotNull(fields);
         assertFalse(fields.isEmpty());
-        assertEquals(3, fields.size());
+        assertEquals(6, fields.size());
 
         // Check for correct map values
         List<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
-        List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        List<Annotation> numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        List<Annotation> nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        List<Annotation> bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
+        List<Annotation> lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
+        List<Annotation> uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);
         assertNotNull(nameAnnotations);
+        assertNotNull(bigdAnnotations);
+        assertNotNull(lngAnnotations);
+        assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
         assertTrue(cityAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
         assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
         assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+        assertTrue(bigdAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+        assertTrue(lngAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+        assertTrue(uncompaAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
     }
 
     @Test

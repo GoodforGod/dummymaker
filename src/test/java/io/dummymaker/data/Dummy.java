@@ -1,5 +1,6 @@
 package io.dummymaker.data;
 
+import io.dummymaker.annotation.number.GenBigDouble;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
@@ -25,10 +26,13 @@ public class Dummy {
      * @see io.dummymaker.scan.ScannerImplTest
      */
     public enum DummyFieldNames {
-        GROUP("group",  "socialGroup",  GenRenameExport.class),
-        CITY( "city",   "city",         GenCity.class, GenIgnoreExport.class),
-        NUM(  "num",    "num",          GenEnumerate.class),
-        NAME( "name",   "name",         GenName.class);
+        UNCOMPA("uncompatible", "uncompatible", GenBigDouble.class, GenIgnoreExport.class),
+        GROUP(  "group",    "socialGroup",  GenRenameExport.class),
+        LNG(    "lng",      "lng",          GenEnumerate.class, GenIgnoreExport.class),
+        BIGD(   "bigd",     "bigd",         GenBigDouble.class, GenIgnoreExport.class),
+        CITY(   "city",     "city",         GenCity.class, GenIgnoreExport.class),
+        NUM(    "num",      "num",          GenEnumerate.class),
+        NAME(   "name",     "name",         GenName.class);
 
         private String originFieldName;
         private String exportFieldName;
@@ -60,6 +64,18 @@ public class Dummy {
     @GenCity
     @GenIgnoreExport
     private String city;
+
+    @GenIgnoreExport
+    @GenBigDouble
+    private Long uncompatible;
+
+    @GenIgnoreExport
+    @GenBigDouble
+    private String bigd;
+
+    @GenIgnoreExport
+    @GenEnumerate
+    private Long lng;
 
     @GenEnumerate
     private Integer num;
