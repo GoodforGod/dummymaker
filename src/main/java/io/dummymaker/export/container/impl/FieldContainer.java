@@ -29,10 +29,6 @@ public class FieldContainer {
      */
     private final boolean isEnumerable;
 
-    FieldContainer(Field field, String finalFieldName) {
-        this(field, finalFieldName, false);
-    }
-
     FieldContainer(Field field, String finalFieldName, boolean isEnumerable) {
         this.field = field;
         this.exportName = finalFieldName;

@@ -46,7 +46,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new CsvExporter().withTextWrap().withHeader();
+        IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -60,7 +60,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportListOfDummiesInCsv() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new CsvExporter();
+        IExporter exporter = new CsvExporter().withPath("             ").withSeparator(SEPARATOR);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -74,7 +74,7 @@ public class CsvExportAsStringTest {
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new CsvExporter().withHeader().withTextWrap();
+        IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(null);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

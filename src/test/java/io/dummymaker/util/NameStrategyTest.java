@@ -36,6 +36,7 @@ public class NameStrategyTest {
         return Arrays.asList(new Object[][] {
                 { PresetStrategies.DEFAULT, "DummyList", "DummyList" },
                 { PresetStrategies.LOW_CASE, "DummyList", "dummylist" },
+                { PresetStrategies.INITIAL_LOW_CASE, "D", "d" },
                 { PresetStrategies.UPPER_CASE, "DummyList", "DUMMYLIST" },
                 { PresetStrategies.UNDERSCORED_LOW_CASE, "DummyList", "dummy_list" },
                 { PresetStrategies.UNDERSCORED_UPPER_CASE, "DummyList", "DUMMY_LIST" },

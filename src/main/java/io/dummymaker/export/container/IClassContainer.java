@@ -23,25 +23,12 @@ public interface IClassContainer {
     boolean isExportable();
 
     /**
-     * Origin class name
-     */
-    String originClassName();
-
-    /**
      * Export class name (after naming strategy applied or renamed)
      *
      * @see io.dummymaker.export.naming.IStrategy
      * @see io.dummymaker.annotation.special.GenRenameExport
      */
     String exportClassName();
-
-    /**
-     * Retrieve export field name by its origin name
-     *
-     * @param originFieldName origin class field name
-     * @return export field name
-     */
-    String getFieldExportName(final String originFieldName);
 
     /**
      * Retrieve field by its export name (formatted via strategy or renamed via annotation)

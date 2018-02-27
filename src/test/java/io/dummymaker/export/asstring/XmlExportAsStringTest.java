@@ -30,7 +30,7 @@ public class XmlExportAsStringTest {
     @Test
     public void exportSingleDummyInXml() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new XmlExporter();
+        IExporter exporter = new XmlExporter().withStrategy(null);
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -44,7 +44,7 @@ public class XmlExportAsStringTest {
     @Test
     public void exportListOfDummiesInXml() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new XmlExporter();
+        IExporter exporter = new XmlExporter().withPath(null);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -60,7 +60,7 @@ public class XmlExportAsStringTest {
         final IStrategy strategy = PresetStrategies.INITIAL_LOW_CASE.getStrategy();
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new XmlExporter().withStrategy(strategy);
+        IExporter exporter = new XmlExporter().withStrategy(strategy).withPath("    ");
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

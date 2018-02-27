@@ -26,8 +26,6 @@ public class ClassContainer implements IClassContainer {
      */
     private final Class exportClass;
 
-    private final String originClassName;
-
     /**
      * Export dummy object class name (renamed or formatted)
      */
@@ -55,8 +53,7 @@ public class ClassContainer implements IClassContainer {
 
         this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
 
-        this.originClassName = exportClass.getSimpleName();
-        this.finalClassName = renamedFields.getOrDefault(null, strategy.toStrategy(originClassName));
+        this.finalClassName = renamedFields.getOrDefault(null, strategy.toStrategy(exportClass.getSimpleName()));
 
         this.fieldContainerMap = buildExportFieldContainerMap();
         this.renamedFields.remove(null);
@@ -70,21 +67,11 @@ public class ClassContainer implements IClassContainer {
     }
 
     @Override
-    public String getFieldExportName(final String originFieldName) {
-        return fieldContainerMap.get(originFieldName).getExportName();
-    }
-
-    @Override
     public Field getField(final String exportFieldName) {
         return fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
                 .findFirst()
                 .orElseThrow(NullPointerException::new).getValue().getField();
-    }
-
-    @Override
-    public String originClassName() {
-        return originClassName;
     }
 
     @Override
@@ -106,8 +93,7 @@ public class ClassContainer implements IClassContainer {
         return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
                 .collect(LinkedHashMap<String, FieldContainer>::new,
                         (m, e) -> m.put(e.getKey().getName(), buildFieldContainer(e.getKey(), e.getValue())),
-                        (m, u) -> {
-                        }
+                        (m, u) -> { }
                 );
     }
 

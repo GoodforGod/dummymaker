@@ -10,6 +10,7 @@ import io.dummymaker.annotation.string.GenName;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -67,7 +68,7 @@ public class Dummy {
 
     @GenIgnoreExport
     @GenBigDouble
-    private Long uncompatible;
+    private List uncompatible;
 
     @GenIgnoreExport
     @GenBigDouble

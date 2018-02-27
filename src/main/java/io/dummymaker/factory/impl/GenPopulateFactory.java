@@ -32,10 +32,6 @@ public class GenPopulateFactory implements IPopulateFactory {
     private static final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
     private static final IAnnotationScanner numerateAnnotationScanner = new EnumerateAnnotationScanner();
 
-    private <T> T populateEntity(final T t) {
-        return populateEntity(t, null, null);
-    }
-
     /**
      * Populate single entity
      *
@@ -96,7 +92,7 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> T populate(final T t) {
-        return populateEntity(t);
+        return populateEntity(t, null, null);
     }
 
     @Override

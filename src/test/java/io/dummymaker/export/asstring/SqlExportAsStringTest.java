@@ -30,7 +30,7 @@ public class SqlExportAsStringTest {
     @Test
     public void exportSingleDummyInSql() throws Exception {
         Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new SqlExporter();
+        IExporter exporter = new SqlExporter().withPath(null);
 
         String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -44,7 +44,7 @@ public class SqlExportAsStringTest {
     @Test
     public void exportListOfDummiesInSql() throws Exception {
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new SqlExporter();
+        IExporter exporter = new SqlExporter().withStrategy(null);
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -60,7 +60,7 @@ public class SqlExportAsStringTest {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_LOW_CASE.getStrategy();
 
         List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new SqlExporter().withStrategy(strategy);
+        IExporter exporter = new SqlExporter().withStrategy(strategy).withPath("    ");
 
         String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
