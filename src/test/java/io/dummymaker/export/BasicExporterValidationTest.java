@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.data.DummyNoZeroContr;
+import io.dummymaker.data.DummyNoZeroConstructor;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
@@ -43,17 +43,17 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNotExportable() {
-        DummyNoZeroContr d = new DummyNoZeroContr(1);
+        DummyNoZeroConstructor d = new DummyNoZeroConstructor(1);
         String s = exporter.exportAsString(d);
         assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportNotExportableList() {
-        List<DummyNoZeroContr> dummyNoZeroContrs = new ArrayList<>();
-        dummyNoZeroContrs.add(new DummyNoZeroContr(1));
-        dummyNoZeroContrs.add(new DummyNoZeroContr(1));
-        String s = exporter.exportAsString(dummyNoZeroContrs);
+        List<DummyNoZeroConstructor> dummyNoZeroConstructors = new ArrayList<>();
+        dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
+        dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
+        String s = exporter.exportAsString(dummyNoZeroConstructors);
         assertTrue(s.isEmpty());
     }
 

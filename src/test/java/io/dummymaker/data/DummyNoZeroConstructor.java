@@ -6,11 +6,11 @@ package io.dummymaker.data;
  * @author GoodforGod
  * @since 27.02.2018
  */
-public class DummyNoZeroContr {
+public class DummyNoZeroConstructor {
 
     private final Integer amount;
 
-    public DummyNoZeroContr(int amount) {
+    public DummyNoZeroConstructor(int amount) {
         this.amount = amount;
     }
 }

@@ -2,7 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
-import io.dummymaker.data.DummyNoZeroContr;
+import io.dummymaker.data.DummyNoZeroConstructor;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
@@ -28,14 +28,14 @@ public class GenProduceFactoryTest {
     @Test
     public void noZeroConstructorErrorList() {
         IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        List<DummyNoZeroContr> dummies = dummyGenPopulateFactory.produce(DummyNoZeroContr.class, 20);
+        List<DummyNoZeroConstructor> dummies = dummyGenPopulateFactory.produce(DummyNoZeroConstructor.class, 20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorError() {
         IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        DummyNoZeroContr dummy = dummyGenPopulateFactory.produce(DummyNoZeroContr.class);
+        DummyNoZeroConstructor dummy = dummyGenPopulateFactory.produce(DummyNoZeroConstructor.class);
         assertNull(dummy);
     }
 
