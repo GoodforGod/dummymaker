@@ -5,7 +5,7 @@ import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
-import io.dummymaker.export.validation.SqlValidation;
+import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
@@ -23,19 +23,19 @@ import static org.junit.Assert.assertNotNull;
  */
 public class SqlExportAsStringTest {
 
-    private IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenProduceFactory();
 
-    private SqlValidation validation = new SqlValidation();
+    private final SqlValidator validation = new SqlValidator();
 
     @Test
     public void exportSingleDummyInSql() throws Exception {
-        Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new SqlExporter().withPath(null);
+        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final IExporter exporter = new SqlExporter().withPath(null);
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] sqlArray = dummyAsString.split("\n");
+        final String[] sqlArray = dummyAsString.split("\n");
         assertEquals(9, sqlArray.length);
 
         validation.isSingleDummyValid(sqlArray);
@@ -43,13 +43,13 @@ public class SqlExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInSql() throws Exception {
-        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new SqlExporter().withStrategy(null);
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new SqlExporter().withStrategy(null);
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] sqlArray = dummyAsString.split("\n");
+        final String[] sqlArray = dummyAsString.split("\n");
         assertEquals(10, sqlArray.length);
 
         validation.isTwoDummiesValid(sqlArray);
@@ -59,13 +59,13 @@ public class SqlExportAsStringTest {
     public void exportListOfDummiesInSqlWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_LOW_CASE.getStrategy();
 
-        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new SqlExporter().withStrategy(strategy).withPath("    ");
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new SqlExporter().withStrategy(strategy).withPath("    ");
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] sqlArray = dummyAsString.split("\n");
+        final String[] sqlArray = dummyAsString.split("\n");
         assertEquals(10, sqlArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(sqlArray, strategy);

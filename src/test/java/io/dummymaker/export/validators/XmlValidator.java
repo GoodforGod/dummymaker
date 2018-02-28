@@ -1,4 +1,4 @@
-package io.dummymaker.export.validation;
+package io.dummymaker.export.validators;
 
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class XmlValidation {
+public class XmlValidator {
 
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("<[a-zA-Z]+>"));

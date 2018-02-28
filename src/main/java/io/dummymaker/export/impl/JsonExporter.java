@@ -173,6 +173,9 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
+        if(isExportEntitySingleList(list))
+            return export(list.get(0));
+
         final IClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
             return false;
@@ -209,6 +212,9 @@ public class JsonExporter extends BasicExporter {
     public <T> String exportAsString(final List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
+
+        if(isExportEntitySingleList(list))
+            return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
         if (!container.isExportable())

@@ -137,7 +137,7 @@ public class CsvExporter extends BasicExporter {
             return false;
 
         if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container)))
+            if (!writer.write(generateCsvHeader(container) + "\n"))
                 return false;
         }
 
@@ -150,6 +150,9 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
+        if(isExportEntitySingleList(list))
+            return export(list.get(0));
+
         final IClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())
             return false;
@@ -159,12 +162,12 @@ public class CsvExporter extends BasicExporter {
             return false;
 
         if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container)))
+            if (!writer.write(generateCsvHeader(container) + "\n"))
                 return false;
         }
 
         final boolean writerHadError = list.stream()
-                .anyMatch(t -> !writer.write("\n" + format(t, container)));
+                .anyMatch(t -> !writer.write(format(t, container) + "\n"));
 
         return !writerHadError && writer.flush();
     }
@@ -190,6 +193,9 @@ public class CsvExporter extends BasicExporter {
     public <T> String exportAsString(final List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
+
+        if(isExportEntitySingleList(list))
+            return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())

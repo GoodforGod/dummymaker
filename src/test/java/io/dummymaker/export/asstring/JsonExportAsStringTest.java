@@ -5,7 +5,7 @@ import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
-import io.dummymaker.export.validation.JsonValidation;
+import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
@@ -23,19 +23,19 @@ import static org.junit.Assert.assertNotNull;
  */
 public class JsonExportAsStringTest {
 
-    private IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenProduceFactory();
 
-    private JsonValidation validation = new JsonValidation();
+    private final JsonValidator validation = new JsonValidator();
 
     @Test
     public void exportSingleDummyInJson() throws Exception {
-        Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new JsonExporter().withPretty().withPath(null);
+        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final IExporter exporter = new JsonExporter().withPretty().withPath(null);
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] jsonArray = dummyAsString.split("\n");
+        final String[] jsonArray = dummyAsString.split("\n");
         assertEquals(5, jsonArray.length);
 
         validation.isSingleDummyValid(jsonArray);
@@ -43,13 +43,13 @@ public class JsonExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInJson() throws Exception {
-        List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new JsonExporter().withPretty().withPath("   ");
+        final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new JsonExporter().withPretty().withPath("   ");
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] jsonArray = dummyAsString.split("\n");
+        final String[] jsonArray = dummyAsString.split("\n");
         assertEquals(14, jsonArray.length);
 
         validation.isTwoDummiesValid(jsonArray);
@@ -59,13 +59,13 @@ public class JsonExportAsStringTest {
     public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
-        List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new JsonExporter().withStrategy(strategy).withPretty().withStrategy(null);
+        final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new JsonExporter().withStrategy(strategy).withPretty().withStrategy(null);
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] jsonArray = dummyAsString.split("\n");
+        final String[] jsonArray = dummyAsString.split("\n");
         assertEquals(14, jsonArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(jsonArray, strategy);

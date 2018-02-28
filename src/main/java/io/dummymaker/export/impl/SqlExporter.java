@@ -263,7 +263,7 @@ public class SqlExporter extends BasicExporter {
         final IWriter writer = buildWriter(container);
         final String primaryKey = buildPrimaryKey(container);
         return writer != null
-                && writer.write(buildCreateTableQuery(container, primaryKey))
+                && writer.write(buildCreateTableQuery(container, primaryKey) + "\n")
                 && writer.write(buildInsertQuery(t, container))
                 && writer.write(format(t, container) + ";")
                 && writer.flush();
@@ -273,6 +273,9 @@ public class SqlExporter extends BasicExporter {
     public <T> boolean export(final List<T> list) {
         if (isExportEntityInvalid(list))
             return false;
+
+        if(isExportEntitySingleList(list))
+            return export(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
@@ -334,6 +337,9 @@ public class SqlExporter extends BasicExporter {
     public <T> String exportAsString(final List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
+
+        if(isExportEntitySingleList(list))
+            return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
         if (!container.isExportable())

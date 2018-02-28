@@ -5,7 +5,7 @@ import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
-import io.dummymaker.export.validation.CsvValidation;
+import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
@@ -23,21 +23,21 @@ import static org.junit.Assert.assertNotNull;
  */
 public class CsvExportAsStringTest {
 
-    private IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenProduceFactory();
 
-    private CsvValidation validation = new CsvValidation();
+    private final CsvValidator validation = new CsvValidator();
 
     private final char SEPARATOR = ',';
 
     @Test
     public void exportSingleDummyInCsv() throws Exception {
-        Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new CsvExporter();
+        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final IExporter exporter = new CsvExporter();
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsString.split(",");
+        final String[] csvArray = dummyAsString.split(",");
         assertEquals(3, csvArray.length);
 
         validation.isSingleDummyValid(csvArray);
@@ -45,13 +45,13 @@ public class CsvExportAsStringTest {
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
-        Dummy dummy = produceFactory.produce(Dummy.class);
-        IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
+        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
 
-        String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsString.split("\n");
+        final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
         validation.isSingleDummyValidWithHeader(csvArray, SEPARATOR);
@@ -59,13 +59,13 @@ public class CsvExportAsStringTest {
 
     @Test
     public void exportListOfDummiesInCsv() throws Exception {
-        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new CsvExporter().withPath("             ").withSeparator(SEPARATOR);
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new CsvExporter().withPath("             ").withSeparator(SEPARATOR);
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsString.split("\n");
+        final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
         validation.isTwoDummiesValid(csvArray);
@@ -73,13 +73,13 @@ public class CsvExportAsStringTest {
 
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
-        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(null);
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(null);
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsString.split("\n");
+        final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
         validation.isTwoDummiesValidWithHeader(csvArray, SEPARATOR);
@@ -89,13 +89,13 @@ public class CsvExportAsStringTest {
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
-        List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(strategy);
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(strategy);
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] csvArray = dummyAsString.split("\n");
+        final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
         validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, SEPARATOR, strategy);

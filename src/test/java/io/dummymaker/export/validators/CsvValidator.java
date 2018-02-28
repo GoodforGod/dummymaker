@@ -1,4 +1,4 @@
-package io.dummymaker.export.validation;
+package io.dummymaker.export.validators;
 
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class CsvValidation {
+public class CsvValidator {
 
     public void isSingleDummyValid(String[] dummy) {
         // first line values check

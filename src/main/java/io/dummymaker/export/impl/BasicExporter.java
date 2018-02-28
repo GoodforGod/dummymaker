@@ -133,7 +133,7 @@ public abstract class BasicExporter implements IExporter {
      * @return validation result
      */
     <T> boolean isExportEntityInvalid(final T t) {
-        return t == null;
+        return (t == null);
     }
 
     /**
@@ -143,7 +143,17 @@ public abstract class BasicExporter implements IExporter {
      * @return validation result
      */
     <T> boolean isExportEntityInvalid(final List<T> t) {
-        return t == null || t.isEmpty() || isExportEntityInvalid(t.get(0));
+        return (t == null || t.isEmpty() || isExportEntityInvalid(t.get(0)));
+    }
+
+    /**
+     * Validate export arguments
+     *
+     * @param t class to validate
+     * @return validation result
+     */
+    <T> boolean isExportEntitySingleList(final List<T> t) {
+        return (t.size() == 1);
     }
 
     public abstract <T> boolean export(final T t);
