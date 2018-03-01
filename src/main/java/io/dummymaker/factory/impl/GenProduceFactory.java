@@ -23,7 +23,7 @@ public class GenProduceFactory implements IProduceFactory {
     private static final IPopulateFactory populateFactory = new GenPopulateFactory();
 
     @Override
-    public <T> T produce(Class<T> tClass) {
+    public <T> T produce(final Class<T> tClass) {
         try {
             return populateFactory.populate(tClass.newInstance());
         } catch (InstantiationException e) {
@@ -36,7 +36,7 @@ public class GenProduceFactory implements IProduceFactory {
     }
 
     @Override
-    public <T> List<T> produce(Class<T> tClass, final int amount) {
+    public <T> List<T> produce(final Class<T> tClass, final int amount) {
         if (amount < 1)
             return Collections.emptyList();
 

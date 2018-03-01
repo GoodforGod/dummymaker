@@ -83,8 +83,8 @@ public class CsvExportAsFileTest  extends ExportAssert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(1, csvArray.length);
+        final String[] csvArray = dummyAsString.split(",");
+        assertEquals(3, csvArray.length);
 
         validation.isSingleDummyValid(csvArray);
     }

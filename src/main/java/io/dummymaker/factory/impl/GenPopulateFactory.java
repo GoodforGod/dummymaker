@@ -10,10 +10,7 @@ import io.dummymaker.scan.impl.PopulateAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -30,7 +27,7 @@ public class GenPopulateFactory implements IPopulateFactory {
     private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
     private static final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
-    private static final IAnnotationScanner numerateAnnotationScanner = new EnumerateAnnotationScanner();
+    private static final IAnnotationScanner enumerateAnnotationScanner = new EnumerateAnnotationScanner();
 
     /**
      * Populate single entity
@@ -41,8 +38,11 @@ public class GenPopulateFactory implements IPopulateFactory {
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
-                                 Map<Field, Long> enumerateMap,
-                                 Map<Field, ? extends IGenerator> generatorMap) {
+                                 final Map<Field, Long> enumerateMap,
+                                 final Map<Field, ? extends IGenerator> generatorMap) {
+        if(t == null)
+            return null;
+
         final boolean haveEnumerateFields = (enumerateMap != null && !enumerateMap.isEmpty());
 
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
@@ -55,25 +55,17 @@ public class GenPopulateFactory implements IPopulateFactory {
             try {
                 annotatedField.getKey().setAccessible(true);
 
-                if (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey())) {
-                    objValue = enumerateMap.get(annotatedField.getKey());
-
-                    if (annotatedField.getKey().getType().isAssignableFrom(Integer.class))
-                        objValue = Integer.valueOf(String.valueOf(objValue));
-                    else if (annotatedField.getKey().getType().isAssignableFrom(Long.class))
-                        objValue = Long.valueOf(String.valueOf(objValue));
-
-                    // Increment numerate number for generated field
-                    enumerateMap.computeIfPresent(annotatedField.getKey(), (k, v) -> v + 1);
-                } else {
-                    objValue = generatorsFieldMap.get(annotatedField.getKey()).generate();
-                }
+                // Populate enumerated field if it is so or via generator
+                objValue = (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey()))
+                        ? buildNextEnumeratedValue(enumerateMap, annotatedField.getKey())
+                        : generatorsFieldMap.get(annotatedField.getKey()).generate();
 
                 annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
             } catch (IllegalAccessException e) {
                 logger.warning(e.getMessage());
             } catch (ClassCastException e) {
                 try {
+                    // Try to cast object type to string if possible, cause origin type is not castable
                     if (annotatedField.getKey().getType().isAssignableFrom(String.class)) {
                         annotatedField.getKey().set(t, String.valueOf(objValue));
                     }
@@ -88,6 +80,23 @@ public class GenPopulateFactory implements IPopulateFactory {
         }
 
         return t;
+    }
+
+    /**
+     * Build enumerate field next value
+     */
+    private Object buildNextEnumeratedValue(final Map<Field, Long> enumerateMap,
+                                            final Field enumeratedField) {
+        Object objValue = enumerateMap.get(enumeratedField);
+
+        if (enumeratedField.getType().isAssignableFrom(Integer.class))
+            objValue = Integer.valueOf(String.valueOf(objValue));
+        else if (enumeratedField.getType().isAssignableFrom(Long.class))
+            objValue = Long.valueOf(String.valueOf(objValue));
+
+        // Increment numerate number for generated field
+        enumerateMap.computeIfPresent(enumeratedField, (k, v) -> v + 1);
+        return objValue;
     }
 
     @Override
@@ -106,15 +115,20 @@ public class GenPopulateFactory implements IPopulateFactory {
 
         return list.stream()
                 .map(t -> populateEntity(t, enumerateMap, generatorMap))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Build generators map to improve performance
+     * So we initialize generators once for entity and not each populate method call
+     */
     private Map<Field, IGenerator> buildGeneratorsMap(Map<Field, List<Annotation>> map) {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         map.forEach((key, value) -> {
             try {
-                final IGenerator generator = ((PrimeGenAnnotation) value.iterator().next()).value().newInstance();
+                final IGenerator generator = ((PrimeGenAnnotation) value.get(0)).value().newInstance();
                 generatorsMap.put(key, generator);
             } catch (InstantiationException | IllegalAccessException e1) {
                 logger.warning(e1.getMessage());
@@ -130,12 +144,10 @@ public class GenPopulateFactory implements IPopulateFactory {
      * @param t class to scan for enumerate fields
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
-        final Map<Field, List<Annotation>> numerateAnnotations = numerateAnnotationScanner.scan(t);
-
-        return numerateAnnotations.entrySet().stream()
+        return enumerateAnnotationScanner.scan(t).entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getKey(),
-                        e -> ((GenEnumerate) e.getValue().iterator().next()).from())
+                        e -> ((GenEnumerate) e.getValue().get(0)).from())
                 );
     }
 }
