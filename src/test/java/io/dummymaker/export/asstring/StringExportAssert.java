@@ -4,21 +4,12 @@ import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoExportFields;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.impl.XmlExporter;
-import io.dummymaker.export.validators.*;
+import io.dummymaker.export.validators.IValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +19,7 @@ import java.util.List;
  * @author GoodforGod
  * @since 03.03.2018
  */
-@Ignore
-@RunWith(Parameterized.class)
-public class ExportAsStringTests extends Assert {
+public abstract class StringExportAssert extends Assert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
@@ -40,38 +29,11 @@ public class ExportAsStringTests extends Assert {
     private final int singleSplitLength;
     private final int listSplitLength;
 
-    public ExportAsStringTests(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+    public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.singleSplitLength = singleSplitLength;
         this.listSplitLength = listSplitLength;
-    }
-
-    @Parameters(name = "{index}: Exporter - ({0})")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]
-                {
-                        { new JsonExporter().withPretty(), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withPath(null), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withStrategy(null), new JsonValidator(), 5, 14 },
-
-                        { new CsvExporter(), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withPath(null), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withPath("    "), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withStrategy(null), new CsvValidator(), 3, 2 },
-
-                        { new SqlExporter(), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withPath(null), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withPath("    "), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withStrategy(null), new SqlValidator(), 9, 10 },
-
-                        { new XmlExporter(), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withPath(null), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withPath("     "), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withStrategy(null), new XmlValidator(), 5, 12 }
-                }
-        );
     }
 
     @Test

@@ -19,13 +19,18 @@ import java.util.List;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class XmlExportAsFileTest extends ExportAssert {
+public class XmlExportAsFileTest extends FileExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final XmlValidator validation = new XmlValidator();
 
     private final Format format = Format.XML;
+
+    public XmlExportAsFileTest() {
+        super(new XmlExporter().withPath(null).withStrategy(null).withPath("             "),
+                new XmlValidator(), Format.XML, 5, 12);
+    }
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {

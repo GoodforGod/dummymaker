@@ -12,20 +12,22 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 /**
  * "Default Description"
  *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class CsvExportAsStringTest {
+public class CsvExportAsStringTest extends StringExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final CsvValidator validation = new CsvValidator();
+
+    public CsvExportAsStringTest() {
+        super(new CsvExporter().withPath(null).withPath("             ").withStrategy(null),
+                new CsvValidator(), 3, 2);
+    }
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {

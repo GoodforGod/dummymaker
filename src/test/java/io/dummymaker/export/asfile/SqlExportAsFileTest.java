@@ -19,13 +19,18 @@ import java.util.List;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class SqlExportAsFileTest extends ExportAssert {
+public class SqlExportAsFileTest extends FileExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final SqlValidator validation = new SqlValidator();
 
     private final Format format = Format.SQL;
+
+    public SqlExportAsFileTest() {
+        super(new SqlExporter().withPath(null).withStrategy(null).withPath("            "),
+                new SqlValidator(), Format.SQL, 9, 10);
+    }
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {

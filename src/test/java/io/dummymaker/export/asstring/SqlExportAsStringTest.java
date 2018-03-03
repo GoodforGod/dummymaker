@@ -12,20 +12,22 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 /**
  * "Default Description"
  *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class SqlExportAsStringTest {
+public class SqlExportAsStringTest extends StringExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final SqlValidator validation = new SqlValidator();
+
+    public SqlExportAsStringTest() {
+        super(new SqlExporter().withPath(null).withStrategy(null).withPath("            "),
+                new SqlValidator(), 9, 10);
+    }
 
     @Test
     public void exportListOfDummiesInSqlWithNamingStrategy() throws Exception {

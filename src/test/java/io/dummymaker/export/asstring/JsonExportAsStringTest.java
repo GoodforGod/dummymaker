@@ -12,20 +12,22 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 /**
  * "Default Description"
  *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class JsonExportAsStringTest {
+public class JsonExportAsStringTest extends StringExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final JsonValidator validation = new JsonValidator();
+
+    public JsonExportAsStringTest() {
+        super(new JsonExporter().withPretty().withPath(null).withStrategy(null).withPath("            "),
+                new JsonValidator(), 5, 14);
+    }
 
     @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {

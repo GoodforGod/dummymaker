@@ -19,13 +19,18 @@ import java.util.List;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class JsonExportAsFileTest extends ExportAssert {
+public class JsonExportAsFileTest extends FileExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final JsonValidator validation = new JsonValidator();
 
     private final Format format = Format.JSON;
+
+    public JsonExportAsFileTest() {
+        super(new JsonExporter().withPretty().withPath(null).withStrategy(null).withPath("            "),
+                new JsonValidator(), Format.JSON, 5, 14);
+    }
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {

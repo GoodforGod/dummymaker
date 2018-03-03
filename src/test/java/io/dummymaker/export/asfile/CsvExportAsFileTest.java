@@ -19,7 +19,7 @@ import java.util.List;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class CsvExportAsFileTest extends ExportAssert {
+public class CsvExportAsFileTest extends FileExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
@@ -28,7 +28,8 @@ public class CsvExportAsFileTest extends ExportAssert {
     private final Format format = Format.CSV;
 
     public CsvExportAsFileTest() {
-        super(new CsvExporter().withPath(null).withPath("             ").withStrategy(null), new CsvValidator(), Format.CSV, 3, 2);
+        super(new CsvExporter().withPath(null).withPath("             ").withStrategy(null),
+                new CsvValidator(), Format.CSV, 3, 2);
     }
 
     @Test
