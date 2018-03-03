@@ -18,7 +18,7 @@ public class JsonValidator {
         assertTrue(dummy[0].matches("\\{"));
         assertTrue(dummy[1].matches("\\t\"" + NAME.getExportFieldName() + "\":\"[a-zA-Z0-9]+\","));
         assertTrue(dummy[2].matches("\\t\"" + GROUP.getExportFieldName() + "\":\"[0-9]+\","));
-        assertTrue(dummy[3].matches("\\t\"" + NUM.getExportFieldName()  + "\":\"null\""));
+        assertTrue(dummy[3].matches("\\t\"" + NUM.getExportFieldName()  + "\":\"[0-9]+\""));
         assertTrue(dummy[4].matches("}"));
     }
 

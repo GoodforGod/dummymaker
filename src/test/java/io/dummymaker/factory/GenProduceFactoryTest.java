@@ -70,8 +70,13 @@ public class GenProduceFactoryTest {
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
         assertNotNull(dummy.getName());
-        assertNull(dummy.getNum());
+        assertNotNull(dummy.getNum());
         assertNotNull(dummy.getGroup());
+
+        assertTrue(dummy.getCity().matches("[a-zA-Z0-9]+"));
+        assertTrue(dummy.getName().matches("[a-zA-Z]+"));
+        assertEquals((int) dummy.getNum(), 0);
+        assertTrue(dummy.getGroup().matches("[0-9]+"));
     }
 
     @Test

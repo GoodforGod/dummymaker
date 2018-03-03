@@ -18,7 +18,7 @@ public class XmlValidator {
         assertTrue(dummy[0].matches("<[a-zA-Z]+>"));
         assertTrue(dummy[1].matches("\\t<" + NAME.getExportFieldName()     + ">" + "[a-zA-Z]+" + "</" + NAME.getExportFieldName() + ">"));
         assertTrue(dummy[2].matches("\\t<" + GROUP.getExportFieldName()    + ">" + "[0-9]+"    + "</" + GROUP.getExportFieldName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + NUM.getExportFieldName()      + ">" + "null"      + "</" + NUM.getExportFieldName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + NUM.getExportFieldName()      + ">" + "[0-9]+"      + "</" + NUM.getExportFieldName() + ">"));
         assertTrue(dummy[4].matches("</[a-zA-Z]+>"));
     }
 

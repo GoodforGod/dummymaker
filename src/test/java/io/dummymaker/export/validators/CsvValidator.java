@@ -19,7 +19,7 @@ public class CsvValidator {
         // first line values check
         assertTrue(dummy[0].matches("[a-zA-Z0-9]+"));
         assertTrue(dummy[1].matches("[0-9]+"));
-        assertTrue(dummy[2].matches("null"));
+        assertTrue(dummy[2].matches("[0-9]+"));
     }
 
     public void isTwoDummiesValid(String[] dummies) {
@@ -53,7 +53,7 @@ public class CsvValidator {
         assertEquals(3, valueArray.length);
         assertTrue(valueArray[0].matches("\'[a-zA-Z0-9]+\'"));
         assertTrue(valueArray[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray[2].matches("null"));
+        assertTrue(valueArray[2].matches("[0-9]+"));
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {

@@ -25,7 +25,7 @@ public class SqlValidator {
         assertTrue(dummy[6].matches(""));
 
         assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + NAME.getExportFieldName() + ", " + GROUP.getExportFieldName() + ", " + NUM.getExportFieldName() + "\\) VALUES"));
-        assertTrue(dummy[8].matches("\\('[a-zA-Z]+', '[0-9]+', null\\);"));
+        assertTrue(dummy[8].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\);"));
     }
 
     public void isTwoDummiesValid(String[] dummies) {

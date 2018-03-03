@@ -101,7 +101,7 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> T populate(final T t) {
-        return populateEntity(t, null, null);
+        return populateEntity(t, buildEnumerateMap(t.getClass()), null);
     }
 
     @Override
