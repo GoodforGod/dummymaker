@@ -28,34 +28,6 @@ public class XmlExportAsStringTest {
     private final XmlValidator validation = new XmlValidator();
 
     @Test
-    public void exportSingleDummyInXml() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final IExporter exporter = new XmlExporter().withStrategy(null);
-
-        final String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        final String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(5, xmlArray.length);
-
-        validation.isSingleDummyValid(xmlArray);
-    }
-
-    @Test
-    public void exportListOfDummiesInXml() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        final IExporter exporter = new XmlExporter().withPath(null);
-
-        final String dummyAsString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsString);
-
-        final String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(12, xmlArray.length);
-
-        validation.isTwoDummiesValid(xmlArray);
-    }
-
-    @Test
     public void exportListOfDummiesInXmlWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.INITIAL_LOW_CASE.getStrategy();
 

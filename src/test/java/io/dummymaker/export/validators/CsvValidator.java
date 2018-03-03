@@ -1,5 +1,6 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.PresetStrategies;
 
@@ -13,8 +14,9 @@ import static org.junit.Assert.assertTrue;
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class CsvValidator {
+public class CsvValidator implements IValidator {
 
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         // first line values check
         assertTrue(dummy[0].matches("[a-zA-Z0-9]+"));
@@ -22,6 +24,7 @@ public class CsvValidator {
         assertTrue(dummy[2].matches("[0-9]+"));
     }
 
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         String[] valueArray1 = dummies[0].split(",");
 
@@ -58,6 +61,24 @@ public class CsvValidator {
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
         isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, PresetStrategies.DEFAULT.getStrategy());
+    }
+
+    @Override
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
+        String[] valueArray1 = dummies[0].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
+        String[] valueArray2 = dummies[1].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
+
+        // first line values check
+        assertEquals(3, valueArray1.length);
+        assertTrue(valueArray1[0].matches("\'[a-zA-Z0-9]+\'"));
+        assertTrue(valueArray1[1].matches("\'[0-9]+\'"));
+        assertTrue(valueArray1[2].matches("[0-9]+"));
+
+        // second line values check
+        assertEquals(3, valueArray2.length);
+        assertTrue(valueArray2[0].matches("\'[a-zA-Z0-9]+\'"));
+        assertTrue(valueArray2[1].matches("\'[0-9]+\'"));
+        assertTrue(valueArray2[2].matches("[0-9]+"));
     }
 
     public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, IStrategy strategy) {

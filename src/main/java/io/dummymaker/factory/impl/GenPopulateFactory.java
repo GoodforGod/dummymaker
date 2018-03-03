@@ -40,7 +40,7 @@ public class GenPopulateFactory implements IPopulateFactory {
     private <T> T populateEntity(final T t,
                                  final Map<Field, Long> enumerateMap,
                                  final Map<Field, ? extends IGenerator> generatorMap) {
-        if(t == null)
+        if (t == null)
             return null;
 
         final boolean haveEnumerateFields = (enumerateMap != null && !enumerateMap.isEmpty());
@@ -101,7 +101,9 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> T populate(final T t) {
-        return populateEntity(t, buildEnumerateMap(t.getClass()), null);
+        return (t == null)
+                ? null
+                : populateEntity(t, buildEnumerateMap(t.getClass()), null);
     }
 
     @Override
@@ -145,7 +147,7 @@ public class GenPopulateFactory implements IPopulateFactory {
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
         return enumerateAnnotationScanner.scan(t).entrySet().stream()
-                .collect(Collectors.toMap(
+                    .collect(Collectors.toMap(
                         e -> e.getKey(),
                         e -> ((GenEnumerate) e.getValue().get(0)).from())
                 );

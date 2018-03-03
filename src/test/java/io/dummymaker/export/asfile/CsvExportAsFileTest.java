@@ -1,7 +1,6 @@
 package io.dummymaker.export.asfile;
 
 import io.dummymaker.data.Dummy;
-import io.dummymaker.data.DummyNoExportFields;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
@@ -12,7 +11,6 @@ import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,105 +26,6 @@ public class CsvExportAsFileTest  extends ExportAssert {
     private final CsvValidator validation = new CsvValidator();
 
     private final Format format = Format.CSV;
-
-    private final char SEPARATOR = ',';
-
-    @Test
-    public void exportSingleDummyInvalidExportEntity() throws Exception {
-        final IExporter exporter = new CsvExporter();
-
-        final boolean exportResult = exporter.export((DummyNoExportFields) null);
-        assertFalse(exportResult);
-    }
-
-    @Test
-    public void exportDummyListInvalidExportEntity() throws Exception {
-        final IExporter exporter = new CsvExporter();
-
-        final boolean exportResult = exporter.export(null);
-        assertFalse(exportResult);
-
-        final boolean exportEmptyResult = exporter.export(Collections.emptyList());
-        assertFalse(exportEmptyResult);
-    }
-
-    @Test
-    public void exportSingleDummyEmptyContainer() throws Exception {
-        final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
-        final IExporter exporter = new CsvExporter();
-
-        final boolean exportResult = exporter.export(dummy);
-        assertFalse(exportResult);
-    }
-
-    @Test
-    public void exportDummyListEmptyContainer() throws Exception {
-        final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
-        final IExporter exporter = new CsvExporter();
-
-        final boolean exportResult = exporter.export(dummy);
-        assertFalse(exportResult);
-    }
-
-    @Test
-    public void exportSingleDummy() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter();
-
-        final boolean exportResult = exporter.export(dummy);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] csvArray = dummyAsString.split(",");
-        assertEquals(3, csvArray.length);
-
-        validation.isSingleDummyValid(csvArray);
-    }
-
-    @Test
-    public void exportListOfDummies() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withStrategy(null).withSeparator(SEPARATOR);
-
-        final boolean exportResult = exporter.export(dummies);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(2, csvArray.length);
-
-        validation.isTwoDummiesValid(csvArray);
-    }
-
-    @Test
-    public void exportSingleDummyList() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withPath("             ").withSeparator(SEPARATOR);
-
-        final boolean exportResult = exporter.export(dummies);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] csvArray = dummyAsString.split(",");
-        assertEquals(3, csvArray.length);
-
-        validation.isSingleDummyValid(csvArray);
-    }
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
@@ -145,7 +44,7 @@ public class CsvExportAsFileTest  extends ExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        validation.isSingleDummyValidWithHeader(csvArray, SEPARATOR);
+        validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
 
@@ -166,7 +65,7 @@ public class CsvExportAsFileTest  extends ExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeader(csvArray, SEPARATOR);
+        validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -188,6 +87,6 @@ public class CsvExportAsFileTest  extends ExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, SEPARATOR, strategy);
+        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, CsvExporter.DEFAULT_SEPARATOR, strategy);
     }
 }

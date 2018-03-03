@@ -28,34 +28,6 @@ public class SqlExportAsStringTest {
     private final SqlValidator validation = new SqlValidator();
 
     @Test
-    public void exportSingleDummyInSql() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final IExporter exporter = new SqlExporter().withPath(null);
-
-        final String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(9, sqlArray.length);
-
-        validation.isSingleDummyValid(sqlArray);
-    }
-
-    @Test
-    public void exportListOfDummiesInSql() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        final IExporter exporter = new SqlExporter().withStrategy(null);
-
-        final String dummyAsString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsString);
-
-        final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(10, sqlArray.length);
-
-        validation.isTwoDummiesValid(sqlArray);
-    }
-
-    @Test
     public void exportListOfDummiesInSqlWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_LOW_CASE.getStrategy();
 

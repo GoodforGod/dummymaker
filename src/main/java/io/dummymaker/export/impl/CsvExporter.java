@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class CsvExporter extends BasicExporter {
 
-    private static final char DEFAULT_SEPARATOR = ',';
+    public static final char DEFAULT_SEPARATOR = ',';
 
     /**
      * CSV format separator for values: value1,value2,value3 ...

@@ -28,66 +28,6 @@ public class XmlExportAsFileTest extends ExportAssert {
     private final Format format = Format.XML;
 
     @Test
-    public void exportSingleDummy() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withStrategy(null);
-
-        final boolean exportResult = exporter.export(dummy);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(5, xmlArray.length);
-
-        validation.isSingleDummyValid(xmlArray);
-    }
-
-    @Test
-    public void exportListOfDummies() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withPath(null);
-
-        final boolean exportResult = exporter.export(dummies);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(12, xmlArray.length);
-
-        validation.isTwoDummiesValid(xmlArray);
-    }
-
-    @Test
-    public void exportSingleDummyList() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
-        final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withPath(null);
-
-        final boolean exportResult = exporter.export(dummies);
-        assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
-
-        final String dummyAsString = readDummyFromFile(filename);
-        assertNotNull(dummyAsString);
-        assertFalse(dummyAsString.isEmpty());
-
-        final String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(5, xmlArray.length);
-
-        validation.isSingleDummyValid(xmlArray);
-    }
-
-    @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.INITIAL_LOW_CASE.getStrategy();
 

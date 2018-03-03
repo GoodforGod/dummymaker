@@ -28,34 +28,6 @@ public class JsonExportAsStringTest {
     private final JsonValidator validation = new JsonValidator();
 
     @Test
-    public void exportSingleDummyInJson() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final IExporter exporter = new JsonExporter().withPretty().withPath(null);
-
-        final String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        final String[] jsonArray = dummyAsString.split("\n");
-        assertEquals(5, jsonArray.length);
-
-        validation.isSingleDummyValid(jsonArray);
-    }
-
-    @Test
-    public void exportListOfDummiesInJson() throws Exception {
-        final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        final IExporter exporter = new JsonExporter().withPretty().withPath("   ");
-
-        final String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        final String[] jsonArray = dummyAsString.split("\n");
-        assertEquals(14, jsonArray.length);
-
-        validation.isTwoDummiesValid(jsonArray);
-    }
-
-    @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
         final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
 

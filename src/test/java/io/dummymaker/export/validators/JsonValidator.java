@@ -12,8 +12,9 @@ import static org.junit.Assert.assertTrue;
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class JsonValidator {
+public class JsonValidator implements IValidator {
 
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("\\{"));
         assertTrue(dummy[1].matches("\\t\"" + NAME.getExportFieldName() + "\":\"[a-zA-Z0-9]+\","));
@@ -22,10 +23,12 @@ public class JsonValidator {
         assertTrue(dummy[4].matches("}"));
     }
 
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, PresetStrategies.DEFAULT.getStrategy());
     }
 
+    @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
         final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();

@@ -12,8 +12,9 @@ import static org.junit.Assert.assertTrue;
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class SqlValidator {
+public class SqlValidator implements IValidator {
 
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummy[1].matches("\\t" + NAME.getExportFieldName() + "\\tVARCHAR,"));
@@ -28,10 +29,12 @@ public class SqlValidator {
         assertTrue(dummy[8].matches("\\('[a-zA-Z]+', '[0-9]+', [0-9]+\\);"));
     }
 
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, PresetStrategies.DEFAULT.getStrategy());
     }
 
+    @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
         final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();

@@ -27,22 +27,6 @@ public class CsvExportAsStringTest {
 
     private final CsvValidator validation = new CsvValidator();
 
-    private final char SEPARATOR = ',';
-
-    @Test
-    public void exportSingleDummyInCsv() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
-        final IExporter exporter = new CsvExporter();
-
-        final String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        final String[] csvArray = dummyAsString.split(",");
-        assertEquals(3, csvArray.length);
-
-        validation.isSingleDummyValid(csvArray);
-    }
-
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = produceFactory.produce(Dummy.class);
@@ -54,22 +38,9 @@ public class CsvExportAsStringTest {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        validation.isSingleDummyValidWithHeader(csvArray, SEPARATOR);
+        validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
-    @Test
-    public void exportListOfDummiesInCsv() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
-        final IExporter exporter = new CsvExporter().withPath("             ").withSeparator(SEPARATOR);
-
-        final String dummyAsString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsString);
-
-        final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(2, csvArray.length);
-
-        validation.isTwoDummiesValid(csvArray);
-    }
 
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
@@ -82,7 +53,7 @@ public class CsvExportAsStringTest {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeader(csvArray, SEPARATOR);
+        validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -98,6 +69,6 @@ public class CsvExportAsStringTest {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, SEPARATOR, strategy);
+        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, CsvExporter.DEFAULT_SEPARATOR, strategy);
     }
 }
