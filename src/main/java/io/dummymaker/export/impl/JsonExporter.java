@@ -120,8 +120,6 @@ public class JsonExporter extends BasicExporter {
                               final IClassContainer container,
                               final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if (exportContainers.isEmpty())
-            return "";
 
         final String fieldTabs = buildFieldTab(mode);
 

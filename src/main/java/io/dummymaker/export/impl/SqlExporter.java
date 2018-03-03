@@ -179,8 +179,6 @@ public class SqlExporter extends BasicExporter {
     private <T> String format(final T t,
                               final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if (exportContainers.isEmpty())
-            return "";
 
         final String resultValues = exportContainers.stream()
                 .map(c -> convertFieldValue(container.getField(c.getExportName()), c))

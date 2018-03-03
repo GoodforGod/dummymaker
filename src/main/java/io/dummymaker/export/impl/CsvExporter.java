@@ -100,8 +100,6 @@ public class CsvExporter extends BasicExporter {
     private <T> String format(final T t,
                               final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if (exportContainers.isEmpty())
-            return "";
 
         final String separatorAsStr = String.valueOf(separator);
         return exportContainers.stream()

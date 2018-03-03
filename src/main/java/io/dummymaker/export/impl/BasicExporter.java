@@ -11,7 +11,6 @@ import io.dummymaker.writer.BufferedFileWriter;
 import io.dummymaker.writer.IWriter;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -106,18 +105,12 @@ public abstract class BasicExporter implements IExporter {
         final List<ExportContainer> exports = new ArrayList<>();
         classContainer.getContainers().forEach((key, value) -> {
             try {
-                final Field field = t.getClass().getDeclaredField(key);
+                value.getField().setAccessible(true);
 
-                if (field != null) {
-                    field.setAccessible(true);
+                final String exportFieldName = value.getExportName();
+                exports.add(new ExportContainer(exportFieldName, String.valueOf(value.getField().get(t))));
 
-                    final String exportFieldName = value.getExportName();
-                    exports.add(new ExportContainer(exportFieldName, String.valueOf(field.get(t))));
-
-                    field.setAccessible(false);
-                }
-            } catch (IllegalAccessException e) {
-                logger.info(e.getMessage());
+                value.getField().setAccessible(false);
             } catch (Exception e) {
                 logger.warning(e.getMessage());
             }

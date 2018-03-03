@@ -103,8 +103,6 @@ public class XmlExporter extends BasicExporter {
                               final IClassContainer container,
                               final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-        if (exportContainers.isEmpty())
-            return "";
 
         final String tabObject = (mode == Mode.SINGLE) ? "" : "\t";
         final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";

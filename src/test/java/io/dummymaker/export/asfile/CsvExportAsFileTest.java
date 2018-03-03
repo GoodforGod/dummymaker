@@ -31,7 +31,7 @@ public class CsvExportAsFileTest  extends ExportAssert {
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = produceFactory.produce(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
+        final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
