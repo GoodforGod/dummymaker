@@ -34,6 +34,12 @@ public class GenPopulateFactoryTest {
     }
 
     @Test
+    public void genPopulateTestNull() {
+        IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
+        assertNull(dummyGenPopulateFactory.populate((Dummy) null));
+    }
+
+    @Test
     public void genPopulateFactoryListTest() {
         String group1 = "300";
         String group2 = "400";

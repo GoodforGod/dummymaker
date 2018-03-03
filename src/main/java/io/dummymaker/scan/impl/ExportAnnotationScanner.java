@@ -32,7 +32,8 @@ public class ExportAnnotationScanner extends AnnotationScanner {
      * @see PrimeGenAnnotation
      */
     private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGenAnnotation.class)
-            || ((a.annotationType().equals(GenForceExport.class)) && ((GenForceExport) a).value()));
+            || ((a.annotationType().equals(GenForceExport.class))
+            && ((GenForceExport) a).value()));
 
     /**
      * Check for ignorable annotations
