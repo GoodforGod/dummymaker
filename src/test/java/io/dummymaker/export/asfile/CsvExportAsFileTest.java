@@ -19,13 +19,17 @@ import java.util.List;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class CsvExportAsFileTest  extends ExportAssert {
+public class CsvExportAsFileTest extends ExportAssert {
 
     private final IProduceFactory produceFactory = new GenProduceFactory();
 
     private final CsvValidator validation = new CsvValidator();
 
     private final Format format = Format.CSV;
+
+    public CsvExportAsFileTest() {
+        super(new CsvExporter().withPath(null).withPath("             ").withStrategy(null), new CsvValidator(), Format.CSV, 3, 2);
+    }
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {

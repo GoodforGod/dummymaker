@@ -11,6 +11,7 @@ import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,6 +28,7 @@ import java.util.List;
  * @author GoodforGod
  * @since 03.03.2018
  */
+@Ignore
 @RunWith(Parameterized.class)
 public class ExportAsFileTests extends ExportAssert {
 
