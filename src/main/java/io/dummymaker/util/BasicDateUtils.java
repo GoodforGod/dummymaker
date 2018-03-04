@@ -30,6 +30,9 @@ public class BasicDateUtils {
 
     public static Timestamp convertToTimestamp(final Date date) {
         try {
+            if(date == null)
+                return null;
+
             final Calendar cal = genCalendar();
             cal.setTime(date);
             cal.set(Calendar.MILLISECOND, 0);
@@ -75,8 +78,7 @@ public class BasicDateUtils {
 
     public static Date parseSimpleDateLong(final String date) {
         try {
-            final boolean timeStatus = isNotBlank(date);
-            return (timeStatus)
+            return (isNotBlank(date))
                     ? new Date(Long.valueOf(date))
                     : null;
         } catch (NumberFormatException e) {
