@@ -2,7 +2,7 @@ package io.dummymaker.export.validators;
 
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +60,7 @@ public class CsvValidator implements IValidator {
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
-        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, PresetStrategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Strategies.DEFAULT.getStrategy());
     }
 
     @Override

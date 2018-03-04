@@ -6,7 +6,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -37,7 +37,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.UNDERSCORED_LOW_CASE.getStrategy();
+        final IStrategy strategy = Strategies.UNDERSCORED_LOW_CASE.getStrategy();
 
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
@@ -59,7 +59,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportListOfDummiesWithTimestampAndDataTypesWithNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.LOW_CASE.getStrategy();
+        final IStrategy strategy = Strategies.LOW_CASE.getStrategy();
 
         final Map<Class, String> dataTypes = new HashMap<>();
         dataTypes.put(Dummy.class, "keks");

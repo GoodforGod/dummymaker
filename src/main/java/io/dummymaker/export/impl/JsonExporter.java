@@ -4,7 +4,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class JsonExporter extends BasicExporter {
     private boolean isPretty;
 
     public JsonExporter() {
-        super(null, Format.JSON, PresetStrategies.DEFAULT.getStrategy());
+        super(null, Format.JSON, Strategies.DEFAULT.getStrategy());
         this.isPretty = false;
     }
 
@@ -51,7 +51,7 @@ public class JsonExporter extends BasicExporter {
      * Build exporter with naming strategy
      *
      * @see IStrategy
-     * @see PresetStrategies
+     * @see Strategies
      *
      * @param strategy naming strategy for exporter
      */

@@ -12,7 +12,7 @@ import io.dummymaker.export.naming.impl.*;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public enum PresetStrategies {
+public enum Strategies {
 
     DEFAULT(new DefaultStrategy()),
     UPPER_CASE(new UpperCaseStrategy()),
@@ -23,7 +23,7 @@ public enum PresetStrategies {
 
     private final IStrategy strategy;
 
-    PresetStrategies(IStrategy strategy) {
+    Strategies(IStrategy strategy) {
         this.strategy = strategy;
     }
 

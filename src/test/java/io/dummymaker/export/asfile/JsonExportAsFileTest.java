@@ -5,7 +5,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -34,7 +34,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final IStrategy strategy = Strategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();

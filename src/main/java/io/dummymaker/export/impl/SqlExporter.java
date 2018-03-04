@@ -5,7 +5,7 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.container.impl.FieldContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -41,7 +41,7 @@ public class SqlExporter extends BasicExporter {
     private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
-        super(null, Format.SQL, PresetStrategies.DEFAULT.getStrategy());
+        super(null, Format.SQL, Strategies.DEFAULT.getStrategy());
     }
 
     /**
@@ -68,7 +68,7 @@ public class SqlExporter extends BasicExporter {
      * Build exporter with naming strategy
      *
      * @see IStrategy
-     * @see PresetStrategies
+     * @see Strategies
      *
      * @param strategy naming strategy for exporter
      */

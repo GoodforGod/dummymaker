@@ -4,7 +4,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class XmlExporter extends BasicExporter {
     private String exportClassFullName = null;
 
     public XmlExporter() {
-        super(null, Format.XML, PresetStrategies.DEFAULT.getStrategy());
+        super(null, Format.XML, Strategies.DEFAULT.getStrategy());
     }
 
     /**
@@ -59,7 +59,7 @@ public class XmlExporter extends BasicExporter {
      * Build exporter with naming strategy
      *
      * @see IStrategy
-     * @see PresetStrategies
+     * @see Strategies
      *
      * @param strategy naming strategy for exporter
      */

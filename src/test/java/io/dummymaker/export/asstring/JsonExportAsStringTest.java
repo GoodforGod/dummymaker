@@ -3,8 +3,7 @@ package io.dummymaker.export.asstring;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -31,10 +30,10 @@ public class JsonExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final Strategies strategy = Strategies.UNDERSCORED_UPPER_CASE;
 
         final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
-        final IExporter exporter = new JsonExporter().withStrategy(strategy).withPretty().withStrategy(null);
+        final IExporter exporter = new JsonExporter().withStrategy(strategy.getStrategy()).withPretty().withStrategy(null);
 
         final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -42,6 +41,6 @@ public class JsonExportAsStringTest extends StringExportAssert {
         final String[] jsonArray = dummyAsString.split("\n");
         assertEquals(14, jsonArray.length);
 
-        validation.isTwoDummiesValidWithNamingStrategy(jsonArray, strategy);
+        validation.isTwoDummiesValidWithNamingStrategy(jsonArray, strategy.getStrategy());
     }
 }

@@ -1,7 +1,7 @@
 package io.dummymaker.export.validators;
 
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +25,7 @@ public class XmlValidator implements IValidator {
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, PresetStrategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithNamingStrategy(dummies, Strategies.DEFAULT.getStrategy());
     }
 
     @Override

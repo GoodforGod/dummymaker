@@ -4,7 +4,7 @@ import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -60,7 +60,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final IStrategy strategy = Strategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(strategy);

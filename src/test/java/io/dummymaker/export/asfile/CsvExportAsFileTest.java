@@ -5,7 +5,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -36,7 +36,8 @@ public class CsvExportAsFileTest extends FileExportAssert {
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = produceFactory.produce(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withStrategy(null).withTextWrap().withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
+        final IExporter exporter = new CsvExporter().withStrategy(null).withTextWrap()
+                .withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
@@ -75,7 +76,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
-        final IStrategy strategy = PresetStrategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final IStrategy strategy = Strategies.UNDERSCORED_UPPER_CASE.getStrategy();
 
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();

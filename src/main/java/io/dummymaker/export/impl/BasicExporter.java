@@ -56,9 +56,8 @@ abstract class BasicExporter implements IExporter {
     }
 
     void setStrategy(final IStrategy strategy) {
-        this.strategy = (strategy == null)
-                ? this.strategy
-                : strategy;
+        if(strategy != null)
+            this.strategy = strategy;
     }
 
     /**

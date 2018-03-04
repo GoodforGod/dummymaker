@@ -4,7 +4,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
+import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class CsvExporter extends BasicExporter {
     private boolean hasHeader = false;
 
     public CsvExporter() {
-        super(null, Format.CSV, PresetStrategies.DEFAULT.getStrategy());
+        super(null, Format.CSV, Strategies.DEFAULT.getStrategy());
     }
 
     /**
