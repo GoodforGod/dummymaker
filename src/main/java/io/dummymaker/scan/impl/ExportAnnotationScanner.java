@@ -6,6 +6,7 @@ import io.dummymaker.annotation.special.GenIgnoreExport;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -53,6 +54,9 @@ public class ExportAnnotationScanner extends AnnotationScanner {
                 .peek(e -> e.setValue(e.getValue().stream()
                         .filter(acceptPredicate)
                         .collect(Collectors.toList())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(LinkedHashMap<Field, List<Annotation>>::new,
+                        (m, e) -> m.put(e.getKey(), e.getValue()),
+                        (m, u) -> { }
+                );
     }
 }

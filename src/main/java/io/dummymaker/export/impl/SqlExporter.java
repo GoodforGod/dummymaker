@@ -38,25 +38,20 @@ public class SqlExporter extends BasicExporter {
      * Map is used to convert Java Field Data Type to Sql Data Type
      * You can add your specific values here by using constructor with Map'String, String'
      */
-    private Map<Class, String> dataTypes;
+    private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
         super(null, Format.SQL, PresetStrategies.DEFAULT.getStrategy());
-        this.dataTypes = buildDefaultDataTypeMap();
     }
 
     /**
      * @param dataTypes map with user custom types for 'dataTypeMap'
      */
-    public SqlExporter(Map<Class, String> dataTypes) {
-        super(null, Format.SQL, PresetStrategies.DEFAULT.getStrategy());
-        final Map<Class, String> dataTypesTemp = buildDefaultDataTypeMap();
-        if (dataTypes == null || dataTypes.isEmpty()) {
-            this.dataTypes = dataTypesTemp;
-        } else {
-            dataTypes.entrySet().addAll(dataTypesTemp.entrySet());
-            this.dataTypes = dataTypes;
-        }
+    public SqlExporter withTypes(final Map<Class, String> dataTypes) {
+        if (dataTypes != null && !dataTypes.isEmpty())
+            dataTypes.forEach((key, value) -> this.dataTypes.put(key, value));
+
+        return this;
     }
 
     /**
@@ -64,7 +59,7 @@ public class SqlExporter extends BasicExporter {
      *
      * @param path path for export file
      */
-    public SqlExporter withPath(String path) {
+    public SqlExporter withPath(final String path) {
         setPath(path);
         return this;
     }
@@ -77,7 +72,7 @@ public class SqlExporter extends BasicExporter {
      *
      * @param strategy naming strategy for exporter
      */
-    public SqlExporter withStrategy(IStrategy strategy) {
+    public SqlExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
         return this;
     }
@@ -213,7 +208,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Check data types for field class compatibility with Timestamp class
      */
-    private boolean isTypeTimestampConvertible(Field field) {
+    private boolean isTypeTimestampConvertible(final Field field) {
         return dataTypes.entrySet().stream()
                 .anyMatch(e -> e.getValue().equals("TIMESTAMP") && e.getKey().equals(field.getType()));
     }
@@ -221,7 +216,8 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container value to Sql specific value type
      */
-    private String convertFieldValue(Field field, ExportContainer container) {
+    private String convertFieldValue(final Field field,
+                                     final ExportContainer container) {
         if (field.getType().equals(String.class))
             return wrapWithComma(container.getExportValue());
         else if (isTypeTimestampConvertible(field))
@@ -234,7 +230,8 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container export value to timestamp value type
      */
-    private Timestamp convertFieldValueToTimestamp(Field field, ExportContainer exportContainer) {
+    private Timestamp convertFieldValueToTimestamp(final Field field,
+                                                   final ExportContainer exportContainer) {
         if (field.getType().equals(LocalDateTime.class)) {
             return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
         } else if (field.getType().equals(LocalDate.class)) {
@@ -242,7 +239,7 @@ public class SqlExporter extends BasicExporter {
         } else if (field.getType().equals(LocalTime.class)) {
             return convertToTimestamp(parseTime(exportContainer.getExportValue()));
         } else if (field.getType().equals(Date.class)) {
-            return convertToTimestamp(parseSimpleDate(exportContainer.getExportValue()));
+            return convertToTimestamp(parseSimpleDateLong(exportContainer.getExportValue()));
         } else if (field.getType().equals(Timestamp.class)) {
             return Timestamp.valueOf(exportContainer.getExportValue());
         }

@@ -19,9 +19,9 @@ public class CsvValidator implements IValidator {
     @Override
     public void isSingleDummyValid(String[] dummy) {
         // first line values check
-        assertTrue(dummy[0].matches("[a-zA-Z0-9]+"));
+        assertTrue(dummy[0].matches("[0-9]+"));
         assertTrue(dummy[1].matches("[0-9]+"));
-        assertTrue(dummy[2].matches("[0-9]+"));
+        assertTrue(dummy[2].matches("[a-zA-Z0-9]+"));
     }
 
     @Override
@@ -30,16 +30,16 @@ public class CsvValidator implements IValidator {
 
         // first line values check
         assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("[a-zA-Z0-9]+"));
+        assertTrue(valueArray1[0].matches("[0-9]+"));
         assertTrue(valueArray1[1].matches("[0-9]+"));
-        assertTrue(valueArray1[2].matches("[0-9]+"));
+        assertTrue(valueArray1[2].matches("[a-zA-Z0-9]+"));
 
         // second line values check
         String[] valueArray2 = dummies[1].split(",");
         assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("[a-zA-Z0-9]+"));
+        assertTrue(valueArray2[0].matches("[0-9]+"));
         assertTrue(valueArray2[1].matches("[0-9]+"));
-        assertTrue(valueArray2[2].matches("[0-9]+"));
+        assertTrue(valueArray2[2].matches("[a-zA-Z0-9]+"));
     }
 
     public void isSingleDummyValidWithHeader(String[] dummy, char separator) {
@@ -48,15 +48,15 @@ public class CsvValidator implements IValidator {
 
         // header check
         assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches(NAME.getExportFieldName()));
-        assertTrue(headerArray[1].matches(GROUP.getExportFieldName()));
-        assertTrue(headerArray[2].matches(NUM.getExportFieldName()));
+        assertTrue(headerArray[0].matches(GROUP.getExportFieldName()));
+        assertTrue(headerArray[1].matches(NUM.getExportFieldName()));
+        assertTrue(headerArray[2].matches(NAME.getExportFieldName()));
 
         // first line values check
         assertEquals(3, valueArray.length);
-        assertTrue(valueArray[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray[2].matches("[0-9]+"));
+        assertTrue(valueArray[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray[1].matches("[0-9]+"));
+        assertTrue(valueArray[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
@@ -70,15 +70,15 @@ public class CsvValidator implements IValidator {
 
         // first line values check
         assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray1[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray1[2].matches("[0-9]+"));
+        assertTrue(valueArray1[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray1[1].matches("[0-9]+"));
+        assertTrue(valueArray1[2].matches("\'[a-zA-Z0-9]+\'"));
 
         // second line values check
         assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray2[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray2[2].matches("[0-9]+"));
+        assertTrue(valueArray2[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray2[1].matches("[0-9]+"));
+        assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
     public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, IStrategy strategy) {
@@ -92,20 +92,20 @@ public class CsvValidator implements IValidator {
 
         // header check
         assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches(expectedNameField));
-        assertTrue(headerArray[1].matches(expectedGroupField));
-        assertTrue(headerArray[2].matches(expectedNumField));
+        assertTrue(headerArray[0].matches(expectedGroupField));
+        assertTrue(headerArray[1].matches(expectedNumField));
+        assertTrue(headerArray[2].matches(expectedNameField));
 
         // first line values check
         assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray1[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray1[2].matches("[0-9]+"));
+        assertTrue(valueArray1[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray1[1].matches("[0-9]+"));
+        assertTrue(valueArray1[2].matches("\'[a-zA-Z0-9]+\'"));
 
         // second line values check
         assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("\'[a-zA-Z0-9]+\'"));
-        assertTrue(valueArray2[1].matches("\'[0-9]+\'"));
-        assertTrue(valueArray2[2].matches("[0-9]+"));
+        assertTrue(valueArray2[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray2[1].matches("[0-9]+"));
+        assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 }

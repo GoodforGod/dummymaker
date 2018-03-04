@@ -6,22 +6,24 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.PresetStrategies;
 import io.dummymaker.writer.BufferedFileWriter;
 import io.dummymaker.writer.IWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * Basic abstract exporter implementation
  *
+ * @see IExporter
+ *
  * @author GoodforGod
  * @since 25.02.2018
  */
-public abstract class BasicExporter implements IExporter {
+abstract class BasicExporter implements IExporter {
 
     private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
 
@@ -33,21 +35,16 @@ public abstract class BasicExporter implements IExporter {
      * @param strategy naming strategy
      * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
+     *
      * @see IStrategy
      * @see Format
      */
     BasicExporter(final String path,
                   final Format format,
                   final IStrategy strategy) {
-
-        if (strategy == null)
-            logger.warning("NamingStrategy in nullable.. Using default strategy.");
-
         this.path = path;
         this.format = format;
-        this.strategy = (strategy == null)
-                ? PresetStrategies.DEFAULT.getStrategy()
-                : strategy;
+        this.strategy = strategy;
     }
 
     void setPath(String path) {
@@ -107,8 +104,13 @@ public abstract class BasicExporter implements IExporter {
             try {
                 value.getField().setAccessible(true);
 
+                final Object exportField = value.getField().get(t);
                 final String exportFieldName = value.getExportName();
-                exports.add(new ExportContainer(exportFieldName, String.valueOf(value.getField().get(t))));
+                final String exportFieldValue = (exportField.getClass().equals(Date.class))
+                        ? String.valueOf(((Date) exportField).getTime())
+                        : String.valueOf(exportField);
+
+                exports.add(new ExportContainer(exportFieldName, exportFieldValue));
 
                 value.getField().setAccessible(false);
             } catch (Exception e) {

@@ -40,9 +40,6 @@ public class GenPopulateFactory implements IPopulateFactory {
     private <T> T populateEntity(final T t,
                                  final Map<Field, Long> enumerateMap,
                                  final Map<Field, ? extends IGenerator> generatorMap) {
-        if (t == null)
-            return null;
-
         final boolean haveEnumerateFields = (enumerateMap != null && !enumerateMap.isEmpty());
 
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
@@ -116,8 +113,8 @@ public class GenPopulateFactory implements IPopulateFactory {
         final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(populateScanner.scan(list.get(0).getClass()));
 
         return list.stream()
-                .map(t -> populateEntity(t, enumerateMap, generatorMap))
                 .filter(Objects::nonNull)
+                .map(t -> populateEntity(t, enumerateMap, generatorMap))
                 .collect(Collectors.toList());
     }
 
@@ -125,7 +122,7 @@ public class GenPopulateFactory implements IPopulateFactory {
      * Build generators map to improve performance
      * So we initialize generators once for entity and not each populate method call
      */
-    private Map<Field, IGenerator> buildGeneratorsMap(Map<Field, List<Annotation>> map) {
+    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field, List<Annotation>> map) {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         map.forEach((key, value) -> {

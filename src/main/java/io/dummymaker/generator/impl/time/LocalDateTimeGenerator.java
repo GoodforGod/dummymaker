@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Generates LocalDateTime from 1970 to 3000 Year with nanoseconds precision
+ * Generates LocalDateTime from 1970 to 3000 Year with seconds precision
  *
  * @author GoodforGod
  * @since 26.05.2017
@@ -24,8 +24,7 @@ public class LocalDateTimeGenerator implements IGenerator<LocalDateTime> {
         int hour        = current().nextInt(1, 24);
         int minute      = current().nextInt(1, 60);
         int second      = current().nextInt(1, 60);
-        int nanoOfSecond = current().nextInt(1, 999999999);
 
-        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond);
+        return LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
     }
 }

@@ -11,21 +11,23 @@ import java.util.List;
 public interface IProduceFactory {
 
     /**
-     * Produce and populates one dummy object
+     * Produce class instance and populate its fields
      *
      * @see IPopulateFactory
      *
+     * @param tClass class to produce
      * @return Populated dummy object
      */
-    <T> T produce(Class<T> tClass);
+    <T> T produce(final Class<T> tClass);
 
     /**
-     * Produce chosen amount of populated dummy objects
+     * Produce chosen amount of class instances and populate their fields
      *
      * @see IPopulateFactory
      *
      * @param amount amount of dummies to produce and populate
+     * @param tClass class to produce
      * @return List of populated dummies
      */
-    <T> List<T> produce(Class<T> tClass, final int amount);
+    <T> List<T> produce(final Class<T> tClass, final int amount);
 }

@@ -26,7 +26,7 @@ public class AnnotationScanner implements IAnnotationScanner {
         final Map<Field, List<Annotation>> fieldScanMap = new LinkedHashMap<>();
 
         try {
-            for(final Field field : t.getDeclaredFields()) {
+            for(Field field : t.getDeclaredFields()) {
 
                 // So we can avoid duplicates but not to use Set in contract for scanner
                 final Set<Annotation> annotations = Arrays.stream(field.getAnnotations())

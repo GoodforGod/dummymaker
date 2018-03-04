@@ -1,6 +1,7 @@
 package io.dummymaker.export.asfile;
 
 import io.dummymaker.data.Dummy;
+import io.dummymaker.data.DummyTimestamp;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
@@ -11,7 +12,9 @@ import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * "Default Description"
@@ -52,5 +55,30 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertEquals(10, sqlArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(sqlArray, strategy);
+    }
+
+    @Test
+    public void exportListOfDummiesWithTimestampAndDataTypesWithNamingStrategy() throws Exception {
+        final IStrategy strategy = PresetStrategies.LOW_CASE.getStrategy();
+
+        final Map<Class, String> dataTypes = new HashMap<>();
+        dataTypes.put(Dummy.class, "keks");
+
+        final List<DummyTimestamp> dummies = produceFactory.produce(DummyTimestamp.class, 2);
+        final String filename = DummyTimestamp.class.getSimpleName() + format.getExtension();
+        final IExporter exporter = new SqlExporter().withTypes(dataTypes).withStrategy(strategy);
+
+        final boolean exportResult = exporter.export(dummies);
+        assertTrue(exportResult);
+        setFilenameToBeRemoved(filename);
+
+        final String dummyAsString = readDummyFromFile(filename);
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] sqlArray = dummyAsString.split("\n");
+        assertEquals(12, sqlArray.length);
+
+        validation.isTwoTimestampedDummiesValidWithNamingStrategy(sqlArray, strategy);
     }
 }

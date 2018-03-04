@@ -17,9 +17,9 @@ public class XmlValidator implements IValidator {
     @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("<[a-zA-Z]+>"));
-        assertTrue(dummy[1].matches("\\t<" + NAME.getExportFieldName()     + ">" + "[a-zA-Z]+" + "</" + NAME.getExportFieldName() + ">"));
-        assertTrue(dummy[2].matches("\\t<" + GROUP.getExportFieldName()    + ">" + "[0-9]+"    + "</" + GROUP.getExportFieldName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + NUM.getExportFieldName()      + ">" + "[0-9]+"      + "</" + NUM.getExportFieldName() + ">"));
+        assertTrue(dummy[1].matches("\\t<" + GROUP.getExportFieldName()    + ">" + "[0-9]+"    + "</" + GROUP.getExportFieldName() + ">"));
+        assertTrue(dummy[2].matches("\\t<" + NUM.getExportFieldName()      + ">" + "[0-9]+"      + "</" + NUM.getExportFieldName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + NAME.getExportFieldName()     + ">" + "[a-zA-Z]+" + "</" + NAME.getExportFieldName() + ">"));
         assertTrue(dummy[4].matches("</[a-zA-Z]+>"));
     }
 
@@ -36,14 +36,14 @@ public class XmlValidator implements IValidator {
 
         assertTrue(dummies[0].matches("<[a-zA-Z]+List>"));
         assertTrue(dummies[1].matches("\\t<[a-zA-Z]+>"));
-        assertTrue(dummies[2].matches("\\t{2}<" + expectedNameField   + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
-        assertTrue(dummies[3].matches("\\t{2}<" + expectedGroupField  + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
-        assertTrue(dummies[4].matches("\\t{2}<" + expectedNumField    + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[2].matches("\\t{2}<" + expectedGroupField  + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
+        assertTrue(dummies[3].matches("\\t{2}<" + expectedNumField    + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[4].matches("\\t{2}<" + expectedNameField   + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
         assertTrue(dummies[5].matches("\\t</[a-zA-Z]+>"));
         assertTrue(dummies[6].matches("\\t<[a-zA-Z]+>"));
-        assertTrue(dummies[7].matches("\\t{2}<" + expectedNameField   + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
-        assertTrue(dummies[8].matches("\\t{2}<" + expectedGroupField  + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
-        assertTrue(dummies[9].matches("\\t{2}<" + expectedNumField    + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[7].matches("\\t{2}<" + expectedGroupField  + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
+        assertTrue(dummies[8].matches("\\t{2}<" + expectedNumField    + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[9].matches("\\t{2}<" + expectedNameField   + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
         assertTrue(dummies[10].matches("\\t</[a-zA-Z]+>"));
         assertTrue(dummies[11].matches("</[a-zA-Z]+List>"));
     }

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 03.03.2018
  */
-public abstract class ExportAssert extends Assert {
+abstract class ExportAssert extends Assert {
 
     private static final Logger logger = Logger.getLogger(FileExportAssert.class.getName());
 
