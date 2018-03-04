@@ -39,4 +39,9 @@ public class BasicStringUtilsTest extends Assert {
     public void nonBlankStringIsNonBlank() {
         assertTrue(BasicStringUtils.isNotBlank("  Bob "));
     }
+
+    @Test
+    public void blankStringIsNonBlank() {
+        assertFalse(BasicStringUtils.isNotBlank("    "));
+    }
 }

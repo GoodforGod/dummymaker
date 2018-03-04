@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static io.dummymaker.util.BasicStringUtils.isBlank;
+
 /**
  * Basic abstract exporter implementation
  *
@@ -47,13 +49,13 @@ abstract class BasicExporter implements IExporter {
         this.strategy = strategy;
     }
 
-    void setPath(String path) {
-        this.path = (path == null || path.trim().isEmpty())
+    void setPath(final String path) {
+        this.path = (isBlank(path))
                 ? null
                 : path;
     }
 
-    void setStrategy(IStrategy strategy) {
+    void setStrategy(final IStrategy strategy) {
         this.strategy = (strategy == null)
                 ? this.strategy
                 : strategy;
@@ -62,14 +64,14 @@ abstract class BasicExporter implements IExporter {
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(T t) {
+    <T> IClassContainer buildClassContainer(final T t) {
         return new ClassContainer(t, strategy);
     }
 
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(List<T> list) {
+    <T> IClassContainer buildClassContainer(final List<T> list) {
         return (list != null && !list.isEmpty())
                 ? buildClassContainer(list.get(0))
                 : null;
@@ -81,7 +83,7 @@ abstract class BasicExporter implements IExporter {
      * @see #export(Object)
      * @see #export(List)
      */
-    IWriter buildWriter(IClassContainer classContainer) {
+    IWriter buildWriter(final IClassContainer classContainer) {
         try {
             return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtension());
         } catch (IOException e) {
@@ -97,7 +99,8 @@ abstract class BasicExporter implements IExporter {
      * @return export containers
      * @see ExportContainer
      */
-    <T> List<ExportContainer> extractExportContainers(final T t, final IClassContainer classContainer) {
+    <T> List<ExportContainer> extractExportContainers(final T t,
+                                                      final IClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
         classContainer.getContainers().forEach((key, value) -> {

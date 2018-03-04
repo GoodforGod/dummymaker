@@ -20,24 +20,36 @@ public class BasicDateUtilsErrorTests extends Assert {
     public void parseDateNull() {
         final LocalDateTime result = BasicDateUtils.parseDateTime(null);
         assertNull(result);
+
+        final LocalDateTime result2 = BasicDateUtils.parseDateTime("   ");
+        assertNull(result2);
     }
 
     @Test
     public void parseDateOldTypeNull() {
         final LocalTime result = BasicDateUtils.parseTime(null);
         assertNull(result);
+
+        final LocalTime result2 = BasicDateUtils.parseTime("    ");
+        assertNull(result2);
     }
 
     @Test
     public void parseTimeNull() {
         final LocalDate result = BasicDateUtils.parseDate(null);
         assertNull(result);
+
+        final LocalDate result2 = BasicDateUtils.parseDate("   ");
+        assertNull(result2);
     }
 
     @Test
     public void parseDateTimeNull() {
         final Date result = BasicDateUtils.parseSimpleDateLong(null);
         assertNull(result);
+
+        final Date result2 = BasicDateUtils.parseSimpleDateLong("  ");
+        assertNull(result2);
     }
 
     @Test
