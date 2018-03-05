@@ -2,10 +2,12 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.collection.GenList;
+import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
+import io.dummymaker.generator.impl.collection.impl.SetGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
@@ -93,6 +95,25 @@ public class GenPopulateFactory implements IPopulateFactory {
         try {
             return null;
         } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+    }
+
+    private Object genIfSet(final Field field, final Annotation annotation) {
+        try {
+            int fixed = ((GenSet) annotation).fixed();
+            int min = ((GenSet) annotation).min();
+            int max = ((GenSet) annotation).max();
+            if(fixed > 0) {
+                min = max = fixed;
+            }
+
+            final IGenerator generator = ((GenSet) annotation).generator().newInstance();
+            final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+
+            return new SetGenerator().generate(generator, ((Class<?>) fieldType), min, max);
+        } catch (InstantiationException | IllegalAccessException e) {
             logger.warning(e.getMessage());
             return null;
         }

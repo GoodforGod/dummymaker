@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author GoodforGod
  * @since 06.03.2018
  */
-abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
+public abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
 
     private final IGenerator generator;
 
@@ -33,9 +33,9 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
     }
 
     public Collection<T> generate(final IGenerator generator,
-                                       final Class<?> fieldType,
-                                       final int min,
-                                       final int max) {
+                                  final Class<?> fieldType,
+                                  final int min,
+                                  final int max) {
         final Class<?> genType = generator.generate().getClass();
 
         final boolean isTypeAssignable = fieldType.isAssignableFrom(genType);
