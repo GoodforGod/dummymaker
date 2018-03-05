@@ -1,6 +1,7 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.collection.GenList;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -26,16 +27,18 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
      *
      * @see PrimeGenAnnotation
      */
-    private final Predicate<Annotation> acceptPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
+    private final Predicate<Annotation> markedAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
+    private final Predicate<Annotation> populateAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class)
+            || a.annotationType().equals(GenList.class);
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
         final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
 
         return classFieldAnnotations.entrySet().stream()
-                .filter(set -> set.getValue().stream().anyMatch(acceptPredicate))
+                .filter(set -> set.getValue().stream().anyMatch(markedAnnotationPredicate))
                 .peek(set -> set.setValue(set.getValue().stream()
-                        .filter(acceptPredicate)
+                        .filter(populateAnnotationPredicate)
                         .collect(Collectors.toList())))
                 .collect(LinkedHashMap<Field, List<Annotation>>::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),

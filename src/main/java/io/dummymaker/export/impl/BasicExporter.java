@@ -6,8 +6,8 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.writer.BufferedFileWriter;
 import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.impl.BufferedFileWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ abstract class BasicExporter implements IExporter {
     BasicExporter(final String path,
                   final Format format,
                   final IStrategy strategy) {
-        this.path = path;
+        setPath(path);
         this.format = format;
         this.strategy = strategy;
     }

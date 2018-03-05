@@ -1,4 +1,6 @@
-package io.dummymaker.writer;
+package io.dummymaker.writer.impl;
+
+import io.dummymaker.writer.IWriter;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -51,8 +53,7 @@ public class BufferedFileWriter implements IWriter {
             return true;
         } catch (IOException e) {
             logger.warning(e.getMessage());
-            flush();
-            return false;
+            return flush();
         }
     }
 

@@ -18,6 +18,6 @@ public class DateGenerator implements IGenerator<Date> {
 
     @Override
     public Date generate() {
-        return new Date(System.currentTimeMillis() - current().nextLong(0, 100000));
+        return new Date(System.currentTimeMillis() - current().nextLong(0, 10000000));
     }
 }

@@ -100,11 +100,10 @@ public class ClassContainer implements IClassContainer {
     /**
      * Return renamed field name if exist or converted origin by via name strategy
      *
-     * @param name origin field name
      * @return renamed field name
      */
-    private String getRenamedFieldOrConverted(final String name) {
-        return renamedFields.getOrDefault(name, strategy.toStrategy(name));
+    private String getFinalFieldName(final Field field) {
+        return renamedFields.getOrDefault(field.getName(), strategy.toStrategy(field.getName()));
     }
 
     /**
@@ -117,7 +116,7 @@ public class ClassContainer implements IClassContainer {
                                                final List<Annotation> fieldAnnotations) {
         return new FieldContainer(
                 field,
-                getRenamedFieldOrConverted(field.getName()),
+                getFinalFieldName(field),
                 isAnnotationEnumerable(fieldAnnotations)
         );
     }
@@ -127,7 +126,7 @@ public class ClassContainer implements IClassContainer {
      *
      * @see io.dummymaker.annotation.special.GenEnumerate
      */
-    private boolean isAnnotationEnumerable(List<Annotation> annotations) {
+    private boolean isAnnotationEnumerable(final List<Annotation> annotations) {
         return annotations.stream()
                 .anyMatch(a -> a.annotationType().equals(PrimeGenAnnotation.class)
                         && ((PrimeGenAnnotation) a).value().equals(EnumerateGenerator.class));

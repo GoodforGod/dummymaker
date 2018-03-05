@@ -1,6 +1,6 @@
 package io.dummymaker.generator.impl.number;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates big double from 10 to 1000000 value
@@ -12,6 +12,6 @@ public class BigDoubleGenerator extends DoubleGenerator {
 
     @Override
     public Double generate(){
-        return super.generate() * current().nextInt(10, 1000000);
+        return super.generate() * ThreadLocalRandom.current().nextInt(10, 1000000);
     }
 }

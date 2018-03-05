@@ -1,15 +1,19 @@
 package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -26,8 +30,8 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
-    private static final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
-    private static final IAnnotationScanner enumerateAnnotationScanner = new EnumerateAnnotationScanner();
+    private final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
+    private final IAnnotationScanner enumerateScanner = new EnumerateAnnotationScanner();
 
     /**
      * Populate single entity
@@ -47,19 +51,25 @@ public class GenPopulateFactory implements IPopulateFactory {
                 ? buildGeneratorsMap(classAnnotatedFields)
                 : generatorMap;
 
-        for (Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
+        for (final Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             Object objValue = null;
             try {
                 annotatedField.getKey().setAccessible(true);
 
-                // Populate enumerated field if it is so or via generator
-                objValue = (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey()))
-                        ? buildNextEnumeratedValue(enumerateMap, annotatedField.getKey())
-                        : generatorsFieldMap.get(annotatedField.getKey()).generate();
+                final Annotation listAnnotation = annotatedField.getValue().stream()
+                        .filter(a -> a.annotationType().equals(GenList.class))
+                        .findAny().orElse(null);
+
+                if(listAnnotation != null) {
+                    objValue = genIfList(annotatedField.getKey(), listAnnotation);
+                } else {
+                    // Populate enumerated field if it is so or via generator
+                    objValue = (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey()))
+                            ? buildNextEnumeratedValue(enumerateMap, annotatedField.getKey())
+                            : generatorsFieldMap.get(annotatedField.getKey()).generate();
+                }
 
                 annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
-            } catch (IllegalAccessException e) {
-                logger.warning(e.getMessage());
             } catch (ClassCastException e) {
                 try {
                     // Try to cast object type to string if possible, cause origin type is not castable
@@ -77,6 +87,34 @@ public class GenPopulateFactory implements IPopulateFactory {
         }
 
         return t;
+    }
+
+    private Object genIfTime(Field field, Annotation annotation) {
+        try {
+            return null;
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+    }
+
+    private Object genIfList(final Field field, final Annotation annotation) {
+        try {
+            int fixed = ((GenList) annotation).fixed();
+            int min = ((GenList) annotation).min();
+            int max = ((GenList) annotation).max();
+            if(fixed > 0) {
+                min = max = fixed;
+            }
+
+            final IGenerator generator = ((GenList) annotation).generator().newInstance();
+            final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+
+            return new ListGenerator().generate(generator, ((Class<?>) fieldType), min, max);
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -122,13 +160,19 @@ public class GenPopulateFactory implements IPopulateFactory {
      * Build generators map to improve performance
      * So we initialize generators once for entity and not each populate method call
      */
-    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field, List<Annotation>> map) {
+    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field,  List<Annotation>> map) {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         map.forEach((key, value) -> {
             try {
-                final IGenerator generator = ((PrimeGenAnnotation) value.get(0)).value().newInstance();
-                generatorsMap.put(key, generator);
+                final Annotation genAnnotation = value.stream()
+                        .filter(a -> a.annotationType().equals(PrimeGenAnnotation.class))
+                        .findAny().orElse(null);
+
+                if(genAnnotation != null) {
+                    final IGenerator generator = ((PrimeGenAnnotation) genAnnotation).value().newInstance();
+                    generatorsMap.put(key, generator);
+                }
             } catch (InstantiationException | IllegalAccessException e1) {
                 logger.warning(e1.getMessage());
             }
@@ -143,7 +187,7 @@ public class GenPopulateFactory implements IPopulateFactory {
      * @param t class to scan for enumerate fields
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
-        return enumerateAnnotationScanner.scan(t).entrySet().stream()
+        return enumerateScanner.scan(t).entrySet().stream()
                     .collect(Collectors.toMap(
                         e -> e.getKey(),
                         e -> ((GenEnumerate) e.getValue().get(0)).from())

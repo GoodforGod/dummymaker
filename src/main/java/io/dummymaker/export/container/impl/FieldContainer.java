@@ -29,7 +29,9 @@ public class FieldContainer {
      */
     private final boolean isEnumerable;
 
-    FieldContainer(Field field, String finalFieldName, boolean isEnumerable) {
+    FieldContainer(final Field field,
+                   final String finalFieldName,
+                   final boolean isEnumerable) {
         this.field = field;
         this.exportName = finalFieldName;
         this.isEnumerable = isEnumerable;
@@ -46,4 +48,5 @@ public class FieldContainer {
     public String getExportName() {
         return exportName;
     }
+
 }
