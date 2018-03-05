@@ -3,7 +3,7 @@ package io.dummymaker.annotation.collection;
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
-import io.dummymaker.generator.impl.string.BigIdGenerator;
+import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.lang.annotation.ElementType;
@@ -12,7 +12,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * "Default Description"
+ * Generate map with KEY and VALUE from generators
+ *
+ * @see io.dummymaker.generator.impl.map.IMapGenerator
+ * @see
  *
  * @author GoodforGod
  * @since 06.03.2018
@@ -24,7 +27,7 @@ public @interface GenMap {
 
     Class<? extends IGenerator> key() default IdGenerator.class;
 
-    Class<? extends IGenerator> value() default BigIdGenerator.class;
+    Class<? extends IGenerator> value() default IdBigGenerator.class;
 
     int min() default 1;
 

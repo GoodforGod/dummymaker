@@ -11,7 +11,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * "Default Description"
+ * Generate set collection
+ *
+ * @see io.dummymaker.generator.impl.collection.ICollectionGenerator
+ * @see io.dummymaker.generator.impl.collection.impl.SetGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

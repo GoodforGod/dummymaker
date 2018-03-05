@@ -10,7 +10,7 @@ import java.util.UUID;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class BigIdGenerator implements IGenerator<String> {
+public class IdBigGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {

@@ -3,6 +3,7 @@ package io.dummymaker.generator.impl.string;
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FemaleNamePresetBundle;
 import io.dummymaker.bundle.impl.MaleNamePresetBundle;
+import io.dummymaker.generator.IGenerator;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 
@@ -12,7 +13,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class NameGenerator extends BigIdGenerator {
+public class NameGenerator implements IGenerator<String> {
 
     private final IBundle<String> maleBundle = new MaleNamePresetBundle();
     private final IBundle<String> femaleBundle = new FemaleNamePresetBundle();

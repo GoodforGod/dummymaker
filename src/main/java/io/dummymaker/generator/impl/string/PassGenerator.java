@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class PassGenerator extends BigIdGenerator {
+public class PassGenerator extends IdBigGenerator {
 
     @Override
     public String generate() {

@@ -1,6 +1,8 @@
 package io.dummymaker.generator.impl.string;
 
 
+import io.dummymaker.generator.IGenerator;
+
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
@@ -9,7 +11,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class PhoneGenerator extends BigIdGenerator {
+public class PhoneGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {

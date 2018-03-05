@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class BigDoubleGenerator extends DoubleGenerator {
+public class DoubleBigGenerator extends DoubleGenerator {
 
     @Override
     public Double generate(){

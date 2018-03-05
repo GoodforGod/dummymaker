@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.string;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
-import io.dummymaker.generator.impl.string.BigIdGenerator;
+import io.dummymaker.generator.impl.string.IdBigGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,12 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see BigIdGenerator
+ * @see IdBigGenerator
  *
  * @author GoodforGod
  * @since 21.02.2018
  */
-@PrimeGenAnnotation(BigIdGenerator.class)
+@PrimeGenAnnotation(IdBigGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenBigId {

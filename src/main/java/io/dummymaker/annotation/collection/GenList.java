@@ -3,7 +3,6 @@ package io.dummymaker.annotation.collection;
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.BasicCollectionGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +13,8 @@ import java.lang.annotation.Target;
 /**
  * Generate list collection
  *
- * @see ListGenerator
+ * @see io.dummymaker.generator.impl.collection.ICollectionGenerator
+ * @see io.dummymaker.generator.impl.collection.impl.ListGenerator
  *
  * @author GoodforGod
  * @since 05.03.2018

@@ -4,6 +4,7 @@ import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.DomainExtensionPresetBundle;
 import io.dummymaker.bundle.impl.EmailServicesPresetBundle;
 import io.dummymaker.bundle.impl.NicknamesPresetBundle;
+import io.dummymaker.generator.IGenerator;
 
 /**
  * Generates email as a string
@@ -11,7 +12,7 @@ import io.dummymaker.bundle.impl.NicknamesPresetBundle;
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class EmailGenerator extends BigIdGenerator {
+public class EmailGenerator implements IGenerator<String> {
 
     private final IBundle<String> nickBundle = new NicknamesPresetBundle();
     private final IBundle<String> emailBundle = new EmailServicesPresetBundle();

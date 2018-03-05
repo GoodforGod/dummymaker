@@ -2,7 +2,7 @@ package io.dummymaker.generator;
 
 import io.dummymaker.generator.impl.BooleanGenerator;
 import io.dummymaker.generator.impl.UuidGenerator;
-import io.dummymaker.generator.impl.number.BigDoubleGenerator;
+import io.dummymaker.generator.impl.number.DoubleBigGenerator;
 import io.dummymaker.generator.impl.number.DoubleGenerator;
 import io.dummymaker.generator.impl.number.IntegerGenerator;
 import io.dummymaker.generator.impl.number.LongGenerator;
@@ -50,11 +50,11 @@ public class GeneratorPatternValidTest {
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
     public static Collection<Object> data() {
         return Arrays.asList(new Object[][] {
-                { new BigDoubleGenerator(),     Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
+                { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0.[0-9]+.") },
                 { new IntegerGenerator(),       Integer.class,  Pattern.compile("-?[0-9]+") },
                 { new LongGenerator(),          Long.class,     Pattern.compile("-?[0-9]+") },
-                { new BigIdGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
+                { new IdBigGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new CityGenerator(),          String.class,   Pattern.compile("[a-zA-Z\\-]+") },
                 { new CompanyGenerator(),       String.class,   Pattern.compile(".+(\\t.+)?") },
                 { new CountryGenerator(),       String.class,   Pattern.compile("[a-zA-Z]+(\\s+[a-zA-Z]+)*") },

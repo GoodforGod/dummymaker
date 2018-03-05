@@ -1,12 +1,13 @@
 package io.dummymaker.generator.impl;
 
-import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.generator.IGenerator;
 
 /**
- * Used like a dummy generator for @GenEnumerate
+ * Used to generate enumerated sequence for dummies
+ * Used by populate factory and genEnumerate
  *
- * @see GenEnumerate
+ * @see io.dummymaker.factory.IPopulateFactory
+ * @see io.dummymaker.annotation.special.GenEnumerate
  *
  * @author GoodforGod
  * @since 07.06.2017
