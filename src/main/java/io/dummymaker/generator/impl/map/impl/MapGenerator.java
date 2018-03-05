@@ -6,6 +6,6 @@ package io.dummymaker.generator.impl.map.impl;
  * @author GoodforGod
  * @since 06.03.2018
  */
-abstract class BasicMapGenerator {
+public class MapGenerator {
 
 }

@@ -6,7 +6,10 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * "Default Description"
+ * Generate hash set collection of elements with object type
+ *
+ * @see BasicCollectionGenerator
+ * @see io.dummymaker.generator.impl.collection.ICollectionGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

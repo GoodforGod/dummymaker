@@ -5,7 +5,7 @@ import io.dummymaker.generator.IGenerator;
 import java.util.Collection;
 
 /**
- * "Default Description"
+ * Generate collection of elements with specific type
  *
  * @author GoodforGod
  * @since 06.03.2018
@@ -20,7 +20,7 @@ public interface ICollectionGenerator<T> extends IGenerator<Collection<T>> {
          * @param fieldType dummy object field type
          * @param min min number of elements
          * @param max max number of elements
-         * @return
+         * @return array list collection
          */
         Collection<T> generate(final IGenerator generator,
                                final Class<?> fieldType,

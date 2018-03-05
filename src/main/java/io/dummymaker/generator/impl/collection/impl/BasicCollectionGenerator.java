@@ -15,15 +15,15 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author GoodforGod
  * @since 06.03.2018
  */
-public abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
+abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
 
     private final IGenerator generator;
 
-    public BasicCollectionGenerator() {
+    BasicCollectionGenerator() {
         this.generator = new IdGenerator();
     }
 
-    public BasicCollectionGenerator(IGenerator generator) {
+    BasicCollectionGenerator(IGenerator generator) {
         this.generator = generator;
     }
 
