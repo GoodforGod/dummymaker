@@ -3,6 +3,7 @@ package io.dummymaker.data;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
+import io.dummymaker.annotation.time.GenLocalDate;
 import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.generator.impl.BooleanGenerator;
 
@@ -31,7 +32,7 @@ public class DummyExperiment {
     @GenMap
     private Map<String, Object> map;
 
-    @GenTime
+    @GenLocalDate
     private String string;
 
     @GenTime

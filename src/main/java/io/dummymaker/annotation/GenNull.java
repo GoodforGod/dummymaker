@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 31.05.2017
  */
-@PrimeGenAnnotation
+@PrimeGen
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenNull {

@@ -1,6 +1,6 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.factory.IProduceFactory;
 
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Produce Dummy Objects and populate them via PrimeGenAnnotation generators included
+ * Produce Dummy Objects and populate them via PrimeGen generators included
  *
  * @author GoodforGod
- * @see PrimeGenAnnotation
+ * @see PrimeGen
  * @since 26.05.2017
  */
 public class GenProduceFactory implements IProduceFactory {

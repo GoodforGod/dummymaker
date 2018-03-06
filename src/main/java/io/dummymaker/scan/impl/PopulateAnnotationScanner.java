@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Scanner annotations that utilize primeGenAnnotation only
  *
- * @see PrimeGenAnnotation
+ * @see PrimeGen
  * @see AnnotationScanner
  *
  * @author GoodforGod
@@ -28,10 +28,10 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
     /**
      * Predicate to check for core prime gen annotation
      *
-     * @see PrimeGenAnnotation
+     * @see PrimeGen
      */
-    private final Predicate<Annotation> markedAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
-    private final Predicate<Annotation> populateAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class)
+    private final Predicate<Annotation> markedAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGen.class);
+    private final Predicate<Annotation> populateAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGen.class)
             || a.annotationType().equals(GenList.class)
             || a.annotationType().equals(GenSet.class)
             || a.annotationType().equals(GenMap.class)

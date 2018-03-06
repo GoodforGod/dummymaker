@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.string;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.impl.string.CityGenerator;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-@PrimeGenAnnotation(CityGenerator.class)
+@PrimeGen(CityGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenCity {

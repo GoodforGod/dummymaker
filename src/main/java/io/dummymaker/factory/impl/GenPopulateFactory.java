@@ -1,6 +1,6 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
@@ -8,6 +8,8 @@ import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.impl.collection.ICollectionGenerator;
+import io.dummymaker.generator.impl.collection.IMapGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
@@ -21,10 +23,10 @@ import java.util.stream.Collectors;
 import static io.dummymaker.util.BasicCastUtils.castObject;
 
 /**
- * Populates objects via PrimeGenAnnotation generators included
+ * Populates objects via PrimeGen generators included
  *
  * @author GoodforGod
- * @see PrimeGenAnnotation
+ * @see PrimeGen
  * @see GenEnumerate
  * @since 30.05.2017
  */
@@ -40,7 +42,7 @@ public class GenPopulateFactory implements IPopulateFactory {
     /**
      * Populate single entity
      *
-     * @param t            entity to populate
+     * @param t             entity to populate
      * @param enumeratesMap map of enumerated marked fields
      * @param generatorsMap map where generator is assigned to each entity field
      * @return populated entity
@@ -52,25 +54,17 @@ public class GenPopulateFactory implements IPopulateFactory {
 
         for (final Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             final Field field = annotatedField.getKey();
-            Object objValue = null;
             try {
                 field.setAccessible(true);
 
-                objValue = buildObject(field,
+                final Object objValue = buildObject(field,
                         annotatedField.getValue(),
                         generatorsMap,
                         enumeratesMap);
 
-                field.set(t, field.getType().cast(objValue));
+                field.set(t, objValue);
             } catch (ClassCastException e) {
-                try {
-                    // Try to cast object type to string if possible, cause origin type is not castable
-                    if (field.getType().isAssignableFrom(String.class)) {
-                        field.set(t, String.valueOf(objValue));
-                    }
-                } catch (Exception ex) {
-                    logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE AND CAN NOT BE CONVERTED TO STRING.");
-                }
+                logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE.");
             } catch (Exception e) {
                 logger.warning(e.getMessage());
             } finally {
@@ -101,18 +95,20 @@ public class GenPopulateFactory implements IPopulateFactory {
                 .filter(a -> a.annotationType().equals(GenTime.class))
                 .findAny().orElse(null);
 
+        final IGenerator generator = generatorsMap.get(field);
+
         if (listAnnotation != null) {
-            return generateFactory.generateListObject(field, listAnnotation, null);
+            return generateFactory.generateListObject(field, listAnnotation, ((ICollectionGenerator) generator));
         } else if (setAnnotation != null) {
-            return generateFactory.generateSetObject(field, setAnnotation, null);
+            return generateFactory.generateSetObject(field, setAnnotation, ((ICollectionGenerator) generator));
         } else if (mapAnnotation != null) {
-            return generateFactory.generateMapObject(field, mapAnnotation, null);
+            return generateFactory.generateMapObject(field, mapAnnotation, ((IMapGenerator) generator));
         } else if (timeAnnotation != null) {
             return generateFactory.generateTimeObject(field, timeAnnotation);
         } else if (enumerateMap.containsKey(field)) {
             return buildNextEnumeratedValue(enumerateMap, field);
         } else {
-            final Object generated = generatorsMap.get(field).generate();
+            final Object generated = generator.generate();
             return castObject(generated, generated.getClass(), field.getType());
         }
     }
@@ -124,10 +120,11 @@ public class GenPopulateFactory implements IPopulateFactory {
                                             final Field enumeratedField) {
         Object objValue = enumerateMap.get(enumeratedField);
 
-        if (enumeratedField.getType().isAssignableFrom(Integer.class))
+        if (enumeratedField.getType().isAssignableFrom(Integer.class)) {
             objValue = Integer.valueOf(String.valueOf(objValue));
-        else if (enumeratedField.getType().isAssignableFrom(Long.class))
+        } else if (enumeratedField.getType().isAssignableFrom(Long.class)) {
             objValue = Long.valueOf(String.valueOf(objValue));
+        }
 
         // Increment numerate number for generated field
         enumerateMap.computeIfPresent(enumeratedField, (k, v) -> v + 1);
@@ -169,15 +166,13 @@ public class GenPopulateFactory implements IPopulateFactory {
         map.forEach((key, value) -> {
             try {
                 final Annotation genAnnotation = value.stream()
-                        .filter(a -> a.annotationType().equals(PrimeGenAnnotation.class))
+                        .filter(a -> a.annotationType().equals(PrimeGen.class))
                         .findAny().orElse(null);
 
-                if (genAnnotation != null) {
-                    final IGenerator generator = ((PrimeGenAnnotation) genAnnotation).value().newInstance();
-                    generatorsMap.put(key, generator);
-                }
-            } catch (InstantiationException | IllegalAccessException e1) {
-                logger.warning(e1.getMessage());
+                final IGenerator generator = ((PrimeGen) genAnnotation).value().newInstance();
+                generatorsMap.put(key, generator);
+            } catch (InstantiationException | IllegalAccessException e) {
+                logger.warning(e.getMessage());
             }
         });
 

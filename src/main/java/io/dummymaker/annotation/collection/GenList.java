@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.collection;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 05.03.2018
  */
-@PrimeGenAnnotation(ListGenerator.class)
+@PrimeGen(ListGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenList {

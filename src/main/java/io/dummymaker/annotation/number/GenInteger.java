@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.number;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.impl.number.IntegerGenerator;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 30.05.2017
  */
-@PrimeGenAnnotation(IntegerGenerator.class)
+@PrimeGen(IntegerGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenInteger {

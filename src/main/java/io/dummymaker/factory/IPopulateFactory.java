@@ -1,5 +1,7 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.annotation.PrimeGen;
+
 import java.util.List;
 
 /**
@@ -13,7 +15,7 @@ public interface IPopulateFactory {
     /**
      * Populates dummy object fields
      *
-     * @see io.dummymaker.annotation.PrimeGenAnnotation
+     * @see PrimeGen
      *
      * @param t object to populate
      * @return Populated Object
@@ -23,7 +25,7 @@ public interface IPopulateFactory {
     /**
      * Populates dummy objects fields
      *
-     * @see io.dummymaker.annotation.PrimeGenAnnotation
+     * @see PrimeGen
      *
      * @param t list of object to populate
      * @return Populated list of objects

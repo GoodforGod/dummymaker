@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 21.02.2018
  */
-@PrimeGenAnnotation(UuidGenerator.class)
+@PrimeGen(UuidGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenUuid {

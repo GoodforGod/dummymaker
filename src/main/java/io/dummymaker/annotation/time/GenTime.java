@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.time;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.impl.time.impl.LocalDateTimeGenerator;
 
 import java.lang.annotation.ElementType;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 06.03.2018
  */
-@PrimeGenAnnotation(LocalDateTimeGenerator.class)
+@PrimeGen(LocalDateTimeGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenTime {

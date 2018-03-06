@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Scanner for special export annotations
  *
- * @see PrimeGenAnnotation
+ * @see PrimeGen
  * @see GenIgnoreExport
  * @see GenForceExport
  *
@@ -30,9 +30,9 @@ public class ExportAnnotationScanner extends AnnotationScanner {
      * Check for accepted for export annotations
      *
      * @see GenForceExport
-     * @see PrimeGenAnnotation
+     * @see PrimeGen
      */
-    private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGenAnnotation.class)
+    private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGen.class)
             || ((a.annotationType().equals(GenForceExport.class))
             && ((GenForceExport) a).value()));
 

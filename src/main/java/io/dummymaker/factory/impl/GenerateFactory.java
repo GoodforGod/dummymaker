@@ -37,7 +37,7 @@ class GenerateFactory {
     private static final Logger logger = Logger.getLogger(GenerateFactory.class.getName());
 
     Object generateTimeObject(final Field field,
-                                      final Annotation annotation) {
+                              final Annotation annotation) {
         try {
             final long from = ((GenTime) annotation).from();
             final long to = ((GenTime) annotation).to();
@@ -52,7 +52,7 @@ class GenerateFactory {
                 return new TimestampGenerator().generate(from, to);
             } else if (field.getType().equals(Date.class)) {
                 return new DateGenerator().generate(from, to);
-            } else if(field.getType().equals(String.class)) {
+            } else if (field.getType().equals(String.class)) {
                 return String.valueOf(new LocalDateTimeGenerator().generate(from, to));
             }
             return null;
@@ -63,17 +63,16 @@ class GenerateFactory {
     }
 
 
-
     Object generateMapObject(final Field field,
-                                     final Annotation annotation) {
+                             final Annotation annotation) {
         return generateMapObject(field, annotation, null);
     }
 
     Object generateMapObject(final Field field,
-                                     final Annotation annotation,
-                                     final IMapGenerator<?,?> mapGenerator) {
+                             final Annotation annotation,
+                             final IMapGenerator<?, ?> mapGenerator) {
         try {
-            if(!field.getType().isAssignableFrom(Map.class))
+            if (!field.getType().isAssignableFrom(Map.class))
                 return null;
 
             final IMapGenerator<?, ?> usedMapGenerator = (mapGenerator != null)
@@ -83,7 +82,7 @@ class GenerateFactory {
             int fixed = ((GenMap) annotation).fixed();
             int min = ((GenMap) annotation).min();
             int max = ((GenMap) annotation).max();
-            if(fixed > 0) {
+            if (fixed > 0) {
                 min = max = fixed;
             }
 
@@ -102,17 +101,16 @@ class GenerateFactory {
     }
 
 
-
     Object generateSetObject(final Field field,
-                                     final Annotation annotation) {
+                             final Annotation annotation) {
         return generateSetObject(field, annotation, null);
     }
 
     Object generateSetObject(final Field field,
-                                     final Annotation annotation,
-                                     final ICollectionGenerator<?> setGenerator) {
+                             final Annotation annotation,
+                             final ICollectionGenerator<?> setGenerator) {
         try {
-            if(!field.getType().isAssignableFrom(Set.class))
+            if (!field.getType().isAssignableFrom(Set.class))
                 return null;
 
             final ICollectionGenerator<?> usedSetGenerator = (setGenerator != null)
@@ -122,7 +120,7 @@ class GenerateFactory {
             int fixed = ((GenSet) annotation).fixed();
             int min = ((GenSet) annotation).min();
             int max = ((GenSet) annotation).max();
-            if(fixed > 0) {
+            if (fixed > 0) {
                 min = max = fixed;
             }
 
@@ -137,17 +135,16 @@ class GenerateFactory {
     }
 
 
-
     Object generateListObject(final Field field,
-                                      final Annotation annotation) {
+                              final Annotation annotation) {
         return generateListObject(field, annotation, null);
     }
 
     Object generateListObject(final Field field,
-                                      final Annotation annotation,
-                                      final ICollectionGenerator<?> listGenerator) {
+                              final Annotation annotation,
+                              final ICollectionGenerator<?> listGenerator) {
         try {
-            if(!field.getType().isAssignableFrom(List.class))
+            if (!field.getType().isAssignableFrom(List.class))
                 return null;
 
             final ICollectionGenerator<?> usedListGenerator = (listGenerator != null)
@@ -157,7 +154,7 @@ class GenerateFactory {
             int fixed = ((GenList) annotation).fixed();
             int min = ((GenList) annotation).min();
             int max = ((GenList) annotation).max();
-            if(fixed > 0) {
+            if (fixed > 0) {
                 min = max = fixed;
             }
 

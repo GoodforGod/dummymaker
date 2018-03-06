@@ -1,6 +1,6 @@
 package io.dummymaker.export.container.impl;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.generator.impl.EnumerateGenerator;
@@ -128,7 +128,7 @@ public class ClassContainer implements IClassContainer {
      */
     private boolean isAnnotationEnumerable(final List<Annotation> annotations) {
         return annotations.stream()
-                .anyMatch(a -> a.annotationType().equals(PrimeGenAnnotation.class)
-                        && ((PrimeGenAnnotation) a).value().equals(EnumerateGenerator.class));
+                .anyMatch(a -> a.annotationType().equals(PrimeGen.class)
+                        && ((PrimeGen) a).value().equals(EnumerateGenerator.class));
     }
 }

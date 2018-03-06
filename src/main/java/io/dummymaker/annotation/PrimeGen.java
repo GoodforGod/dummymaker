@@ -27,7 +27,7 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.ANNOTATION_TYPE)
-public @interface PrimeGenAnnotation {
+public @interface PrimeGen {
 
     /**
      * Contains generator class to be called to generate values on factory

@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.data.Dummy;
@@ -68,8 +68,8 @@ public class ScannerImplTest {
 
         // Check for correct export annotations
         assertTrue(groupAnnotations.iterator().next().annotationType().equals(GenForceExport.class));
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
     }
 
     @Test
@@ -139,12 +139,12 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(bigdAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(lngAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
-        assertTrue(uncompaAnnotations.iterator().next().annotationType().equals(PrimeGenAnnotation.class));
+        assertTrue(cityAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(bigdAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(lngAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(uncompaAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
     }
 
     @Test
