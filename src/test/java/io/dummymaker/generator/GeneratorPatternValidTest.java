@@ -7,7 +7,7 @@ import io.dummymaker.generator.impl.number.DoubleGenerator;
 import io.dummymaker.generator.impl.number.IntegerGenerator;
 import io.dummymaker.generator.impl.number.LongGenerator;
 import io.dummymaker.generator.impl.string.*;
-import io.dummymaker.generator.impl.time.*;
+import io.dummymaker.generator.impl.time.impl.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

@@ -1,7 +1,7 @@
-package io.dummymaker.generator.impl.map.impl;
+package io.dummymaker.generator.impl.collection.impl;
 
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.map.IMapGenerator;
+import io.dummymaker.generator.impl.collection.IMapGenerator;
 import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
@@ -11,7 +11,9 @@ import java.util.Map;
 import static io.dummymaker.util.BasicCastUtils.*;
 
 /**
- * "Default Description"
+ * Generate map of elements with key,value of object type
+ *
+ * @see io.dummymaker.generator.impl.collection.IMapGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

@@ -1,4 +1,4 @@
-package io.dummymaker.generator.impl.map;
+package io.dummymaker.generator.impl.collection;
 
 import io.dummymaker.generator.IGenerator;
 

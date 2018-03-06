@@ -1,28 +1,28 @@
-package io.dummymaker.generator.impl.collection;
+package io.dummymaker.generator.impl.collection.impl.basic;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.string.StringGenerator;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Generates set of strings
+ * Generates list of strings
  *
  * @see StringGenerator
  *
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class SetStringGenerator implements IGenerator<Set<String>> {
+public class ListStringGenerator implements IGenerator<List<String>> {
 
     private final IGenerator<String> generator = new StringGenerator();
 
     @Override
-    public Set<String> generate() {
-        final Set<String> strings = new HashSet<>();
+    public List<String> generate() {
+        final List<String> strings = new ArrayList<>();
         final int amount = current().nextInt(1,10);
 
         for(int i = 0; i < amount; i++)

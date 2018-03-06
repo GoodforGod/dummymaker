@@ -1,6 +1,6 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.generator.impl.collection.*;
+import io.dummymaker.generator.impl.collection.impl.basic.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.generator.impl.collection.ListObjectGenerator;
-import io.dummymaker.generator.impl.collection.ListStringGenerator;
+import io.dummymaker.generator.impl.collection.impl.basic.ListObjectGenerator;
+import io.dummymaker.generator.impl.collection.impl.basic.ListStringGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

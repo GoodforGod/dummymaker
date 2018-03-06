@@ -12,7 +12,9 @@ import static io.dummymaker.util.BasicCastUtils.generateObject;
 import static io.dummymaker.util.BasicCastUtils.generateRandomAmount;
 
 /**
- * "Default Description"
+ * Generate array list collection of elements with object type
+ *
+ * @see ICollectionGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

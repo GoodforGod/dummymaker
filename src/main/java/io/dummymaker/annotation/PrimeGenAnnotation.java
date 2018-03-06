@@ -8,8 +8,9 @@ import java.lang.annotation.*;
 
 /**
  * Prime annotations, used to create new annotations of specific generator provided type
- * Annotations created using this annotation will be used by scanners
- * And populate/produce factories
+ * Used as a marker annotation for other annotations
+ *
+ * Is used by scanners and populate/produce factories
  *
  * This annotation is a core one to support population factory
  *

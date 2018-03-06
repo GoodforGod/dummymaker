@@ -5,11 +5,13 @@ import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
+import io.dummymaker.generator.impl.collection.impl.MapGenerator;
 import io.dummymaker.generator.impl.collection.impl.SetGenerator;
-import io.dummymaker.generator.impl.map.impl.MapGenerator;
+import io.dummymaker.generator.impl.time.impl.*;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
@@ -18,6 +20,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -73,12 +79,18 @@ public class GenPopulateFactory implements IPopulateFactory {
                         .filter(a -> a.annotationType().equals(GenMap.class))
                         .findAny().orElse(null);
 
+                final Annotation timeAnnotation = annotatedField.getValue().stream()
+                        .filter(a -> a.annotationType().equals(GenTime.class))
+                        .findAny().orElse(null);
+
                 if(listAnnotation != null) {
                     objValue = genIfList(field, listAnnotation);
                 } else if(setAnnotation != null) {
                     objValue = genIfSet(field, setAnnotation);
                 } else if(mapAnnotation != null) {
                     objValue = genIfMap(field, mapAnnotation);
+                } else if(timeAnnotation != null) {
+                    objValue = genIfTime(field, timeAnnotation);
                 }
                 else {
                     // Populate enumerated field if it is so or via generator
@@ -107,8 +119,24 @@ public class GenPopulateFactory implements IPopulateFactory {
         return t;
     }
 
-    private Object genIfTime(Field field, Annotation annotation) {
+    private Object genIfTime(final Field field, final Annotation annotation) {
         try {
+            final long from = ((GenTime) annotation).from();
+            final long to = ((GenTime) annotation).to();
+
+            if (field.getType().equals(LocalDateTime.class)) {
+                return new LocalDateTimeGenerator().generate(from, to);
+            } else if (field.getType().equals(LocalDate.class) || field.getType().equals(Object.class)) {
+                return new LocalDateGenerator().generate(from, to);
+            } else if (field.getType().equals(LocalTime.class)) {
+                return new LocalTimeGenerator().generate(from, to);
+            } else if (field.getType().equals(Timestamp.class)) {
+                return new TimestampGenerator().generate(from, to);
+            } else if (field.getType().equals(Date.class)) {
+                return new DateGenerator().generate(from, to);
+            } else if(field.getType().equals(String.class)) {
+                return String.valueOf(new LocalDateTimeGenerator().generate(from, to));
+            }
             return null;
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -118,6 +146,9 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     private Object genIfMap(final Field field, final Annotation annotation) {
         try {
+            if(!field.getType().isAssignableFrom(Map.class))
+                return null;
+
             int fixed = ((GenMap) annotation).fixed();
             int min = ((GenMap) annotation).min();
             int max = ((GenMap) annotation).max();
@@ -141,6 +172,9 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     private Object genIfSet(final Field field, final Annotation annotation) {
         try {
+            if(!field.getType().isAssignableFrom(Set.class))
+                return null;
+
             int fixed = ((GenSet) annotation).fixed();
             int min = ((GenSet) annotation).min();
             int max = ((GenSet) annotation).max();
@@ -160,6 +194,9 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     private Object genIfList(final Field field, final Annotation annotation) {
         try {
+            if(!field.getType().isAssignableFrom(List.class))
+                return null;
+
             int fixed = ((GenList) annotation).fixed();
             int min = ((GenList) annotation).min();
             int max = ((GenList) annotation).max();

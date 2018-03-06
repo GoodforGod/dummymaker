@@ -1,4 +1,4 @@
-package io.dummymaker.generator.impl.collection;
+package io.dummymaker.generator.impl.collection.impl.basic;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.number.IntegerGenerator;

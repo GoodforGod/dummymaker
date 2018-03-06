@@ -2,6 +2,9 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.collection.GenList;
+import io.dummymaker.annotation.collection.GenMap;
+import io.dummymaker.annotation.collection.GenSet;
+import io.dummymaker.annotation.time.GenTime;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,7 +32,10 @@ public class PopulateAnnotationScanner extends AnnotationScanner {
      */
     private final Predicate<Annotation> markedAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class);
     private final Predicate<Annotation> populateAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGenAnnotation.class)
-            || a.annotationType().equals(GenList.class);
+            || a.annotationType().equals(GenList.class)
+            || a.annotationType().equals(GenSet.class)
+            || a.annotationType().equals(GenMap.class)
+            || a.annotationType().equals(GenTime.class);
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

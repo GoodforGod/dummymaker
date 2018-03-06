@@ -2,7 +2,7 @@ package io.dummymaker.generator;
 
 import io.dummymaker.generator.impl.EnumerateGenerator;
 import io.dummymaker.generator.impl.NullGenerator;
-import io.dummymaker.generator.impl.time.LocalDateTimeGenerator;
+import io.dummymaker.generator.impl.time.impl.LocalDateTimeGenerator;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.generator.impl.collection.SetObjectGenerator;
-import io.dummymaker.generator.impl.collection.SetStringGenerator;
+import io.dummymaker.generator.impl.collection.impl.basic.SetObjectGenerator;
+import io.dummymaker.generator.impl.collection.impl.basic.SetStringGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

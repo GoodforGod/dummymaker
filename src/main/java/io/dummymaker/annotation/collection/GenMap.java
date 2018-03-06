@@ -2,7 +2,7 @@ package io.dummymaker.annotation.collection;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.map.impl.MapGenerator;
+import io.dummymaker.generator.impl.collection.impl.MapGenerator;
 import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 /**
  * Generate map with KEY and VALUE from generators
  *
- * @see io.dummymaker.generator.impl.map.IMapGenerator
- * @see
+ * @see io.dummymaker.generator.impl.collection.IMapGenerator
+ * @see MapGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

@@ -1,9 +1,12 @@
-package io.dummymaker.generator.impl.map.impl;
+package io.dummymaker.generator.impl.collection.impl;
 
 import io.dummymaker.generator.IGenerator;
 
 /**
- * "Default Description"
+ * Generate map of elements with key,value of object type
+ *
+ * @see BasicMapGenerator
+ * @see io.dummymaker.generator.impl.collection.IMapGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018
