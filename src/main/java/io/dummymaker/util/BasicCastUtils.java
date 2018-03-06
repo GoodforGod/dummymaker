@@ -17,17 +17,47 @@ public class BasicCastUtils {
     private BasicCastUtils() { }
 
     public static Object generateObject(final IGenerator generator,
+                                        final Class<?> castType,
+                                        final Class<?> fieldType) {
+        return castObject(generator.generate(), castType, fieldType);
+    }
+
+    public static Object generateObject(final IGenerator generator,
                                         final Class<?> fieldType,
                                         final boolean isTypeAssignable,
                                         final boolean isTypeEquals,
                                         final boolean isTypeObject,
                                         final boolean isTypeString) {
+        return castObject(generator.generate(), fieldType,
+                isTypeAssignable, isTypeEquals,
+                isTypeObject, isTypeString);
+    }
+
+    public static Object castObject(final Object castObject,
+                                    final Class<?> castType,
+                                    final Class<?> fieldType) {
+        final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);
+        final boolean isTypeEquals = castType.equals(fieldType);
+        final boolean isTypeObject = fieldType.equals(Object.class);
+        final boolean isTypeString = fieldType.equals(String.class);
+
+        return castObject(castObject, fieldType,
+                isTypeAssignable, isTypeEquals,
+                isTypeObject, isTypeString);
+    }
+
+    public static Object castObject(final Object castObject,
+                                    final Class<?> fieldType,
+                                    final boolean isTypeAssignable,
+                                    final boolean isTypeEquals,
+                                    final boolean isTypeObject,
+                                    final boolean isTypeString) {
         if (isTypeEquals || isTypeObject) {
-            return (generator.generate());
+            return (castObject);
         } else if (isTypeString) {
-            return (String.valueOf(generator.generate()));
+            return (String.valueOf(castObject));
         } else if (isTypeAssignable) {
-            return (fieldType.cast(generator.generate()));
+            return (fieldType.cast(castObject));
         }
         return EMPTY;
     }

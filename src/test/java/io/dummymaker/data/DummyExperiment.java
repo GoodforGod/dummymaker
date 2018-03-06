@@ -31,6 +31,12 @@ public class DummyExperiment {
     @GenMap
     private Map<String, Object> map;
 
+    @GenTime
+    private String string;
+
+    @GenTime
+    private Object object;
+
     public List<String> getObjects() {
         return objects;
     }

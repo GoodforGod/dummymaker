@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenTime {
-    long MAX = 32503669200000L;
+    long MAX = 32503680000L;
 
     long from() default 0L;
 

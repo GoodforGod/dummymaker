@@ -8,25 +8,17 @@ import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
-import io.dummymaker.generator.impl.collection.impl.MapGenerator;
-import io.dummymaker.generator.impl.collection.impl.SetGenerator;
-import io.dummymaker.generator.impl.time.impl.*;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static io.dummymaker.util.BasicCastUtils.castObject;
 
 /**
  * Populates objects via PrimeGenAnnotation generators included
@@ -43,23 +35,20 @@ public class GenPopulateFactory implements IPopulateFactory {
     private final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
     private final IAnnotationScanner enumerateScanner = new EnumerateAnnotationScanner();
 
+    private final GenerateFactory generateFactory = new GenerateFactory();
+
     /**
      * Populate single entity
      *
      * @param t            entity to populate
-     * @param enumerateMap map of enumerated marked fields
-     * @param generatorMap map where generator is assigned to each entity field
+     * @param enumeratesMap map of enumerated marked fields
+     * @param generatorsMap map where generator is assigned to each entity field
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
-                                 final Map<Field, Long> enumerateMap,
-                                 final Map<Field, ? extends IGenerator> generatorMap) {
-        final boolean haveEnumerateFields = (enumerateMap != null && !enumerateMap.isEmpty());
-
+                                 final Map<Field, Long> enumeratesMap,
+                                 final Map<Field, ? extends IGenerator> generatorsMap) {
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
-        final Map<Field, ? extends IGenerator> generatorsFieldMap = (generatorMap == null)
-                ? buildGeneratorsMap(classAnnotatedFields)
-                : generatorMap;
 
         for (final Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
             final Field field = annotatedField.getKey();
@@ -67,37 +56,10 @@ public class GenPopulateFactory implements IPopulateFactory {
             try {
                 field.setAccessible(true);
 
-                final Annotation listAnnotation = annotatedField.getValue().stream()
-                        .filter(a -> a.annotationType().equals(GenList.class))
-                        .findAny().orElse(null);
-
-                final Annotation setAnnotation = annotatedField.getValue().stream()
-                        .filter(a -> a.annotationType().equals(GenSet.class))
-                        .findAny().orElse(null);
-
-                final Annotation mapAnnotation = annotatedField.getValue().stream()
-                        .filter(a -> a.annotationType().equals(GenMap.class))
-                        .findAny().orElse(null);
-
-                final Annotation timeAnnotation = annotatedField.getValue().stream()
-                        .filter(a -> a.annotationType().equals(GenTime.class))
-                        .findAny().orElse(null);
-
-                if(listAnnotation != null) {
-                    objValue = genIfList(field, listAnnotation);
-                } else if(setAnnotation != null) {
-                    objValue = genIfSet(field, setAnnotation);
-                } else if(mapAnnotation != null) {
-                    objValue = genIfMap(field, mapAnnotation);
-                } else if(timeAnnotation != null) {
-                    objValue = genIfTime(field, timeAnnotation);
-                }
-                else {
-                    // Populate enumerated field if it is so or via generator
-                    objValue = (haveEnumerateFields && enumerateMap.containsKey(field))
-                            ? buildNextEnumeratedValue(enumerateMap, field)
-                            : generatorsFieldMap.get(field).generate();
-                }
+                objValue = buildObject(field,
+                        annotatedField.getValue(),
+                        generatorsMap,
+                        enumeratesMap);
 
                 field.set(t, field.getType().cast(objValue));
             } catch (ClassCastException e) {
@@ -119,98 +81,39 @@ public class GenPopulateFactory implements IPopulateFactory {
         return t;
     }
 
-    private Object genIfTime(final Field field, final Annotation annotation) {
-        try {
-            final long from = ((GenTime) annotation).from();
-            final long to = ((GenTime) annotation).to();
+    private Object buildObject(final Field field,
+                               final List<Annotation> annotations,
+                               final Map<Field, ? extends IGenerator> generatorsMap,
+                               final Map<Field, Long> enumerateMap) {
+        final Annotation listAnnotation = annotations.stream()
+                .filter(a -> a.annotationType().equals(GenList.class))
+                .findAny().orElse(null);
 
-            if (field.getType().equals(LocalDateTime.class)) {
-                return new LocalDateTimeGenerator().generate(from, to);
-            } else if (field.getType().equals(LocalDate.class) || field.getType().equals(Object.class)) {
-                return new LocalDateGenerator().generate(from, to);
-            } else if (field.getType().equals(LocalTime.class)) {
-                return new LocalTimeGenerator().generate(from, to);
-            } else if (field.getType().equals(Timestamp.class)) {
-                return new TimestampGenerator().generate(from, to);
-            } else if (field.getType().equals(Date.class)) {
-                return new DateGenerator().generate(from, to);
-            } else if(field.getType().equals(String.class)) {
-                return String.valueOf(new LocalDateTimeGenerator().generate(from, to));
-            }
-            return null;
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
-    }
+        final Annotation setAnnotation = annotations.stream()
+                .filter(a -> a.annotationType().equals(GenSet.class))
+                .findAny().orElse(null);
 
-    private Object genIfMap(final Field field, final Annotation annotation) {
-        try {
-            if(!field.getType().isAssignableFrom(Map.class))
-                return null;
+        final Annotation mapAnnotation = annotations.stream()
+                .filter(a -> a.annotationType().equals(GenMap.class))
+                .findAny().orElse(null);
 
-            int fixed = ((GenMap) annotation).fixed();
-            int min = ((GenMap) annotation).min();
-            int max = ((GenMap) annotation).max();
-            if(fixed > 0) {
-                min = max = fixed;
-            }
+        final Annotation timeAnnotation = annotations.stream()
+                .filter(a -> a.annotationType().equals(GenTime.class))
+                .findAny().orElse(null);
 
-            final IGenerator keyGenerator = ((GenMap) annotation).key().newInstance();
-            final IGenerator valueGenerator = ((GenMap) annotation).value().newInstance();
-            final Type keyFieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-            final Type valueFieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1];
-
-            return new MapGenerator().generate(keyGenerator, valueGenerator,
-                    ((Class<?>) keyFieldType), ((Class<?>) valueFieldType),
-                    min, max);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
-    }
-
-    private Object genIfSet(final Field field, final Annotation annotation) {
-        try {
-            if(!field.getType().isAssignableFrom(Set.class))
-                return null;
-
-            int fixed = ((GenSet) annotation).fixed();
-            int min = ((GenSet) annotation).min();
-            int max = ((GenSet) annotation).max();
-            if(fixed > 0) {
-                min = max = fixed;
-            }
-
-            final IGenerator generator = ((GenSet) annotation).generator().newInstance();
-            final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-
-            return new SetGenerator().generate(generator, ((Class<?>) fieldType), min, max);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
-    }
-
-    private Object genIfList(final Field field, final Annotation annotation) {
-        try {
-            if(!field.getType().isAssignableFrom(List.class))
-                return null;
-
-            int fixed = ((GenList) annotation).fixed();
-            int min = ((GenList) annotation).min();
-            int max = ((GenList) annotation).max();
-            if(fixed > 0) {
-                min = max = fixed;
-            }
-
-            final IGenerator generator = ((GenList) annotation).generator().newInstance();
-            final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-
-            return new ListGenerator().generate(generator, ((Class<?>) fieldType), min, max);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.warning(e.getMessage());
-            return null;
+        if (listAnnotation != null) {
+            return generateFactory.generateListObject(field, listAnnotation, null);
+        } else if (setAnnotation != null) {
+            return generateFactory.generateSetObject(field, setAnnotation, null);
+        } else if (mapAnnotation != null) {
+            return generateFactory.generateMapObject(field, mapAnnotation, null);
+        } else if (timeAnnotation != null) {
+            return generateFactory.generateTimeObject(field, timeAnnotation);
+        } else if (enumerateMap.containsKey(field)) {
+            return buildNextEnumeratedValue(enumerateMap, field);
+        } else {
+            final Object generated = generatorsMap.get(field).generate();
+            return castObject(generated, generated.getClass(), field.getType());
         }
     }
 
@@ -233,9 +136,12 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> T populate(final T t) {
-        return (t == null)
-                ? null
-                : populateEntity(t, buildEnumerateMap(t.getClass()), null);
+        if (t == null)
+            return null;
+
+        return populateEntity(t,
+                buildEnumerateMap(t.getClass()),
+                buildGeneratorsMap(populateScanner.scan(t.getClass())));
     }
 
     @Override
@@ -257,7 +163,7 @@ public class GenPopulateFactory implements IPopulateFactory {
      * Build generators map to improve performance
      * So we initialize generators once for entity and not each populate method call
      */
-    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field,  List<Annotation>> map) {
+    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field, List<Annotation>> map) {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         map.forEach((key, value) -> {
@@ -266,7 +172,7 @@ public class GenPopulateFactory implements IPopulateFactory {
                         .filter(a -> a.annotationType().equals(PrimeGenAnnotation.class))
                         .findAny().orElse(null);
 
-                if(genAnnotation != null) {
+                if (genAnnotation != null) {
                     final IGenerator generator = ((PrimeGenAnnotation) genAnnotation).value().newInstance();
                     generatorsMap.put(key, generator);
                 }
@@ -285,7 +191,7 @@ public class GenPopulateFactory implements IPopulateFactory {
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
         return enumerateScanner.scan(t).entrySet().stream()
-                    .collect(Collectors.toMap(
+                .collect(Collectors.toMap(
                         e -> e.getKey(),
                         e -> ((GenEnumerate) e.getValue().get(0)).from())
                 );
