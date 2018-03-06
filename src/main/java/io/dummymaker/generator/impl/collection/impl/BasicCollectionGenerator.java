@@ -7,7 +7,9 @@ import io.dummymaker.generator.impl.string.IdGenerator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+
+import static io.dummymaker.util.BasicCastUtils.generateObject;
+import static io.dummymaker.util.BasicCastUtils.generateRandomAmount;
 
 /**
  * "Default Description"
@@ -47,25 +49,11 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         final int amount = generateRandomAmount(min, max);
 
         for (int i = 0; i < amount; i++) {
-            if (isTypeEquals || isTypeObject) {
-                list.add(generator.generate());
-            } else if (isTypeString) {
-                list.add(generator.generate().toString());
-            } else if (isTypeAssignable) {
-                list.add(fieldType.cast(generator.generate()));
-            }
+            list.add(generateObject(generator, genType,
+                    isTypeAssignable, isTypeEquals,
+                    isTypeObject, isTypeString));
         }
 
         return list;
-    }
-
-    private int generateRandomAmount(final int min,
-                                     final int max) {
-        final int usedMin = (min < 1) ? 1 : min;
-        final int usedMax = (max < 1) ? 1 : max;
-
-        return (usedMin >= usedMax)
-                ? usedMin
-                : ThreadLocalRandom.current().nextInt(min, max);
     }
 }

@@ -7,7 +7,8 @@ import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+
+import static io.dummymaker.util.BasicCastUtils.*;
 
 /**
  * "Default Description"
@@ -16,8 +17,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 06.03.2018
  */
 abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
-
-    private final Object EMPTY = new Object();
 
     private final IGenerator keyGenerator;
     private final IGenerator valueGenerator;
@@ -32,7 +31,6 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
         this.keyGenerator = keyGenerator;
         this.valueGenerator = valueGenerator;
     }
-
 
     @Override
     public Map<K, V> generate() {
@@ -81,31 +79,5 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
         }
 
         return map;
-    }
-
-    private Object generateObject(final IGenerator generator,
-                                  final Class<?> fieldType,
-                                  final boolean isTypeAssignable,
-                                  final boolean isTypeEquals,
-                                  final boolean isTypeObject,
-                                  final boolean isTypeString) {
-        if (isTypeEquals || isTypeObject) {
-            return (generator.generate());
-        } else if (isTypeString) {
-            return (generator.generate().toString());
-        } else if (isTypeAssignable) {
-            return (fieldType.cast(generator.generate()));
-        }
-        return EMPTY;
-    }
-
-    private int generateRandomAmount(final int min,
-                                     final int max) {
-        final int usedMin = (min < 1) ? 1 : min;
-        final int usedMax = (max < 1) ? 1 : max;
-
-        return (usedMin >= usedMax)
-                ? usedMin
-                : ThreadLocalRandom.current().nextInt(min, max);
     }
 }

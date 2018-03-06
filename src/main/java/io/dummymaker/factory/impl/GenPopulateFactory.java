@@ -56,29 +56,43 @@ public class GenPopulateFactory implements IPopulateFactory {
                 : generatorMap;
 
         for (final Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
+            final Field field = annotatedField.getKey();
             Object objValue = null;
             try {
-                annotatedField.getKey().setAccessible(true);
+                field.setAccessible(true);
 
                 final Annotation listAnnotation = annotatedField.getValue().stream()
                         .filter(a -> a.annotationType().equals(GenList.class))
                         .findAny().orElse(null);
 
+                final Annotation setAnnotation = annotatedField.getValue().stream()
+                        .filter(a -> a.annotationType().equals(GenSet.class))
+                        .findAny().orElse(null);
+
+                final Annotation mapAnnotation = annotatedField.getValue().stream()
+                        .filter(a -> a.annotationType().equals(GenMap.class))
+                        .findAny().orElse(null);
+
                 if(listAnnotation != null) {
-                    objValue = genIfList(annotatedField.getKey(), listAnnotation);
-                } else {
+                    objValue = genIfList(field, listAnnotation);
+                } else if(setAnnotation != null) {
+                    objValue = genIfSet(field, setAnnotation);
+                } else if(mapAnnotation != null) {
+                    objValue = genIfMap(field, mapAnnotation);
+                }
+                else {
                     // Populate enumerated field if it is so or via generator
-                    objValue = (haveEnumerateFields && enumerateMap.containsKey(annotatedField.getKey()))
-                            ? buildNextEnumeratedValue(enumerateMap, annotatedField.getKey())
-                            : generatorsFieldMap.get(annotatedField.getKey()).generate();
+                    objValue = (haveEnumerateFields && enumerateMap.containsKey(field))
+                            ? buildNextEnumeratedValue(enumerateMap, field)
+                            : generatorsFieldMap.get(field).generate();
                 }
 
-                annotatedField.getKey().set(t, annotatedField.getKey().getType().cast(objValue));
+                field.set(t, field.getType().cast(objValue));
             } catch (ClassCastException e) {
                 try {
                     // Try to cast object type to string if possible, cause origin type is not castable
-                    if (annotatedField.getKey().getType().isAssignableFrom(String.class)) {
-                        annotatedField.getKey().set(t, String.valueOf(objValue));
+                    if (field.getType().isAssignableFrom(String.class)) {
+                        field.set(t, String.valueOf(objValue));
                     }
                 } catch (Exception ex) {
                     logger.warning("FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE AND CAN NOT BE CONVERTED TO STRING.");

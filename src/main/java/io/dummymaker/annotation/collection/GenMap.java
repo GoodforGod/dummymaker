@@ -2,7 +2,7 @@ package io.dummymaker.annotation.collection;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
+import io.dummymaker.generator.impl.map.impl.MapGenerator;
 import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 06.03.2018
  */
-@PrimeGenAnnotation(ListGenerator.class)
+@PrimeGenAnnotation(MapGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenMap {
