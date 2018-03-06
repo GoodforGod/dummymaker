@@ -2,12 +2,14 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.PrimeGenAnnotation;
 import io.dummymaker.annotation.collection.GenList;
+import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.collection.impl.SetGenerator;
+import io.dummymaker.generator.impl.map.impl.MapGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
@@ -95,6 +97,29 @@ public class GenPopulateFactory implements IPopulateFactory {
         try {
             return null;
         } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+    }
+
+    private Object genIfMap(final Field field, final Annotation annotation) {
+        try {
+            int fixed = ((GenMap) annotation).fixed();
+            int min = ((GenMap) annotation).min();
+            int max = ((GenMap) annotation).max();
+            if(fixed > 0) {
+                min = max = fixed;
+            }
+
+            final IGenerator keyGenerator = ((GenMap) annotation).key().newInstance();
+            final IGenerator valueGenerator = ((GenMap) annotation).value().newInstance();
+            final Type keyFieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+            final Type valueFieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1];
+
+            return new MapGenerator().generate(keyGenerator, valueGenerator,
+                    ((Class<?>) keyFieldType), ((Class<?>) valueFieldType),
+                    min, max);
+        } catch (InstantiationException | IllegalAccessException e) {
             logger.warning(e.getMessage());
             return null;
         }

@@ -18,7 +18,7 @@ public class DummyExperiment {
     @GenTime
     private Timestamp timestamp;
 
-    @GenList(generator = BooleanGenerator.class, min = 10)
+    @GenList(generator = BooleanGenerator.class)
     private List<String> objects;
 
     public List<String> getObjects() {
