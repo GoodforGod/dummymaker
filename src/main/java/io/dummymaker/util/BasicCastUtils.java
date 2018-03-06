@@ -14,8 +14,6 @@ public class BasicCastUtils {
 
     public static final Object EMPTY = new Object();
 
-    private BasicCastUtils() { }
-
     public static Object generateObject(final IGenerator generator,
                                         final Class<?> castType,
                                         final Class<?> fieldType) {

@@ -1,6 +1,6 @@
 package io.dummymaker.bundle;
 
-import io.dummymaker.data.DummyExperiment;
+import io.dummymaker.data.DummyCollection;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class ExperimentTest extends Assert {
     @Test
     public void test() {
         IProduceFactory factory = new GenProduceFactory();
-        DummyExperiment experiment = factory.produce(DummyExperiment.class);
+        DummyCollection experiment = factory.produce(DummyCollection.class);
         assertNotNull(experiment);
         assertNotNull(experiment.getObjects());
     }

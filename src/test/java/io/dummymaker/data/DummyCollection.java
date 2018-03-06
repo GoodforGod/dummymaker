@@ -3,11 +3,8 @@ package io.dummymaker.data;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
-import io.dummymaker.annotation.time.GenLocalDate;
-import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.generator.impl.BooleanGenerator;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,10 +15,7 @@ import java.util.Set;
  * @author GoodforGod
  * @since 05.03.2018
  */
-public class DummyExperiment {
-
-    @GenTime
-    private Timestamp timestamp;
+public class DummyCollection {
 
     @GenList(generator = BooleanGenerator.class)
     private List<String> objects;
@@ -32,13 +26,15 @@ public class DummyExperiment {
     @GenMap
     private Map<String, Object> map;
 
-    @GenLocalDate
-    private String string;
-
-    @GenTime
-    private Object object;
-
     public List<String> getObjects() {
         return objects;
+    }
+
+    public Set<String> getStrings() {
+        return strings;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
     }
 }

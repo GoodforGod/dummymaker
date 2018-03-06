@@ -63,10 +63,6 @@ class GenerateFactory {
     }
 
 
-    Object generateMapObject(final Field field,
-                             final Annotation annotation) {
-        return generateMapObject(field, annotation, null);
-    }
 
     Object generateMapObject(final Field field,
                              final Annotation annotation,
@@ -101,10 +97,6 @@ class GenerateFactory {
     }
 
 
-    Object generateSetObject(final Field field,
-                             final Annotation annotation) {
-        return generateSetObject(field, annotation, null);
-    }
 
     Object generateSetObject(final Field field,
                              final Annotation annotation,
@@ -135,10 +127,6 @@ class GenerateFactory {
     }
 
 
-    Object generateListObject(final Field field,
-                              final Annotation annotation) {
-        return generateListObject(field, annotation, null);
-    }
 
     Object generateListObject(final Field field,
                               final Annotation annotation,

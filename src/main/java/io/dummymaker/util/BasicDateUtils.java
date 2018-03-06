@@ -24,8 +24,6 @@ public class BasicDateUtils {
 
     private static final String ZONE_ID = "Europe/Moscow";
 
-    private BasicDateUtils() { }
-
     private static Calendar genCalendar() {
         return Calendar.getInstance(TimeZone.getTimeZone(ZONE_ID));
     }
