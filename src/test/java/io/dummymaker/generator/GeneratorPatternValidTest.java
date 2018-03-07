@@ -2,6 +2,9 @@ package io.dummymaker.generator;
 
 import io.dummymaker.generator.impl.BooleanGenerator;
 import io.dummymaker.generator.impl.UuidGenerator;
+import io.dummymaker.generator.impl.collection.impl.ListGenerator;
+import io.dummymaker.generator.impl.collection.impl.MapGenerator;
+import io.dummymaker.generator.impl.collection.impl.SetGenerator;
 import io.dummymaker.generator.impl.number.DoubleBigGenerator;
 import io.dummymaker.generator.impl.number.DoubleGenerator;
 import io.dummymaker.generator.impl.number.IntegerGenerator;
@@ -16,10 +19,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertNotNull;
@@ -71,6 +71,9 @@ public class GeneratorPatternValidTest {
                 { new TagGenerator(),           String.class,   Pattern.compile("#[0-9a-zA-Z]+") },
                 { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
                 { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
+                { new ListGenerator(),          ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new SetGenerator(),           HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new MapGenerator(),           HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
                 { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3} \\d{4}") },
                 { new LocalDateGenerator(),     LocalDate.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
                 { new LocalDateTimeGenerator(), LocalDateTime.class,   Pattern.compile("\\d{4}-\\d{2}-\\d{2}[A-Z]\\d{2}:\\d{2}:\\d{2}") },

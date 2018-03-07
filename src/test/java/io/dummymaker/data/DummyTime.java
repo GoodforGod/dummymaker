@@ -40,17 +40,20 @@ public class DummyTime {
     @GenTime
     private LocalTime time;
 
-    @GenTime
+    @GenTime(from = 1000, to = 999)
     private LocalDate date;
 
-    @GenTime
+    @GenTime(from = -100)
     private LocalDateTime dateTime;
 
     @GenTime(from = 1)
     private Timestamp timestamp;
 
-    @GenTime(to = GenTime.MAX - 1000)
+    @GenTime(to = GenTime.MAX + 1000)
     private Date dateOld;
+
+    @GenTime(from = -100, to = GenTime.MAX + 1000)
+    private Date dateOldCoverage;
 
     @GenTime
     private String dateTimeString;

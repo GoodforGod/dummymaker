@@ -3,6 +3,7 @@ package io.dummymaker.util;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,6 +16,30 @@ import java.util.Date;
  * @since 04.03.2018
  */
 public class BasicDateUtilsErrorTests extends Assert {
+
+    @Test
+    public void convertNullToTimestampDateOldType() {
+        final Timestamp t = BasicDateUtils.convertToTimestamp((Date) null);
+        assertNull(t);
+    }
+
+    @Test
+    public void convertNullToTimestampDate() {
+        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalDate) null);
+        assertNull(t);
+    }
+
+    @Test
+    public void convertNullToTimestampTime() {
+        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalTime) null);
+        assertNull(t);
+    }
+
+    @Test
+    public void convertNullToTimestampDateTime() {
+        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalDateTime) null);
+        assertNull(t);
+    }
 
     @Test
     public void parseDateNull() {
