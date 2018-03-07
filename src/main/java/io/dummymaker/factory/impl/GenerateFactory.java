@@ -27,7 +27,12 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * "default comment"
+ * Factory with special generate methods to support complex annotations
+ *
+ * @see GenTime
+ * @see GenList
+ * @see GenSet
+ * @see GenMap
  *
  * @author GoodforGod
  * @since 06.03.2018
@@ -36,6 +41,14 @@ class GenerateFactory {
 
     private static final Logger logger = Logger.getLogger(GenerateFactory.class.getName());
 
+    /**
+     * Method to produce fields value for GenTime annotation
+     *
+     * @see GenTime
+     *
+     * @param field field to populate
+     * @param annotation fields annotations
+     */
     Object generateTimeObject(final Field field,
                               final Annotation annotation) {
         try {
@@ -63,7 +76,14 @@ class GenerateFactory {
     }
 
 
-
+    /**
+     * Method to produce fields value
+     *
+     * @see GenMap
+     *
+     * @param field field to populate
+     * @param annotation fields annotations
+     */
     Object generateMapObject(final Field field,
                              final Annotation annotation,
                              final IMapGenerator<?, ?> mapGenerator) {
@@ -97,7 +117,14 @@ class GenerateFactory {
     }
 
 
-
+    /**
+     * Method to produce fields value
+     *
+     * @see GenSet
+     *
+     * @param field field to populate
+     * @param annotation fields annotations
+     */
     Object generateSetObject(final Field field,
                              final Annotation annotation,
                              final ICollectionGenerator<?> setGenerator) {
@@ -127,7 +154,14 @@ class GenerateFactory {
     }
 
 
-
+    /**
+     * Method to produce fields value
+     *
+     * @see GenList
+     *
+     * @param field field to populate
+     * @param annotation fields annotations
+     */
     Object generateListObject(final Field field,
                               final Annotation annotation,
                               final ICollectionGenerator<?> listGenerator) {

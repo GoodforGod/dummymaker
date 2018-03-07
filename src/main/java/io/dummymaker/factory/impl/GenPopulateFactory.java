@@ -25,9 +25,10 @@ import static io.dummymaker.util.BasicCastUtils.castObject;
 /**
  * Populates objects via PrimeGen generators included
  *
- * @author GoodforGod
  * @see PrimeGen
  * @see GenEnumerate
+ *
+ * @author GoodforGod
  * @since 30.05.2017
  */
 public class GenPopulateFactory implements IPopulateFactory {
@@ -75,6 +76,14 @@ public class GenPopulateFactory implements IPopulateFactory {
         return t;
     }
 
+    /**
+     * Build field populate value
+     *
+     * @param field field to populate
+     * @param annotations fields annotation
+     * @param generatorsMap fields generators
+     * @param enumerateMap field enumerate map
+     */
     private Object buildObject(final Field field,
                                final List<Annotation> annotations,
                                final Map<Field, ? extends IGenerator> generatorsMap,

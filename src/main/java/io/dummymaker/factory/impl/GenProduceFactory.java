@@ -12,8 +12,9 @@ import java.util.logging.Logger;
 /**
  * Produce Dummy Objects and populate them via PrimeGen generators included
  *
- * @author GoodforGod
  * @see PrimeGen
+ *
+ * @author GoodforGod
  * @since 26.05.2017
  */
 public class GenProduceFactory implements IProduceFactory {
