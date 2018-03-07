@@ -4,8 +4,7 @@ import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.generator.impl.time.ITimeGenerator;
 
 import java.util.Date;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates old java date type
@@ -30,9 +29,11 @@ public class DateGenerator implements ITimeGenerator<Date> {
             usedFrom = 0;
         if(usedTo > GenTime.MAX)
             usedTo = GenTime.MAX;
-        if(usedTo < usedFrom)
-            usedFrom = usedTo;
 
-        return new Date(current().nextLong(usedFrom, usedTo));
+        final long amount = (usedTo < usedFrom)
+                ? usedFrom
+                : ThreadLocalRandom.current().nextLong(usedFrom, usedTo);
+
+        return new Date(amount);
     }
 }

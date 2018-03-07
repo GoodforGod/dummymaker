@@ -100,9 +100,20 @@ public class ProduceFactoryTest {
         assertNotNull(dummy.getStrings());
         assertNotNull(dummy.getMap());
 
+        assertNotNull(dummy.getObjectsFix());
+        assertNotNull(dummy.getStringsFix());
+        assertNotNull(dummy.getMapFix());
+
         assertFalse(dummy.getObjects().isEmpty());
         assertFalse(dummy.getStrings().isEmpty());
         assertFalse(dummy.getMap().isEmpty());
+
+        assertFalse(dummy.getObjectsFix().isEmpty());
+        assertFalse(dummy.getStringsFix().isEmpty());
+        assertFalse(dummy.getMapFix().isEmpty());
+        assertEquals(dummy.getObjectsFix().size(), 4);
+        assertEquals(dummy.getStringsFix().size(), 5);
+        assertEquals(dummy.getMapFix().size(), 3);
     }
 
     @Test

@@ -28,11 +28,13 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
             usedFrom = 0;
         if (usedTo > GenTime.MAX)
             usedTo = GenTime.MAX;
-        if (usedTo < usedFrom)
-            usedFrom = usedTo;
+
+        final long amount = (usedTo < usedFrom)
+                ? usedFrom
+                : ThreadLocalRandom.current().nextLong(usedFrom, usedTo);
 
         return LocalDateTime.ofEpochSecond(
-                ThreadLocalRandom.current().nextLong(usedFrom, usedTo),
+                amount,
                 0,
                 ZoneOffset.UTC
         );

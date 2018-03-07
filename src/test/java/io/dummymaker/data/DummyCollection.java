@@ -26,6 +26,15 @@ public class DummyCollection {
     @GenMap
     private Map<String, Object> map;
 
+    @GenList(generator = BooleanGenerator.class, fixed = 4)
+    private List<String> objectsFix;
+
+    @GenSet(fixed = 5)
+    private Set<String> stringsFix;
+
+    @GenMap(fixed = 3)
+    private Map<String, Object> mapFix;
+
     public List<String> getObjects() {
         return objects;
     }
@@ -36,5 +45,17 @@ public class DummyCollection {
 
     public Map<String, Object> getMap() {
         return map;
+    }
+
+    public List<String> getObjectsFix() {
+        return objectsFix;
+    }
+
+    public Set<String> getStringsFix() {
+        return stringsFix;
+    }
+
+    public Map<String, Object> getMapFix() {
+        return mapFix;
     }
 }
