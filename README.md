@@ -8,7 +8,7 @@ And also *export* them in **CSV/JSON/XML/SQL** formats.
 
 Also it is possible to create your own *Gen* annotations and *IGenerator* generators to populate Dummy object fields in your way.
 
-*Step by step:*
+*Step by step guide:*
 1) Create Dummy object (POJO). 
 2) *Annotate* Dummy object fields with special *Gen* annotations.
 3) Use *Factory* to populate/produce Dummy Object[s].
@@ -34,7 +34,9 @@ dependencies {
 ```
 
 ## Contents
+- [Overall](#overall)
 - [Factories](#factories)
+- [Generators](#generators)
 - [Export](#export)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
   - [CsvExporter Specific Parameters](#csvExporter-specific-parameters)
@@ -57,7 +59,16 @@ dependencies {
   - [SQL](#sql)  
 - [Version History](#version-history)
 
-## **Factories**
+## Overall
+
+*Step by step* scheme how all work.
+Dummy object field should be marked with *Gen* annotation.
+Each *Gen* annotation have special hidden *IGenerator* responsible for value generation.
+When *GenPopulateFactory* is used, it scan for such annotations and use hidden generators to generate values for Dummy object fields.
+Or special *IGenerateFactory* is used to build complex value for specific *Gen* annotations like *GenList*.
+Exporters use scanners to verify what fields to export and format values in chosen format.
+
+## Factories
 
 Factories to populate/produce Dummy Objects.
 
@@ -69,11 +80,18 @@ Factories to populate/produce Dummy Objects.
 
 You can create your own *IGenerateFactory* implementations as well for complex *Gen* annotations.
 
-## **Export**
+## Generators
+
+*IGenerator* generators are the producers of random values of specific type.
+Used by *GenPopulateFactory* to generate values for Dummy object fields.
+
+Are part of *Gen* annotations cause indicate what generator each annotation is using.
+
+## Export
 
 Exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
 
-### ***Basic Exporters Parameters***
+### **Basic Exporters Parameters**
 
 Constructor parameters available for all exporters.
 
@@ -88,32 +106,33 @@ Constructor parameters available for all exporters.
 	* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
 	* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
 
-### ***CsvExporter Specific Parameters***
+### **CsvExporter Specific Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.
 * *withHeader* - if true will generate CSV header, default *False*.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
 
-### ***XmlExporter Specific Parameters***
+### **XmlExporter Specific Parameters**
 * *withEnding* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
 * *withFullname* - full class export name. (class ending is not used in this case).
 
-### ***SqlExporter Specific Parameters***
+### **SqlExporter Specific Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
 
 *DataTypeMap* is used to extend your data types to export in sql format.
 
-## **Annotations**
+## Annotations
 
 It is easily for you to create custom *Gen* annotations and *IGenerator* generators.
 
-### ***Basic Gen Annotations***
+### **Basic Gen Annotations**
 
-Annotations allow you to declare Dummy fields with generator annotations.
-*Factories* will generate values using their *generate* methods.
+*Gen* annotations allow you to mark Dummy fields and tell *GenPopulateFactory* to fill this fields with randomly generated values.
 
-Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail, etc*).
+This annotations hide inside itself specified *IGenerator* class which is responsible for value generation.
 
-### ***Collection Annotations***
+Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail, GenId, etc*).
+
+### **Collection Annotations**
 
 Collection annotations like: **GenList, GenSet, GenMap** used to populate fields with such types.
 *GenList* - produce *ArrayList* collection.
@@ -132,7 +151,7 @@ This attributes are used by *GenMap* annotation only (instead of *generator* att
 * *key* - *IGenerator* generator class to build map *keys* using it.
 * *value* - *IGenerator* generator class to build map *values* using it.
 
-### ***Time Annotation***
+### **Time Annotation**
 
 **GenTime** annotation is used to create time/dateTime/timestamps for field.
 Automatically identify field time *type* and generate value for it. 
@@ -148,7 +167,7 @@ Annotations support special attributes like:
 * *from* - minimum time generated time (*01.01.1970* is default) in long UTC format.
 * *to* - maximum entities generated time (*01.01.3000* is default) in long UTC format.
 
-### ***Special Annotations***
+### **Special Annotations**
 
 * ***GenForceExport*** allow to *force* export object field, even if it is not generated by *Gen*Annotation.
 
@@ -160,7 +179,7 @@ Annotations support special attributes like:
 
 ## *Getting Started Examples*
 
-### ***Annotations***
+### **Annotations**
 
 ####  *POJO gen annotate example*
 
@@ -201,7 +220,7 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 ![](https://media.giphy.com/media/1n4JPUg1rxwemngMhV/giphy.gif)
 
 
-### ***Factories***
+### **Factories**
 
 *GenPopulateFactory/GenProvideFactory* this factories allow you to populate/produce Dummy objects.
 
@@ -214,7 +233,7 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 
 ![](https://media.giphy.com/media/1ffn6PiFgTQKaakZ8B/giphy.gif)
 
-### ***Exporters***
+### **Exporters**
 
 Exporters allow you to export Dummy objects to shown format as a *file* or *string*.
 
@@ -325,7 +344,7 @@ INSERT INTO user (name, id) VALUES
 
 ## Version History
 
-**1.1.0** - Performance and architecture improvements, *IGenerateFactory* support, collection *Gen* annotations, time *Gen* annotations, architecture improvements in custom extension support.
+**1.1.0** - Performance and architecture improvements, *IGenerateFactory* introduced, collection *Gen* annotations, time *Gen* annotations, architecture improvements in custom user extension support.
 
 **1.0.3** - Lots of tests for all functionality, Added *DataTypeMap* parameter for users in SqlExporter (expandable data type for sql), *NamingStrategy* for exporters, bug fixes.
 
