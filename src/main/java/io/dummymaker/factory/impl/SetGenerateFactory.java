@@ -54,6 +54,9 @@ public class SetGenerateFactory extends BasicGenerateFactory<ICollectionGenerato
                            final Annotation annotation,
                            final ICollectionGenerator<?> generator) {
         try {
+            if(field == null || annotation == null)
+                return null;
+
             if(generator == null)
                 return generate(field, annotation);
 

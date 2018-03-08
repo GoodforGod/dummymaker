@@ -60,6 +60,9 @@ public class MapGenerateFactory extends BasicGenerateFactory<IMapGenerator<?, ?>
                            final Annotation annotation,
                            final IMapGenerator<?, ?> generator) {
             try {
+                if(field == null || annotation == null)
+                    return null;
+
                 // If nullable generator use default one
                 if(generator == null)
                     return generate(field, annotation);

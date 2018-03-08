@@ -41,7 +41,7 @@ public abstract class BasicGenerateFactory<T extends IGenerator> implements IGen
         return (BasicCollectionUtils.isEmpty(annotations))
                 ? null
                 : annotations.stream()
-                        .filter(a -> a.getClass().equals(suitableAnnotation))
+                        .filter(a -> a.annotationType().equals(suitableAnnotation))
                         .findFirst().orElse(null);
     }
 

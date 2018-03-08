@@ -57,6 +57,9 @@ public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerat
                            final Annotation annotation,
                            final ICollectionGenerator<?> generator) {
         try {
+            if(field == null || annotation == null)
+                return null;
+
             if(generator == null)
                 return generate(field, annotation);
 

@@ -40,6 +40,9 @@ public class TimeGenerateFactory extends BasicGenerateFactory<ITimeGenerator<?>>
     public Object generate(final Field field,
                            final Annotation annotation) {
         try {
+            if(field == null || annotation == null)
+                return null;
+
             final long from = ((GenTime) annotation).from();
             final long to = ((GenTime) annotation).to();
 
