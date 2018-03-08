@@ -37,7 +37,7 @@ dependencies {
 - [Overall](#overall)
 - [Factories](#factories)
 - [Generators](#generators)
-- [Export](#export)
+- [Exporters](#exporters)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
   - [CsvExporter Specific Parameters](#csvExporter-specific-parameters)
   - [XmlExporter Specific Parameters](#xmlExporter-specific-parameters)
