@@ -39,8 +39,8 @@ public class GenPopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
-    private final IAnnotationScanner populateScanner = new PopulateAnnotationScanner();
-    private final IAnnotationScanner enumerateScanner = new EnumerateAnnotationScanner();
+    private final IAnnotationScanner populateScanner;
+    private final IAnnotationScanner enumerateScanner;
 
     /**
      * Generate factory annotation providers map
@@ -49,8 +49,25 @@ public class GenPopulateFactory implements IPopulateFactory {
     private final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders;
 
     public GenPopulateFactory() {
+        this.populateScanner = new PopulateAnnotationScanner();
+        this.enumerateScanner = new EnumerateAnnotationScanner();
         this.generateFactoryProviders = buildDefaultGenerateFactoryProviders();
     }
+
+    /**
+     * To extend generate factory providers with custom ones
+     *
+     * @see IGenerateFactory
+     *
+     * @param generateFactoryProviders custom generate factory providers
+     */
+    public GenPopulateFactory(Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders) {
+        this();
+        if(generateFactoryProviders != null) {
+            generateFactoryProviders.forEach(this.generateFactoryProviders::put);
+        }
+    }
+
 
     /**
      * Populate single entity
