@@ -27,7 +27,7 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         this.generator = new IdGenerator();
     }
 
-    BasicCollectionGenerator(IGenerator generator) {
+    BasicCollectionGenerator(final IGenerator generator) {
         this.generator = generator;
     }
 
@@ -36,6 +36,7 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         return generate(generator, Object.class, 1, 10);
     }
 
+    @Override
     public Collection<T> generate(final IGenerator generator,
                                   final Class<?> fieldType,
                                   final int min,

@@ -26,16 +26,11 @@ public class AnnotationScanner implements IAnnotationScanner {
         final Map<Field, List<Annotation>> fieldScanMap = new LinkedHashMap<>();
 
         try {
-            for(Field field : t.getDeclaredFields()) {
+            for(final Field field : t.getDeclaredFields()) {
 
                 // So we can avoid duplicates but not to use Set in contract for scanner
                 final Set<Annotation> annotations = Arrays.stream(field.getAnnotations())
-                        .map(a -> {
-                            final Set<Annotation> set = Arrays.stream(a.annotationType().getDeclaredAnnotations())
-                                    .collect(Collectors.toSet());
-                            set.add(a);
-                            return set;
-                        })
+                        .map(this::buildDeclaredAnnotationSet)
                         .flatMap(Set::stream)
                         .collect(Collectors.toSet());
 
@@ -46,5 +41,17 @@ public class AnnotationScanner implements IAnnotationScanner {
         }
 
         return fieldScanMap;
+    }
+
+    /**
+     * Retrieve declared annotations from parent one and build set of them all
+     * @param annotation parent annotation
+     * @return parent annotation and its declared ones
+     */
+    private Set<Annotation> buildDeclaredAnnotationSet(final Annotation annotation) {
+        final Set<Annotation> set = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
+                .collect(Collectors.toSet());
+        set.add(annotation);
+        return set;
     }
 }

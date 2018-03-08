@@ -6,6 +6,7 @@ import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.factory.IGenerateFactory;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
@@ -13,6 +14,7 @@ import io.dummymaker.generator.impl.collection.IMapGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
 import io.dummymaker.scan.impl.PopulateAnnotationScanner;
+import io.dummymaker.util.BasicCollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -39,6 +41,22 @@ public class GenPopulateFactory implements IPopulateFactory {
     private final IAnnotationScanner enumerateScanner = new EnumerateAnnotationScanner();
 
     private final GenerateFactory generateFactory = new GenerateFactory();
+
+    /**
+     * Default supported factory generators
+     */
+    private final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders;
+
+    /**
+     * Fill generate factory map with default supported generate providers
+     */
+    public GenPopulateFactory() {
+        generateFactoryProviders = new HashMap<>();
+        generateFactoryProviders.put(GenList.class, ListGenerateFactory.class);
+        generateFactoryProviders.put(GenSet.class, SetGenerateFactory.class);
+        generateFactoryProviders.put(GenMap.class, MapGenerateFactory.class);
+        generateFactoryProviders.put(GenTime.class, TimeGenerateFactory.class);
+    }
 
     /**
      * Populate single entity
@@ -147,17 +165,17 @@ public class GenPopulateFactory implements IPopulateFactory {
 
         return populateEntity(t,
                 buildEnumerateMap(t.getClass()),
-                buildGeneratorsMap(populateScanner.scan(t.getClass())));
+                buildGeneratorsMap(t.getClass()));
     }
 
     @Override
     public <T> List<T> populate(final List<T> list) {
-        if (list == null || list.isEmpty())
+        if (BasicCollectionUtils.isEmpty(list))
             return Collections.emptyList();
 
         // Set up map for enumerated fields before population
         final Map<Field, Long> enumerateMap = buildEnumerateMap(list.get(0).getClass());
-        final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(populateScanner.scan(list.get(0).getClass()));
+        final Map<Field, IGenerator> generatorMap = buildGeneratorsMap((list.get(0).getClass()));
 
         return list.stream()
                 .filter(Objects::nonNull)
@@ -169,10 +187,11 @@ public class GenPopulateFactory implements IPopulateFactory {
      * Build generators map to improve performance
      * So we initialize generators once for entity and not each populate method call
      */
-    private Map<Field, IGenerator> buildGeneratorsMap(final Map<Field, List<Annotation>> map) {
+    private <T> Map<Field, IGenerator> buildGeneratorsMap(final Class<T> tClass) {
+        final Map<Field, List<Annotation>> fieldAnnotationMap = populateScanner.scan(tClass);
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
-        map.forEach((key, value) -> {
+        fieldAnnotationMap.forEach((key, value) -> {
             try {
                 final Annotation genAnnotation = value.stream()
                         .filter(a -> a.annotationType().equals(PrimeGen.class))
@@ -199,5 +218,36 @@ public class GenPopulateFactory implements IPopulateFactory {
                         e -> e.getKey(),
                         e -> ((GenEnumerate) e.getValue().get(0)).from())
                 );
+    }
+
+    /**
+     * Setup generate factory map for fields which are annotated with special annotations
+     */
+    private <T> Map<Field, IGenerateFactory<?>> buildGenerateFactorySupportMap(final Class<T> tClass) {
+        final Map<Field, List<Annotation>> fieldAnnotationMap = populateScanner.scan(tClass);
+        final Map<Field, IGenerateFactory<?>> generateFactoryMap = new HashMap<>();
+
+        final Map<Field, Annotation> generateSuitableFields = fieldAnnotationMap.entrySet().stream()
+                .peek(e -> e.setValue(e.getValue().stream()
+                        .filter(a -> generateFactoryProviders.containsKey(a.getClass()))
+                        .collect(Collectors.toList())))
+                .filter(e -> !e.getValue().isEmpty())
+                .collect(HashMap<Field, Annotation>::new,
+                        (m, e) -> m.put(e.getKey(), e.getValue().get(0)),
+                        (m, u) -> { }
+                );
+
+        for(final Map.Entry<Field, Annotation> suitableEntry : generateSuitableFields.entrySet()) {
+            try {
+                generateFactoryMap.put(
+                        suitableEntry.getKey(),
+                        generateFactoryProviders.get(suitableEntry.getValue().getClass()).newInstance()
+                );
+            } catch (InstantiationException | IllegalAccessException e) {
+                logger.warning(e.getMessage());
+            }
+        }
+
+        return generateFactoryMap;
     }
 }

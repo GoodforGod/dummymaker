@@ -6,6 +6,7 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.util.BasicCollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
 
@@ -71,7 +72,7 @@ abstract class BasicExporter implements IExporter {
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(final List<T> list) {
-        return (list != null && !list.isEmpty())
+        return (BasicCollectionUtils.isNotEmpty(list))
                 ? buildClassContainer(list.get(0))
                 : null;
     }
@@ -140,7 +141,7 @@ abstract class BasicExporter implements IExporter {
      * @return validation result
      */
     <T> boolean isExportEntityInvalid(final List<T> t) {
-        return (t == null || t.isEmpty() || isExportEntityInvalid(t.get(0)));
+        return (BasicCollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
     }
 
     /**

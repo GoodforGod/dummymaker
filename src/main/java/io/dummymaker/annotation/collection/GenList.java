@@ -2,6 +2,7 @@ package io.dummymaker.annotation.collection;
 
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.impl.collection.ICollectionGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
@@ -13,7 +14,7 @@ import java.lang.annotation.Target;
 /**
  * Generate list collection
  *
- * @see io.dummymaker.generator.impl.collection.ICollectionGenerator
+ * @see ICollectionGenerator
  * @see ListGenerator
  *
  * @author GoodforGod
