@@ -1,54 +1,60 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.annotation.collection.GenMap;
-import io.dummymaker.annotation.collection.GenSet;
-import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.scan.IAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
- * Scanner annotations that utilize primeGenAnnotation only
+ * Scanner used by populate factory
+ *
+ * Scan for prime gen annotation and its child annotation
  *
  * @see PrimeGen
- * @see AnnotationScanner
+ * @see BasicAnnotationScanner
  *
  * @author GoodforGod
  * @since 29.05.2017
  */
-public class PopulateAnnotationScanner extends AnnotationScanner {
+public class PopulateAnnotationScanner implements IAnnotationScanner {
 
     /**
-     * Predicate to check for core prime gen annotation
+     * Predicate to check for core prime marker annotation
      *
      * @see PrimeGen
      */
-    private final Predicate<Annotation> markedAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGen.class);
-    private final Predicate<Annotation> populateAnnotationPredicate = (a) -> a.annotationType().equals(PrimeGen.class)
-            || a.annotationType().equals(GenList.class)
-            || a.annotationType().equals(GenSet.class)
-            || a.annotationType().equals(GenMap.class)
-            || a.annotationType().equals(GenTime.class);
+    private final Predicate<Annotation> isPrime = (a) -> a.annotationType().equals(PrimeGen.class);
 
+    /**
+     * Scan for prime gen annotation and its child annotation*
+     *
+     * @param t class to scan
+     * @return populate field map, where
+     * KEY is field that has populate annotations
+     * VALUE are two annotations:
+     * - 0 is primeGen annotation
+     * - 1 is child primeGen annotation
+     */
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
+        final Map<Field, List<Annotation>> populateAnnotationMap = new HashMap<>();
 
-        return classFieldAnnotations.entrySet().stream()
-                .filter(set -> set.getValue().stream().anyMatch(markedAnnotationPredicate))
-                .peek(set -> set.setValue(set.getValue().stream()
-                        .filter(populateAnnotationPredicate)
-                        .collect(Collectors.toList())))
-                .collect(LinkedHashMap<Field, List<Annotation>>::new,
-                        (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> { }
-                );
+        for(final Field field : t.getDeclaredFields()) {
+            for(Annotation annotation : field.getDeclaredAnnotations()) {
+                for(Annotation inlined : annotation.annotationType().getDeclaredAnnotations()) {
+                    if(isPrime.test(inlined)) {
+                        populateAnnotationMap.put(field, Arrays.asList(inlined, annotation));
+                    }
+                }
+            }
+        }
+
+        return populateAnnotationMap;
     }
 }

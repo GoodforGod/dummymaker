@@ -4,12 +4,15 @@ import io.dummymaker.scan.IAnnotationScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Scan for all annotated fields (without duplicates)
+ * Scan field for all annotations
  * Core scanner implementation
  *
  * @see IAnnotationScanner
@@ -17,9 +20,9 @@ import java.util.stream.Collectors;
  * @author GoodforGod
  * @since 30.05.2017
  */
-public class AnnotationScanner implements IAnnotationScanner {
+public class BasicAnnotationScanner implements IAnnotationScanner {
 
-    private final Logger logger = Logger.getLogger(AnnotationScanner.class.getSimpleName());
+    protected final Logger logger = Logger.getLogger(BasicAnnotationScanner.class.getSimpleName());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
@@ -29,12 +32,12 @@ public class AnnotationScanner implements IAnnotationScanner {
             for(final Field field : t.getDeclaredFields()) {
 
                 // So we can avoid duplicates but not to use Set in contract for scanner
-                final Set<Annotation> annotations = Arrays.stream(field.getAnnotations())
-                        .map(this::buildDeclaredAnnotationSet)
-                        .flatMap(Set::stream)
-                        .collect(Collectors.toSet());
+                final List<Annotation> annotations = Arrays.stream(field.getAnnotations())
+                        .map(this::buildDeclaredAnnotationList)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
 
-                fieldScanMap.put(field, new ArrayList<>(annotations));
+                fieldScanMap.put(field, annotations);
             }
         } catch (SecurityException e) {
             logger.warning(e.toString());
@@ -48,10 +51,10 @@ public class AnnotationScanner implements IAnnotationScanner {
      * @param annotation parent annotation
      * @return parent annotation and its declared ones
      */
-    private Set<Annotation> buildDeclaredAnnotationSet(final Annotation annotation) {
-        final Set<Annotation> set = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
-                .collect(Collectors.toSet());
-        set.add(annotation);
-        return set;
+    private List<Annotation> buildDeclaredAnnotationList(final Annotation annotation) {
+        final List<Annotation> list = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
+                .collect(Collectors.toList());
+        list.add(annotation);
+        return list;
     }
 }

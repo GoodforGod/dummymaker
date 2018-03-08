@@ -26,7 +26,7 @@ public class ScannerImplTest {
 
     @Test
     public void baseScannerFindAllAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new AnnotationScanner();
+        IAnnotationScanner scanner = new BasicAnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
