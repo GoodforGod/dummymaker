@@ -61,11 +61,16 @@ dependencies {
 
 ## Overall
 
-*Step by step* scheme how all work.
-Dummy object field should be marked with *Gen* annotation.
+Scheme how all is linked together:
+
+Dummy object fields should be marked with special *Gen* annotations.
+
 Each *Gen* annotation have special hidden *IGenerator* responsible for value generation.
-When *GenPopulateFactory* is used, it scan for such annotations and use hidden generators to generate values for Dummy object fields.
-Or special *IGenerateFactory* is used to build complex value for specific *Gen* annotations like *GenList*.
+
+When *GenPopulateFactory* is used, it scans for such annotations and use hidden generators to generate values for Dummy object fields.
+
+Or special *IGenerateFactory* is used to build complex value (or value with *annotation attributes involved*) for specific *Gen* annotations like *GenList*.
+
 Exporters use scanners to verify what fields to export and format values in chosen format.
 
 ## Factories
