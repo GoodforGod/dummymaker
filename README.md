@@ -92,9 +92,9 @@ Used by *GenPopulateFactory* to generate values for Dummy object fields.
 
 Are part of *Gen* annotations cause indicate what generator each annotation is using.
 
-## Export
+## Exporters
 
-Exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
+*IExporter* exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
 
 ### **Basic Exporters Parameters**
 

@@ -75,7 +75,7 @@ public class ProduceFactoryTest {
         assertTrue(dummy.getCity().matches("[a-zA-Z0-9]+"));
         assertTrue(dummy.getName().matches("[a-zA-Z]+"));
         assertEquals((int) dummy.getNum(), 0);
-        assertTrue(dummy.getGroup().matches("[0-9]+"));
+        assertEquals("100", dummy.getGroup());
     }
 
     @Test
