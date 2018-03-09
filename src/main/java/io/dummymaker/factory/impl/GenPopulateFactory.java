@@ -5,9 +5,11 @@ import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.special.GenInline;
 import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.factory.IGenerateFactory;
 import io.dummymaker.factory.IPopulateFactory;
+import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.EnumerateAnnotationScanner;
@@ -42,6 +44,8 @@ public class GenPopulateFactory implements IPopulateFactory {
     private final IAnnotationScanner populateScanner;
     private final IAnnotationScanner enumerateScanner;
 
+    private final IProduceFactory produceFactory;
+
     /**
      * Generate factory annotation providers map
      * Indicates which annotation can provide generate factory
@@ -49,6 +53,7 @@ public class GenPopulateFactory implements IPopulateFactory {
     private final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders;
 
     public GenPopulateFactory() {
+        this.produceFactory = new GenProduceFactory();
         this.populateScanner = new PopulateAnnotationScanner();
         this.enumerateScanner = new EnumerateAnnotationScanner();
         this.generateFactoryProviders = buildDefaultGenerateFactoryProviders();
@@ -80,7 +85,8 @@ public class GenPopulateFactory implements IPopulateFactory {
     private <T> T populateEntity(final T t,
                                  final Map<Field, IGenerator> generatorsMap,
                                  final Map<Field, IGenerateFactory> generateFactoryMap,
-                                 final Map<Field, Long> enumeratesMap) {
+                                 final Map<Field, Long> enumeratesMap,
+                                 final boolean allowInlined) {
         final Map<Field, List<Annotation>> classAnnotatedFields = populateScanner.scan(t.getClass());
 
         for (final Map.Entry<Field, List<Annotation>> annotatedField : classAnnotatedFields.entrySet()) {
@@ -92,7 +98,8 @@ public class GenPopulateFactory implements IPopulateFactory {
                         annotatedField.getValue(),
                         generatorsMap,
                         generateFactoryMap,
-                        enumeratesMap);
+                        enumeratesMap,
+                        allowInlined);
 
                 field.set(t, objValue);
             } catch (ClassCastException e) {
@@ -119,7 +126,8 @@ public class GenPopulateFactory implements IPopulateFactory {
                                final List<Annotation> annotations,
                                final Map<Field, IGenerator> generatorsMap,
                                final Map<Field, IGenerateFactory> generateFactoryMap,
-                               final Map<Field, Long> enumerateMap) {
+                               final Map<Field, Long> enumerateMap,
+                               final boolean allowInlined) {
         final IGenerator generator = generatorsMap.get(field);
         final IGenerateFactory generateFactory = generateFactoryMap.get(field);
 
@@ -131,11 +139,26 @@ public class GenPopulateFactory implements IPopulateFactory {
                     generator);
         } else if (enumerateMap.containsKey(field)) {
             generated = buildNextEnumeratedValue(enumerateMap, field);
+        } else if(allowInlined && annotations.get(1).annotationType().equals(GenInline.class)) {
+            generated = buildInlinedObject(field, generator);
         } else {
             generated = generator.generate();
         }
 
         return castObject(generated, generated.getClass(), field.getType());
+    }
+
+    /**
+     * Build inlined object
+     */
+    private Object buildInlinedObject(final Field field,
+                                      final IGenerator generator) {
+        try {
+            return populate(field.getType().newInstance(), false);
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.warning(e.getMessage());
+            return generator.generate();
+        }
     }
 
     /**
@@ -156,15 +179,21 @@ public class GenPopulateFactory implements IPopulateFactory {
         return objValue;
     }
 
-    @Override
-    public <T> T populate(final T t) {
+    private <T> T populate(final T t,
+                           final boolean allowInlined) {
         if (t == null)
             return null;
 
         return populateEntity(t,
                 buildGeneratorsMap(t.getClass()),
                 buildGenerateFactoryMap(t.getClass()),
-                buildEnumerateMap(t.getClass()));
+                buildEnumerateMap(t.getClass()),
+                allowInlined);
+    }
+
+    @Override
+    public <T> T populate(final T t) {
+        return populate(t, true);
     }
 
     @Override
@@ -180,7 +209,7 @@ public class GenPopulateFactory implements IPopulateFactory {
 
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, generatorMap, generateFactoryMap, enumerateMap))
+                .map(t -> populateEntity(t, generatorMap, generateFactoryMap, enumerateMap, true))
                 .collect(Collectors.toList());
     }
 
