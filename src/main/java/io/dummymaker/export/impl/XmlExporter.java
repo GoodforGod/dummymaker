@@ -5,13 +5,10 @@ import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.container.impl.ExportContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.Strategies;
-import io.dummymaker.util.BasicStringUtils;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -133,61 +130,16 @@ public class XmlExporter extends BasicExporter {
     private String buildXmlValue(final Mode mode,
                                  final Field field,
                                  final ExportContainer container) {
-        if(field.getType().isAssignableFrom(List.class) || field.getType().isAssignableFrom(Set.class)) {
-            return buildXmlCollectionValue(mode, container);
-        } else if(field.getType().isAssignableFrom(Map.class)) {
-            return buildXmlMapValue(mode, container);
-        }
-
-        return buildXmValue(mode, container);
+        return buildXmlSimpleValue(mode, container);
     }
 
-    private String buildXmValue(final Mode mode,
+    private String buildXmlSimpleValue(final Mode mode,
                                 final ExportContainer container) {
         final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
 
         return tabField + wrapOpenXmlTag(container.getExportName())
                 + container.getExportValue()
                 + wrapCloseXmlTag(container.getExportName());
-    }
-
-    private String buildXmlCollectionTagName(final String name) {
-        return (isEndingWithS.test(name))
-                ? name
-                : name + "s";
-    }
-
-    private String buildXmlCollectionEntityTagName(final String name) {
-        return (isEndingWithS.test(name))
-                ? name.substring(0, name.length() - 2)
-                : name;
-    }
-
-    private String buildXmlCollectionValue(final Mode mode,
-                                           final ExportContainer container) {
-        final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
-
-        if(BasicStringUtils.isEmpty(container.getExportValue())
-                || container.getExportValue().equals("null")) {
-            return buildXmValue(mode, container);
-        }
-
-        final String collectionTagName = buildXmlCollectionTagName(container.getExportName());
-        final String entityTagName = buildXmlCollectionEntityTagName(container.getExportName());
-
-        return "";
-    }
-
-    private String buildXmlMapValue(final Mode mode,
-                                    final ExportContainer container) {
-        final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
-
-        if(BasicStringUtils.isEmpty(container.getExportValue())
-                || container.getExportValue().equals("null")) {
-            return buildXmValue(mode, container);
-        }
-
-        return "";
     }
 
     /**
