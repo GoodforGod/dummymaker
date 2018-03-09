@@ -7,7 +7,9 @@ import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.export.naming.Strategies;
 import io.dummymaker.writer.IWriter;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +36,10 @@ public class CsvExporter extends BasicExporter {
      * Generate header for CSV file
      */
     private boolean hasHeader = false;
+
+    private final Predicate<String> isValueWrappable = (s) -> s.contains(String.valueOf(this.separator))
+            || s.contains("\"")
+            || s.contains("\n");
 
     public CsvExporter() {
         super(null, Format.CSV, Strategies.DEFAULT.getStrategy());
@@ -103,10 +109,26 @@ public class CsvExporter extends BasicExporter {
 
         final String separatorAsStr = String.valueOf(separator);
         return exportContainers.stream()
-                .map(c -> (areTextValuesWrapped && container.getField(c.getExportName()).getType().equals(String.class))
-                        ? wrapWithQuotes(c.getExportValue())
-                        : c.getExportValue())
+                .map(c -> buildCsvValue(container.getField(c.getExportName()), c.getExportValue()))
                 .collect(Collectors.joining(separatorAsStr));
+    }
+
+    /**
+     * Build correct final export field value in CSV format
+     * Check for wrap option for field value
+     *
+     * @param field export field
+     * @param fieldValue export field value
+     * @return final export field value
+     */
+    private String buildCsvValue(final Field field,
+                                 final String fieldValue) {
+
+
+        return (areTextValuesWrapped && field.getType().equals(String.class)
+                    || isValueWrappable.test(fieldValue))
+                ? wrapWithQuotes(fieldValue)
+                : fieldValue;
     }
 
     /**

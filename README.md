@@ -33,15 +33,15 @@ dependencies {
 }
 ```
 
-## Contents
+## Content
 - [Overall](#overall)
 - [Factories](#factories)
 - [Generators](#generators)
 - [Exporters](#exporters)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
-  - [CsvExporter Specific Parameters](#csvExporter-specific-parameters)
-  - [XmlExporter Specific Parameters](#xmlExporter-specific-parameters)
-  - [SqlExporter Specific Parameters](#sqlExporter-specific-parameters)
+  - [CsvExporter Parameters](#csvExporter-parameters)
+  - [XmlExporter Parameters](#xmlExporter-parameters)
+  - [SqlExporter Parameters](#sqlExporter-parameters)
 - [Annotations](#annotations)
   - [Basic Gen Annotations](#basic-gen-annotations)  
   - [Collection Annotations](#collection-annotations)  
@@ -111,16 +111,16 @@ Constructor parameters available for all exporters.
 	* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
 	* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
 
-### **CsvExporter Specific Parameters**
+### **CsvExporter Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.
 * *withHeader* - if true will generate CSV header, default *False*.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
 
-### **XmlExporter Specific Parameters**
+### **XmlExporter Parameters**
 * *withEnding* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
 * *withFullname* - full class export name. (class ending is not used in this case).
 
-### **SqlExporter Specific Parameters**
+### **SqlExporter Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
 
 *DataTypeMap* is used to extend your data types to export in sql format.
