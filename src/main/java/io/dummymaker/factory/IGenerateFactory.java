@@ -4,7 +4,6 @@ import io.dummymaker.generator.IGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.List;
 
 /**
  * Generate factory used by populate factory to produce complex values
@@ -13,10 +12,6 @@ import java.util.List;
  * @since 08.03.2018
  */
 public interface IGenerateFactory<T extends IGenerator> {
-
-    boolean isSuitable(final Annotation annotation);
-
-    Annotation findSuitable(final List<Annotation> annotations);
 
     Object generate(final Field field,
                     final Annotation annotation);

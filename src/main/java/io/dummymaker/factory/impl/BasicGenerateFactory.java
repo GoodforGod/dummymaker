@@ -2,11 +2,9 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.factory.IGenerateFactory;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.util.BasicCollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -37,20 +35,6 @@ public abstract class BasicGenerateFactory<T extends IGenerator> implements IGen
             throw new NullPointerException("Annotation can not be nullable");
 
         this.suitableAnnotation = suitableAnnotation;
-    }
-
-    @Override
-    public boolean isSuitable(final Annotation annotation) {
-        return (annotation != null && annotation.annotationType().equals(suitableAnnotation));
-    }
-
-    @Override
-    public Annotation findSuitable(final List<Annotation> annotations) {
-        return (BasicCollectionUtils.isEmpty(annotations))
-                ? null
-                : annotations.stream()
-                        .filter(a -> a.annotationType().equals(suitableAnnotation))
-                        .findFirst().orElse(null);
     }
 
     @Override

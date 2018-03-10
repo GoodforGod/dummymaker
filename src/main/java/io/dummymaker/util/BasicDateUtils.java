@@ -4,13 +4,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Logger;
-
-import static io.dummymaker.util.BasicStringUtils.isNotBlank;
 
 /**
  * Contains basic date util methods and functions
@@ -29,18 +26,13 @@ public class BasicDateUtils {
     }
 
     public static Timestamp convertToTimestamp(final Date date) {
-        try {
-            if(date == null)
-                return null;
-
-            final Calendar cal = genCalendar();
-            cal.setTime(date);
-            cal.set(Calendar.MILLISECOND, 0);
-            return new Timestamp(date.getTime());
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
+        if (date == null)
             return null;
-        }
+
+        final Calendar cal = genCalendar();
+        cal.setTime(date);
+        cal.set(Calendar.MILLISECOND, 0);
+        return new Timestamp(date.getTime());
     }
 
     public static Timestamp convertToTimestamp(final LocalDate localDate) {
@@ -63,9 +55,7 @@ public class BasicDateUtils {
 
     public static Date parseSimpleDateLong(final String date) {
         try {
-            return (isNotBlank(date))
-                    ? new Date(Long.valueOf(date))
-                    : null;
+            return new Date(Long.valueOf(date));
         } catch (NumberFormatException e) {
             logger.warning(e.getMessage());
             return null;
@@ -74,10 +64,8 @@ public class BasicDateUtils {
 
     public static LocalDateTime parseDateTime(final String dateTime) {
         try {
-            return (isNotBlank(dateTime))
-                    ? LocalDateTime.parse(dateTime)
-                    : null;
-        } catch (DateTimeParseException e) {
+            return LocalDateTime.parse(dateTime);
+        } catch (Exception e) {
             logger.warning("Can not parse date time: " + e.getMessage());
             return null;
         }
@@ -85,10 +73,8 @@ public class BasicDateUtils {
 
     public static LocalTime parseTime(final String time) {
         try {
-            return (isNotBlank(time))
-                    ? LocalTime.parse(time)
-                    : null;
-        } catch (DateTimeParseException e) {
+            return LocalTime.parse(time);
+        } catch (Exception e) {
             logger.warning("Can not parse time: " + e.getMessage());
             return null;
         }
@@ -96,10 +82,8 @@ public class BasicDateUtils {
 
     public static LocalDate parseDate(final String date) {
         try {
-            return (isNotBlank(date))
-                    ? LocalDate.parse(date)
-                    : null;
-        } catch (DateTimeParseException e) {
+            return LocalDate.parse(date);
+        } catch (Exception e) {
             logger.warning("Can not parse date: " + e.getMessage());
             return null;
         }

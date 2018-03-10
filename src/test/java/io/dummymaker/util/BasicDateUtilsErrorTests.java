@@ -15,7 +15,7 @@ import java.util.Date;
  * @author GoodforGod
  * @since 04.03.2018
  */
-public class BasicDateUtilsNullTests extends Assert {
+public class BasicDateUtilsErrorTests extends Assert {
 
     private BasicDateUtils utils = new BasicDateUtils();
 

@@ -1,13 +1,14 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.annotation.number.GenDoubleBig;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
 import io.dummymaker.factory.impl.GenPopulateFactory;
+import io.dummymaker.factory.impl.ListGenerateFactory;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -19,11 +20,24 @@ import static org.junit.Assert.*;
  */
 public class PopulateFactoryTest {
 
-
-
     @Test
     public void genPopulateTestEmptyList() {
         final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
+        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void genPopulateProvidersEmpty() {
+        final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders = new HashMap<>();
+        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory(generateFactoryProviders);
+        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void genPopulateProviders() {
+        final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders = new HashMap<>();
+        generateFactoryProviders.put(GenDoubleBig.class, ListGenerateFactory.class);
+        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory(generateFactoryProviders);
         assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
     }
 

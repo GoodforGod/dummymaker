@@ -33,4 +33,9 @@ public class BasicCollectionUtilsTest extends Assert {
         collection.add(new Object());
         assertTrue(BasicCollectionUtils.isNotEmpty(collection));
     }
+
+    @Test
+    public void isNotEmptyNotForEmptyCollection() {
+        assertFalse(BasicCollectionUtils.isNotEmpty(null));
+    }
 }
