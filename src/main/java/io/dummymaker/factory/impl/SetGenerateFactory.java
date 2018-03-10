@@ -54,14 +54,11 @@ public class SetGenerateFactory extends BasicGenerateFactory<ICollectionGenerato
                            final Annotation annotation,
                            final ICollectionGenerator<?> generator) {
         try {
-            if(field == null || annotation == null)
+            if(field == null || annotation == null || !field.getType().isAssignableFrom(Set.class))
                 return null;
 
             if(generator == null)
                 return generate(field, annotation);
-
-            if (!field.getType().isAssignableFrom(Set.class))
-                return null;
 
             int fixed = ((GenSet) annotation).fixed();
             int min = ((GenSet) annotation).min();
@@ -70,7 +67,7 @@ public class SetGenerateFactory extends BasicGenerateFactory<ICollectionGenerato
                 min = max = fixed;
             }
 
-            final IGenerator valueGenerator = ((GenSet) annotation).generator().newInstance();
+            final IGenerator valueGenerator = ((GenSet) annotation).value().newInstance();
             final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
 
             return generator.generate(valueGenerator, ((Class<?>) fieldType), min, max);

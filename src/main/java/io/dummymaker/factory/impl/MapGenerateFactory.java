@@ -60,15 +60,12 @@ public class MapGenerateFactory extends BasicGenerateFactory<IMapGenerator<?, ?>
                            final Annotation annotation,
                            final IMapGenerator<?, ?> generator) {
             try {
-                if(field == null || annotation == null)
+                if(field == null || annotation == null || !field.getType().isAssignableFrom(Map.class))
                     return null;
 
                 // If nullable generator use default one
                 if(generator == null)
                     return generate(field, annotation);
-
-                if (!field.getType().isAssignableFrom(Map.class))
-                    return null;
 
                 int fixed = ((GenMap) annotation).fixed();
                 int min = ((GenMap) annotation).min();

@@ -2,10 +2,8 @@ package io.dummymaker.scan;
 
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.number.GenDoubleBig;
-import io.dummymaker.annotation.number.GenLong;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.string.GenBigId;
 import io.dummymaker.annotation.string.GenCity;
 import io.dummymaker.annotation.string.GenName;
 import io.dummymaker.data.Dummy;
@@ -145,18 +143,18 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.getGen().annotationType().equals(PrimeGen.class));
-        assertTrue(numAnnotations.getGen().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.getGen().annotationType().equals(PrimeGen.class));
-        assertTrue(bigdAnnotations.getGen().annotationType().equals(PrimeGen.class));
-        assertTrue(lngAnnotations.getGen().annotationType().equals(PrimeGen.class));
-        assertTrue(uncompaAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(cityAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(numAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(bigdAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(lngAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(uncompaAnnotations.getPrime().annotationType().equals(PrimeGen.class));
 
         assertTrue(cityAnnotations.getGen().annotationType().equals(GenCity.class));
         assertTrue(numAnnotations.getGen().annotationType().equals(GenEnumerate.class));
         assertTrue(nameAnnotations.getGen().annotationType().equals(GenName.class));
-        assertTrue(bigdAnnotations.getGen().annotationType().equals(GenBigId.class));
-        assertTrue(lngAnnotations.getGen().annotationType().equals(GenLong.class));
+        assertTrue(bigdAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
+        assertTrue(lngAnnotations.getGen().annotationType().equals(GenEnumerate.class));
         assertTrue(uncompaAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
     }
 

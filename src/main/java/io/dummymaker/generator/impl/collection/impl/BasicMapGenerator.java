@@ -1,6 +1,9 @@
 package io.dummymaker.generator.impl.collection.impl;
 
+import io.dummymaker.factory.IPopulateFactory;
+import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.impl.EmbeddedGenerator;
 import io.dummymaker.generator.impl.collection.IMapGenerator;
 import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
@@ -39,7 +42,7 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
     public Map<K, V> generate() {
         return generate(keyGenerator, valueGenerator,
                 Object.class, Object.class,
-                0, 10);
+                1, 10);
     }
 
     @Override
@@ -53,9 +56,21 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
         final Map map = new HashMap<>();
         final int amount = generateRandomAmount(min, max);
 
+        final boolean isEmbedded = (keyGenerator != null && keyGenerator.getClass().equals(EmbeddedGenerator.class)
+                || valueGenerator != null && valueGenerator.getClass().equals(EmbeddedGenerator.class));
+
+        final IPopulateFactory embeddedPopulateFactory = (isEmbedded)
+                ? new GenPopulateEmbeddedFreeFactory()
+                : null;
+
         for (int i = 0; i < amount; i++) {
-            final Object key = generateObject(keyGenerator, keyType);
-            final Object value = generateObject(valueGenerator, valueType);
+            final Object key = (isEmbedded)
+                    ? embeddedPopulateFactory.populate(instanceClass(keyType))
+                    : generateObject(keyGenerator, keyType);
+
+            final Object value = (isEmbedded)
+                    ? embeddedPopulateFactory.populate(instanceClass(valueType))
+                    : generateObject(valueGenerator, valueType);
 
             if (key.equals(EMPTY))
                 return Collections.emptyMap();

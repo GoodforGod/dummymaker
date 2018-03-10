@@ -17,16 +17,16 @@ import java.util.Set;
  */
 public class DummyCollection {
 
-    @GenList(generator = BooleanGenerator.class)
+    @GenList(value = BooleanGenerator.class)
     private List<String> objects;
 
-    @GenSet(generator = BooleanGenerator.class)
+    @GenSet(value = BooleanGenerator.class)
     private Set<String> strings;
 
     @GenMap
     private Map<String, Object> map;
 
-    @GenList(generator = BooleanGenerator.class, fixed = 4)
+    @GenList(value = BooleanGenerator.class, fixed = 4)
     private List<String> objectsFix;
 
     @GenSet(fixed = 5)

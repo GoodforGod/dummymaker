@@ -2,10 +2,8 @@ package io.dummymaker.generator.impl;
 
 import io.dummymaker.generator.IGenerator;
 
-import java.util.Objects;
-
 /**
- * Used as a marker generator for collection generators or other generate factories
+ * Used as a marker generator for embedded annotation
  *
  * @see io.dummymaker.annotation.special.GenEmbedded
  *
@@ -14,14 +12,8 @@ import java.util.Objects;
  */
 public class EmbeddedGenerator implements IGenerator<Object> {
 
-
     @Override
     public Object generate() {
-        return null;
-    }
-
-    public Objects generate(final Class<?> tClass) {
-
         return null;
     }
 }

@@ -57,14 +57,11 @@ public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerat
                            final Annotation annotation,
                            final ICollectionGenerator<?> generator) {
         try {
-            if(field == null || annotation == null)
+            if(field == null || annotation == null || !field.getType().isAssignableFrom(List.class))
                 return null;
 
             if(generator == null)
                 return generate(field, annotation);
-
-            if (!field.getType().isAssignableFrom(List.class))
-                return null;
 
             int fixed = ((GenList) annotation).fixed();
             int min = ((GenList) annotation).min();
@@ -73,7 +70,7 @@ public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerat
                 min = max = fixed;
             }
 
-            final IGenerator valueGenerator = ((GenList) annotation).generator().newInstance();
+            final IGenerator valueGenerator = ((GenList) annotation).value().newInstance();
             final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
 
             return generator.generate(valueGenerator, ((Class<?>) fieldType), min, max);

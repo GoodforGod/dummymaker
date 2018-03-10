@@ -1,6 +1,9 @@
 package io.dummymaker.generator.impl.collection.impl;
 
+import io.dummymaker.factory.IPopulateFactory;
+import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.impl.EmbeddedGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
@@ -44,8 +47,16 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         final List list = new ArrayList<>();
         final int amount = generateRandomAmount(min, max);
 
+        final boolean isEmbedded = (generator != null && generator.getClass().equals(EmbeddedGenerator.class));
+
+        final IPopulateFactory embeddedPopulateFactory = (isEmbedded)
+                ? new GenPopulateEmbeddedFreeFactory()
+                : null;
+
         for (int i = 0; i < amount; i++) {
-            final Object object = generateObject(generator, fieldType);
+            final Object object = (isEmbedded)
+                    ? embeddedPopulateFactory.populate(instanceClass(fieldType))
+                    : generateObject(generator, fieldType);
 
             if(object.equals(EMPTY))
                 return Collections.emptyList();

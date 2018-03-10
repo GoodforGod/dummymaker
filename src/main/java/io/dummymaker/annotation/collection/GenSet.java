@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenSet {
 
-    Class<? extends IGenerator> generator() default IdGenerator.class;
+    Class<? extends IGenerator> value() default IdGenerator.class;
 
     int min() default 1;
 
