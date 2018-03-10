@@ -93,7 +93,7 @@ public class BasicDateUtils {
                     ? LocalDateTime.parse(dateTime)
                     : null;
         } catch (DateTimeParseException e) {
-            logger.warning("[BASIC DATE UTILS] Can not parse date time: " + e.getMessage());
+            logger.warning("Can not parse date time: " + e.getMessage());
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class BasicDateUtils {
                     ? LocalTime.parse(time)
                     : null;
         } catch (DateTimeParseException e) {
-            logger.warning("[BASIC DATE UTILS] Can not parse time: " + e.getMessage());
+            logger.warning("Can not parse time: " + e.getMessage());
             return null;
         }
     }
@@ -115,7 +115,7 @@ public class BasicDateUtils {
                     ? LocalDate.parse(date)
                     : null;
         } catch (DateTimeParseException e) {
-            logger.warning("[BASIC DATE UTILS] Can not parse date: " + e.getMessage());
+            logger.warning("Can not parse date: " + e.getMessage());
             return null;
         }
     }

@@ -7,7 +7,9 @@ import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.string.GenCity;
 import io.dummymaker.annotation.string.GenName;
 import io.dummymaker.data.Dummy;
+import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.data.DummyNoZeroConstructor;
 import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.*;
 import org.junit.Test;
@@ -114,6 +116,29 @@ public class ScannerImplTest {
 
         // Check for correct export annotations
         assertEquals("socialGroup", groupFieldRenamedValue);
+    }
+
+    @Test
+    public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
+        IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
+
+        Map<Field, PopulateContainer> fields = scanner.scan(DummyCollection.class);
+
+        // Check for correct fields number in map
+        assertNotNull(fields);
+        assertFalse(fields.isEmpty());
+        assertEquals(6, fields.size());
+    }
+
+    @Test
+    public void scannerForExportEmbeddedFreeCollectionAnnotation() throws NoSuchFieldException {
+        IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
+
+        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
+
+        // Check for correct fields number in map
+        assertNotNull(fields);
+        assertTrue(fields.isEmpty());
     }
 
     @Test

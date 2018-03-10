@@ -15,7 +15,7 @@ import java.util.Date;
  * @author GoodforGod
  * @since 04.03.2018
  */
-public class BasicDateUtilsErrorTests extends Assert {
+public class BasicDateUtilsNullTests extends Assert {
 
     @Test
     public void convertNullToTimestampDateOldType() {

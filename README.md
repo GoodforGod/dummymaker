@@ -182,7 +182,7 @@ Annotations support special attributes like:
 
 * ***GenEnumerate*** annotation with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
 
-* ***GenEmbedded*** annotation should mark complex object fields which also contain *Gen* annotations inside. (There is no recursion, only one step down in hierarchy)
+* ***GenEmbedded*** annotation should mark complex object fields which also contain *Gen* annotations inside (There is no recursion, only one step down in hierarchy).
 
 Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 

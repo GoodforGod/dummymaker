@@ -3,6 +3,7 @@ package io.dummymaker.data;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.impl.BooleanGenerator;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class DummyCollection {
 
     @GenMap(fixed = 3)
     private Map<String, Object> mapFix;
+
+    @GenEmbedded
+    private DummyCollection dummyCollection;
 
     public List<String> getObjects() {
         return objects;
