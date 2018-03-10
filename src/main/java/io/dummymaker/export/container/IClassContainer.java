@@ -1,9 +1,13 @@
 package io.dummymaker.export.container;
 
+import io.dummymaker.export.container.impl.FieldContainer;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
+ * Container class used to store class field information and different field states
+ *
  * Class Container for class origin/final name
  * Fields origin/final names
  * Fields values as Field type
@@ -13,38 +17,42 @@ import java.util.Map;
  */
 public interface IClassContainer {
 
-    String originClassName();
-    String finalClassName();
-
     /**
-     * Convert field origin name to export field name
+     * Show whenever export values are presented
      *
-     * @param originFieldName origin class field name
-     * @return export field name
+     * @return boolean value stated if container is exportable
      */
-    String getExportFieldName(final String originFieldName);
+    boolean isExportable();
 
     /**
+     * Export class name (after naming strategy applied or renamed)
      *
-     * @param finalFieldName field container with final name and
+     * @see io.dummymaker.export.naming.IStrategy
+     * @see io.dummymaker.annotation.special.GenRenameExport
+     * @return class final export name
+     */
+    String exportClassName();
+
+    /**
+     * Retrieve field by its export name (formatted via strategy or renamed via annotation)
+     *
+     * @see io.dummymaker.export.naming.IStrategy
+     * @see io.dummymaker.annotation.special.GenRenameExport
+     *
+     * @param exportFieldName field container with final name
      * @return field value
      */
-    Field getFieldByFinalName(final String finalFieldName);
+    Field getField(final String exportFieldName);
 
     /**
-     * Convert string value via choose NameStrategy
+     * Return map of field containers
      *
-     * @param value value to convert
-     * @return converted value
+     * KEY - 'origin field'
+     * VALUE - 'field container'
      *
-     * @see io.dummymaker.util.NameStrategist
+     * @see FieldContainer
+     *
+     * @return export containers
      */
-    String convertByNamingStrategy(final String value);
-
-    Map<String, FieldContainer> fieldContainerMap();
-
-    /**
-     * @return renamed field map
-     */
-    Map<String, String> renamedFields();
+    Map<String, FieldContainer> getContainers();
 }

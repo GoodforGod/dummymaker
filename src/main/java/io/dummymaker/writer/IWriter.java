@@ -1,7 +1,9 @@
 package io.dummymaker.writer;
 
 /**
- * Default Comment
+ * Writer interface used by exporters to write values as files
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 31.05.2017
@@ -9,19 +11,12 @@ package io.dummymaker.writer;
 public interface IWriter {
 
     /**
-     * Try to create file and setup writer
-     *
-     * @return operation result status
-     */
-    boolean init();
-
-    /**
      * Writes string and add newline symbol to the end
      *
      * @param value string to write
      * @return indicates operation success
      */
-    boolean writeLine(String value);
+    boolean write(String value);
 
     /**
      * Closes write stream

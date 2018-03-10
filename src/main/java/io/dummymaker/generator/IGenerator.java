@@ -1,11 +1,13 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.annotation.base.PrimeGenAnnotation;
+import io.dummymaker.annotation.PrimeGen;
 
 /**
- * Generator used by PrimeGenAnnotation to populate field
+ * Generator used by PrimeGen to populate field
  *
- * @see PrimeGenAnnotation
+ *
+ * @see io.dummymaker.factory.IPopulateFactory
+ * @see PrimeGen
  *
  * @author GoodforGod
  * @since 26.05.2017

@@ -1,5 +1,6 @@
 package io.dummymaker.bundle;
 
+import io.dummymaker.bundle.impl.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -21,16 +22,15 @@ import static org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class BundleImplTest {
 
-    private IPresetBundle bundle;
+    private BasicBundle bundle;
 
-    public BundleImplTest(IPresetBundle bundle) {
+    public BundleImplTest(BasicBundle bundle) {
         this.bundle = bundle;
     }
 
     @Parameters(name = "{index}: Bundle - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new TagPresetBundle() },
                 { new CityPresetBundle() },
                 { new CompanyPresetBundle() },
                 { new CountryPresetBundle() },
@@ -38,19 +38,28 @@ public class BundleImplTest {
                 { new EmailServicesPresetBundle() },
                 { new FemaleNamePresetBundle() },
                 { new MaleNamePresetBundle() },
-                { new NicknamesPresetBundle() }
+                { new NicknamesPresetBundle() },
+                { new NounPresetBundle() },
+                { new PhrasePresetBundle() },
+                { new TagPresetBundle() }
         });
     }
 
     @Test
     public void bundlePresentSizeCheck() {
-        assertEquals(bundle.preset.size(), bundle.size());
+        assertEquals(bundle.getAll().size(), bundle.size());
     }
 
     @Test
     public void bundlePresentIndexGet() {
         Integer index = current().nextInt(0, bundle.size() - 1);
-        assertEquals(bundle.preset.get(index), bundle.get(index));
+        assertEquals(bundle.getAll().get(index), bundle.get(index));
+    }
+
+    @Test
+    public void testIndexOutOfBound() {
+        Integer integer = -1;
+        assertNotNull(bundle.get(integer));
     }
 
     @Test

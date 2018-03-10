@@ -20,6 +20,12 @@ public class DummyNoPopulateFields {
     @GenIgnoreExport
     private String city;
 
+    @GenForceExport(value = false)
+    private String noexport;
+
+    @GenIgnoreExport(value = false)
+    private String noignore;
+
     private Integer num;
 
     private String name;

@@ -2,17 +2,15 @@ package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.XmlExporter;
-import io.dummymaker.export.validation.XmlValidation;
-import io.dummymaker.factory.GenProduceFactory;
+import io.dummymaker.export.impl.XmlExporter;
+import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.validators.XmlValidator;
 import io.dummymaker.factory.IProduceFactory;
+import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
 import java.util.List;
-
-import static io.dummymaker.util.NameStrategist.NamingStrategy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * "Default Description"
@@ -20,51 +18,28 @@ import static org.junit.Assert.assertNotNull;
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class XmlExportAsStringTest {
+public class XmlExportAsStringTest extends StringExportAssert {
 
-    private IProduceFactory<Dummy> produceFactory = new GenProduceFactory<>(Dummy.class);
+    private final IProduceFactory produceFactory = new GenProduceFactory();
 
-    private XmlValidation validation = new XmlValidation();
+    private final XmlValidator validation = new XmlValidator();
 
-    @Test
-    public void exportSingleDummyInXml() {
-        Dummy dummy = produceFactory.produce();
-        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
-
-        String dummyAsString = exporter.exportAsString(dummy);
-        assertNotNull(dummyAsString);
-
-        String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(5, xmlArray.length);
-
-        validation.isSingleDummyValid(xmlArray);
+    public XmlExportAsStringTest() {
+        super(new XmlExporter().withPath(null).withStrategy((IStrategy) null).withPath("             "),
+                new XmlValidator(), 5, 12);
     }
 
     @Test
-    public void exportListOfDummiesInXml() {
-        List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class);
+    public void exportListOfDummiesInXmlWithNamingStrategy() throws Exception {
+        final IStrategy strategy = Strategies.INITIAL_LOW_CASE.getStrategy();
 
-        String dummyAsString = exporter.exportAsString(dummies);
+        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final IExporter exporter = new XmlExporter().withStrategy(strategy).withPath("    ");
+
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
-        String[] xmlArray = dummyAsString.split("\n");
-        assertEquals(12, xmlArray.length);
-
-        validation.isTwoDummiesValid(xmlArray);
-    }
-
-    @Test
-    public void exportListOfDummiesInXmlWithNamingStrategy() {
-        final NamingStrategy strategy = NamingStrategy.INITIAL_LOW_CASE;
-
-        List<Dummy> dummies = produceFactory.produce(2);
-        IExporter<Dummy> exporter = new XmlExporter<>(Dummy.class, null, strategy);
-
-        String dummyAsString = exporter.exportAsString(dummies);
-        assertNotNull(dummyAsString);
-
-        String[] xmlArray = dummyAsString.split("\n");
+        final String[] xmlArray = dummyAsString.split("\n");
         assertEquals(12, xmlArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(xmlArray, strategy);

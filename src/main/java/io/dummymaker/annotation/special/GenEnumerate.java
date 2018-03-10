@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.special;
 
-import io.dummymaker.annotation.base.PrimeGenAnnotation;
-import io.dummymaker.generator.EnumerateGenerator;
+import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.generator.impl.EnumerateGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-@PrimeGenAnnotation(EnumerateGenerator.class)
+@PrimeGen(EnumerateGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenEnumerate {
