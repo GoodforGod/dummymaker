@@ -57,7 +57,7 @@ public class GeneratorPatternValidTest {
                 { new IdBigGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new CityGenerator(),          String.class,   Pattern.compile("[a-zA-Z\\-]+") },
                 { new CompanyGenerator(),       String.class,   Pattern.compile(".+(\\t.+)?") },
-                { new CountryGenerator(),       String.class,   Pattern.compile("[a-zA-Z]+(\\s+[a-zA-Z]+)*") },
+                { new CountryGenerator(),       String.class,   Pattern.compile("[a-zA-Z]+([\\s\\-]+[a-zA-Z]+)*") },
                 { new EmailGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+@[a-zA-Z]+\\.[a-zA-Z]+") },
                 { new IdGenerator(),            String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new JsonGenerator(),          String.class,   Pattern.compile("\\{.*:.*}") },
@@ -74,9 +74,9 @@ public class GeneratorPatternValidTest {
                 { new ListGenerator(),          ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
                 { new SetGenerator(),           HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
                 { new MapGenerator(),           HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
-                { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3} \\d{4}") },
+                { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{1,2} [A-Za-z]{3} \\d{4}") },
                 { new LocalDateGenerator(),     LocalDate.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
-                { new LocalDateTimeGenerator(), LocalDateTime.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}[A-Z]\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?") },
+                { new LocalDateTimeGenerator(), LocalDateTime.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") },
                 { new LocalTimeGenerator(),     LocalTime.class, Pattern.compile("\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") },
                 { new TimestampGenerator(),     Timestamp.class, Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") }
         });
@@ -84,10 +84,12 @@ public class GeneratorPatternValidTest {
 
     @Test
     public void genValueRegexCheck() {
-        Object generated = generator.generate();
+        final Object generated = generator.generate();
 
         assertNotNull(generated);
         assertTrue(generated.getClass().equals(genClass));
-        assertTrue(pattern.matcher(String.valueOf(generated)).matches());
+
+        final String generatedAsString = String.valueOf(generated);
+        assertTrue(pattern.matcher(generatedAsString).matches());
     }
 }

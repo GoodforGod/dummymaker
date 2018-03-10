@@ -17,7 +17,6 @@ public class CityPresetBundle extends BasicBundle<String> {
             add("Algiers");
             add("Andorra");
             add("Luanda");
-            add("and");
             add("Buenos");
             add("Yerevan");
             add("Canberra");
