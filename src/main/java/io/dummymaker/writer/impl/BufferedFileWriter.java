@@ -9,7 +9,9 @@ import java.io.OutputStreamWriter;
 import java.util.logging.Logger;
 
 /**
- * Default Comment
+ * Buffered writer implementation
+ *
+ * @see IWriter
  *
  * @author GoodforGod
  * @since 31.05.2017
@@ -24,8 +26,11 @@ public class BufferedFileWriter implements IWriter {
      * @param fileName file name
      * @param path     path where to create file (NULL or EMPTY for home dir)
      * @param extension file extension
+     *
+     * @throws IOException if can not instantiate writer
      */
-    public BufferedFileWriter(final String fileName, final String path, final String extension) throws IOException {
+    public BufferedFileWriter(final String fileName, final String path, final String extension)
+                                                                                throws IOException {
         try {
             final String workPath = buildPath(fileName, path, extension);
             this.writer = new BufferedWriter(

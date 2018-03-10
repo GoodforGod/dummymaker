@@ -41,6 +41,7 @@ public class JsonExporter extends BasicExporter {
      * Build exporter with path value
      *
      * @param path path for export file
+     * @return exporter
      */
     public JsonExporter withPath(final String path) {
         setPath(path);
@@ -54,6 +55,7 @@ public class JsonExporter extends BasicExporter {
      * @see Strategies
      *
      * @param strategy naming strategy for exporter
+     * @return exporter
      */
     public JsonExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
@@ -62,6 +64,7 @@ public class JsonExporter extends BasicExporter {
 
     /**
      * @see #isPretty
+     * @return exporter
      */
     public JsonExporter withPretty() {
         this.isPretty = true;

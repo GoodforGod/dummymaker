@@ -49,6 +49,7 @@ public class CsvExporter extends BasicExporter {
      * Build exporter with path value
      *
      * @param path path for export file
+     * @return exporter
      */
     public CsvExporter withPath(final String path) {
         setPath(path);
@@ -61,6 +62,7 @@ public class CsvExporter extends BasicExporter {
      * @see IStrategy
      *
      * @param strategy naming strategy for exporter
+     * @return exporter
      */
     public CsvExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
@@ -69,6 +71,7 @@ public class CsvExporter extends BasicExporter {
 
     /**
      * @see #areTextValuesWrapped
+     * @return exporter
      */
     public CsvExporter withTextWrap() {
         this.areTextValuesWrapped = true;
@@ -77,6 +80,7 @@ public class CsvExporter extends BasicExporter {
 
     /**
      * @see #hasHeader
+     * @return exporter
      */
     public CsvExporter withHeader() {
         this.hasHeader = true;
@@ -87,6 +91,7 @@ public class CsvExporter extends BasicExporter {
      * @see #separator
      *
      * @param separator char separator for CSV values
+     * @return exporter
      */
     public CsvExporter withSeparator(final char separator) {
         this.separator = separator;

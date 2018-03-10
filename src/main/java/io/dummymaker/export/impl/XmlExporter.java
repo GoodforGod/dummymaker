@@ -50,6 +50,7 @@ public class XmlExporter extends BasicExporter {
      * Build exporter with path value
      *
      * @param path path for export file
+     * @return exporter
      */
     public XmlExporter withPath(final String path) {
         setPath(path);
@@ -63,6 +64,7 @@ public class XmlExporter extends BasicExporter {
      * @see Strategies
      *
      * @param strategy naming strategy for exporter
+     * @return exporter
      */
     public XmlExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);
@@ -72,6 +74,7 @@ public class XmlExporter extends BasicExporter {
     /**
      * @see #exportClassFullName
      * @param fullName full name for XML list tag
+     * @return exporter
      */
     public XmlExporter withFullname(final String fullName) {
         this.exportClassFullName = fullName;
@@ -81,6 +84,7 @@ public class XmlExporter extends BasicExporter {
     /**
      * @see #exportClassEnding
      * @param ending custom ending for XML list tag
+     * @return exporter
      */
     public XmlExporter withEnding(final String ending) {
         this.exportClassEnding = ending;

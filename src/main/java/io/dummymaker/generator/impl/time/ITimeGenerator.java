@@ -15,6 +15,7 @@ public interface ITimeGenerator<T> extends IGenerator<T> {
      * @param to as a maximum of GenTime.MAX
      *
      * @see io.dummymaker.annotation.time.GenTime#MAX
+     * @return generated time object
      */
     T generate(final long from,
                final long to);

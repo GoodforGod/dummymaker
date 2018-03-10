@@ -19,6 +19,8 @@ public interface IClassContainer {
 
     /**
      * Show whenever export values are presented
+     *
+     * @return boolean value stated if container is exportable
      */
     boolean isExportable();
 
@@ -27,6 +29,7 @@ public interface IClassContainer {
      *
      * @see io.dummymaker.export.naming.IStrategy
      * @see io.dummymaker.annotation.special.GenRenameExport
+     * @return class final export name
      */
     String exportClassName();
 

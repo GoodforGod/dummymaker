@@ -18,6 +18,7 @@ public interface IPopulateFactory {
      * @see PrimeGen
      *
      * @param t object to populate
+     * @param <T> object type
      * @return Populated Object
      */
     <T> T populate(final T t);
@@ -28,6 +29,7 @@ public interface IPopulateFactory {
      * @see PrimeGen
      *
      * @param t list of object to populate
+     * @param <T> object type
      * @return Populated list of objects
      */
     <T> List<T> populate(final List<T> t);

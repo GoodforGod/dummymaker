@@ -1,7 +1,9 @@
 package io.dummymaker.writer;
 
 /**
- * Default Comment
+ * Writer interface used by exporters to write values as files
+ *
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 31.05.2017

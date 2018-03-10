@@ -46,6 +46,7 @@ public class SqlExporter extends BasicExporter {
 
     /**
      * @param dataTypes map with user custom types for 'dataTypeMap'
+     * @return exporter
      */
     public SqlExporter withTypes(final Map<Class, String> dataTypes) {
         if (dataTypes != null && !dataTypes.isEmpty())
@@ -58,6 +59,7 @@ public class SqlExporter extends BasicExporter {
      * Build exporter with path value
      *
      * @param path path for export file
+     * @return exporter
      */
     public SqlExporter withPath(final String path) {
         setPath(path);
@@ -71,6 +73,7 @@ public class SqlExporter extends BasicExporter {
      * @see Strategies
      *
      * @param strategy naming strategy for exporter
+     * @return exporter
      */
     public SqlExporter withStrategy(final IStrategy strategy) {
         setStrategy(strategy);

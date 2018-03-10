@@ -4,7 +4,7 @@ package io.dummymaker.export.container.impl;
 /**
  * ExportContainer class for BasicExporter extract class method
  *
- * @see io.dummymaker.export.impl.BasicExporter
+ * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
  * @since 03.09.2017

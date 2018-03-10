@@ -9,7 +9,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generate Inline object for that field
+ * Generate object with fields type and populate its fields marked by gen annotations
+ *
+ * @see io.dummymaker.factory.IPopulateFactory
  *
  * @author GoodforGod
  * @since 09.03.2018

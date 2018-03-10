@@ -16,6 +16,7 @@ public interface IProduceFactory {
      * @see IPopulateFactory
      *
      * @param tClass class to produce
+     * @param <T> object type
      * @return Populated dummy object
      */
     <T> T produce(final Class<T> tClass);
@@ -27,6 +28,7 @@ public interface IProduceFactory {
      *
      * @param amount amount of dummies to produce and populate
      * @param tClass class to produce
+     * @param <T> object type
      * @return List of populated dummies
      */
     <T> List<T> produce(final Class<T> tClass, final int amount);
