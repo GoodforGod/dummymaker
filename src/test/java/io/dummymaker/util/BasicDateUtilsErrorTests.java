@@ -21,25 +21,29 @@ public class BasicDateUtilsErrorTests extends Assert {
 
     @Test
     public void convertNullToTimestampDateOldType() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp((Date) null);
+        Date date = null;
+        final Timestamp t = BasicDateUtils.convertToTimestamp(date);
         assertNull(t);
     }
 
     @Test
     public void convertNullToTimestampDate() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalDate) null);
+        LocalDate localDate = null;
+        final Timestamp t = BasicDateUtils.convertToTimestamp(localDate);
         assertNull(t);
     }
 
     @Test
     public void convertNullToTimestampTime() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalTime) null);
+        LocalTime localTime = null;
+        final Timestamp t = BasicDateUtils.convertToTimestamp(localTime);
         assertNull(t);
     }
 
     @Test
     public void convertNullToTimestampDateTime() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp((LocalDateTime) null);
+        LocalDateTime localDateTime = null;
+        final Timestamp t = BasicDateUtils.convertToTimestamp(localDateTime);
         assertNull(t);
     }
 
