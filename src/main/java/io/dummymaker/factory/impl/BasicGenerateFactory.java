@@ -32,7 +32,7 @@ public abstract class BasicGenerateFactory<T extends IGenerator> implements IGen
 
     @Override
     public boolean isSuitable(final Annotation annotation) {
-        return (annotation != null && annotation.getClass().equals(suitableAnnotation));
+        return (annotation != null && annotation.annotationType().equals(suitableAnnotation));
     }
 
     @Override
