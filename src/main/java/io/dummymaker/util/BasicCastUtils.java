@@ -3,6 +3,7 @@ package io.dummymaker.util;
 import io.dummymaker.generator.IGenerator;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Logger;
 
 /**
  * "default comment"
@@ -12,28 +13,53 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BasicCastUtils {
 
+    public static Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
+
     public static final Object EMPTY = new Object();
 
+    public static <T> T instanceClass(final Class<T> tClass) {
+        try {
+            return tClass.newInstance();
+        } catch (InstantiationException e) {
+            logger.warning(e.getMessage() + " | " + tClass + " | CAN NOT INSTANTIATE, NO ZERO PUBLIC CONSTRUCTOR.");
+        } catch (IllegalAccessException e) {
+            logger.warning(e.getMessage() + " | " + tClass + " | NO ACCESS TO INSTANTIATING OBJECT.");
+        }
+        return null;
+    }
+
+    /**
+     * Try to generate and cast object to field type or string if possible
+     *
+     * @param generator generator
+     * @param fieldType actual field type
+     * @return generated and casted object
+     */
     public static Object generateObject(final IGenerator generator,
-                                        final Class<?> castType,
                                         final Class<?> fieldType) {
-        return castObject(generator.generate(), castType, fieldType);
+        if(generator == null)
+            return EMPTY;
+
+        final Object object = generator.generate();
+        if(object == null)
+            return EMPTY;
+
+        return castObject(object, fieldType);
     }
 
-    public static Object generateObject(final IGenerator generator,
-                                        final Class<?> fieldType,
-                                        final boolean isTypeAssignable,
-                                        final boolean isTypeEquals,
-                                        final boolean isTypeObject,
-                                        final boolean isTypeString) {
-        return castObject(generator.generate(), fieldType,
-                isTypeAssignable, isTypeEquals,
-                isTypeObject, isTypeString);
-    }
-
+    /**
+     * Try to generate and cast object to field type or string if possible
+     *
+     * @param castObject cast object
+     * @param fieldType actual field type
+     * @return generated and casted object
+     */
     public static Object castObject(final Object castObject,
-                                    final Class<?> castType,
                                     final Class<?> fieldType) {
+        if(fieldType == null)
+            return EMPTY;
+
+        final Class<?> castType = castObject.getClass();
         final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);
         final boolean isTypeEquals = castType.equals(fieldType);
         final boolean isTypeObject = fieldType.equals(Object.class);
@@ -44,18 +70,18 @@ public class BasicCastUtils {
                 isTypeObject, isTypeString);
     }
 
-    public static Object castObject(final Object castObject,
+    private static Object castObject(final Object castObject,
                                     final Class<?> fieldType,
                                     final boolean isTypeAssignable,
                                     final boolean isTypeEquals,
                                     final boolean isTypeObject,
                                     final boolean isTypeString) {
         if (isTypeEquals || isTypeObject) {
-            return (castObject);
+            return castObject;
         } else if (isTypeString) {
-            return (String.valueOf(castObject));
+            return String.valueOf(castObject);
         } else if (isTypeAssignable) {
-            return (fieldType.cast(castObject));
+            return fieldType.cast(castObject);
         }
         return EMPTY;
     }

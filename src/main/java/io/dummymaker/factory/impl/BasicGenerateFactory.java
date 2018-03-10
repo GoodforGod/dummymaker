@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 /**
  * Basic core implementation of generate factory with suitable find methods implementation
- * Used by full factory implementations
  *
  * @see IGenerateFactory
  *
@@ -33,7 +32,7 @@ public abstract class BasicGenerateFactory<T extends IGenerator> implements IGen
 
     @Override
     public boolean isSuitable(final Annotation annotation) {
-        return annotation != null && annotation.getClass().equals(suitableAnnotation);
+        return (annotation != null && annotation.getClass().equals(suitableAnnotation));
     }
 
     @Override

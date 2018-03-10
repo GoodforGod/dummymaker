@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
  * Core scanner implementation
  *
  * @see IAnnotationScanner
- * @see BasicAnnotationScanner
+ * @see BasicScanner
  *
  * @author GoodforGod
  * @since 08.03.2018
  */
-public class UniqueAnnotationScanner extends BasicAnnotationScanner {
+public class UniqueScanner extends BasicScanner {
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

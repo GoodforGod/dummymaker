@@ -6,10 +6,10 @@ import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import static io.dummymaker.util.BasicCastUtils.generateObject;
-import static io.dummymaker.util.BasicCastUtils.generateRandomAmount;
+import static io.dummymaker.util.BasicCastUtils.*;
 
 /**
  * Generate array list collection of elements with object type
@@ -41,20 +41,16 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
                                   final Class<?> fieldType,
                                   final int min,
                                   final int max) {
-        final Class<?> genType = generator.generate().getClass();
-
-        final boolean isTypeAssignable = fieldType.isAssignableFrom(genType);
-        final boolean isTypeEquals = genType.equals(fieldType);
-        final boolean isTypeObject = fieldType.equals(Object.class);
-        final boolean isTypeString = fieldType.equals(String.class);
-
         final List list = new ArrayList<>();
         final int amount = generateRandomAmount(min, max);
 
         for (int i = 0; i < amount; i++) {
-            list.add(generateObject(generator, genType,
-                    isTypeAssignable, isTypeEquals,
-                    isTypeObject, isTypeString));
+            final Object object = generateObject(generator, fieldType);
+
+            if(object.equals(EMPTY))
+                return Collections.emptyList();
+
+            list.add(object);
         }
 
         return list;

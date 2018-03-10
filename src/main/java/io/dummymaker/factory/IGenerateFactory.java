@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 /**
- * "default comment"
+ * Generate factory used by populate factory to produce complex values
  *
  * @author GoodforGod
  * @since 08.03.2018

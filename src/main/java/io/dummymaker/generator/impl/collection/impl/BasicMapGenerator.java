@@ -5,6 +5,7 @@ import io.dummymaker.generator.impl.collection.IMapGenerator;
 import io.dummymaker.generator.impl.string.IdBigGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,33 +50,15 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
                               final int min,
                               final int max) {
 
-        final Class<?> genKeyType = keyGenerator.generate().getClass();
-        final Class<?> genValueType = valueGenerator.generate().getClass();
-
-        final boolean isKeyTypeAssignable = keyType.isAssignableFrom(genKeyType);
-        final boolean isKeyTypeEquals = genKeyType.equals(keyType);
-        final boolean isKeyTypeObject = keyType.equals(Object.class);
-        final boolean isKeyTypeString = keyType.equals(String.class);
-
-        final boolean isValueTypeAssignable = valueType.isAssignableFrom(genValueType);
-        final boolean isValueTypeEquals = genValueType.equals(valueType);
-        final boolean isValueTypeObject = valueType.equals(Object.class);
-        final boolean isValueTypeString = valueType.equals(String.class);
-
         final Map map = new HashMap<>();
         final int amount = generateRandomAmount(min, max);
 
         for (int i = 0; i < amount; i++) {
-            final Object key = generateObject(keyGenerator, keyType,
-                    isKeyTypeAssignable, isKeyTypeEquals,
-                    isKeyTypeObject, isKeyTypeString);
-
-            final Object value = generateObject(valueGenerator, valueType,
-                    isValueTypeAssignable, isValueTypeEquals,
-                    isValueTypeObject, isValueTypeString);
+            final Object key = generateObject(keyGenerator, keyType);
+            final Object value = generateObject(valueGenerator, valueType);
 
             if (key.equals(EMPTY))
-                continue;
+                return Collections.emptyMap();
 
             map.put(key, value);
         }

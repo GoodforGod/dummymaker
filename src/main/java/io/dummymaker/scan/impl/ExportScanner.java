@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
  * @see GenIgnoreExport
  * @see GenForceExport
  *
- * @see BasicAnnotationScanner
+ * @see BasicScanner
  *
  * @author GoodforGod
  * @since 03.06.2017
  */
-public class ExportAnnotationScanner extends UniqueAnnotationScanner {
+public class ExportScanner extends UniqueScanner {
 
     /**
      * Check for accepted for export annotations

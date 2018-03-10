@@ -21,7 +21,8 @@ public class ExportContainer {
      */
     private final String exportValue;
 
-    public ExportContainer(String exportFieldName, String fieldValue) {
+    public ExportContainer(final String exportFieldName,
+                           final String fieldValue) {
         this.exportName = exportFieldName;
         this.exportValue = fieldValue;
     }

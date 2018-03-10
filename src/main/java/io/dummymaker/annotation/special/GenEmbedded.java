@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
 @PrimeGen
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.FIELD)
-public @interface GenInline {
+public @interface GenEmbedded {
 
 }

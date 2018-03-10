@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  * @author GoodforGod
  * @since 30.05.2017
  */
-public class BasicAnnotationScanner implements IAnnotationScanner {
+public class BasicScanner implements IAnnotationScanner {
 
-    protected final Logger logger = Logger.getLogger(BasicAnnotationScanner.class.getSimpleName());
+    protected final Logger logger = Logger.getLogger(BasicScanner.class.getSimpleName());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

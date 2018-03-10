@@ -1,13 +1,13 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.scan.IAnnotationScanner;
+import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.scan.IPopulateScanner;
+import io.dummymaker.scan.container.PopulateContainer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -15,14 +15,18 @@ import java.util.function.Predicate;
  * Scanner used by populate factory
  *
  * Scan for prime gen annotation and its child annotation
+ * Scan also for GenEmbedded annotations to populate embedded fields
  *
  * @see PrimeGen
- * @see BasicAnnotationScanner
+ * @see GenEmbedded
+ *
+ * @see BasicScanner
+ * @see io.dummymaker.factory.IPopulateFactory
  *
  * @author GoodforGod
  * @since 29.05.2017
  */
-public class PopulateAnnotationScanner implements IAnnotationScanner {
+public class PopulateScanner implements IPopulateScanner {
 
     /**
      * Predicate to check for core prime marker annotation
@@ -42,14 +46,14 @@ public class PopulateAnnotationScanner implements IAnnotationScanner {
      * - 1 is child primeGen annotation
      */
     @Override
-    public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> populateAnnotationMap = new HashMap<>();
+    public Map<Field, PopulateContainer> scan(final Class t) {
+        final Map<Field, PopulateContainer> populateAnnotationMap = new HashMap<>();
 
         for(final Field field : t.getDeclaredFields()) {
             for(Annotation annotation : field.getDeclaredAnnotations()) {
                 for(Annotation inlined : annotation.annotationType().getDeclaredAnnotations()) {
                     if(isPrime.test(inlined)) {
-                        populateAnnotationMap.put(field, Arrays.asList(inlined, annotation));
+                        populateAnnotationMap.put(field, new PopulateContainer(inlined, annotation));
                     }
                 }
             }

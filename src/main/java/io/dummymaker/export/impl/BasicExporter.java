@@ -109,7 +109,7 @@ abstract class BasicExporter implements IExporter {
 
                 final Object exportField = value.getField().get(t);
                 final String exportFieldName = value.getExportName();
-                final String exportFieldValue = (exportField.getClass().equals(Date.class))
+                final String exportFieldValue = (exportField != null && exportField.getClass().equals(Date.class))
                         ? String.valueOf(((Date) exportField).getTime())
                         : String.valueOf(exportField);
 

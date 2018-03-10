@@ -4,8 +4,8 @@ import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.export.container.IClassContainer;
 import io.dummymaker.export.naming.IStrategy;
 import io.dummymaker.generator.impl.EnumerateGenerator;
-import io.dummymaker.scan.impl.ExportAnnotationScanner;
-import io.dummymaker.scan.impl.RenameAnnotationScanner;
+import io.dummymaker.scan.impl.ExportScanner;
+import io.dummymaker.scan.impl.RenameScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -51,7 +51,7 @@ public class ClassContainer implements IClassContainer {
         this.exportClass = t.getClass();
         this.strategy = strategy;
 
-        this.renamedFields = new RenameAnnotationScanner().scan(exportClass);
+        this.renamedFields = new RenameScanner().scan(exportClass);
 
         this.finalClassName = renamedFields.getOrDefault(null, strategy.toStrategy(exportClass.getSimpleName()));
 
@@ -90,7 +90,7 @@ public class ClassContainer implements IClassContainer {
      * @return final fields container map
      */
     private Map<String, FieldContainer> buildExportFieldContainerMap() {
-        return new ExportAnnotationScanner().scan(exportClass).entrySet().stream()
+        return new ExportScanner().scan(exportClass).entrySet().stream()
                 .collect(LinkedHashMap<String, FieldContainer>::new,
                         (m, e) -> m.put(e.getKey().getName(), buildFieldContainer(e.getKey(), e.getValue())),
                         (m, u) -> { }

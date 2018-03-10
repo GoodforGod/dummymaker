@@ -9,7 +9,6 @@ import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -42,8 +41,6 @@ public class XmlExporter extends BasicExporter {
      * @see #exportClassEnding
      */
     private String exportClassFullName = null;
-
-    private final Predicate<String> isEndingWithS = (s) -> s.charAt(s.length() - 1) == 's';
 
     public XmlExporter() {
         super(null, Format.XML, Strategies.DEFAULT.getStrategy());

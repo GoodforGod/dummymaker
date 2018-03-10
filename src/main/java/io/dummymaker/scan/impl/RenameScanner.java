@@ -18,14 +18,14 @@ import java.util.logging.Logger;
  * NULL key indicates constructor/class new name
  *
  * @see GenRenameExport
- * @see BasicAnnotationScanner
+ * @see BasicScanner
  *
  * @author GoodforGod
  * @since 06.07.2017
  */
-public class RenameAnnotationScanner implements IScanner<String, String> {
+public class RenameScanner implements IScanner<String, String> {
 
-    private final Logger logger = Logger.getLogger(RenameAnnotationScanner.class.getSimpleName());
+    private final Logger logger = Logger.getLogger(RenameScanner.class.getSimpleName());
 
     /**
      * Check if field is annotation with rename annotation

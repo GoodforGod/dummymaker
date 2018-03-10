@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
  *
  * @see GenEnumerate
  *
- * @see BasicAnnotationScanner
+ * @see BasicScanner
  *
  * @author GoodforGod
  * @since 07.06.2017
  */
-public class EnumerateAnnotationScanner extends UniqueAnnotationScanner {
+public class EnumerateScanner extends UniqueScanner {
 
     /**
      * Predicate to check for enumerate annotation

@@ -1,10 +1,16 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.number.GenDoubleBig;
+import io.dummymaker.annotation.number.GenLong;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
+import io.dummymaker.annotation.string.GenBigId;
+import io.dummymaker.annotation.string.GenCity;
+import io.dummymaker.annotation.string.GenName;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.*;
 import org.junit.Test;
 
@@ -26,7 +32,7 @@ public class ScannerImplTest {
 
     @Test
     public void baseScannerFindAllAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new BasicAnnotationScanner();
+        IAnnotationScanner scanner = new BasicScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -47,7 +53,7 @@ public class ScannerImplTest {
 
     @Test
     public void exportAnnotationScannerTest() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new ExportAnnotationScanner();
+        IAnnotationScanner scanner = new ExportScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -74,7 +80,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForEnumerateAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new EnumerateAnnotationScanner();
+        IAnnotationScanner scanner = new EnumerateScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -94,7 +100,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForRenameAnnotations() throws NoSuchFieldException {
-        IScanner<String, String> scanner = new RenameAnnotationScanner();
+        IScanner<String, String> scanner = new RenameScanner();
 
         Map<String, String> fields = scanner.scan(Dummy.class);
 
@@ -114,9 +120,9 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForPopulateAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new PopulateAnnotationScanner();
+        IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, PopulateContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -124,12 +130,12 @@ public class ScannerImplTest {
         assertEquals(6, fields.size());
 
         // Check for correct map values
-        List<Annotation> cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
-        List<Annotation> numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        List<Annotation> nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
-        List<Annotation> bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
-        List<Annotation> lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
-        List<Annotation> uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
+        PopulateContainer cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
+        PopulateContainer numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        PopulateContainer nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        PopulateContainer bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
+        PopulateContainer lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
+        PopulateContainer uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);
@@ -139,19 +145,26 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(bigdAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(lngAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(uncompaAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(cityAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(numAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(bigdAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(lngAnnotations.getGen().annotationType().equals(PrimeGen.class));
+        assertTrue(uncompaAnnotations.getGen().annotationType().equals(PrimeGen.class));
+
+        assertTrue(cityAnnotations.getGen().annotationType().equals(GenCity.class));
+        assertTrue(numAnnotations.getGen().annotationType().equals(GenEnumerate.class));
+        assertTrue(nameAnnotations.getGen().annotationType().equals(GenName.class));
+        assertTrue(bigdAnnotations.getGen().annotationType().equals(GenBigId.class));
+        assertTrue(lngAnnotations.getGen().annotationType().equals(GenLong.class));
+        assertTrue(uncompaAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
     }
 
     @Test
     public void scanForPopulateAnnotationsWhereThereNoOne() {
-        IAnnotationScanner scanner = new PopulateAnnotationScanner();
+        IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
+        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoPopulateFields.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -160,7 +173,7 @@ public class ScannerImplTest {
 
     @Test
     public void scanForEnumerateWhereThereNoOne() {
-        IAnnotationScanner scanner = new EnumerateAnnotationScanner();
+        IAnnotationScanner scanner = new EnumerateScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 

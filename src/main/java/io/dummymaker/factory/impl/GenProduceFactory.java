@@ -7,7 +7,8 @@ import io.dummymaker.factory.IProduceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
+
+import static io.dummymaker.util.BasicCastUtils.instanceClass;
 
 /**
  * Produce Dummy Objects and populate them via PrimeGen generators included
@@ -19,21 +20,15 @@ import java.util.logging.Logger;
  */
 public class GenProduceFactory implements IProduceFactory {
 
-    private static final Logger logger = Logger.getLogger(GenProduceFactory.class.getName());
+    private final IPopulateFactory populateFactory;
 
-    private static final IPopulateFactory populateFactory = new GenPopulateFactory();
+    public GenProduceFactory() {
+        this.populateFactory = new GenPopulateFactory();
+    }
 
     @Override
     public <T> T produce(final Class<T> tClass) {
-        try {
-            return populateFactory.populate(tClass.newInstance());
-        } catch (InstantiationException e) {
-            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE NEW OBJECT!");
-        } catch (IllegalAccessException e) {
-            logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
-        }
-
-        return null;
+        return populateFactory.populate(instanceClass(tClass));
     }
 
     @Override
@@ -41,19 +36,15 @@ public class GenProduceFactory implements IProduceFactory {
         if (amount < 1)
             return Collections.emptyList();
 
-        try {
-            final List<T> produced = new ArrayList<>();
-            for (int i = 0; i < amount; i++)
-                produced.add(tClass.newInstance());
+        final List<T> produced = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            final T t = instanceClass(tClass);
+            if (t == null)
+                return Collections.emptyList();
 
-            return populateFactory.populate(produced);
-
-        } catch (InstantiationException e) {
-            logger.warning(e.getMessage() + " | OBJECT MIGHT NOT HAVE ZERO PUBLIC CONSTRUCTOR! CAN NOT INSTANTIATE OBJECT!");
-        } catch (IllegalAccessException e) {
-            logger.warning(e.getMessage() + " | DOES NOT HAVE ACCESS TO OBJECT TO INSTANTIATE IT!");
+            produced.add(t);
         }
 
-        return Collections.emptyList();
+        return populateFactory.populate(produced);
     }
 }
