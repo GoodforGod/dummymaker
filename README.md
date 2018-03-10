@@ -144,7 +144,7 @@ Collection annotations like: **GenList, GenSet, GenMap** used to populate fields
 *GenSet* - produce *HashSet* collection.
 *GenMap* - produce *HashMap* collection.
 
-Collection annotations are *not supported* by any exporter in mean time.
+Collection annotations are **NOT SUPPORTED** by any *exporter* in mean time.
 
 Annotations support special attributes like:
 * *min* - minimum entities generated amount.
@@ -181,6 +181,10 @@ Annotations support special attributes like:
 * ***GenRenameExport*** allow to rename Dummy export field name or Class Name (Annotate constructor to rename class export name).
 
 * ***GenEnumerate*** annotation with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
+
+* ***GenEmbedded*** annotation should mark complex object fields which also contain *Gen* annotations inside. (There is no recursion, only one step down in hierarchy)
+
+Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 
 ## *Getting Started Examples*
 
@@ -224,6 +228,9 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 
 ![](https://media.giphy.com/media/1n4JPUg1rxwemngMhV/giphy.gif)
 
+#### *Embedded fields example*
+
+![](https://media.giphy.com/media/uTOSaDeSbAJq4soFt2/giphy.gif)
 
 ### **Factories**
 
@@ -349,7 +356,7 @@ INSERT INTO user (name, id) VALUES
 
 ## Version History
 
-**1.1.0** - Performance and architecture improvements, *IGenerateFactory* introduced, collection *Gen* annotations, time *Gen* annotations, architecture improvements in custom user extension support.
+**1.1.0** - Performance and architecture improvements, *IGenerateFactory* introduced, collection *Gen* annotations, time *Gen* annotations, Embedded *Gen* support, architecture improvements in custom user extension support.
 
 **1.0.3** - Lots of tests for all functionality, Added *DataTypeMap* parameter for users in SqlExporter (expandable data type for sql), *NamingStrategy* for exporters, bug fixes.
 

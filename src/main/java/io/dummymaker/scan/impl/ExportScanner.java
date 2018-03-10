@@ -1,6 +1,10 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.collection.GenList;
+import io.dummymaker.annotation.collection.GenMap;
+import io.dummymaker.annotation.collection.GenSet;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
 
@@ -41,8 +45,11 @@ public class ExportScanner extends UniqueScanner {
      *
      * @see GenIgnoreExport
      */
-    private final Predicate<Annotation> ignorePredicate = (a) -> (a.annotationType().equals(GenIgnoreExport.class)
-            && ((GenIgnoreExport) a).value());
+    private final Predicate<Annotation> ignorePredicate = (a) -> a.annotationType().equals(GenEmbedded.class)
+            || a.annotationType().equals(GenList.class)
+            || a.annotationType().equals(GenSet.class)
+            || a.annotationType().equals(GenMap.class)
+            || (a.annotationType().equals(GenIgnoreExport.class) && ((GenIgnoreExport) a).value());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
