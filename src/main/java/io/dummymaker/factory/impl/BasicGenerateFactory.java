@@ -21,8 +21,17 @@ public abstract class BasicGenerateFactory<T extends IGenerator> implements IGen
 
     protected static final Logger logger = Logger.getLogger(BasicGenerateFactory.class.getName());
 
+    /**
+     * Annotation provider for generate factory
+     */
     protected final Class<? extends Annotation> suitableAnnotation;
 
+    /**
+     * Build generate factory basic impl
+     *
+     * @param suitableAnnotation annotation provider type
+     * @throws NullPointerException if annotation is nullable
+     */
     public BasicGenerateFactory(final Class<? extends Annotation> suitableAnnotation) {
         if(suitableAnnotation == null)
             throw new NullPointerException("Annotation can not be nullable");

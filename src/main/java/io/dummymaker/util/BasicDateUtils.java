@@ -44,36 +44,21 @@ public class BasicDateUtils {
     }
 
     public static Timestamp convertToTimestamp(final LocalDate localDate) {
-        try {
-            return (localDate != null)
-                    ? Timestamp.valueOf(localDate.atStartOfDay())
-                    : null;
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
+        return (localDate != null)
+                ? Timestamp.valueOf(localDate.atStartOfDay())
+                : null;
     }
 
     public static Timestamp convertToTimestamp(final LocalTime localTime) {
-        try {
-            return (localTime != null)
-                    ? Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime))
-                    : null;
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
+        return (localTime != null)
+                ? Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime))
+                : null;
     }
 
     public static Timestamp convertToTimestamp(final LocalDateTime localDateTime) {
-        try {
-            return (localDateTime != null)
-                    ? Timestamp.valueOf(localDateTime)
-                    : null;
-        } catch (Exception e) {
-            logger.warning(e.getMessage());
-            return null;
-        }
+        return (localDateTime != null)
+                ? Timestamp.valueOf(localDateTime)
+                : null;
     }
 
     public static Date parseSimpleDateLong(final String date) {

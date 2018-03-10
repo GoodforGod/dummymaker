@@ -2,6 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.data.DummyCollection;
+import io.dummymaker.factory.impl.BasicGenerateFactory;
 import io.dummymaker.factory.impl.ListGenerateFactory;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.impl.BasicScanner;
@@ -9,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class GenerateFactorySpecialTests extends Assert {
 
     @Test
     public void isSuitable() {
-        IGenerateFactory generateFactory = new ListGenerateFactory();
+        BasicGenerateFactory generateFactory = new ListGenerateFactory();
 
         IAnnotationScanner scanner = new BasicScanner();
 
@@ -32,14 +34,14 @@ public class GenerateFactorySpecialTests extends Assert {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        Annotation suitable = generateFactory.findSuitable(annotations);
+        Annotation suitable =  generateFactory.findSuitable(annotations);
 
         assertTrue(generateFactory.isSuitable(suitable));
     }
 
     @Test
     public void tryToFindSuitable() {
-        IGenerateFactory generateFactory = new ListGenerateFactory();
+        BasicGenerateFactory generateFactory = new ListGenerateFactory();
 
         IAnnotationScanner scanner = new BasicScanner();
 
@@ -52,5 +54,14 @@ public class GenerateFactorySpecialTests extends Assert {
 
         assertNotNull(suitable);
         assertEquals(suitable.annotationType(), GenList.class);
+    }
+
+    @Test
+    public void tryToFindSuitableNullAnnotation() {
+        IGenerateFactory generateFactory = new ListGenerateFactory();
+
+        Annotation suitable = generateFactory.findSuitable(new ArrayList<>());
+
+        assertNull(suitable);
     }
 }

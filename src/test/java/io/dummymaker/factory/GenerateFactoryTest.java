@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyTime;
 import io.dummymaker.factory.impl.ListGenerateFactory;
 import io.dummymaker.factory.impl.MapGenerateFactory;
@@ -38,33 +39,43 @@ public class GenerateFactoryTest extends Assert {
     private Annotation annotation;
 
     public GenerateFactoryTest(IGenerateFactory generateFactory,
-                               IGenerator generator) {
+                               IGenerator generator,
+                               Field field,
+                               Annotation annotation) {
         this.generateFactory = generateFactory;
         this.generator = generator;
-
-        DummyTime dummyTime = new DummyTime();
-        this.field = dummyTime.getClass().getDeclaredFields()[0];
-        this.annotation = this.field.getDeclaredAnnotations()[0];
+        this.field = field;
+        this.annotation = annotation;
     }
 
     @Parameters(name = "{index}: Factory - ({0})")
     public static Collection<Object[]> data() {
+        final DummyCollection dummyCollection = new DummyCollection();
+        Field listField = dummyCollection.getClass().getDeclaredFields()[0];
+        Annotation listAnnotation = listField.getDeclaredAnnotations()[0];
+
+        Field setField = dummyCollection.getClass().getDeclaredFields()[1];
+        Annotation setAnnotation = setField.getDeclaredAnnotations()[0];
+
+        Field mapField = dummyCollection.getClass().getDeclaredFields()[2];
+        Annotation mapAnnotation = mapField.getDeclaredAnnotations()[0];
+
+        final DummyTime dummyTime = new DummyTime();
+        Field timeField = dummyTime.getClass().getDeclaredFields()[0];
+        Annotation timeAnnotation = timeField.getDeclaredAnnotations()[0];
+
         return Arrays.asList(new Object[][]{
-                {new ListGenerateFactory(), new ListGenerator()},
-                {new SetGenerateFactory(), new SetGenerator()},
-                {new MapGenerateFactory(), new MapGenerator()},
-                {new TimeGenerateFactory(), new LocalDateGenerator()}
+                {new ListGenerateFactory(), new ListGenerator(), listField, listAnnotation},
+                {new SetGenerateFactory(), new SetGenerator(), setField, setAnnotation},
+                {new MapGenerateFactory(), new MapGenerator(), mapField, mapAnnotation},
+                {new TimeGenerateFactory(), new LocalDateGenerator(), timeField, timeAnnotation}
         });
     }
 
     @Test
     public void nullableGeneratorTest() {
         Object object = generateFactory.generate(field, annotation, null);
-        if (generateFactory.getClass().equals(TimeGenerateFactory.class)) {
-            assertNotNull(object);
-        } else {
-            assertNull(object);
-        }
+        assertNotNull(object);
     }
 
     @Test
@@ -76,11 +87,7 @@ public class GenerateFactoryTest extends Assert {
     @Test
     public void noGeneratorExecution() {
         Object object = generateFactory.generate(field, annotation);
-        if (generateFactory.getClass().equals(TimeGenerateFactory.class)) {
-            assertNotNull(object);
-        } else {
-            assertNull(object);
-        }
+        assertNotNull(object);
     }
 
     @Test

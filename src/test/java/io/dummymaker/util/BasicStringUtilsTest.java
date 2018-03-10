@@ -11,6 +11,8 @@ import org.junit.Test;
  */
 public class BasicStringUtilsTest extends Assert {
 
+    private BasicStringUtils utils = new BasicStringUtils();
+
     @Test
     public void nullStringIsEmpty() {
         assertTrue(BasicStringUtils.isEmpty(null));

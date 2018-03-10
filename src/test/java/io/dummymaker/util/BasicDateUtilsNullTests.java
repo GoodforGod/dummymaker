@@ -17,6 +17,8 @@ import java.util.Date;
  */
 public class BasicDateUtilsNullTests extends Assert {
 
+    private BasicDateUtils utils = new BasicDateUtils();
+
     @Test
     public void convertNullToTimestampDateOldType() {
         final Timestamp t = BasicDateUtils.convertToTimestamp((Date) null);
@@ -46,6 +48,10 @@ public class BasicDateUtilsNullTests extends Assert {
         final LocalDateTime result = BasicDateUtils.parseDateTime(null);
         assertNull(result);
 
+    }
+
+    @Test
+    public void parseDateEmpty() {
         final LocalDateTime result2 = BasicDateUtils.parseDateTime("   ");
         assertNull(result2);
     }
@@ -54,7 +60,10 @@ public class BasicDateUtilsNullTests extends Assert {
     public void parseDateOldTypeNull() {
         final LocalTime result = BasicDateUtils.parseTime(null);
         assertNull(result);
+    }
 
+    @Test
+    public void parseDateOldEmpty() {
         final LocalTime result2 = BasicDateUtils.parseTime("    ");
         assertNull(result2);
     }
@@ -63,7 +72,10 @@ public class BasicDateUtilsNullTests extends Assert {
     public void parseTimeNull() {
         final LocalDate result = BasicDateUtils.parseDate(null);
         assertNull(result);
+    }
 
+    @Test
+    public void parseTimeEmpty() {
         final LocalDate result2 = BasicDateUtils.parseDate("   ");
         assertNull(result2);
     }
@@ -72,7 +84,10 @@ public class BasicDateUtilsNullTests extends Assert {
     public void parseDateTimeNull() {
         final Date result = BasicDateUtils.parseSimpleDateLong(null);
         assertNull(result);
+    }
 
+    @Test
+    public void parseDateTimeEmpty() {
         final Date result2 = BasicDateUtils.parseSimpleDateLong("  ");
         assertNull(result2);
     }
