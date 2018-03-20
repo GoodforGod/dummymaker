@@ -47,6 +47,10 @@ dependencies {
   - [Collection Annotations](#collection-annotations)  
   - [Time Annotation](#time-annotation)  
   - [Special Annotations](#special-annotations)  
+- [Customization](#customization)
+  - [IGenerator](#igenerator)
+  - [Gen Annotation](#gen-annotation)
+  - [IGenerateFactory](#igeneratefactory)
 - [Getting Started with examples](#getting-started-with-examples)
   - [Annotations](#annotations)
   - [Factories](#factories)
@@ -270,6 +274,22 @@ All *Exporters* parameters you can find in specified section.
 *Export as string* is useful in case you have custom writer or need to send it over network.
 
 ![](https://media.giphy.com/media/kS8R51TFsdCw2Agv97/giphy.gif)
+
+## Customization
+
+You can extend basic functionality with your own annotations and generators. All infrastructure will support custom generators, annotations, generate factories with no doubt.
+
+### IGenerator
+
+![](https://media.giphy.com/media/FEXNa199DiR2GK1ekF/giphy.gif)
+
+### Gen Annotation
+
+![](https://media.giphy.com/media/7SZufvmQLuosppw7nc/giphy.gif)
+
+### IGenerateFactory
+
+![](https://media.giphy.com/media/5bgGzRo5svjQQJDkhU/giphy.gif)
 
 ## Export File Structures
 
