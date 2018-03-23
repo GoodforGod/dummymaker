@@ -403,4 +403,4 @@ INSERT INTO user (name, id) VALUES
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENCE](LICENCE) file for details.
+This project is licensed under the MIT - see the [LICENSE](LICENSE) file for details.
