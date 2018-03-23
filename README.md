@@ -279,15 +279,30 @@ All *Exporters* parameters you can find in specified section.
 
 You can extend basic functionality with your own annotations and generators. All infrastructure will support custom generators, annotations, generate factories with no doubt.
 
+The library works this way:
+* You create generators using *IGenerator* interface.
+* You create custom *Gen* annotation using *PrimeGen* annotation.
+* You mark Dummy object field with such annotation.
+* *Magic*.
+* Done.
+
 ### IGenerator
+
+Is responsible for generating values for fields.
 
 ![](https://media.giphy.com/media/FEXNa199DiR2GK1ekF/giphy.gif)
 
 ### Gen Annotation
 
+Is created using special *PrimeGen* annotation and custom generator as its value.
+
+Is used to mark Dummy object field with specific generator.
+
 ![](https://media.giphy.com/media/7SZufvmQLuosppw7nc/giphy.gif)
 
 ### IGenerateFactory
+
+Is used to build complex values for fields, when simple *IGenerator* implementation is insufficient or *Gen* annotation require special parameters. 
 
 ![](https://media.giphy.com/media/5bgGzRo5svjQQJDkhU/giphy.gif)
 
