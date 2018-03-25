@@ -1,14 +1,14 @@
 # DummyMaker   :hotsprings:
 
 ![](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
 
-Library allow to produce Dummy objects (POJOs) via special *Factories* and populate their fields with values via special *Gen* annotations.
-And also *export* them in **CSV/JSON/XML/SQL** formats.
+Library allow to produce Dummy objects (POJOs) using special *factories*, *populate* their fields with values by special *Gen* annotations and *generators* and *export* them in **CSV/JSON/XML/SQL** formats.
 
-Also it is possible to create your own *Gen* annotations and *IGenerator* generators to populate Dummy object fields in your way.
+Also it is possible to create your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
 
-*Step by step guide:*
+*Step by step guide how to produce and export your first Dummy:*
 1) Create Dummy object (POJO). 
 2) *Annotate* Dummy object fields with special *Gen* annotations.
 3) Use *Factory* to populate/produce Dummy Object[s].
@@ -39,9 +39,9 @@ dependencies {
 - [Generators](#generators)
 - [Exporters](#exporters)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
-  - [CsvExporter Parameters](#csvExporter-parameters)
-  - [XmlExporter Parameters](#xmlExporter-parameters)
-  - [SqlExporter Parameters](#sqlExporter-parameters)
+  - [CsvExporter Parameters](#csvexporter-parameters)
+  - [XmlExporter Parameters](#xmlexporter-parameters)
+  - [SqlExporter Parameters](#sqlexporter-parameters)
 - [Annotations](#annotations)
   - [Basic Gen Annotations](#basic-gen-annotations)  
   - [Collection Annotations](#collection-annotations)  
@@ -52,9 +52,9 @@ dependencies {
   - [Gen Annotation](#gen-annotation)
   - [IGenerateFactory](#igeneratefactory)
 - [Getting Started with examples](#getting-started-with-examples)
-  - [Annotations](#annotations)
-  - [Factories](#factories)
-  - [Exporters](#exporters)
+  - [Annotations](#annotations-examples)
+  - [Factories](#factories-examples)
+  - [Exporters](#exporters-examples)
 - [Export File Structures](#export-file-structures)
   - [Dummy Object Class](#dummy-object-class)
   - [CSV](#csv)
@@ -192,7 +192,7 @@ Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 
 ## *Getting Started Examples*
 
-### **Annotations**
+### **Annotations Examples**
 
 ####  *POJO gen annotate example*
 
@@ -236,7 +236,7 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 
 ![](https://media.giphy.com/media/uTOSaDeSbAJq4soFt2/giphy.gif)
 
-### **Factories**
+### **Factories Examples**
 
 *GenPopulateFactory/GenProvideFactory* this factories allow you to populate/produce Dummy objects.
 
@@ -249,7 +249,7 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 
 ![](https://media.giphy.com/media/1ffn6PiFgTQKaakZ8B/giphy.gif)
 
-### **Exporters**
+### **Exporters Examples**
 
 Exporters allow you to export Dummy objects to shown format as a *file* or *string*.
 
