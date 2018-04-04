@@ -4,9 +4,9 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
 
-Library allow to produce Dummy objects (POJOs) using special *factories*, *populate* their fields with values by special *Gen* annotations and *generators* and *export* them in **CSV/JSON/XML/SQL** formats.
+Library can produce Dummy objects (POJOs) using special *factories*, *populate* their fields with values by special *Gen* annotations and *generators*, *export* them in **CSV/JSON/XML/SQL** formats.
 
-Also it is possible to create your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
+Also it is possible extend library functionality by creating your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
 
 *Step by step guide how to produce and export your first Dummy:*
 1) Create Dummy object (POJO). 
@@ -105,16 +105,16 @@ Are part of *Gen* annotations cause indicate what generator each annotation is u
 
 Constructor parameters available for all exporters.
 
-* *withPath* - set path for export file, default directory where app is started.
-* *withStrategy* - naming strategy applied to all origin fields (fields which are not *@GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
+* *withPath* - set path for export file, default directory is app home.
+* *withStrategy* - naming strategy applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
 
-	**Strategies**
-	* *DEFAULT* - origin name, as is.
-	* *UPPER_CASE* - name in upper case, like *DummyList - DUMMYLIST*
-	* *LOW_CASE* - name in low case, like *DummyList - dummylist*
-	* *UNDERSCORED_LOW_CASE* - name in upper case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-	* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-	* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
+	**Strategies**:
+	* *DEFAULT* - name as is.
+	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
+	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
+	* *INITIAL_LOW_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
+	* *UNDERSCORED_LOW_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
+	* *UNDERSCORED_UPPER_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
 
 ### **CsvExporter Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.

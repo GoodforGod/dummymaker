@@ -127,12 +127,13 @@ abstract class BasicExporter implements IExporter {
         if(exportFieldValue == null)
            return ExportContainer.buildValue(exportFieldName, "");
 
-        if(exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
-            return ExportContainer.buildCollection(exportFieldName, null);
-        }
-
         if (exportFieldValue.getClass().equals(Date.class))
             return ExportContainer.buildValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+
+        if(exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
+            final ExportContainer container = ExportContainer.buildCollection(exportFieldName);
+        }
+
 
         return ExportContainer.buildValue(exportFieldName, String.valueOf(exportFieldValue));
     }
