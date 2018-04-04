@@ -37,8 +37,7 @@ public class ExportScanner extends UniqueScanner {
      * @see PrimeGen
      */
     private final Predicate<Annotation> acceptPredicate = (a) -> (a.annotationType().equals(PrimeGen.class)
-            || ((a.annotationType().equals(GenForceExport.class))
-            && ((GenForceExport) a).value()));
+            || ((a.annotationType().equals(GenForceExport.class))));
 
     /**
      * Check for ignorable annotations
@@ -49,7 +48,7 @@ public class ExportScanner extends UniqueScanner {
             || a.annotationType().equals(GenList.class)
             || a.annotationType().equals(GenSet.class)
             || a.annotationType().equals(GenMap.class)
-            || (a.annotationType().equals(GenIgnoreExport.class) && ((GenIgnoreExport) a).value());
+            || (a.annotationType().equals(GenIgnoreExport.class));
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

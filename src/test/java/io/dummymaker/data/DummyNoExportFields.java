@@ -1,6 +1,5 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.special.GenIgnoreExport;
 import io.dummymaker.annotation.special.GenRenameExport;
 
@@ -17,12 +16,6 @@ public class DummyNoExportFields {
 
     @GenIgnoreExport
     private String city;
-
-    @GenForceExport(value = false)
-    private String noexport;
-
-    @GenIgnoreExport(value = false)
-    private String noignore;
 
     private Integer num;
 
