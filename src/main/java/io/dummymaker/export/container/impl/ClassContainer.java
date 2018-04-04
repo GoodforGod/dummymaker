@@ -131,4 +131,15 @@ public class ClassContainer implements IClassContainer {
                 .anyMatch(a -> a.annotationType().equals(PrimeGen.class)
                         && ((PrimeGen) a).value().equals(EnumerateGenerator.class));
     }
+
+    /**
+     * Indicates is field enumerated or not
+     *
+     * @see io.dummymaker.annotation.special.GenEnumerate
+     */
+    private boolean isAnnotationEmbedded(final List<Annotation> annotations) {
+        return annotations.stream()
+                .anyMatch(a -> a.annotationType().equals(PrimeGen.class)
+                        && ((PrimeGen) a).value().equals(EnumerateGenerator.class));
+    }
 }

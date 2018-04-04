@@ -12,6 +12,7 @@ import io.dummymaker.writer.impl.BufferedFileWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -107,13 +108,10 @@ abstract class BasicExporter implements IExporter {
             try {
                 value.getField().setAccessible(true);
 
-                final Object exportField = value.getField().get(t);
                 final String exportFieldName = value.getExportName();
-                final String exportFieldValue = (exportField != null && exportField.getClass().equals(Date.class))
-                        ? String.valueOf(((Date) exportField).getTime())
-                        : String.valueOf(exportField);
+                final Object exportFieldValue = value.getField().get(t);
 
-                exports.add(new ExportContainer(exportFieldName, exportFieldValue));
+                exports.add(buildContainer(exportFieldName, exportFieldValue));
 
                 value.getField().setAccessible(false);
             } catch (Exception e) {
@@ -122,6 +120,21 @@ abstract class BasicExporter implements IExporter {
         });
 
         return exports;
+    }
+
+    ExportContainer buildContainer(final String exportFieldName,
+                                   final Object exportFieldValue) {
+        if(exportFieldValue == null)
+           return ExportContainer.buildValue(exportFieldName, "");
+
+        if(exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
+            return ExportContainer.buildCollection(exportFieldName, null);
+        }
+
+        if (exportFieldValue.getClass().equals(Date.class))
+            return ExportContainer.buildValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+
+        return ExportContainer.buildValue(exportFieldName, String.valueOf(exportFieldValue));
     }
 
     /**

@@ -29,6 +29,8 @@ public class FieldContainer {
      */
     private final boolean isEnumerable;
 
+
+
     FieldContainer(final Field field,
                    final String finalFieldName,
                    final boolean isEnumerable) {
