@@ -2,7 +2,9 @@ package io.dummymaker.util;
 
 import io.dummymaker.generator.IGenerator;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -13,17 +15,33 @@ import java.util.logging.Logger;
  */
 public class BasicCastUtils {
 
-    public static Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
+    public static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
 
     public static final Object EMPTY = new Object();
 
+    @SuppressWarnings("unchecked")
     public static <T> T instanceClass(final Class<T> tClass) {
         try {
-            return tClass.newInstance();
-        } catch (InstantiationException e) {
-            logger.warning(e.getMessage() + " | " + tClass + " | CAN NOT INSTANTIATE, NO ZERO PUBLIC CONSTRUCTOR.");
+            if(tClass == null)
+                return null;
+
+            final Constructor zeroArgConstructor = Arrays.stream(tClass.getDeclaredConstructors())
+                    .filter(c -> c.getParameterCount() == 0)
+                    .findFirst().orElse(null);
+
+            if(zeroArgConstructor == null) {
+                logger.warning("[CAN NOT INSTANTIATE] : " + tClass + ", have NO zero arg constructor.");
+                return null;
+            }
+
+            return (T) zeroArgConstructor.newInstance();
+        } catch (InstantiationException | InvocationTargetException e) {
+            logger.warning("[CAN NOT INSTANTIATE] : " + tClass
+                    + ", class may be an abstract class, an interface, "
+                    + "array, primitive. \n" + e.getMessage());
         } catch (IllegalAccessException e) {
-            logger.warning(e.getMessage() + " | " + tClass + " | NO ACCESS TO INSTANTIATING OBJECT.");
+            logger.warning("[CAN NOT INSTANTIATE] : " + tClass
+                    + ", no access to instantiating object.\n" + e.getMessage());
         }
         return null;
     }
@@ -59,11 +77,17 @@ public class BasicCastUtils {
         if(fieldType == null)
             return EMPTY;
 
+        final boolean isTypeString = fieldType.equals(String.class);
+        if(castObject == null) {
+            return (isTypeString)
+                    ? "null"
+                    : EMPTY;
+        }
+
         final Class<?> castType = castObject.getClass();
         final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);
         final boolean isTypeEquals = castType.equals(fieldType);
         final boolean isTypeObject = fieldType.equals(Object.class);
-        final boolean isTypeString = fieldType.equals(String.class);
 
         return castObject(castObject, fieldType,
                 isTypeAssignable, isTypeEquals,
@@ -84,15 +108,5 @@ public class BasicCastUtils {
             return fieldType.cast(castObject);
         }
         return EMPTY;
-    }
-
-    public static int generateRandomAmount(final int min,
-                                           final int max) {
-        final int usedMin = (min < 1) ? 1 : min;
-        final int usedMax = (max < 1) ? 1 : max;
-
-        return (usedMin >= usedMax)
-                ? usedMin
-                : ThreadLocalRandom.current().nextInt(min, max);
     }
 }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.dummymaker.util.BasicCastUtils.*;
+import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
  * Generate map of elements with key,value of object type
@@ -45,6 +46,7 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
                 1, 10);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<K, V> generate(final IGenerator keyGenerator,
                               final IGenerator valueGenerator,
@@ -56,8 +58,8 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
         final Map map = new HashMap<>();
         final int amount = generateRandomAmount(min, max);
 
-        final boolean isEmbedded = (keyGenerator != null && keyGenerator.getClass().equals(EmbeddedGenerator.class)
-                || valueGenerator != null && valueGenerator.getClass().equals(EmbeddedGenerator.class));
+        final boolean isEmbedded = keyGenerator != null && keyGenerator.getClass().equals(EmbeddedGenerator.class)
+                || valueGenerator != null && valueGenerator.getClass().equals(EmbeddedGenerator.class);
 
         final IPopulateFactory embeddedPopulateFactory = (isEmbedded)
                 ? new GenPopulateEmbeddedFreeFactory()

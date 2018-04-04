@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @PrimeGen(IdBigGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenBigId {
+public @interface GenIdBig {
 
 }

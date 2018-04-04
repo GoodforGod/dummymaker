@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static io.dummymaker.util.BasicCastUtils.*;
+import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
  * Generate array list collection of elements with object type
@@ -39,6 +40,7 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         return generate(generator, Object.class, 1, 10);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Collection<T> generate(final IGenerator generator,
                                   final Class<?> fieldType,

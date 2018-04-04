@@ -1,6 +1,7 @@
 package io.dummymaker.util;
 
 import java.util.Collection;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Basic util methods for collections
@@ -18,4 +19,13 @@ public class BasicCollectionUtils {
         return !isEmpty(collection);
     }
 
+    public static int generateRandomAmount(final int min,
+                                           final int max) {
+        final int usedMin = (min < 1) ? 1 : min;
+        final int usedMax = (max < 1) ? 1 : max;
+
+        return (usedMin >= usedMax)
+                ? usedMin
+                : ThreadLocalRandom.current().nextInt(min, max);
+    }
 }

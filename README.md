@@ -61,7 +61,7 @@ dependencies {
 
 ## Overall
 
-Scheme how all is linked together:
+How all is linked together:
 
 Dummy object fields should be marked with special *Gen* annotations.
 
@@ -76,6 +76,7 @@ Exporters use scanners to verify what fields to export and format values in chos
 ## Factories
 
 Factories to populate/produce Dummy Objects.
+Factory is responsible for field population.
 
 * ***GenProduceFactory*** - allow you to produce new Dummies with populated fields.
 
@@ -169,8 +170,8 @@ Automatically identify field time *type* and generate value for it.
 * *Timestamp (java.sql.Timestamp)*
 
 Annotations support special attributes like:
-* *from* - minimum time generated time (*01.01.1970* is default) in long UTC format.
-* *to* - maximum entities generated time (*01.01.3000* is default) in long UTC format.
+* *from* - minimum generated time (*01.01.1970* is default) in long UTC format.
+* *to* - maximum generated time (*01.01.3000* is default) in long UTC format.
 
 ### **Special Annotations**
 
@@ -190,7 +191,9 @@ Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 
 ### **Annotations**
 
-####  *POJO gen annotate example*
+####  *Field annotate example*
+
+Make sure that *Gen* annotation *generate type* is **same** or is **castable** to field type, or *field type* is **string** so in this case any object can be casted to *string*.
 
 ![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
 
@@ -206,21 +209,29 @@ And field *id* will **NOT** be export if *ignore* annotation will have *true* (*
 *GenEnumerate* annotation will enumerate Dummy field starting from 10 in this case (*from 0 is default*).
 It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 19.
 
-*GenRenameExport* annotation will change *field* export name or *class* name.
+*GenRenameExport* annotation will change *field* or *class* export name.
 
 ![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
 
 #### *Class name Rename example*
 
-*GenRenameExport* annotation will change *class* export name.in this case.
+*GenRenameExport* annotation will change **class** *export* name.in this case.
 
 ![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
 
 #### *Gen Time annotation example*
 
+You can generate time/date values using this annotation.
+
+Read more in *time annotation* section.
+
 ![](https://media.giphy.com/media/MuCzQ6BfY1Y1HrggsP/giphy.gif)
 
 #### *Collection annotation example*
+
+You can populate collections such as *Set, List, Map* with any generic type you want, if such *IGenerator* is available (or you can create your own generator).
+
+Read more in *collection annotation* section.
 
 ![](https://media.giphy.com/media/8FrjAE955A2vTmxgal/giphy.gif)
 
@@ -229,6 +240,8 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 ![](https://media.giphy.com/media/1n4JPUg1rxwemngMhV/giphy.gif)
 
 #### *Embedded fields example*
+
+You can populate complex object fields using *GenEmbedded* annotation.
 
 ![](https://media.giphy.com/media/uTOSaDeSbAJq4soFt2/giphy.gif)
 

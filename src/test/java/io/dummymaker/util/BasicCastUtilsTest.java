@@ -17,19 +17,19 @@ public class BasicCastUtilsTest extends Assert {
 
     @Test
     public void generateAmountMinMoreMax() {
-        int amount = BasicCastUtils.generateRandomAmount(10, 1);
+        int amount = BasicCollectionUtils.generateRandomAmount(10, 1);
         assertEquals(10, amount);
     }
 
     @Test
     public void generateAmountMinLessOne() {
-        int amount = BasicCastUtils.generateRandomAmount(-10, 1);
+        int amount = BasicCollectionUtils.generateRandomAmount(-10, 1);
         assertEquals(1, amount);
     }
 
     @Test
     public void generateAmountMaxLessOne() {
-        int amount = BasicCastUtils.generateRandomAmount(1, -1);
+        int amount = BasicCollectionUtils.generateRandomAmount(1, -1);
         assertEquals(1, amount);
     }
 

@@ -14,6 +14,7 @@ import java.util.Collection;
  */
 public class BasicCollectionUtilsTest extends Assert {
 
+    // due to code coverage strange reports on utils contractors
     private BasicCollectionUtils utils = new BasicCollectionUtils();
 
     @Test

@@ -93,6 +93,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                  final Map<Field, IGenerateFactory> generateFactoryMap,
                                  final Map<Field, Long> enumeratesMap,
                                  final Set<Field> errorFields) {
+        if(t == null)
+            throw new NullPointerException("Can not populate entity, cause can not instantiate class.");
+
         final Map<Field, PopulateContainer> populateAnnotationMap = populateScanner.scan(t.getClass());
 
         for (final Map.Entry<Field, PopulateContainer> annotatedField : populateAnnotationMap.entrySet()) {
@@ -139,6 +142,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * @param enumerateMap      field enumerate map
      * @param errorFields       set with fields that had errors in
      */
+    @SuppressWarnings("unchecked")
     private Object buildObject(final Field field,
                                final PopulateContainer populateContainer,
                                final Map<Field, IGenerator> generatorsMap,
@@ -163,7 +167,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         }
 
         final Object casted = castObject(generated, field.getType());
-        if (casted.equals(EMPTY)) {
+        if (EMPTY.equals(casted)) {
             errorFields.add(field);
             return null;
         }
