@@ -13,7 +13,6 @@ import java.time.LocalDate;
  * @since 11.03.2018
  */
 public class BasicCastUtilsTest extends Assert {
-    private BasicCastUtils utils = new BasicCastUtils();
 
     @Test
     public void generateAmountMinMoreMax() {

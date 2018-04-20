@@ -1,8 +1,9 @@
 language: java
 
-sudo: required
 script: "mvn cobertura:cobertura"
+
 dist: trusty
+sudo: false
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
