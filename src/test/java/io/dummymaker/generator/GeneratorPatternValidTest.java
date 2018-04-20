@@ -48,7 +48,7 @@ public class GeneratorPatternValidTest {
     }
 
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
-    public static Collection<Object> data() {
+    public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0.[0-9]+.") },
@@ -90,6 +90,6 @@ public class GeneratorPatternValidTest {
         assertTrue(generated.getClass().equals(genClass));
 
         final String generatedAsString = String.valueOf(generated);
-        assertTrue(pattern.matcher(generatedAsString).matches());
+        assertTrue(generatedAsString, pattern.matcher(generatedAsString).matches());
     }
 }

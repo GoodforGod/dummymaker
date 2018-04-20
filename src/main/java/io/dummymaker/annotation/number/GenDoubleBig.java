@@ -1,12 +1,5 @@
 package io.dummymaker.annotation.number;
 
-/**
- * "Default Description"
- *
- * @author GoodforGod
- * @since 06.03.2018
- */
-
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.impl.number.DoubleBigGenerator;
 

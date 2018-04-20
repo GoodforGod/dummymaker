@@ -5,7 +5,7 @@ import io.dummymaker.generator.IGenerator;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * "Default Description"
+ * Generates boolean values
  *
  * @author GoodforGod
  * @since 21.02.2018

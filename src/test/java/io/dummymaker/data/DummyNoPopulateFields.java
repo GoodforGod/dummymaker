@@ -13,7 +13,7 @@ import io.dummymaker.annotation.special.GenRenameExport;
  */
 public class DummyNoPopulateFields {
 
-    @GenRenameExport(name = "socialGroup")
+    @GenRenameExport("socialGroup")
     @GenForceExport
     private String group = "100";
 

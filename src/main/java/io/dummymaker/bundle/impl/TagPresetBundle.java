@@ -1,7 +1,7 @@
 package io.dummymaker.bundle.impl;
 
 /**
- * Default Comment
+ * Bundle with tag string values
  *
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017

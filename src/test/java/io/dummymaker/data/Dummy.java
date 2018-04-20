@@ -58,7 +58,7 @@ public class Dummy {
         }
     }
 
-    @GenRenameExport(name = "socialGroup")
+    @GenRenameExport("socialGroup")
     @GenForceExport
     private String group = "100";
 

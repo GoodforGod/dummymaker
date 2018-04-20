@@ -72,7 +72,7 @@ public class ProduceFactoryTest {
         assertNotNull(dummy.getNum());
         assertNotNull(dummy.getGroup());
 
-        assertTrue(dummy.getCity().matches("[a-zA-Z0-9]+"));
+        assertTrue(dummy.getCity().matches("[a-zA-Z\\-]+"));
         assertTrue(dummy.getName().matches("[a-zA-Z]+"));
         assertEquals((int) dummy.getNum(), 0);
         assertEquals("100", dummy.getGroup());
@@ -144,16 +144,17 @@ public class ProduceFactoryTest {
 
         final Pattern datePattern = Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}");
         final Pattern localDatePattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
-        final Pattern localDateTimePattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d+)?");
         final Pattern localTimePattern = Pattern.compile("\\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?");
+        final Pattern localDateTimePattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?");
         final Pattern timestampPattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?");
 
-        assertTrue(datePattern.matcher(dummy.getDateOld().toString()).matches());
-        assertTrue(localDatePattern.matcher(dummy.getDate().toString()).matches());
-        assertTrue(localTimePattern.matcher(dummy.getTime().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTime().toString()).matches());
-        assertTrue(timestampPattern.matcher(dummy.getTimestamp().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTimeString()).matches());
+        assertTrue(dummy.getDateOld().toString(), datePattern.matcher(dummy.getDateOld().toString()).matches());
+        assertTrue(dummy.getDate().toString(), localDatePattern.matcher(dummy.getDate().toString()).matches());
+        assertTrue(dummy.getTime().toString(), localTimePattern.matcher(dummy.getTime().toString()).matches());
+        assertTrue(dummy.getDateTime().toString(), localDateTimePattern.matcher(dummy.getDateTime().toString()).matches());
+        assertTrue(dummy.getTimestamp().toString(), timestampPattern.matcher(dummy.getTimestamp().toString()).matches());
+
+        assertTrue(dummy.getDateTimeObject().toString(), localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
+        assertTrue(dummy.getDateTimeString(), localDateTimePattern.matcher(dummy.getDateTimeString()).matches());
     }
 }

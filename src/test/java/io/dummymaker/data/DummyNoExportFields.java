@@ -11,7 +11,7 @@ import io.dummymaker.annotation.special.GenRenameExport;
  */
 public class DummyNoExportFields {
 
-    @GenRenameExport(name = "socialGroup")
+    @GenRenameExport("socialGroup")
     private String group = "100";
 
     @GenIgnoreExport

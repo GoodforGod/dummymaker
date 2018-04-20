@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  */
 public class RenameScanner implements IScanner<String, String> {
 
-    private final Logger logger = Logger.getLogger(RenameScanner.class.getSimpleName());
+    private final Logger logger = Logger.getLogger(RenameScanner.class.getName());
 
     /**
      * Check if field is annotation with rename annotation
@@ -54,13 +54,13 @@ public class RenameScanner implements IScanner<String, String> {
                             .findAny().orElse(null))
                     .filter(Objects::nonNull)
                     .findAny()
-                    .ifPresent(a -> renameMap.put(null, ((GenRenameExport) a).name()));
+                    .ifPresent(a -> renameMap.put(null, ((GenRenameExport) a).value()));
 
             for (final Field field : t.getDeclaredFields()) {
                 Arrays.stream(field.getAnnotations())
                         .filter(isRenamed)
                         .findAny()
-                        .ifPresent(a -> renameMap.put(field.getName(), ((GenRenameExport) a).name()));
+                        .ifPresent(a -> renameMap.put(field.getName(), ((GenRenameExport) a).value()));
             }
         } catch (SecurityException e) {
             logger.warning(e.toString());
