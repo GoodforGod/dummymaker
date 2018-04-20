@@ -1,14 +1,19 @@
 language: java
 
 sudo: required
-
 script: "mvn cobertura:cobertura"
+dist: trusty
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
-jdk:
-  - oraclejdk9
-  - openjdk9
-  - oraclejdk8
-  - openjdk8
+matrix:
+  include:
+    - jdk: oraclejdk7
+    - jdk: openjdk7
+    - jdk: oraclejdk8
+    - jdk: openjdk8
+    - jdk: oraclejdk9
+    - jdk: openjdk9
+    - jdk: oraclejdk10
+    - jdk: openjdk10
