@@ -1,6 +1,6 @@
 package io.dummymaker.export.naming.impl;
 
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 
 /**
  * Each upper letter separated with underscore symbol, and transform to low case
@@ -12,10 +12,10 @@ import io.dummymaker.export.naming.IStrategy;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class UnderscoredLowCaseStrategy implements IStrategy {
+public class SnakeCase implements ICase {
 
     @Override
-    public String toStrategy(String value) {
+    public String format(String value) {
         final StringBuilder builder = new StringBuilder();
 
         for(final char letter : value.toCharArray()) {

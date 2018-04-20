@@ -8,7 +8,7 @@ package io.dummymaker.export.naming;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public interface IStrategy {
+public interface ICase {
 
     /**
      * Format value using naming strategy
@@ -16,5 +16,5 @@ public interface IStrategy {
      * @param value value to formatted via strategy
      * @return formatted value
      */
-    String toStrategy(final String value);
+    String format(final String value);
 }

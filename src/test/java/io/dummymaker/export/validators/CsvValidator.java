@@ -1,8 +1,8 @@
 package io.dummymaker.export.validators;
 
 import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertEquals;
@@ -60,11 +60,11 @@ public class CsvValidator implements IValidator {
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
-        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Strategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Cases.DEFAULT.value());
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
         String[] valueArray1 = dummies[0].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
         String[] valueArray2 = dummies[1].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
 
@@ -81,10 +81,10 @@ public class CsvValidator implements IValidator {
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
-    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, IStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, ICase strategy) {
+        final String expectedNameField = strategy.format(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.format(NUM.getExportFieldName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));

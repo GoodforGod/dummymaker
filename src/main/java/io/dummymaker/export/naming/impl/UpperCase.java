@@ -1,6 +1,6 @@
 package io.dummymaker.export.naming.impl;
 
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 
 /**
  * All words are in upper case: look - LOOK
@@ -8,10 +8,10 @@ import io.dummymaker.export.naming.IStrategy;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class UpperCaseStrategy implements IStrategy {
+public class UpperCase implements ICase {
 
     @Override
-    public String toStrategy(String value) {
+    public String format(String value) {
         return value.toUpperCase();
     }
 }

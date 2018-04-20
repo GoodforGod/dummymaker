@@ -1,10 +1,10 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -42,7 +42,7 @@ public class CsvExporter extends BasicExporter {
             || s.contains("\n");
 
     public CsvExporter() {
-        super(null, Format.CSV, Strategies.DEFAULT.getStrategy());
+        super(null, Format.CSV, Cases.DEFAULT.value());
     }
 
     /**
@@ -59,13 +59,13 @@ public class CsvExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see IStrategy
+     * @see ICase
      *
-     * @param strategy naming strategy for exporter
+     * @param nameCase naming strategy for exporter
      * @return exporter
      */
-    public CsvExporter withStrategy(final IStrategy strategy) {
-        setStrategy(strategy);
+    public CsvExporter withCase(final ICase nameCase) {
+        setCase(nameCase);
         return this;
     }
 

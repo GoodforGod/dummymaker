@@ -1,8 +1,8 @@
 package io.dummymaker.export.validators;
 
 import io.dummymaker.data.DummyTimestamp.FieldNames;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -32,14 +32,14 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, Strategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+        final String expectedNameField = strategy.format(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.format(NUM.getExportFieldName());
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummies[1].matches("\\t" + expectedGroupField + "\\tVARCHAR,"));
@@ -55,16 +55,16 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[9].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
-    public void isTwoTimestampedDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
-        final String expectedDateField = strategy.toStrategy(FieldNames.LOCAL_DATE.getName());
-        final String expectedTimeField = strategy.toStrategy(FieldNames.LOCAL_TIME.getName());
-        final String expectedDateTimeField = strategy.toStrategy(FieldNames.LOCAL_DATETIME.getName());
-        final String expectedTimestampField = strategy.toStrategy(FieldNames.TIMESTAMP.getName());
-        final String expectedDateOldField = strategy.toStrategy(FieldNames.DATE.getName());
+    public void isTwoTimestampedDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+        final String expectedDateField = strategy.format(FieldNames.LOCAL_DATE.getName());
+        final String expectedTimeField = strategy.format(FieldNames.LOCAL_TIME.getName());
+        final String expectedDateTimeField = strategy.format(FieldNames.LOCAL_DATETIME.getName());
+        final String expectedTimestampField = strategy.format(FieldNames.TIMESTAMP.getName());
+        final String expectedDateOldField = strategy.format(FieldNames.DATE.getName());
 
         final String timestampPattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{0,3}";
 
-        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummytimestamp\\("));
+        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("TimeDummyClass") + "\\("));
         assertTrue(dummies[1].matches("\\t" + expectedTimeField + "\\tTIMESTAMP,"));
         assertTrue(dummies[2].matches("\\t" + expectedDateField + "\\tTIMESTAMP,"));
         assertTrue(dummies[3].matches("\\t" + expectedDateTimeField + "\\tTIMESTAMP,"));
@@ -75,7 +75,7 @@ public class SqlValidator implements IValidator {
 
         assertTrue(dummies[8].matches(""));
 
-        assertTrue(dummies[9].matches("INSERT INTO dummytimestamp \\(" + expectedTimeField + ", "
+        assertTrue(dummies[9].matches("INSERT INTO " + strategy.format("TimeDummyClass") + " \\(" + strategy.format(expectedTimeField) + ", "
                 + expectedDateField + ", " + expectedDateTimeField + ", "
                 + expectedTimestampField + ", " + expectedDateOldField + "\\) VALUES"));
         assertTrue(dummies[10].matches("\\('" + timestampPattern + "', " +

@@ -38,10 +38,10 @@ public class BasicCastUtils {
         } catch (InstantiationException | InvocationTargetException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
                     + ", class may be an abstract class, an interface, "
-                    + "array, primitive. \n" + e.getMessage());
+                    + "array, primitive." + e.getMessage());
         } catch (IllegalAccessException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
-                    + ", no access to instantiating object.\n" + e.getMessage());
+                    + ", no access to instantiating object." + e.getMessage());
         }
         return null;
     }

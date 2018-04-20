@@ -7,15 +7,14 @@ import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.container.impl.PopulateContainer;
 import io.dummymaker.factory.IGenerateFactory;
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.EnumerateScanner;
 import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
-import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.util.BasicCollectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -55,9 +54,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     private final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders;
 
     BasicPopulateFactory(final IPopulateScanner populateScanner) {
-        this.populateScanner = (populateScanner == null) ? new PopulateScanner() : populateScanner;
         this.populateEmbeddedFreeScanner = new PopulateEmbeddedFreeScanner();
         this.enumerateScanner = new EnumerateScanner();
+        this.populateScanner = populateScanner;
 
         this.generateFactoryProviders = buildDefaultGenerateFactoryProviders();
     }
@@ -253,7 +252,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * Build generate factory map with default generate factory providers
      */
     private Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> buildDefaultGenerateFactoryProviders() {
-        Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> factoryProviders = new HashMap<>();
+        final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> factoryProviders = new HashMap<>();
         factoryProviders.put(GenList.class, ListGenerateFactory.class);
         factoryProviders.put(GenSet.class, SetGenerateFactory.class);
         factoryProviders.put(GenMap.class, MapGenerateFactory.class);

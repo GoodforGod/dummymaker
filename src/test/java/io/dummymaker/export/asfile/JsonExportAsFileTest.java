@@ -4,8 +4,8 @@ import io.dummymaker.data.Dummy;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -28,17 +28,17 @@ public class JsonExportAsFileTest extends FileExportAssert {
     private final Format format = Format.JSON;
 
     public JsonExportAsFileTest() {
-        super(new JsonExporter().withPretty().withPath(null).withStrategy(null).withPath("            "),
+        super(new JsonExporter().withPretty().withPath(null).withCase(null).withPath("            "),
                 new JsonValidator(), Format.JSON, 5, 14);
     }
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final IStrategy strategy = Strategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummy = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new JsonExporter().withStrategy(strategy).withPretty().withStrategy(null);
+        final IExporter exporter = new JsonExporter().withCase(strategy).withPretty().withCase(null);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);

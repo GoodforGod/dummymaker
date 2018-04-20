@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -48,11 +47,8 @@ public class RenameScanner implements IScanner<String, String> {
     public Map<String, String> scan(final Class t) {
         final Map<String, String> renameMap = new LinkedHashMap<>();
         try {
-            Arrays.stream(t.getConstructors())
-                    .map(c -> Arrays.stream(c.getAnnotations())
-                            .filter(isRenamed)
-                            .findAny().orElse(null))
-                    .filter(Objects::nonNull)
+            Arrays.stream(t.getDeclaredAnnotations())
+                    .filter(isRenamed)
                     .findAny()
                     .ifPresent(a -> renameMap.put(null, ((GenRenameExport) a).value()));
 

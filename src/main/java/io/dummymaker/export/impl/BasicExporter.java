@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.util.BasicCollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
@@ -33,22 +33,22 @@ abstract class BasicExporter implements IExporter {
 
     private String path;
     private Format format;
-    private IStrategy strategy;
+    private ICase caseUsed;
 
     /**
-     * @param strategy naming strategy
+     * @param caseUsed naming strategy
      * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
      *
-     * @see IStrategy
+     * @see ICase
      * @see Format
      */
     BasicExporter(final String path,
                   final Format format,
-                  final IStrategy strategy) {
+                  final ICase caseUsed) {
         setPath(path);
         this.format = format;
-        this.strategy = strategy;
+        this.caseUsed = caseUsed;
     }
 
     void setPath(final String path) {
@@ -57,16 +57,16 @@ abstract class BasicExporter implements IExporter {
                 : path;
     }
 
-    void setStrategy(final IStrategy strategy) {
-        if(strategy != null)
-            this.strategy = strategy;
+    void setCase(final ICase caseUsed) {
+        if(caseUsed != null)
+            this.caseUsed = caseUsed;
     }
 
     /**
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(final T t) {
-        return new ClassContainer(t, strategy);
+        return new ClassContainer(t, caseUsed);
     }
 
     /**

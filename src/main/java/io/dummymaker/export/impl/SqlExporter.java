@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.container.impl.FieldContainer;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -41,7 +41,7 @@ public class SqlExporter extends BasicExporter {
     private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
-        super(null, Format.SQL, Strategies.DEFAULT.getStrategy());
+        super(null, Format.SQL, Cases.DEFAULT.value());
     }
 
     /**
@@ -69,14 +69,14 @@ public class SqlExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see IStrategy
-     * @see Strategies
+     * @see ICase
+     * @see Cases
      *
-     * @param strategy naming strategy for exporter
+     * @param nameCase naming strategy for exporter
      * @return exporter
      */
-    public SqlExporter withStrategy(final IStrategy strategy) {
-        setStrategy(strategy);
+    public SqlExporter withCase(final ICase nameCase) {
+        setCase(nameCase);
         return this;
     }
 

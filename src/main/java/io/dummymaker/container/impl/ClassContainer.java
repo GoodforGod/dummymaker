@@ -1,8 +1,8 @@
-package io.dummymaker.export.container.impl;
+package io.dummymaker.container.impl;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.generator.impl.EnumerateGenerator;
 import io.dummymaker.scan.impl.ExportScanner;
 import io.dummymaker.scan.impl.RenameScanner;
@@ -34,7 +34,7 @@ public class ClassContainer implements IClassContainer {
     /**
      * Naming strategy applied to field names and class name
      */
-    private final IStrategy strategy;
+    private final ICase strategy;
 
     /**
      * Field origin name as a 'key', fieldContainer as 'value'
@@ -47,13 +47,13 @@ public class ClassContainer implements IClassContainer {
     private final Map<String, String> renamedFields;
 
     public <T> ClassContainer(final T t,
-                              final IStrategy strategy) {
+                              final ICase strategy) {
         this.exportClass = t.getClass();
         this.strategy = strategy;
 
         this.renamedFields = new RenameScanner().scan(exportClass);
 
-        this.finalClassName = renamedFields.getOrDefault(null, strategy.toStrategy(exportClass.getSimpleName()));
+        this.finalClassName = renamedFields.getOrDefault(null, strategy.format(exportClass.getSimpleName()));
 
         this.fieldContainerMap = buildExportFieldContainerMap();
         this.renamedFields.remove(null);
@@ -103,7 +103,7 @@ public class ClassContainer implements IClassContainer {
      * @return renamed field name
      */
     private String getFinalFieldName(final Field field) {
-        return renamedFields.getOrDefault(field.getName(), strategy.toStrategy(field.getName()));
+        return renamedFields.getOrDefault(field.getName(), strategy.format(field.getName()));
     }
 
     /**

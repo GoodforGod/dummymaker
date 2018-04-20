@@ -6,11 +6,11 @@ import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
 import io.dummymaker.annotation.string.GenCity;
 import io.dummymaker.annotation.string.GenName;
+import io.dummymaker.container.impl.PopulateContainer;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyNoPopulateFields;
 import io.dummymaker.data.DummyNoZeroConstructor;
-import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.*;
 import org.junit.Test;
 

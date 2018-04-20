@@ -1,6 +1,6 @@
 package io.dummymaker.export.naming.impl;
 
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 
 /**
  * Returns default value as is.
@@ -8,10 +8,10 @@ import io.dummymaker.export.naming.IStrategy;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class DefaultStrategy implements IStrategy {
+public class DefaultCase implements ICase {
 
     @Override
-    public String toStrategy(String value) {
+    public String format(String value) {
         return value;
     }
 }

@@ -1,10 +1,10 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class JsonExporter extends BasicExporter {
     private boolean isPretty;
 
     public JsonExporter() {
-        super(null, Format.JSON, Strategies.DEFAULT.getStrategy());
+        super(null, Format.JSON, Cases.DEFAULT.value());
         this.isPretty = false;
     }
 
@@ -51,14 +51,14 @@ public class JsonExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see IStrategy
-     * @see Strategies
+     * @see ICase
+     * @see Cases
      *
-     * @param strategy naming strategy for exporter
+     * @param nameCase naming strategy for exporter
      * @return exporter
      */
-    public JsonExporter withStrategy(final IStrategy strategy) {
-        setStrategy(strategy);
+    public JsonExporter withCase(final ICase nameCase) {
+        setCase(nameCase);
         return this;
     }
 

@@ -1,4 +1,4 @@
-package io.dummymaker.scan.container;
+package io.dummymaker.container.impl;
 
 import java.lang.annotation.Annotation;
 

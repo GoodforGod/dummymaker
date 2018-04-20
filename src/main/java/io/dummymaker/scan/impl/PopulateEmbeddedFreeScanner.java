@@ -5,8 +5,8 @@ import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
 import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.container.impl.PopulateContainer;
 import io.dummymaker.generator.impl.EmbeddedGenerator;
-import io.dummymaker.scan.container.PopulateContainer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

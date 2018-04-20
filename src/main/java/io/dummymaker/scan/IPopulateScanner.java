@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.scan.container.PopulateContainer;
+import io.dummymaker.container.impl.PopulateContainer;
 import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 

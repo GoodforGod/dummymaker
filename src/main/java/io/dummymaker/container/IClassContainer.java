@@ -1,6 +1,7 @@
-package io.dummymaker.export.container;
+package io.dummymaker.container;
 
-import io.dummymaker.export.container.impl.FieldContainer;
+import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.export.naming.ICase;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface IClassContainer {
     /**
      * Export class name (after naming strategy applied or renamed)
      *
-     * @see io.dummymaker.export.naming.IStrategy
+     * @see ICase
      * @see io.dummymaker.annotation.special.GenRenameExport
      * @return class final export name
      */
@@ -36,7 +37,7 @@ public interface IClassContainer {
     /**
      * Retrieve field by its export name (formatted via strategy or renamed via annotation)
      *
-     * @see io.dummymaker.export.naming.IStrategy
+     * @see ICase
      * @see io.dummymaker.annotation.special.GenRenameExport
      *
      * @param exportFieldName field container with final name

@@ -4,8 +4,8 @@ import io.dummymaker.data.Dummy;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -28,7 +28,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
     private final Format format = Format.CSV;
 
     public CsvExportAsFileTest() {
-        super(new CsvExporter().withPath(null).withPath("             ").withStrategy(null),
+        super(new CsvExporter().withPath(null).withPath("             ").withCase(null),
                 new CsvValidator(), Format.CSV, 3, 2);
     }
 
@@ -36,7 +36,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = produceFactory.produce(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withStrategy(null).withTextWrap()
+        final IExporter exporter = new CsvExporter().withCase(null).withTextWrap()
                 .withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
 
         final boolean exportResult = exporter.export(dummy);
@@ -58,7 +58,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(null);
+        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(null);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
@@ -76,11 +76,11 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
-        final IStrategy strategy = Strategies.UNDERSCORED_UPPER_CASE.getStrategy();
+        final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withStrategy(strategy);
+        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);

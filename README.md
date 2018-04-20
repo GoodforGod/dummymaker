@@ -106,15 +106,18 @@ Are part of *Gen* annotations cause indicate what generator each annotation is u
 Constructor parameters available for all exporters.
 
 * *withPath* - set path for export file, default directory is app home.
-* *withStrategy* - naming strategy applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
+* *withCase* - naming strategy applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
 
-	**Strategies**:
+	**Cases**:
 	* *DEFAULT* - name as is.
 	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
 	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
-	* *INITIAL_LOW_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
-	* *UNDERSCORED_LOW_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
-	* *UNDERSCORED_UPPER_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+	* *CAMEL_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
+	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
+	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
+	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
+    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
 
 ### **CsvExporter Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.

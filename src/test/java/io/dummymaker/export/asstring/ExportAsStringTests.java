@@ -54,22 +54,22 @@ public class ExportAsStringTests extends Assert {
                         { new JsonExporter().withPretty(), new JsonValidator(), 5, 14 },
                         { new JsonExporter().withPretty().withPath(null), new JsonValidator(), 5, 14 },
                         { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withStrategy(null), new JsonValidator(), 5, 14 },
+                        { new JsonExporter().withPretty().withCase(null), new JsonValidator(), 5, 14 },
 
                         { new CsvExporter(), new CsvValidator(), 3, 2 },
                         { new CsvExporter().withPath(null), new CsvValidator(), 3, 2 },
                         { new CsvExporter().withPath("    "), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withStrategy(null), new CsvValidator(), 3, 2 },
+                        { new CsvExporter().withCase(null), new CsvValidator(), 3, 2 },
 
                         { new SqlExporter(), new SqlValidator(), 9, 10 },
                         { new SqlExporter().withPath(null), new SqlValidator(), 9, 10 },
                         { new SqlExporter().withPath("    "), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withStrategy(null), new SqlValidator(), 9, 10 },
+                        { new SqlExporter().withCase(null), new SqlValidator(), 9, 10 },
 
                         { new XmlExporter(), new XmlValidator(), 5, 12 },
                         { new XmlExporter().withPath(null), new XmlValidator(), 5, 12 },
                         { new XmlExporter().withPath("     "), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withStrategy(null), new XmlValidator(), 5, 12 }
+                        { new XmlExporter().withCase(null), new XmlValidator(), 5, 12 }
                 }
         );
     }

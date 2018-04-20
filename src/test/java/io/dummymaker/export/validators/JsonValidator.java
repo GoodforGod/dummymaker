@@ -1,7 +1,7 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -25,14 +25,14 @@ public class JsonValidator implements IValidator {
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, Strategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+        final String expectedNameField = strategy.format(NAME.getExportFieldName());
         final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+        final String expectedNumField = strategy.format(NUM.getExportFieldName());
 
         assertTrue(dummies[0].matches("\\{"));
         assertTrue(dummies[1].matches("\\t\"[a-zA-Z]+\": \\["));

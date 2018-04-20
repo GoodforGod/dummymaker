@@ -4,8 +4,8 @@ import io.dummymaker.data.Dummy;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.XmlExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.XmlValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
@@ -28,17 +28,17 @@ public class XmlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.XML;
 
     public XmlExportAsFileTest() {
-        super(new XmlExporter().withPath(null).withStrategy(null).withPath("             "),
+        super(new XmlExporter().withPath(null).withCase(null).withPath("             "),
                 new XmlValidator(), Format.XML, 5, 12);
     }
 
     @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final IStrategy strategy = Strategies.INITIAL_LOW_CASE.getStrategy();
+        final ICase strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withStrategy(strategy).withPath("    ");
+        final IExporter exporter = new XmlExporter().withCase(strategy).withPath("    ");
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);

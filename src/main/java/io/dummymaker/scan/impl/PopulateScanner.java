@@ -2,8 +2,8 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.container.impl.PopulateContainer;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.container.PopulateContainer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
