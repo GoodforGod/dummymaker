@@ -25,7 +25,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenList {
 
-    Class<? extends IGenerator> value() default IdGenerator.class;
+    Class<? extends IGenerator> def = IdGenerator.class;
+
+    Class<? extends IGenerator> value() default def;
 
     int min() default 1;
 

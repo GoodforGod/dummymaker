@@ -1,7 +1,5 @@
 package io.dummymaker.generator.impl.collection.impl;
 
-import io.dummymaker.generator.IGenerator;
-
 /**
  * Generate map of elements with key,value of object type
  *
@@ -15,10 +13,5 @@ public class MapGenerator extends BasicMapGenerator<Object, Object> {
 
     public MapGenerator() {
         super();
-    }
-
-    public MapGenerator(final IGenerator keyGenerator,
-                        final IGenerator valueGenerator) {
-        super(keyGenerator, valueGenerator);
     }
 }

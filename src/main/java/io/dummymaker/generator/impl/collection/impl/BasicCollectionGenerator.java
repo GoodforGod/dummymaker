@@ -25,19 +25,11 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
 
-    private final IGenerator generator;
-
-    BasicCollectionGenerator() {
-        this.generator = new IdGenerator();
-    }
-
-    BasicCollectionGenerator(final IGenerator generator) {
-        this.generator = generator;
-    }
+    private IGenerator defaultGenerator = new IdGenerator();
 
     @Override
     public Collection<T> generate() {
-        return generate(generator, Object.class, 1, 10);
+        return generate(defaultGenerator, Object.class, 1, 10);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,7 +41,8 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
         final List list = new ArrayList<>();
         final int amount = generateRandomAmount(min, max);
 
-        final boolean isEmbedded = (generator != null && generator.getClass().equals(EmbeddedGenerator.class));
+        final IGenerator usedGenerator = (generator == null) ? defaultGenerator : generator;
+        final boolean isEmbedded = (usedGenerator.getClass().equals(EmbeddedGenerator.class));
 
         final IPopulateFactory embeddedPopulateFactory = (isEmbedded)
                 ? new GenPopulateEmbeddedFreeFactory()
@@ -57,10 +50,10 @@ abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
 
         for (int i = 0; i < amount; i++) {
             final Object object = (isEmbedded)
-                    ? embeddedPopulateFactory.populate(instanceClass(fieldType))
-                    : generateObject(generator, fieldType);
+                    ? embeddedPopulateFactory.populate(instantiate(fieldType))
+                    : generateObject(usedGenerator, fieldType);
 
-            if(object.equals(EMPTY))
+            if(UNKNOWN.equals(object))
                 return Collections.emptyList();
 
             list.add(object);

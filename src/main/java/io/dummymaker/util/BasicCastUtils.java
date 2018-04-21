@@ -15,12 +15,12 @@ import java.util.logging.Logger;
  */
 public class BasicCastUtils {
 
-    public static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
+    private static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
 
-    public static final Object EMPTY = new Object();
+    public static final Object UNKNOWN = new Object();
 
     @SuppressWarnings("unchecked")
-    public static <T> T instanceClass(final Class<T> tClass) {
+    public static <T> T instantiate(final Class<T> tClass) {
         try {
             if(tClass == null)
                 return null;
@@ -37,11 +37,11 @@ public class BasicCastUtils {
             return (T) zeroArgConstructor.newInstance();
         } catch (InstantiationException | InvocationTargetException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
-                    + ", class may be an abstract class, an interface, "
+                    + " - class may be an abstract class, an interface, "
                     + "array, primitive." + e.getMessage());
         } catch (IllegalAccessException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
-                    + ", no access to instantiating object." + e.getMessage());
+                    + " - no access to instantiating object." + e.getMessage());
         }
         return null;
     }
@@ -56,12 +56,9 @@ public class BasicCastUtils {
     public static Object generateObject(final IGenerator generator,
                                         final Class<?> fieldType) {
         if(generator == null)
-            return EMPTY;
+            return null;
 
         final Object object = generator.generate();
-        if(object == null)
-            return EMPTY;
-
         return castObject(object, fieldType);
     }
 
@@ -75,31 +72,30 @@ public class BasicCastUtils {
     public static Object castObject(final Object castObject,
                                     final Class<?> fieldType) {
         if(fieldType == null)
-            return EMPTY;
+            return UNKNOWN;
 
         final boolean isTypeString = fieldType.equals(String.class);
         if(castObject == null) {
             return (isTypeString)
                     ? "null"
-                    : EMPTY;
+                    : UNKNOWN;
         }
 
-        final Class<?> castType = castObject.getClass();
-        final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);
-        final boolean isTypeEquals = castType.equals(fieldType);
-        final boolean isTypeObject = fieldType.equals(Object.class);
+        final Class<?> castType         = castObject.getClass();
+        final boolean isTypeAssignable  = fieldType.isAssignableFrom(castType);
+        final boolean isTypeEquals      = castType.equals(fieldType);
+        final boolean isTypeObject      = fieldType.equals(Object.class);
 
-        return castObject(castObject, fieldType,
-                isTypeAssignable, isTypeEquals,
-                isTypeObject, isTypeString);
+        return castObject(castObject, fieldType, isTypeAssignable,
+                isTypeEquals, isTypeObject, isTypeString);
     }
 
     private static Object castObject(final Object castObject,
-                                    final Class<?> fieldType,
-                                    final boolean isTypeAssignable,
-                                    final boolean isTypeEquals,
-                                    final boolean isTypeObject,
-                                    final boolean isTypeString) {
+                                     final Class<?> fieldType,
+                                     final boolean isTypeAssignable,
+                                     final boolean isTypeEquals,
+                                     final boolean isTypeObject,
+                                     final boolean isTypeString) {
         if (isTypeEquals || isTypeObject) {
             return castObject;
         } else if (isTypeString) {
@@ -107,6 +103,6 @@ public class BasicCastUtils {
         } else if (isTypeAssignable) {
             return fieldType.cast(castObject);
         }
-        return EMPTY;
+        return UNKNOWN;
     }
 }

@@ -1,6 +1,5 @@
 package io.dummymaker.generator.impl.collection.impl;
 
-import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
 
 /**
@@ -16,9 +15,5 @@ public class ListGenerator extends BasicCollectionGenerator<Object> {
 
     public ListGenerator() {
         super();
-    }
-
-    public ListGenerator(final IGenerator generator) {
-        super(generator);
     }
 }

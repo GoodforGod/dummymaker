@@ -106,7 +106,7 @@ Are part of *Gen* annotations cause indicate what generator each annotation is u
 Constructor parameters available for all exporters.
 
 * *withPath* - set path for export file, default directory is app home.
-* *withCase* - naming strategy applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
+* *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
 
 	**Cases**:
 	* *DEFAULT* - name as is.
@@ -125,8 +125,7 @@ Constructor parameters available for all exporters.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
 
 ### **XmlExporter Parameters**
-* *withEnding* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
-* *withFullname* - full class export name. (class ending is not used in this case).
+* *withName* - class custom export name value. (class ending is not used in this case).
 
 ### **SqlExporter Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.

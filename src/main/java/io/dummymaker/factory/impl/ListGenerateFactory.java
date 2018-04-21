@@ -4,13 +4,13 @@ import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
+import io.dummymaker.util.BasicCastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Generates list object filled with annotation generator specified type values
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerator<?>> {
 
-    private static final Logger logger = Logger.getLogger(ListGenerateFactory.class.getName());
+    private ICollectionGenerator<?> generator;
 
     public ListGenerateFactory() {
         super(GenList.class);
@@ -41,7 +41,12 @@ public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerat
     @Override
     public Object generate(final Field field,
                            final Annotation annotation) {
-        return generate(field, annotation, new ListGenerator());
+
+        // lazy initialization and reuse of generator
+        if(this.generator == null)
+            this.generator = new ListGenerator();
+
+        return generate(field, annotation, this.generator);
     }
 
     /**
@@ -56,27 +61,22 @@ public class ListGenerateFactory extends BasicGenerateFactory<ICollectionGenerat
     public Object generate(final Field field,
                            final Annotation annotation,
                            final ICollectionGenerator<?> generator) {
-        try {
-            if(field == null || annotation == null || !field.getType().isAssignableFrom(List.class))
-                return null;
-
-            if(generator == null)
-                return generate(field, annotation);
-
-            int fixed = ((GenList) annotation).fixed();
-            int min = ((GenList) annotation).min();
-            int max = ((GenList) annotation).max();
-            if (fixed > 0) {
-                min = max = fixed;
-            }
-
-            final IGenerator valueGenerator = ((GenList) annotation).value().newInstance();
-            final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-
-            return generator.generate(valueGenerator, ((Class<?>) fieldType), min, max);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.warning(e.getMessage());
+        if (field == null || annotation == null || !field.getType().isAssignableFrom(List.class))
             return null;
+
+        if (generator == null)
+            return generate(field, annotation);
+
+        int fixed = ((GenList) annotation).fixed();
+        int min = ((GenList) annotation).min();
+        int max = ((GenList) annotation).max();
+        if (fixed > 0) {
+            min = max = fixed;
         }
+
+        final IGenerator valueGenerator = BasicCastUtils.instantiate(((GenList) annotation).value());
+
+        final Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+        return generator.generate(valueGenerator, ((Class<?>) fieldType), min, max);
     }
 }

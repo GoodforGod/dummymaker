@@ -21,10 +21,6 @@ public class SetGenerator extends BasicCollectionGenerator<Object> {
         super();
     }
 
-    public SetGenerator(final IGenerator generator) {
-        super(generator);
-    }
-
     @Override
     public Collection<Object> generate() {
         return new HashSet<>(super.generate());

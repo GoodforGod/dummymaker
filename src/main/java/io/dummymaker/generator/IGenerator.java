@@ -5,7 +5,6 @@ import io.dummymaker.annotation.PrimeGen;
 /**
  * Generator used by PrimeGen to populate field
  *
- *
  * @see io.dummymaker.factory.IPopulateFactory
  * @see PrimeGen
  *

@@ -25,19 +25,8 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
 
-    private final IGenerator keyGenerator;
-    private final IGenerator valueGenerator;
-
-    BasicMapGenerator() {
-        this.keyGenerator = new IdGenerator();
-        this.valueGenerator = new IdBigGenerator();
-    }
-
-    BasicMapGenerator(final IGenerator keyGenerator,
-                      final IGenerator valueGenerator) {
-        this.keyGenerator = keyGenerator;
-        this.valueGenerator = valueGenerator;
-    }
+    private IGenerator defaultKeyGenerator = new IdGenerator();
+    private IGenerator defaultValueGenerator = new IdBigGenerator();
 
     @Override
     public Map<K, V> generate() {
@@ -58,26 +47,29 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
         final Map map = new HashMap<>();
         final int amount = generateRandomAmount(min, max);
 
-        final boolean isEmbedded = keyGenerator != null && keyGenerator.getClass().equals(EmbeddedGenerator.class)
-                || valueGenerator != null && valueGenerator.getClass().equals(EmbeddedGenerator.class);
+        final IGenerator usedKeyGenerator   = (keyGenerator == null) ? defaultKeyGenerator : keyGenerator;
+        final IGenerator usedValueGenerator = (valueGenerator == null) ? defaultValueGenerator : valueGenerator;
 
-        final IPopulateFactory embeddedPopulateFactory = (isEmbedded)
+        final boolean isKeyEmbedded = usedKeyGenerator.getClass().equals(EmbeddedGenerator.class);
+        final boolean isValueEmbedded = usedValueGenerator.getClass().equals(EmbeddedGenerator.class);
+
+        final IPopulateFactory embeddedPopulateFactory = (isKeyEmbedded || isValueEmbedded)
                 ? new GenPopulateEmbeddedFreeFactory()
                 : null;
 
         for (int i = 0; i < amount; i++) {
-            final Object key = (isEmbedded)
-                    ? embeddedPopulateFactory.populate(instanceClass(keyType))
+            final Object key = (isKeyEmbedded)
+                    ? embeddedPopulateFactory.populate(instantiate(keyType))
                     : generateObject(keyGenerator, keyType);
 
-            final Object value = (isEmbedded)
-                    ? embeddedPopulateFactory.populate(instanceClass(valueType))
-                    : generateObject(valueGenerator, valueType);
-
-            if (key.equals(EMPTY))
+            if (UNKNOWN.equals(key))
                 return Collections.emptyMap();
 
-            map.put(key, value);
+            final Object value = (isValueEmbedded)
+                    ? embeddedPopulateFactory.populate(instantiate(valueType))
+                    : generateObject(valueGenerator, valueType);
+
+            map.put(key, (UNKNOWN.equals(value)) ? null : value);
         }
 
         return map;

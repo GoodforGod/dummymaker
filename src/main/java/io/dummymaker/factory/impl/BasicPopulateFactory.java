@@ -116,10 +116,10 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
                 field.set(t, objValue);
             } catch (ClassCastException e) {
-                logger.warning(e.getMessage() + " | FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE.");
+                logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible.");
                 errorFields.add(field);
             } catch (IllegalAccessException e) {
-                logger.warning(e.getMessage() + " | HAVE NO ACCESS TO FIELD.");
+                logger.warning(e.getMessage() + " | have NO ACCESS to field.");
                 errorFields.add(field);
             } catch (Exception e) {
                 logger.warning(e.getMessage());
@@ -150,23 +150,22 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                final Set<Field> errorFields) {
         final IGenerator generator = generatorsMap.get(field);
         final IGenerateFactory generateFactory = generateFactoryMap.get(field);
+        final Annotation populateAnnotation = populateContainer.getGen();
 
         Object generated;
 
         if (generateFactory != null) {
-            generated = generateFactory.generate(field,
-                    populateContainer.getGen(),
-                    generator);
+            generated = generateFactory.generate(field, populateAnnotation, generator);
         } else if (enumerateMap.containsKey(field)) {
             generated = buildNextEnumeratedValue(enumerateMap, field);
-        } else if (populateContainer.getGen().annotationType().equals(GenEmbedded.class)) {
+        } else if (populateAnnotation.annotationType().equals(GenEmbedded.class)) {
             generated = buildEmbeddedValue(field, errorFields);
         } else {
             generated = generator.generate();
         }
 
         final Object casted = castObject(generated, field.getType());
-        if (EMPTY.equals(casted)) {
+        if (UNKNOWN.equals(casted)) {
             errorFields.add(field);
             return null;
         }
@@ -182,18 +181,18 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      */
     private Object buildEmbeddedValue(final Field field,
                                       final Set<Field> errorFields) {
-        final Object object = instanceClass(field.getType());
-        if (object != null) {
-            return populateEntity(instanceClass(field.getType()),
-                    this.populateEmbeddedFreeScanner,
-                    buildGeneratorsMap(field.getType()),
-                    buildGenerateFactoryMap(field.getType()),
-                    buildEnumerateMap(field.getType()),
-                    new HashSet<>());
-        } else {
+        final Object object = instantiate(field.getType());
+        if (object == null) {
             errorFields.add(field);
             return null;
         }
+
+        return populateEntity(instantiate(field.getType()),
+                this.populateEmbeddedFreeScanner,
+                buildGeneratorsMap(field.getType()),
+                buildGenerateFactoryMap(field.getType()),
+                buildEnumerateMap(field.getType()),
+                new HashSet<>());
     }
 
     /**
@@ -207,6 +206,8 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             objValue = Integer.valueOf(String.valueOf(objValue));
         } else if (enumeratedField.getType().isAssignableFrom(Long.class)) {
             objValue = Long.valueOf(String.valueOf(objValue));
+        } else if(enumeratedField.getType().isAssignableFrom(Double.class)) {
+            objValue = Double.valueOf(String.valueOf(objValue));
         }
 
         // Increment numerate number for generated field
@@ -232,11 +233,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         if (BasicCollectionUtils.isEmpty(list))
             return Collections.emptyList();
 
-        // Set up map for enumerated fields before population
         final Class<?> tClass = list.get(0).getClass();
-        if (tClass == null)
-            return Collections.emptyList();
-
         final Set<Field> errorFields = new HashSet<>();
         final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass);
         final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(tClass);
@@ -269,7 +266,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         populateAnnotationMap.forEach((key, value) -> {
-            final IGenerator generator = instanceClass(((PrimeGen) value.getPrime()).value());
+            final IGenerator generator = instantiate(((PrimeGen) value.getPrime()).value());
             if (generator != null) {
                 generatorsMap.put(key, generator);
             }
@@ -302,7 +299,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                 .filter(e -> generateFactoryProviders.containsKey(e.getValue().getGen().annotationType()))
                 .forEach(e -> {
 
-                    final IGenerateFactory generateFactory = instanceClass(
+                    final IGenerateFactory generateFactory = instantiate(
                             generateFactoryProviders.get(e.getValue().getGen().annotationType()));
 
                     if (generateFactory != null) {

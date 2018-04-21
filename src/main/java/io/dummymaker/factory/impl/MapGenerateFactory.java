@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Generates map object where
@@ -26,7 +25,7 @@ import java.util.logging.Logger;
  */
 public class MapGenerateFactory extends BasicGenerateFactory<IMapGenerator<?, ?>> {
 
-    private static final Logger logger = Logger.getLogger(MapGenerateFactory.class.getName());
+    private IMapGenerator<?, ?> generator;
 
     public MapGenerateFactory() {
         super(GenMap.class);
@@ -43,7 +42,12 @@ public class MapGenerateFactory extends BasicGenerateFactory<IMapGenerator<?, ?>
     @Override
     public Object generate(final Field field,
                            final Annotation annotation) {
-        return generate(field, annotation, new MapGenerator());
+
+        // lazy initialization and reuse of generator
+        if(this.generator == null)
+            this.generator = new MapGenerator();
+
+        return generate(field, annotation, this.generator);
     }
 
     /**

@@ -35,18 +35,18 @@ public class BasicCastUtilsTest extends Assert {
     @Test
     public void castNullFieldType() {
         Object object = BasicCastUtils.castObject(new Object(), null);
-        assertEquals(BasicCastUtils.EMPTY, object);
+        assertEquals(BasicCastUtils.UNKNOWN, object);
     }
 
     @Test
     public void castNullGenerator() {
         Object object = BasicCastUtils.generateObject(null, LocalDate.class);
-        assertEquals(BasicCastUtils.EMPTY, object);
+        assertEquals(BasicCastUtils.UNKNOWN, object);
     }
 
     @Test
     public void castNullableGenerator() {
         Object object = BasicCastUtils.generateObject(new NullGenerator(), Long.class);
-        assertEquals(BasicCastUtils.EMPTY, object);
+        assertEquals(BasicCastUtils.UNKNOWN, object);
     }
 }

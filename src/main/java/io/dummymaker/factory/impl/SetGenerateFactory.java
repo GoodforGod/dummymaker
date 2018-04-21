@@ -23,6 +23,8 @@ import java.util.Set;
  */
 public class SetGenerateFactory extends BasicGenerateFactory<ICollectionGenerator<?>> {
 
+    private ICollectionGenerator<?> generator;
+
     public SetGenerateFactory() {
         super(GenSet.class);
     }
@@ -38,7 +40,12 @@ public class SetGenerateFactory extends BasicGenerateFactory<ICollectionGenerato
     @Override
     public Object generate(final Field field,
                            final Annotation annotation) {
-        return generate(field, annotation, new SetGenerator());
+
+        // lazy initialization and reuse of generator
+        if(this.generator == null)
+            this.generator = new SetGenerator();
+
+        return generate(field, annotation, this.generator);
     }
 
     /**
