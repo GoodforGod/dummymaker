@@ -4,6 +4,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.IComplexGenerator;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * Generates null values
@@ -11,7 +12,7 @@ import java.lang.annotation.Annotation;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class NullGenerator implements IGenerator<Object>, IComplexGenerator<Object> {
+public class NullGenerator implements IGenerator<Object>, IComplexGenerator {
 
     @Override
     public Object generate() {
@@ -19,12 +20,8 @@ public class NullGenerator implements IGenerator<Object>, IComplexGenerator<Obje
     }
 
     @Override
-    public Object generate(final Annotation annotation) {
+    public Object generate(final Annotation annotation,
+                           final Field field) {
         return null;
-    }
-
-    @Override
-    public boolean isSuitable(final Annotation annotation) {
-        return true;
     }
 }

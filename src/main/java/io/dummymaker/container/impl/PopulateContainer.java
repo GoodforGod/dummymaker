@@ -3,7 +3,7 @@ package io.dummymaker.container.impl;
 import java.lang.annotation.Annotation;
 
 /**
- * Container with prime annotation and its child gen annotation
+ * Container with core annotation and its child gen annotation
  * Used by populate scanners
  *
  * @see io.dummymaker.scan.IPopulateScanner
@@ -16,8 +16,9 @@ public class PopulateContainer {
 
     /**
      * @see io.dummymaker.annotation.PrimeGen
+     * @see io.dummymaker.annotation.ComplexGen
      */
-    private final Annotation prime;
+    private final Annotation core;
 
     /**
      * Its child gen annotation like:
@@ -27,14 +28,14 @@ public class PopulateContainer {
      */
     private final Annotation gen;
 
-    public PopulateContainer(final Annotation prime,
+    public PopulateContainer(final Annotation core,
                              final Annotation gen) {
-        this.prime = prime;
+        this.core = core;
         this.gen = gen;
     }
 
-    public Annotation getPrime() {
-        return prime;
+    public Annotation getCore() {
+        return core;
     }
 
     public Annotation getGen() {

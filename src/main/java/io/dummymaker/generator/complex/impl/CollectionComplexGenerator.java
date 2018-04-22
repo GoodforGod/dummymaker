@@ -14,9 +14,9 @@ import java.util.List;
  * @author GoodforGod
  * @since 22.04.2018
  */
-abstract class BasicCollectionComplexGenerator extends BasicComplexGenerator {
+abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
-    BasicCollectionComplexGenerator(final IGenerator defaultGenerator) {
+    CollectionComplexGenerator(final IGenerator defaultGenerator) {
         super(defaultGenerator);
     }
 

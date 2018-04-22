@@ -1,7 +1,6 @@
 package io.dummymaker.annotation.collection;
 
 import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
@@ -22,7 +21,6 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 05.03.2018
  */
-@PrimeGen(ListGenerator.class)
 @ComplexGen(ListComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

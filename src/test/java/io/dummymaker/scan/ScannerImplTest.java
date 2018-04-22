@@ -168,12 +168,12 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(numAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(bigdAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(lngAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(uncompaAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(cityAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(numAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(bigdAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(lngAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(uncompaAnnotations.getCore().annotationType().equals(PrimeGen.class));
 
         assertTrue(cityAnnotations.getGen().annotationType().equals(GenCity.class));
         assertTrue(numAnnotations.getGen().annotationType().equals(GenEnumerate.class));

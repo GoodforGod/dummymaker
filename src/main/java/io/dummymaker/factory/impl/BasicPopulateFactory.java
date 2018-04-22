@@ -1,5 +1,6 @@
 package io.dummymaker.factory.impl;
 
+import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.collection.GenList;
 import io.dummymaker.annotation.collection.GenMap;
@@ -8,9 +9,10 @@ import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.time.GenTime;
 import io.dummymaker.container.impl.PopulateContainer;
-import io.dummymaker.factory.IGenerateFactory;
 import io.dummymaker.factory.IPopulateFactory;
+import io.dummymaker.factory.gen.*;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.EnumerateScanner;
@@ -23,7 +25,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicCastUtils.*;
+import static io.dummymaker.util.BasicCastUtils.castObject;
+import static io.dummymaker.util.BasicCastUtils.instantiate;
 
 /**
  * Populate object populate fields using generators and generate factories
@@ -75,7 +78,6 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         }
     }
 
-
     /**
      * Populate single entity
      *
@@ -83,7 +85,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * @param enumeratesMap      map of enumerated marked fields
      * @param generatorsMap      map where generator is assigned to each entity field
      * @param generateFactoryMap map with generate factories
-     * @param errorFields        set with fields that had errors in
+     * @param nullableFields        set with fields that had errors in
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
@@ -91,7 +93,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                  final Map<Field, IGenerator> generatorsMap,
                                  final Map<Field, IGenerateFactory> generateFactoryMap,
                                  final Map<Field, Long> enumeratesMap,
-                                 final Set<Field> errorFields) {
+                                 final Set<Field> nullableFields) {
         if(t == null)
             throw new NullPointerException("Can not populate entity, cause can not instantiate class.");
 
@@ -101,7 +103,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             final Field field = annotatedField.getKey();
 
             // If field had errors in prev populate iteration, just skip that field
-            if (errorFields.contains(field))
+            if (nullableFields.contains(field))
                 continue;
 
             try {
@@ -112,18 +114,18 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                         generatorsMap,
                         generateFactoryMap,
                         enumeratesMap,
-                        errorFields);
+                        nullableFields);
 
                 field.set(t, objValue);
             } catch (ClassCastException e) {
                 logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible.");
-                errorFields.add(field);
+                nullableFields.add(field);
             } catch (IllegalAccessException e) {
                 logger.warning(e.getMessage() + " | have NO ACCESS to field.");
-                errorFields.add(field);
+                nullableFields.add(field);
             } catch (Exception e) {
                 logger.warning(e.getMessage());
-                errorFields.add(field);
+                nullableFields.add(field);
             } finally {
                 annotatedField.getKey().setAccessible(false);
             }
@@ -136,37 +138,39 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * Build field populate value
      *
      * @param field             field to populate
-     * @param populateContainer field populate annotations
+     * @param container field populate annotations
      * @param generatorsMap     fields generators
      * @param enumerateMap      field enumerate map
-     * @param errorFields       set with fields that had errors in
+     * @param nullableFields       set with fields that had errors in
      */
     @SuppressWarnings("unchecked")
     private Object buildObject(final Field field,
-                               final PopulateContainer populateContainer,
+                               final PopulateContainer container,
                                final Map<Field, IGenerator> generatorsMap,
                                final Map<Field, IGenerateFactory> generateFactoryMap,
                                final Map<Field, Long> enumerateMap,
-                               final Set<Field> errorFields) {
+                               final Set<Field> nullableFields) {
         final IGenerator generator = generatorsMap.get(field);
         final IGenerateFactory generateFactory = generateFactoryMap.get(field);
-        final Annotation populateAnnotation = populateContainer.getGen();
+        final Annotation fieldAnnotation = container.getGen();
 
         Object generated;
 
-        if (generateFactory != null) {
-            generated = generateFactory.generate(field, populateAnnotation, generator);
+        if(container.getCore().annotationType().equals(ComplexGen.class)) {
+            generated = ((IComplexGenerator) generator).generate(fieldAnnotation, field);
+        } else if (generateFactory != null) {
+            generated = generateFactory.generate(field, fieldAnnotation, generator);
         } else if (enumerateMap.containsKey(field)) {
             generated = buildNextEnumeratedValue(enumerateMap, field);
-        } else if (populateAnnotation.annotationType().equals(GenEmbedded.class)) {
-            generated = buildEmbeddedValue(field, errorFields);
+        } else if (fieldAnnotation.annotationType().equals(GenEmbedded.class)) {
+            generated = buildEmbeddedValue(field, nullableFields);
         } else {
             generated = generator.generate();
         }
 
         final Object casted = castObject(generated, field.getType());
-        if (UNKNOWN.equals(casted)) {
-            errorFields.add(field);
+        if (casted == null) {
+            nullableFields.add(field);
             return null;
         }
 
@@ -234,14 +238,14 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             return Collections.emptyList();
 
         final Class<?> tClass = list.get(0).getClass();
-        final Set<Field> errorFields = new HashSet<>();
+        final Set<Field> nullableFields = new HashSet<>();
         final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass);
         final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(tClass);
         final Map<Field, IGenerateFactory> generateFactoryMap = buildGenerateFactoryMap(tClass);
 
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, this.populateScanner, generatorMap, generateFactoryMap, enumerateMap, errorFields))
+                .map(t -> populateEntity(t, this.populateScanner, generatorMap, generateFactoryMap, enumerateMap, nullableFields))
                 .collect(Collectors.toList());
     }
 
@@ -266,9 +270,16 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         final Map<Field, IGenerator> generatorsMap = new HashMap<>();
 
         populateAnnotationMap.forEach((key, value) -> {
-            final IGenerator generator = instantiate(((PrimeGen) value.getPrime()).value());
-            if (generator != null) {
-                generatorsMap.put(key, generator);
+            if(value.getCore().annotationType().equals(PrimeGen.class)) {
+                final IGenerator generator = instantiate(((PrimeGen) value.getCore()).value());
+                if (generator != null) {
+                    generatorsMap.put(key, generator);
+                }
+            } else if(value.getCore().annotationType().equals(ComplexGen.class)) {
+                final IComplexGenerator generator = instantiate(((ComplexGen) value.getCore()).value());
+                if (generator != null) {
+                    generatorsMap.put(key, generator);
+                }
             }
         });
 

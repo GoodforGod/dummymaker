@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * @author GoodforGod
  * @since 21.04.2018
  */
-public interface IComplexGenerator extends IGenerator {
+public interface IComplexGenerator extends IGenerator<Object> {
 
     Object generate(final Annotation annotation,
                     final Field field);

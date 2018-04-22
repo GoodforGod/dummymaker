@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.time;
 
-import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.generator.impl.time.impl.LocalDateTimeGenerator;
+import io.dummymaker.annotation.ComplexGen;
+import io.dummymaker.generator.complex.impl.TimeComplexGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @author GoodforGod
  * @since 06.03.2018
  */
-@PrimeGen(LocalDateTimeGenerator.class)
+@ComplexGen(TimeComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenTime {

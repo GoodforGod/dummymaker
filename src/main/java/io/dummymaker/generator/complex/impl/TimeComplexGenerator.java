@@ -6,11 +6,14 @@ import io.dummymaker.generator.impl.time.ITimeGenerator;
 import io.dummymaker.generator.impl.time.impl.*;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+
+import static io.dummymaker.util.BasicCastUtils.castObject;
 
 /**
  * Generate time object for GenTime annotation
@@ -29,23 +32,24 @@ public class TimeComplexGenerator implements IComplexGenerator {
 
     @Override
     public Object generate(final Annotation annotation,
-                           final Class<?> fieldClass) {
-        if (fieldClass == null || annotation == null)
+                           final Field field) {
+        if (field == null || annotation == null)
             return null;
 
         final long from = ((GenTime) annotation).from();
         final long to = ((GenTime) annotation).to();
+        final Class<?> fieldClass = field.getType();
 
         if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
-            return getLocalDateTimeGenerator().generate(from, to);
+            return castObject(getLocalDateTimeGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
-            return getLocalDateGenerator().generate(from, to);
+            return castObject(getLocalDateGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
-            return getLocalTimeGenerator().generate(from, to);
+            return castObject(getLocalTimeGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
-            return getTimestampGenerator().generate(from, to);
+            return castObject(getTimestampGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
-            return getDateGenerator().generate(from, to);
+            return castObject(getDateGenerator().generate(from, to), fieldClass);
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.factory.IGenerateFactory;
+import io.dummymaker.factory.gen.IGenerateFactory;
 import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 
 import java.lang.annotation.Annotation;

@@ -3,8 +3,9 @@ package io.dummymaker.factory;
 import io.dummymaker.annotation.number.GenDoubleBig;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.factory.gen.IGenerateFactory;
+import io.dummymaker.factory.gen.ListGenerateFactory;
 import io.dummymaker.factory.impl.GenPopulateFactory;
-import io.dummymaker.factory.impl.ListGenerateFactory;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;

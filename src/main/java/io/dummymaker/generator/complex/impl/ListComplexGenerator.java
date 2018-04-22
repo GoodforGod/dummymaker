@@ -5,7 +5,10 @@ import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.List;
 
+import static io.dummymaker.util.BasicCastUtils.extractActualType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
@@ -14,7 +17,7 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  * @author GoodforGod
  * @since 21.04.2018
  */
-public class ListComplexGenerator extends BasicCollectionComplexGenerator {
+public class ListComplexGenerator extends CollectionComplexGenerator {
 
     public ListComplexGenerator() {
         super(new IdGenerator());
@@ -23,13 +26,14 @@ public class ListComplexGenerator extends BasicCollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field) {
-        if (field == null || annotation == null)
+        if (field == null || annotation == null || !field.getType().isAssignableFrom(List.class))
             return null;
 
         final GenList a = ((GenList) annotation);
+        final Type valueClass = extractActualType(field.getGenericType());
         final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 
-        return generateList(amount, a.value(), field.getDeclaringClass());
+        return generateList(amount, a.value(), ((Class<?>) valueClass));
     }
 
     @Override

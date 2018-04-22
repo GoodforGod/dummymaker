@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.PopulateContainer;
@@ -33,7 +34,8 @@ public class PopulateScanner implements IPopulateScanner {
      *
      * @see PrimeGen
      */
-    private final Predicate<Annotation> isPrime = (a) -> a.annotationType().equals(PrimeGen.class);
+    private final Predicate<Annotation> isGen = (a) -> a.annotationType().equals(PrimeGen.class)
+            || a.annotationType().equals(ComplexGen.class);
 
     /**
      * Scan for prime gen annotation and its child annotation*
@@ -49,11 +51,14 @@ public class PopulateScanner implements IPopulateScanner {
     public Map<Field, PopulateContainer> scan(final Class t) {
         final Map<Field, PopulateContainer> populateAnnotationMap = new HashMap<>();
 
+        // Use only first found gen annotation on field
         for(final Field field : t.getDeclaredFields()) {
+            nextField:
             for(Annotation annotation : field.getDeclaredAnnotations()) {
-                for(Annotation inlined : annotation.annotationType().getDeclaredAnnotations()) {
-                    if(isPrime.test(inlined)) {
-                        populateAnnotationMap.put(field, new PopulateContainer(inlined, annotation));
+                for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
+                    if(isGen.test(inline)) {
+                        populateAnnotationMap.put(field, new PopulateContainer(inline, annotation));
+                        break nextField;
                     }
                 }
             }

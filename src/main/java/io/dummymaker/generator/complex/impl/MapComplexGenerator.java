@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.dummymaker.util.BasicCastUtils.extractGenericType;
+import static io.dummymaker.util.BasicCastUtils.extractActualType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
@@ -32,8 +32,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final Class<?> valueFieldType) {
         final Map map = new HashMap<>();
         for (int i = 0; i < amount; i++) {
-            final Object key = generateValue(keyGenerator, keyFieldType);
-            final Object value = generateValue(valueGenerator, valueFieldType);
+            final Object key    = generateValue(keyGenerator, keyFieldType);
+            final Object value  = generateValue(valueGenerator, valueFieldType);
 
             if (key != null && value != null) {
                 map.put(key, value);
@@ -50,11 +50,11 @@ public class MapComplexGenerator extends BasicComplexGenerator {
             return null;
 
         final GenMap a = ((GenMap) annotation);
-        final Class<? extends IGenerator> keyGenerator = a.key();
+        final Class<? extends IGenerator> keyGenerator   = a.key();
         final Class<? extends IGenerator> valueGenerator = a.value();
 
-        final Type keyType = extractGenericType(field.getGenericType(), 0);
-        final Type valueType = extractGenericType(field.getGenericType(), 1);
+        final Type keyType   = extractActualType(field.getGenericType(), 0);
+        final Type valueType = extractActualType(field.getGenericType(), 1);
 
         final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()) - 1; // due to initial object
 

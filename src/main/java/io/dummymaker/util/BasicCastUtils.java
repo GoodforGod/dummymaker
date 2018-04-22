@@ -21,13 +21,27 @@ public class BasicCastUtils {
 
     public static final Object UNKNOWN = new Object();
 
-    public static <T> T instantiate(final Class<T> tClass, T defaultEntity) {
+    /**
+     * Instantiate class if possible, or return default provided value
+     * @param tClass class to instantiate
+     * @param defaultEntity def provided value
+     * @param <T> class instance
+     * @return class instance
+     */
+    public static <T> T instantiate(final Class<T> tClass,
+                                    final T defaultEntity) {
         final T t = instantiate(tClass);
         return (t == null)
                 ? defaultEntity
                 : t;
     }
 
+    /**
+     * Instantiate class if possible, or return default provided value
+     * @param tClass class to instantiate
+     * @param <T> class instance
+     * @return class instance
+     */
     @SuppressWarnings("unchecked")
     public static <T> T instantiate(final Class<T> tClass) {
         try {
@@ -72,12 +86,23 @@ public class BasicCastUtils {
         return castObject(object, fieldType);
     }
 
-    public static Type extractGenericType(final Type genericType) {
-        return extractGenericType(genericType, 0);
+    /**
+     * Extracts actual type from generic type
+     * @param genericType to extract from
+     * @return actual type
+     */
+    public static Type extractActualType(final Type genericType) {
+        return extractActualType(genericType, 0);
     }
 
-    public static Type extractGenericType(final Type genericType,
-                                          final int paramNumber) {
+    /**
+     * Extracts actual type from generic type
+     * @param genericType to extract from
+     * @param paramNumber actual param number in parameterized type array
+     * @return actual type
+     */
+    public static Type extractActualType(final Type genericType,
+                                         final int paramNumber) {
         final ParameterizedType parameterizedType = ((ParameterizedType) genericType);
         return (parameterizedType.getActualTypeArguments().length < paramNumber)
                 ? Object.class

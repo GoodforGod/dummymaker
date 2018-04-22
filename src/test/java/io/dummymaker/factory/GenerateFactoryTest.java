@@ -2,10 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyTime;
-import io.dummymaker.factory.impl.ListGenerateFactory;
-import io.dummymaker.factory.impl.MapGenerateFactory;
-import io.dummymaker.factory.impl.SetGenerateFactory;
-import io.dummymaker.factory.impl.TimeGenerateFactory;
+import io.dummymaker.factory.gen.*;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.collection.impl.MapGenerator;
