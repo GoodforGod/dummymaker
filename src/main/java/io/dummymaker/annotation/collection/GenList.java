@@ -1,7 +1,9 @@
 package io.dummymaker.annotation.collection;
 
+import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.impl.collection.ICollectionGenerator;
 import io.dummymaker.generator.impl.collection.impl.ListGenerator;
 import io.dummymaker.generator.impl.string.IdGenerator;
@@ -21,13 +23,12 @@ import java.lang.annotation.Target;
  * @since 05.03.2018
  */
 @PrimeGen(ListGenerator.class)
+@ComplexGen(ListComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenList {
 
-    Class<? extends IGenerator> def = IdGenerator.class;
-
-    Class<? extends IGenerator> value() default def;
+    Class<? extends IGenerator> value() default IdGenerator.class;
 
     int min() default 1;
 

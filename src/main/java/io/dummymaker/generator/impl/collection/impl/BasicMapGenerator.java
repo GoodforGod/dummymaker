@@ -30,7 +30,7 @@ abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
 
     @Override
     public Map<K, V> generate() {
-        return generate(keyGenerator, valueGenerator,
+        return generate(defaultKeyGenerator, defaultValueGenerator,
                 Object.class, Object.class,
                 1, 10);
     }

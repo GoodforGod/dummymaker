@@ -28,4 +28,12 @@ public class BasicCollectionUtils {
                 ? usedMin
                 : ThreadLocalRandom.current().nextInt(min, max);
     }
+
+    public static int generateRandomAmount(final int min,
+                                           final int max,
+                                           final int fixed) {
+        return (fixed > 0)
+                ? fixed
+                : generateRandomAmount(min, max);
+    }
 }

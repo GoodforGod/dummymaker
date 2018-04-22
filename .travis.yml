@@ -1,9 +1,20 @@
 language: java
 
-script: "mvn cobertura:cobertura"
+env:
+  global:
+    - CC_TEST_REPORTER_ID=f66f57daa8b7b257b6cb48f490a2e5b3fd7a3f90e46124a190af0f2e7af20d55
 
 dist: trusty
 sudo: false
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - "mvn cobertura:cobertura"
+  - bundle exec rspec
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

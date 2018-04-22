@@ -1,14 +1,12 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.impl.collection.ICollectionGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
-import io.dummymaker.util.BasicCastUtils;
+import io.dummymaker.generator.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+
+import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
  * "default comment"
@@ -16,9 +14,11 @@ import java.util.List;
  * @author GoodforGod
  * @since 21.04.2018
  */
-public class ListComplexGenerator implements IComplexGenerator {
+public class ListComplexGenerator extends BasicCollectionComplexGenerator {
 
-    private final ICollectionGenerator<?> generator = new ListGenerator();
+    public ListComplexGenerator() {
+        super(new IdGenerator());
+    }
 
     @Override
     public Object generate(final Annotation annotation,
@@ -26,19 +26,14 @@ public class ListComplexGenerator implements IComplexGenerator {
         if (fieldClass == null || annotation == null || !fieldClass.isAssignableFrom(List.class))
             return null;
 
-        int fixed = ((GenList) annotation).fixed();
-        int min = ((GenList) annotation).min();
-        int max = ((GenList) annotation).max();
-        if (fixed > 0) {
-            min = max = fixed;
-        }
+        final GenList a = ((GenList) annotation);
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()) - 1; // due to initial object
 
-        final IGenerator valueGenerator = BasicCastUtils.instantiate(((GenList) annotation).value());
-        return generator.generate(valueGenerator, fieldClass, min, max);
+        return generateList(amount, a.value(), fieldClass);
     }
 
     @Override
     public Object generate() {
-        return null;
+        return generateList(10, null, Object.class);
     }
 }

@@ -1,8 +1,8 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.generator.complex.IComplexGenerator;
-
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * "default comment"
@@ -10,16 +10,18 @@ import java.lang.annotation.Annotation;
  * @author GoodforGod
  * @since 21.04.2018
  */
-public class SetComplexGenerator implements IComplexGenerator {
+public class SetComplexGenerator extends ListComplexGenerator {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object generate(final Annotation annotation,
-                        final Class<?> fieldClass) {
-        return null;
+                           final Class<?> fieldClass) {
+        return new HashSet<>(((List) super.generate(annotation, fieldClass)));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object generate() {
-        return null;
+        return new HashSet<>((List) super.generate());
     }
 }
