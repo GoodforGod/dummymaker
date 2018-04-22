@@ -3,6 +3,7 @@ package io.dummymaker.generator.complex;
 import io.dummymaker.generator.IGenerator;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * Complex Generator used by ComplexGen annotation to populate fields
@@ -17,5 +18,5 @@ import java.lang.annotation.Annotation;
 public interface IComplexGenerator extends IGenerator {
 
     Object generate(final Annotation annotation,
-               final Class<?> fieldClass);
+                    final Field field);
 }

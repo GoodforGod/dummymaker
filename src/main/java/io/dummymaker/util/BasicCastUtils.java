@@ -4,6 +4,8 @@ import io.dummymaker.generator.IGenerator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -62,12 +64,24 @@ public class BasicCastUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T generateObject(final IGenerator generator,
-                                        final Class<T> fieldType) {
+                                       final Class<T> fieldType) {
         if(generator == null)
             return null;
 
         final Object object = generator.generate();
         return castObject(object, fieldType);
+    }
+
+    public static Type extractGenericType(final Type genericType) {
+        return extractGenericType(genericType, 0);
+    }
+
+    public static Type extractGenericType(final Type genericType,
+                                          final int paramNumber) {
+        final ParameterizedType parameterizedType = ((ParameterizedType) genericType);
+        return (parameterizedType.getActualTypeArguments().length < paramNumber)
+                ? Object.class
+                : parameterizedType.getActualTypeArguments()[paramNumber];
     }
 
     /**
