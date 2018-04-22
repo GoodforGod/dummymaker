@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.annotation.ComplexGen;
+import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -10,7 +11,7 @@ import java.lang.reflect.Field;
  * When annotation have attributes or value generates for multiple field types
  *
  * @see io.dummymaker.factory.IPopulateFactory
- * @see io.dummymaker.annotation.ComplexGen
+ * @see ComplexGen
  *
  * @author GoodforGod
  * @since 21.04.2018

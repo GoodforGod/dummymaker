@@ -1,6 +1,6 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.annotation.complex.GenTime;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;

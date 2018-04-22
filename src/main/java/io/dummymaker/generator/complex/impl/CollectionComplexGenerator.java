@@ -1,6 +1,6 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,7 +9,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * "default comment"
+ * Basic collection complex generator implementation
+ * Can be used by other collection complex generators
+ *
+ * @see io.dummymaker.generator.complex.IComplexGenerator
  *
  * @author GoodforGod
  * @since 22.04.2018
@@ -31,7 +34,7 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
         final List<T> list = new ArrayList<>(amount);
         list.add(initial);
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount - 1; i++) {
             final T t = generateValue(valueGenerator, fieldClass);
             list.add(t);
         }

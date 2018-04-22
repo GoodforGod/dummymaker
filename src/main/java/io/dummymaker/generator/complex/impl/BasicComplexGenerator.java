@@ -2,9 +2,9 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
-import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.impl.EmbeddedGenerator;
+import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,7 +13,11 @@ import static io.dummymaker.util.BasicCastUtils.generateObject;
 import static io.dummymaker.util.BasicCastUtils.instantiate;
 
 /**
- * "default comment"
+ * Basic complex generator implementation
+ * Can be used by other Complex generators
+ * Providing basic methods, to build new generators on top of this one
+ *
+ * @see IComplexGenerator
  *
  * @author GoodforGod
  * @since 22.04.2018
@@ -22,7 +26,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
 
     private final IGenerator defaultGenerator;
 
-    // Lazy initialization and
+    // Lazy initialization
     private IGenerator lastInstGenerator;
     private IPopulateFactory embeddedFreePopulateFactory;
 

@@ -26,7 +26,7 @@ public class BasicScanner implements IAnnotationScanner {
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> fieldScanMap = new LinkedHashMap<>();
+        final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
 
         try {
             for(final Field field : t.getDeclaredFields()) {
@@ -37,13 +37,13 @@ public class BasicScanner implements IAnnotationScanner {
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
 
-                fieldScanMap.put(field, annotations);
+                fieldAnnotationsMap.put(field, annotations);
             }
         } catch (SecurityException e) {
             logger.warning(e.toString());
         }
 
-        return fieldScanMap;
+        return fieldAnnotationsMap;
     }
 
     /**

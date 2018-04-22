@@ -111,9 +111,10 @@ public class ProduceFactoryTest {
         assertFalse(dummy.getObjectsFix().isEmpty());
         assertFalse(dummy.getStringsFix().isEmpty());
         assertFalse(dummy.getMapFix().isEmpty());
-        assertEquals(dummy.getObjectsFix().size(), 4);
-        assertEquals(dummy.getStringsFix().size(), 5);
-        assertEquals(dummy.getMapFix().size(), 3);
+
+        assertEquals(4, dummy.getObjectsFix().size());
+        assertEquals(5, dummy.getStringsFix().size());
+        assertEquals(3, dummy.getMapFix().size());
     }
 
     @Test

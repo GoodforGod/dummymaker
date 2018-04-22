@@ -1,11 +1,8 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.IGenerator;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -19,7 +16,17 @@ public class BasicCastUtils {
 
     private static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
 
-    public static final Object UNKNOWN = new Object();
+    public static Object castToNumber(final Object value,
+                                      final Class<?> fieldType) {
+        if (fieldType.isAssignableFrom(Integer.class)) {
+            return Integer.valueOf(String.valueOf(value));
+        } else if (fieldType.isAssignableFrom(Long.class)) {
+            return Long.valueOf(String.valueOf(value));
+        } else if(fieldType.isAssignableFrom(Double.class)) {
+            return Double.valueOf(String.valueOf(value));
+        }
+        return null;
+    }
 
     /**
      * Instantiate class if possible, or return default provided value
@@ -87,23 +94,25 @@ public class BasicCastUtils {
     }
 
     /**
-     * Extracts actual type from generic type
-     * @param genericType to extract from
+     * Extracts field generic type from generic type
+     *
+     * @param field to extract from
      * @return actual type
      */
-    public static Type extractActualType(final Type genericType) {
-        return extractActualType(genericType, 0);
+    public static Type getGenericType(final Field field) {
+        return getGenericType(field, 0);
     }
 
     /**
-     * Extracts actual type from generic type
-     * @param genericType to extract from
+     * Extracts field generic type from generic type
+     *
+     * @param field to extract from
      * @param paramNumber actual param number in parameterized type array
      * @return actual type
      */
-    public static Type extractActualType(final Type genericType,
-                                         final int paramNumber) {
-        final ParameterizedType parameterizedType = ((ParameterizedType) genericType);
+    public static Type getGenericType(final Field field,
+                                      final int paramNumber) {
+        final ParameterizedType parameterizedType = ((ParameterizedType) field.getGenericType());
         return (parameterizedType.getActualTypeArguments().length < paramNumber)
                 ? Object.class
                 : parameterizedType.getActualTypeArguments()[paramNumber];

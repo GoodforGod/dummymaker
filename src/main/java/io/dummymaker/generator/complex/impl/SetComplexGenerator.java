@@ -1,7 +1,8 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.annotation.collection.GenSet;
-import io.dummymaker.generator.impl.string.IdGenerator;
+import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.generator.simple.impl.string.IdGenerator;
+import io.dummymaker.util.BasicCastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,11 +10,12 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
-import static io.dummymaker.util.BasicCastUtils.extractActualType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
- * "default comment"
+ * Generates Set or GenSet annotation
+ *
+ * @see GenSet
  *
  * @author GoodforGod
  * @since 21.04.2018
@@ -31,8 +33,8 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
             return null;
 
         final GenSet a = ((GenSet) annotation);
-        final Type valueClass = extractActualType(field.getGenericType());
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()) - 1; // due to initial object
+        final Type valueClass = BasicCastUtils.getGenericType(field);
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 
         return new HashSet<>(generateList(amount, a.value(), ((Class<?>) valueClass)));
     }

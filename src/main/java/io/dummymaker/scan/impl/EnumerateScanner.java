@@ -4,11 +4,11 @@ import io.dummymaker.annotation.special.GenEnumerate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Scanner to filter fields for enumerate annotation fields
@@ -27,20 +27,22 @@ public class EnumerateScanner extends UniqueScanner {
      *
      * @see GenEnumerate
      */
-    private final Predicate<Annotation> numeratePredicate = (a) -> a.annotationType().equals(GenEnumerate.class);
+    private final Predicate<Annotation> isEnumerate = (a) -> a.annotationType().equals(GenEnumerate.class);
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> classFieldAnnotations = super.scan(t);
+        final Map<Field, List<Annotation>> populateAnnotationMap = new HashMap<>();
 
-        return classFieldAnnotations.entrySet().stream()
-                .filter(entry -> entry.getValue().stream().anyMatch(numeratePredicate))
-                .peek(e -> e.setValue(e.getValue().stream()
-                        .filter(numeratePredicate)
-                        .collect(Collectors.toList())))
-                .collect(LinkedHashMap<Field, List<Annotation>>::new,
-                        (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> { }
-                );
+        // Use only first found gen annotation on field
+        for(final Field field : t.getDeclaredFields()) {
+            for(Annotation annotation : field.getDeclaredAnnotations()) {
+                if (isEnumerate.test(annotation)) {
+                    populateAnnotationMap.put(field, Collections.singletonList(annotation));
+                    break;
+                }
+            }
+        }
+
+        return populateAnnotationMap;
     }
 }

@@ -3,7 +3,7 @@ package io.dummymaker.scan.impl;
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.container.impl.PopulateContainer;
+import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
@@ -48,8 +48,8 @@ public class PopulateScanner implements IPopulateScanner {
      * - 1 is child primeGen annotation
      */
     @Override
-    public Map<Field, PopulateContainer> scan(final Class t) {
-        final Map<Field, PopulateContainer> populateAnnotationMap = new HashMap<>();
+    public Map<Field, GenContainer> scan(final Class t) {
+        final Map<Field, GenContainer> populateAnnotationMap = new HashMap<>();
 
         // Use only first found gen annotation on field
         for(final Field field : t.getDeclaredFields()) {
@@ -57,7 +57,7 @@ public class PopulateScanner implements IPopulateScanner {
             for(Annotation annotation : field.getDeclaredAnnotations()) {
                 for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                     if(isGen.test(inline)) {
-                        populateAnnotationMap.put(field, new PopulateContainer(inline, annotation));
+                        populateAnnotationMap.put(field, new GenContainer(inline, annotation));
                         break nextField;
                     }
                 }

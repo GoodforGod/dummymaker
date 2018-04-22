@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.special;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.generator.impl.EmbeddedGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

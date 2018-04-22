@@ -1,12 +1,12 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.string.GenCity;
+import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenEnumerate;
 import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.string.GenCity;
-import io.dummymaker.annotation.string.GenName;
-import io.dummymaker.container.impl.PopulateContainer;
+import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyNoPopulateFields;
@@ -122,7 +122,7 @@ public class ScannerImplTest {
     public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyCollection.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyCollection.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -134,7 +134,7 @@ public class ScannerImplTest {
     public void scannerForExportEmbeddedFreeCollectionAnnotation() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -145,7 +145,7 @@ public class ScannerImplTest {
     public void scannerForPopulateAnnotations() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(Dummy.class);
+        Map<Field, GenContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -153,12 +153,12 @@ public class ScannerImplTest {
         assertEquals(6, fields.size());
 
         // Check for correct map values
-        PopulateContainer cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
-        PopulateContainer numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        PopulateContainer nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
-        PopulateContainer bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
-        PopulateContainer lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
-        PopulateContainer uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
+        GenContainer cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
+        GenContainer numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        GenContainer nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        GenContainer bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
+        GenContainer lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
+        GenContainer uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);
@@ -187,7 +187,7 @@ public class ScannerImplTest {
     public void scanForPopulateAnnotationsWhereThereNoOne() {
         IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoPopulateFields.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyNoPopulateFields.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);

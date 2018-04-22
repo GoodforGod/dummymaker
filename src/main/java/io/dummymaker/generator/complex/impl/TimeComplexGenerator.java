@@ -1,9 +1,9 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.impl.time.ITimeGenerator;
-import io.dummymaker.generator.impl.time.impl.*;
+import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
+import io.dummymaker.generator.simple.impl.time.impl.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -17,6 +17,10 @@ import static io.dummymaker.util.BasicCastUtils.castObject;
 
 /**
  * Generate time object for GenTime annotation
+ *
+ * @see GenTime
+ *
+ * @see IComplexGenerator
  *
  * @author GoodforGod
  * @since 21.04.2018
@@ -46,10 +50,10 @@ public class TimeComplexGenerator implements IComplexGenerator {
             return castObject(getLocalDateGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
             return castObject(getLocalTimeGenerator().generate(from, to), fieldClass);
-        } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
-            return castObject(getTimestampGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
             return castObject(getDateGenerator().generate(from, to), fieldClass);
+        } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
+            return castObject(getTimestampGenerator().generate(from, to), fieldClass);
         }
         return null;
     }

@@ -21,12 +21,12 @@ public class BasicCollectionUtils {
 
     public static int generateRandomAmount(final int min,
                                            final int max) {
-        final int usedMin = (min < 1) ? 1 : min;
-        final int usedMax = (max < 1) ? 1 : max;
+        final int usedMin = (min < 1) ? 0 : min;
+        final int usedMax = (max < 1) ? 0 : max;
 
         return (usedMin >= usedMax)
                 ? usedMin
-                : ThreadLocalRandom.current().nextInt(min, max);
+                : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
     }
 
     public static int generateRandomAmount(final int min,

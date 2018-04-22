@@ -1,6 +1,6 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.impl.NullGenerator;
+import io.dummymaker.generator.simple.impl.NullGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,8 +22,8 @@ public class BasicCastUtilsTest extends Assert {
 
     @Test
     public void generateAmountMinLessOne() {
-        int amount = BasicCollectionUtils.generateRandomAmount(-10, 1);
-        assertEquals(1, amount);
+        int amount = BasicCollectionUtils.generateRandomAmount(-10, 0);
+        assertEquals(0, amount);
     }
 
     @Test
@@ -35,18 +35,18 @@ public class BasicCastUtilsTest extends Assert {
     @Test
     public void castNullFieldType() {
         Object object = BasicCastUtils.castObject(new Object(), null);
-        assertEquals(BasicCastUtils.UNKNOWN, object);
+        assertNull(object);
     }
 
     @Test
     public void castNullGenerator() {
         Object object = BasicCastUtils.generateObject(null, LocalDate.class);
-        assertEquals(BasicCastUtils.UNKNOWN, object);
+        assertNull(object);
     }
 
     @Test
     public void castNullableGenerator() {
         Object object = BasicCastUtils.generateObject(new NullGenerator(), Long.class);
-        assertEquals(BasicCastUtils.UNKNOWN, object);
+        assertNull(object);
     }
 }

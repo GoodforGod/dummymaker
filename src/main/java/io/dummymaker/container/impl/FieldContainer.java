@@ -12,24 +12,17 @@ import java.lang.reflect.Field;
  */
 public class FieldContainer {
 
-    /**
-     * Class Field
-     */
+    /** Class Field */
     private final Field field;
 
-    /**
-     * Final field name (renamed or converted by naming strategy)
-     */
+    /** Final field name (renamed or converted by naming strategy) */
     private final String exportName;
 
     /**
      * Is field enumerable or not
-     *
      * @see io.dummymaker.annotation.special.GenEnumerate
      */
     private final boolean isEnumerable;
-
-
 
     FieldContainer(final Field field,
                    final String finalFieldName,

@@ -1,18 +1,23 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.generator.impl.string.IdGenerator;
+import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.generator.simple.impl.string.IdGenerator;
+import io.dummymaker.util.BasicCastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static io.dummymaker.util.BasicCastUtils.extractActualType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 
 /**
- * "default comment"
+ * Generates List for GenList annotation
+ *
+ * @see GenList
+ *
+ * @see io.dummymaker.generator.complex.IComplexGenerator
+ * @see CollectionComplexGenerator
  *
  * @author GoodforGod
  * @since 21.04.2018
@@ -30,7 +35,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             return null;
 
         final GenList a = ((GenList) annotation);
-        final Type valueClass = extractActualType(field.getGenericType());
+        final Type valueClass = BasicCastUtils.getGenericType(field);
         final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 
         return generateList(amount, a.value(), ((Class<?>) valueClass));

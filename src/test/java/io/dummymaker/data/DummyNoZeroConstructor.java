@@ -1,9 +1,9 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.annotation.collection.GenMap;
-import io.dummymaker.annotation.collection.GenSet;
-import io.dummymaker.generator.impl.EmbeddedGenerator;
+import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.annotation.complex.GenMap;
+import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 
 import java.util.List;
 import java.util.Map;

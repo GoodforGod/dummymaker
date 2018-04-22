@@ -2,12 +2,11 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyTime;
-import io.dummymaker.factory.gen.*;
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
-import io.dummymaker.generator.impl.collection.impl.MapGenerator;
-import io.dummymaker.generator.impl.collection.impl.SetGenerator;
-import io.dummymaker.generator.impl.time.impl.LocalDateGenerator;
+import io.dummymaker.generator.complex.IComplexGenerator;
+import io.dummymaker.generator.complex.impl.ListComplexGenerator;
+import io.dummymaker.generator.complex.impl.MapComplexGenerator;
+import io.dummymaker.generator.complex.impl.SetComplexGenerator;
+import io.dummymaker.generator.complex.impl.TimeComplexGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,19 +27,15 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class GenerateFactoryTest extends Assert {
 
-    private IGenerateFactory generateFactory;
-
-    private IGenerator generator;
+    private IComplexGenerator complexGenerator;
 
     private Field field;
     private Annotation annotation;
 
-    public GenerateFactoryTest(IGenerateFactory generateFactory,
-                               IGenerator generator,
-                               Field field,
-                               Annotation annotation) {
-        this.generateFactory = generateFactory;
-        this.generator = generator;
+    public GenerateFactoryTest(final IComplexGenerator complexGenerator,
+                               final Field field,
+                               final Annotation annotation) {
+        this.complexGenerator = complexGenerator;
         this.field = field;
         this.annotation = annotation;
     }
@@ -62,34 +57,28 @@ public class GenerateFactoryTest extends Assert {
         Annotation timeAnnotation = timeField.getDeclaredAnnotations()[0];
 
         return Arrays.asList(new Object[][]{
-                {new ListGenerateFactory(), new ListGenerator(), listField, listAnnotation},
-                {new SetGenerateFactory(), new SetGenerator(), setField, setAnnotation},
-                {new MapGenerateFactory(), new MapGenerator(), mapField, mapAnnotation},
-                {new TimeGenerateFactory(), new LocalDateGenerator(), timeField, timeAnnotation}
+                {new ListComplexGenerator(),    listField,  listAnnotation},
+                {new SetComplexGenerator(),     setField,   setAnnotation},
+                {new MapComplexGenerator(),     mapField,   mapAnnotation},
+                {new TimeComplexGenerator(),    timeField,  timeAnnotation}
         });
     }
 
     @Test
     public void nullableGeneratorTest() {
-        Object object = generateFactory.generate(field, annotation, null);
+        Object object = complexGenerator.generate(annotation, field);
         assertNotNull(object);
     }
 
     @Test
     public void nullableFieldTest() {
-        Object object = generateFactory.generate(null, annotation, generator);
+        Object object = complexGenerator.generate(annotation, null);
         assertNull(object);
     }
 
     @Test
     public void noGeneratorExecution() {
-        Object object = generateFactory.generate(field, annotation);
-        assertNotNull(object);
-    }
-
-    @Test
-    public void nullableAnnotationTest() {
-        Object object = generateFactory.generate(field, null, generator);
+        Object object = complexGenerator.generate(null, field);
         assertNull(object);
     }
 }

@@ -3,7 +3,7 @@ package io.dummymaker.container.impl;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.container.IClassContainer;
 import io.dummymaker.export.naming.ICase;
-import io.dummymaker.generator.impl.EnumerateGenerator;
+import io.dummymaker.generator.simple.impl.EnumerateGenerator;
 import io.dummymaker.scan.impl.ExportScanner;
 import io.dummymaker.scan.impl.RenameScanner;
 
@@ -21,37 +21,27 @@ import java.util.Map;
  */
 public class ClassContainer implements IClassContainer {
 
-    /**
-     * Export dummy object class
-     */
+    /** Export dummy object class */
     private final Class exportClass;
 
-    /**
-     * Export dummy object class name (renamed or formatted)
-     */
+    /** Export dummy object class name (renamed or formatted) */
     private final String finalClassName;
 
-    /**
-     * Naming strategy applied to field names and class name
-     */
+    /** Naming strategy applied to field names and class name */
     private final ICase strategy;
 
-    /**
-     * Field origin name as a 'key', fieldContainer as 'value'
-     */
+    /** Field origin name as a 'key', fieldContainer as 'value' */
     private final Map<String, FieldContainer> fieldContainerMap;
 
-    /**
-     * Renamed fields, 'Key' is origin field name, 'Value' is new field name
-     */
+    /** Renamed fields, 'Key' is origin field name, 'Value' is new field name */
     private final Map<String, String> renamedFields;
 
     public <T> ClassContainer(final T t,
                               final ICase strategy) {
-        this.exportClass = t.getClass();
-        this.strategy = strategy;
+        this.exportClass    = t.getClass();
+        this.strategy       = strategy;
 
-        this.renamedFields = new RenameScanner().scan(exportClass);
+        this.renamedFields  = new RenameScanner().scan(exportClass);
 
         this.finalClassName = renamedFields.getOrDefault(null, strategy.format(exportClass.getSimpleName()));
 
@@ -103,7 +93,7 @@ public class ClassContainer implements IClassContainer {
      * @return renamed field name
      */
     private String getFinalFieldName(final Field field) {
-        return renamedFields.getOrDefault(field.getName(), strategy.format(field.getName()));
+        return this.renamedFields.getOrDefault(field.getName(), strategy.format(field.getName()));
     }
 
     /**
