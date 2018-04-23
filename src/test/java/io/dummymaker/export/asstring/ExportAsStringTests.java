@@ -75,14 +75,14 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummyInvalidExportEntity() throws Exception {
+    public void exportSingleDummyInvalidExportEntity() {
         final String exportResult = exporter.exportAsString((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
 
     @Test
-    public void exportDummyListInvalidExportEntity() throws Exception {
+    public void exportDummyListInvalidExportEntity() {
         final String exportResult = exporter.exportAsString(null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
@@ -93,7 +93,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummyEmptyContainer() throws Exception {
+    public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
 
         final String exportResult = exporter.exportAsString(dummy);
@@ -102,7 +102,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportDummyListEmptyContainer() throws Exception {
+    public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
 
         final String exportResult = exporter.exportAsString(dummy);
@@ -111,7 +111,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = produceFactory.produce(Dummy.class);
 
         final String dummyAsString = exporter.exportAsString(dummy);
@@ -127,7 +127,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
 
         final String dummyAsString = exporter.exportAsString(dummies);
@@ -143,7 +143,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
 
         final String dummyAsString = exporter.exportAsString(dummies);

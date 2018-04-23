@@ -43,14 +43,17 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
+    private static final int MAX_EMBEDDED_DEPTH = GenEmbedded.MAX;
+    private static final int MIN_EMBEDDED_DEPTH = 1;
+
     private final IAnnotationScanner enumerateScanner;
     private final IPopulateScanner populateScanner;
     private final IPopulateScanner populateEmbeddedFreeScanner;
 
     BasicPopulateFactory(final IPopulateScanner populateScanner) {
         this.populateEmbeddedFreeScanner = new PopulateEmbeddedFreeScanner();
-        this.enumerateScanner = new EnumerateScanner();
-        this.populateScanner = populateScanner;
+        this.populateScanner            = populateScanner;
+        this.enumerateScanner           = new EnumerateScanner();
     }
 
     /**
@@ -63,11 +66,11 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
-                                 final IPopulateScanner populateScanner,
                                  final Map<Field, IGenerator> generatorsMap,
                                  final Map<Field, Long> enumeratesMap,
-                                 final Set<Field> nullableFields) {
-        final Map<Field, GenContainer> populateAnnotationMap = populateScanner.scan(t.getClass());
+                                 final Set<Field> nullableFields,
+                                 final int currentEmbeddedDepth) {
+        final Map<Field, GenContainer> populateAnnotationMap = getPopulateScanner(currentEmbeddedDepth).scan(t.getClass());
 
         for (final Map.Entry<Field, GenContainer> annotatedField : populateAnnotationMap.entrySet()) {
             final Field field = annotatedField.getKey();
@@ -83,7 +86,8 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                         annotatedField.getValue(),
                         generatorsMap,
                         enumeratesMap,
-                        nullableFields);
+                        nullableFields,
+                        currentEmbeddedDepth);
 
                 field.set(t, objValue);
 
@@ -117,7 +121,8 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                   final GenContainer container,
                                   final Map<Field, IGenerator> generatorsMap,
                                   final Map<Field, Long> enumerateMap,
-                                  final Set<Field> nullableFields) {
+                                  final Set<Field> nullableFields,
+                                  final int currentEmbeddedDepth) {
         final IGenerator generator = generatorsMap.get(field);
         final Annotation fieldAnnotation = container.getGen();
 
@@ -126,7 +131,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         if (enumerateMap.containsKey(field)) {
             generated = generateEnumerateObject(field, enumerateMap);
         } else if (fieldAnnotation.annotationType().equals(GenEmbedded.class)) {
-            generated = generateEmbeddedObject(field, nullableFields);
+            final int fieldDepth = getDepth(((GenEmbedded) fieldAnnotation).depth());
+            final int resultDepth = currentEmbeddedDepth - fieldDepth;
+            generated = generateEmbeddedObject(field, nullableFields, resultDepth);
         } else if(container.getCore().annotationType().equals(ComplexGen.class)) {
             generated = ((IComplexGenerator) generator).generate(fieldAnnotation, field);
         }  else {
@@ -147,18 +154,20 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * @param nullableFields set with fields that had errors in
      */
     private Object generateEmbeddedObject(final Field field,
-                                          final Set<Field> nullableFields) {
+                                          final Set<Field> nullableFields,
+                                          final int currentEmbeddedDepth) {
         final Object embedded = instantiate(field.getType());
         if(embedded == null) {
             nullableFields.add(field);
             return null;
         }
 
+        final int nextEmbeddedDepth = currentEmbeddedDepth;
         return populateEntity(embedded,
-                this.populateEmbeddedFreeScanner,
                 buildGeneratorsMap(field.getType()),
                 buildEnumerateMap(field.getType()),
-                new HashSet<>());
+                new HashSet<>(),
+                nextEmbeddedDepth);
     }
 
     /**
@@ -181,10 +190,10 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             return null;
 
         return populateEntity(t,
-                this.populateScanner,
                 buildGeneratorsMap(t.getClass()),
                 buildEnumerateMap(t.getClass()),
-                new HashSet<>());
+                new HashSet<>(),
+                MAX_EMBEDDED_DEPTH);
     }
 
     @Override
@@ -192,17 +201,40 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         if (BasicCollectionUtils.isEmpty(list))
             return Collections.emptyList();
 
-        final Class<?> tClass = list.get(0).getClass();
+        final Class<?> tClass           = list.get(0).getClass();
         final Set<Field> nullableFields = new HashSet<>(); // use for performance
-        final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass); // store enumerate gen state
-        final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(tClass); // use for performance
+
+        final Map<Field, Long> enumerateMap         = buildEnumerateMap(tClass); // store enumerate gen state
+        final Map<Field, IGenerator> generatorMap   = buildGeneratorsMap(tClass); // use for performance
 
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, this.populateScanner, generatorMap, enumerateMap, nullableFields))
+                .map(t -> populateEntity(t, generatorMap, enumerateMap, nullableFields, MAX_EMBEDDED_DEPTH))
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Return embedded free or embedded support populate scanner
+     *
+     * @param embeddedDepth current embedded depth stage
+     * @return populate scanner
+     */
+    private IPopulateScanner getPopulateScanner(final int embeddedDepth) {
+        return (embeddedDepth < MIN_EMBEDDED_DEPTH)
+                ? this.populateEmbeddedFreeScanner
+                : this.populateScanner;
+    }
+
+    private int getDepth(final int fieldDepth) {
+        if(fieldDepth < 1)
+            return MIN_EMBEDDED_DEPTH;
+
+        final int realDepth = MAX_EMBEDDED_DEPTH - fieldDepth;
+        return (realDepth < 1)
+                ? 0
+                : realDepth;
+    }
 
     /**
      * Build generators map to improve performance
