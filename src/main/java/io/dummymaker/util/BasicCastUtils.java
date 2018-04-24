@@ -2,7 +2,10 @@ package io.dummymaker.util;
 
 import io.dummymaker.generator.simple.IGenerator;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -94,25 +97,25 @@ public class BasicCastUtils {
     }
 
     /**
-     * Extracts field generic type from generic type
+     * Extracts generic type
      *
-     * @param field to extract from
-     * @return actual type
+     * @param type to extract from
+     * @return actual type or object if length is not presented
      */
-    public static Type getGenericType(final Field field) {
-        return getGenericType(field, 0);
+    public static Type getGenericType(final Type type) {
+        return getGenericType(type, 0);
     }
 
     /**
-     * Extracts field generic type from generic type
+     * Extracts generic type
      *
-     * @param field to extract from
+     * @param type to extract from
      * @param paramNumber actual param number in parameterized type array
-     * @return actual type
+     * @return actual type or object if length is not presented
      */
-    public static Type getGenericType(final Field field,
+    public static Type getGenericType(final Type type,
                                       final int paramNumber) {
-        final ParameterizedType parameterizedType = ((ParameterizedType) field.getGenericType());
+        final ParameterizedType parameterizedType = ((ParameterizedType) type);
         return (parameterizedType.getActualTypeArguments().length < paramNumber)
                 ? Object.class
                 : parameterizedType.getActualTypeArguments()[paramNumber];
@@ -140,12 +143,40 @@ public class BasicCastUtils {
 
         final Class<?> castType         = castObject.getClass();
         final boolean isTypeAssignable  = fieldType.isAssignableFrom(castType);
-        final boolean isTypeEquals      = castType.equals(fieldType);
+        final boolean isTypeEquals      = isClassEquals(castType, fieldType);
         final boolean isTypeObject      = fieldType.equals(Object.class);
 
         return castObject(castObject, fieldType,
                 isTypeAssignable, isTypeEquals,
                 isTypeObject, isTypeString);
+    }
+
+    public static boolean isClassEquals(final Class<?> firstClass,
+                                        final Class<?> secondClass) {
+        final boolean isFirstInt    = firstClass.isAssignableFrom(Integer.class);
+        final boolean isSecondInt   = secondClass.isAssignableFrom(Integer.class);
+
+        final boolean isFirstLong   = firstClass.isAssignableFrom(Long.class);
+        final boolean isSecondLong  = secondClass.isAssignableFrom(Long.class);
+
+        final boolean isFirstDouble = firstClass.isAssignableFrom(Double.class);
+        final boolean isSecondDouble = secondClass.isAssignableFrom(Double.class);
+
+        if(isFirstInt && isSecondInt
+                || isFirstInt && secondClass.equals(int.class)
+                || firstClass.equals(int.class) && isSecondInt) {
+            return true;
+        } else if(isFirstLong && isSecondLong
+                || isFirstLong && secondClass.equals(long.class)
+                || firstClass.equals(long.class) && isSecondLong) {
+            return true;
+        } else if(isFirstDouble && isSecondDouble
+                || isFirstDouble && secondClass.equals(double.class)
+                || firstClass.equals(double.class) && isSecondDouble) {
+            return true;
+        }
+
+        return firstClass.equals(secondClass);
     }
 
     @SuppressWarnings("unchecked")

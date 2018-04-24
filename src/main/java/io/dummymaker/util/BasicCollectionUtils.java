@@ -19,6 +19,10 @@ public class BasicCollectionUtils {
         return !isEmpty(collection);
     }
 
+    public static int getRandomIndex(final Collection collection) {
+        return generateRandomAmount(0, collection.size() - 1);
+    }
+
     public static int generateRandomAmount(final int min,
                                            final int max) {
         final int usedMin = (min < 1) ? 0 : min;

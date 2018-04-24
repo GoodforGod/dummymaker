@@ -22,5 +22,9 @@ import java.lang.annotation.Target;
 public @interface GenEmbedded {
     int MAX = 11;
 
+    /**
+     * If annotation is present, than it will be minimum 1 depth used by factory
+     * And MAX level is limit embedded object depth in hierarchy
+     */
     int depth() default 1;
 }

@@ -19,22 +19,21 @@ import static org.junit.Assert.*;
  */
 public class PopulateFactoryTest {
 
+    private final IPopulateFactory factory = new GenPopulateFactory();
+
     @Test
     public void genPopulateTestEmptyList() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
+        assertTrue(factory.populate(Collections.emptyList()).isEmpty());
     }
 
     @Test
     public void genPopulateTestNullList() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertTrue(dummyGenPopulateFactory.populate(null).isEmpty());
+        assertTrue(factory.populate(null).isEmpty());
     }
 
     @Test
     public void genPopulateTestNull() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertNull(dummyGenPopulateFactory.populate((Dummy) null));
+        assertNull(factory.populate((Dummy) null));
     }
 
     @Test
@@ -49,8 +48,7 @@ public class PopulateFactoryTest {
         dummies.get(0).setGroup(group1);
         dummies.get(1).setGroup(group2);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummies = dummyGenPopulateFactory.populate(dummies);
+        dummies = factory.populate(dummies);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -77,8 +75,7 @@ public class PopulateFactoryTest {
         Dummy dummy = new Dummy();
         dummy.setGroup(group);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummy = dummyGenPopulateFactory.populate(dummy);
+        dummy = factory.populate(dummy);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -99,8 +96,7 @@ public class PopulateFactoryTest {
         DummyNoPopulateFields dummy = new DummyNoPopulateFields();
         dummy.setGroup(group);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummy = dummyGenPopulateFactory.populate(dummy);
+        dummy = factory.populate(dummy);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());

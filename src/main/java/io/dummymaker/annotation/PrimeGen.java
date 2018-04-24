@@ -4,7 +4,10 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Prime annotations, used to create new annotations of specific generator provided type
@@ -24,7 +27,6 @@ import java.lang.annotation.*;
  * @author GoodforGod
  * @since 28.05.2017
  */
-@Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.ANNOTATION_TYPE)
 public @interface PrimeGen {

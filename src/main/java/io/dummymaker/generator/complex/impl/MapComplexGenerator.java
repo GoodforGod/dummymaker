@@ -62,8 +62,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         final Class<? extends IGenerator> keyGenerator   = a.key();
         final Class<? extends IGenerator> valueGenerator = a.value();
 
-        final Type keyType   = getGenericType(field, 0);
-        final Type valueType = getGenericType(field, 1);
+        final Type keyType   = getGenericType(field.getGenericType(), 0);
+        final Type valueType = getGenericType(field.getGenericType(), 1);
 
         final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 

@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker.generator;
 
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyTime;
@@ -25,16 +25,15 @@ import java.util.Collection;
  * @since 08.03.2018
  */
 @RunWith(Parameterized.class)
-public class GenerateFactoryTest extends Assert {
+public class ComplexGeneratorsTest extends Assert {
 
     private IComplexGenerator complexGenerator;
-
     private Field field;
     private Annotation annotation;
 
-    public GenerateFactoryTest(final IComplexGenerator complexGenerator,
-                               final Field field,
-                               final Annotation annotation) {
+    public ComplexGeneratorsTest(final IComplexGenerator complexGenerator,
+                                 final Field field,
+                                 final Annotation annotation) {
         this.complexGenerator = complexGenerator;
         this.field = field;
         this.annotation = annotation;

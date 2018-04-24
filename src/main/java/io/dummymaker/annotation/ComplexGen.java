@@ -5,7 +5,10 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Complex Gen annotation used to create new annotations of specific complex generator provided type
@@ -27,7 +30,6 @@ import java.lang.annotation.*;
  * @author GoodforGod
  * @since 21.04.2018
  */
-@Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.ANNOTATION_TYPE)
 public @interface ComplexGen {

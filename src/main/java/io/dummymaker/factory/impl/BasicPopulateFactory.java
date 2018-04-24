@@ -132,11 +132,12 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             generated = generateEnumerateObject(field, enumerateMap);
         } else if (fieldAnnotation.annotationType().equals(GenEmbedded.class)) {
             final int fieldDepth = getDepth(((GenEmbedded) fieldAnnotation).depth());
-            final int resultDepth = currentEmbeddedDepth - fieldDepth;
-            generated = generateEmbeddedObject(field, nullableFields, resultDepth);
-        } else if(container.getCore().annotationType().equals(ComplexGen.class)) {
+            generated = (fieldDepth >= currentEmbeddedDepth)
+                    ? generateEmbeddedObject(field, nullableFields, currentEmbeddedDepth)
+                    : null;
+        } else if (container.getCore().annotationType().equals(ComplexGen.class)) {
             generated = ((IComplexGenerator) generator).generate(fieldAnnotation, field);
-        }  else {
+        } else {
             generated = generator.generate();
         }
 
@@ -162,7 +163,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             return null;
         }
 
-        final int nextEmbeddedDepth = currentEmbeddedDepth;
+        final int nextEmbeddedDepth = currentEmbeddedDepth + 1;
         return populateEntity(embedded,
                 buildGeneratorsMap(field.getType()),
                 buildEnumerateMap(field.getType()),
@@ -193,7 +194,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                 buildGeneratorsMap(t.getClass()),
                 buildEnumerateMap(t.getClass()),
                 new HashSet<>(),
-                MAX_EMBEDDED_DEPTH);
+                MIN_EMBEDDED_DEPTH);
     }
 
     @Override
@@ -209,7 +210,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, generatorMap, enumerateMap, nullableFields, MAX_EMBEDDED_DEPTH))
+                .map(t -> populateEntity(t, generatorMap, enumerateMap, nullableFields, MIN_EMBEDDED_DEPTH))
                 .collect(Collectors.toList());
     }
 
@@ -230,10 +231,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         if(fieldDepth < 1)
             return MIN_EMBEDDED_DEPTH;
 
-        final int realDepth = MAX_EMBEDDED_DEPTH - fieldDepth;
-        return (realDepth < 1)
-                ? 0
-                : realDepth;
+        return (fieldDepth > MAX_EMBEDDED_DEPTH)
+                ? MAX_EMBEDDED_DEPTH
+                : fieldDepth;
     }
 
     /**
