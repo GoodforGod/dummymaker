@@ -21,11 +21,11 @@ public class BasicCastUtils {
 
     public static Object castToNumber(final Object value,
                                       final Class<?> fieldType) {
-        if (fieldType.isAssignableFrom(Integer.class)) {
+        if (fieldType.isAssignableFrom(Integer.class) || fieldType.isAssignableFrom(int.class)) {
             return Integer.valueOf(String.valueOf(value));
-        } else if (fieldType.isAssignableFrom(Long.class)) {
+        } else if (fieldType.isAssignableFrom(Long.class) || fieldType.isAssignableFrom(long.class)) {
             return Long.valueOf(String.valueOf(value));
-        } else if(fieldType.isAssignableFrom(Double.class)) {
+        } else if(fieldType.isAssignableFrom(Double.class) || fieldType.isAssignableFrom(double.class)) {
             return Double.valueOf(String.valueOf(value));
         }
         return null;
@@ -143,7 +143,7 @@ public class BasicCastUtils {
 
         final Class<?> castType         = castObject.getClass();
         final boolean isTypeAssignable  = fieldType.isAssignableFrom(castType);
-        final boolean isTypeEquals      = isClassEquals(castType, fieldType);
+        final boolean isTypeEquals      = areEquals(castType, fieldType);
         final boolean isTypeObject      = fieldType.equals(Object.class);
 
         return castObject(castObject, fieldType,
@@ -151,8 +151,8 @@ public class BasicCastUtils {
                 isTypeObject, isTypeString);
     }
 
-    public static boolean isClassEquals(final Class<?> firstClass,
-                                        final Class<?> secondClass) {
+    public static boolean areEquals(final Class<?> firstClass,
+                                    final Class<?> secondClass) {
         final boolean isFirstInt    = firstClass.isAssignableFrom(Integer.class);
         final boolean isSecondInt   = secondClass.isAssignableFrom(Integer.class);
 
@@ -161,6 +161,9 @@ public class BasicCastUtils {
 
         final boolean isFirstDouble = firstClass.isAssignableFrom(Double.class);
         final boolean isSecondDouble = secondClass.isAssignableFrom(Double.class);
+
+        final boolean isFirstChar   = firstClass.isAssignableFrom(Character.class);
+        final boolean isSecondChar  = secondClass.isAssignableFrom(Character.class);
 
         if(isFirstInt && isSecondInt
                 || isFirstInt && secondClass.equals(int.class)
@@ -173,6 +176,10 @@ public class BasicCastUtils {
         } else if(isFirstDouble && isSecondDouble
                 || isFirstDouble && secondClass.equals(double.class)
                 || firstClass.equals(double.class) && isSecondDouble) {
+            return true;
+        } else if(isFirstChar && isSecondChar
+                || isFirstChar && secondClass.equals(char.class)
+                || firstClass.equals(char.class) && isSecondChar) {
             return true;
         }
 

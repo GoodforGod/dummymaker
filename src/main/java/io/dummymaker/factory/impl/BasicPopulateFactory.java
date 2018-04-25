@@ -52,8 +52,8 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
     BasicPopulateFactory(final IPopulateScanner populateScanner) {
         this.populateEmbeddedFreeScanner = new PopulateEmbeddedFreeScanner();
-        this.populateScanner            = populateScanner;
-        this.enumerateScanner           = new EnumerateScanner();
+        this.enumerateScanner            = new EnumerateScanner();
+        this.populateScanner             = populateScanner;
     }
 
     /**
@@ -112,10 +112,10 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
      * Generate populate field value
      *
      * @param field             field to populate
-     * @param container field populate annotations
+     * @param container         field populate annotations
      * @param generatorsMap     fields generators
      * @param enumerateMap      field enumerate map
-     * @param nullableFields       set with fields that had errors in
+     * @param nullableFields    set with fields that had errors in
      */
     private Object generateObject(final Field field,
                                   final GenContainer container,

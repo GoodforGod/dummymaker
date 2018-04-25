@@ -1,15 +1,31 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.container.impl.GeneratorsContainer;
-import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.simple.impl.UuidGenerator;
+import io.dummymaker.generator.simple.impl.collection.impl.ListGenerator;
+import io.dummymaker.generator.simple.impl.collection.impl.MapGenerator;
+import io.dummymaker.generator.simple.impl.collection.impl.SetGenerator;
+import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
 import io.dummymaker.generator.simple.impl.number.DoubleGenerator;
-import io.dummymaker.util.BasicCastUtils;
+import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
+import io.dummymaker.generator.simple.impl.number.LongGenerator;
+import io.dummymaker.generator.simple.impl.string.*;
+import io.dummymaker.generator.simple.impl.time.impl.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.dummymaker.util.BasicCastUtils.getGenericType;
+import static io.dummymaker.util.BasicCollectionUtils.getRandomIndex;
+import static io.dummymaker.util.BasicCollectionUtils.isEmpty;
+import static java.util.Collections.singletonList;
 
 /**
  * "default comment"
@@ -19,46 +35,165 @@ import java.util.Map;
  */
 public class AutoGeneratorsFactory {
 
-    private final Map<Class, GeneratorsContainer> classGeneratorsMap;
+    private final IGenerator nullGenerator = new NullGenerator();
 
-    public AutoGeneratorsFactory() {
-        this.classGeneratorsMap = new HashMap<>();
-        Class<? extends IGenerator> cg = DoubleGenerator.class;
-        String s = ((Class<?>) BasicCastUtils.getGenericType(cg.getGenericInterfaces()[0])).getTypeName();
+    private void availableListGenerators() {
+        final List<Class<? extends IGenerator>> generators = new ArrayList<>();
+
+        // Numbers
+        generators.add(DoubleBigGenerator.class);
+        generators.add(DoubleGenerator.class);
+        generators.add(IntegerGenerator.class);
+        generators.add(LongGenerator.class);
+
+        // Strings
+        generators.add(CityGenerator.class);
+        generators.add(CompanyGenerator.class);
+        generators.add(CountryGenerator.class);
+        generators.add(EmailGenerator.class);
+        generators.add(IdBigGenerator.class);
+        generators.add(IdGenerator.class);
+        generators.add(JsonGenerator.class);
+        generators.add(NameGenerator.class);
+        generators.add(NickGenerator.class);
+        generators.add(NounGenerator.class);
+        generators.add(PassGenerator.class);
+        generators.add(PhoneGenerator.class);
+        generators.add(PhraseGenerator.class);
+        generators.add(StringGenerator.class);
+        generators.add(TagGenerator.class);
+
+        // Time
+        generators.add(DateGenerator.class);
+        generators.add(LocalDateGenerator.class);
+        generators.add(LocalTimeGenerator.class);
+        generators.add(TimestampGenerator.class);
+        generators.add(LocalDateTimeGenerator.class);
+
+        // Special
+        generators.add(BooleanGenerator.class);
+        generators.add(UuidGenerator.class);
     }
 
-    private GeneratorsContainer buildStringGenerators() {
-        final List<IGenerator> generators               = new ArrayList<>();
-        final List<IComplexGenerator> complexGenerators = new ArrayList<>();
+    public Map<Class<?>, List<Class<? extends IGenerator>>> availableGenerators() {
+        final List<Class<? extends IGenerator>> generators = new ArrayList<>();
 
-        return new GeneratorsContainer(generators, complexGenerators);
+        // Numbers
+        return Stream.of(
+                DoubleBigGenerator.class,
+                DoubleGenerator.class,
+                IntegerGenerator.class,
+                LongGenerator.class,
+
+                // Strings
+                CityGenerator.class,
+                CompanyGenerator.class,
+                CountryGenerator.class,
+                EmailGenerator.class,
+                IdBigGenerator.class,
+                IdGenerator.class,
+                JsonGenerator.class,
+                NameGenerator.class,
+                NickGenerator.class,
+                NounGenerator.class,
+                PassGenerator.class,
+                PhoneGenerator.class,
+                PhraseGenerator.class,
+                StringGenerator.class,
+                TagGenerator.class,
+
+                // Time
+                DateGenerator.class,
+                LocalDateGenerator.class,
+                LocalTimeGenerator.class,
+                TimestampGenerator.class,
+                LocalDateTimeGenerator.class,
+
+                // Special
+                BooleanGenerator.class,
+                UuidGenerator.class
+        ).collect(Collectors.groupingBy(
+                this::extractGenericType
+        ));
     }
 
-    private GeneratorsContainer buildIntGenerators() {
-        final List<IGenerator> generators               = new ArrayList<>();
-        final List<IComplexGenerator> complexGenerators = new ArrayList<>();
+    public IGenerator getGenerator(final Field field) {
+        final Class<?> fieldClass = field.getDeclaringClass();
 
-        return new GeneratorsContainer(generators, complexGenerators);
+        if(fieldClass.equals(List.class)) {
+            final Class<?> genericType      = ((Class<?>) getGenericType(field.getGenericType()));
+            return new ListGenerator(getGenerator(genericType));
+        } else if(fieldClass.equals(Set.class)) {
+            final Class<?> genericType      = ((Class<?>) getGenericType(field.getGenericType()));
+            return new SetGenerator(getGenerator(genericType));
+        } else if(fieldClass.equals(Map.class)) {
+            final Class<?> genericKeyType   = ((Class<?>) getGenericType(field.getGenericType(), 0));
+            final Class<?> genericValueType = ((Class<?>) getGenericType(field.getGenericType(), 1));
+            return new MapGenerator(getGenerator(genericKeyType), getGenerator(genericValueType));
+        }
+
+        return getGenerator(fieldClass);
     }
 
-    private GeneratorsContainer buildLongGenerators() {
-        final List<IGenerator> generators               = new ArrayList<>();
-        final List<IComplexGenerator> complexGenerators = new ArrayList<>();
+    public IGenerator getGenerator(final Class<?> fieldClass) {
+        final Map<Class, List<IGenerator>> map = instantiateGenerators();
 
-        return new GeneratorsContainer(generators, complexGenerators);
+        final List<IGenerator> generators = map.get(fieldClass);
+        return isEmpty(generators)
+                ? nullGenerator
+                : generators.get(getRandomIndex(generators));
     }
 
-    private GeneratorsContainer buildDoubleGenerators() {
-        final List<IGenerator> generators               = new ArrayList<>();
-        final List<IComplexGenerator> complexGenerators = new ArrayList<>();
+    public Map<Class, List<IGenerator>> instantiateGenerators() {
 
-        return new GeneratorsContainer(generators, complexGenerators);
+        final Map<Class, List<IGenerator>> collectedGenerators = Stream.of(
+                // Numbers
+                new DoubleBigGenerator(),
+                new DoubleGenerator(),
+                new IntegerGenerator(),
+                new LongGenerator(),
+
+                // Strings
+                new CityGenerator(),
+                new CompanyGenerator(),
+                new CountryGenerator(),
+                new EmailGenerator(),
+                new IdBigGenerator(),
+                new IdGenerator(),
+                new JsonGenerator(),
+                new NameGenerator(),
+                new NickGenerator(),
+                new NounGenerator(),
+                new PassGenerator(),
+                new PhoneGenerator(),
+                new PhraseGenerator(),
+                new StringGenerator(),
+                new TagGenerator(),
+
+                // Time
+                new DateGenerator(),
+                new LocalDateGenerator(),
+                new LocalTimeGenerator(),
+                new TimestampGenerator(),
+                new LocalDateTimeGenerator(),
+
+                // Special
+                new BooleanGenerator(),
+                new UuidGenerator()
+        ).collect(Collectors.groupingBy(
+                g -> extractGenericType(g.getClass())
+        ));
+
+        collectedGenerators.put(List.class, singletonList(new ListGenerator()));
+        collectedGenerators.put(Set.class, singletonList(new SetGenerator()));
+        collectedGenerators.put(Map.class, singletonList(new MapGenerator()));
+
+        return collectedGenerators;
     }
 
-    private GeneratorsContainer buildGenerators() {
-        final List<IGenerator> generators               = new ArrayList<>();
-        final List<IComplexGenerator> complexGenerators = new ArrayList<>();
-
-        return new GeneratorsContainer(generators, complexGenerators);
+    private Class<?> extractGenericType(Class<? extends IGenerator> generator) {
+        return (generator.getGenericInterfaces().length == 0)
+                ? ((Class<?>) getGenericType(((Class<?>) generator.getGenericSuperclass()).getGenericInterfaces()[0]))
+                : ((Class<?>) getGenericType(generator.getGenericInterfaces()[0]));
     }
 }

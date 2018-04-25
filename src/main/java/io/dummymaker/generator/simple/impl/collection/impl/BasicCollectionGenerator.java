@@ -26,7 +26,15 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 abstract class BasicCollectionGenerator<T> implements ICollectionGenerator<T> {
 
-    private IGenerator defaultGenerator = new IdGenerator();
+    private final IGenerator defaultGenerator;
+
+    BasicCollectionGenerator() {
+        this.defaultGenerator = new IdGenerator();
+    }
+
+    BasicCollectionGenerator(final IGenerator defaultGenerator) {
+        this.defaultGenerator = defaultGenerator;
+    }
 
     @Override
     public Collection<T> generate() {

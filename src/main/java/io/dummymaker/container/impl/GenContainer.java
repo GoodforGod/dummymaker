@@ -1,7 +1,5 @@
 package io.dummymaker.container.impl;
 
-import io.dummymaker.annotation.ComplexGen;
-
 import java.lang.annotation.Annotation;
 
 /**
@@ -18,7 +16,7 @@ public class GenContainer {
 
     /**
      * @see io.dummymaker.annotation.PrimeGen
-     * @see ComplexGen
+     * @see io.dummymaker.annotation.ComplexGen
      */
     private final Annotation core;
 

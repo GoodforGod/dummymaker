@@ -87,15 +87,20 @@ public class SqlExporter extends BasicExporter {
      */
     private HashMap<Class, String> buildDefaultDataTypeMap() {
         return new HashMap<Class, String>() {{
-            put(Long.class, "BIGINT");
-            put(Double.class, "DOUBLE PRECISION");
-            put(String.class, "VARCHAR");
-            put(Integer.class, "INT");
+            put(Long.class,         "BIGINT");
+            put(long.class,         "BIGINT");
+            put(Double.class,       "DOUBLE PRECISION");
+            put(double.class,       "DOUBLE PRECISION");
+            put(Integer.class,      "INT");
+            put(int.class,          "INT");
+            put(String.class,       "VARCHAR");
+            put(Character.class,    "CHAR");
+            put(char.class,         "CHAR");
+            put(Date.class,         "TIMESTAMP");
+            put(Timestamp.class,    "TIMESTAMP");
+            put(LocalDate.class,    "TIMESTAMP");
+            put(LocalTime.class,    "TIMESTAMP");
             put(LocalDateTime.class, "TIMESTAMP");
-            put(Timestamp.class, "TIMESTAMP");
-            put(LocalDate.class, "TIMESTAMP");
-            put(LocalTime.class, "TIMESTAMP");
-            put(Date.class, "TIMESTAMP");
         }};
     }
 

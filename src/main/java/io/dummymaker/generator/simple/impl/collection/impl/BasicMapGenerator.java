@@ -5,7 +5,6 @@ import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.collection.IMapGenerator;
-import io.dummymaker.generator.simple.impl.string.IdBigGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.util.HashMap;
@@ -25,8 +24,19 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 abstract class BasicMapGenerator<K, V> implements IMapGenerator<K, V> {
 
-    private IGenerator defaultKeyGenerator = new IdGenerator();
-    private IGenerator defaultValueGenerator = new IdBigGenerator();
+    private final IGenerator defaultKeyGenerator;
+    private final IGenerator defaultValueGenerator;
+
+    BasicMapGenerator() {
+        this.defaultKeyGenerator    = new IdGenerator();
+        this.defaultValueGenerator  = new IdGenerator();
+    }
+
+    BasicMapGenerator(final IGenerator defaultKeyGenerator,
+                             final IGenerator defaultValueGenerator) {
+        this.defaultKeyGenerator    = defaultKeyGenerator;
+        this.defaultValueGenerator  = defaultValueGenerator;
+    }
 
     @Override
     public Map<K, V> generate() {

@@ -35,8 +35,8 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             return null;
 
         final GenList a = ((GenList) annotation);
-        final Type valueClass = getGenericType(field.getGenericType());
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+        final Type valueClass   = getGenericType(field.getGenericType());
+        final int amount        = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 
         return generateList(amount, a.value(), ((Class<?>) valueClass));
     }
