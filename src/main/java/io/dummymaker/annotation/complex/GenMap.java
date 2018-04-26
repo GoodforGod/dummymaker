@@ -3,7 +3,6 @@ package io.dummymaker.annotation.complex;
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.generator.complex.impl.MapComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.collection.impl.MapGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.ElementType;
@@ -14,8 +13,7 @@ import java.lang.annotation.Target;
 /**
  * Generate map with KEY and VALUE from generators
  *
- * @see io.dummymaker.generator.simple.impl.collection.IMapGenerator
- * @see MapGenerator
+ * @see MapComplexGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018
