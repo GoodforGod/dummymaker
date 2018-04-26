@@ -1,5 +1,6 @@
 package io.dummymaker.generator.complex.impl;
 
+import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -19,23 +20,20 @@ import java.util.List;
  */
 abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
-    CollectionComplexGenerator(final IGenerator defaultGenerator) {
-        super(defaultGenerator);
-    }
-
     <T> List<T> generateList(final int amount,
                              final Class<? extends IGenerator> valueGenerator,
-                             final Class<T> fieldClass) {
+                             final Class<T> fieldClass,
+                             final GeneratorsStorage storage) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final T initial = generateValue(valueGenerator, fieldClass);
+        final T initial = generateValue(valueGenerator, fieldClass, storage);
         if(initial == null)
             return Collections.emptyList();
 
         final List<T> list = new ArrayList<>(amount);
         list.add(initial);
         for (int i = 0; i < amount - 1; i++) {
-            final T t = generateValue(valueGenerator, fieldClass);
+            final T t = generateValue(valueGenerator, fieldClass, storage);
             list.add(t);
         }
 
@@ -44,7 +42,8 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
     @Override
     public abstract Object generate(final Annotation annotation,
-                                    final Field field);
+                                    final Field field,
+                                    final GeneratorsStorage storage);
 
     @Override
     public abstract Object generate();

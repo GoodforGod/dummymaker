@@ -1,11 +1,12 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
@@ -24,25 +25,35 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 public class ListComplexGenerator extends CollectionComplexGenerator {
 
-    public ListComplexGenerator() {
-        super(new IdGenerator());
-    }
-
     @Override
     public Object generate(final Annotation annotation,
-                           final Field field) {
-        if (field == null || annotation == null || !field.getType().isAssignableFrom(List.class))
+                           final Field field,
+                           final GeneratorsStorage storage) {
+        if (field == null || !field.getType().isAssignableFrom(List.class))
             return null;
 
-        final GenList a = ((GenList) annotation);
-        final Type valueClass   = getGenericType(field.getGenericType());
-        final int amount        = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+        final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
+        if(annotation == null) {
+            if(storage == null)
+                return Collections.emptyList();
 
-        return generateList(amount, a.value(), ((Class<?>) valueClass));
+            return generateList(10,
+                    storage.getRandomGenInstance(field).getClass(),
+                    ((Class<?>) valueClass),
+                    storage);
+        }
+
+        final GenList a = ((GenList) annotation);
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+
+        return generateList(amount, a.value(), ((Class<?>) valueClass), storage);
     }
 
     @Override
     public Object generate() {
-        return generateList(10, null, Object.class);
+        return generateList(10,
+                IdGenerator.class,
+                Object.class,
+                null);
     }
 }

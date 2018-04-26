@@ -1,5 +1,16 @@
 package io.dummymaker.factory.impl;
 
+import io.dummymaker.annotation.ComplexGen;
+import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.simple.number.GenDouble;
+import io.dummymaker.annotation.simple.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.number.GenInteger;
+import io.dummymaker.annotation.simple.number.GenLong;
+import io.dummymaker.annotation.simple.string.GenCity;
+import io.dummymaker.annotation.simple.string.GenCompany;
+import io.dummymaker.annotation.simple.string.GenCountry;
+import io.dummymaker.annotation.simple.string.GenEmail;
+import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.BooleanGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
@@ -13,12 +24,15 @@ import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
 import io.dummymaker.generator.simple.impl.number.LongGenerator;
 import io.dummymaker.generator.simple.impl.string.*;
 import io.dummymaker.generator.simple.impl.time.impl.*;
+import io.dummymaker.util.BasicCastUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,6 +87,40 @@ public class AutoGeneratorsFactory {
         // Special
         generators.add(BooleanGenerator.class);
         generators.add(UuidGenerator.class);
+    }
+
+    public void availableGenContainers() {
+        final List<Class<? extends Annotation>> genAnnotations = Stream.of(
+
+                // Num
+                GenDouble.class,
+                GenDoubleBig.class,
+                GenInteger.class,
+                GenLong.class,
+
+                // Strings
+                GenCity.class,
+                GenCompany.class,
+                GenCountry.class,
+                GenEmail.class
+        ).collect(Collectors.toList());
+
+        final Predicate<Annotation> isGen = (a) -> a.annotationType().equals(PrimeGen.class)
+                || a.annotationType().equals(ComplexGen.class);
+
+        final Annotation annotation = BasicCastUtils.instantiate(genAnnotations.get(0));
+        if(annotation == null)
+            return;
+
+        GenContainer container = null;
+        for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
+            if(isGen.test(inline)) {
+                container = GenContainer.asGen(inline, annotation);
+            }
+        }
+
+        if(container != null)
+            container.toString();
     }
 
     public Map<Class<?>, List<Class<? extends IGenerator>>> availableGenerators() {

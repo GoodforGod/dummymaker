@@ -17,7 +17,6 @@ public interface ICollectionGenerator<T> extends IGenerator<Collection<T>> {
          * between min and max
          *
          * @param generator generator type
-         * @param fieldType dummy object field type
          * @param min min number of elements
          * @param max max number of elements
          * @return array list collection

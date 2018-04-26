@@ -65,19 +65,19 @@ public class ComplexGeneratorsTest extends Assert {
 
     @Test
     public void nullableGeneratorTest() {
-        Object object = complexGenerator.generate(annotation, field);
+        Object object = complexGenerator.generate(annotation, field, null);
         assertNotNull(object);
     }
 
     @Test
     public void nullableFieldTest() {
-        Object object = complexGenerator.generate(annotation, null);
+        Object object = complexGenerator.generate(annotation, null, null);
         assertNull(object);
     }
 
     @Test
     public void noGeneratorExecution() {
-        Object object = complexGenerator.generate(null, field);
-        assertNull(object);
+        Object object = complexGenerator.generate(null, field, null);
+        assertNotNull(object);
     }
 }

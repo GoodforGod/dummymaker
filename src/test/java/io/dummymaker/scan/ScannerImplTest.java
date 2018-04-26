@@ -175,12 +175,12 @@ public class ScannerImplTest {
         assertTrue(lngAnnotations.getCore().annotationType().equals(PrimeGen.class));
         assertTrue(uncompaAnnotations.getCore().annotationType().equals(PrimeGen.class));
 
-        assertTrue(cityAnnotations.getGen().annotationType().equals(GenCity.class));
-        assertTrue(numAnnotations.getGen().annotationType().equals(GenEnumerate.class));
-        assertTrue(nameAnnotations.getGen().annotationType().equals(GenName.class));
-        assertTrue(bigdAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
-        assertTrue(lngAnnotations.getGen().annotationType().equals(GenEnumerate.class));
-        assertTrue(uncompaAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
+        assertTrue(cityAnnotations.getMarker().annotationType().equals(GenCity.class));
+        assertTrue(numAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(nameAnnotations.getMarker().annotationType().equals(GenName.class));
+        assertTrue(bigdAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
+        assertTrue(lngAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(uncompaAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
     }
 
     @Test

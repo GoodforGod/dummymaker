@@ -57,7 +57,7 @@ public class PopulateScanner implements IPopulateScanner {
             for(Annotation annotation : field.getDeclaredAnnotations()) {
                 for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                     if(isGen.test(inline)) {
-                        populateAnnotationMap.put(field, new GenContainer(inline, annotation));
+                        populateAnnotationMap.put(field, GenContainer.asGen(inline, annotation));
                         break nextField;
                     }
                 }

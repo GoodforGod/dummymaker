@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex;
 
 import io.dummymaker.annotation.ComplexGen;
+import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -19,5 +20,6 @@ import java.lang.reflect.Field;
 public interface IComplexGenerator extends IGenerator<Object> {
 
     Object generate(final Annotation annotation,
-                    final Field field);
+                    final Field field,
+                    final GeneratorsStorage storage);
 }

@@ -40,7 +40,7 @@ public class PopulateEmbeddedFreeScanner extends PopulateScanner {
      *
      * @see GenEmbedded
      */
-    private final Predicate<Annotation> isEmbedded = (a) -> !a.annotationType().equals(GenEmbedded.class)
+    private final Predicate<Annotation> isNotEmbedded = (a) -> !a.annotationType().equals(GenEmbedded.class)
             && !(a.annotationType().equals(GenList.class) && ((GenList) a).value().equals(EmbeddedGenerator.class))
             && !(a.annotationType().equals(GenSet.class) && ((GenSet) a).value().equals(EmbeddedGenerator.class))
             && !(a.annotationType().equals(GenMap.class)
@@ -50,7 +50,7 @@ public class PopulateEmbeddedFreeScanner extends PopulateScanner {
     public Map<Field, GenContainer> scan(final Class t) {
         return super.scan(t).entrySet()
                 .stream()
-                .filter(e -> isEmbedded.test(e.getValue().getGen()))
+                .filter(e -> isNotEmbedded.test(e.getValue().getMarker()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

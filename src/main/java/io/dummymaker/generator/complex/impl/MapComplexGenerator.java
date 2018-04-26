@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenMap;
+import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -22,27 +23,24 @@ import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
  */
 public class MapComplexGenerator extends BasicComplexGenerator {
 
-    public MapComplexGenerator() {
-        super(new IdGenerator());
-    }
-
     private Map generateMap(final int amount,
                             final Class<? extends IGenerator> keyGenerator,
                             final Class<? extends IGenerator> valueGenerator,
                             final Class<?> keyFieldType,
-                            final Class<?> valueFieldType) {
+                            final Class<?> valueFieldType,
+                            final GeneratorsStorage storage) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final Object initialKey     = generateValue(keyGenerator, keyFieldType);
-        final Object initialValue   = generateValue(valueGenerator, valueFieldType);
+        final Object initialKey     = generateValue(keyGenerator, keyFieldType, storage);
+        final Object initialValue   = generateValue(valueGenerator, valueFieldType, storage);
         if(initialKey == null && initialValue == null)
             return Collections.emptyMap();
 
         final Map map = new HashMap<>(amount);
         map.put(initialKey, initialValue);
         for (int i = 0; i < amount - 1; i++) {
-            final Object key    = generateValue(keyGenerator, keyFieldType);
-            final Object value  = generateValue(valueGenerator, valueFieldType);
+            final Object key    = generateValue(keyGenerator, keyFieldType, storage);
+            final Object value  = generateValue(valueGenerator, valueFieldType, storage);
 
             if (key != null && value != null) {
                 map.put(key, value);
@@ -54,24 +52,46 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
     @Override
     public Object generate(final Annotation annotation,
-                           final Field field) {
-        if (field == null || annotation == null || !field.getType().isAssignableFrom(Map.class))
+                           final Field field,
+                           final GeneratorsStorage storage) {
+        if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;
+
+        final Type keyType   = getGenericType(field.getGenericType(), 0);
+        final Type valueType = getGenericType(field.getGenericType(), 1);
+        if(annotation == null) {
+            if(storage == null)
+                return Collections.emptyMap();
+
+            return generateMap(10,
+                    IdGenerator.class,
+                    IdGenerator.class,
+                    ((Class<?>) keyType),
+                    ((Class<?>) valueType),
+                    storage);
+        }
 
         final GenMap a = ((GenMap) annotation);
         final Class<? extends IGenerator> keyGenerator   = a.key();
         final Class<? extends IGenerator> valueGenerator = a.value();
 
-        final Type keyType   = getGenericType(field.getGenericType(), 0);
-        final Type valueType = getGenericType(field.getGenericType(), 1);
-
         final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
 
-        return generateMap(amount, keyGenerator, valueGenerator, ((Class<?>) keyType), ((Class<?>) valueType));
+        return generateMap(amount,
+                keyGenerator,
+                valueGenerator,
+                ((Class<?>) keyType),
+                ((Class<?>) valueType),
+                storage);
     }
 
     @Override
     public Object generate() {
-        return null;
+        return generateMap(10,
+                IdGenerator.class,
+                IdGenerator.class,
+                Object.class,
+                Object.class,
+                null);
     }
 }
