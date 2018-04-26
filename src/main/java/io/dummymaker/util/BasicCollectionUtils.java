@@ -23,6 +23,13 @@ public class BasicCollectionUtils {
         return generateRandomAmount(0, collection.size() - 1);
     }
 
+    public static int getIndexWithSalt(final int size,
+                                       final String name,
+                                       final int salt) {
+        final int hashed = name.hashCode() + salt;
+        return Math.abs(hashed % size);
+    }
+
     public static int generateRandomAmount(final int min,
                                            final int max) {
         final int usedMin = (min < 1) ? 0 : min;

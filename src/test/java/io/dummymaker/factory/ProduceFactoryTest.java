@@ -159,6 +159,36 @@ public class ProduceFactoryTest {
     }
 
     @Test
+    public void produceAutoDummy() {
+        final DummyAuto dummyAuto = factory.produce(DummyAuto.class);
+        assertNotNull(dummyAuto);
+
+
+        assertNotNull(dummyAuto.getaLong());
+        assertNotEquals(0, dummyAuto.getAnInt());
+
+        assertNotNull(dummyAuto.getList());
+        assertNotNull(dummyAuto.getMap());
+        assertFalse(dummyAuto.getList().isEmpty());
+        assertFalse(dummyAuto.getMap().isEmpty());
+        assertEquals(10, dummyAuto.getList().size());
+        assertEquals(10, dummyAuto.getMap().size());
+
+        assertNotNull(dummyAuto.getDummyAuto());
+
+        final DummyAuto innerDummy = dummyAuto.getDummyAuto();
+        assertNotNull(innerDummy.getaLong());
+        assertNotEquals(0, innerDummy.getAnInt());
+
+        assertNotNull(innerDummy.getList());
+        assertNotNull(innerDummy.getMap());
+        assertFalse(innerDummy.getList().isEmpty());
+        assertFalse(innerDummy.getMap().isEmpty());
+        assertEquals(10, innerDummy.getList().size());
+        assertEquals(10, innerDummy.getMap().size());
+    }
+
+    @Test
     public void produceWithWrongCollectionFields() {
         final DummyCollectionWrong dummy = factory.produce(DummyCollectionWrong.class);
 

@@ -7,13 +7,13 @@ import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
+import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * "default comment"
@@ -57,17 +57,17 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;
 
-        final Type keyType   = getGenericType(field.getGenericType(), 0);
-        final Type valueType = getGenericType(field.getGenericType(), 1);
+        final Class<?> keyType   = (Class<?>) getGenericType(field.getGenericType(), 0);
+        final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
         if(annotation == null) {
             if(storage == null)
                 return Collections.emptyMap();
 
             return generateMap(10,
-                    IdGenerator.class,
-                    IdGenerator.class,
-                    ((Class<?>) keyType),
-                    ((Class<?>) valueType),
+                    getAutoGenerator(keyType),
+                    getAutoGenerator(valueType),
+                    keyType,
+                    valueType,
                     storage);
         }
 
@@ -80,8 +80,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         return generateMap(amount,
                 keyGenerator,
                 valueGenerator,
-                ((Class<?>) keyType),
-                ((Class<?>) valueType),
+                keyType,
+                valueType,
                 storage);
     }
 

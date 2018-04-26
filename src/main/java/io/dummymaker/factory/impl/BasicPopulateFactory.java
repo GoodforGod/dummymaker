@@ -92,10 +92,11 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                 field.set(t, objValue);
 
             } catch (ClassCastException e) {
-                logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible.");
+                logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
                 nullableFields.add(field); // skip field due to error as if it null
+                throw e;
             } catch (IllegalAccessException e) {
-                logger.warning(e.getMessage() + " | have NO ACCESS to field.");
+                logger.warning(e.getMessage() + " | have NO ACCESS to field: " + field.getName());
                 nullableFields.add(field); // skip field due to error as if it null
             } catch (Exception e) {
                 logger.warning(e.getMessage());

@@ -8,7 +8,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotations is used on classes and uses
+ * Annotations is used on classes
+ * And uses default suitable generators to fill class fields
+ *
+ * @see io.dummymaker.util.BasicGenUtils#AUTO_GENERATORS
  *
  * @author GoodforGod
  * @since 21.04.2018

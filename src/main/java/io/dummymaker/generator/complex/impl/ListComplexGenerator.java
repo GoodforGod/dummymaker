@@ -11,6 +11,7 @@ import java.util.List;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
+import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * Generates List for GenList annotation
@@ -38,7 +39,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
                 return Collections.emptyList();
 
             return generateList(10,
-                    storage.getRandomGenInstance(field).getClass(),
+                    getAutoGenerator(valueClass),
                     ((Class<?>) valueClass),
                     storage);
         }
@@ -53,7 +54,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
     public Object generate() {
         return generateList(10,
                 IdGenerator.class,
-                Object.class,
+                String.class,
                 null);
     }
 }

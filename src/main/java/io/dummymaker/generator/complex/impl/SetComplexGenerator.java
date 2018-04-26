@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
 import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
+import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * Generates Set or GenSet annotation
@@ -37,7 +38,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
                 return Collections.emptySet();
 
             return new HashSet<>(generateList(10,
-                    storage.getRandomGenInstance(field).getClass(),
+                    getAutoGenerator(field),
                     ((Class<?>) valueClass),
                     storage));
         }

@@ -1,11 +1,13 @@
 package io.dummymaker.generator;
 
+import io.dummymaker.generator.complex.impl.ListComplexGenerator;
+import io.dummymaker.generator.complex.impl.MapComplexGenerator;
+import io.dummymaker.generator.complex.impl.SetComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.impl.CharacterGenerator;
+import io.dummymaker.generator.simple.impl.ObjectGenerator;
 import io.dummymaker.generator.simple.impl.UuidGenerator;
-import io.dummymaker.generator.simple.impl.collection.impl.ListGenerator;
-import io.dummymaker.generator.simple.impl.collection.impl.MapGenerator;
-import io.dummymaker.generator.simple.impl.collection.impl.SetGenerator;
 import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
 import io.dummymaker.generator.simple.impl.number.DoubleGenerator;
 import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
@@ -72,9 +74,11 @@ public class GeneratorPatternValidTest {
                 { new TagGenerator(),           String.class,   Pattern.compile("#[0-9a-zA-Z]+") },
                 { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
                 { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
-                { new ListGenerator(),          ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
-                { new SetGenerator(),           HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
-                { new MapGenerator(),           HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
+                { new CharacterGenerator(),     Character.class, Pattern.compile(".") },
+                { new ObjectGenerator(),        Object.class,   Pattern.compile("java\\.lang\\.Object@[1-9A-Za-z]+") },
+                { new ListComplexGenerator(),   ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new SetComplexGenerator(),    HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new MapComplexGenerator(),    HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
                 { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{1,2} [A-Za-z]{3} \\d{4}") },
                 { new LocalDateGenerator(),     LocalDate.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
                 { new LocalDateTimeGenerator(), LocalDateTime.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") },

@@ -15,7 +15,7 @@ public class PhoneGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return current().nextInt(10)
+        return current().nextInt(1,9)
                 + "("
                 + current().nextInt(100, 999)
                 + ")"

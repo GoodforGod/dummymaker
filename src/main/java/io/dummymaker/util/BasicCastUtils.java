@@ -115,10 +115,14 @@ public class BasicCastUtils {
      */
     public static Type getGenericType(final Type type,
                                       final int paramNumber) {
-        final ParameterizedType parameterizedType = ((ParameterizedType) type);
-        return (parameterizedType.getActualTypeArguments().length < paramNumber)
-                ? Object.class
-                : parameterizedType.getActualTypeArguments()[paramNumber];
+        try {
+            final ParameterizedType parameterizedType = ((ParameterizedType) type);
+            return (parameterizedType.getActualTypeArguments().length < paramNumber)
+                    ? Object.class
+                    : parameterizedType.getActualTypeArguments()[paramNumber];
+        } catch (Exception e) {
+            return Object.class;
+        }
     }
 
     /**
@@ -151,37 +155,45 @@ public class BasicCastUtils {
                 isTypeObject, isTypeString);
     }
 
+    /**
+     * Check if objects have equals types, even if they are primitive
+     */
     public static boolean areEquals(final Class<?> firstClass,
                                     final Class<?> secondClass) {
-        final boolean isFirstInt    = firstClass.isAssignableFrom(Integer.class);
-        final boolean isSecondInt   = secondClass.isAssignableFrom(Integer.class);
+        final boolean isFirstInt = firstClass.isAssignableFrom(Integer.class);
+        final boolean isSecondInt = secondClass.isAssignableFrom(Integer.class);
+        if (isFirstInt && isSecondInt
+                || isFirstInt && secondClass.equals(int.class)
+                || firstClass.equals(int.class) && isSecondInt)
+            return true;
 
-        final boolean isFirstLong   = firstClass.isAssignableFrom(Long.class);
-        final boolean isSecondLong  = secondClass.isAssignableFrom(Long.class);
+        final boolean isFirstLong = firstClass.isAssignableFrom(Long.class);
+        final boolean isSecondLong = secondClass.isAssignableFrom(Long.class);
+        if (isFirstLong && isSecondLong
+                || isFirstLong && secondClass.equals(long.class)
+                || firstClass.equals(long.class) && isSecondLong)
+            return true;
 
         final boolean isFirstDouble = firstClass.isAssignableFrom(Double.class);
         final boolean isSecondDouble = secondClass.isAssignableFrom(Double.class);
-
-        final boolean isFirstChar   = firstClass.isAssignableFrom(Character.class);
-        final boolean isSecondChar  = secondClass.isAssignableFrom(Character.class);
-
-        if(isFirstInt && isSecondInt
-                || isFirstInt && secondClass.equals(int.class)
-                || firstClass.equals(int.class) && isSecondInt) {
-            return true;
-        } else if(isFirstLong && isSecondLong
-                || isFirstLong && secondClass.equals(long.class)
-                || firstClass.equals(long.class) && isSecondLong) {
-            return true;
-        } else if(isFirstDouble && isSecondDouble
+        if (isFirstDouble && isSecondDouble
                 || isFirstDouble && secondClass.equals(double.class)
-                || firstClass.equals(double.class) && isSecondDouble) {
+                || firstClass.equals(double.class) && isSecondDouble)
             return true;
-        } else if(isFirstChar && isSecondChar
+
+        final boolean isFirstChar = firstClass.isAssignableFrom(Character.class);
+        final boolean isSecondChar = secondClass.isAssignableFrom(Character.class);
+        if (isFirstChar && isSecondChar
                 || isFirstChar && secondClass.equals(char.class)
-                || firstClass.equals(char.class) && isSecondChar) {
+                || firstClass.equals(char.class) && isSecondChar)
             return true;
-        }
+
+        final boolean isFirstBool = firstClass.isAssignableFrom(Boolean.class);
+        final boolean isSecondBool = secondClass.isAssignableFrom(Boolean.class);
+        if (isFirstBool && isSecondBool
+                || isFirstChar && secondClass.equals(boolean.class)
+                || firstClass.equals(boolean.class) && isSecondChar)
+            return true;
 
         return firstClass.equals(secondClass);
     }
