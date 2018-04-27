@@ -85,7 +85,7 @@ abstract class BasicExporter implements IExporter {
      */
     IWriter buildWriter(final IClassContainer classContainer) {
         try {
-            return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtension());
+            return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
         } catch (IOException e) {
             logger.warning(e.getMessage());
             return null;
@@ -103,32 +103,36 @@ abstract class BasicExporter implements IExporter {
                                                       final IClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
-        classContainer.getContainers().forEach((key, value) -> {
-            try {
-                value.getField().setAccessible(true);
 
-                final String exportFieldName = value.getExportName();
-                final Object exportFieldValue = value.getField().get(t);
+        // Using only SIMPLE values containers
+        classContainer.getSimpleContainers().forEach((k, v) -> {
+            try {
+                k.setAccessible(true);
+
+                final String exportFieldName = v.getExportName();
+                final Object exportFieldValue = k.get(t);
 
                 exports.add(buildContainer(exportFieldName, exportFieldValue));
 
-                value.getField().setAccessible(false);
-            } catch (Exception e) {
-                logger.warning(e.getMessage());
+                k.setAccessible(false);
+            } catch (Exception ex) {
+                logger.warning(ex.getMessage());
             }
         });
 
         return exports;
     }
 
-    ExportContainer buildContainer(final String exportFieldName,
+    private ExportContainer buildContainer(final String exportFieldName,
                                    final Object exportFieldValue) {
-        if(exportFieldValue == null)
-           return ExportContainer.asValue(exportFieldName, "");
+        if(exportFieldValue == null) {
+            return ExportContainer.asValue(exportFieldName, "");
+        }
 
-        //TODO Check this
-        if (exportFieldValue.getClass().equals(Date.class))
+        //TODO Check this in SQL exporter
+        if (exportFieldValue.getClass().equals(Date.class)) {
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+        }
 
 //        if(this.format == Format.JSON) {
 //            if (exportFieldValue.getClass().isAssignableFrom(Collection.class)) {

@@ -186,7 +186,7 @@ public class JsonExporter extends BasicExporter {
             return false;
 
         // Open JSON Object List
-        writer.write(openJsonListTag(container.exportClassName()) + "\n");
+        writer.write(openJsonListTag(container.getExportClassName()) + "\n");
 
         final String result = list.stream()
                 .map(t -> format(t, container, Mode.LIST))
@@ -221,7 +221,7 @@ public class JsonExporter extends BasicExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder builder = new StringBuilder(openJsonListTag(container.exportClassName()))
+        final StringBuilder builder = new StringBuilder(openJsonListTag(container.getExportClassName()))
                 .append("\n");
 
         final String result = list.stream()

@@ -5,7 +5,7 @@ import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.special.GenForceExport;
+import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyCollection;
@@ -53,9 +53,9 @@ public class ScannerImplTest {
 
     @Test
     public void exportAnnotationScannerTest() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new ExportScanner();
+        IExportScanner scanner = new ExportScanner();
 
-        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, FieldContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -63,19 +63,18 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        List<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
-        List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
-
+        FieldContainer groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
+        FieldContainer numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        FieldContainer nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);
         assertNotNull(nameAnnotations);
 
         // Check for correct export annotations
-        assertTrue(groupAnnotations.iterator().next().annotationType().equals(GenForceExport.class));
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(groupAnnotations.isSimple());
+        assertTrue(numAnnotations.isEnumerable());
+        assertTrue(nameAnnotations.isSimple());
     }
 
     @Test

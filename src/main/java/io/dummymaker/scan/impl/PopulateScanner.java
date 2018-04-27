@@ -54,7 +54,7 @@ public class PopulateScanner implements IPopulateScanner {
      */
     @Override
     public Map<Field, GenContainer> scan(final Class t) {
-        final Map<Field, GenContainer> populateAnnotationMap = new HashMap<>();
+        final Map<Field, GenContainer> populateAnnotationMap = new LinkedHashMap<>();
 
         // Check if class is auto generatable
         final boolean isAutoGen = Arrays.stream(t.getDeclaredAnnotations())

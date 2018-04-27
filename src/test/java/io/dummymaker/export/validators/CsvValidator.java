@@ -25,6 +25,12 @@ public class CsvValidator implements IValidator {
     }
 
     @Override
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("-?[0-9]+"));
+        assertTrue(dummy[1].matches("-?[0-9]+"));
+    }
+
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         String[] valueArray1 = dummies[0].split(",");
 

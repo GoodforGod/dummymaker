@@ -126,13 +126,11 @@ public class SqlExporter extends BasicExporter {
      */
     private String buildCreateTableQuery(final IClassContainer container,
                                          final String primaryKeyField) {
-        final Map<String, FieldContainer> containerMap = container.getContainers();
-
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(container.exportClassName().toLowerCase())
+                .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
 
-        final String resultValues = containerMap.entrySet().stream()
+        final String resultValues = container.getSimpleContainers().entrySet().stream()
                 .map(e -> "\t" + buildInsertNameTypeQuery(e.getValue().getExportName(), container))
                 .collect(Collectors.joining(",\n"));
 
@@ -165,7 +163,7 @@ public class SqlExporter extends BasicExporter {
                                         final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
-                .append(container.exportClassName().toLowerCase())
+                .append(container.getExportClassName().toLowerCase())
                 .append(" (");
 
         final String names = exportContainers.stream()
@@ -201,18 +199,18 @@ public class SqlExporter extends BasicExporter {
      * - Randomly selected
      */
     private String buildPrimaryKey(final IClassContainer container) {
-        final Map<String, FieldContainer> containerMap = container.getContainers();
-        return containerMap.entrySet().stream()
-                .filter(e -> e.getKey().equalsIgnoreCase("id")
-                        || e.getKey().equalsIgnoreCase("uid"))
-                .map(Map.Entry::getKey)
-                .findAny()
-                .orElse(containerMap.entrySet().stream()
-                        .filter(c -> c.getValue().isEnumerable())
-                        .map(Map.Entry::getKey)
-                        .findAny()
-                        .orElse(containerMap.entrySet().iterator().next().getKey())
-                );
+        final Map<Field, FieldContainer> containerMap = container.getSimpleContainers();
+
+        for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
+            if (entry.getValue().isEnumerable()) {
+                return entry.getValue().getExportName();
+            } else if (entry.getKey().getName().equalsIgnoreCase("id")
+                    || entry.getKey().getName().equalsIgnoreCase("uid")) {
+                return entry.getValue().getExportName();
+            }
+        }
+
+        return containerMap.entrySet().iterator().next().getValue().getExportName();
     }
 
     /**

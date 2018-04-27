@@ -24,6 +24,14 @@ public class JsonValidator implements IValidator {
     }
 
     @Override
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches("\\t\"aLong\":\"-?[0-9]+\","));
+        assertTrue(dummy[2].matches("\\t\"anInt\":\"-?[0-9]+\""));
+        assertTrue(dummy[3].matches("}"));
+    }
+
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
     }

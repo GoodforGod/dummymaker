@@ -24,6 +24,14 @@ public class XmlValidator implements IValidator {
     }
 
     @Override
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("<DummyAuto>"));
+        assertTrue(dummy[1].matches("\\t<aLong>" + "-?[0-9]+" + "</aLong>"));
+        assertTrue(dummy[2].matches("\\t<anInt>" + "-?[0-9]+" + "</anInt>"));
+        assertTrue(dummy[3].matches("</DummyAuto>"));
+    }
+
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
     }

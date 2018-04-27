@@ -143,7 +143,7 @@ public class CsvExporter extends BasicExporter {
      */
     private String generateCsvHeader(final IClassContainer container) {
         final String separatorAsStr = String.valueOf(separator);
-        return container.getContainers().entrySet().stream()
+        return container.getSimpleContainers().entrySet().stream()
                 .map(e -> e.getValue().getExportName())
                 .collect(Collectors.joining(separatorAsStr));
     }

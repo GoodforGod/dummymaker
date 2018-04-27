@@ -31,6 +31,20 @@ public class SqlValidator implements IValidator {
     }
 
     @Override
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummyauto\\("));
+        assertTrue(dummy[1].matches("\\taLong\\tBIGINT,"));
+        assertTrue(dummy[2].matches("\\tanInt\\tINT,"));
+        assertTrue(dummy[3].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummy[4].matches("\\);"));
+
+        assertTrue(dummy[5].matches(""));
+
+        assertTrue(dummy[6].matches("INSERT INTO dummyauto \\(aLong, anInt\\) VALUES"));
+        assertTrue(dummy[7].matches("\\(-?[0-9]+, -?[0-9]+\\);"));
+    }
+
+    @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
     }

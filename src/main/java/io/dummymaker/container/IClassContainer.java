@@ -32,7 +32,7 @@ public interface IClassContainer {
      * @see io.dummymaker.annotation.special.GenRenameExport
      * @return class final export name
      */
-    String exportClassName();
+    String getExportClassName();
 
     /**
      * Retrieve field by its export name (formatted via strategy or renamed via annotation)
@@ -46,14 +46,16 @@ public interface IClassContainer {
     Field getField(final String exportFieldName);
 
     /**
-     * Return map of field containers
-     *
-     * KEY - 'origin field'
-     * VALUE - 'field container'
+     * Returns field containers map
      *
      * @see FieldContainer
-     *
-     * @return export containers
      */
-    Map<String, FieldContainer> getContainers();
+    Map<Field, FieldContainer> getContainers();
+
+    /**
+     * Returns only simple field containers map
+     *
+     * @see FieldContainer
+     */
+    Map<Field, FieldContainer> getSimpleContainers();
 }

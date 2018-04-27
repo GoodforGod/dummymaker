@@ -113,7 +113,7 @@ public class XmlExporter extends BasicExporter {
 
         final StringBuilder builder = new StringBuilder()
                 .append(tabObject)
-                .append(wrapOpenXmlTag(container.exportClassName()))
+                .append(wrapOpenXmlTag(container.getExportClassName()))
                 .append("\n");
 
         final String resultValues = exportContainers.stream()
@@ -124,7 +124,7 @@ public class XmlExporter extends BasicExporter {
                 .append("\n");
 
         return builder.append(tabObject)
-                .append(wrapCloseXmlTag(container.exportClassName()))
+                .append(wrapCloseXmlTag(container.getExportClassName()))
                 .toString();
     }
 
