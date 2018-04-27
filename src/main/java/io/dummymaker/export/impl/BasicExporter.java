@@ -12,7 +12,6 @@ import io.dummymaker.writer.impl.BufferedFileWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -125,24 +124,24 @@ abstract class BasicExporter implements IExporter {
     ExportContainer buildContainer(final String exportFieldName,
                                    final Object exportFieldValue) {
         if(exportFieldValue == null)
-           return ExportContainer.buildValue(exportFieldName, "");
+           return ExportContainer.asValue(exportFieldName, "");
 
+        //TODO Check this
         if (exportFieldValue.getClass().equals(Date.class))
-            return ExportContainer.buildValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+            return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
 
-        if(this.format == Format.JSON) {
-            if (exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
-                final ExportContainer container = ExportContainer.buildCollection(exportFieldName);
-            }
+//        if(this.format == Format.JSON) {
+//            if (exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
+//                final ExportContainer container = ExportContainer.asCollection(exportFieldName);
+//            }
+//
+//            final IClassContainer classContainer = buildClassContainer(exportFieldValue.getClass());
+//            if(classContainer.isExportable()) {
+//                final List<ExportContainer> embeddedContainers = extractExportContainers(exportFieldValue, classContainer);
+//            }
+//        }
 
-            final IClassContainer classContainer = buildClassContainer(exportFieldValue.getClass());
-            if(classContainer.isExportable()) {
-                final List<ExportContainer> embeddedContainers = extractExportContainers(exportFieldValue, classContainer);
-            }
-        }
-
-
-        return ExportContainer.buildValue(exportFieldName, String.valueOf(exportFieldValue));
+        return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
     }
 
     /**

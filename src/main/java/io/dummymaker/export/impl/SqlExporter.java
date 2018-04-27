@@ -93,10 +93,12 @@ public class SqlExporter extends BasicExporter {
             put(double.class,       "DOUBLE PRECISION");
             put(Integer.class,      "INT");
             put(int.class,          "INT");
-            put(String.class,       "VARCHAR");
             put(Character.class,    "CHAR");
             put(char.class,         "CHAR");
-            put(Date.class,         "TIMESTAMP");
+            put(Boolean.class,      "BIT");
+            put(boolean.class,      "BIT");
+            put(String.class,       "VARCHAR");
+            put(Date.class,         "TIMESTAMP"); // due to Date class acts as time in millis when export
             put(Timestamp.class,    "TIMESTAMP");
             put(LocalDate.class,    "TIMESTAMP");
             put(LocalTime.class,    "TIMESTAMP");
