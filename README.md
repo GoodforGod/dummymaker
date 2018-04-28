@@ -41,9 +41,9 @@ dependencies {
 - [Annotations](#annotations)
   - [Gen Annotations](#gen-annotations)  
   - [Core Annotations](#core-annotations)  
+  - [Auto Annotation](#auto-annotation)
   - [Collection Annotations](#collection-annotations)  
   - [Time Annotation](#time-annotation)  
-  - [Auto Annotation](#auto-annotation)
   - [Special Annotations](#special-annotations)  
 - [Exporters](#exporters)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
@@ -158,6 +158,12 @@ Library provides *PrimeGen* and *ComplexGen* annotations as markers to build oth
 
 Annotations used as markers on top of other annotations, which will be used to annotate fields in the end. This annotations takes *IGenerator*/*IComplexGenerator* as a input when building top level annotation. Check guide below for example.
 
+### **Auto Annotation**
+
+Use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
+
+As simple as it can be. Magic.
+
 ### **Collection Annotations**
 
 Collection annotations like: **GenList, GenSet, GenMap** used to populate fields with such types.
@@ -193,11 +199,6 @@ Annotations support special attributes like:
 * *from* - minimum generated time (*01.01.1970* is default) in long UTC format.
 * *to* - maximum generated time (*01.01.3000* is default) in long UTC format.
 
-### **Auto Annotation**
-
-Use can use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
-
-As simple as it can be.
 
 ### **Embedded Annotation**
 
@@ -227,12 +228,19 @@ Make sure that *Gen* annotation *generate type* is **same** or is **castable** t
 
 ![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
 
+#### *Auto Gen magic*
+
+Just simple use *GenAuto* on class and library will do all for you.
+Check *Auto Annotation* part for details.
+
+![](https://media.giphy.com/media/2fOt0kmS5Zk99CldyU/giphy.gif)
+
 #### *Force and Ignore annotations*
 
 In this case, field city will be export despite it isn't marked with *Gen* annotation, value will be "Saint-Petersburg".
 And field *id* will **NOT** be export if *ignore* annotation will have *true* (*default*) value.
 
-![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
+![](https://media.giphy.com/media/fGUhbzqFXGO18YDdmM/giphy.gif)
 
 #### *Enumerate and Rename field example*
 
@@ -241,13 +249,13 @@ It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 
 
 *GenRenameExport* annotation will change *field* or *class* export name.
 
-![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
+![](https://media.giphy.com/media/1lAKHEbMtZ0ISV1HMp/giphy.gif)
 
 #### *Class name Rename example*
 
 *GenRenameExport* annotation will change **class** *export* name.in this case.
 
-![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
+![](https://media.giphy.com/media/cdMPMc4OcXoBb0erSO/giphy.gif)
 
 #### *Gen Time annotation example*
 
@@ -267,13 +275,15 @@ Read more in *collection annotation* section.
 
 #### *Collection parameters*
 
-![](https://media.giphy.com/media/1n4JPUg1rxwemngMhV/giphy.gif)
+![](https://media.giphy.com/media/3b8NNh405Y9ORC8NMa/giphy.gif)
 
 #### *Embedded fields example*
 
 You can populate complex object fields using *GenEmbedded* annotation.
 
-![](https://media.giphy.com/media/uTOSaDeSbAJq4soFt2/giphy.gif)
+In this case depth of embedded object field will be 5 levels.
+
+![](https://media.giphy.com/media/kFezIHBLZ961ariUc7/giphy.gif)
 
 ### **Factories Examples**
 
@@ -339,11 +349,19 @@ Is used to mark Dummy object field with specific generator.
 
 ![](https://media.giphy.com/media/7SZufvmQLuosppw7nc/giphy.gif)
 
-### IGenerateFactory
+### IComplexGenerator
 
-Is used to build complex values for fields, when simple *IGenerator* implementation is insufficient or *Gen* annotation require special parameters. 
+Is used to build complex values for fields, when simple *IGenerator* implementation is insufficient or *Gen* annotation require special parameters or when you need to access field. 
 
-![](https://media.giphy.com/media/5bgGzRo5svjQQJDkhU/giphy.gif)
+![](https://media.giphy.com/media/YFEIVlEljwvo8q0Vxp/giphy.gif)
+
+### Complex Gen Annotation
+
+Is created using special *ComplexGen* annotation and custom complex generator as its value.
+
+Is used to mark Dummy object field with specific complex generator.
+
+![](https://media.giphy.com/media/lptSdvg4sbVWNhUfcF/giphy.gif)
 
 ## Export File Structures
 
