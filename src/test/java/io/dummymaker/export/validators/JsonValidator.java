@@ -1,5 +1,7 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.data.DummyTime.Fields;
+import io.dummymaker.data.DummyTime.Patterns;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 
@@ -63,6 +65,15 @@ public class JsonValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches("\\t\"" + Fields.LOCAL_TIME.getName()           + "\":\"" + Patterns.LOCAL_TIME.getPattern() + "\","));
+        assertTrue(dummy[2].matches("\\t\"" + Fields.LOCAL_DATE.getName()           + "\":\"" + Patterns.LOCAL_DATE.getPattern() + "\","));
+        assertTrue(dummy[3].matches("\\t\"" + Fields.LOCAL_DATETIME.getName()       + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[4].matches("\\t\"" + Fields.TIMESTAMP.getName()            + "\":\"" + Patterns.TIMESTAMP.getPattern() + "\","));
+        assertTrue(dummy[5].matches("\\t\"" + Fields.DATE.getName()                 + "\":\"[0-9]+\","));
+        assertTrue(dummy[6].matches("\\t\"" + Fields.DATE_COVERAGE.getName()        + "\":\"[0-9]+\","));
+        assertTrue(dummy[7].matches("\\t\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[8].matches("\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\""));
+        assertTrue(dummy[9].matches("}"));
     }
 }

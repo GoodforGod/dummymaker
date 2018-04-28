@@ -39,7 +39,7 @@ public class UniqueExporterTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 { new CsvExporter(), new CsvValidator() },
-                { new JsonExporter(), new JsonValidator()},
+                { new JsonExporter().withPretty(), new JsonValidator()},
                 { new XmlExporter(), new XmlValidator()},
                 { new SqlExporter(), new SqlValidator()}
         });
@@ -49,7 +49,7 @@ public class UniqueExporterTest {
     public void checkDateClassActsAsMillisLongWhenExport() {
         DummyTime dummyTime = factory.produce(DummyTime.class);
         String s = exporter.exportAsString(dummyTime);
-        String[] split = s.split("\n");
+        String[] split = s.split((exporter.getClass().equals(CsvExporter.class)) ? "," : "\n");
         validator.isDummyTimeValid(split);
     }
 }

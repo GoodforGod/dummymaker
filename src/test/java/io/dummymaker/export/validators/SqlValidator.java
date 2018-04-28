@@ -1,5 +1,7 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.data.DummyTime;
+import io.dummymaker.data.DummyTime.Fields;
 import io.dummymaker.data.DummyTimestamp.FieldNames;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -106,6 +108,36 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummytime\\("));
+        assertTrue(dummy[1].matches("\\t" + Fields.LOCAL_TIME.getName() + "\\tTIMESTAMP,"));
+        assertTrue(dummy[2].matches("\\t" + Fields.LOCAL_DATE.getName() + "\\tTIMESTAMP,"));
+        assertTrue(dummy[3].matches("\\t" + Fields.LOCAL_DATETIME.getName() + "\\tTIMESTAMP,"));
+        assertTrue(dummy[4].matches("\\t" + Fields.TIMESTAMP.getName() + "\\tTIMESTAMP,"));
+        assertTrue(dummy[5].matches("\\t" + Fields.DATE.getName() + "\\tBIGINT,"));
+        assertTrue(dummy[6].matches("\\t" + Fields.DATE_COVERAGE.getName() + "\\tBIGINT,"));
+        assertTrue(dummy[7].matches("\\t" + Fields.LOCAL_DATETIME_STRING.getName() + "\\tVARCHAR,"));
+        assertTrue(dummy[8].matches("\\t" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\\tVARCHAR,"));
+        assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummy[10].matches("\\);"));
 
+        assertTrue(dummy[11].matches(""));
+
+        assertTrue(dummy[12].matches("INSERT INTO dummytime \\(" + Fields.LOCAL_TIME.getName()
+                + ", " + Fields.LOCAL_DATE.getName() + ", " + Fields.LOCAL_DATETIME.getName()
+                + ", " + Fields.TIMESTAMP.getName()
+                + ", " + Fields.DATE.getName() + ", " + Fields.DATE_COVERAGE.getName()
+                + ", " + Fields.LOCAL_DATETIME_STRING.getName() + ", " + Fields.LOCAL_DATETIME_OBJECT.getName()
+                + "\\) VALUES"));
+
+        assertTrue(dummy[13].matches("\\(" +
+                "'" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
+                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
+                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
+                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
+                + ", " + "[0-9]+"
+                + ", " + "[0-9]+"
+                + ", '" + DummyTime.Patterns.LOCAL_DATETIME.getPattern() + "'"
+                + ", " + DummyTime.Patterns.LOCAL_DATETIME.getPattern()
+                + "\\);"));
     }
 }

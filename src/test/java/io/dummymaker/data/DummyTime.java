@@ -41,9 +41,9 @@ public class DummyTime {
         LOCAL_DATETIME("dateTime"),
         TIMESTAMP("timestamp"),
         DATE("dateOld"),
+        DATE_COVERAGE("dateOldCoverage"),
         LOCAL_DATETIME_STRING("dateTimeString"),
         LOCAL_DATETIME_OBJECT("dateTimeObject");
-
 
         private final String name;
 

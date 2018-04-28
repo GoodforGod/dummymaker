@@ -1,5 +1,6 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.data.DummyTime.Patterns;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -117,6 +118,13 @@ public class CsvValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-
+        assertTrue(dummy[0].matches(Patterns.LOCAL_TIME.getPattern().pattern()));
+        assertTrue(dummy[1].matches(Patterns.LOCAL_DATE.getPattern().pattern()));
+        assertTrue(dummy[2].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[3].matches(Patterns.TIMESTAMP.getPattern().pattern()));
+        assertTrue(dummy[4].matches("[0-9]+"));
+        assertTrue(dummy[5].matches("[0-9]+"));
+        assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
 }
