@@ -3,7 +3,7 @@ package io.dummymaker.bundle.impl;
 import java.util.ArrayList;
 
 /**
- * Default Comment
+ * Bundle with company names string values
  *
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017

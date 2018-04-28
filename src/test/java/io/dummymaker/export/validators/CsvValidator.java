@@ -1,8 +1,9 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.data.DummyTime.Patterns;
 import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertEquals;
@@ -22,6 +23,12 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[0].matches("[0-9]+"));
         assertTrue(dummy[1].matches("[0-9]+"));
         assertTrue(dummy[2].matches("[a-zA-Z0-9]+"));
+    }
+
+    @Override
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("-?[0-9]+"));
+        assertTrue(dummy[1].matches("-?[0-9]+"));
     }
 
     @Override
@@ -48,9 +55,9 @@ public class CsvValidator implements IValidator {
 
         // header check
         assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches(GROUP.getExportFieldName()));
-        assertTrue(headerArray[1].matches(NUM.getExportFieldName()));
-        assertTrue(headerArray[2].matches(NAME.getExportFieldName()));
+        assertTrue(headerArray[0].matches(GROUP.exportName()));
+        assertTrue(headerArray[1].matches(NUM.exportName()));
+        assertTrue(headerArray[2].matches(NAME.exportName()));
 
         // first line values check
         assertEquals(3, valueArray.length);
@@ -60,11 +67,11 @@ public class CsvValidator implements IValidator {
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
-        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Strategies.DEFAULT.getStrategy());
+        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Cases.DEFAULT.value());
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
         String[] valueArray1 = dummies[0].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
         String[] valueArray2 = dummies[1].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
 
@@ -81,10 +88,10 @@ public class CsvValidator implements IValidator {
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
-    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, IStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
-        final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, ICase strategy) {
+        final String expectedNameField = strategy.format(NAME.exportName());
+        final String expectedGroupField = GROUP.exportName();
+        final String expectedNumField = strategy.format(NUM.exportName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));
@@ -107,5 +114,17 @@ public class CsvValidator implements IValidator {
         assertTrue(valueArray2[0].matches("\'[0-9]+\'"));
         assertTrue(valueArray2[1].matches("[0-9]+"));
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
+    }
+
+    @Override
+    public void isDummyTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches(Patterns.LOCAL_TIME.getPattern().pattern()));
+        assertTrue(dummy[1].matches(Patterns.LOCAL_DATE.getPattern().pattern()));
+        assertTrue(dummy[2].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[3].matches(Patterns.TIMESTAMP.getPattern().pattern()));
+        assertTrue(dummy[4].matches("[0-9]+"));
+        assertTrue(dummy[5].matches("[0-9]+"));
+        assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
 }

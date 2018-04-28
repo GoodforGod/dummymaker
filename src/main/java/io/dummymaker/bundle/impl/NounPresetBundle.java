@@ -3,7 +3,7 @@ package io.dummymaker.bundle.impl;
 import java.util.ArrayList;
 
 /**
- * add("default comment");
+ * Bundle with noun words string values
  *
  * @author GoodforGod
  * @since 21.02.2018

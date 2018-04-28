@@ -1,6 +1,7 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.time.*;
+import io.dummymaker.annotation.simple.time.*;
+import io.dummymaker.annotation.special.GenRenameExport;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author GoodforGod
  * @since 03.03.2018
  */
+@GenRenameExport("TimeDummyClass")
 public class DummyTimestamp {
 
     public enum FieldNames {

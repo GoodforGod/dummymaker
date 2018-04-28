@@ -1,7 +1,9 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.data.DummyTime.Fields;
+import io.dummymaker.data.DummyTime.Patterns;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.data.Dummy.DummyFieldNames.*;
 import static org.junit.Assert.assertTrue;
@@ -17,22 +19,30 @@ public class JsonValidator implements IValidator {
     @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("\\{"));
-        assertTrue(dummy[1].matches("\\t\"" + GROUP.getExportFieldName() + "\":\"[0-9]+\","));
-        assertTrue(dummy[2].matches("\\t\"" + NUM.getExportFieldName()  + "\":\"[0-9]+\","));
-        assertTrue(dummy[3].matches("\\t\"" + NAME.getExportFieldName() + "\":\"[a-zA-Z0-9]+\""));
+        assertTrue(dummy[1].matches("\\t\"" + GROUP.exportName() + "\":\"[0-9]+\","));
+        assertTrue(dummy[2].matches("\\t\"" + NUM.exportName()  + "\":\"[0-9]+\","));
+        assertTrue(dummy[3].matches("\\t\"" + NAME.exportName() + "\":\"[a-zA-Z0-9]+\""));
         assertTrue(dummy[4].matches("}"));
     }
 
     @Override
-    public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, Strategies.DEFAULT.getStrategy());
+    public void isSingleAutoDummyValid(String[] dummy) {
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches("\\t\"aLong\":\"-?[0-9]+\","));
+        assertTrue(dummy[2].matches("\\t\"anInt\":\"-?[0-9]+\""));
+        assertTrue(dummy[3].matches("}"));
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy) {
-        final String expectedNameField = strategy.toStrategy(NAME.getExportFieldName());
-        final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.toStrategy(NUM.getExportFieldName());
+    public void isTwoDummiesValid(String[] dummies) {
+        isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
+    }
+
+    @Override
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+        final String expectedNameField = strategy.format(NAME.exportName());
+        final String expectedGroupField = GROUP.exportName();
+        final String expectedNumField = strategy.format(NUM.exportName());
 
         assertTrue(dummies[0].matches("\\{"));
         assertTrue(dummies[1].matches("\\t\"[a-zA-Z]+\": \\["));
@@ -51,5 +61,19 @@ public class JsonValidator implements IValidator {
 
         assertTrue(dummies[12].matches("\\t]"));
         assertTrue(dummies[13].matches("}"));
+    }
+
+    @Override
+    public void isDummyTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches("\\t\"" + Fields.LOCAL_TIME.getName()           + "\":\"" + Patterns.LOCAL_TIME.getPattern() + "\","));
+        assertTrue(dummy[2].matches("\\t\"" + Fields.LOCAL_DATE.getName()           + "\":\"" + Patterns.LOCAL_DATE.getPattern() + "\","));
+        assertTrue(dummy[3].matches("\\t\"" + Fields.LOCAL_DATETIME.getName()       + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[4].matches("\\t\"" + Fields.TIMESTAMP.getName()            + "\":\"" + Patterns.TIMESTAMP.getPattern() + "\","));
+        assertTrue(dummy[5].matches("\\t\"" + Fields.DATE.getName()                 + "\":\"[0-9]+\","));
+        assertTrue(dummy[6].matches("\\t\"" + Fields.DATE_COVERAGE.getName()        + "\":\"[0-9]+\","));
+        assertTrue(dummy[7].matches("\\t\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[8].matches("\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\""));
+        assertTrue(dummy[9].matches("}"));
     }
 }

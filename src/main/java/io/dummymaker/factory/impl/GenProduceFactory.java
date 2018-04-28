@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static io.dummymaker.util.BasicCastUtils.instanceClass;
+import static io.dummymaker.util.BasicCastUtils.instantiate;
 
 /**
  * Produce Dummy Objects and populate them via PrimeGen generators included
@@ -28,7 +28,7 @@ public class GenProduceFactory implements IProduceFactory {
 
     @Override
     public <T> T produce(final Class<T> tClass) {
-        return populateFactory.populate(instanceClass(tClass));
+        return populateFactory.populate(instantiate(tClass));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class GenProduceFactory implements IProduceFactory {
 
         final List<T> produced = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            final T t = instanceClass(tClass);
+            final T t = instantiate(tClass);
             if (t == null)
                 return Collections.emptyList();
 

@@ -8,7 +8,9 @@ import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
- * Prime (Parent) bundle implementation
+ * Prime bundle implementation
+ *
+ * @see IBundle
  *
  * @author GoodforGod
  * @since 31.05.2017

@@ -1,10 +1,10 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.annotation.collection.GenMap;
-import io.dummymaker.annotation.collection.GenSet;
+import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.annotation.complex.GenMap;
+import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.generator.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.impl.BooleanGenerator;
 
 import java.util.List;
 import java.util.Map;

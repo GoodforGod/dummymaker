@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * Scan for field and its unique annotations (without duplicates)
+ * And return fields in correct order
  * Core scanner implementation
  *
  * @see IAnnotationScanner

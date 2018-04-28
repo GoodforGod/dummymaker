@@ -1,15 +1,21 @@
 package io.dummymaker.scan.impl;
 
+import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
+import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.container.PopulateContainer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
+
+import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * Scanner used by populate factory
@@ -29,36 +35,75 @@ import java.util.function.Predicate;
 public class PopulateScanner implements IPopulateScanner {
 
     /**
-     * Predicate to check for core prime marker annotation
+     * Predicate to check for core prime/complex marker annotation
      *
      * @see PrimeGen
      */
-    private final Predicate<Annotation> isPrime = (a) -> a.annotationType().equals(PrimeGen.class);
+    private final Predicate<Annotation> isGen = (a) -> a.annotationType().equals(PrimeGen.class)
+            || a.annotationType().equals(ComplexGen.class);
 
     /**
-     * Scan for prime gen annotation and its child annotation*
+     * Scan for prime/complex gen annotation and its child annotation
      *
      * @param t class to scan
      * @return populate field map, where
      * KEY is field that has populate annotations
-     * VALUE are two annotations:
-     * - 0 is primeGen annotation
-     * - 1 is child primeGen annotation
+     * VALUE is Gen container with generate params for that field
+     *
+     * @see GenContainer
      */
     @Override
-    public Map<Field, PopulateContainer> scan(final Class t) {
-        final Map<Field, PopulateContainer> populateAnnotationMap = new HashMap<>();
+    public Map<Field, GenContainer> scan(final Class t) {
+        final Map<Field, GenContainer> populateAnnotationMap = new LinkedHashMap<>();
+
+        // Check if class is auto generatable
+        final boolean isAutoGen = Arrays.stream(t.getDeclaredAnnotations())
+                .anyMatch(a -> a.annotationType().equals(GenAuto.class));
 
         for(final Field field : t.getDeclaredFields()) {
-            for(Annotation annotation : field.getDeclaredAnnotations()) {
-                for(Annotation inlined : annotation.annotationType().getDeclaredAnnotations()) {
-                    if(isPrime.test(inlined)) {
-                        populateAnnotationMap.put(field, new PopulateContainer(inlined, annotation));
-                    }
+            GenContainer genContainer = findGenAnnotation(field);
+
+            // Create auto gen container is class is auto generatable
+            if(genContainer == null && isAutoGen) {
+                Class<? extends IGenerator> autoGenerator = getAutoGenerator(field);
+                if (autoGenerator.equals(NullGenerator.class)) {
+                    // Try to treat field as embedded object, when no suitable generator
+                    autoGenerator = EmbeddedGenerator.class;
                 }
+
+                genContainer = GenContainer.asAuto(autoGenerator, isComplex(field));
+            }
+
+            if(genContainer != null) {
+                populateAnnotationMap.put(field, genContainer);
             }
         }
 
         return populateAnnotationMap;
+    }
+
+    /**
+     * Check if the field have complex suitable generator
+     */
+    private boolean isComplex(final Field field) {
+        final Class<?> declaringClass = field.getType();
+        return (declaringClass.equals(List.class)
+                || declaringClass.equals(Set.class)
+                || declaringClass.equals(Map.class));
+    }
+
+    /**
+     * Found only first found gen annotation on field
+     */
+    private GenContainer findGenAnnotation(final Field field) {
+        for(Annotation annotation : field.getDeclaredAnnotations()) {
+            for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
+                if(isGen.test(inline)) {
+                    return GenContainer.asGen(inline, annotation);
+                }
+            }
+        }
+
+        return null;
     }
 }

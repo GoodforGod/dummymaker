@@ -1,6 +1,9 @@
 package io.dummymaker.annotation.special;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Allow to rename fields and class names when export
@@ -9,9 +12,8 @@ import java.lang.annotation.*;
  * @author GoodforGod (Anton Kurako)
  * @since 06.07.2017
  */
-@Inherited
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.FIELD, ElementType.CONSTRUCTOR })
+@Target(value = { ElementType.FIELD, ElementType.TYPE })
 public @interface GenRenameExport {
-    String name();
+    String value();
 }

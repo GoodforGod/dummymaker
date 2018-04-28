@@ -17,31 +17,29 @@ import static org.junit.Assert.*;
  */
 public class ProduceFactoryTest {
 
+    private final IProduceFactory factory = new GenProduceFactory();
+
     @Test
     public void produceLessThanZeroAmount() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final List<Dummy> dummies = dummyGenPopulateFactory.produce(Dummy.class, -20);
+        final List<Dummy> dummies = factory.produce(Dummy.class, -20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorErrorList() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final List<DummyNoZeroConstructor> dummies = dummyGenPopulateFactory.produce(DummyNoZeroConstructor.class, 20);
+        final List<DummyNoZeroConstructor> dummies = factory.produce(DummyNoZeroConstructor.class, 20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorError() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final DummyNoZeroConstructor dummy = dummyGenPopulateFactory.produce(DummyNoZeroConstructor.class);
+        final DummyNoZeroConstructor dummy = factory.produce(DummyNoZeroConstructor.class);
         assertNull(dummy);
     }
 
     @Test
     public void produceListOfTwo() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final List<Dummy> dummies = dummyGenPopulateFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.produce(Dummy.class, 2);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -63,8 +61,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceSingleDummy() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final Dummy dummy = dummyGenPopulateFactory.produce(Dummy.class);
+        final Dummy dummy = factory.produce(Dummy.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -72,7 +69,7 @@ public class ProduceFactoryTest {
         assertNotNull(dummy.getNum());
         assertNotNull(dummy.getGroup());
 
-        assertTrue(dummy.getCity().matches("[a-zA-Z0-9]+"));
+        assertTrue(dummy.getCity().matches("[a-zA-Z\\-]+"));
         assertTrue(dummy.getName().matches("[a-zA-Z]+"));
         assertEquals((int) dummy.getNum(), 0);
         assertEquals("100", dummy.getGroup());
@@ -80,8 +77,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithNoPopulateFields() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final DummyNoPopulateFields dummy = dummyGenPopulateFactory.produce(DummyNoPopulateFields.class);
+        final DummyNoPopulateFields dummy = factory.produce(DummyNoPopulateFields.class);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());
@@ -92,8 +88,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithCollectionFields() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final DummyCollection dummy = dummyGenPopulateFactory.produce(DummyCollection.class);
+        final DummyCollection dummy = factory.produce(DummyCollection.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getObjects());
@@ -111,15 +106,90 @@ public class ProduceFactoryTest {
         assertFalse(dummy.getObjectsFix().isEmpty());
         assertFalse(dummy.getStringsFix().isEmpty());
         assertFalse(dummy.getMapFix().isEmpty());
-        assertEquals(dummy.getObjectsFix().size(), 4);
-        assertEquals(dummy.getStringsFix().size(), 5);
-        assertEquals(dummy.getMapFix().size(), 3);
+
+        assertEquals(4, dummy.getObjectsFix().size());
+        assertEquals(5, dummy.getStringsFix().size());
+        assertEquals(3, dummy.getMapFix().size());
+    }
+
+    @Test
+    public void produceEmbeddedDummy() {
+        final DummyEmbedded embedded = factory.produce(DummyEmbedded.class);
+        validateEmbeddedDummy(embedded);
+    }
+
+    @Test
+    public void produceEmbeddedDummyList() {
+        final List<DummyEmbedded> embeddeds = factory.produce(DummyEmbedded.class, 2);
+        for(DummyEmbedded embedded : embeddeds) {
+            validateEmbeddedDummy(embedded);
+        }
+    }
+
+    private void validateEmbeddedDummy(DummyEmbedded embedded) {
+        assertNotNull(embedded);
+
+        assertNotNull(embedded.getEmbedded());
+        assertNotNull(embedded.getEmbeddedMax());
+        assertNotNull(embedded.getEmbeddedDefault());
+
+        assertNotEquals(0, embedded.getAnInt());
+        assertNotEquals(0L, embedded.getaLong());
+        assertNotEquals(0.0, embedded.getaDouble());
+
+        // Check default
+        assertNotNull(embedded.getEmbeddedDefault());
+        assertNull(embedded.getEmbeddedDefault().getEmbeddedDefault());
+
+        // Check embedded
+        DummyEmbedded embeddedSimple = embedded;
+        for(int i = 0; i < 3; i++) {
+            assertNotNull(embeddedSimple);
+            embeddedSimple = embeddedSimple.getEmbedded();
+        }
+        assertNull(embeddedSimple.getEmbedded());
+
+        // Check max
+        DummyEmbedded embeddedMax = embedded;
+        for(int i = 0; i < 11; i++) {
+            assertNotNull(embeddedMax);
+            embeddedMax = embeddedMax.getEmbeddedMax();
+        }
+        assertNull(embeddedMax.getEmbeddedMax());
+    }
+
+    @Test
+    public void produceAutoDummy() {
+        final DummyAuto dummyAuto = factory.produce(DummyAuto.class);
+        assertNotNull(dummyAuto);
+
+        assertNotNull(dummyAuto.getaLong());
+        assertNotEquals(0, dummyAuto.getAnInt());
+
+        assertNotNull(dummyAuto.getList());
+        assertNotNull(dummyAuto.getMap());
+        assertFalse(dummyAuto.getList().isEmpty());
+        assertFalse(dummyAuto.getMap().isEmpty());
+        assertEquals(10, dummyAuto.getList().size());
+        assertEquals(10, dummyAuto.getMap().size());
+
+        assertNotNull(dummyAuto.getDummyAuto());
+
+        final DummyAuto innerDummy = dummyAuto.getDummyAuto();
+        assertNotNull(innerDummy.getaLong());
+        assertNotEquals(0, innerDummy.getAnInt());
+
+        assertNotNull(innerDummy.getList());
+        assertNotNull(innerDummy.getMap());
+        assertFalse(innerDummy.getList().isEmpty());
+        assertFalse(innerDummy.getMap().isEmpty());
+        assertEquals(10, innerDummy.getList().size());
+        assertEquals(10, innerDummy.getMap().size());
     }
 
     @Test
     public void produceWithWrongCollectionFields() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final DummyCollectionWrong dummy = dummyGenPopulateFactory.produce(DummyCollectionWrong.class);
+        final DummyCollectionWrong dummy = factory.produce(DummyCollectionWrong.class);
 
         assertNotNull(dummy);
 
@@ -130,8 +200,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithTimeFields() {
-        final IProduceFactory dummyGenPopulateFactory = new GenProduceFactory();
-        final DummyTime dummy = dummyGenPopulateFactory.produce(DummyTime.class);
+        final DummyTime dummy = factory.produce(DummyTime.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getDateOld());
@@ -142,18 +211,53 @@ public class ProduceFactoryTest {
         assertNotNull(dummy.getDateTimeString());
         assertNotNull(dummy.getDateTimeObject());
 
-        final Pattern datePattern = Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{2} [A-Za-z]{3} \\d{4}");
-        final Pattern localDatePattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
-        final Pattern localDateTimePattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}[A-Z]\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?");
-        final Pattern localTimePattern = Pattern.compile("\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?");
-        final Pattern timestampPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?");
+        final Pattern localDatePattern = DummyTime.Patterns.LOCAL_DATE.getPattern();
+        final Pattern localTimePattern = DummyTime.Patterns.LOCAL_TIME.getPattern();
+        final Pattern localDateTimePattern = DummyTime.Patterns.LOCAL_DATETIME.getPattern();
+        final Pattern timestampPattern = DummyTime.Patterns.TIMESTAMP.getPattern();
+        final Pattern datePattern = DummyTime.Patterns.DATE.getPattern();
 
-        assertTrue(datePattern.matcher(dummy.getDateOld().toString()).matches());
-        assertTrue(localDatePattern.matcher(dummy.getDate().toString()).matches());
-        assertTrue(localTimePattern.matcher(dummy.getTime().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTime().toString()).matches());
-        assertTrue(timestampPattern.matcher(dummy.getTimestamp().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
-        assertTrue(localDateTimePattern.matcher(dummy.getDateTimeString()).matches());
+        assertTrue(dummy.getDateOld().toString(), datePattern.matcher(dummy.getDateOld().toString()).matches());
+        assertTrue(dummy.getDate().toString(), localDatePattern.matcher(dummy.getDate().toString()).matches());
+        assertTrue(dummy.getTime().toString(), localTimePattern.matcher(dummy.getTime().toString()).matches());
+        assertTrue(dummy.getDateTime().toString(), localDateTimePattern.matcher(dummy.getDateTime().toString()).matches());
+        assertTrue(dummy.getTimestamp().toString(), timestampPattern.matcher(dummy.getTimestamp().toString()).matches());
+
+        assertTrue(dummy.getDateTimeObject().toString(), localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
+        assertTrue(dummy.getDateTimeString(), localDateTimePattern.matcher(dummy.getDateTimeString()).matches());
+    }
+
+    @Test
+    public void produceHalfAutoGenerateDummy() {
+        final DummyAutoHalf dummyAuto = factory.produce(DummyAutoHalf.class);
+
+        List<DummyAutoHalf> produce = factory.produce(DummyAutoHalf.class, 10);
+
+        assertNotNull(dummyAuto);
+
+        assertNotNull(dummyAuto.getName());
+        assertFalse(dummyAuto.getName().isEmpty());
+        assertTrue(dummyAuto.getName().matches("[a-zA-Z]+"));
+        assertEquals(0, dummyAuto.getAnInt());
+
+        assertNotNull(dummyAuto.getList());
+        assertNotNull(dummyAuto.getMap());
+        assertFalse(dummyAuto.getList().isEmpty());
+        assertFalse(dummyAuto.getMap().isEmpty());
+        assertEquals(10, dummyAuto.getList().size());
+        assertEquals(6, dummyAuto.getMap().size());
+
+        assertNotNull(dummyAuto.getDummyAuto());
+
+        final DummyAuto innerDummy = dummyAuto.getDummyAuto();
+        assertNotNull(innerDummy.getaLong());
+        assertNotEquals(0, innerDummy.getAnInt());
+
+        assertNotNull(innerDummy.getList());
+        assertNotNull(innerDummy.getMap());
+        assertFalse(innerDummy.getList().isEmpty());
+        assertFalse(innerDummy.getMap().isEmpty());
+        assertEquals(10, innerDummy.getList().size());
+        assertEquals(10, innerDummy.getMap().size());
     }
 }

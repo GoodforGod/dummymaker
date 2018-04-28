@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.container.impl.FieldContainer;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -41,7 +41,7 @@ public class SqlExporter extends BasicExporter {
     private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
-        super(null, Format.SQL, Strategies.DEFAULT.getStrategy());
+        super(null, Format.SQL, Cases.DEFAULT.value());
     }
 
     /**
@@ -69,14 +69,14 @@ public class SqlExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see IStrategy
-     * @see Strategies
+     * @see ICase
+     * @see Cases
      *
-     * @param strategy naming strategy for exporter
+     * @param nameCase naming strategy for exporter
      * @return exporter
      */
-    public SqlExporter withStrategy(final IStrategy strategy) {
-        setStrategy(strategy);
+    public SqlExporter withCase(final ICase nameCase) {
+        setCase(nameCase);
         return this;
     }
 
@@ -87,15 +87,23 @@ public class SqlExporter extends BasicExporter {
      */
     private HashMap<Class, String> buildDefaultDataTypeMap() {
         return new HashMap<Class, String>() {{
-            put(Long.class, "BIGINT");
-            put(Double.class, "DOUBLE PRECISION");
-            put(String.class, "VARCHAR");
-            put(Integer.class, "INT");
+            put(Long.class,         "BIGINT");
+            put(long.class,         "BIGINT");
+            put(Date.class,         "BIGINT");
+            put(Double.class,       "DOUBLE PRECISION");
+            put(double.class,       "DOUBLE PRECISION");
+            put(Integer.class,      "INT");
+            put(int.class,          "INT");
+            put(Character.class,    "CHAR");
+            put(char.class,         "CHAR");
+            put(Boolean.class,      "BIT");
+            put(boolean.class,      "BIT");
+            put(String.class,       "VARCHAR");
+            put(Object.class,       "VARCHAR");
+            put(Timestamp.class,    "TIMESTAMP");
+            put(LocalDate.class,    "TIMESTAMP");
+            put(LocalTime.class,    "TIMESTAMP");
             put(LocalDateTime.class, "TIMESTAMP");
-            put(Timestamp.class, "TIMESTAMP");
-            put(LocalDate.class, "TIMESTAMP");
-            put(LocalTime.class, "TIMESTAMP");
-            put(Date.class, "TIMESTAMP");
         }};
     }
 
@@ -119,13 +127,11 @@ public class SqlExporter extends BasicExporter {
      */
     private String buildCreateTableQuery(final IClassContainer container,
                                          final String primaryKeyField) {
-        final Map<String, FieldContainer> containerMap = container.getContainers();
-
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(container.exportClassName().toLowerCase())
+                .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
 
-        final String resultValues = containerMap.entrySet().stream()
+        final String resultValues = container.getSimpleContainers().entrySet().stream()
                 .map(e -> "\t" + buildInsertNameTypeQuery(e.getValue().getExportName(), container))
                 .collect(Collectors.joining(",\n"));
 
@@ -158,7 +164,7 @@ public class SqlExporter extends BasicExporter {
                                         final IClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
-                .append(container.exportClassName().toLowerCase())
+                .append(container.getExportClassName().toLowerCase())
                 .append(" (");
 
         final String names = exportContainers.stream()
@@ -194,18 +200,18 @@ public class SqlExporter extends BasicExporter {
      * - Randomly selected
      */
     private String buildPrimaryKey(final IClassContainer container) {
-        final Map<String, FieldContainer> containerMap = container.getContainers();
-        return containerMap.entrySet().stream()
-                .filter(e -> e.getKey().equalsIgnoreCase("id")
-                        || e.getKey().equalsIgnoreCase("uid"))
-                .map(Map.Entry::getKey)
-                .findAny()
-                .orElse(containerMap.entrySet().stream()
-                        .filter(c -> c.getValue().isEnumerable())
-                        .map(Map.Entry::getKey)
-                        .findAny()
-                        .orElse(containerMap.entrySet().iterator().next().getKey())
-                );
+        final Map<Field, FieldContainer> containerMap = container.getSimpleContainers();
+
+        for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
+            if (entry.getValue().isEnumerable()) {
+                return entry.getValue().getExportName();
+            } else if (entry.getKey().getName().equalsIgnoreCase("id")
+                    || entry.getKey().getName().equalsIgnoreCase("uid")) {
+                return entry.getValue().getExportName();
+            }
+        }
+
+        return containerMap.entrySet().iterator().next().getValue().getExportName();
     }
 
     /**

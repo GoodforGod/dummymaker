@@ -1,6 +1,6 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 
 /**
  * "default comment"
@@ -12,7 +12,11 @@ public interface IValidator {
 
     void isSingleDummyValid(String[] dummy);
 
+    void isSingleAutoDummyValid(String[] dummy);
+
     void isTwoDummiesValid(String[] dummies);
 
-    void isTwoDummiesValidWithNamingStrategy(String[] dummies, IStrategy strategy);
+    void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy);
+
+    void isDummyTimeValid(String[] dummy);
 }

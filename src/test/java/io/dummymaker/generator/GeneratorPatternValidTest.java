@@ -1,16 +1,20 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.generator.impl.BooleanGenerator;
-import io.dummymaker.generator.impl.UuidGenerator;
-import io.dummymaker.generator.impl.collection.impl.ListGenerator;
-import io.dummymaker.generator.impl.collection.impl.MapGenerator;
-import io.dummymaker.generator.impl.collection.impl.SetGenerator;
-import io.dummymaker.generator.impl.number.DoubleBigGenerator;
-import io.dummymaker.generator.impl.number.DoubleGenerator;
-import io.dummymaker.generator.impl.number.IntegerGenerator;
-import io.dummymaker.generator.impl.number.LongGenerator;
-import io.dummymaker.generator.impl.string.*;
-import io.dummymaker.generator.impl.time.impl.*;
+import io.dummymaker.data.DummyTime;
+import io.dummymaker.generator.complex.impl.ListComplexGenerator;
+import io.dummymaker.generator.complex.impl.MapComplexGenerator;
+import io.dummymaker.generator.complex.impl.SetComplexGenerator;
+import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.impl.CharacterGenerator;
+import io.dummymaker.generator.simple.impl.ObjectGenerator;
+import io.dummymaker.generator.simple.impl.UuidGenerator;
+import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
+import io.dummymaker.generator.simple.impl.number.DoubleGenerator;
+import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
+import io.dummymaker.generator.simple.impl.number.LongGenerator;
+import io.dummymaker.generator.simple.impl.string.*;
+import io.dummymaker.generator.simple.impl.time.impl.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -48,7 +52,7 @@ public class GeneratorPatternValidTest {
     }
 
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
-    public static Collection<Object> data() {
+    public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+.[0-9]+") },
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0.[0-9]+.") },
@@ -71,14 +75,16 @@ public class GeneratorPatternValidTest {
                 { new TagGenerator(),           String.class,   Pattern.compile("#[0-9a-zA-Z]+") },
                 { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
                 { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
-                { new ListGenerator(),          ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
-                { new SetGenerator(),           HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
-                { new MapGenerator(),           HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
-                { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{1,2} [A-Za-z]{3} \\d{4}") },
-                { new LocalDateGenerator(),     LocalDate.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
-                { new LocalDateTimeGenerator(), LocalDateTime.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}") },
-                { new LocalTimeGenerator(),     LocalTime.class, Pattern.compile("\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") },
-                { new TimestampGenerator(),     Timestamp.class, Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") }
+                { new CharacterGenerator(),     Character.class, Pattern.compile(".") },
+                { new ObjectGenerator(),        String.class,   Pattern.compile("object_[0-9]+") },
+                { new ListComplexGenerator(),   ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new SetComplexGenerator(),    HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
+                { new MapComplexGenerator(),    HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
+                { new DateGenerator(),          Date.class,     DummyTime.Patterns.DATE.getPattern() },
+                { new LocalDateGenerator(),     LocalDate.class,DummyTime.Patterns.LOCAL_DATE.getPattern() },
+                { new LocalDateTimeGenerator(), LocalDateTime.class,DummyTime.Patterns.LOCAL_DATETIME.getPattern() },
+                { new LocalTimeGenerator(),     LocalTime.class, DummyTime.Patterns.LOCAL_TIME.getPattern() },
+                { new TimestampGenerator(),     Timestamp.class, DummyTime.Patterns.TIMESTAMP.getPattern() }
         });
     }
 
@@ -90,6 +96,6 @@ public class GeneratorPatternValidTest {
         assertTrue(generated.getClass().equals(genClass));
 
         final String generatedAsString = String.valueOf(generated);
-        assertTrue(pattern.matcher(generatedAsString).matches());
+        assertTrue(generatedAsString, pattern.matcher(generatedAsString).matches());
     }
 }

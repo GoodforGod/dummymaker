@@ -24,7 +24,7 @@ public class BufferedFileWriter implements IWriter {
 
     /**
      * @param fileName file name
-     * @param path     path where to create file (NULL or EMPTY for home dir)
+     * @param path     path where to create file (NULL or UNKNOWN for home dir)
      * @param extension file extension
      *
      * @throws IOException if can not instantiate writer

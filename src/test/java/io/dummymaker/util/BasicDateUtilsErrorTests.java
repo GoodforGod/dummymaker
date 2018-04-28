@@ -17,8 +17,6 @@ import java.util.Date;
  */
 public class BasicDateUtilsErrorTests extends Assert {
 
-    private BasicDateUtils utils = new BasicDateUtils();
-
     @Test
     public void convertNullToTimestampDateOldType() {
         Date date = null;
@@ -56,7 +54,7 @@ public class BasicDateUtilsErrorTests extends Assert {
 
     @Test
     public void parseDateEmpty() {
-        final LocalDateTime result2 = BasicDateUtils.parseDateTime("   ");
+        final LocalDateTime result2 = BasicDateUtils.parseDateTime(" 5125  ");
         assertNull(result2);
     }
 
@@ -68,7 +66,7 @@ public class BasicDateUtilsErrorTests extends Assert {
 
     @Test
     public void parseDateOldEmpty() {
-        final LocalTime result2 = BasicDateUtils.parseTime("    ");
+        final LocalTime result2 = BasicDateUtils.parseTime("  124  ");
         assertNull(result2);
     }
 
@@ -80,7 +78,7 @@ public class BasicDateUtilsErrorTests extends Assert {
 
     @Test
     public void parseTimeEmpty() {
-        final LocalDate result2 = BasicDateUtils.parseDate("   ");
+        final LocalDate result2 = BasicDateUtils.parseDate("  61361  ");
         assertNull(result2);
     }
 
@@ -92,34 +90,34 @@ public class BasicDateUtilsErrorTests extends Assert {
 
     @Test
     public void parseDateTimeEmpty() {
-        final Date result2 = BasicDateUtils.parseSimpleDateLong("  ");
+        final Date result2 = BasicDateUtils.parseSimpleDateLong("  61361  ");
         assertNull(result2);
     }
 
     @Test
     public void parseDateInvalidFormat() {
-        final String asString = "10:101/";
+        final String asString = "10:101515125/";
         final LocalDateTime result = BasicDateUtils.parseDateTime(asString);
         assertNull(result);
     }
 
     @Test
     public void parseDateOldTypeInvalidFormat() {
-        final String asString = "10:101/";
+        final String asString = "10:10112515/";
         final LocalTime result = BasicDateUtils.parseTime(asString);
         assertNull(result);
     }
 
     @Test
     public void parseTimeInvalidFormat() {
-        final String asString = "10:101/";
+        final String asString = "10:101125125/";
         final LocalDate result = BasicDateUtils.parseDate(asString);
         assertNull(result);
     }
 
     @Test
     public void parseDateTimeInvalidFormat() {
-        final String asString = "10:101/";
+        final String asString = "10:101512512/";
         final Date result = BasicDateUtils.parseSimpleDateLong(asString);
         assertNull(result);
     }

@@ -1,16 +1,16 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.string.GenCity;
+import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.string.GenCity;
-import io.dummymaker.annotation.string.GenName;
+import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyNoPopulateFields;
 import io.dummymaker.data.DummyNoZeroConstructor;
-import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.*;
 import org.junit.Test;
 
@@ -53,9 +53,9 @@ public class ScannerImplTest {
 
     @Test
     public void exportAnnotationScannerTest() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new ExportScanner();
+        IExportScanner scanner = new ExportScanner();
 
-        Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
+        Map<Field, FieldContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -63,19 +63,18 @@ public class ScannerImplTest {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        List<Annotation> groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
-        List<Annotation> numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        List<Annotation> nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
-
+        FieldContainer groupAnnotations    = fields.get(Dummy.class.getDeclaredField(GROUP.getOriginFieldName()));
+        FieldContainer numAnnotations      = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        FieldContainer nameAnnotations     = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);
         assertNotNull(nameAnnotations);
 
         // Check for correct export annotations
-        assertTrue(groupAnnotations.iterator().next().annotationType().equals(GenForceExport.class));
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.iterator().next().annotationType().equals(PrimeGen.class));
+        assertTrue(groupAnnotations.isSimple());
+        assertTrue(numAnnotations.isEnumerable());
+        assertTrue(nameAnnotations.isSimple());
     }
 
     @Test
@@ -99,30 +98,10 @@ public class ScannerImplTest {
     }
 
     @Test
-    public void scannerForRenameAnnotations() throws NoSuchFieldException {
-        IScanner<String, String> scanner = new RenameScanner();
-
-        Map<String, String> fields = scanner.scan(Dummy.class);
-
-        // Check for correct fields number in map
-        assertNotNull(fields);
-        assertFalse(fields.isEmpty());
-        assertEquals(1, fields.size());
-
-        // Check for correct map values
-        String groupFieldRenamedValue = fields.get(GROUP.getOriginFieldName());
-
-        assertNotNull(groupFieldRenamedValue);
-
-        // Check for correct export annotations
-        assertEquals("socialGroup", groupFieldRenamedValue);
-    }
-
-    @Test
     public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyCollection.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyCollection.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -134,7 +113,7 @@ public class ScannerImplTest {
     public void scannerForExportEmbeddedFreeCollectionAnnotation() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -145,7 +124,7 @@ public class ScannerImplTest {
     public void scannerForPopulateAnnotations() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(Dummy.class);
+        Map<Field, GenContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -153,12 +132,12 @@ public class ScannerImplTest {
         assertEquals(6, fields.size());
 
         // Check for correct map values
-        PopulateContainer cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
-        PopulateContainer numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
-        PopulateContainer nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
-        PopulateContainer bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
-        PopulateContainer lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
-        PopulateContainer uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
+        GenContainer cityAnnotations    = fields.get(Dummy.class.getDeclaredField(CITY.getOriginFieldName()));
+        GenContainer numAnnotations     = fields.get(Dummy.class.getDeclaredField(NUM.getOriginFieldName()));
+        GenContainer nameAnnotations    = fields.get(Dummy.class.getDeclaredField(NAME.getOriginFieldName()));
+        GenContainer bigdAnnotations    = fields.get(Dummy.class.getDeclaredField(BIGD.getOriginFieldName()));
+        GenContainer lngAnnotations     = fields.get(Dummy.class.getDeclaredField(LNG.getOriginFieldName()));
+        GenContainer uncompaAnnotations = fields.get(Dummy.class.getDeclaredField(UNCOMPA.getOriginFieldName()));
 
         assertNotNull(cityAnnotations);
         assertNotNull(numAnnotations);
@@ -168,26 +147,26 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(numAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(bigdAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(lngAnnotations.getPrime().annotationType().equals(PrimeGen.class));
-        assertTrue(uncompaAnnotations.getPrime().annotationType().equals(PrimeGen.class));
+        assertTrue(cityAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(numAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(nameAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(bigdAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(lngAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertTrue(uncompaAnnotations.getCore().annotationType().equals(PrimeGen.class));
 
-        assertTrue(cityAnnotations.getGen().annotationType().equals(GenCity.class));
-        assertTrue(numAnnotations.getGen().annotationType().equals(GenEnumerate.class));
-        assertTrue(nameAnnotations.getGen().annotationType().equals(GenName.class));
-        assertTrue(bigdAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
-        assertTrue(lngAnnotations.getGen().annotationType().equals(GenEnumerate.class));
-        assertTrue(uncompaAnnotations.getGen().annotationType().equals(GenDoubleBig.class));
+        assertTrue(cityAnnotations.getMarker().annotationType().equals(GenCity.class));
+        assertTrue(numAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(nameAnnotations.getMarker().annotationType().equals(GenName.class));
+        assertTrue(bigdAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
+        assertTrue(lngAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(uncompaAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
     }
 
     @Test
     public void scanForPopulateAnnotationsWhereThereNoOne() {
         IPopulateScanner scanner = new PopulateScanner();
 
-        Map<Field, PopulateContainer> fields = scanner.scan(DummyNoPopulateFields.class);
+        Map<Field, GenContainer> fields = scanner.scan(DummyNoPopulateFields.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);

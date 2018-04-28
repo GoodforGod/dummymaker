@@ -14,8 +14,6 @@ import java.util.Collection;
  */
 public class BasicCollectionUtilsTest extends Assert {
 
-    private BasicCollectionUtils utils = new BasicCollectionUtils();
-
     @Test
     public void isEmptyCollectionEmpty() {
         Collection<Object> collection = new ArrayList<>();

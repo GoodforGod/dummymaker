@@ -1,14 +1,13 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.annotation.number.GenDoubleBig;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
 import io.dummymaker.factory.impl.GenPopulateFactory;
-import io.dummymaker.factory.impl.ListGenerateFactory;
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -20,37 +19,21 @@ import static org.junit.Assert.*;
  */
 public class PopulateFactoryTest {
 
+    private final IPopulateFactory factory = new GenPopulateFactory();
+
     @Test
     public void genPopulateTestEmptyList() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
-    }
-
-    @Test
-    public void genPopulateProvidersEmpty() {
-        final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders = new HashMap<>();
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory(generateFactoryProviders);
-        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
-    }
-
-    @Test
-    public void genPopulateProviders() {
-        final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders = new HashMap<>();
-        generateFactoryProviders.put(GenDoubleBig.class, ListGenerateFactory.class);
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory(generateFactoryProviders);
-        assertTrue(dummyGenPopulateFactory.populate(Collections.emptyList()).isEmpty());
+        assertTrue(factory.populate(Collections.emptyList()).isEmpty());
     }
 
     @Test
     public void genPopulateTestNullList() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertTrue(dummyGenPopulateFactory.populate(null).isEmpty());
+        assertTrue(factory.populate(null).isEmpty());
     }
 
     @Test
     public void genPopulateTestNull() {
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        assertNull(dummyGenPopulateFactory.populate((Dummy) null));
+        assertNull(factory.populate((Dummy) null));
     }
 
     @Test
@@ -65,8 +48,7 @@ public class PopulateFactoryTest {
         dummies.get(0).setGroup(group1);
         dummies.get(1).setGroup(group2);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummies = dummyGenPopulateFactory.populate(dummies);
+        dummies = factory.populate(dummies);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -93,8 +75,7 @@ public class PopulateFactoryTest {
         Dummy dummy = new Dummy();
         dummy.setGroup(group);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummy = dummyGenPopulateFactory.populate(dummy);
+        dummy = factory.populate(dummy);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -115,8 +96,7 @@ public class PopulateFactoryTest {
         DummyNoPopulateFields dummy = new DummyNoPopulateFields();
         dummy.setGroup(group);
 
-        final IPopulateFactory dummyGenPopulateFactory = new GenPopulateFactory();
-        dummy = dummyGenPopulateFactory.populate(dummy);
+        dummy = factory.populate(dummy);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());

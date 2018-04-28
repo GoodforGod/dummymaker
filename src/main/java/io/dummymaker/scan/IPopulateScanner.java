@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.scan.container.PopulateContainer;
+import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 
@@ -12,11 +12,11 @@ import java.lang.reflect.Field;
  * @see PopulateScanner
  * @see PopulateEmbeddedFreeScanner
  *
- * @see PopulateContainer
+ * @see GenContainer
  *
  * @author GoodforGod
  * @since 10.03.2018
  */
-public interface IPopulateScanner extends IScanner<Field, PopulateContainer> {
+public interface IPopulateScanner extends IScanner<Field, GenContainer> {
 
 }

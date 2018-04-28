@@ -1,21 +1,19 @@
 package io.dummymaker.factory.impl;
 
+import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.collection.GenList;
-import io.dummymaker.annotation.collection.GenMap;
-import io.dummymaker.annotation.collection.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.time.GenTime;
-import io.dummymaker.factory.IGenerateFactory;
+import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.factory.IPopulateFactory;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.IComplexGenerator;
+import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.container.PopulateContainer;
 import io.dummymaker.scan.impl.EnumerateScanner;
-import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
-import io.dummymaker.scan.impl.PopulateScanner;
+import io.dummymaker.util.BasicCastUtils;
 import io.dummymaker.util.BasicCollectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -24,16 +22,19 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicCastUtils.*;
+import static io.dummymaker.util.BasicCastUtils.castObject;
+import static io.dummymaker.util.BasicCastUtils.instantiate;
 
 /**
- * Populate object populate fields using generators and generate factories
- * Scan for populate annotations and generate values for such fields via generators
+ * Scan for populate annotations on entity fields
+ * and generate values for such fields via generators
  *
- * @see IGenerateFactory
  * @see IGenerator
+ * @see IComplexGenerator
  *
  * @see PrimeGen
+ * @see ComplexGen
+ *
  * @see GenEnumerate
  *
  * @author GoodforGod
@@ -43,85 +44,63 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
 
-    private final IPopulateScanner populateScanner;
-    private final IPopulateScanner populateEmbeddedFreeScanner;
+    private static final int MAX_EMBEDDED_DEPTH = GenEmbedded.MAX;
+    private static final int MIN_EMBEDDED_DEPTH = 1;
 
     private final IAnnotationScanner enumerateScanner;
+    private final IPopulateScanner populateScanner;
 
-    /**
-     * Generate factory annotation providers map
-     * Indicates which annotation can provide generate factory
-     */
-    private final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders;
+    private final GeneratorsStorage genStorage;
 
     BasicPopulateFactory(final IPopulateScanner populateScanner) {
-        this.populateScanner = (populateScanner == null) ? new PopulateScanner() : populateScanner;
-        this.populateEmbeddedFreeScanner = new PopulateEmbeddedFreeScanner();
-        this.enumerateScanner = new EnumerateScanner();
-
-        this.generateFactoryProviders = buildDefaultGenerateFactoryProviders();
+        this.genStorage         = new GeneratorsStorage();
+        this.enumerateScanner   = new EnumerateScanner();
+        this.populateScanner    = populateScanner;
     }
-
-    /**
-     * To extend generate factory providers with custom ones
-     *
-     * @param generateFactoryProviders custom generate factory providers
-     * @see IGenerateFactory
-     */
-    BasicPopulateFactory(final IPopulateScanner populateScanner,
-                         final Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> generateFactoryProviders) {
-        this(populateScanner);
-        if (generateFactoryProviders != null) {
-            generateFactoryProviders.forEach(this.generateFactoryProviders::put);
-        }
-    }
-
 
     /**
      * Populate single entity
      *
      * @param t                  entity to populate
      * @param enumeratesMap      map of enumerated marked fields
-     * @param generatorsMap      map where generator is assigned to each entity field
-     * @param generateFactoryMap map with generate factories
-     * @param errorFields        set with fields that had errors in
+     * @param nullableFields     set with fields that had errors in
+     * @param currentEmbeddedDepth embedded depth level
      * @return populated entity
      */
     private <T> T populateEntity(final T t,
-                                 final IPopulateScanner populateScanner,
-                                 final Map<Field, IGenerator> generatorsMap,
-                                 final Map<Field, IGenerateFactory> generateFactoryMap,
                                  final Map<Field, Long> enumeratesMap,
-                                 final Set<Field> errorFields) {
-        final Map<Field, PopulateContainer> populateAnnotationMap = populateScanner.scan(t.getClass());
+                                 final Set<Field> nullableFields,
+                                 final int currentEmbeddedDepth) {
+        final Map<Field, GenContainer> genContainers = this.populateScanner.scan(t.getClass());
 
-        for (final Map.Entry<Field, PopulateContainer> annotatedField : populateAnnotationMap.entrySet()) {
+        for (final Map.Entry<Field, GenContainer> annotatedField : genContainers.entrySet()) {
             final Field field = annotatedField.getKey();
 
-            // If field had errors in prev populate iteration, just skip that field
-            if (errorFields.contains(field))
+            // If field had errors or null gen in prev populate iteration, just skip that field
+            if (nullableFields.contains(field))
                 continue;
 
             try {
                 field.setAccessible(true);
 
-                final Object objValue = buildObject(field,
+                final Object objValue = generateObject(field,
                         annotatedField.getValue(),
-                        generatorsMap,
-                        generateFactoryMap,
                         enumeratesMap,
-                        errorFields);
+                        nullableFields,
+                        currentEmbeddedDepth);
 
                 field.set(t, objValue);
+
             } catch (ClassCastException e) {
-                logger.warning(e.getMessage() + " | FIELD TYPE AND GENERATE TYPE ARE NOT COMPATIBLE.");
-                errorFields.add(field);
+                logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
+                nullableFields.add(field); // skip field due to error as if it null
+                throw e;
             } catch (IllegalAccessException e) {
-                logger.warning(e.getMessage() + " | HAVE NO ACCESS TO FIELD.");
-                errorFields.add(field);
+                logger.warning(e.getMessage() + " | have NO ACCESS to field: " + field.getName());
+                nullableFields.add(field); // skip field due to error as if it null
             } catch (Exception e) {
                 logger.warning(e.getMessage());
-                errorFields.add(field);
+                nullableFields.add(field); // skip field due to error as if it null
             } finally {
                 annotatedField.getKey().setAccessible(false);
             }
@@ -131,85 +110,80 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     }
 
     /**
-     * Build field populate value
+     * Generate populate field value
      *
      * @param field             field to populate
-     * @param populateContainer field populate annotations
-     * @param generatorsMap     fields generators
+     * @param container         field populate annotations
      * @param enumerateMap      field enumerate map
-     * @param errorFields       set with fields that had errors in
+     * @param nullableFields    set with fields that had errors in
      */
-    private Object buildObject(final Field field,
-                               final PopulateContainer populateContainer,
-                               final Map<Field, IGenerator> generatorsMap,
-                               final Map<Field, IGenerateFactory> generateFactoryMap,
-                               final Map<Field, Long> enumerateMap,
-                               final Set<Field> errorFields) {
-        final IGenerator generator = generatorsMap.get(field);
-        final IGenerateFactory generateFactory = generateFactoryMap.get(field);
+    private Object generateObject(final Field field,
+                                  final GenContainer container,
+                                  final Map<Field, Long> enumerateMap,
+                                  final Set<Field> nullableFields,
+                                  final int currentEmbeddedDepth) {
+        final IGenerator generator = genStorage.getGeneratorInstance(container.getGeneratorClass());
+        final Annotation annotation = container.getMarker();
 
         Object generated;
 
-        if (generateFactory != null) {
-            generated = generateFactory.generate(field,
-                    populateContainer.getGen(),
-                    generator);
+        if (EmbeddedGenerator.class.equals(container.getGeneratorClass())) {
+            generated = generateEmbeddedObject(annotation, field, nullableFields, currentEmbeddedDepth);
         } else if (enumerateMap.containsKey(field)) {
-            generated = buildNextEnumeratedValue(enumerateMap, field);
-        } else if (populateContainer.getGen().annotationType().equals(GenEmbedded.class)) {
-            generated = buildEmbeddedValue(field, errorFields);
+            generated = generateEnumerateObject(field, enumerateMap);
+        } else if (container.isComplex()) {
+            generated = ((IComplexGenerator) generator).generate(annotation, field, genStorage);
         } else {
             generated = generator.generate();
         }
 
         final Object casted = castObject(generated, field.getType());
-        if (casted.equals(EMPTY)) {
-            errorFields.add(field);
-            return null;
-        }
+        if (casted == null)
+            nullableFields.add(field);
 
         return casted;
     }
 
     /**
-     * Build embedded field value
+     * Generate embedded field value
      *
      * @param field       field with embedded value
-     * @param errorFields set with fields that had errors in
+     * @param nullableFields set with fields that had errors in
      */
-    private Object buildEmbeddedValue(final Field field,
-                                      final Set<Field> errorFields) {
-        final Object object = instanceClass(field.getType());
-        if (object != null) {
-            return populateEntity(instanceClass(field.getType()),
-                    this.populateEmbeddedFreeScanner,
-                    buildGeneratorsMap(field.getType()),
-                    buildGenerateFactoryMap(field.getType()),
-                    buildEnumerateMap(field.getType()),
-                    new HashSet<>());
-        } else {
-            errorFields.add(field);
+    private Object generateEmbeddedObject(final Annotation annotation,
+                                          final Field field,
+                                          final Set<Field> nullableFields,
+                                          final int currentEmbeddedDepth) {
+        final int fieldDepth = getDepth(annotation);
+        if(fieldDepth < currentEmbeddedDepth)
+            return null;
+
+        final Object embedded = instantiate(field.getType());
+        if(embedded == null) {
+            nullableFields.add(field);
             return null;
         }
+
+        final int nextEmbeddedDepth = currentEmbeddedDepth + 1;
+        return populateEntity(embedded,
+                buildEnumerateMap(field.getType()),
+                buildNullableSet(),
+                nextEmbeddedDepth);
     }
 
     /**
-     * Build enumerate field next value
+     * Generate enumerate field next value
      */
-    private Object buildNextEnumeratedValue(final Map<Field, Long> enumerateMap,
-                                            final Field enumeratedField) {
-        Object objValue = enumerateMap.get(enumeratedField);
-
-        if (enumeratedField.getType().isAssignableFrom(Integer.class)) {
-            objValue = Integer.valueOf(String.valueOf(objValue));
-        } else if (enumeratedField.getType().isAssignableFrom(Long.class)) {
-            objValue = Long.valueOf(String.valueOf(objValue));
-        }
+    private Object generateEnumerateObject(final Field field,
+                                           final Map<Field, Long> enumerateMap) {
+        final Long currentEnumerateValue = enumerateMap.get(field);
+        Object objValue = BasicCastUtils.castToNumber(currentEnumerateValue, field.getType());
 
         // Increment numerate number for generated field
-        enumerateMap.computeIfPresent(enumeratedField, (k, v) -> v + 1);
+        enumerateMap.computeIfPresent(field, (k, v) -> v + 1);
         return objValue;
     }
+
 
     @Override
     public <T> T populate(final T t) {
@@ -217,11 +191,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             return null;
 
         return populateEntity(t,
-                this.populateScanner,
-                buildGeneratorsMap(t.getClass()),
-                buildGenerateFactoryMap(t.getClass()),
                 buildEnumerateMap(t.getClass()),
-                new HashSet<>());
+                buildNullableSet(),
+                MIN_EMBEDDED_DEPTH);
     }
 
     @Override
@@ -229,50 +201,28 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         if (BasicCollectionUtils.isEmpty(list))
             return Collections.emptyList();
 
-        // Set up map for enumerated fields before population
         final Class<?> tClass = list.get(0).getClass();
-        if (tClass == null)
-            return Collections.emptyList();
 
-        final Set<Field> errorFields = new HashSet<>();
-        final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass);
-        final Map<Field, IGenerator> generatorMap = buildGeneratorsMap(tClass);
-        final Map<Field, IGenerateFactory> generateFactoryMap = buildGenerateFactoryMap(tClass);
+        final Set<Field> nullableFields = buildNullableSet(); // use for performance
+        final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass); // store enumerate gen state
 
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, this.populateScanner, generatorMap, generateFactoryMap, enumerateMap, errorFields))
+                .map(t -> populateEntity(t, enumerateMap, nullableFields, MIN_EMBEDDED_DEPTH))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Build generate factory map with default generate factory providers
-     */
-    private Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> buildDefaultGenerateFactoryProviders() {
-        Map<Class<? extends Annotation>, Class<? extends IGenerateFactory>> factoryProviders = new HashMap<>();
-        factoryProviders.put(GenList.class, ListGenerateFactory.class);
-        factoryProviders.put(GenSet.class, SetGenerateFactory.class);
-        factoryProviders.put(GenMap.class, MapGenerateFactory.class);
-        factoryProviders.put(GenTime.class, TimeGenerateFactory.class);
-        return factoryProviders;
-    }
+    private int getDepth(final Annotation annotation) {
+        if(annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
+            return MIN_EMBEDDED_DEPTH;
 
-    /**
-     * Build generators map to improve performance
-     * So we initialize generators once for entity and not each populate method call
-     */
-    private <T> Map<Field, IGenerator> buildGeneratorsMap(final Class<T> tClass) {
-        final Map<Field, PopulateContainer> populateAnnotationMap = this.populateScanner.scan(tClass);
-        final Map<Field, IGenerator> generatorsMap = new HashMap<>();
+        final int fieldDepth = ((GenEmbedded) annotation).depth();
+        if(fieldDepth < 1)
+            return MIN_EMBEDDED_DEPTH;
 
-        populateAnnotationMap.forEach((key, value) -> {
-            final IGenerator generator = instanceClass(((PrimeGen) value.getPrime()).value());
-            if (generator != null) {
-                generatorsMap.put(key, generator);
-            }
-        });
-
-        return generatorsMap;
+        return (fieldDepth > MAX_EMBEDDED_DEPTH)
+                ? MAX_EMBEDDED_DEPTH
+                : fieldDepth;
     }
 
     /**
@@ -283,31 +233,12 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     private Map<Field, Long> buildEnumerateMap(final Class t) {
         return this.enumerateScanner.scan(t).entrySet().stream()
                 .collect(Collectors.toMap(
-                        e -> e.getKey(),
+                        Map.Entry::getKey,
                         e -> ((GenEnumerate) e.getValue().get(0)).from())
                 );
     }
 
-    /**
-     * Setup generate factory map for fields which are annotated with special annotations
-     */
-    private <T> Map<Field, IGenerateFactory> buildGenerateFactoryMap(final Class<T> tClass) {
-        final Map<Field, PopulateContainer> populateAnnotationMap = this.populateScanner.scan(tClass);
-        final Map<Field, IGenerateFactory> generateFactoryMap = new HashMap<>();
-
-        populateAnnotationMap.entrySet().stream()
-                .filter(e -> generateFactoryProviders.containsKey(e.getValue().getGen().annotationType()))
-                .forEach(e -> {
-
-                    final IGenerateFactory generateFactory = instanceClass(
-                            generateFactoryProviders.get(e.getValue().getGen().annotationType()));
-
-                    if (generateFactory != null) {
-                        generateFactoryMap.put(e.getKey(), generateFactory);
-                    }
-                });
-
-        return generateFactoryMap;
+    private Set<Field> buildNullableSet() {
+        return new HashSet<>();
     }
-
 }

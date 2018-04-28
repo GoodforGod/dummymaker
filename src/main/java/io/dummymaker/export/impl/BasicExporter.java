@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.naming.IStrategy;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.util.BasicCollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
@@ -32,22 +32,22 @@ abstract class BasicExporter implements IExporter {
 
     private String path;
     private Format format;
-    private IStrategy strategy;
+    private ICase caseUsed;
 
     /**
-     * @param strategy naming strategy
+     * @param caseUsed naming strategy
      * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
      *
-     * @see IStrategy
+     * @see ICase
      * @see Format
      */
     BasicExporter(final String path,
                   final Format format,
-                  final IStrategy strategy) {
+                  final ICase caseUsed) {
         setPath(path);
         this.format = format;
-        this.strategy = strategy;
+        this.caseUsed = caseUsed;
     }
 
     void setPath(final String path) {
@@ -56,16 +56,16 @@ abstract class BasicExporter implements IExporter {
                 : path;
     }
 
-    void setStrategy(final IStrategy strategy) {
-        if(strategy != null)
-            this.strategy = strategy;
+    void setCase(final ICase caseUsed) {
+        if(caseUsed != null)
+            this.caseUsed = caseUsed;
     }
 
     /**
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(final T t) {
-        return new ClassContainer(t, strategy);
+        return new ClassContainer(t, caseUsed);
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class BasicExporter implements IExporter {
      */
     IWriter buildWriter(final IClassContainer classContainer) {
         try {
-            return new BufferedFileWriter(classContainer.exportClassName(), path, format.getExtension());
+            return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
         } catch (IOException e) {
             logger.warning(e.getMessage());
             return null;
@@ -103,25 +103,49 @@ abstract class BasicExporter implements IExporter {
                                                       final IClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
-        classContainer.getContainers().forEach((key, value) -> {
+
+        // Using only SIMPLE values containers
+        classContainer.getSimpleContainers().forEach((k, v) -> {
             try {
-                value.getField().setAccessible(true);
+                k.setAccessible(true);
 
-                final Object exportField = value.getField().get(t);
-                final String exportFieldName = value.getExportName();
-                final String exportFieldValue = (exportField != null && exportField.getClass().equals(Date.class))
-                        ? String.valueOf(((Date) exportField).getTime())
-                        : String.valueOf(exportField);
+                final String exportFieldName = v.getExportName();
+                final Object exportFieldValue = k.get(t);
 
-                exports.add(new ExportContainer(exportFieldName, exportFieldValue));
+                exports.add(buildContainer(exportFieldName, exportFieldValue));
 
-                value.getField().setAccessible(false);
-            } catch (Exception e) {
-                logger.warning(e.getMessage());
+                k.setAccessible(false);
+            } catch (Exception ex) {
+                logger.warning(ex.getMessage());
             }
         });
 
         return exports;
+    }
+
+    private ExportContainer buildContainer(final String exportFieldName,
+                                   final Object exportFieldValue) {
+        if(exportFieldValue == null) {
+            return ExportContainer.asValue(exportFieldName, "");
+        }
+
+        //TODO Check this in SQL exporter
+        if (exportFieldValue.getClass().equals(Date.class)) {
+            return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+        }
+
+//        if(this.format == Format.JSON) {
+//            if (exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
+//                final ExportContainer container = ExportContainer.asCollection(exportFieldName);
+//            }
+//
+//            final IClassContainer classContainer = buildClassContainer(exportFieldValue.getClass());
+//            if(classContainer.isExportable()) {
+//                final List<ExportContainer> embeddedContainers = extractExportContainers(exportFieldValue, classContainer);
+//            }
+//        }
+
+        return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
     }
 
     /**

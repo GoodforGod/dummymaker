@@ -1,6 +1,7 @@
 package io.dummymaker.export.asstring;
 
 import io.dummymaker.data.Dummy;
+import io.dummymaker.data.DummyAuto;
 import io.dummymaker.data.DummyNoExportFields;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
@@ -54,35 +55,35 @@ public class ExportAsStringTests extends Assert {
                         { new JsonExporter().withPretty(), new JsonValidator(), 5, 14 },
                         { new JsonExporter().withPretty().withPath(null), new JsonValidator(), 5, 14 },
                         { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withStrategy(null), new JsonValidator(), 5, 14 },
+                        { new JsonExporter().withPretty().withCase(null), new JsonValidator(), 5, 14 },
 
                         { new CsvExporter(), new CsvValidator(), 3, 2 },
                         { new CsvExporter().withPath(null), new CsvValidator(), 3, 2 },
                         { new CsvExporter().withPath("    "), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withStrategy(null), new CsvValidator(), 3, 2 },
+                        { new CsvExporter().withCase(null), new CsvValidator(), 3, 2 },
 
                         { new SqlExporter(), new SqlValidator(), 9, 10 },
                         { new SqlExporter().withPath(null), new SqlValidator(), 9, 10 },
                         { new SqlExporter().withPath("    "), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withStrategy(null), new SqlValidator(), 9, 10 },
+                        { new SqlExporter().withCase(null), new SqlValidator(), 9, 10 },
 
                         { new XmlExporter(), new XmlValidator(), 5, 12 },
                         { new XmlExporter().withPath(null), new XmlValidator(), 5, 12 },
                         { new XmlExporter().withPath("     "), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withStrategy(null), new XmlValidator(), 5, 12 }
+                        { new XmlExporter().withCase(null), new XmlValidator(), 5, 12 }
                 }
         );
     }
 
     @Test
-    public void exportSingleDummyInvalidExportEntity() throws Exception {
+    public void exportSingleDummyInvalidExportEntity() {
         final String exportResult = exporter.exportAsString((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
 
     @Test
-    public void exportDummyListInvalidExportEntity() throws Exception {
+    public void exportDummyListInvalidExportEntity() {
         final String exportResult = exporter.exportAsString(null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
@@ -93,7 +94,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummyEmptyContainer() throws Exception {
+    public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
 
         final String exportResult = exporter.exportAsString(dummy);
@@ -102,7 +103,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportDummyListEmptyContainer() throws Exception {
+    public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
 
         final String exportResult = exporter.exportAsString(dummy);
@@ -111,7 +112,7 @@ public class ExportAsStringTests extends Assert {
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = produceFactory.produce(Dummy.class);
 
         final String dummyAsString = exporter.exportAsString(dummy);
@@ -120,14 +121,30 @@ public class ExportAsStringTests extends Assert {
 
         final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
 
-        final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        final String[] strings = dummyAsString.split(splitter);
+        assertEquals(singleSplitLength, strings.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyValid(strings);
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleAutoDummy() {
+        final DummyAuto dummy = produceFactory.produce(DummyAuto.class);
+
+        final String dummyAsString = exporter.exportAsString(dummy);
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+
+        final String[] strings = dummyAsString.split(splitter);
+        assertEquals(singleSplitLength - 1, strings.length);
+
+        validator.isSingleAutoDummyValid(strings);
+    }
+
+    @Test
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
 
         final String dummyAsString = exporter.exportAsString(dummies);
@@ -136,23 +153,23 @@ public class ExportAsStringTests extends Assert {
 
         final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
 
-        final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        final String[] strings = dummyAsString.split(splitter);
+        assertEquals(singleSplitLength, strings.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyValid(strings);
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
 
         final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(listSplitLength, csvArray.length);
+        final String[] strings = dummyAsString.split("\n");
+        assertEquals(listSplitLength, strings.length);
 
-        validator.isTwoDummiesValid(csvArray);
+        validator.isTwoDummiesValid(strings);
     }
 }

@@ -1,18 +1,18 @@
 # DummyMaker   :hotsprings:
 
-![](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)
+![travis](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
 
-Library allow to produce Dummy objects (POJOs) using special *factories*, *populate* their fields with values by special *Gen* annotations and *generators* and *export* them in **CSV/JSON/XML/SQL** formats.
+Library can produce Dummies using special *factories*, *populate* their fields with values via special *Gen* annotations and *generators*, *export* them in **CSV/JSON/XML/SQL** formats.
 
-Also it is possible to create your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
+Also it is possible to easily extend library functionality by creating your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
 
 *Step by step guide how to produce and export your first Dummy:*
-1) Create Dummy object (POJO). 
-2) *Annotate* Dummy object fields with special *Gen* annotations.
-3) Use *Factory* to populate/produce Dummy Object[s].
-4) Export Dummy Objects by using special *Exporter*.
+1) Create Dummy. 
+2) *Annotate* Dummies fields with special *Gen* annotations.
+3) Use *Factory* to populate/produce Dummy.
+4) Export Dummy by using special *Exporter*.
 
 ![](https://media.giphy.com/media/1msHfmVdtuwkXww4ZC/giphy.gif)
 
@@ -22,14 +22,14 @@ Also it is possible to create your own *Gen* annotations, *IGenerator* generator
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.1.0'
+    compile 'com.github.goodforgod:dummymaker:1.1.1'
 }
 ```
 
@@ -37,20 +37,23 @@ dependencies {
 - [Overall](#overall)
 - [Factories](#factories)
 - [Generators](#generators)
+- [Complex Generators](#complex-generators)
+- [Annotations](#annotations)
+  - [Gen Annotations](#gen-annotations)  
+  - [Core Annotations](#core-annotations)  
+  - [Auto Annotation](#auto-annotation)
+  - [Collection Annotations](#collection-annotations)  
+  - [Time Annotation](#time-annotation)  
+  - [Special Annotations](#special-annotations)  
 - [Exporters](#exporters)
   - [Basic Exporters Parameters](#basic-exporters-parameters)
   - [CsvExporter Parameters](#csvexporter-parameters)
   - [XmlExporter Parameters](#xmlexporter-parameters)
   - [SqlExporter Parameters](#sqlexporter-parameters)
-- [Annotations](#annotations)
-  - [Basic Gen Annotations](#basic-gen-annotations)  
-  - [Collection Annotations](#collection-annotations)  
-  - [Time Annotation](#time-annotation)  
-  - [Special Annotations](#special-annotations)  
 - [Customization](#customization)
   - [IGenerator](#igenerator)
+  - [IComplexGenerator](#icomplexgenerator)
   - [Gen Annotation](#gen-annotation)
-  - [IGenerateFactory](#igeneratefactory)
 - [Getting Started with examples](#getting-started-with-examples)
   - [Annotations](#annotations-examples)
   - [Factories](#factories-examples)
@@ -65,7 +68,7 @@ dependencies {
 
 ## Overall
 
-Scheme how all is linked together:
+How all is linked together:
 
 Dummy object fields should be marked with special *Gen* annotations.
 
@@ -73,21 +76,18 @@ Each *Gen* annotation have special hidden *IGenerator* responsible for value gen
 
 When *GenPopulateFactory* is used, it scans for such annotations and use hidden generators to generate values for Dummy object fields.
 
-Or special *IGenerateFactory* is used to build complex value (or value with *annotation attributes involved*) for specific *Gen* annotations like *GenList*.
+Or special *IComplexGenerator* is used to build complex value (or value with *annotation attributes involved*) for specific *Gen* annotations like *GenList*.
 
 Exporters use scanners to verify what fields to export and format values in chosen format.
 
 ## Factories
 
 Factories to populate/produce Dummy Objects.
+Factory is responsible for field population.
 
 * ***GenProduceFactory*** - allow you to produce new Dummies with populated fields.
 
 * ***GenPopulateFactory*** - allow you to populate fields of already created Dummies.
-
-* ***IGenerateFactory*** - special factory interface used to build complex generate factories to build Dummy object field values, used by GenPopulateFactory.
-
-You can create your own *IGenerateFactory* implementations as well for complex *Gen* annotations.
 
 ## Generators
 
@@ -95,6 +95,12 @@ You can create your own *IGenerateFactory* implementations as well for complex *
 Used by *GenPopulateFactory* to generate values for Dummy object fields.
 
 Are part of *Gen* annotations cause indicate what generator each annotation is using.
+
+## Complex Generators
+
+Complex Generators are special generators used to build complex values where you can access entity field, or its annotation.
+
+You can create your own *IComplexGenerator* implementations as well for complex *Gen* annotations.
 
 ## Exporters
 
@@ -104,16 +110,19 @@ Are part of *Gen* annotations cause indicate what generator each annotation is u
 
 Constructor parameters available for all exporters.
 
-* *withPath* - set path for export file, default directory where app is started.
-* *withStrategy* - naming strategy applied to all origin fields (fields which are not *@GenRenameExport*), default value is *DEFAULT*. All strategies presets are in **Strategies** enum and inherit **IStrategy** interface.
+* *withPath* - set path for export file, default directory is app home.
+* *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
 
-	**Strategies**
-	* *DEFAULT* - origin name, as is.
-	* *UPPER_CASE* - name in upper case, like *DummyList - DUMMYLIST*
-	* *LOW_CASE* - name in low case, like *DummyList - dummylist*
-	* *UNDERSCORED_LOW_CASE* - name in upper case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-	* *UNDERSCORED_UPPER_CASE* - name in low case, with *_* symbol before each capital letter, like *DummyList - dummy_list*
-	* *INITIAL_LOW_CASE* - origin name, but first letter is low case, like *DummyList - dummyList*
+	**Cases**:
+	* *DEFAULT* - name as is.
+	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
+	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
+	* *CAMEL_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
+	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
+	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
+	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
+    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
 
 ### **CsvExporter Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.
@@ -121,8 +130,7 @@ Constructor parameters available for all exporters.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
 
 ### **XmlExporter Parameters**
-* *withEnding* - export xml list name value (example: if class is Dummy, default list name will be DummyList).
-* *withFullname* - full class export name. (class ending is not used in this case).
+* *withName* - class custom export name value. (class ending is not used in this case).
 
 ### **SqlExporter Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
@@ -133,13 +141,28 @@ Constructor parameters available for all exporters.
 
 It is easily for you to create custom *Gen* annotations and *IGenerator* generators.
 
-### **Basic Gen Annotations**
+### **Gen Annotations**
 
 *Gen* annotations allow you to mark Dummy fields and tell *GenPopulateFactory* to fill this fields with randomly generated values.
 
 This annotations hide inside itself specified *IGenerator* class which is responsible for value generation.
 
 Generate annotations start with *Gen* prefix (like *GenInteger, GenEmail, GenId, etc*).
+
+### **Core Annotations**
+
+Library provides *PrimeGen* and *ComplexGen* annotations as markers to build other annotations *GenLong* or *GenList*.
+
+*PrimeGen* annotation is used to build simple annotations with *IGenerator* interface involved.
+*ComplexGen* annotation is used to build complex generators with *IComplexGenerator* interface.
+
+Annotations used as markers on top of other annotations, which will be used to annotate fields in the end. This annotations takes *IGenerator*/*IComplexGenerator* as a input when building top level annotation. Check guide below for example.
+
+### **Auto Annotation**
+
+Use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
+
+As simple as it can be. Magic.
 
 ### **Collection Annotations**
 
@@ -154,7 +177,7 @@ Annotations support special attributes like:
 * *min* - minimum entities generated amount.
 * *max* - maximum entities generated amount.
 * *fixed* - fixed number entities generated amount.
-* *generator* - *IGenerator* generator class to build values using it.
+* *value* - *IGenerator* generator class to build values using it.
 
 This attributes are used by *GenMap* annotation only (instead of *generator* attribute):
 * *key* - *IGenerator* generator class to build map *keys* using it.
@@ -173,8 +196,17 @@ Automatically identify field time *type* and generate value for it.
 * *Timestamp (java.sql.Timestamp)*
 
 Annotations support special attributes like:
-* *from* - minimum time generated time (*01.01.1970* is default) in long UTC format.
-* *to* - maximum entities generated time (*01.01.3000* is default) in long UTC format.
+* *from* - minimum generated time (*01.01.1970* is default) in long UTC format.
+* *to* - maximum generated time (*01.01.3000* is default) in long UTC format.
+
+
+### **Embedded Annotation**
+
+*GenEmbedded* annotation used to mark complex object fields (like fields which also contain *Gen* annotations inside).
+
+Annotation support **depth** parameter, which indicates maximum depth of the Dummy from its root and can have 11 levels as maximum.
+
+Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 
 ### **Special Annotations**
 
@@ -186,55 +218,78 @@ Annotations support special attributes like:
 
 * ***GenEnumerate*** annotation with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
 
-* ***GenEmbedded*** annotation should mark complex object fields which also contain *Gen* annotations inside (There is no recursion, only one step down in hierarchy).
-
-Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
-
 ## *Getting Started Examples*
 
 ### **Annotations Examples**
 
-####  *POJO gen annotate example*
+####  *Field annotate example*
+
+Make sure that *Gen* annotation *generate type* is **same** or is **castable** to field type, or *field type* is **string** so in this case any object can be casted to *string*.
 
 ![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
+
+#### *Auto Gen magic*
+
+Just simple use *GenAuto* on class and library will do all for you.
+All fields will be populated automatically if such generators are available.
+Check *Auto Annotation* part for details.
+
+![](https://media.giphy.com/media/2fOt0kmS5Zk99CldyU/giphy.gif)
 
 #### *Force and Ignore annotations*
 
 In this case, field city will be export despite it isn't marked with *Gen* annotation, value will be "Saint-Petersburg".
 And field *id* will **NOT** be export if *ignore* annotation will have *true* (*default*) value.
 
-![](https://media.giphy.com/media/3oKIP9McvYYBRw4S2I/giphy.gif)
+![](https://media.giphy.com/media/fGUhbzqFXGO18YDdmM/giphy.gif)
 
 #### *Enumerate and Rename field example*
 
 *GenEnumerate* annotation will enumerate Dummy field starting from 10 in this case (*from 0 is default*).
 It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 19.
 
-*GenRenameExport* annotation will change *field* export name or *class* name.
+*GenRenameExport* annotation will change *field* or *class* export name.
 
-![](https://media.giphy.com/media/FsKNHPlKtSEpO/giphy.gif)
+![](https://media.giphy.com/media/1lAKHEbMtZ0ISV1HMp/giphy.gif)
 
 #### *Class name Rename example*
 
-*GenRenameExport* annotation will change *class* export name.in this case.
+*GenRenameExport* annotation will change **class** *export* name.in this case.
 
-![](https://media.giphy.com/media/7iuQXqNdcnSLu/giphy.gif)
+![](https://media.giphy.com/media/cdMPMc4OcXoBb0erSO/giphy.gif)
 
 #### *Gen Time annotation example*
+
+You can generate time/date values using this annotation.
+
+Read more in *time annotation* section.
 
 ![](https://media.giphy.com/media/MuCzQ6BfY1Y1HrggsP/giphy.gif)
 
 #### *Collection annotation example*
 
+You can populate collections such as *Set, List, Map* with any generic type you want, if such *IGenerator* is available (or you can create your own generator).
+
+Read more in *collection annotation* section.
+
 ![](https://media.giphy.com/media/8FrjAE955A2vTmxgal/giphy.gif)
 
 #### *Collection parameters*
 
-![](https://media.giphy.com/media/1n4JPUg1rxwemngMhV/giphy.gif)
+*List* will have from 50 to 100 elements and values will be generated by *NameGenerator*
+*Set* will always have a fixed 13 elements (or less if hash codes will be the same for different objects)
+
+![](https://media.giphy.com/media/3b8NNh405Y9ORC8NMa/giphy.gif)
 
 #### *Embedded fields example*
 
-![](https://media.giphy.com/media/uTOSaDeSbAJq4soFt2/giphy.gif)
+You can populate complex object fields using *GenEmbedded* annotation.
+
+In this case depth of embedded object field will be 5 levels.
+
+And embedded list will have only 1 depth level.
+
+![](https://media.giphy.com/media/kFezIHBLZ961ariUc7/giphy.gif)
 
 ### **Factories Examples**
 
@@ -279,7 +334,7 @@ All *Exporters* parameters you can find in specified section.
 
 You can extend basic functionality with your own annotations and generators. All infrastructure will support custom generators, annotations, generate factories with no doubt.
 
-The library works this way:
+First step to your own *Gen* annotation:
 * You create generators using *IGenerator* interface.
 * You create custom *Gen* annotation using *PrimeGen* annotation.
 * You mark Dummy object field with such annotation.
@@ -300,11 +355,19 @@ Is used to mark Dummy object field with specific generator.
 
 ![](https://media.giphy.com/media/7SZufvmQLuosppw7nc/giphy.gif)
 
-### IGenerateFactory
+### IComplexGenerator
 
-Is used to build complex values for fields, when simple *IGenerator* implementation is insufficient or *Gen* annotation require special parameters. 
+Is used to build complex values for fields, when simple *IGenerator* implementation is insufficient or *Gen* annotation require special parameters or when you need to access field. 
 
-![](https://media.giphy.com/media/5bgGzRo5svjQQJDkhU/giphy.gif)
+![](https://media.giphy.com/media/YFEIVlEljwvo8q0Vxp/giphy.gif)
+
+### Complex Gen Annotation
+
+Is created using special *ComplexGen* annotation and custom complex generator as its value.
+
+Is used to mark Dummy object field with specific complex generator.
+
+![](https://media.giphy.com/media/lptSdvg4sbVWNhUfcF/giphy.gif)
 
 ## Export File Structures
 
@@ -390,6 +453,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.1.1** - Factory performance improvements (about 40%), *GenAuto* annotation, *IComplexGenerator* the successor of *IGenerateFactory*, primitive support, Embedded multi level depth support, bug fixes.
 
 **1.1.0** - Performance and architecture improvements, *IGenerateFactory* introduced, collection *Gen* annotations, time *Gen* annotations, Embedded *Gen* support, architecture improvements in custom user extension support.
 

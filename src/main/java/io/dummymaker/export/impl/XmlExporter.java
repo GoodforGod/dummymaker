@@ -1,10 +1,10 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.container.IClassContainer;
+import io.dummymaker.container.impl.ExportContainer;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.container.IClassContainer;
-import io.dummymaker.export.container.impl.ExportContainer;
-import io.dummymaker.export.naming.IStrategy;
-import io.dummymaker.export.naming.Strategies;
+import io.dummymaker.export.naming.Cases;
+import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -43,7 +43,7 @@ public class XmlExporter extends BasicExporter {
     private String exportClassFullName = null;
 
     public XmlExporter() {
-        super(null, Format.XML, Strategies.DEFAULT.getStrategy());
+        super(null, Format.XML, Cases.DEFAULT.value());
     }
 
     /**
@@ -60,14 +60,14 @@ public class XmlExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see IStrategy
-     * @see Strategies
+     * @see ICase
+     * @see Cases
      *
-     * @param strategy naming strategy for exporter
+     * @param nameCase naming strategy for exporter
      * @return exporter
      */
-    public XmlExporter withStrategy(final IStrategy strategy) {
-        setStrategy(strategy);
+    public XmlExporter withCase(final ICase nameCase) {
+        setCase(nameCase);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class XmlExporter extends BasicExporter {
 
         final StringBuilder builder = new StringBuilder()
                 .append(tabObject)
-                .append(wrapOpenXmlTag(container.exportClassName()))
+                .append(wrapOpenXmlTag(container.getExportClassName()))
                 .append("\n");
 
         final String resultValues = exportContainers.stream()
@@ -124,7 +124,7 @@ public class XmlExporter extends BasicExporter {
                 .append("\n");
 
         return builder.append(tabObject)
-                .append(wrapCloseXmlTag(container.exportClassName()))
+                .append(wrapCloseXmlTag(container.getExportClassName()))
                 .toString();
     }
 

@@ -1,12 +1,13 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.time.GenTime;
+import io.dummymaker.annotation.complex.GenTime;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * "default comment"
@@ -16,19 +17,37 @@ import java.util.Date;
  */
 public class DummyTime {
 
-    public enum FieldNames {
+    public enum Patterns {
+        LOCAL_TIME(Pattern.compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
+        LOCAL_DATE(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
+        LOCAL_DATETIME(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
+        TIMESTAMP(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),
+        DATE(Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"));
+
+        private final Pattern pattern;
+
+        Patterns(Pattern pattern) {
+            this.pattern = pattern;
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+    }
+
+    public enum Fields {
         LOCAL_TIME("time"),
         LOCAL_DATE("date"),
         LOCAL_DATETIME("dateTime"),
         TIMESTAMP("timestamp"),
         DATE("dateOld"),
+        DATE_COVERAGE("dateOldCoverage"),
         LOCAL_DATETIME_STRING("dateTimeString"),
         LOCAL_DATETIME_OBJECT("dateTimeObject");
 
-
         private final String name;
 
-        FieldNames(String name) {
+        Fields(String name) {
             this.name = name;
         }
 
