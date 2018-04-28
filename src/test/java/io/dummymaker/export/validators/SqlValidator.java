@@ -85,7 +85,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[2].matches("\\t" + expectedDateField + "\\tTIMESTAMP,"));
         assertTrue(dummies[3].matches("\\t" + expectedDateTimeField + "\\tTIMESTAMP,"));
         assertTrue(dummies[4].matches("\\t" + expectedTimestampField + "\\tTIMESTAMP,"));
-        assertTrue(dummies[5].matches("\\t" + expectedDateOldField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[5].matches("\\t" + expectedDateOldField + "\\tBIGINT,"));
         assertTrue(dummies[6].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummies[7].matches("\\);"));
 
@@ -94,16 +94,16 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[9].matches("INSERT INTO " + strategy.format("TimeDummyClass") + " \\(" + strategy.format(expectedTimeField) + ", "
                 + expectedDateField + ", " + expectedDateTimeField + ", "
                 + expectedTimestampField + ", " + expectedDateOldField + "\\) VALUES"));
-        assertTrue(dummies[10].matches("\\('" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "'\\),"));
-        assertTrue(dummies[11].matches("\\('" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "', " +
-                "'" + timestampPattern + "'\\);"));
+        assertTrue(dummies[10].matches("\\('" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "[0-9]+" + "\\),"));
+        assertTrue(dummies[11].matches("\\('" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "'" + timestampPattern + "', "
+                + "[0-9]+" + "\\);"));
     }
 
     @Override

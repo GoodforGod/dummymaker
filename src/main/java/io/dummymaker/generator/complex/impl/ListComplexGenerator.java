@@ -2,6 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
@@ -45,9 +46,13 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
         }
 
         final GenList a = ((GenList) annotation);
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+        final Class<? extends IGenerator> generatorClass = (a.value().equals(IGenerator.class))
+                ? getAutoGenerator(valueClass)
+                : a.value();
 
-        return generateList(amount, a.value(), ((Class<?>) valueClass), storage);
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed());
+
+        return generateList(amount, generatorClass, ((Class<?>) valueClass), storage);
     }
 
     @Override

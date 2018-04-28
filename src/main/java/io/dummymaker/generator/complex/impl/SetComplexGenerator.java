@@ -2,11 +2,11 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,21 +32,25 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
         if (field == null || !field.getType().isAssignableFrom(Set.class))
             return null;
 
-        final Type valueClass = getGenericType(field.getGenericType());
+        final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if(annotation == null) {
             if(storage == null)
                 return Collections.emptySet();
 
             return new HashSet<>(generateList(10,
                     getAutoGenerator(field),
-                    ((Class<?>) valueClass),
+                    valueClass,
                     storage));
         }
 
         final GenSet a = ((GenSet) annotation);
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+        final Class<? extends IGenerator> generatorClass = (a.value().equals(IGenerator.class))
+                ? getAutoGenerator(valueClass)
+                : a.value();
 
-        return new HashSet<>(generateList(amount, a.value(), ((Class<?>) valueClass), storage));
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed());
+
+        return new HashSet<>(generateList(amount, generatorClass, valueClass, storage));
     }
 
     @Override

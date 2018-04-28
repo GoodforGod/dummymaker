@@ -3,7 +3,6 @@ package io.dummymaker.annotation.complex;
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.generator.complex.impl.SetComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,7 +22,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenSet {
 
-    Class<? extends IGenerator> value() default IdGenerator.class;
+    Class<? extends IGenerator> value() default IGenerator.class;
 
     int min() default 1;
 

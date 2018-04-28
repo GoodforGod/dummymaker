@@ -72,10 +72,16 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         }
 
         final GenMap a = ((GenMap) annotation);
-        final Class<? extends IGenerator> keyGenerator   = a.key();
-        final Class<? extends IGenerator> valueGenerator = a.value();
 
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed()); // due to initial object
+        final Class<? extends IGenerator> keyGenerator   = (a.key().equals(IGenerator.class))
+                ? getAutoGenerator(keyType)
+                : a.key();
+
+        final Class<? extends IGenerator> valueGenerator = (a.value().equals(IGenerator.class))
+                ? getAutoGenerator(valueType)
+                : a.value();
+
+        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed());
 
         return generateMap(amount,
                 keyGenerator,
