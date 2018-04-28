@@ -1,5 +1,6 @@
 package io.dummymaker.generator;
 
+import io.dummymaker.data.DummyTime;
 import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.complex.impl.MapComplexGenerator;
 import io.dummymaker.generator.complex.impl.SetComplexGenerator;
@@ -75,15 +76,15 @@ public class GeneratorPatternValidTest {
                 { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
                 { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
                 { new CharacterGenerator(),     Character.class, Pattern.compile(".") },
-                { new ObjectGenerator(),        Object.class,   Pattern.compile("java\\.lang\\.Object@[0-9A-Za-z]+") },
+                { new ObjectGenerator(),        String.class,   Pattern.compile("object_[0-9]+") },
                 { new ListComplexGenerator(),   ArrayList.class,Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
                 { new SetComplexGenerator(),    HashSet.class,  Pattern.compile("\\[([a-zA-Z0-9]+(, )?)+]") },
                 { new MapComplexGenerator(),    HashMap.class,  Pattern.compile("\\{([a-zA-Z0-9]+=[a-zA-Z0-9]+(, )?)+}") },
-                { new DateGenerator(),          Date.class,     Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{2}:\\d{2}:\\d{1,2} [A-Za-z]{3} \\d{4}") },
-                { new LocalDateGenerator(),     LocalDate.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}") },
-                { new LocalDateTimeGenerator(), LocalDateTime.class,Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?") },
-                { new LocalTimeGenerator(),     LocalTime.class, Pattern.compile("\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") },
-                { new TimestampGenerator(),     Timestamp.class, Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(\\.\\d{1,10})?") }
+                { new DateGenerator(),          Date.class,     DummyTime.Patterns.DATE.getPattern() },
+                { new LocalDateGenerator(),     LocalDate.class,DummyTime.Patterns.LOCAL_DATE.getPattern() },
+                { new LocalDateTimeGenerator(), LocalDateTime.class,DummyTime.Patterns.LOCAL_DATETIME.getPattern() },
+                { new LocalTimeGenerator(),     LocalTime.class, DummyTime.Patterns.LOCAL_TIME.getPattern() },
+                { new TimestampGenerator(),     Timestamp.class, DummyTime.Patterns.TIMESTAMP.getPattern() }
         });
     }
 

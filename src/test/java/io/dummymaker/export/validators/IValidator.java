@@ -17,4 +17,6 @@ public interface IValidator {
     void isTwoDummiesValid(String[] dummies);
 
     void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy);
+
+    void isDummyTimeValid(String[] dummy);
 }

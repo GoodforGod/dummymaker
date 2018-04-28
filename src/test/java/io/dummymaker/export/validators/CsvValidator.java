@@ -54,9 +54,9 @@ public class CsvValidator implements IValidator {
 
         // header check
         assertEquals(3, headerArray.length);
-        assertTrue(headerArray[0].matches(GROUP.getExportFieldName()));
-        assertTrue(headerArray[1].matches(NUM.getExportFieldName()));
-        assertTrue(headerArray[2].matches(NAME.getExportFieldName()));
+        assertTrue(headerArray[0].matches(GROUP.exportName()));
+        assertTrue(headerArray[1].matches(NUM.exportName()));
+        assertTrue(headerArray[2].matches(NAME.exportName()));
 
         // first line values check
         assertEquals(3, valueArray.length);
@@ -88,9 +88,9 @@ public class CsvValidator implements IValidator {
     }
 
     public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.getExportFieldName());
-        final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.format(NUM.getExportFieldName());
+        final String expectedNameField = strategy.format(NAME.exportName());
+        final String expectedGroupField = GROUP.exportName();
+        final String expectedNumField = strategy.format(NUM.exportName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));
@@ -113,5 +113,10 @@ public class CsvValidator implements IValidator {
         assertTrue(valueArray2[0].matches("\'[0-9]+\'"));
         assertTrue(valueArray2[1].matches("[0-9]+"));
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
+    }
+
+    @Override
+    public void isDummyTimeValid(String[] dummy) {
+
     }
 }

@@ -98,26 +98,6 @@ public class ScannerImplTest {
     }
 
     @Test
-    public void scannerForRenameAnnotations() throws NoSuchFieldException {
-        IScanner<String, String> scanner = new RenameScanner();
-
-        Map<String, String> fields = scanner.scan(Dummy.class);
-
-        // Check for correct fields number in map
-        assertNotNull(fields);
-        assertFalse(fields.isEmpty());
-        assertEquals(1, fields.size());
-
-        // Check for correct map values
-        String groupFieldRenamedValue = fields.get(GROUP.getOriginFieldName());
-
-        assertNotNull(groupFieldRenamedValue);
-
-        // Check for correct export annotations
-        assertEquals("socialGroup", groupFieldRenamedValue);
-    }
-
-    @Test
     public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 

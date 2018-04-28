@@ -212,11 +212,11 @@ public class ProduceFactoryTest {
         assertNotNull(dummy.getDateTimeString());
         assertNotNull(dummy.getDateTimeObject());
 
-        final Pattern datePattern = Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}");
-        final Pattern localDatePattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
-        final Pattern localTimePattern = Pattern.compile("\\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?");
-        final Pattern localDateTimePattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?");
-        final Pattern timestampPattern = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?");
+        final Pattern localDatePattern = DummyTime.Patterns.LOCAL_DATE.getPattern();
+        final Pattern localTimePattern = DummyTime.Patterns.LOCAL_TIME.getPattern();
+        final Pattern localDateTimePattern = DummyTime.Patterns.LOCAL_DATETIME.getPattern();
+        final Pattern timestampPattern = DummyTime.Patterns.TIMESTAMP.getPattern();
+        final Pattern datePattern = DummyTime.Patterns.DATE.getPattern();
 
         assertTrue(dummy.getDateOld().toString(), datePattern.matcher(dummy.getDateOld().toString()).matches());
         assertTrue(dummy.getDate().toString(), localDatePattern.matcher(dummy.getDate().toString()).matches());

@@ -89,6 +89,7 @@ public class SqlExporter extends BasicExporter {
         return new HashMap<Class, String>() {{
             put(Long.class,         "BIGINT");
             put(long.class,         "BIGINT");
+            put(Date.class,         "BIGINT");
             put(Double.class,       "DOUBLE PRECISION");
             put(double.class,       "DOUBLE PRECISION");
             put(Integer.class,      "INT");
@@ -98,7 +99,7 @@ public class SqlExporter extends BasicExporter {
             put(Boolean.class,      "BIT");
             put(boolean.class,      "BIT");
             put(String.class,       "VARCHAR");
-            put(Date.class,         "TIMESTAMP"); // due to Date class acts as time in millis when export
+            put(Object.class,       "VARCHAR");
             put(Timestamp.class,    "TIMESTAMP");
             put(LocalDate.class,    "TIMESTAMP");
             put(LocalTime.class,    "TIMESTAMP");

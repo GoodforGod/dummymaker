@@ -45,7 +45,7 @@ public class Dummy {
             this.annotations.addAll(Arrays.asList(annotations));
         }
 
-        public String getExportFieldName() {
+        public String exportName() {
             return exportFieldName;
         }
 

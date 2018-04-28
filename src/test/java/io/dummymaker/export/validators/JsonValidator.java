@@ -17,9 +17,9 @@ public class JsonValidator implements IValidator {
     @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("\\{"));
-        assertTrue(dummy[1].matches("\\t\"" + GROUP.getExportFieldName() + "\":\"[0-9]+\","));
-        assertTrue(dummy[2].matches("\\t\"" + NUM.getExportFieldName()  + "\":\"[0-9]+\","));
-        assertTrue(dummy[3].matches("\\t\"" + NAME.getExportFieldName() + "\":\"[a-zA-Z0-9]+\""));
+        assertTrue(dummy[1].matches("\\t\"" + GROUP.exportName() + "\":\"[0-9]+\","));
+        assertTrue(dummy[2].matches("\\t\"" + NUM.exportName()  + "\":\"[0-9]+\","));
+        assertTrue(dummy[3].matches("\\t\"" + NAME.exportName() + "\":\"[a-zA-Z0-9]+\""));
         assertTrue(dummy[4].matches("}"));
     }
 
@@ -38,9 +38,9 @@ public class JsonValidator implements IValidator {
 
     @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.getExportFieldName());
-        final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.format(NUM.getExportFieldName());
+        final String expectedNameField = strategy.format(NAME.exportName());
+        final String expectedGroupField = GROUP.exportName();
+        final String expectedNumField = strategy.format(NUM.exportName());
 
         assertTrue(dummies[0].matches("\\{"));
         assertTrue(dummies[1].matches("\\t\"[a-zA-Z]+\": \\["));
@@ -59,5 +59,10 @@ public class JsonValidator implements IValidator {
 
         assertTrue(dummies[12].matches("\\t]"));
         assertTrue(dummies[13].matches("}"));
+    }
+
+    @Override
+    public void isDummyTimeValid(String[] dummy) {
+
     }
 }

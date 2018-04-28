@@ -18,15 +18,15 @@ public class SqlValidator implements IValidator {
     @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
-        assertTrue(dummy[1].matches("\\t" + GROUP.getExportFieldName() + "\\tVARCHAR,"));
-        assertTrue(dummy[2].matches("\\t" + NUM.getExportFieldName() + "\\tINT,"));
-        assertTrue(dummy[3].matches("\\t" + NAME.getExportFieldName() + "\\tVARCHAR,"));
+        assertTrue(dummy[1].matches("\\t" + GROUP.exportName() + "\\tVARCHAR,"));
+        assertTrue(dummy[2].matches("\\t" + NUM.exportName() + "\\tINT,"));
+        assertTrue(dummy[3].matches("\\t" + NAME.exportName() + "\\tVARCHAR,"));
         assertTrue(dummy[4].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[5].matches("\\);"));
 
         assertTrue(dummy[6].matches(""));
 
-        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.getExportFieldName() + ", " + NUM.getExportFieldName() + ", " + NAME.getExportFieldName() + "\\) VALUES"));
+        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", " + NAME.exportName() + "\\) VALUES"));
         assertTrue(dummy[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
@@ -51,9 +51,9 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.getExportFieldName());
-        final String expectedGroupField = GROUP.getExportFieldName();
-        final String expectedNumField = strategy.format(NUM.getExportFieldName());
+        final String expectedNameField = strategy.format(NAME.exportName());
+        final String expectedGroupField = GROUP.exportName();
+        final String expectedNumField = strategy.format(NUM.exportName());
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummies[1].matches("\\t" + expectedGroupField + "\\tVARCHAR,"));
@@ -102,5 +102,10 @@ public class SqlValidator implements IValidator {
                 "'" + timestampPattern + "', " +
                 "'" + timestampPattern + "', " +
                 "'" + timestampPattern + "'\\);"));
+    }
+
+    @Override
+    public void isDummyTimeValid(String[] dummy) {
+
     }
 }
