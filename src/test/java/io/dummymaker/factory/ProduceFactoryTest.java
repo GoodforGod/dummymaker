@@ -245,7 +245,7 @@ public class ProduceFactoryTest {
         assertFalse(dummyAuto.getList().isEmpty());
         assertFalse(dummyAuto.getMap().isEmpty());
         assertEquals(10, dummyAuto.getList().size());
-        assertEquals(10, dummyAuto.getMap().size());
+        assertEquals(6, dummyAuto.getMap().size());
 
         assertNotNull(dummyAuto.getDummyAuto());
 

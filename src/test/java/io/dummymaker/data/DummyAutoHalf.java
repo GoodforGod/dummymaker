@@ -27,7 +27,7 @@ public class DummyAutoHalf {
     @GenRenameExport("superlist")
     private List list;
 
-    @GenMap
+    @GenMap(fixed = 6)
     private Map<Integer, String> map;
 
     private DummyAuto dummyAuto;
