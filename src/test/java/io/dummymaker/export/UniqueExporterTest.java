@@ -5,6 +5,7 @@ import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
+import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
@@ -27,24 +28,28 @@ public class UniqueExporterTest {
     private final IProduceFactory factory = new GenProduceFactory();
 
     private IExporter exporter;
+    private IValidator validator;
 
-    public UniqueExporterTest(IExporter exporter) {
+    public UniqueExporterTest(IExporter exporter, IValidator validator) {
         this.exporter = exporter;
+        this.validator = validator;
     }
 
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                { new CsvExporter() },
-                { new JsonExporter() },
-                { new XmlExporter() },
-                { new SqlExporter() }
+                { new CsvExporter(), new CsvValidator() },
+                { new JsonExporter(), new JsonValidator()},
+                { new XmlExporter(), new XmlValidator()},
+                { new SqlExporter(), new SqlValidator()}
         });
     }
 
     @Test
     public void checkDateClassActsAsMillisLongWhenExport() {
-        DummyTime produce = factory.produce(DummyTime.class);
-
+        DummyTime dummyTime = factory.produce(DummyTime.class);
+        String s = exporter.exportAsString(dummyTime);
+        String[] split = s.split("\n");
+        validator.isDummyTimeValid(split);
     }
 }

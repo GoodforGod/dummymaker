@@ -1,5 +1,6 @@
 package io.dummymaker.export.validators;
 
+import io.dummymaker.data.DummyTime;
 import io.dummymaker.data.DummyTime.Fields;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -59,21 +60,28 @@ public class XmlValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-        assertTrue(dummy[0].matches("<[a-zA-Z]+>"));
-        assertTrue(dummy[1].matches("\\t<" + Fields.LOCAL_TIME.getName() + ">" + "[0-9]+"
+        assertTrue(dummy[0].matches("<DummyTime>"));
+        assertTrue(dummy[1].matches("\\t<" + Fields.LOCAL_TIME.getName() + ">"
+                + DummyTime.Patterns.LOCAL_TIME.getPattern()
                 + "</" + Fields.LOCAL_TIME.getName() + ">"));
-        assertTrue(dummy[2].matches("\\t<" + Fields.LOCAL_DATE.getName()   + ">" + "[0-9]+"
+        assertTrue(dummy[2].matches("\\t<" + Fields.LOCAL_DATE.getName()   + ">"
+                + DummyTime.Patterns.LOCAL_DATE.getPattern()
                 + "</" + Fields.LOCAL_DATE.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + Fields.LOCAL_DATETIME.getName()  + ">" + "[a-zA-Z]+"
+        assertTrue(dummy[3].matches("\\t<" + Fields.LOCAL_DATETIME.getName()  + ">"
+                + DummyTime.Patterns.LOCAL_DATETIME.getPattern()
                 + "</" + Fields.LOCAL_DATETIME.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + Fields.TIMESTAMP.getName()  + ">" + "[a-zA-Z]+"
+        assertTrue(dummy[3].matches("\\t<" + Fields.TIMESTAMP.getName()  + ">"
+                + DummyTime.Patterns.TIMESTAMP.getPattern()
                 + "</" + Fields.TIMESTAMP.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + Fields.DATE.getName()  + ">" + "[a-zA-Z]+"
+        assertTrue(dummy[3].matches("\\t<" + Fields.DATE.getName()  + ">"
+                + DummyTime.Patterns.DATE.getPattern()
                 + "</" + Fields.DATE.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + Fields.DATE.getName()  + ">" + "[a-zA-Z]+"
-                + "</" + Fields.DATE.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + Fields.DATE.getName()  + ">" + "[a-zA-Z]+"
-                + "</" + Fields.DATE.getName() + ">"));
-        assertTrue(dummy[4].matches("</[a-zA-Z]+>"));
+        assertTrue(dummy[3].matches("\\t<" + Fields.LOCAL_DATETIME_STRING.getName()  + ">"
+                + DummyTime.Patterns.LOCAL_DATETIME.getPattern()
+                + "</" + Fields.LOCAL_DATETIME_STRING.getName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + Fields.LOCAL_DATETIME_OBJECT.getName()  + ">"
+                + DummyTime.Patterns.LOCAL_DATETIME.getPattern()
+                + "</" + Fields.LOCAL_DATETIME_OBJECT.getName() + ">"));
+        assertTrue(dummy[4].matches("</DummyTime>"));
     }
 }
