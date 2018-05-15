@@ -90,25 +90,30 @@ Exporters use scanners to verify what fields to export and format values in chos
 
 ## Factories
 
-Factories to populate/produce Dummy Objects.
-Factory is responsible for field population.
+Factories to populate Dummy fields with values.
 
-* ***GenProduceFactory*** - allow you to produce new Dummies with populated fields.
-
-* ***GenPopulateFactory*** - allow you to populate fields of already created Dummies.
+* ***GenProduceFactory*** - allow you to produce new Dummies with populated fields. (*IProduceFactory* interface)
+* ***GenPopulateFactory*** - allow you to populate fields of already created Dummies. (*IPopulateFactory* interface)
 
 ## Generators
 
 *IGenerator* generators are the producers of random values of specific type.
-Used by *GenPopulateFactory* to generate values for Dummy object fields.
-
+Used by *IPopulateFactory* to generate values for Dummy object fields.
 Are part of *Gen* annotations cause indicate what generator each annotation is using.
+
+You can create your own *IGenerator* implementations as well for *Gen* annotations.
+
+[Check example how to create your own](#igenerator)
 
 ## Complex Generators
 
-Complex Generators are special generators used to build complex values where you can access entity field, or its annotation.
+Have similar purpose as *IGenerator* but with extended abilities.
+
+Complex Generators are special generators used to build complex values where you can access entity *field* or *annotations* properties.
 
 You can create your own *IComplexGenerator* implementations as well for complex *Gen* annotations.
+
+[Check example how to create your own](#icomplexgenerator)
 
 ## Annotations
 
@@ -135,7 +140,7 @@ Annotations used as markers on top of other annotations, which will be used to a
 
 Use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
 
-[As simple as it can be. Magic. Chech example.](#auto-gen-magic)
+[As simple as it can be. Magic. Check example.](#auto-gen-magic)
 
 ### **Collection Annotations**
 
@@ -143,8 +148,6 @@ Collection annotations like: **GenList, GenSet, GenMap** used to populate fields
 *GenList* - produce *ArrayList* collection.
 *GenSet* - produce *HashSet* collection.
 *GenMap* - produce *HashMap* collection.
-
-Collection annotations are **NOT SUPPORTED** by any *exporter* in mean time.
 
 Annotations support special attributes like:
 * *min* - minimum entities generated amount.
@@ -155,6 +158,8 @@ Annotations support special attributes like:
 This attributes are used by *GenMap* annotation only (instead of *generator* attribute):
 * *key* - *IGenerator* generator class to build map *keys* using it.
 * *value* - *IGenerator* generator class to build map *values* using it.
+
+Collection annotation are **NOT SUPPORTED** by any *IExporter* in mean time.
 
 ### **Time Annotation**
 
@@ -178,7 +183,7 @@ Annotations support special attributes like:
 
 Annotation support **depth** parameter, which indicates maximum depth of the Dummy from its root and can have 11 levels as maximum.
 
-Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
+Embedded fields are **NOT SUPPORTED** by any *IExporter* in mean time.
 
 ### **Special Annotations**
 
@@ -201,7 +206,7 @@ Constructor parameters available for all exporters.
 * *withPath* - set path for export file, default directory is app home.
 * *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
 
-	**Cases**:
+	**Available cases:**
 	* *DEFAULT* - name as is.
 	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
 	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
@@ -209,8 +214,10 @@ Constructor parameters available for all exporters.
 	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
 	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
 	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
-    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
-    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+    	* *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
+    	* *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+
+Or you can create your own case using *ICase* interface.
 
 ### **CsvExporter Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.
@@ -224,6 +231,8 @@ Constructor parameters available for all exporters.
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
 
 *DataTypeMap* is used to extend your data types to export in sql format.
+
+So you can match java class to SQL type. Like map Java Integer to SQL INT type. Using this parameter you can extend or change defaults mapped data types.
 
 ## *Getting Started Examples*
 
