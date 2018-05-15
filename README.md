@@ -10,7 +10,7 @@ Also it is possible to easily extend library functionality by creating your own 
 
 *Step by step guide how to produce and export your first Dummy:*
 1) Create Dummy. 
-2) *Annotate* Dummies fields with special *Gen* annotations.
+2) *Annotate* Dummies fields with special *Gen* annotations. (Or check [GenAuto](#auto-gen-magic) annotation)
 3) Use *Factory* to populate/produce Dummy.
 4) Export Dummy by using special *Exporter*.
 
@@ -50,14 +50,22 @@ dependencies {
   - [CsvExporter Parameters](#csvexporter-parameters)
   - [XmlExporter Parameters](#xmlexporter-parameters)
   - [SqlExporter Parameters](#sqlexporter-parameters)
-- [Customization](#customization)
-  - [IGenerator](#igenerator)
-  - [IComplexGenerator](#icomplexgenerator)
-  - [Gen Annotation](#gen-annotation)
-- [Getting Started with examples](#getting-started-with-examples)
+- [Annotations](#annotations)
+  - [Gen Annotations](#gen-annotations)  
+  - [Core Annotations](#core-annotations)  
+  - [Auto Annotation](#auto-annotation)
+  - [Collection Annotations](#collection-annotations)  
+  - [Time Annotation](#time-annotation)  
+  - [Special Annotations](#special-annotations)  
+- [Getting Started Examples](#getting-started-examples)
   - [Annotations](#annotations-examples)
   - [Factories](#factories-examples)
   - [Exporters](#exporters-examples)
+- [Customization](#customization)
+  - [IGenerator](#igenerator)
+  - [Gen Annotation](#gen-annotation)
+  - [IComplexGenerator](#icomplexgenerator)
+  - [Complex Gen Annotation](#complex-gen-annotation)
 - [Export File Structures](#export-file-structures)
   - [Dummy Object Class](#dummy-object-class)
   - [CSV](#csv)
@@ -102,41 +110,6 @@ Complex Generators are special generators used to build complex values where you
 
 You can create your own *IComplexGenerator* implementations as well for complex *Gen* annotations.
 
-## Exporters
-
-*IExporter* exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
-
-### **Basic Exporters Parameters**
-
-Constructor parameters available for all exporters.
-
-* *withPath* - set path for export file, default directory is app home.
-* *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
-
-	**Cases**:
-	* *DEFAULT* - name as is.
-	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
-	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
-	* *CAMEL_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
-	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
-	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
-	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
-    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
-    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
-
-### **CsvExporter Parameters**
-* *withWrap* - if true will wrap String values with commas like 'this', default *False*.
-* *withHeader* - if true will generate CSV header, default *False*.
-* *withSeparator* - set CSV format separator, default is '**,**' comma.
-
-### **XmlExporter Parameters**
-* *withName* - class custom export name value. (class ending is not used in this case).
-
-### **SqlExporter Parameters**
-* *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
-
-*DataTypeMap* is used to extend your data types to export in sql format.
-
 ## Annotations
 
 It is easily for you to create custom *Gen* annotations and *IGenerator* generators.
@@ -162,7 +135,7 @@ Annotations used as markers on top of other annotations, which will be used to a
 
 Use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
 
-As simple as it can be. Magic.
+[As simple as it can be. Magic. Chech example.](#auto-gen-magic)
 
 ### **Collection Annotations**
 
@@ -199,7 +172,6 @@ Annotations support special attributes like:
 * *from* - minimum generated time (*01.01.1970* is default) in long UTC format.
 * *to* - maximum generated time (*01.01.3000* is default) in long UTC format.
 
-
 ### **Embedded Annotation**
 
 *GenEmbedded* annotation used to mark complex object fields (like fields which also contain *Gen* annotations inside).
@@ -218,6 +190,41 @@ Embedded fields are **NOT SUPPORTED** by any *exporter* in mean time.
 
 * ***GenEnumerate*** annotation with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
 
+## Exporters
+
+*IExporter* exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
+
+### **Basic Exporters Parameters**
+
+Constructor parameters available for all exporters.
+
+* *withPath* - set path for export file, default directory is app home.
+* *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
+
+	**Cases**:
+	* *DEFAULT* - name as is.
+	* *LOW_CASE* - name in low case (like *DummyList - dummylist*)
+	* *UPPER_CASE* - name in upper case (like *DummyList - DUMMYLIST*)
+	* *CAMEL_CASE* - name as is, but first letter is low case (like *DummyList - dummyList*)
+	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
+	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
+	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
+    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+
+### **CsvExporter Parameters**
+* *withWrap* - if true will wrap String values with commas like 'this', default *False*.
+* *withHeader* - if true will generate CSV header, default *False*.
+* *withSeparator* - set CSV format separator, default is '**,**' comma.
+
+### **XmlExporter Parameters**
+* *withName* - class custom export name value. (class ending is not used in this case).
+
+### **SqlExporter Parameters**
+* *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
+
+*DataTypeMap* is used to extend your data types to export in sql format.
+
 ## *Getting Started Examples*
 
 ### **Annotations Examples**
@@ -232,7 +239,8 @@ Make sure that *Gen* annotation *generate type* is **same** or is **castable** t
 
 Just simple use *GenAuto* on class and library will do all for you.
 All fields will be populated automatically if such generators are available.
-Check *Auto Annotation* part for details.
+
+Check *Auto Annotation* [part for details](#auto-annotation).
 
 ![](https://media.giphy.com/media/2fOt0kmS5Zk99CldyU/giphy.gif)
 
