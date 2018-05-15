@@ -46,17 +46,6 @@ dependencies {
   - [Time Annotation](#time-annotation)  
   - [Special Annotations](#special-annotations)  
 - [Exporters](#exporters)
-  - [Basic Exporters Parameters](#basic-exporters-parameters)
-  - [CsvExporter Parameters](#csvexporter-parameters)
-  - [XmlExporter Parameters](#xmlexporter-parameters)
-  - [SqlExporter Parameters](#sqlexporter-parameters)
-- [Annotations](#annotations)
-  - [Gen Annotations](#gen-annotations)  
-  - [Core Annotations](#core-annotations)  
-  - [Auto Annotation](#auto-annotation)
-  - [Collection Annotations](#collection-annotations)  
-  - [Time Annotation](#time-annotation)  
-  - [Special Annotations](#special-annotations)  
 - [Getting Started Examples](#getting-started-examples)
   - [Annotations](#annotations-examples)
   - [Factories](#factories-examples)
@@ -67,7 +56,7 @@ dependencies {
   - [IComplexGenerator](#icomplexgenerator)
   - [Complex Gen Annotation](#complex-gen-annotation)
 - [Export File Structures](#export-file-structures)
-  - [Dummy Object Class](#dummy-object-class)
+  - [Dummy Class Example](#dummy-class-example)
   - [CSV](#csv)
   - [JSON](#json)
   - [XML](#xml)
@@ -199,7 +188,13 @@ Embedded fields are **NOT SUPPORTED** by any *IExporter* in mean time.
 
 *IExporter* exporters allow you to export Dummy objects to the shown format via *file* or as a *string*.
 
-### **Basic Exporters Parameters**
+There are 4 available exporters with different formats:
+* JsonExporter
+* CsvExporter
+* SqlExporter
+* XmlExporter
+
+### **All Exporters Parameters**
 
 Constructor parameters available for all exporters.
 
@@ -214,20 +209,20 @@ Constructor parameters available for all exporters.
 	* *PASCAL_CASE* - name as is, but first letter is upper case (like *DummyList - dummyList*)
 	* *SNAKE_CASE* - name in low case, with *_* symbol before each capital letter (like *DummyList - dummy_list*)
 	* *UPPER_SNAKE_CASE* - name in upper case, with *_* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
-    	* *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
-    	* *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
+    * *KEBAB_CASE* - name in low case, with *-* symbol before each capital letter (like *DummyList - dummy_list*)
+    * *UPPER_KEBAB_CASE* - name in upper case, with *-* symbol before each capital letter (like *DummyList - DUMMY_LIST*)
 
 Or you can create your own case using *ICase* interface.
 
-### **CsvExporter Parameters**
+### **CsvExporter Specific Parameters**
 * *withWrap* - if true will wrap String values with commas like 'this', default *False*.
 * *withHeader* - if true will generate CSV header, default *False*.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
 
-### **XmlExporter Parameters**
+### **XmlExporter Specific Parameters**
 * *withName* - class custom export name value. (class ending is not used in this case).
 
-### **SqlExporter Parameters**
+### **SqlExporter Specific Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
 
 *DataTypeMap* is used to extend your data types to export in sql format.
@@ -390,7 +385,8 @@ Is used to mark Dummy object field with specific complex generator.
 
 Examples of exported Dummy object in each format.
 
-### Dummy Object Class
+### Dummy Class Example
+
 ```java
 public class User {
 
@@ -452,6 +448,8 @@ Can be used to import data in ***MySQL, SQL Server, etc...***
 ```
 
 ### *SQL*
+
+Can be executed to load data in any ***SQL database***.
 
 Don't forget about **Primary Key**!
 
