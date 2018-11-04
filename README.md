@@ -311,8 +311,7 @@ You can populate single or two dimension array any generic type you want, if suc
 
 Read more in *array annotation* section.
 
-![](https://media.giphy.com/media/8FrjAE955A2vTmxgal/giphy.gif)
-
+![](https://media.giphy.com/media/eB5X49oQHkClApV3PA/giphy.gif)
 
 #### *Collection annotation example*
 

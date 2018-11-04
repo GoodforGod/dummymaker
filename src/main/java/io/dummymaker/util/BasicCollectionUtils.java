@@ -20,7 +20,7 @@ public class BasicCollectionUtils {
     }
 
     public static int getRandomIndex(final Collection collection) {
-        return generateRandomAmount(0, collection.size() - 1);
+        return generateRandomSize(0, collection.size() - 1);
     }
 
     public static int getIndexWithSalt(final int size,
@@ -30,21 +30,21 @@ public class BasicCollectionUtils {
         return Math.abs(hashed % size);
     }
 
-    public static int generateRandomAmount(final int min,
-                                           final int max) {
-        final int usedMin = (min < 1) ? 1 : min;
-        final int usedMax = (max < 1) ? 1 : max;
+    public static int generateRandomSize(final int min,
+                                         final int max) {
+        final int usedMin = (min < 1) ? 0 : min;
+        final int usedMax = (max < 1) ? 0 : max;
 
         return (usedMin >= usedMax)
                 ? usedMin
                 : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
     }
 
-    public static int generateRandomAmount(final int min,
-                                           final int max,
-                                           final int fixed) {
+    public static int generateRandomSize(final int min,
+                                         final int max,
+                                         final int fixed) {
         return (fixed > -1)
                 ? fixed
-                : generateRandomAmount(min, max);
+                : generateRandomSize(min, max);
     }
 }

@@ -71,45 +71,30 @@ public class TimeComplexGenerator implements IComplexGenerator {
     }
 
     private ITimeGenerator<LocalDateTime> getLocalDateTimeGenerator(final GeneratorsStorage storage) {
-        if (storage != null)
-            storage.getGenInstance(DateGenerator.class);
-
         if (localDateTimeGenerator == null)
             this.localDateTimeGenerator = new LocalDateTimeGenerator();
         return localDateTimeGenerator;
     }
 
     private ITimeGenerator<LocalDate> getLocalDateGenerator(final GeneratorsStorage storage) {
-        if (storage != null)
-            storage.getGenInstance(DateGenerator.class);
-
         if (localDateGenerator == null)
             this.localDateGenerator = new LocalDateGenerator();
         return localDateGenerator;
     }
 
     private ITimeGenerator<LocalTime> getLocalTimeGenerator(final GeneratorsStorage storage) {
-        if (storage != null)
-            storage.getGenInstance(DateGenerator.class);
-
         if (localTimeGenerator == null)
             this.localTimeGenerator = new LocalTimeGenerator();
         return localTimeGenerator;
     }
 
     private ITimeGenerator<Timestamp> getTimestampGenerator(final GeneratorsStorage storage) {
-        if (storage != null)
-            storage.getGenInstance(DateGenerator.class);
-
         if (timestampGenerator == null)
             this.timestampGenerator = new TimestampGenerator();
         return timestampGenerator;
     }
 
     private ITimeGenerator<Date> getDateGenerator(final GeneratorsStorage storage) {
-        if (storage != null)
-            storage.getGenInstance(DateGenerator.class);
-
         if (dateGenerator == null)
             this.dateGenerator = new DateGenerator();
         return dateGenerator;
