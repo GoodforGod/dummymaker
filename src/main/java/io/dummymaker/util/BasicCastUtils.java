@@ -6,11 +6,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
- * "default comment"
+ * Utils for object casting
  *
  * @author GoodforGod
  * @since 06.03.2018
@@ -25,8 +27,14 @@ public class BasicCastUtils {
             return Integer.valueOf(String.valueOf(value));
         } else if (fieldType.isAssignableFrom(Long.class) || fieldType.isAssignableFrom(long.class)) {
             return Long.valueOf(String.valueOf(value));
+        } else if(fieldType.isAssignableFrom(Float.class) || fieldType.isAssignableFrom(float.class)) {
+            return Float.valueOf(String.valueOf(value));
         } else if(fieldType.isAssignableFrom(Double.class) || fieldType.isAssignableFrom(double.class)) {
             return Double.valueOf(String.valueOf(value));
+        } else if(fieldType.isAssignableFrom(BigInteger.class)) {
+            return BigInteger.valueOf(Long.valueOf(String.valueOf(value)));
+        } else if(fieldType.isAssignableFrom(BigDecimal.class)) {
+            return BigDecimal.valueOf(Long.valueOf(String.valueOf(value)));
         }
         return null;
     }
@@ -160,6 +168,20 @@ public class BasicCastUtils {
      */
     public static boolean areEquals(final Class<?> firstClass,
                                     final Class<?> secondClass) {
+        final boolean isFirstShort = firstClass.isAssignableFrom(Short.class);
+        final boolean isSecondShort = secondClass.isAssignableFrom(Short.class);
+        if (isFirstShort && isSecondShort
+                || isFirstShort && secondClass.equals(short.class)
+                || firstClass.equals(short.class) && isSecondShort)
+            return true;
+
+        final boolean isFirstByte = firstClass.isAssignableFrom(Byte.class);
+        final boolean isSecondByte = secondClass.isAssignableFrom(Byte.class);
+        if (isFirstByte && isSecondByte
+                || isFirstByte && secondClass.equals(byte.class)
+                || firstClass.equals(byte.class) && isSecondByte)
+            return true;
+
         final boolean isFirstInt = firstClass.isAssignableFrom(Integer.class);
         final boolean isSecondInt = secondClass.isAssignableFrom(Integer.class);
         if (isFirstInt && isSecondInt
@@ -179,6 +201,13 @@ public class BasicCastUtils {
         if (isFirstDouble && isSecondDouble
                 || isFirstDouble && secondClass.equals(double.class)
                 || firstClass.equals(double.class) && isSecondDouble)
+            return true;
+
+        final boolean isFirstFloat = firstClass.isAssignableFrom(Float.class);
+        final boolean isSecondFloat = secondClass.isAssignableFrom(Float.class);
+        if (isFirstFloat && isSecondFloat
+                || isFirstDouble && secondClass.equals(float.class)
+                || firstClass.equals(float.class) && isSecondDouble)
             return true;
 
         final boolean isFirstChar = firstClass.isAssignableFrom(Character.class);

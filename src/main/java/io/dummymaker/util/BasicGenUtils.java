@@ -4,11 +4,11 @@ import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.complex.impl.MapComplexGenerator;
 import io.dummymaker.generator.complex.impl.SetComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.*;
-import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
-import io.dummymaker.generator.simple.impl.number.DoubleGenerator;
-import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
-import io.dummymaker.generator.simple.impl.number.LongGenerator;
+import io.dummymaker.generator.simple.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.simple.impl.ObjectGenerator;
+import io.dummymaker.generator.simple.impl.UuidGenerator;
+import io.dummymaker.generator.simple.impl.number.*;
 import io.dummymaker.generator.simple.impl.string.*;
 import io.dummymaker.generator.simple.impl.time.impl.*;
 
@@ -22,7 +22,7 @@ import static io.dummymaker.util.BasicCollectionUtils.getIndexWithSalt;
 import static java.util.Collections.singletonList;
 
 /**
- * "default comment"
+ * Utils for auto gen mapping
  *
  * @author GoodforGod
  * @since 26.04.2018
