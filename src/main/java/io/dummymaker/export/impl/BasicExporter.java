@@ -133,9 +133,24 @@ abstract class BasicExporter implements IExporter {
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
 
         if (this.format == Format.JSON) {
-            if (FieldContainer.Type.ARRAY.equals(type) && !(exportFieldValue).getClass().getComponentType().isPrimitive()) {
-                return ExportContainer.asArray(exportFieldName,
-                        Arrays.toString((Object[]) exportFieldValue));
+            if (FieldContainer.Type.ARRAY.equals(type)) {
+                Class<?> arrayType = exportFieldValue.getClass().getComponentType();
+                if(arrayType.equals(byte.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((byte[]) exportFieldValue));
+                } else if(arrayType.equals(short.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((short[]) exportFieldValue));
+                } else if(arrayType.equals(char.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((char[]) exportFieldValue));
+                } else if(arrayType.equals(int.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((int[]) exportFieldValue));
+                } else if(arrayType.equals(long.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((long[]) exportFieldValue));
+                } else if(arrayType.equals(float.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((float[]) exportFieldValue));
+                } else if(arrayType.equals(double.class)) {
+                    return ExportContainer.asArray(exportFieldName, Arrays.toString((double[]) exportFieldValue));
+                }
+                return ExportContainer.asArray(exportFieldName, Arrays.toString((Object[]) exportFieldValue));
             } else if (FieldContainer.Type.ARRAY_2D.equals(type)) {
                 return ExportContainer.asArray2D(exportFieldName,
                         Arrays.deepToString((Object[]) exportFieldValue));

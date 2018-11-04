@@ -156,7 +156,6 @@ Annotations support special attributes like:
 * *value* - *IGenerator* generator class to build values using it.
 
 Arrays exports are supported only by **JsonExporter** in mean time.
-**PRIMITIVE** arrays are **NOT SUPPORTED** for export, use object wrappers instead (*int* -> *Integer*).
 
 ### **Collection Annotations**
 
