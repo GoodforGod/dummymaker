@@ -13,10 +13,9 @@ public interface ITimeGenerator<T> extends IGenerator<T> {
 
     /**
      * @param from minimum 0 represents 1970.1.1
-     * @param to as a maximum of GenTime.MAX
-     *
-     * @see GenTime#MAX
+     * @param to   as a maximum of GenTime.MAX
      * @return generated time object
+     * @see GenTime#MAX
      */
     T generate(final long from,
                final long to);

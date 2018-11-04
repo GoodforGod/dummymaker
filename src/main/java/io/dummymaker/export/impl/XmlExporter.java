@@ -60,11 +60,10 @@ public class XmlExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see ICase
-     * @see Cases
-     *
      * @param nameCase naming strategy for exporter
      * @return exporter
+     * @see ICase
+     * @see Cases
      */
     public XmlExporter withCase(final ICase nameCase) {
         setCase(nameCase);
@@ -72,9 +71,9 @@ public class XmlExporter extends BasicExporter {
     }
 
     /**
-     * @see #exportClassFullName
      * @param fullName full name for XML list tag
      * @return exporter
+     * @see #exportClassFullName
      */
     public XmlExporter withFullname(final String fullName) {
         this.exportClassFullName = fullName;
@@ -82,9 +81,9 @@ public class XmlExporter extends BasicExporter {
     }
 
     /**
-     * @see #exportClassEnding
      * @param ending custom ending for XML list tag
      * @return exporter
+     * @see #exportClassEnding
      */
     public XmlExporter withEnding(final String ending) {
         this.exportClassEnding = ending;
@@ -135,7 +134,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     private String buildXmlSimpleValue(final Mode mode,
-                                final ExportContainer container) {
+                                       final ExportContainer container) {
         final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
 
         return tabField + wrapOpenXmlTag(container.getExportName())
@@ -146,10 +145,9 @@ public class XmlExporter extends BasicExporter {
     /**
      * Build XML list tag determined by fullname status and ending class phrase
      *
+     * @return XML list tag
      * @see #exportClassEnding
      * @see #exportClassFullName
-     *
-     * @return XML list tag
      */
     private <T> String buildClassListTag(final T t) {
         return (exportClassFullName != null)
@@ -177,7 +175,7 @@ public class XmlExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return export(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
@@ -217,7 +215,7 @@ public class XmlExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return "";
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);

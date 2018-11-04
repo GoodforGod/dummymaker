@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
+ * @see TimeComplexGenerator
  *
  * @author GoodforGod
  * @since 06.03.2018

@@ -14,7 +14,6 @@ import java.util.function.Predicate;
  * Scanner to filter fields for enumerate annotation fields
  *
  * @see GenEnumerate
- *
  * @see BasicScanner
  *
  * @author GoodforGod
@@ -34,8 +33,8 @@ public class EnumerateScanner extends UniqueScanner {
         final Map<Field, List<Annotation>> populateAnnotationMap = new HashMap<>();
 
         // Use only first found gen annotation on field
-        for(final Field field : t.getDeclaredFields()) {
-            for(Annotation annotation : field.getDeclaredAnnotations()) {
+        for (final Field field : t.getDeclaredFields()) {
+            for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (isEnumerate.test(annotation)) {
                     populateAnnotationMap.put(field, Collections.singletonList(annotation));
                     break;

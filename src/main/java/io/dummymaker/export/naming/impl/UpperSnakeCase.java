@@ -4,9 +4,9 @@ import io.dummymaker.export.naming.ICase;
 
 /**
  * Each upper letter separated with underscore symbol, and transform to upper case
- *
+ * <p>
  * EXCLUDING FIRST LETTER, first letter to low case
- *
+ * <p>
  * Example: ( DummyList - DUMMY_LIST )
  *
  * @author GoodforGod
@@ -18,7 +18,7 @@ public class UpperSnakeCase implements ICase {
     public String format(String value) {
         final StringBuilder builder = new StringBuilder();
 
-        for(final char letter : value.toCharArray()) {
+        for (final char letter : value.toCharArray()) {
             if (Character.isUpperCase(letter) && builder.length() != 0)
                 builder.append("_");
 

@@ -26,6 +26,6 @@ public class NickGenerator implements IGenerator<String> {
         return (!tuple)
                 ? first
                 : (revert) ? second + first
-                            : first + second;
+                : first + second;
     }
 }

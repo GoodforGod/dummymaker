@@ -27,7 +27,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
     }
 
     @SafeVarargs
-    public BasicBundle(T ... values) {
+    public BasicBundle(T... values) {
         this.preset = Arrays.asList(values);
     }
 

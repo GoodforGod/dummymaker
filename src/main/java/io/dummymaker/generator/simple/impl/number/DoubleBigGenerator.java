@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DoubleBigGenerator extends DoubleGenerator {
 
     @Override
-    public Double generate(){
+    public Double generate() {
         return super.generate() * ThreadLocalRandom.current().nextInt(10, 1000000);
     }
 }

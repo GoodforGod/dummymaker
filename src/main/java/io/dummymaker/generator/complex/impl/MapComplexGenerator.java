@@ -19,7 +19,6 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * "default comment"
  *
  * @see GenMap
- *
  * @see io.dummymaker.generator.complex.IComplexGenerator
  * @see CollectionComplexGenerator
  *
@@ -36,16 +35,16 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final GeneratorsStorage storage) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final Object initialKey     = generateValue(keyGenerator, keyFieldType, storage);
-        final Object initialValue   = generateValue(valueGenerator, valueFieldType, storage);
-        if(initialKey == null && initialValue == null)
+        final Object initialKey = generateValue(keyGenerator, keyFieldType, storage);
+        final Object initialValue = generateValue(valueGenerator, valueFieldType, storage);
+        if (initialKey == null && initialValue == null)
             return Collections.emptyMap();
 
         final Map map = new HashMap<>(amount);
         map.put(initialKey, initialValue);
         for (int i = 0; i < amount - 1; i++) {
-            final Object key    = generateValue(keyGenerator, keyFieldType, storage);
-            final Object value  = generateValue(valueGenerator, valueFieldType, storage);
+            final Object key = generateValue(keyGenerator, keyFieldType, storage);
+            final Object value = generateValue(valueGenerator, valueFieldType, storage);
 
             if (key != null && value != null) {
                 map.put(key, value);
@@ -62,12 +61,9 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;
 
-        final Class<?> keyType   = (Class<?>) getGenericType(field.getGenericType(), 0);
+        final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
         final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
-        if(annotation == null) {
-            if(storage == null)
-                return Collections.emptyMap();
-
+        if (annotation == null) {
             return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(keyType),
                     getAutoGenerator(valueType),
@@ -78,7 +74,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
         final GenMap a = ((GenMap) annotation);
 
-        final Class<? extends IGenerator> keyGenerator   = isGenDefault(a.key())
+        final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
                 ? getAutoGenerator(keyType)
                 : a.key();
 

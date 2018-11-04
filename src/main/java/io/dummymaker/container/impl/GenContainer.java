@@ -13,7 +13,6 @@ import java.lang.annotation.Annotation;
  * Used by populate scanners and factories
  *
  * @see IPopulateScanner
- *
  * @see PrimeGen
  * @see ComplexGen
  *
@@ -78,7 +77,6 @@ public class GenContainer {
                 true,
                 generatorClass);
     }
-
 
 
     public Class<? extends IGenerator> getGeneratorClass() {

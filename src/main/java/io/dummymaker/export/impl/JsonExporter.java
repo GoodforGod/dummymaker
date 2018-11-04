@@ -51,11 +51,10 @@ public class JsonExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see ICase
-     * @see Cases
-     *
      * @param nameCase naming strategy for exporter
      * @return exporter
+     * @see ICase
+     * @see Cases
      */
     public JsonExporter withCase(final ICase nameCase) {
         setCase(nameCase);
@@ -63,8 +62,8 @@ public class JsonExporter extends BasicExporter {
     }
 
     /**
-     * @see #isPretty
      * @return exporter
+     * @see #isPretty
      */
     public JsonExporter withPretty() {
         this.isPretty = true;
@@ -79,7 +78,7 @@ public class JsonExporter extends BasicExporter {
      * Tabs between newline and JSON value fields
      */
     private String buildFieldTab(final Mode mode) {
-        if(isPretty) {
+        if (isPretty) {
             return (mode == Mode.SINGLE)
                     ? "\t"
                     : "\t\t\t";
@@ -92,7 +91,7 @@ public class JsonExporter extends BasicExporter {
      * Build JSON open entity tag
      */
     private String buildOpenTag(final Mode mode) {
-        if(isPretty) {
+        if (isPretty) {
             return (mode == Mode.SINGLE)
                     ? "{\n"
                     : "\t\t{\n";
@@ -105,7 +104,7 @@ public class JsonExporter extends BasicExporter {
      * Build JSON close entity tag
      */
     private String buildCloseTag(final Mode mode) {
-        if(isPretty) {
+        if (isPretty) {
             return (mode == Mode.SINGLE)
                     ? "\n}"
                     : "\n\t\t}";
@@ -174,7 +173,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return export(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
@@ -214,7 +213,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return "";
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);

@@ -2,9 +2,7 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.complex.GenList;
-import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.annotation.complex.*;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -17,15 +15,13 @@ import java.util.stream.Collectors;
 
 /**
  * Scanner used by populate factory
- *
+ * <p>
  * Scan for prime gen and complex gen annotation and its child annotation
  * EXCLUDE EMBEDDED ANNOTATED FIELDS
  *
  * @see PrimeGen
  * @see ComplexGen
- *
  * @see GenEmbedded
- *
  * @see BasicScanner
  * @see io.dummymaker.factory.IPopulateFactory
  *
@@ -44,7 +40,9 @@ public class PopulateEmbeddedFreeScanner extends PopulateScanner {
             && !(a.annotationType().equals(GenList.class) && ((GenList) a).value().equals(EmbeddedGenerator.class))
             && !(a.annotationType().equals(GenSet.class) && ((GenSet) a).value().equals(EmbeddedGenerator.class))
             && !(a.annotationType().equals(GenMap.class)
-            && (((GenMap) a).key().equals(EmbeddedGenerator.class) || ((GenMap) a).value().equals(EmbeddedGenerator.class)));
+            && (((GenMap) a).key().equals(EmbeddedGenerator.class) || ((GenMap) a).value().equals(EmbeddedGenerator.class)))
+            && !(a.annotationType().equals(GenArray.class) && ((GenArray) a).value().equals(EmbeddedGenerator.class))
+            && !(a.annotationType().equals(GenArray2D.class) && ((GenArray2D) a).value().equals(EmbeddedGenerator.class));
 
     @Override
     public Map<Field, GenContainer> scan(final Class t) {

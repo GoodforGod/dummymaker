@@ -12,15 +12,14 @@ import java.lang.annotation.Target;
 /**
  * Prime annotations, used to create new annotations of specific generator provided type
  * Used as a marker annotation for other annotations
- *
+ * <p>
  * Is used by scanners and populate/produce factories
- *
+ * <p>
  * This annotation is a core one to support population factory
  *
  * @see IGenerator
  * @see io.dummymaker.scan.IScanner
  * @see IAnnotationScanner
- *
  * @see io.dummymaker.factory.IPopulateFactory
  * @see io.dummymaker.factory.IProduceFactory
  *
@@ -34,9 +33,8 @@ public @interface PrimeGen {
     /**
      * Contains generator class to be called to generate values on factory
      *
-     * @see io.dummymaker.factory.IPopulateFactory
-     *
      * @return generator
+     * @see io.dummymaker.factory.IPopulateFactory
      */
     Class<? extends IGenerator> value() default NullGenerator.class;
 }

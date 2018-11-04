@@ -1,9 +1,6 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.complex.impl.ArrayComplexGenerator;
-import io.dummymaker.generator.complex.impl.ListComplexGenerator;
-import io.dummymaker.generator.complex.impl.MapComplexGenerator;
-import io.dummymaker.generator.complex.impl.SetComplexGenerator;
+import io.dummymaker.generator.complex.impl.*;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.BooleanGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
@@ -126,7 +123,7 @@ public class BasicGenUtils {
         final String fieldName = fieldClass.getSimpleName();
 
         if (fieldClass.getTypeName().endsWith("[][]"))
-            return ArrayComplexGenerator.class;
+            return Array2DComplexGenerator.class;
         if (fieldClass.getTypeName().endsWith("[]"))
             return ArrayComplexGenerator.class;
         if (BasicCollectionUtils.isEmpty(generators))

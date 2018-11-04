@@ -206,8 +206,8 @@ public class BasicCastUtils {
         final boolean isFirstFloat = firstClass.isAssignableFrom(Float.class);
         final boolean isSecondFloat = secondClass.isAssignableFrom(Float.class);
         if (isFirstFloat && isSecondFloat
-                || isFirstDouble && secondClass.equals(float.class)
-                || firstClass.equals(float.class) && isSecondDouble)
+                || isFirstFloat && secondClass.equals(float.class)
+                || firstClass.equals(float.class) && isSecondFloat)
             return true;
 
         final boolean isFirstChar = firstClass.isAssignableFrom(Character.class);

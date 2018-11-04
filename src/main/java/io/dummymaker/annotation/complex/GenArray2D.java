@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generate array
+ * Generates 2 dimension array
  *
  * @see Array2DComplexGenerator
  *

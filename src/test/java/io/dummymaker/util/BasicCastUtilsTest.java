@@ -23,7 +23,7 @@ public class BasicCastUtilsTest extends Assert {
     @Test
     public void generateAmountMinLessOne() {
         int amount = BasicCollectionUtils.generateRandomAmount(-10, 0);
-        assertEquals(0, amount);
+        assertEquals(1, amount);
     }
 
     @Test

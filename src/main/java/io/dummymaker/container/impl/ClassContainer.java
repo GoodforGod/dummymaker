@@ -16,22 +16,28 @@ import java.util.Map;
  */
 public class ClassContainer implements IClassContainer {
 
-    /** Export dummy object class */
+    /**
+     * Export dummy object class
+     */
     private final Class exportClass;
 
-    /** Export dummy object class name (renamed or formatted) */
+    /**
+     * Export dummy object class name (renamed or formatted)
+     */
     private final String finalClassName;
 
-    /** Field origin name as a 'key', fieldContainer as 'value' */
+    /**
+     * Field origin name as a 'key', fieldContainer as 'value'
+     */
     private final Map<Field, FieldContainer> fieldContainerMap;
 
     public <T> ClassContainer(final T t,
                               final ICase strategy) {
         this.exportClass = t.getClass();
 
-        this.fieldContainerMap          = new ExportScanner().scan(t.getClass(), strategy);
-        final FieldContainer container  = this.fieldContainerMap.get(null);
-        if(container != null) {
+        this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy);
+        final FieldContainer container = this.fieldContainerMap.get(null);
+        if (container != null) {
             this.finalClassName = container.getExportName();
             this.fieldContainerMap.remove(null);
         } else {
@@ -74,6 +80,7 @@ public class ClassContainer implements IClassContainer {
                 .filter(e -> e.getValue().isSimple() || e.getValue().isEnumerable())
                 .collect(LinkedHashMap<Field, FieldContainer>::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> { });
+                        (m, u) -> {
+                        });
     }
 }

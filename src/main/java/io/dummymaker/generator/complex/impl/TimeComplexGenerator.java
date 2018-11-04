@@ -20,7 +20,6 @@ import static io.dummymaker.util.BasicCastUtils.castObject;
  * Generate time object for GenTime annotation
  *
  * @see GenTime
- *
  * @see IComplexGenerator
  *
  * @author GoodforGod
@@ -72,46 +71,46 @@ public class TimeComplexGenerator implements IComplexGenerator {
     }
 
     private ITimeGenerator<LocalDateTime> getLocalDateTimeGenerator(final GeneratorsStorage storage) {
-        if(storage != null)
-            storage.getGeneratorInstance(DateGenerator.class);
+        if (storage != null)
+            storage.getGenInstance(DateGenerator.class);
 
-        if(localDateTimeGenerator == null)
+        if (localDateTimeGenerator == null)
             this.localDateTimeGenerator = new LocalDateTimeGenerator();
         return localDateTimeGenerator;
     }
 
     private ITimeGenerator<LocalDate> getLocalDateGenerator(final GeneratorsStorage storage) {
-        if(storage != null)
-            storage.getGeneratorInstance(DateGenerator.class);
+        if (storage != null)
+            storage.getGenInstance(DateGenerator.class);
 
-        if(localDateGenerator == null)
+        if (localDateGenerator == null)
             this.localDateGenerator = new LocalDateGenerator();
         return localDateGenerator;
     }
 
     private ITimeGenerator<LocalTime> getLocalTimeGenerator(final GeneratorsStorage storage) {
-        if(storage != null)
-            storage.getGeneratorInstance(DateGenerator.class);
+        if (storage != null)
+            storage.getGenInstance(DateGenerator.class);
 
-        if(localTimeGenerator == null)
+        if (localTimeGenerator == null)
             this.localTimeGenerator = new LocalTimeGenerator();
         return localTimeGenerator;
     }
 
     private ITimeGenerator<Timestamp> getTimestampGenerator(final GeneratorsStorage storage) {
-        if(storage != null)
-            storage.getGeneratorInstance(DateGenerator.class);
+        if (storage != null)
+            storage.getGenInstance(DateGenerator.class);
 
-        if(timestampGenerator == null)
+        if (timestampGenerator == null)
             this.timestampGenerator = new TimestampGenerator();
         return timestampGenerator;
     }
 
     private ITimeGenerator<Date> getDateGenerator(final GeneratorsStorage storage) {
-        if(storage != null)
-            storage.getGeneratorInstance(DateGenerator.class);
+        if (storage != null)
+            storage.getGenInstance(DateGenerator.class);
 
-        if(dateGenerator == null)
+        if (dateGenerator == null)
             this.dateGenerator = new DateGenerator();
         return dateGenerator;
     }

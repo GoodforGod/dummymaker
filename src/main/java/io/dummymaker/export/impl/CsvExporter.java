@@ -59,10 +59,9 @@ public class CsvExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see ICase
-     *
      * @param nameCase naming strategy for exporter
      * @return exporter
+     * @see ICase
      */
     public CsvExporter withCase(final ICase nameCase) {
         setCase(nameCase);
@@ -70,8 +69,8 @@ public class CsvExporter extends BasicExporter {
     }
 
     /**
-     * @see #areTextValuesWrapped
      * @return exporter
+     * @see #areTextValuesWrapped
      */
     public CsvExporter withTextWrap() {
         this.areTextValuesWrapped = true;
@@ -79,8 +78,8 @@ public class CsvExporter extends BasicExporter {
     }
 
     /**
-     * @see #hasHeader
      * @return exporter
+     * @see #hasHeader
      */
     public CsvExporter withHeader() {
         this.hasHeader = true;
@@ -88,10 +87,9 @@ public class CsvExporter extends BasicExporter {
     }
 
     /**
-     * @see #separator
-     *
      * @param separator char separator for CSV values
      * @return exporter
+     * @see #separator
      */
     public CsvExporter withSeparator(final char separator) {
         this.separator = separator;
@@ -122,7 +120,7 @@ public class CsvExporter extends BasicExporter {
      * Build correct final export field value in CSV format
      * Check for wrap option for field value
      *
-     * @param field export field
+     * @param field      export field
      * @param fieldValue export field value
      * @return final export field value
      */
@@ -131,7 +129,7 @@ public class CsvExporter extends BasicExporter {
 
 
         return (areTextValuesWrapped && field.getType().equals(String.class)
-                    || isValueWrappable.test(fieldValue))
+                || isValueWrappable.test(fieldValue))
                 ? wrapWithQuotes(fieldValue)
                 : fieldValue;
     }
@@ -175,7 +173,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return export(list.get(0));
 
         final IClassContainer container = buildClassContainer(list.get(0));
@@ -219,7 +217,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return "";
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list.get(0));

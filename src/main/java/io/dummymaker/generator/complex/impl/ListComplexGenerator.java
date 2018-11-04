@@ -7,7 +7,6 @@ import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,7 +17,6 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * Generates List for GenList annotation
  *
  * @see GenList
- *
  * @see io.dummymaker.generator.complex.IComplexGenerator
  * @see CollectionComplexGenerator
  *
@@ -35,10 +33,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             return null;
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
-        if(annotation == null) {
-            if(storage == null)
-                return Collections.emptyList();
-
+        if (annotation == null) {
             return generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(valueClass),
                     ((Class<?>) valueClass),

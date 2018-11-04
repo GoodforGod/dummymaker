@@ -26,10 +26,8 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  *
  * @see PrimeGen
  * @see ComplexGen
- *
  * @see GenIgnoreExport
  * @see GenForceExport
- *
  * @see UniqueScanner
  *
  * @author GoodforGod

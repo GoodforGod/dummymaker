@@ -29,7 +29,7 @@ public class BasicScanner implements IAnnotationScanner {
         final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
 
         try {
-            for(final Field field : t.getDeclaredFields()) {
+            for (final Field field : t.getDeclaredFields()) {
 
                 // So we can avoid duplicates but not to use Set in contract for scanner
                 final List<Annotation> annotations = Arrays.stream(field.getAnnotations())
@@ -48,6 +48,7 @@ public class BasicScanner implements IAnnotationScanner {
 
     /**
      * Retrieve declared annotations from parent one and build set of them all
+     *
      * @param annotation parent annotation
      * @return parent annotation and its declared ones
      */

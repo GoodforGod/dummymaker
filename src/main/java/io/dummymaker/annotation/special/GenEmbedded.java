@@ -23,8 +23,8 @@ public @interface GenEmbedded {
     int MAX = 11;
 
     /**
-     * If annotation is present, than it will be minimum 1 depth used by factory
-     * And MAX level is limit embedded object depth in hierarchy
+     * If annotation is present, than it will be 1 level depth used by factory
+     * And MAX level is limit depth embedded object can have
      */
     int depth() default 1;
 }

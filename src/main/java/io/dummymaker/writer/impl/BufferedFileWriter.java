@@ -23,14 +23,13 @@ public class BufferedFileWriter implements IWriter {
     private BufferedWriter writer;
 
     /**
-     * @param fileName file name
-     * @param path     path where to create file (NULL or UNKNOWN for home dir)
+     * @param fileName  file name
+     * @param path      path where to create file (NULL or UNKNOWN for home dir)
      * @param extension file extension
-     *
      * @throws IOException if can not instantiate writer
      */
     public BufferedFileWriter(final String fileName, final String path, final String extension)
-                                                                                throws IOException {
+            throws IOException {
         try {
             final String workPath = buildPath(fileName, path, extension);
             this.writer = new BufferedWriter(

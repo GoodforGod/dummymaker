@@ -38,7 +38,6 @@ abstract class BasicExporter implements IExporter {
      * @param caseUsed naming strategy
      * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
-     *
      * @see ICase
      * @see Format
      */
@@ -57,7 +56,7 @@ abstract class BasicExporter implements IExporter {
     }
 
     void setCase(final ICase caseUsed) {
-        if(caseUsed != null)
+        if (caseUsed != null)
             this.caseUsed = caseUsed;
     }
 
@@ -124,8 +123,8 @@ abstract class BasicExporter implements IExporter {
     }
 
     private ExportContainer buildContainer(final String exportFieldName,
-                                   final Object exportFieldValue) {
-        if(exportFieldValue == null) {
+                                           final Object exportFieldValue) {
+        if (exportFieldValue == null) {
             return ExportContainer.asValue(exportFieldName, "");
         }
 

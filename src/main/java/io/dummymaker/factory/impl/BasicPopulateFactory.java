@@ -31,10 +31,8 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  *
  * @see IGenerator
  * @see IComplexGenerator
- *
  * @see PrimeGen
  * @see ComplexGen
- *
  * @see GenEnumerate
  *
  * @author GoodforGod
@@ -53,17 +51,17 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     private final GeneratorsStorage genStorage;
 
     BasicPopulateFactory(final IPopulateScanner populateScanner) {
-        this.genStorage         = new GeneratorsStorage();
-        this.enumerateScanner   = new EnumerateScanner();
-        this.populateScanner    = populateScanner;
+        this.genStorage = new GeneratorsStorage();
+        this.enumerateScanner = new EnumerateScanner();
+        this.populateScanner = populateScanner;
     }
 
     /**
      * Populate single entity
      *
-     * @param t                  entity to populate
-     * @param enumeratesMap      map of enumerated marked fields
-     * @param nullableFields     set with fields that had errors in
+     * @param t                    entity to populate
+     * @param enumeratesMap        map of enumerated marked fields
+     * @param nullableFields       set with fields that had errors in
      * @param currentEmbeddedDepth embedded depth level
      * @return populated entity
      */
@@ -112,17 +110,17 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     /**
      * Generate populate field value
      *
-     * @param field             field to populate
-     * @param container         field populate annotations
-     * @param enumerateMap      field enumerate map
-     * @param nullableFields    set with fields that had errors in
+     * @param field          field to populate
+     * @param container      field populate annotations
+     * @param enumerateMap   field enumerate map
+     * @param nullableFields set with fields that had errors in
      */
     private Object generateObject(final Field field,
                                   final GenContainer container,
                                   final Map<Field, Long> enumerateMap,
                                   final Set<Field> nullableFields,
                                   final int currentEmbeddedDepth) {
-        final IGenerator generator = genStorage.getGeneratorInstance(container.getGeneratorClass());
+        final IGenerator generator = genStorage.getGenInstance(container.getGeneratorClass());
         final Annotation annotation = container.getMarker();
 
         Object generated;
@@ -147,7 +145,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     /**
      * Generate embedded field value
      *
-     * @param field       field with embedded value
+     * @param field          field with embedded value
      * @param nullableFields set with fields that had errors in
      */
     private Object generateEmbeddedObject(final Annotation annotation,
@@ -155,11 +153,11 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                           final Set<Field> nullableFields,
                                           final int currentEmbeddedDepth) {
         final int fieldDepth = getDepth(annotation);
-        if(fieldDepth < currentEmbeddedDepth)
+        if (fieldDepth < currentEmbeddedDepth)
             return null;
 
         final Object embedded = instantiate(field.getType());
-        if(embedded == null) {
+        if (embedded == null) {
             nullableFields.add(field);
             return null;
         }
@@ -213,11 +211,11 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
     }
 
     private int getDepth(final Annotation annotation) {
-        if(annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
+        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
             return MIN_EMBEDDED_DEPTH;
 
         final int fieldDepth = ((GenEmbedded) annotation).depth();
-        if(fieldDepth < 1)
+        if (fieldDepth < 1)
             return MIN_EMBEDDED_DEPTH;
 
         return (fieldDepth > MAX_EMBEDDED_DEPTH)

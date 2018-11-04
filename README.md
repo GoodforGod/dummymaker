@@ -22,14 +22,14 @@ Also it is possible to easily extend library functionality by creating your own 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.1.1'
+    compile 'com.github.goodforgod:dummymaker:1.1.2'
 }
 ```
 
@@ -42,6 +42,7 @@ dependencies {
   - [Gen Annotations](#gen-annotations)  
   - [Core Annotations](#core-annotations)  
   - [Auto Annotation](#auto-annotation)
+  - [Array Annotations](#array-annotations)  
   - [Collection Annotations](#collection-annotations)  
   - [Time Annotation](#time-annotation)  
   - [Special Annotations](#special-annotations)  
@@ -130,6 +131,29 @@ Annotations used as markers on top of other annotations, which will be used to a
 Use just *GenAuto* annotation on top of your class and library will automatically try to find suitable generators for your Dummy fields. Annotation provides just single embedded depth support.
 
 [As simple as it can be. Magic. Check example.](#auto-gen-magic)
+
+### **Array Annotations**
+
+**GenArray** annotation allow you to generate an array of any type library provides generators for. 
+Arrays in classes annotated with *@GenAuto* will be generated automatically.
+
+Annotations support special attributes like:
+* *min* - minimum entities generated amount.
+* *max* - maximum entities generated amount.
+* *fixed* - fixed number entities generated amount.
+* *value* - *IGenerator* generator class to build values using it.
+
+**GenArray2D** annotation allow you to generate two dimension array of any type library provides generators for. 
+Arrays in classes annotated with *@GenAuto* will be generated automatically.
+
+Annotations support special attributes like:
+* *minFirst* - first dimension minimum entities generated amount.
+* *minSecond* - second dimension minimum entities generated amount.
+* *maxFirst* - first dimension maximum entities generated amount.
+* *maxSecond* - second dimension maximum entities generated amount.
+* *fixedFirst* - first dimension fixed number entities generated amount.
+* *fixedSecond* - second dimension fixed number entities generated amount.
+* *value* - *IGenerator* generator class to build values using it.
 
 ### **Collection Annotations**
 
@@ -277,6 +301,15 @@ You can generate time/date values using this annotation.
 Read more in *time annotation* section.
 
 ![](https://media.giphy.com/media/MuCzQ6BfY1Y1HrggsP/giphy.gif)
+
+#### *Arrays annotation example*
+
+You can populate single or two dimension array any generic type you want, if such *IGenerator* is available (or you can create your own generator).
+
+Read more in *array annotation* section.
+
+![](https://media.giphy.com/media/8FrjAE955A2vTmxgal/giphy.gif)
+
 
 #### *Collection annotation example*
 
@@ -468,6 +501,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.1.2** - Full primitive support, single or two dimension array support.
 
 **1.1.1** - Factory performance improvements (about 40%), *GenAuto* annotation, *IComplexGenerator* the successor of *IGenerateFactory*, primitive support, Embedded multi level depth support, bug fixes.
 

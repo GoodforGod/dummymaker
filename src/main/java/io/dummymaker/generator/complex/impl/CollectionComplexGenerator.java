@@ -27,7 +27,7 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
         final T initial = generateValue(valueGenerator, fieldClass, storage);
-        if(initial == null)
+        if (initial == null)
             return Collections.emptyList();
 
         final List<T> list = new ArrayList<>(size);

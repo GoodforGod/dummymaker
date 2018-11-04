@@ -244,7 +244,7 @@ public class ProduceFactoryTest {
         assertNotNull(dummyAuto.getMap());
         assertFalse(dummyAuto.getList().isEmpty());
         assertFalse(dummyAuto.getMap().isEmpty());
-        assertEquals(10, dummyAuto.getList().size());
+        assertNotEquals(0, dummyAuto.getList().size());
         assertEquals(6, dummyAuto.getMap().size());
 
         assertNotNull(dummyAuto.getDummyAuto());
@@ -257,7 +257,31 @@ public class ProduceFactoryTest {
         assertNotNull(innerDummy.getMap());
         assertFalse(innerDummy.getList().isEmpty());
         assertFalse(innerDummy.getMap().isEmpty());
-        assertEquals(10, innerDummy.getList().size());
-        assertEquals(10, innerDummy.getMap().size());
+        assertNotEquals(0, innerDummy.getList().size());
+        assertNotEquals(0, innerDummy.getMap().size());
+    }
+
+    @Test
+    public void produceDummyArray() {
+        DummyArray dummyArray = factory.produce(DummyArray.class);
+
+        assertNotNull(dummyArray);
+
+        assertNotEquals(0, dummyArray.getBytes().length);
+        assertNotEquals(0, dummyArray.getBytes2().length);
+        assertNotEquals(0, dummyArray.getShorts().length);
+        assertNotEquals(0, dummyArray.getShorts2().length);
+        assertNotEquals(0, dummyArray.getInts().length);
+        assertNotEquals(0, dummyArray.getInts2().length);
+        assertNotEquals(0, dummyArray.getLongs().length);
+        assertNotEquals(0, dummyArray.getLongs2().length);
+        assertNotEquals(0, dummyArray.getDoubles().length);
+        assertNotEquals(0, dummyArray.getDoubles2().length);
+
+        assertNotNull(dummyArray.getaFloatObj());
+        assertNotNull(dummyArray.getaByteObj());
+        assertNotNull(dummyArray.getaShortObj());
+        assertNotNull(dummyArray.getaDoubleObj());
+        assertNotNull(dummyArray.getaLongObj());
     }
 }

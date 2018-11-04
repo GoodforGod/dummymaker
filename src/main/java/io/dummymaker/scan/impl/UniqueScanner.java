@@ -14,10 +14,9 @@ import java.util.stream.Collectors;
  * And return fields in correct order
  * Core scanner implementation
  *
+ * @author GoodforGod
  * @see IAnnotationScanner
  * @see BasicScanner
- *
- * @author GoodforGod
  * @since 08.03.2018
  */
 public class UniqueScanner extends BasicScanner {
@@ -30,7 +29,8 @@ public class UniqueScanner extends BasicScanner {
                         .collect(Collectors.toList())))
                 .collect(LinkedHashMap<Field, List<Annotation>>::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> { }
+                        (m, u) -> {
+                        }
                 );
     }
 }

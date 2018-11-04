@@ -19,13 +19,7 @@ public class GeneratorsStorage {
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators = new HashMap<>();
 
-    public IGenerator getGeneratorInstance(final Class<? extends IGenerator> generatorClass) {
-        final IGenerator generator = generators.get(generatorClass);
-        if(generator != null)
-            return generator;
-
-        final IGenerator iGenerator = instantiate(generatorClass);
-        generators.put(generatorClass, iGenerator);
-        return iGenerator;
+    public IGenerator getGenInstance(final Class<? extends IGenerator> generatorClass) {
+        return generators.computeIfAbsent(generatorClass, (k) -> instantiate(generatorClass));
     }
 }

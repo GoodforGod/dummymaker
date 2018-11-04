@@ -14,7 +14,7 @@ public class UpperKebabCase implements ICase {
     public String format(String value) {
         final StringBuilder builder = new StringBuilder();
 
-        for(final char letter : value.toCharArray()) {
+        for (final char letter : value.toCharArray()) {
             if (Character.isUpperCase(letter) && builder.length() != 0)
                 builder.append("-");
 

@@ -38,20 +38,20 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
         return IGenerator.class.equals(tClass);
     }
 
-    <T> T generateValue(final Class<? extends IGenerator> generatorClass,
+    <T> T generateValue(final Class<? extends IGenerator> valueGeneratorClass,
                         final Class<T> valueClass,
                         final GeneratorsStorage storage) {
-        if ((EmbeddedGenerator.class.equals(generatorClass)))
+        if ((EmbeddedGenerator.class.equals(valueGeneratorClass)))
             return getEmbeddedFreePopulateFactory().populate(instantiate(valueClass));
 
-        final IGenerator valueGenerator = getGenerator(generatorClass, storage);
+        final IGenerator valueGenerator = getGenerator(valueGeneratorClass, storage);
         return generateObject(valueGenerator, valueClass);
     }
 
     IGenerator getGenerator(final Class<? extends IGenerator> generatorClass,
                             final GeneratorsStorage storage) {
         if (storage != null)
-            return storage.getGeneratorInstance(generatorClass);
+            return storage.getGenInstance(generatorClass);
         if (generatorClass != null)
             return BasicCastUtils.instantiate(generatorClass);
         return new NullGenerator();

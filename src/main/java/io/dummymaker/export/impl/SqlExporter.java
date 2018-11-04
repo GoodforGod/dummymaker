@@ -69,11 +69,10 @@ public class SqlExporter extends BasicExporter {
     /**
      * Build exporter with naming strategy
      *
-     * @see ICase
-     * @see Cases
-     *
      * @param nameCase naming strategy for exporter
      * @return exporter
+     * @see ICase
+     * @see Cases
      */
     public SqlExporter withCase(final ICase nameCase) {
         setCase(nameCase);
@@ -87,22 +86,22 @@ public class SqlExporter extends BasicExporter {
      */
     private HashMap<Class, String> buildDefaultDataTypeMap() {
         return new HashMap<Class, String>() {{
-            put(Long.class,         "BIGINT");
-            put(long.class,         "BIGINT");
-            put(Date.class,         "BIGINT");
-            put(Double.class,       "DOUBLE PRECISION");
-            put(double.class,       "DOUBLE PRECISION");
-            put(Integer.class,      "INT");
-            put(int.class,          "INT");
-            put(Character.class,    "CHAR");
-            put(char.class,         "CHAR");
-            put(Boolean.class,      "BIT");
-            put(boolean.class,      "BIT");
-            put(String.class,       "VARCHAR");
-            put(Object.class,       "VARCHAR");
-            put(Timestamp.class,    "TIMESTAMP");
-            put(LocalDate.class,    "TIMESTAMP");
-            put(LocalTime.class,    "TIMESTAMP");
+            put(Long.class, "BIGINT");
+            put(long.class, "BIGINT");
+            put(Date.class, "BIGINT");
+            put(Double.class, "DOUBLE PRECISION");
+            put(double.class, "DOUBLE PRECISION");
+            put(Integer.class, "INT");
+            put(int.class, "INT");
+            put(Character.class, "CHAR");
+            put(char.class, "CHAR");
+            put(Boolean.class, "BIT");
+            put(boolean.class, "BIT");
+            put(String.class, "VARCHAR");
+            put(Object.class, "VARCHAR");
+            put(Timestamp.class, "TIMESTAMP");
+            put(LocalDate.class, "TIMESTAMP");
+            put(LocalTime.class, "TIMESTAMP");
             put(LocalDateTime.class, "TIMESTAMP");
         }};
     }
@@ -193,7 +192,7 @@ public class SqlExporter extends BasicExporter {
 
     /**
      * Search for primary key entity candidate field and retrieve its export field name
-     *
+     * <p>
      * Primary key is field that (in that order):
      * - Have ID or UID name (case ignored)
      * - Is marked with enumerate gen annotation
@@ -278,7 +277,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return false;
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return export(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);
@@ -342,7 +341,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntityInvalid(list))
             return "";
 
-        if(isExportEntitySingleList(list))
+        if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
         final IClassContainer container = buildClassContainer(list);

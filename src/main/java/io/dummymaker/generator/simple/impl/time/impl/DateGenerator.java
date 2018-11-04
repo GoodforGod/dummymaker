@@ -25,9 +25,9 @@ public class DateGenerator implements ITimeGenerator<Date> {
     public Date generate(final long from, final long to) {
         long usedFrom = from;
         long usedTo = to;
-        if(usedFrom < 0)
+        if (usedFrom < 0)
             usedFrom = 0;
-        if(usedTo > GenTime.MAX)
+        if (usedTo > GenTime.MAX)
             usedTo = GenTime.MAX;
 
         final long amount = (usedTo < usedFrom)

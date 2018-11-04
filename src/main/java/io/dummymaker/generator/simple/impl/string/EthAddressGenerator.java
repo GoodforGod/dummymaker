@@ -10,6 +10,6 @@ public class EthAddressGenerator extends IdGenerator {
 
     @Override
     public String generate() {
-        return "0x" + super.generate() + super.generate().substring(0, 7);
+        return "0x" + super.generate() + super.generate().substring(0, 8);
     }
 }

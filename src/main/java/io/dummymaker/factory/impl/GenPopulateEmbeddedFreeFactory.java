@@ -4,7 +4,7 @@ import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 
 /**
  * Populate gen annotated object fields without embedded ones
- *
+ * <p>
  * EXCLUDE EMBEDDED FIELDS
  *
  * @see BasicPopulateFactory

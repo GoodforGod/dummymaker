@@ -13,17 +13,15 @@ import java.lang.annotation.Target;
 /**
  * Complex Gen annotation used to create new annotations of specific complex generator provided type
  * Used as a marker annotation for other annotations
- *
+ * <p>
  * Is used by scanners and populate/produce factories
- *
+ * <p>
  * This annotation is a also core one (as prime one) to support population factory
  *
  * @see PrimeGen
- *
  * @see IGenerator
  * @see io.dummymaker.scan.IScanner
  * @see IAnnotationScanner
- *
  * @see io.dummymaker.factory.IPopulateFactory
  * @see io.dummymaker.factory.IProduceFactory
  *
@@ -37,9 +35,8 @@ public @interface ComplexGen {
     /**
      * Contains complex generator class to be called to generate values on populate factory
      *
-     * @see io.dummymaker.factory.IPopulateFactory
-     *
      * @return generator
+     * @see io.dummymaker.factory.IPopulateFactory
      */
     Class<? extends IComplexGenerator> value() default NullGenerator.class;
 }

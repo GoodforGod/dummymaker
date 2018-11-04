@@ -4,7 +4,7 @@ import io.dummymaker.export.naming.impl.*;
 
 /**
  * Naming strategy for class and field names
- *
+ * <p>
  * Used in all exporters
  *
  * @see io.dummymaker.export.IExporter

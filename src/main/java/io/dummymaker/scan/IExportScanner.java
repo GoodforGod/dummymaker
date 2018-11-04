@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * "default comment"
+ * Scanner for special export annotations
  *
  * @author GoodforGod
  * @since 27.04.2018

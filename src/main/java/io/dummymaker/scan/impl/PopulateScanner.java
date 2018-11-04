@@ -19,13 +19,12 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * Scanner used by populate factory
- *
+ * <p>
  * Scan for prime gen annotation and its child annotation
  * Scan also for GenEmbedded annotations to populate embedded fields
  *
  * @see PrimeGen
  * @see GenEmbedded
- *
  * @see BasicScanner
  * @see io.dummymaker.factory.IPopulateFactory
  *
@@ -49,7 +48,6 @@ public class PopulateScanner implements IPopulateScanner {
      * @return populate field map, where
      * KEY is field that has populate annotations
      * VALUE is Gen container with generate params for that field
-     *
      * @see GenContainer
      */
     @Override
@@ -60,21 +58,21 @@ public class PopulateScanner implements IPopulateScanner {
         final boolean isAutoGen = Arrays.stream(t.getDeclaredAnnotations())
                 .anyMatch(a -> a.annotationType().equals(GenAuto.class));
 
-        for(final Field field : t.getDeclaredFields()) {
+        for (final Field field : t.getDeclaredFields()) {
             GenContainer genContainer = findGenAnnotation(field);
 
             // Create auto gen container class is auto generative
-            if(genContainer == null && isAutoGen) {
-                Class<? extends IGenerator> autoGenerator = getAutoGenerator(field.getType());
-                if (autoGenerator.equals(NullGenerator.class)) {
+            if (genContainer == null && isAutoGen) {
+                Class<? extends IGenerator> generator = getAutoGenerator(field.getType());
+                if (generator.equals(NullGenerator.class)) {
                     // Try to treat field as embedded object, when no suitable generator
-                    autoGenerator = EmbeddedGenerator.class;
+                    generator = EmbeddedGenerator.class;
                 }
 
-                genContainer = GenContainer.asAuto(autoGenerator, isComplex(field));
+                genContainer = GenContainer.asAuto(generator, isComplex(field));
             }
 
-            if(genContainer != null) {
+            if (genContainer != null) {
                 populateAnnotationMap.put(field, genContainer);
             }
         }
@@ -89,16 +87,18 @@ public class PopulateScanner implements IPopulateScanner {
         final Class<?> declaringClass = field.getType();
         return (declaringClass.equals(List.class)
                 || declaringClass.equals(Set.class)
-                || declaringClass.equals(Map.class));
+                || declaringClass.equals(Map.class))
+                || declaringClass.getTypeName().endsWith("[][]")
+                || declaringClass.getTypeName().endsWith("[]");
     }
 
     /**
      * Found only first found gen annotation on field
      */
     private GenContainer findGenAnnotation(final Field field) {
-        for(Annotation annotation : field.getDeclaredAnnotations()) {
-            for(Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
-                if(isGen.test(inline)) {
+        for (Annotation annotation : field.getDeclaredAnnotations()) {
+            for (Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
+                if (isGen.test(inline)) {
                     return GenContainer.asGen(inline, annotation);
                 }
             }
