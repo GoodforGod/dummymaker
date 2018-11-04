@@ -155,6 +155,9 @@ Annotations support special attributes like:
 * *fixedSecond* - second dimension fixed number entities generated amount.
 * *value* - *IGenerator* generator class to build values using it.
 
+Arrays exports are supported only by **JsonExporter** in mean time.
+**PRIMITIVE** arrays are **NOT SUPPORTED** for export, use object wrappers instead (*int* -> *Integer*).
+
 ### **Collection Annotations**
 
 Collection annotations like: **GenList, GenSet, GenMap** used to populate fields with such types.
@@ -172,7 +175,7 @@ This attributes are used by *GenMap* annotation only (instead of *generator* att
 * *key* - *IGenerator* generator class to build map *keys* using it.
 * *value* - *IGenerator* generator class to build map *values* using it.
 
-Collection annotation are **NOT SUPPORTED** by any *IExporter* in mean time.
+Collection exports are supported only by **JsonExporter** in mean time.
 
 ### **Time Annotation**
 
@@ -502,7 +505,7 @@ INSERT INTO user (name, id) VALUES
 
 ## Version History
 
-**1.1.2** - Full primitive support, single or two dimension array support.
+**1.1.2** - Full primitive support, single or two dimension array support, jsonExporter collection, map, array support.
 
 **1.1.1** - Factory performance improvements (about 40%), *GenAuto* annotation, *IComplexGenerator* the successor of *IGenerateFactory*, primitive support, Embedded multi level depth support, bug fixes.
 

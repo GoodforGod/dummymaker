@@ -2,6 +2,7 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.container.IClassContainer;
 import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -74,6 +75,12 @@ public class JsonExporter extends BasicExporter {
         return "\"" + value + "\"";
     }
 
+    private String wrapWithQuotes(final ExportContainer container) {
+        return (container.getType().equals(FieldContainer.Type.SIMPLE))
+                ? "\"" + container.getExportValue() + "\""
+                : container.getExportValue();
+    }
+
     /**
      * Tabs between newline and JSON value fields
      */
@@ -132,7 +139,7 @@ public class JsonExporter extends BasicExporter {
         final StringBuilder builder = new StringBuilder(openValueTag);
 
         final String valueResult = exportContainers.stream()
-                .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c.getExportValue()))
+                .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c))
                 .collect(Collectors.joining(valueDelimiter));
 
         builder.append(valueResult)

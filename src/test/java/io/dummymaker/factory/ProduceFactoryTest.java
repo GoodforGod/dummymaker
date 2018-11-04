@@ -1,6 +1,7 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.data.*;
+import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenProduceFactory;
 import org.junit.Test;
 
@@ -35,6 +36,20 @@ public class ProduceFactoryTest {
     public void noZeroConstructorError() {
         final DummyNoZeroConstructor dummy = factory.produce(DummyNoZeroConstructor.class);
         assertNull(dummy);
+    }
+
+    @Test
+    public void arrayDummyToJson() {
+        DummyArray dummyArray = new GenProduceFactory().produce(DummyArray.class);
+        String s = new JsonExporter().exportAsString(dummyArray);
+        Pattern patternSingleArray = Pattern.compile("\"floatsff\":\\[[\\-0-9.]");
+        Pattern patternTwoArray = Pattern.compile("\"bytes2\":\\[\\[[\\-0-9.]");
+        Pattern patternList = Pattern.compile("\"floatList\":\\[[\\-0-9.]");
+        Pattern patternMap= Pattern.compile("\"mapa\":\\{\"[a-zA-Z0-9_]+\":\"[a-zA-Z0-9_]+\"");
+        assertTrue(patternSingleArray.matcher(s).find());
+        assertTrue(patternTwoArray.matcher(s).find());
+        assertTrue(patternList.matcher(s).find());
+        assertTrue(patternMap.matcher(s).find());
     }
 
     @Test

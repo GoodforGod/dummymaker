@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.container.IClassContainer;
 import io.dummymaker.container.impl.ClassContainer;
 import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.naming.ICase;
@@ -11,9 +12,7 @@ import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static io.dummymaker.util.BasicStringUtils.isBlank;
@@ -104,14 +103,14 @@ abstract class BasicExporter implements IExporter {
         final List<ExportContainer> exports = new ArrayList<>();
 
         // Using only SIMPLE values containers
-        classContainer.getSimpleContainers().forEach((k, v) -> {
+        classContainer.getFormatSupported(format).forEach((k, v) -> {
             try {
                 k.setAccessible(true);
 
                 final String exportFieldName = v.getExportName();
                 final Object exportFieldValue = k.get(t);
 
-                exports.add(buildContainer(exportFieldName, exportFieldValue));
+                exports.add(buildContainer(exportFieldName, exportFieldValue, v.getType()));
 
                 k.setAccessible(false);
             } catch (Exception ex) {
@@ -123,28 +122,38 @@ abstract class BasicExporter implements IExporter {
     }
 
     private ExportContainer buildContainer(final String exportFieldName,
-                                           final Object exportFieldValue) {
+                                           final Object exportFieldValue,
+                                           final FieldContainer.Type type) {
         if (exportFieldValue == null) {
             return ExportContainer.asValue(exportFieldName, "");
         }
 
         //TODO Check this in SQL exporter
-        if (exportFieldValue.getClass().equals(Date.class)) {
+        if (exportFieldValue.getClass().equals(Date.class))
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
+
+        if (this.format == Format.JSON) {
+            if (FieldContainer.Type.ARRAY.equals(type) && !(exportFieldValue).getClass().getComponentType().isPrimitive()) {
+                return ExportContainer.asArray(exportFieldName,
+                        Arrays.toString((Object[]) exportFieldValue));
+            } else if (FieldContainer.Type.ARRAY_2D.equals(type)) {
+                return ExportContainer.asArray2D(exportFieldName,
+                        Arrays.deepToString((Object[]) exportFieldValue));
+            } else if (FieldContainer.Type.COLLECTION.equals(type)) {
+                return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
+            } else if (FieldContainer.Type.MAP.equals(type)) {
+                return ExportContainer.asMap(exportFieldName, convertAsMap(exportFieldValue));
+            }
         }
 
-//        if(this.format == Format.JSON) {
-//            if (exportFieldValue.getClass().isAssignableFrom(Collection.class)) {
-//                final ExportContainer container = ExportContainer.asCollection(exportFieldName);
-//            }
-//
-//            final IClassContainer classContainer = buildClassContainer(exportFieldValue.getClass());
-//            if(classContainer.isExportable()) {
-//                final List<ExportContainer> embeddedContainers = extractExportContainers(exportFieldValue, classContainer);
-//            }
-//        }
-
         return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
+    }
+
+    private String convertAsMap(Object exportMap) {
+        final StringBuilder builder = new StringBuilder("{");
+        ((Map) exportMap).forEach((k, v) -> builder.append("\"").append(k).append("\":\"").append(v).append("\","));
+        int length = builder.length();
+        return builder.toString().substring(0, length - 1) + "}";
     }
 
     /**

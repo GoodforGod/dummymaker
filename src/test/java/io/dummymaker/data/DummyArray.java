@@ -2,6 +2,9 @@ package io.dummymaker.data;
 
 import io.dummymaker.annotation.special.GenAuto;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * ! NO DESCRIPTION !
  *
@@ -10,6 +13,10 @@ import io.dummymaker.annotation.special.GenAuto;
  */
 @GenAuto
 public class DummyArray {
+
+    private Map mapa;
+    private Float[] floatsff;
+    private List<Float> floatList;
 
     private byte[][] bytes2;
     private short[][] shorts2;

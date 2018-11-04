@@ -1,9 +1,6 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.data.DummyAuto;
 import io.dummymaker.data.DummyTime;
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.factory.impl.GenProduceFactory;
 import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.complex.impl.MapComplexGenerator;
 import io.dummymaker.generator.complex.impl.SetComplexGenerator;
@@ -98,9 +95,6 @@ public class GeneratorPatternValidTest {
 
     @Test
     public void genValueRegexCheck() {
-        DummyAuto dummyArray = new GenProduceFactory().produce(DummyAuto.class);
-        String s = new JsonExporter().exportAsString(dummyArray);
-
         final Object generated = generator.generate();
 
         assertNotNull(generated);

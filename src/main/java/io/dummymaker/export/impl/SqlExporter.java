@@ -130,7 +130,7 @@ public class SqlExporter extends BasicExporter {
                 .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
 
-        final String resultValues = container.getSimpleContainers().entrySet().stream()
+        final String resultValues = container.getFormatSupported(Format.SQL).entrySet().stream()
                 .map(e -> "\t" + buildInsertNameTypeQuery(e.getValue().getExportName(), container))
                 .collect(Collectors.joining(",\n"));
 
@@ -199,7 +199,7 @@ public class SqlExporter extends BasicExporter {
      * - Randomly selected
      */
     private String buildPrimaryKey(final IClassContainer container) {
-        final Map<Field, FieldContainer> containerMap = container.getSimpleContainers();
+        final Map<Field, FieldContainer> containerMap = container.getFormatSupported(Format.SQL);
 
         for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
             if (entry.getValue().isEnumerable()) {

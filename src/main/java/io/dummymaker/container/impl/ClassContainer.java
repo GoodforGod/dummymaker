@@ -1,6 +1,7 @@
 package io.dummymaker.container.impl;
 
 import io.dummymaker.container.IClassContainer;
+import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.scan.impl.ExportScanner;
 
@@ -60,10 +61,6 @@ public class ClassContainer implements IClassContainer {
                 .orElseThrow(NullPointerException::new).getKey();
     }
 
-    public Class getExportClass() {
-        return exportClass;
-    }
-
     @Override
     public String getExportClassName() {
         return this.finalClassName;
@@ -75,9 +72,9 @@ public class ClassContainer implements IClassContainer {
     }
 
     @Override
-    public Map<Field, FieldContainer> getSimpleContainers() {
+    public Map<Field, FieldContainer> getFormatSupported(final Format format) {
         return this.fieldContainerMap.entrySet().stream()
-                .filter(e -> e.getValue().isSimple() || e.getValue().isEnumerable())
+                .filter(e -> format.getSupported().contains(e.getValue().getType()))
                 .collect(LinkedHashMap<Field, FieldContainer>::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
                         (m, u) -> {

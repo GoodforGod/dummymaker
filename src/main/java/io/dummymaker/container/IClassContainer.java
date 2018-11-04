@@ -1,6 +1,7 @@
 package io.dummymaker.container;
 
 import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;
 
 import java.lang.reflect.Field;
@@ -53,9 +54,9 @@ public interface IClassContainer {
     Map<Field, FieldContainer> getContainers();
 
     /**
-     * Returns only simple field containers map
+     * Returns only format support field containers map
      *
      * @see FieldContainer
      */
-    Map<Field, FieldContainer> getSimpleContainers();
+    Map<Field, FieldContainer> getFormatSupported(Format format);
 }

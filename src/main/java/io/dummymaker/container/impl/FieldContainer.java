@@ -19,11 +19,12 @@ import static io.dummymaker.util.BasicStringUtils.isEmpty;
  */
 public class FieldContainer {
 
-    private enum Type {
+    public enum Type {
         SIMPLE,
         ENUMERABLE,
         EMBEDDED,
         COLLECTION,
+        MAP,
         ARRAY,
         ARRAY_2D
     }
@@ -59,10 +60,10 @@ public class FieldContainer {
         if (generator == null)
             return Type.SIMPLE;
 
-        if ((generator.equals(SetComplexGenerator.class)
-                || generator.equals(ListComplexGenerator.class)
-                || generator.equals(MapComplexGenerator.class))) {
+        if (generator.equals(SetComplexGenerator.class) || generator.equals(ListComplexGenerator.class)) {
             return Type.COLLECTION;
+        } else if (generator.equals(MapComplexGenerator.class)) {
+            return Type.MAP;
         } else if (generator.equals(EmbeddedGenerator.class)) {
             return Type.EMBEDDED;
         } else if (generator.equals(EnumerateGenerator.class)) {
@@ -74,6 +75,10 @@ public class FieldContainer {
         }
 
         return Type.SIMPLE;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public boolean isSimple() {
