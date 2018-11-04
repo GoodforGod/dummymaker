@@ -1,8 +1,9 @@
 package io.dummymaker.generator.simple.impl.array;
 
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.number.ByteGenerator;
 import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates array of doubles
@@ -10,17 +11,16 @@ import io.dummymaker.generator.simple.impl.number.DoubleBigGenerator;
  * @author GoodforGod
  * @since 04.11.2018
  */
-public class DoubleArrayGenerator implements IGenerator<Double[]> {
+public class DoubleArrayGenerator implements IGenerator<double[][]> {
 
     private final DoubleBigGenerator generator = new DoubleBigGenerator();
-    private final ByteGenerator arrayGenerator = new ByteGenerator();
 
     @Override
-    public Double[] generate() {
-        final int size = arrayGenerator.generate();
-        final Double[] result = new Double[size];
+    public double[][] generate() {
+        final int size = ThreadLocalRandom.current().nextInt(1, 20);
+        final double[][] result = new double[size][size];
         for(int i = 0; i < size; i++)
-            result[i] = generator.generate();
+            result[i][i] = generator.generate();
 
         return result;
     }

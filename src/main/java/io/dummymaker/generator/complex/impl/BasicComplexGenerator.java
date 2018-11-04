@@ -11,6 +11,7 @@ import io.dummymaker.util.BasicCastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.BasicCastUtils.generateObject;
 import static io.dummymaker.util.BasicCastUtils.instantiate;
@@ -27,8 +28,15 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  */
 abstract class BasicComplexGenerator implements IComplexGenerator {
 
+    static final int MIN_DEFAULT = 1;
+    static final int MAX_DEFAULT = 10;
+
     // Lazy initialization
     private IPopulateFactory embeddedFreePopulateFactory;
+
+    boolean isGenDefault(Class<? extends IGenerator> tClass) {
+        return IGenerator.class.equals(tClass);
+    }
 
     <T> T generateValue(final Class<? extends IGenerator> generatorClass,
                         final Class<T> valueClass,
@@ -42,17 +50,30 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
 
     IGenerator getGenerator(final Class<? extends IGenerator> generatorClass,
                             final GeneratorsStorage storage) {
-        if(storage != null)
+        if (storage != null)
             return storage.getGeneratorInstance(generatorClass);
-        if(generatorClass != null)
+        if (generatorClass != null)
             return BasicCastUtils.instantiate(generatorClass);
         return new NullGenerator();
     }
 
     IPopulateFactory getEmbeddedFreePopulateFactory() {
-        if(embeddedFreePopulateFactory == null)
+        if (embeddedFreePopulateFactory == null)
             this.embeddedFreePopulateFactory = new GenPopulateEmbeddedFreeFactory();
         return embeddedFreePopulateFactory;
+    }
+
+    static int genRandomSize(final int min,
+                             final int max) {
+        final int usedMin = (min < 1) ? 0 : min;
+        final int usedMax = (max < 1) ? 0 : max;
+        return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
+    }
+
+    static int genRandomSize(final int min,
+                             final int max,
+                             final int fixed) {
+        return (fixed > -1) ? fixed : genRandomSize(min, max);
     }
 
     @Override

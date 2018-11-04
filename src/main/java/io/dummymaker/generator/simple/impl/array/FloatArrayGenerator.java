@@ -1,8 +1,9 @@
 package io.dummymaker.generator.simple.impl.array;
 
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.number.ByteGenerator;
 import io.dummymaker.generator.simple.impl.number.FloatBigGenerator;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates array of floats
@@ -13,11 +14,10 @@ import io.dummymaker.generator.simple.impl.number.FloatBigGenerator;
 public class FloatArrayGenerator implements IGenerator<Float[]> {
 
     private final FloatBigGenerator generator = new FloatBigGenerator();
-    private final ByteGenerator arrayGenerator = new ByteGenerator();
 
     @Override
     public Float[] generate() {
-        final int size = arrayGenerator.generate();
+        final int size = ThreadLocalRandom.current().nextInt(1, 20);
         final Float[] result = new Float[size];
         for(int i = 0; i < size; i++)
             result[i] = generator.generate();

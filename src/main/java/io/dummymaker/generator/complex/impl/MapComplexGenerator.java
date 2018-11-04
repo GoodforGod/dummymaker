@@ -10,13 +10,18 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
-import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
  * "default comment"
+ *
+ * @see GenMap
+ *
+ * @see io.dummymaker.generator.complex.IComplexGenerator
+ * @see CollectionComplexGenerator
  *
  * @author GoodforGod
  * @since 22.04.2018
@@ -63,7 +68,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
             if(storage == null)
                 return Collections.emptyMap();
 
-            return generateMap(10,
+            return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(keyType),
                     getAutoGenerator(valueType),
                     keyType,
@@ -73,17 +78,16 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
         final GenMap a = ((GenMap) annotation);
 
-        final Class<? extends IGenerator> keyGenerator   = (a.key().equals(IGenerator.class))
+        final Class<? extends IGenerator> keyGenerator   = isGenDefault(a.key())
                 ? getAutoGenerator(keyType)
                 : a.key();
 
-        final Class<? extends IGenerator> valueGenerator = (a.value().equals(IGenerator.class))
+        final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
                 ? getAutoGenerator(valueType)
                 : a.value();
 
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed());
-
-        return generateMap(amount,
+        final int size = genRandomSize(a.min(), a.max(), a.fixed());
+        return generateMap(size,
                 keyGenerator,
                 valueGenerator,
                 keyType,
@@ -93,7 +97,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
     @Override
     public Object generate() {
-        return generateMap(10,
+        return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 IdGenerator.class,
                 IdGenerator.class,
                 Object.class,

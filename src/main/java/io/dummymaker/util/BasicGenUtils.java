@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+import io.dummymaker.generator.complex.impl.ArrayComplexGenerator;
 import io.dummymaker.generator.complex.impl.ListComplexGenerator;
 import io.dummymaker.generator.complex.impl.MapComplexGenerator;
 import io.dummymaker.generator.complex.impl.SetComplexGenerator;
@@ -12,8 +13,10 @@ import io.dummymaker.generator.simple.impl.number.*;
 import io.dummymaker.generator.simple.impl.string.*;
 import io.dummymaker.generator.simple.impl.time.impl.*;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,12 +49,18 @@ public class BasicGenUtils {
     private static Map<Class, List<Class<? extends IGenerator>>> instantiateAutoGeneratorsMap() {
 
         final Map<Class, List<Class<? extends IGenerator>>> collectedGenerators = Stream.of(
-                DoubleBigGenerator.class,
-                DoubleGenerator.class,
+                ByteGenerator.class,
+                ShortGenerator.class,
                 IntegerGenerator.class,
                 LongGenerator.class,
+                FloatGenerator.class,
+                FloatBigGenerator.class,
+                DoubleBigGenerator.class,
+                DoubleGenerator.class,
 
                 // Strings
+                HexNumberGenerator.class,
+                HexDataGenerator.class,
                 CityGenerator.class,
                 CompanyGenerator.class,
                 CountryGenerator.class,
@@ -79,6 +88,7 @@ public class BasicGenUtils {
                 BooleanGenerator.class,
                 ObjectGenerator.class,
                 CharacterGenerator.class,
+                CharGenerator.class,
                 UuidGenerator.class
         ).collect(Collectors.groupingBy(
                 BasicGenUtils::getGeneratorType
@@ -86,15 +96,18 @@ public class BasicGenUtils {
 
         // Complex
         collectedGenerators.put(List.class, singletonList(ListComplexGenerator.class));
-        collectedGenerators.put(Set.class,  singletonList(SetComplexGenerator.class));
-        collectedGenerators.put(Map.class,  singletonList(MapComplexGenerator.class));
+        collectedGenerators.put(Set.class, singletonList(SetComplexGenerator.class));
+        collectedGenerators.put(Map.class, singletonList(MapComplexGenerator.class));
 
         // Primitives
-        collectedGenerators.put(int.class,      singletonList(IntegerGenerator.class));
-        collectedGenerators.put(long.class,     singletonList(LongGenerator.class));
-        collectedGenerators.put(double.class,   Arrays.asList(DoubleGenerator.class, DoubleBigGenerator.class));
-        collectedGenerators.put(char.class,     singletonList(CharacterGenerator.class));
-        collectedGenerators.put(boolean.class,  singletonList(BooleanGenerator.class));
+        collectedGenerators.put(byte.class, singletonList(ByteGenerator.class));
+        collectedGenerators.put(short.class, singletonList(ShortGenerator.class));
+        collectedGenerators.put(int.class, singletonList(IntegerGenerator.class));
+        collectedGenerators.put(long.class, singletonList(LongGenerator.class));
+        collectedGenerators.put(float.class, Arrays.asList(FloatGenerator.class, FloatBigGenerator.class));
+        collectedGenerators.put(double.class, Arrays.asList(DoubleGenerator.class, DoubleBigGenerator.class));
+        collectedGenerators.put(char.class, singletonList(CharGenerator.class));
+        collectedGenerators.put(boolean.class, singletonList(BooleanGenerator.class));
 
         return collectedGenerators;
     }
@@ -105,31 +118,32 @@ public class BasicGenUtils {
                 : ((Class<?>) getGenericType(generator.getGenericInterfaces()[0]));
     }
 
-    public static List<Class<? extends IGenerator>> getAutoGenerators(final Field field) {
-        return getAutoGenerators(field.getDeclaringClass());
-    }
-
-    public static List<Class<? extends IGenerator>> getAutoGenerators(final Class<?> fieldClass) {
-        final List<Class<? extends IGenerator>> autoGenerators = AUTO_GENERATORS.get(fieldClass);
-        return (BasicCollectionUtils.isEmpty(autoGenerators))
-                ? Collections.singletonList(NullGenerator.class)
-                : autoGenerators;
-    }
-
-    public static Class<? extends IGenerator> getAutoGenerator(final Field field) {
-        return (field != null)
-                ? getAutoGenerator(field.getType())
-                : NullGenerator.class;
-    }
-
     public static Class<? extends IGenerator> getAutoGenerator(final Class<?> fieldClass) {
-        if(fieldClass == null)
+        if (fieldClass == null)
             return NullGenerator.class;
 
-        final List<Class<? extends IGenerator>> autoGenerators = AUTO_GENERATORS.get(fieldClass);
+        final List<Class<? extends IGenerator>> generators = AUTO_GENERATORS.get(fieldClass);
         final String fieldName = fieldClass.getSimpleName();
-        return (BasicCollectionUtils.isEmpty(autoGenerators))
-                ? NullGenerator.class
-                : autoGenerators.get(getIndexWithSalt(autoGenerators.size(), fieldName, SALT));
+
+        if (fieldClass.getTypeName().endsWith("[][]"))
+            return ArrayComplexGenerator.class;
+        if (fieldClass.getTypeName().endsWith("[]"))
+            return ArrayComplexGenerator.class;
+        if (BasicCollectionUtils.isEmpty(generators))
+            return NullGenerator.class;
+
+        return generators.get(getIndexWithSalt(generators.size(), fieldName, SALT));
+    }
+
+    public static Class<? extends IGenerator> getAutoGenerator(final String classTypeName) {
+        if (BasicStringUtils.isEmpty(classTypeName))
+            return NullGenerator.class;
+
+        for (Map.Entry<Class, List<Class<? extends IGenerator>>> entry : AUTO_GENERATORS.entrySet()) {
+            if (entry.getKey().getTypeName().equals(classTypeName))
+                return entry.getValue().get(getIndexWithSalt(entry.getValue().size(), classTypeName, SALT));
+        }
+
+        return NullGenerator.class;
     }
 }

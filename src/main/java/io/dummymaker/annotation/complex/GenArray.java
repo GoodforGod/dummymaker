@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.generator.complex.impl.SetComplexGenerator;
+import io.dummymaker.generator.complex.impl.ArrayComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.ElementType;
@@ -10,17 +10,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generate set collection
+ * Generate array
  *
- * @see SetComplexGenerator
+ * @see ArrayComplexGenerator
  *
  * @author GoodforGod
- * @since 06.03.2018
+ * @since 04.11.2018
  */
-@ComplexGen(SetComplexGenerator.class)
+@ComplexGen(ArrayComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenSet {
+public @interface GenArray {
 
     Class<? extends IGenerator> value() default IGenerator.class;
 

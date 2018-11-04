@@ -56,16 +56,16 @@ public class PopulateScanner implements IPopulateScanner {
     public Map<Field, GenContainer> scan(final Class t) {
         final Map<Field, GenContainer> populateAnnotationMap = new LinkedHashMap<>();
 
-        // Check if class is auto generatable
+        // Check if class is auto generative
         final boolean isAutoGen = Arrays.stream(t.getDeclaredAnnotations())
                 .anyMatch(a -> a.annotationType().equals(GenAuto.class));
 
         for(final Field field : t.getDeclaredFields()) {
             GenContainer genContainer = findGenAnnotation(field);
 
-            // Create auto gen container is class is auto generatable
+            // Create auto gen container class is auto generative
             if(genContainer == null && isAutoGen) {
-                Class<? extends IGenerator> autoGenerator = getAutoGenerator(field);
+                Class<? extends IGenerator> autoGenerator = getAutoGenerator(field.getType());
                 if (autoGenerator.equals(NullGenerator.class)) {
                     // Try to treat field as embedded object, when no suitable generator
                     autoGenerator = EmbeddedGenerator.class;

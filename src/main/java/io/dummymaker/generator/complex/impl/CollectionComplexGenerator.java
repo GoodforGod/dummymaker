@@ -20,7 +20,7 @@ import java.util.List;
  */
 abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
-    <T> List<T> generateList(final int amount,
+    <T> List<T> generateList(final int size,
                              final Class<? extends IGenerator> valueGenerator,
                              final Class<T> fieldClass,
                              final GeneratorsStorage storage) {
@@ -30,9 +30,9 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
         if(initial == null)
             return Collections.emptyList();
 
-        final List<T> list = new ArrayList<>(amount);
+        final List<T> list = new ArrayList<>(size);
         list.add(initial);
-        for (int i = 0; i < amount - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             final T t = generateValue(valueGenerator, fieldClass, storage);
             list.add(t);
         }

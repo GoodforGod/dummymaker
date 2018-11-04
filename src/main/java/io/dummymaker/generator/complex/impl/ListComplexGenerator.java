@@ -9,9 +9,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
-import static io.dummymaker.util.BasicCollectionUtils.generateRandomAmount;
 import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 
 /**
@@ -39,25 +39,24 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             if(storage == null)
                 return Collections.emptyList();
 
-            return generateList(10,
+            return generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(valueClass),
                     ((Class<?>) valueClass),
                     storage);
         }
 
         final GenList a = ((GenList) annotation);
-        final Class<? extends IGenerator> generatorClass = (a.value().equals(IGenerator.class))
+        final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
                 ? getAutoGenerator(valueClass)
                 : a.value();
 
-        final int amount = generateRandomAmount(a.min(), a.max(), a.fixed());
-
-        return generateList(amount, generatorClass, ((Class<?>) valueClass), storage);
+        final int size = genRandomSize(a.min(), a.max(), a.fixed());
+        return generateList(size, generatorClass, ((Class<?>) valueClass), storage);
     }
 
     @Override
     public Object generate() {
-        return generateList(10,
+        return generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 IdGenerator.class,
                 String.class,
                 null);

@@ -170,8 +170,8 @@ public class ProduceFactoryTest {
         assertNotNull(dummyAuto.getMap());
         assertFalse(dummyAuto.getList().isEmpty());
         assertFalse(dummyAuto.getMap().isEmpty());
-        assertEquals(10, dummyAuto.getList().size());
-        assertEquals(10, dummyAuto.getMap().size());
+        assertNotEquals(0, dummyAuto.getList().size());
+        assertNotEquals(0, dummyAuto.getMap().size());
 
         assertNotNull(dummyAuto.getDummyAuto());
 
@@ -183,8 +183,8 @@ public class ProduceFactoryTest {
         assertNotNull(innerDummy.getMap());
         assertFalse(innerDummy.getList().isEmpty());
         assertFalse(innerDummy.getMap().isEmpty());
-        assertEquals(10, innerDummy.getList().size());
-        assertEquals(10, innerDummy.getMap().size());
+        assertNotEquals(10, innerDummy.getList().size());
+        assertNotEquals(10, innerDummy.getMap().size());
     }
 
     @Test

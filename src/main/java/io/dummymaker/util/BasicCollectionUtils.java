@@ -32,8 +32,8 @@ public class BasicCollectionUtils {
 
     public static int generateRandomAmount(final int min,
                                            final int max) {
-        final int usedMin = (min < 1) ? 0 : min;
-        final int usedMax = (max < 1) ? 0 : max;
+        final int usedMin = (min < 1) ? 1 : min;
+        final int usedMax = (max < 1) ? 1 : max;
 
         return (usedMin >= usedMax)
                 ? usedMin
@@ -43,7 +43,7 @@ public class BasicCollectionUtils {
     public static int generateRandomAmount(final int min,
                                            final int max,
                                            final int fixed) {
-        return (fixed > 0)
+        return (fixed > -1)
                 ? fixed
                 : generateRandomAmount(min, max);
     }
