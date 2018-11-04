@@ -70,25 +70,20 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                                  final Set<Field> nullableFields,
                                  final int currentEmbeddedDepth) {
         final Map<Field, GenContainer> genContainers = this.populateScanner.scan(t.getClass());
-
         for (final Map.Entry<Field, GenContainer> annotatedField : genContainers.entrySet()) {
             final Field field = annotatedField.getKey();
-
             // If field had errors or null gen in prev populate iteration, just skip that field
             if (nullableFields.contains(field))
                 continue;
 
             try {
                 field.setAccessible(true);
-
                 final Object objValue = generateObject(field,
                         annotatedField.getValue(),
                         enumeratesMap,
                         nullableFields,
                         currentEmbeddedDepth);
-
                 field.set(t, objValue);
-
             } catch (ClassCastException e) {
                 logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
                 nullableFields.add(field); // skip field due to error as if it null
@@ -103,7 +98,6 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                 annotatedField.getKey().setAccessible(false);
             }
         }
-
         return t;
     }
 

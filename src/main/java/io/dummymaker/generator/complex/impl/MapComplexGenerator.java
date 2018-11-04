@@ -73,7 +73,6 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         }
 
         final GenMap a = ((GenMap) annotation);
-
         final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
                 ? getAutoGenerator(keyType)
                 : a.key();
@@ -83,12 +82,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 : a.value();
 
         final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        return generateMap(size,
-                keyGenerator,
-                valueGenerator,
-                keyType,
-                valueType,
-                storage);
+        return generateMap(size, keyGenerator, valueGenerator, keyType, valueType, storage);
     }
 
     @Override
