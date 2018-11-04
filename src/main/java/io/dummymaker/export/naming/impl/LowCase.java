@@ -1,5 +1,6 @@
 package io.dummymaker.export.naming.impl;
 
+
 import io.dummymaker.export.naming.ICase;
 
 /**

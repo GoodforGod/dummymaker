@@ -2,6 +2,7 @@ package io.dummymaker.export.naming.impl;
 
 import io.dummymaker.export.naming.ICase;
 
+
 /**
  * Returns default value as is.
  *
