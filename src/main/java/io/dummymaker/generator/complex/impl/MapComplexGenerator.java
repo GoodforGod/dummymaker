@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenMap;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
@@ -32,19 +33,21 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final Class<? extends IGenerator> valueGenerator,
                             final Class<?> keyFieldType,
                             final Class<?> valueFieldType,
-                            final GeneratorsStorage storage) {
+                            final GeneratorsStorage storage,
+                            final int depth,
+                            final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final Object initialKey = generateValue(keyGenerator, keyFieldType, storage);
-        final Object initialValue = generateValue(valueGenerator, valueFieldType, storage);
+        final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth);
+        final Object initialValue = generateValue(valueGenerator, valueFieldType, storage, depth);
         if (initialKey == null && initialValue == null)
             return Collections.emptyMap();
 
         final Map map = new HashMap<>(amount);
         map.put(initialKey, initialValue);
         for (int i = 0; i < amount - 1; i++) {
-            final Object key = generateValue(keyGenerator, keyFieldType, storage);
-            final Object value = generateValue(valueGenerator, valueFieldType, storage);
+            final Object key = generateValue(keyGenerator, keyFieldType, storage, depth);
+            final Object value = generateValue(valueGenerator, valueFieldType, storage, depth);
 
             if (key != null && value != null) {
                 map.put(key, value);
@@ -57,7 +60,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage) {
+                           final GeneratorsStorage storage,
+                           final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;
 
@@ -69,7 +73,9 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                     getAutoGenerator(valueType),
                     keyType,
                     valueType,
-                    storage);
+                    storage,
+                    depth,
+                    GenEmbedded.MAX);
         }
 
         final GenMap a = ((GenMap) annotation);
@@ -82,7 +88,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 : a.value();
 
         final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        return generateMap(size, keyGenerator, valueGenerator, keyType, valueType, storage);
+        return generateMap(size, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
     }
 
     @Override
@@ -92,6 +98,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 IdGenerator.class,
                 Object.class,
                 Object.class,
-                null);
+                null,
+                GenEmbedded.MAX,
+                1);
     }
 }

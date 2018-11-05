@@ -124,7 +124,9 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         } else if (enumerateMap.containsKey(field)) {
             generated = generateEnumerateObject(field, enumerateMap);
         } else if (container.isComplex()) {
-            generated = ((IComplexGenerator) generator).generate(annotation, field, genStorage);
+            // If complexGen can generate embedded objects
+            // And not handling it like BasicComplexGenerator, you are StackOverFlowed
+            generated = ((IComplexGenerator) generator).generate(annotation, field, genStorage, currentEmbeddedDepth);
         } else {
             generated = generator.generate();
         }
@@ -156,11 +158,10 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
             return null;
         }
 
-        final int nextEmbeddedDepth = currentEmbeddedDepth + 1;
         return populateEntity(embedded,
                 buildEnumerateMap(field.getType()),
                 buildNullableSet(),
-                nextEmbeddedDepth);
+                currentEmbeddedDepth + 1);
     }
 
     /**
@@ -176,6 +177,16 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         return objValue;
     }
 
+    <T> T populate(final T t,
+                   final int depth) {
+        if (t == null)
+            return null;
+
+        return populateEntity(t,
+                buildEnumerateMap(t.getClass()),
+                buildNullableSet(),
+                depth);
+    }
 
     @Override
     public <T> T populate(final T t) {

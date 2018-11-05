@@ -23,7 +23,8 @@ public class NullGenerator implements IGenerator<Object>, IComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage) {
+                           final GeneratorsStorage storage,
+                           final int depth) {
         return null;
     }
 }

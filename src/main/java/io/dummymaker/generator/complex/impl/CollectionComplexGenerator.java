@@ -23,17 +23,19 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
     <T> List<T> generateList(final int size,
                              final Class<? extends IGenerator> valueGenerator,
                              final Class<T> fieldClass,
-                             final GeneratorsStorage storage) {
+                             final GeneratorsStorage storage,
+                             final int depth,
+                             final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final T initial = generateValue(valueGenerator, fieldClass, storage);
+        final T initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
         if (initial == null)
             return Collections.emptyList();
 
         final List<T> list = new ArrayList<>(size);
         list.add(initial);
         for (int i = 0; i < size - 1; i++) {
-            final T t = generateValue(valueGenerator, fieldClass, storage);
+            final T t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
             list.add(t);
         }
 
@@ -43,7 +45,8 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
     @Override
     public abstract Object generate(final Annotation annotation,
                                     final Field field,
-                                    final GeneratorsStorage storage);
+                                    final GeneratorsStorage storage,
+                                    final int depth);
 
     @Override
     public abstract Object generate();

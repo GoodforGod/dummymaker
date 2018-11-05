@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenArray2D;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
@@ -26,7 +27,10 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 public class Array2DComplexGenerator extends CollectionComplexGenerator {
 
     @Override
-    public Object generate(Annotation annotation, Field field, GeneratorsStorage storage) {
+    public Object generate(final Annotation annotation,
+                           final Field field,
+                           final GeneratorsStorage storage,
+                           final int depth) {
         if (field == null)
             return null;
 
@@ -34,7 +38,7 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            return toArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage);
+            return toArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage, depth, 1);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);
@@ -44,25 +48,27 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
 
         final int sizeFirst = genRandomSize(a.minFirst(), a.maxFirst(), a.fixedFirst());
         final int sizeSecond = genRandomSize(a.minSecond(), a.maxSecond(), a.fixedSecond());
-        return toArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage);
+        return toArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
         final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        return toArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null);
+        return toArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
     private Object toArray2D(final int firstSize,
                              final int secondSize,
                              final Class<?> valueClass,
                              final Class<? extends IGenerator> valueGenerator,
-                             final GeneratorsStorage storage) {
+                             final GeneratorsStorage storage,
+                             final int depth,
+                             final int maxDepth) {
         final Object array = Array.newInstance(valueClass, firstSize, secondSize);
         for (int i = 0; i < firstSize; i++) {
             final Object row = Array.get(array, i);
-            final List<?> objects = generateList(secondSize, valueGenerator, valueClass, storage);
+            final List<?> objects = generateList(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
             for (int j = 0; j < secondSize; j++)
                 Array.set(row, j, objects.get(j));
         }

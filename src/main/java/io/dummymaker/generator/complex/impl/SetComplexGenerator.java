@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
@@ -29,7 +30,8 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage) {
+                           final GeneratorsStorage storage,
+                           final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Set.class))
             return null;
 
@@ -38,7 +40,9 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
             return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(valueClass),
                     valueClass,
-                    storage));
+                    storage,
+                    depth,
+                    1));
         }
 
         final GenSet a = ((GenSet) annotation);
@@ -47,7 +51,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
                 : a.value();
 
         final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        return new HashSet<>(generateList(size, generatorClass, valueClass, storage));
+        return new HashSet<>(generateList(size, generatorClass, valueClass, storage, depth, a.depth()));
     }
 
     @Override
@@ -55,6 +59,8 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
         return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 IdGenerator.class,
                 Object.class,
-                null));
+                null,
+                GenEmbedded.MAX,
+                1));
     }
 }

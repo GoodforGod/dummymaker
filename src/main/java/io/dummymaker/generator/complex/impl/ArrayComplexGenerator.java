@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenArray;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
@@ -26,17 +27,21 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
-    public Object generate(Annotation annotation, Field field, GeneratorsStorage storage) {
+    public Object generate(final Annotation annotation,
+                           final Field field,
+                           final GeneratorsStorage storage,
+                           final int depth) {
         if (field == null)
             return null;
 
         final Class<?> valueClass = field.getType().getComponentType();
-        final Object array = Array.newInstance(valueClass, 2, 2);
         if (annotation == null) {
             List<?> objects = generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(valueClass),
                     ((Class<?>) valueClass),
-                    storage);
+                    storage,
+                    depth,
+                    1);
 
             return toArray(valueClass, objects);
         }
@@ -47,7 +52,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
                 : a.value();
 
         final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        List<?> objects = generateList(size, generatorClass, ((Class<?>) valueClass), storage);
+        List<?> objects = generateList(size, generatorClass, ((Class<?>) valueClass), storage, depth, a.depth());
         return toArray(valueClass, objects);
     }
 
@@ -56,7 +61,9 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
         List<String> strings = generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 IdGenerator.class,
                 String.class,
-                null);
+                null,
+                GenEmbedded.MAX,
+                1);
 
         return toArray(Object.class, strings);
     }

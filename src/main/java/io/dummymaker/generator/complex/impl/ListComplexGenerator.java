@@ -1,6 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
@@ -28,7 +29,8 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage) {
+                           final GeneratorsStorage storage,
+                           final int depth) {
         if (field == null || !field.getType().isAssignableFrom(List.class))
             return null;
 
@@ -37,7 +39,9 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             return generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     getAutoGenerator(valueClass),
                     ((Class<?>) valueClass),
-                    storage);
+                    storage,
+                    depth,
+                    1);
         }
 
         final GenList a = ((GenList) annotation);
@@ -46,7 +50,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
                 : a.value();
 
         final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        return generateList(size, generatorClass, ((Class<?>) valueClass), storage);
+        return generateList(size, generatorClass, ((Class<?>) valueClass), storage, depth, a.depth());
     }
 
     @Override
@@ -54,6 +58,8 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
         return generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 IdGenerator.class,
                 String.class,
-                null);
+                null,
+                GenEmbedded.MAX,
+                1);
     }
 }
