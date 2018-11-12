@@ -9,6 +9,7 @@ import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,9 +22,8 @@ import static io.dummymaker.util.BasicDateUtils.*;
 /**
  * Export objects as SQL insert query.
  *
- * @see Format
- *
  * @author GoodforGod
+ * @see Format
  * @since 25.02.2018
  */
 public class SqlExporter extends BasicExporter {
@@ -86,17 +86,23 @@ public class SqlExporter extends BasicExporter {
      */
     private HashMap<Class, String> buildDefaultDataTypeMap() {
         return new HashMap<Class, String>() {{
-            put(Long.class, "BIGINT");
-            put(long.class, "BIGINT");
-            put(Date.class, "BIGINT");
-            put(Double.class, "DOUBLE PRECISION");
-            put(double.class, "DOUBLE PRECISION");
-            put(Integer.class, "INT");
+            put(boolean.class, "BOOLEAN");
+            put(Boolean.class, "BOOLEAN");
+            put(byte.class, "BYTE");
+            put(Byte.class, "BYTE");
+            put(short.class, "INT");
+            put(Short.class, "INT");
             put(int.class, "INT");
-            put(Character.class, "CHAR");
+            put(Integer.class, "INT");
+            put(long.class, "BIGINT");
+            put(Long.class, "BIGINT");
+            put(float.class, "DOUBLE PRECISION");
+            put(Float.class, "DOUBLE PRECISION");
+            put(double.class, "DOUBLE PRECISION");
+            put(Double.class, "DOUBLE PRECISION");
             put(char.class, "CHAR");
-            put(Boolean.class, "BIT");
-            put(boolean.class, "BIT");
+            put(Character.class, "CHAR");
+            put(Date.class, "BIGINT");
             put(String.class, "VARCHAR");
             put(Object.class, "VARCHAR");
             put(Timestamp.class, "TIMESTAMP");
@@ -113,12 +119,11 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert Java Field Type to Sql Data Type
      *
-     * @param exportFieldName final field name
+     * @param exportFieldType final field name
      * @return sql data type
      */
-    private String translateJavaTypeToSqlType(final String exportFieldName,
-                                              final IClassContainer container) {
-        return dataTypes.getOrDefault(container.getField(exportFieldName).getType(), "VARCHAR");
+    private String translateJavaTypeToSqlType(final Class<?> exportFieldType) {
+        return dataTypes.getOrDefault(exportFieldType, "VARCHAR");
     }
 
     /**
@@ -152,9 +157,19 @@ public class SqlExporter extends BasicExporter {
      */
     private String buildInsertNameTypeQuery(final String finalFieldName,
                                             final IClassContainer container) {
-        return finalFieldName + "\t" + translateJavaTypeToSqlType(finalFieldName, container);
+        final Class<?> exportFieldType = container.getField(finalFieldName).getType();
+        switch (container.getContainer(finalFieldName).getType()) {
+            case ARRAY:
+            case COLLECTION:
+                final Class<?> type = exportFieldType.getComponentType();
+                return finalFieldName + "\t" + translateJavaTypeToSqlType(type) + "[]";
+            case ARRAY_2D:
+                final Class<?> type2D = exportFieldType.getComponentType().getComponentType();
+                return finalFieldName + "\t" + translateJavaTypeToSqlType(type2D) + "[][]";
+            default:
+                return finalFieldName + "\t" + translateJavaTypeToSqlType(exportFieldType);
+        }
     }
-
 
     /**
      * Build insert query part with values
@@ -226,13 +241,38 @@ public class SqlExporter extends BasicExporter {
      */
     private String convertFieldValue(final Field field,
                                      final ExportContainer container) {
-        if (field.getType().equals(String.class))
+        final boolean isArray2D = (container.getType() == FieldContainer.Type.ARRAY_2D);
+        if (field.getType().equals(String.class)) {
             return wrapWithComma(container.getExportValue());
-        else if (isTypeTimestampConvertible(field))
+        } else if (isTypeTimestampConvertible(field)) {
             return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
-        else
-            return container.getExportValue();
+        } else if (container.getType() == FieldContainer.Type.ARRAY
+                || isArray2D
+                || container.getType() == FieldContainer.Type.COLLECTION) {
 
+            final Class<?> componentType = extractType(container.getType(), field);
+            final String sqlType = dataTypes.getOrDefault(componentType, "VARCHAR");
+            final String result = (sqlType.equals("VARCHAR") || sqlType.equals("CHAR"))
+                    ? container.getExportValue().replace("[", "{\"").replace("]", "\"}").replace(",", "\",\"").replace(" ", "")
+                    : container.getExportValue().replace("[", "{").replace("]", "}");
+            return wrapWithComma(result);
+        }
+
+        return container.getExportValue();
+    }
+
+    private Class<?> extractType(FieldContainer.Type type,
+                                 Field field) {
+        switch (type) {
+            case ARRAY:
+                return field.getType().getComponentType();
+            case ARRAY_2D:
+                return field.getType().getComponentType().getComponentType();
+            case COLLECTION:
+                return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+            default:
+                return String.class;
+        }
     }
 
     /**
@@ -363,8 +403,7 @@ public class SqlExporter extends BasicExporter {
             builder.append(format(t, container));
 
             // End insert Query if no elements left or need to organize next batch
-            final boolean hasNext = iterator.hasNext();
-            if (i < 0 || !hasNext) {
+            if (i < 0 || !iterator.hasNext()) {
                 builder.append(";\n");
             } else {
                 builder.append(",\n");

@@ -1,7 +1,8 @@
 package io.dummymaker.generator.complex.impl;
 
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
-import io.dummymaker.factory.IPopulateFactory;
+import io.dummymaker.factory.IPopulateEmbeddedFactory;
 import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
@@ -32,34 +33,51 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     static final int MAX_DEFAULT = 10;
 
     // Lazy initialization
-    private IPopulateFactory embeddedFreePopulateFactory;
+    private IPopulateEmbeddedFactory embeddedFreePopulateFactory;
 
     boolean isGenDefault(Class<? extends IGenerator> generatorClass) {
         return IGenerator.class.equals(generatorClass);
     }
 
-    <T> T generateValue(final Class<? extends IGenerator> valueGeneratorClass,
+    <T> T generateValue(final Class<? extends IGenerator> generatorClass,
                         final Class<T> valueClass,
-                        final GeneratorsStorage storage) {
-        if ((EmbeddedGenerator.class.equals(valueGeneratorClass))) {
-            return getEmbeddedFreePopulateFactory().populate(instantiate(valueClass));
+                        final GeneratorsStorage storage,
+                        final int depth) {
+        return generateValue(generatorClass, valueClass, storage, depth, 1);
+    }
+
+    <T> T generateValue(final Class<? extends IGenerator> generatorClass,
+                        final Class<T> valueClass,
+                        final GeneratorsStorage storage,
+                        final int depth,
+                        final int depthLimit) {
+        final int realDepthLimit = (depthLimit > GenEmbedded.MAX) ? GenEmbedded.MAX : (depthLimit < 1 ? 1 : depthLimit);
+        if ((EmbeddedGenerator.class.equals(generatorClass) || NullGenerator.class.equals(generatorClass))
+                && depth <= realDepthLimit) {
+            return getEmbeddedFreePopulateFactory().populate(instantiate(valueClass), depth + 1);
         }
 
-        final IGenerator valueGenerator = getGenerator(valueGeneratorClass, storage);
-        return generateObject(valueGenerator, valueClass);
+        final IGenerator generator = getGenerator(generatorClass, storage);
+        return generateObject(generator, valueClass);
     }
 
     IGenerator getGenerator(final Class<? extends IGenerator> generatorClass,
                             final GeneratorsStorage storage) {
-        if (storage != null) {
-            return storage.getGenInstance(generatorClass);
-        } else if (generatorClass != null) {
-            return BasicCastUtils.instantiate(generatorClass);
-        }
-        return new NullGenerator();
+        if (generatorClass == null)
+            return new NullGenerator();
+
+        return (storage != null)
+                ? storage.getGenInstance(generatorClass)
+                : BasicCastUtils.instantiate(generatorClass);
     }
 
-    IPopulateFactory getEmbeddedFreePopulateFactory() {
+    /**
+     * Use with CAUTION
+     * You could fall into recursion if not handling it like here
+     *
+     * @return embeddedFreePopulateFactory
+     */
+    IPopulateEmbeddedFactory getEmbeddedFreePopulateFactory() {
         if (embeddedFreePopulateFactory == null) {
             this.embeddedFreePopulateFactory = new GenPopulateEmbeddedFreeFactory();
         }
@@ -75,7 +93,8 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     @Override
     public abstract Object generate(final Annotation annotation,
                                     final Field field,
-                                    final GeneratorsStorage storage);
+                                    final GeneratorsStorage storage,
+                                    final int depth);
 
     @Override
     public abstract Object generate();

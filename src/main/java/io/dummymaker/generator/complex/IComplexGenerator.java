@@ -21,5 +21,6 @@ public interface IComplexGenerator extends IGenerator<Object> {
 
     Object generate(final Annotation annotation,
                     final Field field,
-                    final GeneratorsStorage storage);
+                    final GeneratorsStorage storage,
+                    final int depth);
 }

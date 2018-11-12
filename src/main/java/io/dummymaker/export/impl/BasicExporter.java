@@ -20,9 +20,8 @@ import static io.dummymaker.util.BasicStringUtils.isBlank;
 /**
  * Basic abstract exporter implementation
  *
- * @see IExporter
- *
  * @author GoodforGod
+ * @see IExporter
  * @since 25.02.2018
  */
 abstract class BasicExporter implements IExporter {
@@ -63,7 +62,7 @@ abstract class BasicExporter implements IExporter {
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(final T t) {
-        return new ClassContainer(t, caseUsed);
+        return new ClassContainer(t, caseUsed, format);
     }
 
     /**
@@ -132,36 +131,65 @@ abstract class BasicExporter implements IExporter {
         if (exportFieldValue.getClass().equals(Date.class))
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
 
-        if (this.format == Format.JSON) {
-            if (FieldContainer.Type.ARRAY.equals(type)) {
-                Class<?> arrayType = exportFieldValue.getClass().getComponentType();
-                if(arrayType.equals(byte.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((byte[]) exportFieldValue));
-                } else if(arrayType.equals(short.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((short[]) exportFieldValue));
-                } else if(arrayType.equals(char.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((char[]) exportFieldValue));
-                } else if(arrayType.equals(int.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((int[]) exportFieldValue));
-                } else if(arrayType.equals(long.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((long[]) exportFieldValue));
-                } else if(arrayType.equals(float.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((float[]) exportFieldValue));
-                } else if(arrayType.equals(double.class)) {
-                    return ExportContainer.asArray(exportFieldName, Arrays.toString((double[]) exportFieldValue));
-                }
-                return ExportContainer.asArray(exportFieldName, Arrays.toString((Object[]) exportFieldValue));
-            } else if (FieldContainer.Type.ARRAY_2D.equals(type)) {
-                return ExportContainer.asArray2D(exportFieldName,
-                        Arrays.deepToString((Object[]) exportFieldValue));
-            } else if (FieldContainer.Type.COLLECTION.equals(type)) {
-                return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
-            } else if (FieldContainer.Type.MAP.equals(type)) {
-                return ExportContainer.asMap(exportFieldName, convertAsMap(exportFieldValue));
+        if (this.format.isTypeSupported(type)) {
+            switch (type) {
+                case ARRAY:
+                    String convertValue = convertAsArray(exportFieldValue);
+                    return ExportContainer.asArray(exportFieldName, convertValue);
+                case ARRAY_2D:
+                    return ExportContainer.asArray2D(exportFieldName,
+                            Arrays.deepToString((Object[]) exportFieldValue));
+                case COLLECTION:
+                    return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
+                case MAP:
+                    return ExportContainer.asMap(exportFieldName, convertAsMap(exportFieldValue));
+
+                default:
+                    break;
             }
         }
 
         return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
+    }
+
+    private String convertAsArray2D(Object exportValue) {
+        Class<?> arrayType = exportValue.getClass().getComponentType();
+        if (arrayType.equals(byte.class)) {
+            return Arrays.toString((byte[][]) exportValue);
+        } else if (arrayType.equals(short.class)) {
+            return Arrays.toString((short[][]) exportValue);
+        } else if (arrayType.equals(char.class)) {
+            return Arrays.toString((char[][]) exportValue);
+        } else if (arrayType.equals(int.class)) {
+            return Arrays.toString((int[][]) exportValue);
+        } else if (arrayType.equals(long.class)) {
+            return Arrays.toString((long[][]) exportValue);
+        } else if (arrayType.equals(float.class)) {
+            return Arrays.toString((float[][]) exportValue);
+        } else if (arrayType.equals(double.class)) {
+            return Arrays.toString((double[][]) exportValue);
+        }
+        return Arrays.toString((Object[][]) exportValue);
+    }
+
+    private String convertAsArray(Object exportValue) {
+        Class<?> arrayType = exportValue.getClass().getComponentType();
+        if (arrayType.equals(byte.class)) {
+            return Arrays.toString((byte[]) exportValue);
+        } else if (arrayType.equals(short.class)) {
+            return Arrays.toString((short[]) exportValue);
+        } else if (arrayType.equals(char.class)) {
+            return Arrays.toString((char[]) exportValue);
+        } else if (arrayType.equals(int.class)) {
+            return Arrays.toString((int[]) exportValue);
+        } else if (arrayType.equals(long.class)) {
+            return Arrays.toString((long[]) exportValue);
+        } else if (arrayType.equals(float.class)) {
+            return Arrays.toString((float[]) exportValue);
+        } else if (arrayType.equals(double.class)) {
+            return Arrays.toString((double[]) exportValue);
+        }
+        return Arrays.toString((Object[]) exportValue);
     }
 
     private String convertAsMap(Object exportMap) {

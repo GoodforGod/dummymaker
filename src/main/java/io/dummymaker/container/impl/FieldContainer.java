@@ -101,7 +101,7 @@ public class FieldContainer {
         return type.equals(Type.ARRAY);
     }
 
-    public boolean isArrayTwoDimension() {
+    public boolean isArray2D() {
         return type.equals(Type.ARRAY_2D);
     }
 

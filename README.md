@@ -22,14 +22,14 @@ Also it is possible to easily extend library functionality by creating your own 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.1.2'
+    compile 'com.github.goodforgod:dummymaker:1.1.3'
 }
 ```
 
@@ -142,6 +142,7 @@ Annotations support special attributes like:
 * *max* - maximum entities generated amount.
 * *fixed* - fixed number entities generated amount.
 * *value* - *IGenerator* generator class to build values using it.
+* *depth* - Depth for embedded objects (if such presents).
 
 **GenArray2D** annotation allow you to generate two dimension array of any type library provides generators for. 
 Arrays in classes annotated with *@GenAuto* will be generated automatically.
@@ -169,6 +170,7 @@ Annotations support special attributes like:
 * *max* - maximum entities generated amount.
 * *fixed* - fixed number entities generated amount.
 * *value* - *IGenerator* generator class to build values using it.
+* *depth* - Depth for embedded objects (if such presents).
 
 This attributes are used by *GenMap* annotation only (instead of *generator* attribute):
 * *key* - *IGenerator* generator class to build map *keys* using it.
@@ -502,6 +504,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
 
 **1.1.2** - Full primitive support, single or two dimension array support, jsonExporter collection, map, array support.
 

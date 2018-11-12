@@ -8,6 +8,8 @@ import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.writer.IWriter;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,10 +77,46 @@ public class JsonExporter extends BasicExporter {
         return "\"" + value + "\"";
     }
 
-    private String wrapWithQuotes(final ExportContainer container) {
-        return (container.getType().equals(FieldContainer.Type.SIMPLE))
-                ? "\"" + container.getExportValue() + "\""
-                : container.getExportValue();
+    private String wrapWithQuotes(final ExportContainer container,
+                                  final IClassContainer classContainer) {
+        Class<?> aClass = extractType(container.getType(), classContainer.getField(container.getExportName()));
+        boolean quotes = isTypeNeedQuotes(aClass);
+        if (!quotes)
+            return container.getExportValue();
+
+        if (container.getType().equals(FieldContainer.Type.ARRAY)
+                || container.getType().equals(FieldContainer.Type.ARRAY_2D)
+                || container.getType().equals(FieldContainer.Type.COLLECTION))
+            return container.getExportValue().replace("[", "[\"").replace("]", "\"]").replace(",", "\",\"").replace(" ", "");
+
+        return "\"" + container.getExportValue() + "\"";
+    }
+
+    private boolean isTypeNeedQuotes(Class<?> classType) {
+        return !classType.equals(int.class)
+                && !classType.equals(long.class)
+                && !classType.equals(short.class)
+                && !classType.equals(double.class)
+                && !classType.equals(float.class)
+                && !classType.equals(Integer.class)
+                && !classType.equals(Long.class)
+                && !classType.equals(Short.class)
+                && !classType.equals(Double.class)
+                && !classType.equals(Float.class);
+    }
+
+    private Class<?> extractType(FieldContainer.Type type,
+                                 Field field) {
+        switch (type) {
+            case ARRAY:
+                return field.getType().getComponentType();
+            case ARRAY_2D:
+                return field.getType().getComponentType().getComponentType();
+            case COLLECTION:
+                return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+            default:
+                return field.getType();
+        }
     }
 
     /**
@@ -139,7 +177,7 @@ public class JsonExporter extends BasicExporter {
         final StringBuilder builder = new StringBuilder(openValueTag);
 
         final String valueResult = exportContainers.stream()
-                .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c))
+                .map(c -> fieldTabs + wrapWithQuotes(c.getExportName()) + ":" + wrapWithQuotes(c, container))
                 .collect(Collectors.joining(valueDelimiter));
 
         builder.append(valueResult)

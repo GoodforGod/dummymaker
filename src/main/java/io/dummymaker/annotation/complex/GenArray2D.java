@@ -32,4 +32,6 @@ public @interface GenArray2D {
 
     int fixedFirst() default -1;
     int fixedSecond() default -1;
+
+    int depth() default 1;
 }

@@ -31,4 +31,6 @@ public @interface GenMap {
     int max() default 10;
 
     int fixed() default -1;
+
+    int depth() default 1;
 }
