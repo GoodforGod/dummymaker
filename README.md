@@ -4,17 +4,15 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
 
-Library can produce Dummies using special *factories*, *populate* their fields with values via special *Gen* annotations and *generators*, *export* them in **CSV/JSON/XML/SQL** formats.
+Library can generate Dummies using special *factories*, *populate* their fields with unique values via special *Gen* annotations, *export* them in **CSV/JSON/XML/SQL** formats.
 
-Also it is possible to easily extend library functionality by creating your own *Gen* annotations, *IGenerator* generators, *IGenerateFactories* factories to populate Dummy object fields *in your way*.
-
-*Step by step guide how to produce and export your first Dummy:*
+*How to produce your first **1.000.000** unique Dummies*
 1) Create Dummy. 
-2) *Annotate* Dummies fields with special *Gen* annotations. (Or check [GenAuto](#auto-gen-magic) annotation)
-3) Use *Factory* to populate/produce Dummy.
-4) Export Dummy by using special *Exporter*.
+2) *Annotate* Dummy with special *[GenAuto](#auto-gen-magic)* annotation.
+3) Use *GenProduceFactory* to produce *1.000.000* Dummies.
+4) Done.
 
-![](https://media.giphy.com/media/1msHfmVdtuwkXww4ZC/giphy.gif)
+![](https://media.giphy.com/media/2kVkTxa5gHoWWKrg5O/giphy.gif)
 
 ## Dependency :rocket:
 **Maven**
