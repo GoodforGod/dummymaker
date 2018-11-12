@@ -43,7 +43,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
                         final Class<T> valueClass,
                         final GeneratorsStorage storage,
                         final int depth) {
-        return generateValue(generatorClass, valueClass, storage, depth, GenEmbedded.MAX);
+        return generateValue(generatorClass, valueClass, storage, depth, 1);
     }
 
     <T> T generateValue(final Class<? extends IGenerator> generatorClass,

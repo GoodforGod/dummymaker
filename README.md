@@ -22,14 +22,14 @@ Also it is possible to easily extend library functionality by creating your own 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.1.2'
+    compile 'com.github.goodforgod:dummymaker:1.1.3'
 }
 ```
 
@@ -502,6 +502,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
 
 **1.1.2** - Full primitive support, single or two dimension array support, jsonExporter collection, map, array support.
 
