@@ -110,14 +110,14 @@ public class ScannerImplTest {
     }
 
     @Test
-    public void scannerForExportEmbeddedFreeCollectionAnnotation() throws NoSuchFieldException {
+    public void scannerForExportEmbeddedFreeCollectionAnnotation() {
         IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
 
         Map<Field, GenContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
-        assertTrue(fields.isEmpty());
+        assertFalse(fields.isEmpty());
     }
 
     @Test
