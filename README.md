@@ -142,6 +142,7 @@ Annotations support special attributes like:
 * *max* - maximum entities generated amount.
 * *fixed* - fixed number entities generated amount.
 * *value* - *IGenerator* generator class to build values using it.
+* *depth* - Depth for embedded objects (if such presents).
 
 **GenArray2D** annotation allow you to generate two dimension array of any type library provides generators for. 
 Arrays in classes annotated with *@GenAuto* will be generated automatically.
@@ -169,6 +170,7 @@ Annotations support special attributes like:
 * *max* - maximum entities generated amount.
 * *fixed* - fixed number entities generated amount.
 * *value* - *IGenerator* generator class to build values using it.
+* *depth* - Depth for embedded objects (if such presents).
 
 This attributes are used by *GenMap* annotation only (instead of *generator* attribute):
 * *key* - *IGenerator* generator class to build map *keys* using it.
