@@ -84,10 +84,16 @@ public class JsonExporter extends BasicExporter {
         if (!quotes)
             return container.getExportValue();
 
-        if (container.getType().equals(FieldContainer.Type.ARRAY)
-                || container.getType().equals(FieldContainer.Type.ARRAY_2D)
-                || container.getType().equals(FieldContainer.Type.COLLECTION))
-            return container.getExportValue().replace("[", "[\"").replace("]", "\"]").replace(",", "\",\"").replace(" ", "");
+        if (container.getType().equals(FieldContainer.Type.ARRAY)) {
+            return container.getExportValue().replace("[", "[\"").replace("]", "\"]")
+                    .replace("], ", "],").replace(", ", "\",\"").replace(" ", "");
+        } else if(container.getType().equals(FieldContainer.Type.ARRAY_2D)) {
+            return container.getExportValue().replace("[[", "[[\"").replace("]]", "\"]]")
+                    .replace("], ", "],").replace(", ", "\",\"").replace("],[", "\"],[\"").replace(" ", "");
+        } else if(container.getType().equals(FieldContainer.Type.COLLECTION)
+                || container.getType().equals(FieldContainer.Type.MAP)) {
+            return container.getExportValue();
+        }
 
         return "\"" + container.getExportValue() + "\"";
     }
@@ -96,9 +102,11 @@ public class JsonExporter extends BasicExporter {
         return !classType.equals(int.class)
                 && !classType.equals(long.class)
                 && !classType.equals(short.class)
+                && !classType.equals(byte.class)
                 && !classType.equals(double.class)
                 && !classType.equals(float.class)
                 && !classType.equals(Integer.class)
+                && !classType.equals(Byte.class)
                 && !classType.equals(Long.class)
                 && !classType.equals(Short.class)
                 && !classType.equals(Double.class)
