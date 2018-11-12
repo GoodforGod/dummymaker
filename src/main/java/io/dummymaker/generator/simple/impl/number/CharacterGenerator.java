@@ -14,6 +14,8 @@ public class CharacterGenerator implements IGenerator<Character> {
 
     @Override
     public Character generate() {
-        return ((char) ThreadLocalRandom.current().nextInt(34, 126));
+        boolean b = ThreadLocalRandom.current().nextBoolean();
+        char c = (char) ThreadLocalRandom.current().nextInt(97, 122);
+        return (b) ? Character.toUpperCase(c) : c;
     }
 }
