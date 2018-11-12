@@ -8,13 +8,13 @@
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Library can produce dummy objects (POJOs), fill their annotated fields with random values, export objects in CSV/JSON/XML/SQL formats.</description>
+    <description>Library can generate Dummy objects (POJOs), fill their fields with random values, export in CSV/JSON/XML/SQL formats.</description>
     <url>http://maven.apache.org</url>
 
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <url>https://github.com/GoodforGod/dummymaker/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
