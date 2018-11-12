@@ -38,16 +38,16 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth);
-        final Object initialValue = generateValue(valueGenerator, valueFieldType, storage, depth);
+        final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);
+        final Object initialValue = generateValue(valueGenerator, valueFieldType, storage, depth, maxDepth);
         if (initialKey == null && initialValue == null)
             return Collections.emptyMap();
 
         final Map map = new HashMap<>(amount);
         map.put(initialKey, initialValue);
         for (int i = 0; i < amount - 1; i++) {
-            final Object key = generateValue(keyGenerator, keyFieldType, storage, depth);
-            final Object value = generateValue(valueGenerator, valueFieldType, storage, depth);
+            final Object key = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);
+            final Object value = generateValue(valueGenerator, valueFieldType, storage, depth, maxDepth);
 
             if (key != null && value != null) {
                 map.put(key, value);
@@ -75,7 +75,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                     valueType,
                     storage,
                     depth,
-                    GenEmbedded.MAX);
+                    1);
         }
 
         final GenMap a = ((GenMap) annotation);

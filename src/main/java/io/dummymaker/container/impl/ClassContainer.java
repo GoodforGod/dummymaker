@@ -31,10 +31,13 @@ public class ClassContainer implements IClassContainer {
      * Field origin name as a 'key', fieldContainer as 'value'
      */
     private final Map<Field, FieldContainer> fieldContainerMap;
+    private final Format format;
 
     public <T> ClassContainer(final T t,
-                              final ICase strategy) {
+                              final ICase strategy,
+                              final Format format) {
         this.exportClass = t.getClass();
+        this.format = format;
 
         this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy);
         final FieldContainer container = this.fieldContainerMap.get(null);
@@ -50,7 +53,7 @@ public class ClassContainer implements IClassContainer {
      * If empty then no export values are present and export is pointless
      */
     public boolean isExportable() {
-        return fieldContainerMap.entrySet().stream().anyMatch(e -> e.getValue().isSimple());
+        return fieldContainerMap.entrySet().stream().anyMatch(e -> format.isTypeSupported(e.getValue().getType()));
     }
 
     @Override
@@ -69,6 +72,13 @@ public class ClassContainer implements IClassContainer {
     @Override
     public Map<Field, FieldContainer> getContainers() {
         return this.fieldContainerMap;
+    }
+
+    public FieldContainer getContainer(final String exportFieldName) {
+        return this.fieldContainerMap.entrySet().stream()
+                .filter(e -> e.getValue().getExportName().equals(exportFieldName))
+                .findFirst()
+                .orElseThrow(NullPointerException::new).getValue();
     }
 
     @Override

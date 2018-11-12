@@ -47,6 +47,14 @@ public interface IClassContainer {
     Field getField(final String exportFieldName);
 
     /**
+     * Retrieve container by its export name (formatted via strategy or renamed via annotation)
+     *
+     * @param exportFieldName field container with final name
+     * @return field container
+     */
+    FieldContainer getContainer(final String exportFieldName);
+
+    /**
      * Returns field containers map
      *
      * @see FieldContainer

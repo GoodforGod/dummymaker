@@ -18,7 +18,7 @@ public enum Format {
     CSV(".csv", Type.SIMPLE, Type.ENUMERABLE),
     JSON(".json", Type.SIMPLE, Type.ENUMERABLE, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION, Type.MAP),
     XML(".xml", Type.SIMPLE, Type.ENUMERABLE),
-    SQL(".sql", Type.SIMPLE, Type.ENUMERABLE);
+    SQL(".sql", Type.SIMPLE, Type.ENUMERABLE, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION);
 
     private final Set<Type> supported;
     private final String extension;
@@ -26,6 +26,10 @@ public enum Format {
     Format(final String extension, Type... type) {
         this.extension = extension;
         this.supported = new HashSet<>(Arrays.asList(type));
+    }
+
+    public boolean isTypeSupported(Type type) {
+        return supported.contains(type);
     }
 
     public Set<Type> getSupported() {
