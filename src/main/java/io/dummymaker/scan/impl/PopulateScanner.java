@@ -4,6 +4,7 @@ import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -23,12 +24,11 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * Scan for prime gen annotation and its child annotation
  * Scan also for GenEmbedded annotations to populate embedded fields
  *
+ * @author GoodforGod
  * @see PrimeGen
  * @see GenEmbedded
  * @see BasicScanner
  * @see io.dummymaker.factory.IPopulateFactory
- *
- * @author GoodforGod
  * @since 29.05.2017
  */
 public class PopulateScanner implements IPopulateScanner {
@@ -72,7 +72,7 @@ public class PopulateScanner implements IPopulateScanner {
                 genContainer = GenContainer.asAuto(generator, isComplex(field));
             }
 
-            if (genContainer != null) {
+            if (!isIgnored(field) && genContainer != null) {
                 populateAnnotationMap.put(field, genContainer);
             }
         }
@@ -89,7 +89,8 @@ public class PopulateScanner implements IPopulateScanner {
                 || declaringClass.equals(Set.class)
                 || declaringClass.equals(Map.class))
                 || declaringClass.getTypeName().endsWith("[][]")
-                || declaringClass.getTypeName().endsWith("[]");
+                || declaringClass.getTypeName().endsWith("[]")
+                || declaringClass.isEnum();
     }
 
     /**
@@ -105,5 +106,12 @@ public class PopulateScanner implements IPopulateScanner {
         }
 
         return null;
+    }
+
+    /**
+     * Exclude ignored population fields
+     */
+    private boolean isIgnored(final Field field) {
+        return Arrays.stream(field.getDeclaredAnnotations()).anyMatch(a -> a.annotationType().equals(GenIgnore.class));
     }
 }

@@ -36,7 +36,7 @@ public class GenProduceFactory implements IProduceFactory {
         if (amount < 1)
             return Collections.emptyList();
 
-        final List<T> produced = new ArrayList<>();
+        final List<T> produced = new ArrayList<>(amount);
         for (int i = 0; i < amount; i++) {
             final T t = instantiate(tClass);
             if (t == null)
