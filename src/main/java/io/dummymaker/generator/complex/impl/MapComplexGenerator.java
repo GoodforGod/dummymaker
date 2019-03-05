@@ -68,7 +68,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
         final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
         if (annotation == null) {
-            return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
+            return generateMap(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
                     getAutoGenerator(keyType),
                     getAutoGenerator(valueType),
                     keyType,
@@ -93,7 +93,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
     @Override
     public Object generate() {
-        return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
+        return generateMap(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
                 IdGenerator.class,
                 IdGenerator.class,
                 Object.class,

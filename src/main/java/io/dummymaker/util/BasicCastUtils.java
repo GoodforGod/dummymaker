@@ -19,31 +19,71 @@ import java.util.logging.Logger;
  */
 public class BasicCastUtils {
 
+    private enum CastType {
+        UNKNOWN,
+        BOOLEAN,
+        BYTE,
+        SHORT,
+        CHAR,
+        INT,
+        LONG,
+        FLOAT,
+        DOUBLE,
+        BIG_INT,
+        BIG_DECIMAL;
+
+        public static CastType of(final Class<?> type) {
+            if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
+                return BYTE;
+            } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(short.class)) {
+                return SHORT;
+            } else if (type.isAssignableFrom(Character.class) || type.isAssignableFrom(char.class)) {
+                return CHAR;
+            } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(int.class)) {
+                return INT;
+            } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(long.class)) {
+                return LONG;
+            } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(float.class)) {
+                return FLOAT;
+            } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(double.class)) {
+                return DOUBLE;
+            } else if (type.isAssignableFrom(BigInteger.class)) {
+                return BIG_INT;
+            } else if (type.isAssignableFrom(BigDecimal.class)) {
+                return BIG_DECIMAL;
+            }
+
+            return UNKNOWN;
+        }
+    }
+
     private static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
 
-    public static Object castToNumber(final Object value,
-                                      final Class<?> fieldType) {
-        if (fieldType.isAssignableFrom(Integer.class) || fieldType.isAssignableFrom(int.class)) {
-            return Integer.valueOf(String.valueOf(value));
-        } else if (fieldType.isAssignableFrom(Long.class) || fieldType.isAssignableFrom(long.class)) {
-            return Long.valueOf(String.valueOf(value));
-        } else if(fieldType.isAssignableFrom(Float.class) || fieldType.isAssignableFrom(float.class)) {
-            return Float.valueOf(String.valueOf(value));
-        } else if(fieldType.isAssignableFrom(Double.class) || fieldType.isAssignableFrom(double.class)) {
-            return Double.valueOf(String.valueOf(value));
-        } else if(fieldType.isAssignableFrom(BigInteger.class)) {
-            return BigInteger.valueOf(Long.valueOf(String.valueOf(value)));
-        } else if(fieldType.isAssignableFrom(BigDecimal.class)) {
-            return BigDecimal.valueOf(Long.valueOf(String.valueOf(value)));
+    public static Object castToNumber(final Object value, final Class<?> fieldType) {
+        switch (CastType.of(fieldType)) {
+            case INT:
+                return Integer.valueOf(String.valueOf(value));
+            case LONG:
+                return Long.valueOf(String.valueOf(value));
+            case FLOAT:
+                return Float.valueOf(String.valueOf(value));
+            case DOUBLE:
+                return Double.valueOf(String.valueOf(value));
+            case BIG_INT:
+                return BigInteger.valueOf(Long.valueOf(String.valueOf(value)));
+            case BIG_DECIMAL:
+                return BigDecimal.valueOf(Long.valueOf(String.valueOf(value)));
+            default:
+                return null;
         }
-        return null;
     }
 
     /**
      * Instantiate class if possible, or return default provided value
-     * @param tClass class to instantiate
+     *
+     * @param tClass        class to instantiate
      * @param defaultEntity def provided value
-     * @param <T> class instance
+     * @param <T>           class instance
      * @return class instance
      */
     public static <T> T instantiate(final Class<T> tClass,
@@ -56,21 +96,22 @@ public class BasicCastUtils {
 
     /**
      * Instantiate class if possible, or return default provided value
+     *
      * @param tClass class to instantiate
-     * @param <T> class instance
+     * @param <T>    class instance
      * @return class instance
      */
     @SuppressWarnings("unchecked")
     public static <T> T instantiate(final Class<T> tClass) {
         try {
-            if(tClass == null)
+            if (tClass == null)
                 return null;
 
             final Constructor<?> zeroArgConstructor = Arrays.stream(tClass.getDeclaredConstructors())
                     .filter(c -> c.getParameterCount() == 0)
                     .findFirst().orElse(null);
 
-            if(zeroArgConstructor == null) {
+            if (zeroArgConstructor == null) {
                 logger.warning("[CAN NOT INSTANTIATE] : " + tClass + ", have NO zero arg constructor.");
                 return null;
             }
@@ -97,7 +138,7 @@ public class BasicCastUtils {
     @SuppressWarnings("unchecked")
     public static <T> T generateObject(final IGenerator generator,
                                        final Class<T> fieldType) {
-        if(generator == null)
+        if (generator == null)
             return null;
 
         final Object object = generator.generate();
@@ -117,7 +158,7 @@ public class BasicCastUtils {
     /**
      * Extracts generic type
      *
-     * @param type to extract from
+     * @param type        to extract from
      * @param paramNumber actual param number in parameterized type array
      * @return actual type or object if length is not presented
      */
@@ -137,26 +178,26 @@ public class BasicCastUtils {
      * Try to generate and cast object to field type or string if possible
      *
      * @param castObject cast object
-     * @param fieldType actual field type
+     * @param fieldType  actual field type
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
     public static <T> T castObject(final Object castObject,
                                    final Class<T> fieldType) {
-        if(fieldType == null)
+        if (fieldType == null)
             return null;
 
         final boolean isTypeString = fieldType.equals(String.class);
-        if(castObject == null) {
+        if (castObject == null) {
             return (isTypeString)
                     ? ((T) "null")
                     : null;
         }
 
-        final Class<?> castType         = castObject.getClass();
-        final boolean isTypeAssignable  = fieldType.isAssignableFrom(castType);
-        final boolean isTypeEquals      = areEquals(castType, fieldType);
-        final boolean isTypeObject      = fieldType.equals(Object.class);
+        final Class<?> castType = castObject.getClass();
+        final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);
+        final boolean isTypeEquals = areEquals(castType, fieldType);
+        final boolean isTypeObject = fieldType.equals(Object.class);
 
         return castObject(castObject, fieldType,
                 isTypeAssignable, isTypeEquals,
@@ -166,65 +207,14 @@ public class BasicCastUtils {
     /**
      * Check if objects have equals types, even if they are primitive
      */
-    public static boolean areEquals(final Class<?> firstClass,
-                                    final Class<?> secondClass) {
-        final boolean isFirstShort = firstClass.isAssignableFrom(Short.class);
-        final boolean isSecondShort = secondClass.isAssignableFrom(Short.class);
-        if (isFirstShort && isSecondShort
-                || isFirstShort && secondClass.equals(short.class)
-                || firstClass.equals(short.class) && isSecondShort)
-            return true;
+    private static boolean areEquals(final Class<?> firstClass,
+                                     final Class<?> secondClass) {
+        final CastType firstType = CastType.of(firstClass);
+        final CastType secondType = CastType.of(firstClass);
 
-        final boolean isFirstByte = firstClass.isAssignableFrom(Byte.class);
-        final boolean isSecondByte = secondClass.isAssignableFrom(Byte.class);
-        if (isFirstByte && isSecondByte
-                || isFirstByte && secondClass.equals(byte.class)
-                || firstClass.equals(byte.class) && isSecondByte)
-            return true;
-
-        final boolean isFirstInt = firstClass.isAssignableFrom(Integer.class);
-        final boolean isSecondInt = secondClass.isAssignableFrom(Integer.class);
-        if (isFirstInt && isSecondInt
-                || isFirstInt && secondClass.equals(int.class)
-                || firstClass.equals(int.class) && isSecondInt)
-            return true;
-
-        final boolean isFirstLong = firstClass.isAssignableFrom(Long.class);
-        final boolean isSecondLong = secondClass.isAssignableFrom(Long.class);
-        if (isFirstLong && isSecondLong
-                || isFirstLong && secondClass.equals(long.class)
-                || firstClass.equals(long.class) && isSecondLong)
-            return true;
-
-        final boolean isFirstDouble = firstClass.isAssignableFrom(Double.class);
-        final boolean isSecondDouble = secondClass.isAssignableFrom(Double.class);
-        if (isFirstDouble && isSecondDouble
-                || isFirstDouble && secondClass.equals(double.class)
-                || firstClass.equals(double.class) && isSecondDouble)
-            return true;
-
-        final boolean isFirstFloat = firstClass.isAssignableFrom(Float.class);
-        final boolean isSecondFloat = secondClass.isAssignableFrom(Float.class);
-        if (isFirstFloat && isSecondFloat
-                || isFirstFloat && secondClass.equals(float.class)
-                || firstClass.equals(float.class) && isSecondFloat)
-            return true;
-
-        final boolean isFirstChar = firstClass.isAssignableFrom(Character.class);
-        final boolean isSecondChar = secondClass.isAssignableFrom(Character.class);
-        if (isFirstChar && isSecondChar
-                || isFirstChar && secondClass.equals(char.class)
-                || firstClass.equals(char.class) && isSecondChar)
-            return true;
-
-        final boolean isFirstBool = firstClass.isAssignableFrom(Boolean.class);
-        final boolean isSecondBool = secondClass.isAssignableFrom(Boolean.class);
-        if (isFirstBool && isSecondBool
-                || isFirstChar && secondClass.equals(boolean.class)
-                || firstClass.equals(boolean.class) && isSecondChar)
-            return true;
-
-        return firstClass.equals(secondClass);
+        return (firstType.equals(CastType.UNKNOWN))
+                ? firstClass.equals(secondClass)
+                : firstType.equals(secondType);
     }
 
     @SuppressWarnings("unchecked")
@@ -234,13 +224,12 @@ public class BasicCastUtils {
                                     final boolean isTypeEquals,
                                     final boolean isTypeObject,
                                     final boolean isTypeString) {
-        if (isTypeEquals || isTypeObject) {
+        if (isTypeEquals || isTypeObject)
             return ((T) castObject);
-        } else if (isTypeString) {
+        else if (isTypeString)
             return ((T) String.valueOf(castObject));
-        } else if (isTypeAssignable) {
+        else if (isTypeAssignable)
             return fieldType.cast(castObject);
-        }
         return null;
     }
 }

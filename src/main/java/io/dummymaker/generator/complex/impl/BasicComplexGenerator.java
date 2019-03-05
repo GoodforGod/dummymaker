@@ -29,8 +29,8 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  */
 abstract class BasicComplexGenerator implements IComplexGenerator {
 
-    static final int MIN_DEFAULT = 1;
-    static final int MAX_DEFAULT = 10;
+    static final int MIN_COUNT_DEFAULT = 1;
+    static final int MAX_COUNT_DEFAULT = 10;
 
     // Lazy initialization
     private IPopulateEmbeddedFactory embeddedFreePopulateFactory;

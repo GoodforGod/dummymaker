@@ -36,8 +36,8 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = field.getType().getComponentType().getComponentType();
         if (annotation == null) {
-            final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
+            final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
             return toArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage, depth, 1);
         }
 
@@ -53,8 +53,8 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
+        final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
         return toArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 

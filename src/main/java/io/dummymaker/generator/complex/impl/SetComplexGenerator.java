@@ -37,7 +37,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if (annotation == null) {
-            return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
+            return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
                     getAutoGenerator(valueClass),
                     valueClass,
                     storage,
@@ -56,7 +56,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
+        return new HashSet<>(generateList(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
                 IdGenerator.class,
                 Object.class,
                 null,
