@@ -13,9 +13,8 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
 /**
  * Produce Dummy Objects and populate them via PrimeGen generators included
  *
- * @see PrimeGen
- *
  * @author GoodforGod
+ * @see PrimeGen
  * @since 26.05.2017
  */
 public class GenProduceFactory implements IProduceFactory {
@@ -33,17 +32,12 @@ public class GenProduceFactory implements IProduceFactory {
 
     @Override
     public <T> List<T> produce(final Class<T> tClass, final int amount) {
-        if (amount < 1)
+        if (amount < 1 || instantiate(tClass) == null)
             return Collections.emptyList();
 
         final List<T> produced = new ArrayList<>(amount);
-        for (int i = 0; i < amount; i++) {
-            final T t = instantiate(tClass);
-            if (t == null)
-                return Collections.emptyList();
-
-            produced.add(t);
-        }
+        for (int i = 0; i < amount; i++)
+            produced.add(instantiate(tClass));
 
         return populateFactory.populate(produced);
     }

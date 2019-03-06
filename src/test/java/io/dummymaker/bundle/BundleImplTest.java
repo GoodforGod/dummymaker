@@ -41,6 +41,7 @@ public class BundleImplTest {
                 { new NicknamesPresetBundle() },
                 { new NounPresetBundle() },
                 { new PhrasePresetBundle() },
+                { new SurnameBundle() },
                 { new TagPresetBundle() }
         });
     }

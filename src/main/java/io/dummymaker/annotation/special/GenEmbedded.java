@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.FIELD)
 public @interface GenEmbedded {
-    int MAX = 11;
+    int MAX = 18;
 
     /**
      * If annotation is present, than it will be 1 level depth used by factory

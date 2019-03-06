@@ -48,8 +48,7 @@ public class PopulateEmbeddedFreeScanner extends PopulateScanner {
     public Map<Field, GenContainer> scan(final Class t) {
         return super.scan(t).entrySet()
                 .stream()
-                .filter(e -> isNotEmbedded.test(e.getValue().getMarker())
-                        || !EmbeddedGenerator.class.equals(e.getValue().getGeneratorClass()))
+                .filter(e -> isNotEmbedded.test(e.getValue().getMarker()) || !EmbeddedGenerator.class.equals(e.getValue().getGeneratorClass()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

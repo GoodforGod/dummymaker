@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class BasicScanner implements IAnnotationScanner {
 
-    protected final Logger logger = Logger.getLogger(BasicScanner.class.getName());
+    private final Logger logger = Logger.getLogger(BasicScanner.class.getName());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

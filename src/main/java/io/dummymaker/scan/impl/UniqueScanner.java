@@ -29,8 +29,7 @@ public class UniqueScanner extends BasicScanner {
                         .collect(Collectors.toList())))
                 .collect(LinkedHashMap<Field, List<Annotation>>::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> {
-                        }
+                        (m, u) -> { }
                 );
     }
 }

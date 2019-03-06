@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,14 +50,20 @@ public class GeneratorPatternValidTest {
     @Parameters(name = "{index}: Generator ({0}), Regex {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
+                { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
+                { new ShortGenerator(),         Short.class,    Pattern.compile("-?[0-9]+") },
+                { new UShortGenerator(),        Short.class,    Pattern.compile("[0-9]+") },
+                { new ByteGenerator(),          Byte.class,     Pattern.compile("-?[0-9]+") },
+                { new UByteGenerator(),         Byte.class,     Pattern.compile("[0-9]+") },
+                { new IntegerGenerator(),       Integer.class,  Pattern.compile("-?[0-9]+") },
+                { new UIntegerGenerator(),      Integer.class,  Pattern.compile("[0-9]+") },
+                { new LongGenerator(),          Long.class,     Pattern.compile("-?[0-9]+") },
                 { new FloatGenerator(),         Float.class,    Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new FloatBigGenerator(),      Float.class,    Pattern.compile("-?[0-9]+\\.[0-9]+") },
-                { new ShortGenerator(),         Short.class,    Pattern.compile("-?[0-9]+") },
-                { new ByteGenerator(),          Byte.class,     Pattern.compile("-?[0-9]+") },
                 { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0\\.[0-9]+") },
-                { new IntegerGenerator(),       Integer.class,  Pattern.compile("-?[0-9]+") },
-                { new LongGenerator(),          Long.class,     Pattern.compile("-?[0-9]+") },
+                { new BigIntegerGenerator(),    BigInteger.class, Pattern.compile("-?[0-9]+") },
+                { new BigDecimalGenerator(),    BigDecimal.class, Pattern.compile("-?[0-9]+") },
                 { new IdBigGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new BtcAddressGenerator(),    String.class,   Pattern.compile("[a-zA-Z0-9]{34}") },
                 { new BtcTxHashGenerator(),     String.class,   Pattern.compile("[a-zA-Z0-9]{64}") },
@@ -70,6 +78,7 @@ public class GeneratorPatternValidTest {
                 { new IdGenerator(),            String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new JsonGenerator(),          String.class,   Pattern.compile("\\{.*:.*}") },
                 { new NameGenerator(),          String.class,   Pattern.compile("[a-zA-Z]+") },
+                { new SurnameGenerator(),       String.class,   Pattern.compile("[a-zA-Z]+") },
                 { new NickGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z\\-.]+") },
                 { new NounGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new PassGenerator(),          String.class,   Pattern.compile("[0-9a-zA-Z]{6,}") },
@@ -78,7 +87,6 @@ public class GeneratorPatternValidTest {
                 { new StringGenerator(),        String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new TagGenerator(),           String.class,   Pattern.compile("#[0-9a-zA-Z]+") },
                 { new UuidGenerator(),          UUID.class,     Pattern.compile("[0-9a-zA-Z\\-]+") },
-                { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
                 { new CharacterGenerator(),     Character.class, Pattern.compile("[a-zA-Z]") },
                 { new CharGenerator(),          Character.class, Pattern.compile(".") },
                 { new ObjectGenerator(),        String.class,   Pattern.compile("object_[0-9]+") },

@@ -170,7 +170,7 @@ public class ProduceFactoryTest {
             assertNotNull(embeddedMax);
             embeddedMax = embeddedMax.getEmbeddedMax();
         }
-        assertNull(embeddedMax.getEmbeddedMax());
+        assertNotNull(embeddedMax.getEmbeddedMax());
     }
 
     @Test

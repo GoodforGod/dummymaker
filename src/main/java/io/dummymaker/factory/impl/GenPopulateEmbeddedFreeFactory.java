@@ -19,8 +19,7 @@ public class GenPopulateEmbeddedFreeFactory extends BasicPopulateFactory impleme
         super(new PopulateEmbeddedFreeScanner());
     }
 
-    public <T> T populate(final T t,
-                          final int depth) {
+    public <T> T populate(final T t, final int depth) {
         return super.populate(t, depth);
     }
 }
