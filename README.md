@@ -20,14 +20,14 @@ Library can generate Dummies using special *factories*, *populate* their fields 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.1.3'
+    compile 'com.github.goodforgod:dummymaker:1.1.4'
 }
 ```
 
@@ -206,7 +206,11 @@ Embedded fields are **NOT SUPPORTED** by any *IExporter* in mean time.
 
 * ***GenIgnoreExport*** allow to *ignore* object's field during export.
 
+* ***GenIgnore*** ignores field when populating dummy.
+
 * ***GenRenameExport*** allow to rename Dummy export field name or Class Name (Annotate constructor to rename class export name).
+
+* ***GenEnum*** generates Enum field value.
 
 * ***GenEnumerate*** annotation with option (*from*) to numerate populated/produced Dummies fields (Works on *Integer/Long/String* field types).
 
@@ -502,6 +506,8 @@ INSERT INTO user (name, id) VALUES
 ```
 
 ## Version History
+
+**1.1.4** - Unsigned int and byte, @Ignore annotation, @GenEnum enum generation, minor improvements.
 
 **1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
 

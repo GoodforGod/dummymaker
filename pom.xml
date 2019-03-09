@@ -52,7 +52,7 @@
         <maven-build-plugin-version>3.0.2</maven-build-plugin-version>
         <maven-gpg-plugin-version>1.6</maven-gpg-plugin-version>
         <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
-        <maven-javadoc-plugin-version>2.10.4</maven-javadoc-plugin-version>
+        <maven-javadoc-plugin-version>3.0.1</maven-javadoc-plugin-version>
         <maven-nexus-staging-maven-plugin-version>1.6.8</maven-nexus-staging-maven-plugin-version>
         <cobertura-plugin-version>2.7</cobertura-plugin-version>
 
@@ -143,6 +143,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <additionalOptions>-html5</additionalOptions>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
