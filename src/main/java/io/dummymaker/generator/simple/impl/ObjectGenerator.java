@@ -5,7 +5,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Generates object as string like: object1245155
+ * Generates object as string like: object_1245155
  *
  * @author GoodforGod
  * @since 26.04.2018

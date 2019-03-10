@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 /**
  * Generates Sql Timestamp from 1970 to 3000 Year with nanoseconds precision
+ * @see Timestamp
  *
  * @author GoodforGod
  * @since 21.02.2018

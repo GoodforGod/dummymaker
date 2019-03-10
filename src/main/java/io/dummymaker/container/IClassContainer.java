@@ -58,13 +58,16 @@ public interface IClassContainer {
      * Returns field containers map
      *
      * @see FieldContainer
+     * @return field container map
      */
     Map<Field, FieldContainer> getContainers();
 
     /**
      * Returns only format support field containers map
+     * @param format to filter on
      *
      * @see FieldContainer
+     * @return field format supported container map
      */
     Map<Field, FieldContainer> getFormatSupported(Format format);
 }

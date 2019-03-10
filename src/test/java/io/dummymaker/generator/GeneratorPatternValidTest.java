@@ -17,10 +17,9 @@ import org.junit.runners.Parameterized;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -51,17 +50,17 @@ public class GeneratorPatternValidTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new BooleanGenerator(),       Boolean.class,  Pattern.compile("false|true") },
-                { new ShortGenerator(),         Short.class,    Pattern.compile("-?[0-9]+") },
-                { new UShortGenerator(),        Short.class,    Pattern.compile("[0-9]+") },
                 { new ByteGenerator(),          Byte.class,     Pattern.compile("-?[0-9]+") },
                 { new UByteGenerator(),         Byte.class,     Pattern.compile("[0-9]+") },
+                { new ShortGenerator(),         Short.class,    Pattern.compile("-?[0-9]+") },
+                { new UShortGenerator(),        Short.class,    Pattern.compile("[0-9]+") },
                 { new IntegerGenerator(),       Integer.class,  Pattern.compile("-?[0-9]+") },
                 { new UIntegerGenerator(),      Integer.class,  Pattern.compile("[0-9]+") },
                 { new LongGenerator(),          Long.class,     Pattern.compile("-?[0-9]+") },
                 { new FloatGenerator(),         Float.class,    Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new FloatBigGenerator(),      Float.class,    Pattern.compile("-?[0-9]+\\.[0-9]+") },
-                { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0\\.[0-9]+") },
+                { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new BigIntegerGenerator(),    BigInteger.class, Pattern.compile("-?[0-9]+") },
                 { new BigDecimalGenerator(),    BigDecimal.class, Pattern.compile("-?[0-9]+") },
                 { new IdBigGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
@@ -96,8 +95,8 @@ public class GeneratorPatternValidTest {
                 { new DateGenerator(),          Date.class,     DummyTime.Patterns.DATE.getPattern() },
                 { new LocalDateGenerator(),     LocalDate.class,DummyTime.Patterns.LOCAL_DATE.getPattern() },
                 { new LocalDateTimeGenerator(), LocalDateTime.class,DummyTime.Patterns.LOCAL_DATETIME.getPattern() },
-                { new LocalTimeGenerator(),     LocalTime.class, DummyTime.Patterns.LOCAL_TIME.getPattern() },
-                { new TimestampGenerator(),     Timestamp.class, DummyTime.Patterns.TIMESTAMP.getPattern() }
+                { new DateSqlGenerator(),       java.sql.Date.class, DummyTime.Patterns.DATE_SQL.getPattern() },
+                { new TimeGenerator(),          Time.class, DummyTime.Patterns.TIME.getPattern() }
         });
     }
 

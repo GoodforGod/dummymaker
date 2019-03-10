@@ -21,6 +21,7 @@ public class BasicCastUtils {
 
     private enum CastType {
         UNKNOWN,
+        STRING,
         BOOLEAN,
         BYTE,
         SHORT,
@@ -33,7 +34,11 @@ public class BasicCastUtils {
         BIG_DECIMAL;
 
         public static CastType of(final Class<?> type) {
-            if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
+            if (type.isAssignableFrom(String.class)) {
+                return STRING;
+            } else if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(boolean.class)) {
+                return BOOLEAN;
+            } else if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
                 return BYTE;
             } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(short.class)) {
                 return SHORT;
@@ -61,6 +66,14 @@ public class BasicCastUtils {
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {
+            case BYTE:
+                return Byte.valueOf(String.valueOf(value));
+            case CHAR:
+                return String.valueOf(value).charAt(0);
+            case SHORT:
+                return Short.valueOf(String.valueOf(value));
+            case BOOLEAN:
+                return Boolean.valueOf(String.valueOf(value));
             case INT:
                 return Integer.valueOf(String.valueOf(value));
             case LONG:
@@ -121,11 +134,12 @@ public class BasicCastUtils {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
                     + " - class may be an abstract class, an interface, "
                     + "array, primitive." + e.getMessage());
+            return null;
         } catch (IllegalAccessException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
                     + " - no access to instantiating object." + e.getMessage());
+            return null;
         }
-        return null;
     }
 
     /**
@@ -133,6 +147,7 @@ public class BasicCastUtils {
      *
      * @param generator generator
      * @param fieldType actual field type
+     * @param <T> generic type
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
@@ -179,6 +194,7 @@ public class BasicCastUtils {
      *
      * @param castObject cast object
      * @param fieldType  actual field type
+     * @param <T> generic type
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
@@ -210,9 +226,9 @@ public class BasicCastUtils {
     private static boolean areEquals(final Class<?> firstClass,
                                      final Class<?> secondClass) {
         final CastType firstType = CastType.of(firstClass);
-        final CastType secondType = CastType.of(firstClass);
+        final CastType secondType = CastType.of(secondClass);
 
-        return (firstType.equals(CastType.UNKNOWN))
+        return (firstType.equals(CastType.UNKNOWN) || secondType.equals(CastType.UNKNOWN))
                 ? firstClass.equals(secondClass)
                 : firstType.equals(secondType);
     }

@@ -8,6 +8,7 @@ import io.dummymaker.generator.simple.impl.time.impl.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,8 +32,10 @@ public class TimeComplexGenerator implements IComplexGenerator {
     private ITimeGenerator<LocalDateTime> localDateTimeGenerator;
     private ITimeGenerator<LocalDate> localDateGenerator;
     private ITimeGenerator<LocalTime> localTimeGenerator;
-    private ITimeGenerator<Timestamp> timestampGenerator;
     private ITimeGenerator<Date> dateGenerator;
+    private ITimeGenerator<Timestamp> timestampGenerator;
+    private ITimeGenerator<Time> timeGenerator;
+    private ITimeGenerator<java.sql.Date> dateSqlGenerator;
 
     @Override
     public Object generate(final Annotation annotation,
@@ -57,6 +60,10 @@ public class TimeComplexGenerator implements IComplexGenerator {
             return castObject(getDateGenerator().generate(from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
             return castObject(getTimestampGenerator().generate(from, to), fieldClass);
+        } else if (fieldClass.isAssignableFrom(Time.class)) {
+            return castObject(getTimeGenerator().generate(from, to), fieldClass);
+        } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
+            return castObject(getDateSqlGenerator().generate(from, to), fieldClass);
         }
         return null;
     }
@@ -84,16 +91,29 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return localTimeGenerator;
     }
 
+    private ITimeGenerator<Date> getDateGenerator() {
+        if (dateGenerator == null)
+            this.dateGenerator = new DateGenerator();
+        return dateGenerator;
+    }
+
     private ITimeGenerator<Timestamp> getTimestampGenerator() {
         if (timestampGenerator == null)
             this.timestampGenerator = new TimestampGenerator();
         return timestampGenerator;
     }
 
-    private ITimeGenerator<Date> getDateGenerator() {
-        if (dateGenerator == null)
-            this.dateGenerator = new DateGenerator();
-        return dateGenerator;
+    private ITimeGenerator<Time> getTimeGenerator() {
+        if (timeGenerator == null)
+            this.timeGenerator = new TimeGenerator();
+        return timeGenerator;
+    }
+
+
+    private ITimeGenerator<java.sql.Date> getDateSqlGenerator() {
+        if (dateSqlGenerator == null)
+            this.dateSqlGenerator = new DateSqlGenerator();
+        return dateSqlGenerator;
     }
 
 }

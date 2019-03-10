@@ -18,6 +18,10 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenTime {
+
+    /**
+     * Epoch Unix Time Stamp - 1/1/3000
+     */
     long MAX = 32503680000L;
 
     long from() default 0L;

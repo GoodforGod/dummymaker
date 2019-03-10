@@ -47,13 +47,18 @@ public class BasicGenUtils {
 
         final Map<Class, List<Class<? extends IGenerator>>> collectedGenerators = Stream.of(
                 ByteGenerator.class,
+                UByteGenerator.class,
                 ShortGenerator.class,
+                UShortGenerator.class,
                 IntegerGenerator.class,
+                UIntegerGenerator.class,
                 LongGenerator.class,
                 FloatGenerator.class,
                 FloatBigGenerator.class,
                 DoubleBigGenerator.class,
                 DoubleGenerator.class,
+                BigIntegerGenerator.class,
+                BigDecimalGenerator.class,
 
                 // Strings
                 HexNumberGenerator.class,
@@ -75,10 +80,12 @@ public class BasicGenUtils {
                 TagGenerator.class,
 
                 // Time
+                DateSqlGenerator.class,
+                TimeGenerator.class,
+                TimestampGenerator.class,
                 DateGenerator.class,
                 LocalDateGenerator.class,
                 LocalTimeGenerator.class,
-                TimestampGenerator.class,
                 LocalDateTimeGenerator.class,
 
                 // Special
@@ -97,13 +104,13 @@ public class BasicGenUtils {
         collectedGenerators.put(Map.class, singletonList(MapComplexGenerator.class));
 
         // Primitives
-        collectedGenerators.put(byte.class, singletonList(ByteGenerator.class));
-        collectedGenerators.put(short.class, singletonList(ShortGenerator.class));
-        collectedGenerators.put(int.class, singletonList(IntegerGenerator.class));
+        collectedGenerators.put(byte.class, Arrays.asList(ByteGenerator.class, UByteGenerator.class));
+        collectedGenerators.put(short.class, Arrays.asList(ShortGenerator.class, UShortGenerator.class));
+        collectedGenerators.put(int.class, Arrays.asList(IntegerGenerator.class, UIntegerGenerator.class));
         collectedGenerators.put(long.class, singletonList(LongGenerator.class));
         collectedGenerators.put(float.class, Arrays.asList(FloatGenerator.class, FloatBigGenerator.class));
         collectedGenerators.put(double.class, Arrays.asList(DoubleGenerator.class, DoubleBigGenerator.class));
-        collectedGenerators.put(char.class, singletonList(CharGenerator.class));
+        collectedGenerators.put(char.class, Arrays.asList(CharGenerator.class, CharacterGenerator.class));
         collectedGenerators.put(boolean.class, singletonList(BooleanGenerator.class));
 
         return collectedGenerators;
