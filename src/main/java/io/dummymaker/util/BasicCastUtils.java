@@ -246,6 +246,8 @@ public class BasicCastUtils {
             return ((T) String.valueOf(castObject));
         else if (isTypeAssignable)
             return fieldType.cast(castObject);
-        return null;
+
+        // Try to force cast anyway (need more testing)
+        return ((T) castObject);
     }
 }

@@ -29,13 +29,12 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * Scan for populate annotations on entity fields
  * and generate values for such fields via generators
  *
+ * @author GoodforGod
  * @see IGenerator
  * @see IComplexGenerator
  * @see PrimeGen
  * @see ComplexGen
  * @see GenEnumerate
- *
- * @author GoodforGod
  * @since 10.03.2018
  */
 abstract class BasicPopulateFactory implements IPopulateFactory {
@@ -83,7 +82,10 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                         enumeratesMap,
                         nullableFields,
                         currentEmbeddedDepth);
-                field.set(t, objValue);
+
+                // CHECK
+                if (objValue != null)
+                    field.set(t, objValue);
             } catch (ClassCastException e) {
                 logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
                 nullableFields.add(field); // skip field due to error as if it null

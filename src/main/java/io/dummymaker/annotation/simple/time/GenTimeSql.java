@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
 @PrimeGen(TimeGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenTime {
+public @interface GenTimeSql {
 
 }
