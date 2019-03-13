@@ -87,7 +87,7 @@ public class BasicCastUtils {
             case BIG_DECIMAL:
                 return BigDecimal.valueOf(Long.valueOf(String.valueOf(value)));
             default:
-                return null;
+                return value;
         }
     }
 
@@ -147,7 +147,7 @@ public class BasicCastUtils {
      *
      * @param generator generator
      * @param fieldType actual field type
-     * @param <T> generic type
+     * @param <T>       generic type
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
@@ -194,7 +194,7 @@ public class BasicCastUtils {
      *
      * @param castObject cast object
      * @param fieldType  actual field type
-     * @param <T> generic type
+     * @param <T>        generic type
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
@@ -215,9 +215,25 @@ public class BasicCastUtils {
         final boolean isTypeEquals = areEquals(castType, fieldType);
         final boolean isTypeObject = fieldType.equals(Object.class);
 
-        return castObject(castObject, fieldType,
+        final Object boxedIfPossible = boxObject(castObject, fieldType);
+
+        return castObject(boxedIfPossible, fieldType,
                 isTypeAssignable, isTypeEquals,
                 isTypeObject, isTypeString);
+    }
+
+    /**
+     * Try to box downcast or box object if it is boxed primitive type
+     * And field is also boxed primitive (can't cast one to another explicitly)
+     */
+    private static <T> Object boxObject(final Object castObject,
+                                        final Class<T> fieldType) {
+        final CastType firstType = CastType.of(castObject.getClass());
+        final CastType secondType = CastType.of(fieldType);
+
+        return (secondType.equals(CastType.UNKNOWN) || firstType.equals(CastType.UNKNOWN))
+                ? castObject
+                : castToNumber(castObject, fieldType);
     }
 
     /**
