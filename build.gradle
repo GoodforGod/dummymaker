@@ -1,0 +1,104 @@
+plugins {
+    id 'jacoco'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.github.goodforgod'
+version = '1.2.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+check.dependsOn jacocoTestReport
+jacocoTestReport {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'DummyMaker'
+                url = 'https://github.com/GoodforGod/dummymaker'
+                description = 'Library can generate Dummy objects (POJOs), fill their fields with random values, export in CSV/JSON/XML/SQL formats.'
+
+                license {
+                    name = 'MIT License'
+                    url = 'https://github.com/GoodforGod/dummymaker/blob/master/LICENSE'
+                    distribution = 'repo'
+                }
+
+                developer {
+                    id = 'GoodforGod'
+                    name = 'Anton Kurako'
+                    email = 'goodforgod.dev@gmail.com'
+                    url = 'https://github.com/GoodforGod'
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/GoodforGod/dummymaker.git'
+                    developerConnection = 'scm:git:ssh://GoodforGod/dummymaker.git'
+                    url = 'https://github.com/GoodforGod/dummymaker/tree/master'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username project.properties['ossrhUsername']
+                password project.properties['ossrhPassword']
+            }
+        }
+    }
+}
+
+if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}

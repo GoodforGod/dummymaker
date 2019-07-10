@@ -1,8 +1,8 @@
 package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.factory.IPopulateFactory;
 import io.dummymaker.factory.IProduceFactory;
+import io.dummymaker.scan.impl.PopulateScanner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,17 +17,15 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * @see PrimeGen
  * @since 26.05.2017
  */
-public class GenProduceFactory implements IProduceFactory {
+public class GenFactory extends PopulateFactory implements IProduceFactory {
 
-    private final IPopulateFactory populateFactory;
-
-    public GenProduceFactory() {
-        this.populateFactory = new GenPopulateFactory();
+    public GenFactory() {
+        super(new PopulateScanner());
     }
 
     @Override
     public <T> T produce(final Class<T> tClass) {
-        return populateFactory.populate(instantiate(tClass));
+        return populate(instantiate(tClass));
     }
 
     @Override
@@ -39,6 +37,6 @@ public class GenProduceFactory implements IProduceFactory {
         for (int i = 0; i < amount; i++)
             produced.add(instantiate(tClass));
 
-        return populateFactory.populate(produced);
+        return populate(produced);
     }
 }

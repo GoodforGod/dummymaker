@@ -3,7 +3,7 @@ package io.dummymaker.generator.complex.impl;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.factory.IPopulateEmbeddedFactory;
-import io.dummymaker.factory.impl.GenPopulateEmbeddedFreeFactory;
+import io.dummymaker.factory.impl.GenSimpleFactory;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -79,7 +79,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
      */
     IPopulateEmbeddedFactory getEmbeddedFreePopulateFactory() {
         if (embeddedFreePopulateFactory == null) {
-            this.embeddedFreePopulateFactory = new GenPopulateEmbeddedFreeFactory();
+            this.embeddedFreePopulateFactory = new GenSimpleFactory();
         }
         return embeddedFreePopulateFactory;
     }

@@ -7,7 +7,7 @@ import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -25,7 +25,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class UniqueExporterTest {
 
-    private final IProduceFactory factory = new GenProduceFactory();
+    private final IProduceFactory factory = new GenFactory();
 
     private IExporter exporter;
     private IValidator validator;

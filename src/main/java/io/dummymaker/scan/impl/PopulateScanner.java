@@ -58,7 +58,7 @@ public class PopulateScanner implements IPopulateScanner {
         final boolean isAutoGen = Arrays.stream(t.getDeclaredAnnotations())
                 .anyMatch(a -> a.annotationType().equals(GenAuto.class));
 
-        for (final Field field : t.getDeclaredFields()) {
+        for (final Field field : getAllDeclaredFields(t)) {
             GenContainer genContainer = findGenAnnotation(field);
 
             // Create auto gen container class is auto generative
@@ -78,6 +78,17 @@ public class PopulateScanner implements IPopulateScanner {
         }
 
         return populateAnnotationMap;
+    }
+
+    private List<Field> getAllDeclaredFields(Class tClass) {
+        if(tClass == null || Object.class.equals(tClass))
+            return Collections.emptyList();
+
+        final List<Field> fields = new ArrayList<>();
+        fields.addAll(Arrays.asList(tClass.getDeclaredFields()));
+        fields.addAll(getAllDeclaredFields(tClass.getSuperclass()));
+
+        return fields;
     }
 
     /**

@@ -2,7 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyNoPopulateFields;
-import io.dummymaker.factory.impl.GenPopulateFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class PopulateFactoryTest {
 
-    private final IPopulateFactory factory = new GenPopulateFactory();
+    private final IPopulateFactory factory = new GenFactory();
 
     @Test
     public void genPopulateTestEmptyList() {

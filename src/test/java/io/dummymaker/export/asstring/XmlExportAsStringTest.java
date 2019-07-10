@@ -7,7 +7,7 @@ import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.XmlValidator;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class XmlExportAsStringTest extends StringExportAssert {
 
-    private final IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenFactory();
 
     private final XmlValidator validation = new XmlValidator();
 

@@ -37,22 +37,49 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * @see GenEnumerate
  * @since 10.03.2018
  */
-abstract class BasicPopulateFactory implements IPopulateFactory {
+abstract class PopulateFactory implements IPopulateFactory {
 
-    private static final Logger logger = Logger.getLogger(GenPopulateFactory.class.getName());
-
-    private static final int MAX_EMBEDDED_DEPTH = GenEmbedded.MAX;
-    private static final int MIN_EMBEDDED_DEPTH = 1;
+    private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
 
     private final IAnnotationScanner enumerateScanner;
     private final IPopulateScanner populateScanner;
 
     private final GeneratorsStorage genStorage;
 
-    BasicPopulateFactory(final IPopulateScanner populateScanner) {
+    PopulateFactory(IPopulateScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
         this.enumerateScanner = new EnumerateScanner();
         this.populateScanner = populateScanner;
+    }
+
+    @Override
+    public <T> T populate(final T t) {
+        return populate(t, 1);
+    }
+
+    @Override
+    public <T> List<T> populate(final List<T> list) {
+        if (BasicCollectionUtils.isEmpty(list))
+            return Collections.emptyList();
+
+        final Class<?> tClass = list.get(0).getClass();
+        final Set<Field> nullableFields = buildEmptySet(); // use for performance
+        final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass); // store enumerate gen state
+
+        return list.stream()
+                .filter(Objects::nonNull)
+                .map(t -> populateEntity(t, enumerateMap, nullableFields, 1))
+                .collect(Collectors.toList());
+    }
+
+    <T> T populate(T t, int depth) {
+        if (t == null)
+            return null;
+
+        return populateEntity(t,
+                buildEnumerateMap(t.getClass()),
+                buildEmptySet(),
+                depth);
     }
 
     /**
@@ -83,16 +110,13 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                         nullableFields,
                         currentEmbeddedDepth);
 
-                // CHECK
                 if (objValue != null)
                     field.set(t, objValue);
+
             } catch (ClassCastException e) {
                 logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
                 nullableFields.add(field); // skip field due to error as if it null
                 throw e;
-            } catch (IllegalAccessException e) {
-                logger.warning(e.getMessage() + " | have NO ACCESS to field: " + field.getName());
-                nullableFields.add(field); // skip field due to error as if it null
             } catch (Exception e) {
                 logger.warning(e.getMessage());
                 nullableFields.add(field); // skip field due to error as if it null
@@ -162,7 +186,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
 
         return populateEntity(embedded,
                 buildEnumerateMap(field.getType()),
-                buildNullableSet(),
+                buildEmptySet(),
                 currentEmbeddedDepth + 1);
     }
 
@@ -179,54 +203,17 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
         return objValue;
     }
 
-    <T> T populate(final T t,
-                   final int depth) {
-        if (t == null)
-            return null;
-
-        return populateEntity(t,
-                buildEnumerateMap(t.getClass()),
-                buildNullableSet(),
-                depth);
-    }
-
-    @Override
-    public <T> T populate(final T t) {
-        if (t == null)
-            return null;
-
-        return populateEntity(t,
-                buildEnumerateMap(t.getClass()),
-                buildNullableSet(),
-                MIN_EMBEDDED_DEPTH);
-    }
-
-    @Override
-    public <T> List<T> populate(final List<T> list) {
-        if (BasicCollectionUtils.isEmpty(list))
-            return Collections.emptyList();
-
-        final Class<?> tClass = list.get(0).getClass();
-
-        final Set<Field> nullableFields = buildNullableSet(); // use for performance
-        final Map<Field, Long> enumerateMap = buildEnumerateMap(tClass); // store enumerate gen state
-
-        return list.stream()
-                .filter(Objects::nonNull)
-                .map(t -> populateEntity(t, enumerateMap, nullableFields, MIN_EMBEDDED_DEPTH))
-                .collect(Collectors.toList());
-    }
 
     private int getDepth(final Annotation annotation) {
         if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
-            return MIN_EMBEDDED_DEPTH;
+            return 1;
 
         final int fieldDepth = ((GenEmbedded) annotation).depth();
         if (fieldDepth < 1)
-            return MIN_EMBEDDED_DEPTH;
+            return 1;
 
-        return (fieldDepth > MAX_EMBEDDED_DEPTH)
-                ? MAX_EMBEDDED_DEPTH
+        return (fieldDepth > GenEmbedded.MAX)
+                ? GenEmbedded.MAX
                 : fieldDepth;
     }
 
@@ -243,7 +230,7 @@ abstract class BasicPopulateFactory implements IPopulateFactory {
                 );
     }
 
-    private Set<Field> buildNullableSet() {
+    private Set<Field> buildEmptySet() {
         return new HashSet<>();
     }
 }

@@ -1,21 +1,5 @@
-### Java template
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# IntelliJ project files
 .idea
 *.iml
+/gradle.properties
 out
-gen
-.gitignore
+.gradle

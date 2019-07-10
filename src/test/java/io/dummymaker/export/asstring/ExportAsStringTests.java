@@ -10,7 +10,7 @@ import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class ExportAsStringTests extends Assert {
 
-    private final IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenFactory();
 
     private final IExporter exporter;
     private final IValidator validator;

@@ -8,14 +8,14 @@ import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
  * <p>
  * EXCLUDE EMBEDDED FIELDS
  *
- * @see BasicPopulateFactory
+ * @see PopulateFactory
  *
  * @author GoodforGod
  * @since 10.03.2018
  */
-public class GenPopulateEmbeddedFreeFactory extends BasicPopulateFactory implements IPopulateEmbeddedFactory {
+public class GenSimpleFactory extends PopulateFactory implements IPopulateEmbeddedFactory {
 
-    public GenPopulateEmbeddedFreeFactory() {
+    public GenSimpleFactory() {
         super(new PopulateEmbeddedFreeScanner());
     }
 

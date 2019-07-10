@@ -7,7 +7,7 @@ import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 abstract class FileExportAssert extends ExportAssert {
 
-    private final IProduceFactory produceFactory = new GenProduceFactory();
+    private final IProduceFactory produceFactory = new GenFactory();
 
     private final IExporter exporter;
     private final IValidator validator;

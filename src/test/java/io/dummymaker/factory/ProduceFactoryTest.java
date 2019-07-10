@@ -2,7 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.data.*;
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class ProduceFactoryTest {
 
-    private final IProduceFactory factory = new GenProduceFactory();
+    private final IProduceFactory factory = new GenFactory();
 
     @Test
     public void produceLessThanZeroAmount() {
@@ -40,7 +40,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void arrayDummyToJson() {
-        DummyArray dummyArray = new GenProduceFactory().produce(DummyArray.class);
+        DummyArray dummyArray = new GenFactory().produce(DummyArray.class);
         String s = new JsonExporter().exportAsString(dummyArray);
         Pattern patternSingleArray = Pattern.compile("\"floatsff\":\\[[\\-0-9.]");
         Pattern patternTwoArray = Pattern.compile("\"bytes2\":\\[\\[[\\-0-9.]");
