@@ -20,14 +20,14 @@ Library can generate Dummies using special *factories*, *populate* their fields 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.2.0</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.2.0'
+    compile 'com.github.goodforgod:dummymaker:1.1.3'
 }
 ```
 

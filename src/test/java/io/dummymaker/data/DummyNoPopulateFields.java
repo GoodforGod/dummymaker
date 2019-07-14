@@ -1,8 +1,8 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.special.GenIgnoreExport;
-import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.special.GenExportForce;
+import io.dummymaker.annotation.special.GenExportIgnore;
+import io.dummymaker.annotation.special.GenExportName;
 
 /**
  * Dummy Object used as data to proceed in tests
@@ -13,11 +13,11 @@ import io.dummymaker.annotation.special.GenRenameExport;
  */
 public class DummyNoPopulateFields {
 
-    @GenRenameExport("socialGroup")
-    @GenForceExport
+    @GenExportName("socialGroup")
+    @GenExportForce
     private String group = "100";
 
-    @GenIgnoreExport
+    @GenExportIgnore
     private String city;
 
     private Integer num;

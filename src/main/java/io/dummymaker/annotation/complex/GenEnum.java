@@ -20,9 +20,8 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenEnum {
-    int MAX = 10000000;
 
-    int from() default 0;
+    String[] only() default {};
 
-    int to() default MAX;
+    String[] exclude() default {};
 }

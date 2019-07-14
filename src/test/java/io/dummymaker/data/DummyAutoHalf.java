@@ -4,7 +4,7 @@ import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.special.GenExportName;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class DummyAutoHalf {
     @GenName
     private String name;
 
-    @GenRenameExport("superlist")
+    @GenExportName("superlist")
     private List list;
 
     @GenMap(fixed = 6)

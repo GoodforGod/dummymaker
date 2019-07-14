@@ -1,5 +1,6 @@
 package io.dummymaker.container;
 
+import io.dummymaker.annotation.special.GenExportName;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;
@@ -30,7 +31,7 @@ public interface IClassContainer {
      * Export class name (after naming strategy applied or renamed)
      *
      * @see ICase
-     * @see io.dummymaker.annotation.special.GenRenameExport
+     * @see GenExportName
      * @return class final export name
      */
     String getExportClassName();
@@ -39,7 +40,7 @@ public interface IClassContainer {
      * Retrieve field by its export name (formatted via strategy or renamed via annotation)
      *
      * @see ICase
-     * @see io.dummymaker.annotation.special.GenRenameExport
+     * @see GenExportName
      *
      * @param exportFieldName field container with final name
      * @return field value

@@ -32,5 +32,8 @@ public @interface GenMap {
 
     int fixed() default -1;
 
+    /**
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
+     */
     int depth() default 1;
 }

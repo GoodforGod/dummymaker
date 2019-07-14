@@ -5,12 +5,16 @@ import io.dummymaker.container.impl.GeneratorsStorage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
+ * @see GenEnum
  * @since 01.03.2019
  */
 public class EnumComplexGenerator extends BasicComplexGenerator {
@@ -24,18 +28,28 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
         if (field == null)
             return null;
 
-        final int from = (annotation == null) ? 0 : ((GenEnum) annotation).from();
-        final int to = (annotation == null) ? GenEnum.MAX : ((GenEnum) annotation).to();
+        final Set<String> exclude = Arrays.stream(((GenEnum) annotation).exclude()).collect(Collectors.toSet());
+        final Predicate<String> excludePredicate = (exclude.isEmpty())
+                ? s -> true
+                : s -> !exclude.contains(s);
 
-        final int length = field.getType().getFields().length;
-        final int usedLength = (length < to) ? length : to;
-        final int i = ThreadLocalRandom.current().nextInt(from, usedLength);
+        final Set<String> only = Arrays.stream(((GenEnum) annotation).only()).collect(Collectors.toSet());
+        final Predicate<String> onlyPredicate = (exclude.isEmpty())
+                ? s -> true
+                : only::contains;
 
-        return Enum.valueOf((Class<? extends Enum>)field.getType(), field.getType().getFields()[i].getName());
+        final List<Field> candidates = Arrays.stream(field.getType().getFields())
+                .filter(f -> onlyPredicate.test(f.getName()))
+                .filter(f -> excludePredicate.test(f.getName()))
+                .collect(Collectors.toList());
+
+        final int i = ThreadLocalRandom.current().nextInt(0, candidates.size());
+
+        return Enum.valueOf((Class<? extends Enum>) field.getType(), field.getType().getFields()[i].getName());
     }
 
     @Override
     public Object generate() {
-        return 0;
+        return null;
     }
 }

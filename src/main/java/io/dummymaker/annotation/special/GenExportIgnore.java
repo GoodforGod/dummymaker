@@ -6,15 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Force object field to export, despite it been annotated with generate annotations
+ * Ignores object field during export
  *
  * @see io.dummymaker.export.IExporter
  *
  * @author GoodforGod
- * @since 31.05.2017
+ * @since 03.06.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.FIELD)
-public @interface GenForceExport {
+public @interface GenExportIgnore {
 
 }

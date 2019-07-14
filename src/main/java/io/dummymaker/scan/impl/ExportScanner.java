@@ -2,9 +2,9 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.special.GenIgnoreExport;
-import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.special.GenExportForce;
+import io.dummymaker.annotation.special.GenExportIgnore;
+import io.dummymaker.annotation.special.GenExportName;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.export.naming.Cases;
@@ -26,8 +26,8 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  *
  * @see PrimeGen
  * @see ComplexGen
- * @see GenIgnoreExport
- * @see GenForceExport
+ * @see GenExportIgnore
+ * @see GenExportForce
  * @see UniqueScanner
  *
  * @author GoodforGod
@@ -53,24 +53,24 @@ public class ExportScanner implements IExportScanner {
         final Map<Field, String> renamedFields = new HashMap<>();
         for (final Field field : t.getDeclaredFields()) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
-                if (annotation.annotationType().equals(GenForceExport.class)) {
+                if (annotation.annotationType().equals(GenExportForce.class)) {
                     exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field.getType()), field.getName()));
-                } else if (annotation.annotationType().equals(GenIgnoreExport.class)) {
+                } else if (annotation.annotationType().equals(GenExportIgnore.class)) {
                     exportFields.remove(field);
                 }
 
-                if (annotation.annotationType().equals(GenRenameExport.class)) {
-                    renamedFields.put(field, ((GenRenameExport) annotation).value());
+                if (annotation.annotationType().equals(GenExportName.class)) {
+                    renamedFields.put(field, ((GenExportName) annotation).value());
                 }
             }
         }
 
         Arrays.stream(t.getDeclaredAnnotations())
-                .filter(a -> a.annotationType().equals(GenRenameExport.class))
+                .filter(a -> a.annotationType().equals(GenExportName.class))
                 .findFirst()
                 .ifPresent(annotation -> exportFields.put(
                         null,
-                        FieldContainer.as(null, null, ((GenRenameExport) annotation).value()))
+                        FieldContainer.as(null, null, ((GenExportName) annotation).value()))
                 );
 
         final Map<Field, GenContainer> containerMap = new PopulateScanner().scan(t);

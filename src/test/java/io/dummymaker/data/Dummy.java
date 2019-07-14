@@ -4,9 +4,9 @@ import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenEnumerate;
-import io.dummymaker.annotation.special.GenForceExport;
-import io.dummymaker.annotation.special.GenIgnoreExport;
-import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.special.GenExportForce;
+import io.dummymaker.annotation.special.GenExportIgnore;
+import io.dummymaker.annotation.special.GenExportName;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,11 +27,11 @@ public class Dummy {
      * @see io.dummymaker.scan.ScannerImplTest
      */
     public enum DummyFieldNames {
-        UNCOMPA("uncompatible", "uncompatible", GenDoubleBig.class, GenIgnoreExport.class),
-        GROUP(  "group",    "socialGroup",  GenRenameExport.class),
-        LNG(    "lng",      "lng",          GenEnumerate.class, GenIgnoreExport.class),
-        BIGD(   "bigd",     "bigd",         GenDoubleBig.class, GenIgnoreExport.class),
-        CITY(   "city",     "city",         GenCity.class, GenIgnoreExport.class),
+        UNCOMPA("uncompatible", "uncompatible", GenDoubleBig.class, GenExportIgnore.class),
+        GROUP(  "group",    "socialGroup",  GenExportName.class),
+        LNG(    "lng",      "lng",          GenEnumerate.class, GenExportIgnore.class),
+        BIGD(   "bigd",     "bigd",         GenDoubleBig.class, GenExportIgnore.class),
+        CITY(   "city",     "city",         GenCity.class, GenExportIgnore.class),
         NUM(    "num",      "num",          GenEnumerate.class),
         NAME(   "name",     "name",         GenName.class);
 
@@ -58,23 +58,23 @@ public class Dummy {
         }
     }
 
-    @GenRenameExport("socialGroup")
-    @GenForceExport
+    @GenExportName("socialGroup")
+    @GenExportForce
     private String group = "100";
 
     @GenCity
-    @GenIgnoreExport
+    @GenExportIgnore
     private String city;
 
-    @GenIgnoreExport
+    @GenExportIgnore
     @GenDoubleBig
     private List uncompatible;
 
-    @GenIgnoreExport
+    @GenExportIgnore
     @GenDoubleBig
     private String bigd;
 
-    @GenIgnoreExport
+    @GenExportIgnore
     @GenEnumerate
     private Long lng;
 

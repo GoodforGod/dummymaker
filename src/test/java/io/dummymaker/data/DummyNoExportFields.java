@@ -1,7 +1,7 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.special.GenIgnoreExport;
-import io.dummymaker.annotation.special.GenRenameExport;
+import io.dummymaker.annotation.special.GenExportIgnore;
+import io.dummymaker.annotation.special.GenExportName;
 
 /**
  * "default comment"
@@ -11,10 +11,10 @@ import io.dummymaker.annotation.special.GenRenameExport;
  */
 public class DummyNoExportFields {
 
-    @GenRenameExport("socialGroup")
+    @GenExportName("socialGroup")
     private String group = "100";
 
-    @GenIgnoreExport
+    @GenExportIgnore
     private String city;
 
     private Integer num;
