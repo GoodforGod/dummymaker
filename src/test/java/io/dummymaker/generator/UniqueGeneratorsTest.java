@@ -2,8 +2,8 @@ package io.dummymaker.generator;
 
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.EnumerateGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.simple.impl.SequentialGenerator;
 import io.dummymaker.generator.simple.impl.time.impl.LocalDateTimeGenerator;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class UniqueGeneratorsTest {
 
     @Test
     public void enumerateGen() {
-        IGenerator generator = new EnumerateGenerator();
+        IGenerator generator = new SequentialGenerator();
 
         Object generated = generator.generate();
 

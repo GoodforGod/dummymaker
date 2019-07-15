@@ -217,7 +217,7 @@ public class SqlExporter extends BasicExporter {
         final Map<Field, FieldContainer> containerMap = container.getFormatSupported(Format.SQL);
 
         for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
-            if (entry.getValue().isEnumerable()) {
+            if (entry.getValue().isSequential()) {
                 return entry.getValue().getExportName();
             } else if (entry.getKey().getName().equalsIgnoreCase("id")
                     || entry.getKey().getName().equalsIgnoreCase("uid")) {

@@ -15,10 +15,10 @@ import java.util.Set;
  * @since 25.02.2018
  */
 public enum Format {
-    CSV(".csv", Type.SIMPLE, Type.ENUMERABLE),
-    JSON(".json", Type.SIMPLE, Type.ENUMERABLE, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION, Type.MAP),
-    XML(".xml", Type.SIMPLE, Type.ENUMERABLE),
-    SQL(".sql", Type.SIMPLE, Type.ENUMERABLE, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION);
+    CSV(".csv", Type.SIMPLE, Type.SEQUENTIAL),
+    JSON(".json", Type.SIMPLE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION, Type.MAP),
+    XML(".xml", Type.SIMPLE, Type.SEQUENTIAL),
+    SQL(".sql", Type.SIMPLE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION);
 
     private final Set<Type> supported;
     private final String extension;

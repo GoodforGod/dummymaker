@@ -4,7 +4,7 @@ import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
-import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.special.GenSequential;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.data.Dummy;
@@ -73,7 +73,7 @@ public class ScannerImplTest {
 
         // Check for correct export annotations
         assertTrue(groupAnnotations.isSimple());
-        assertTrue(numAnnotations.isEnumerable());
+        assertTrue(numAnnotations.isSequential());
         assertTrue(nameAnnotations.isSimple());
     }
 
@@ -94,7 +94,7 @@ public class ScannerImplTest {
         assertNotNull(numAnnotations);
 
         // Check for correct export annotations
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(GenEnumerate.class));
+        assertTrue(numAnnotations.iterator().next().annotationType().equals(GenSequential.class));
     }
 
     @Test
@@ -155,10 +155,10 @@ public class ScannerImplTest {
         assertTrue(uncompaAnnotations.getCore().annotationType().equals(PrimeGen.class));
 
         assertTrue(cityAnnotations.getMarker().annotationType().equals(GenCity.class));
-        assertTrue(numAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(numAnnotations.getMarker().annotationType().equals(GenSequential.class));
         assertTrue(nameAnnotations.getMarker().annotationType().equals(GenName.class));
         assertTrue(bigdAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
-        assertTrue(lngAnnotations.getMarker().annotationType().equals(GenEnumerate.class));
+        assertTrue(lngAnnotations.getMarker().annotationType().equals(GenSequential.class));
         assertTrue(uncompaAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
     }
 

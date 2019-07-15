@@ -3,7 +3,7 @@ package io.dummymaker.container.impl;
 import io.dummymaker.generator.complex.impl.*;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.EnumerateGenerator;
+import io.dummymaker.generator.simple.impl.SequentialGenerator;
 
 import java.lang.reflect.Field;
 
@@ -21,7 +21,7 @@ public class FieldContainer {
 
     public enum Type {
         SIMPLE,
-        ENUMERABLE,
+        SEQUENTIAL,
         EMBEDDED,
         COLLECTION,
         MAP,
@@ -66,8 +66,8 @@ public class FieldContainer {
             return Type.MAP;
         } else if (generator.equals(EmbeddedGenerator.class)) {
             return Type.EMBEDDED;
-        } else if (generator.equals(EnumerateGenerator.class)) {
-            return Type.ENUMERABLE;
+        } else if (generator.equals(SequentialGenerator.class)) {
+            return Type.SEQUENTIAL;
         } else if(generator.equals(ArrayComplexGenerator.class)) {
             return Type.ARRAY;
         } else if(generator.equals(Array2DComplexGenerator.class)) {
@@ -93,8 +93,8 @@ public class FieldContainer {
         return type.equals(Type.COLLECTION);
     }
 
-    public boolean isEnumerable() {
-        return type.equals(Type.ENUMERABLE);
+    public boolean isSequential() {
+        return type.equals(Type.SEQUENTIAL);
     }
 
     public boolean isArray() {

@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.impl;
 
+import io.dummymaker.annotation.special.GenSequential;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -7,12 +8,12 @@ import io.dummymaker.generator.simple.IGenerator;
  * Used by populate factory and genEnumerate
  *
  * @see io.dummymaker.factory.IPopulateFactory
- * @see io.dummymaker.annotation.special.GenEnumerate
+ * @see GenSequential
  *
  * @author GoodforGod
  * @since 07.06.2017
  */
-public class EnumerateGenerator implements IGenerator<Object> {
+public class SequentialGenerator implements IGenerator<Object> {
 
     @Override
     public Object generate() {

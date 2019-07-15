@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.special.GenSequential;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * Scanner to filter fields for enumerate annotation fields
  *
- * @see GenEnumerate
+ * @see GenSequential
  * @see BasicScanner
  *
  * @author GoodforGod
@@ -24,9 +24,9 @@ public class EnumerateScanner extends UniqueScanner {
     /**
      * Predicate to check for enumerate annotation
      *
-     * @see GenEnumerate
+     * @see GenSequential
      */
-    private final Predicate<Annotation> isEnumerate = (a) -> a.annotationType().equals(GenEnumerate.class);
+    private final Predicate<Annotation> isEnumerate = (a) -> a.annotationType().equals(GenSequential.class);
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {

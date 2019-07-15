@@ -8,9 +8,9 @@ import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.BasicCastUtils.getGenericType;
@@ -28,7 +28,9 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  */
 public class MapComplexGenerator extends BasicComplexGenerator {
 
-    private Map generateMap(final int amount,
+    @SuppressWarnings("unchecked")
+    private Map generateMap(final int size,
+                            final Field field,
                             final Class<? extends IGenerator> keyGenerator,
                             final Class<? extends IGenerator> valueGenerator,
                             final Class<?> keyFieldType,
@@ -37,15 +39,15 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final int depth,
                             final int maxDepth) {
 
-        // Firstly try to generate initial object, so we won't allocate list if not necessary
+        // Firstly try to generate initial object, so we won't allocate map if not necessary
         final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);
         final Object initialValue = generateValue(valueGenerator, valueFieldType, storage, depth, maxDepth);
         if (initialKey == null && initialValue == null)
             return Collections.emptyMap();
 
-        final Map map = new HashMap<>(amount);
+        final Map map = buildMap(field, size);
         map.put(initialKey, initialValue);
-        for (int i = 0; i < amount - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             final Object key = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);
             final Object value = generateValue(valueGenerator, valueFieldType, storage, depth, maxDepth);
 
@@ -69,6 +71,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
         if (annotation == null) {
             return generateMap(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
+                    field,
                     getAutoGenerator(keyType),
                     getAutoGenerator(valueType),
                     keyType,
@@ -87,13 +90,14 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 ? getAutoGenerator(valueType)
                 : a.value();
 
-        final int size = genRandomSize(a.min(), a.max(), a.fixed());
-        return generateMap(size, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
+        final int size = getDesiredSize(a.min(), a.max(), a.fixed());
+        return generateMap(size, field, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         return generateMap(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
+                null,
                 IdGenerator.class,
                 IdGenerator.class,
                 Object.class,
@@ -101,5 +105,27 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 null,
                 GenEmbedded.MAX,
                 1);
+    }
+
+    @SuppressWarnings("SortedCollectionWithNonComparableKeys")
+    private <K, V> Map<K, V> buildMap(Field field, int size) {
+        if (field == null)
+            return new HashMap<>(size);
+
+        if (IdentityHashMap.class.equals(field.getType())) {
+            return new IdentityHashMap<>(size);
+        } else if (LinkedHashMap.class.equals(field.getType())) {
+            return new LinkedHashMap<>(size);
+        } else if (WeakHashMap.class.equals(field.getType())) {
+            return new WeakHashMap<>(size);
+        } else if (ConcurrentHashMap.class.equals(field.getType())) {
+            return new ConcurrentHashMap<>(size);
+        } else if (TreeMap.class.equals(field.getType())) {
+            return new TreeMap<>();
+        } else if (ConcurrentSkipListMap.class.equals(field.getType())) {
+            return new ConcurrentSkipListMap<>();
+        }
+
+        return new HashMap<>(size);
     }
 }

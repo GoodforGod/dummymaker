@@ -84,9 +84,9 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
         return embeddedFreePopulateFactory;
     }
 
-    static int genRandomSize(final int min,
-                             final int max,
-                             final int fixed) {
+    static int getDesiredSize(final int min,
+                              final int max,
+                              final int fixed) {
         return (fixed > -1) ? fixed : BasicCollectionUtils.generateRandomSize(min, max);
     }
 

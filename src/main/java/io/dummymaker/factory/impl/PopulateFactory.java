@@ -3,7 +3,7 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.ComplexGen;
 import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.annotation.special.GenEnumerate;
+import io.dummymaker.annotation.special.GenSequential;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.factory.IPopulateFactory;
@@ -34,7 +34,7 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * @see IComplexGenerator
  * @see PrimeGen
  * @see ComplexGen
- * @see GenEnumerate
+ * @see GenSequential
  * @since 10.03.2018
  */
 abstract class PopulateFactory implements IPopulateFactory {
@@ -203,7 +203,6 @@ abstract class PopulateFactory implements IPopulateFactory {
         return objValue;
     }
 
-
     private int getDepth(final Annotation annotation) {
         if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
             return 1;
@@ -226,7 +225,7 @@ abstract class PopulateFactory implements IPopulateFactory {
         return this.enumerateScanner.scan(t).entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> ((GenEnumerate) e.getValue().get(0)).from())
+                        e -> ((GenSequential) e.getValue().get(0)).from())
                 );
     }
 

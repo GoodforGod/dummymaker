@@ -9,7 +9,6 @@ import io.dummymaker.generator.simple.impl.string.IdGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
@@ -24,7 +23,7 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * @author GoodforGod
  * @since 04.11.2018
  */
-public class Array2DComplexGenerator extends CollectionComplexGenerator {
+public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
     @Override
     public Object generate(final Annotation annotation,
@@ -38,7 +37,7 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
-            return toArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage, depth, 1);
+            return genArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage, depth, 1);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);
@@ -46,31 +45,35 @@ public class Array2DComplexGenerator extends CollectionComplexGenerator {
                 ? getAutoGenerator(valueClass)
                 : a.value();
 
-        final int sizeFirst = genRandomSize(a.minFirst(), a.maxFirst(), a.fixedFirst());
-        final int sizeSecond = genRandomSize(a.minSecond(), a.maxSecond(), a.fixedSecond());
-        return toArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage, depth, a.depth());
+        final int sizeFirst = getDesiredSize(a.minFirst(), a.maxFirst(), a.fixedFirst());
+        final int sizeSecond = getDesiredSize(a.minSecond(), a.maxSecond(), a.fixedSecond());
+        return genArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
         final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
-        return toArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
+        return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
-    private Object toArray2D(final int firstSize,
-                             final int secondSize,
-                             final Class<?> valueClass,
-                             final Class<? extends IGenerator> valueGenerator,
-                             final GeneratorsStorage storage,
-                             final int depth,
-                             final int maxDepth) {
-        final Object array = Array.newInstance(valueClass, firstSize, secondSize);
+    @SuppressWarnings("unchecked")
+    private <T> T[][] genArray2D(final int firstSize,
+                                 final int secondSize,
+                                 final Class<T> valueClass,
+                                 final Class<? extends IGenerator> valueGenerator,
+                                 final GeneratorsStorage storage,
+                                 final int depth,
+                                 final int maxDepth) {
+        final T[][] array = ((T[][]) Array.newInstance(valueClass, firstSize, secondSize));
         for (int i = 0; i < firstSize; i++) {
             final Object row = Array.get(array, i);
-            final List<?> objects = generateList(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
-            for (int j = 0; j < secondSize; j++)
-                Array.set(row, j, objects.get(j));
+            final T[] objects = genArray(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
+            if(objects == null || objects.length < 1)
+                break;
+
+            for (int j = 0; j < objects.length - 1; j++)
+                Array.set(row, j, objects[i]);
         }
 
         return array;
