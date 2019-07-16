@@ -6,9 +6,9 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-public class TagPresetBundle extends BasicBundle<String> {
+public class TagsBundle extends BasicBundle<String> {
 
-    public TagPresetBundle() {
+    public TagsBundle() {
         super(
                 "#yummy",
                 "#healthy",

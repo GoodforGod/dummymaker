@@ -1,7 +1,5 @@
 package io.dummymaker.bundle;
 
-import java.util.List;
-
 /**
  * Provides default bundles of values for generators
  *
@@ -22,7 +20,7 @@ public interface IBundle<T> {
      *
      * @return all bundle values
      */
-    List<T> getAll();
+    T[] getAll();
 
     /**
      * Get random bundle value

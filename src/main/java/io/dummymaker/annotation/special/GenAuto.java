@@ -21,4 +21,13 @@ import java.lang.annotation.Target;
 @Target(value = ElementType.TYPE)
 public @interface GenAuto {
 
+    /**
+     * @see GenEmbedded#MAX
+     */
+    int MAX = GenEmbedded.MAX;
+
+    /**
+     * @see GenEmbedded#depth()
+     */
+    int depth() default 1;
 }

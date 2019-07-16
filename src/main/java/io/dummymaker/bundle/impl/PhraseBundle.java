@@ -6,9 +6,9 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-public class PhrasePresetBundle extends BasicBundle<String> {
+public class PhraseBundle extends BasicBundle<String> {
 
-    public PhrasePresetBundle() {
+    public PhraseBundle() {
         super(
                 "A bird in the hand is worth two in the bush",
                 "A bunch of fives",

@@ -1,8 +1,8 @@
 package io.dummymaker.generator.simple.impl.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.FemaleNamePresetBundle;
-import io.dummymaker.bundle.impl.MaleNamePresetBundle;
+import io.dummymaker.bundle.impl.FemaleNameBundle;
+import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -15,8 +15,8 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class NameGenerator implements IGenerator<String> {
 
-    private final IBundle<String> maleBundle = new MaleNamePresetBundle();
-    private final IBundle<String> femaleBundle = new FemaleNamePresetBundle();
+    private final IBundle<String> maleBundle = new MaleNameBundle();
+    private final IBundle<String> femaleBundle = new FemaleNameBundle();
 
     @Override
     public String generate() {

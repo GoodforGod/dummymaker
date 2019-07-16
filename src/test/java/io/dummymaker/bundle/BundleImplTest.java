@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.runners.Parameterized.Parameters;
 
@@ -31,18 +30,18 @@ public class BundleImplTest {
     @Parameters(name = "{index}: Bundle - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new CityPresetBundle() },
-                { new CompanyPresetBundle() },
-                { new CountryPresetBundle() },
-                { new DomainExtensionPresetBundle() },
-                { new EmailServicesPresetBundle() },
-                { new FemaleNamePresetBundle() },
-                { new MaleNamePresetBundle() },
-                { new NicknamesPresetBundle() },
-                { new NounPresetBundle() },
-                { new PhrasePresetBundle() },
+                { new CityBundle() },
+                { new CompanyBundle() },
+                { new CountryBundle() },
+                { new DomainExtensionBundle() },
+                { new EmailServicesBundle() },
+                { new FemaleNameBundle() },
+                { new MaleNameBundle() },
+                { new NicknamesBundle() },
+                { new NounBundle() },
+                { new PhraseBundle() },
                 { new SurnameBundle() },
-                { new TagPresetBundle() }
+                { new TagsBundle() }
         });
     }
 

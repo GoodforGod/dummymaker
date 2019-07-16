@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.impl.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.CityPresetBundle;
+import io.dummymaker.bundle.impl.CityBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class CityGenerator implements IGenerator<String> {
 
-    private final IBundle<String> bundle = new CityPresetBundle();
+    private final IBundle<String> bundle = new CityBundle();
 
     @Override
     public String generate() {

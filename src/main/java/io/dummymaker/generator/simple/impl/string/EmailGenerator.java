@@ -1,9 +1,9 @@
 package io.dummymaker.generator.simple.impl.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.DomainExtensionPresetBundle;
-import io.dummymaker.bundle.impl.EmailServicesPresetBundle;
-import io.dummymaker.bundle.impl.NicknamesPresetBundle;
+import io.dummymaker.bundle.impl.DomainExtensionBundle;
+import io.dummymaker.bundle.impl.EmailServicesBundle;
+import io.dummymaker.bundle.impl.NicknamesBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -14,9 +14,9 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class EmailGenerator implements IGenerator<String> {
 
-    private final IBundle<String> nickBundle = new NicknamesPresetBundle();
-    private final IBundle<String> emailBundle = new EmailServicesPresetBundle();
-    private final IBundle<String> domainBundle = new DomainExtensionPresetBundle();
+    private final IBundle<String> nickBundle = new NicknamesBundle();
+    private final IBundle<String> emailBundle = new EmailServicesBundle();
+    private final IBundle<String> domainBundle = new DomainExtensionBundle();
 
     @Override
     public String generate() {

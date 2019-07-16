@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.impl.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.PhrasePresetBundle;
+import io.dummymaker.bundle.impl.PhraseBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class PhraseGenerator implements IGenerator<String> {
 
-    private final IBundle<String> bundle = new PhrasePresetBundle();
+    private final IBundle<String> bundle = new PhraseBundle();
 
     @Override
     public String generate() {

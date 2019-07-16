@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.impl.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.CountryPresetBundle;
+import io.dummymaker.bundle.impl.CountryBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class CountryGenerator implements IGenerator<String> {
 
-    private final IBundle<String> bundle = new CountryPresetBundle();
+    private final IBundle<String> bundle = new CountryBundle();
 
     @Override
     public String generate() {
