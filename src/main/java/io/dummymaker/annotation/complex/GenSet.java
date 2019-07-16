@@ -32,6 +32,7 @@ public @interface GenSet {
 
     /**
      * @see io.dummymaker.annotation.special.GenEmbedded#MAX
+     * @return desired embedded depth
      */
     int depth() default 1;
 }

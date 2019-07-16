@@ -35,6 +35,7 @@ public @interface GenArray2D {
 
     /**
      * @see io.dummymaker.annotation.special.GenEmbedded#MAX
+     * @return desired embedded depth
      */
     int depth() default 1;
 }

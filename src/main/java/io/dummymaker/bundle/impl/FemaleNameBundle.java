@@ -3,8 +3,8 @@ package io.dummymaker.bundle.impl;
 /**
  * Contains Female Names As String
  *
- * @Author GoodforGod
- * @Since 31.05.2017
+ * @author GoodforGod
+ * @since 31.05.2017
  */
 public class FemaleNameBundle extends BasicBundle<String> {
 

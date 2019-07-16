@@ -1,6 +1,7 @@
 package io.dummymaker.bundle;
 
 import io.dummymaker.bundle.impl.*;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.runners.Parameterized.Parameters;
 
 /**
@@ -19,7 +19,7 @@ import static org.junit.runners.Parameterized.Parameters;
  * @since 20.08.2017
  */
 @RunWith(Parameterized.class)
-public class BundleImplTest {
+public class BundleImplTest extends Assert {
 
     private BasicBundle bundle;
 
@@ -47,18 +47,18 @@ public class BundleImplTest {
 
     @Test
     public void bundlePresentSizeCheck() {
-        assertEquals(bundle.getAll().size(), bundle.size());
+        assertEquals(bundle.getAll().length, bundle.size());
     }
 
     @Test
     public void bundlePresentIndexGet() {
-        Integer index = current().nextInt(0, bundle.size() - 1);
-        assertEquals(bundle.getAll().get(index), bundle.get(index));
+        int index = current().nextInt(0, bundle.size() - 1);
+        assertEquals(bundle.getAll()[index], bundle.get(index));
     }
 
     @Test
     public void testIndexOutOfBound() {
-        Integer integer = -1;
+        int integer = -1;
         assertNotNull(bundle.get(integer));
     }
 

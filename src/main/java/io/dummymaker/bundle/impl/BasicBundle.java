@@ -31,7 +31,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
     public T get(int index) {
         return (index > 0 && index < preset.length - 1)
                 ? preset[index]
-                : preset[ThreadLocalRandom.current().nextInt(preset.length - 1)];
+                : preset[ThreadLocalRandom.current().nextInt(0, preset.length - 1)];
     }
 
     @Override

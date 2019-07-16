@@ -58,22 +58,26 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T[][] genArray2D(final int firstSize,
+    private <T> Object genArray2D(final int firstSize,
                                  final int secondSize,
                                  final Class<T> valueClass,
                                  final Class<? extends IGenerator> valueGenerator,
                                  final GeneratorsStorage storage,
                                  final int depth,
                                  final int maxDepth) {
-        final T[][] array = ((T[][]) Array.newInstance(valueClass, firstSize, secondSize));
+        final Object array = Array.newInstance(valueClass, firstSize, secondSize);
         for (int i = 0; i < firstSize; i++) {
             final Object row = Array.get(array, i);
-            final T[] objects = genArray(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
-            if(objects == null || objects.length < 1)
+            final Object objects = genArray(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
+            if(objects == null)
                 break;
 
-            for (int j = 0; j < objects.length - 1; j++)
-                Array.set(row, j, objects[i]);
+            final int length = Array.getLength(objects);
+            if(length < 1)
+                break;
+
+            for (int j = 0; j < length - 1; j++)
+                Array.set(row, j, Array.get(objects, i));
         }
 
         return array;

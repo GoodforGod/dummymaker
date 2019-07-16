@@ -28,6 +28,7 @@ public @interface GenAuto {
 
     /**
      * @see GenEmbedded#depth()
+     * @return desired embedded depth
      */
     int depth() default 1;
 }

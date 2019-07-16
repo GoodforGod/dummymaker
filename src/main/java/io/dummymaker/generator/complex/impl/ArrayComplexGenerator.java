@@ -62,7 +62,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    <T> T[] genArray(final int size,
+    <T> Object genArray(final int size,
                      final Class<? extends IGenerator> valueGenerator,
                      final Class<T> fieldClass,
                      final GeneratorsStorage storage,
@@ -72,10 +72,10 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
         // Firstly try to generate initial object, so we won't allocate list if not necessary
         final T initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
         if (initial == null) {
-            return (T[]) new Object[0];
+            return new Object[0];
         }
 
-        final T[] array = ((T[]) Array.newInstance(fieldClass, size));
+        final Object array = Array.newInstance(fieldClass, size);
         for (int i = 0; i < size - 1; i++) {
             final T t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
             Array.set(array, i, t);
