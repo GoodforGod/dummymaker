@@ -79,7 +79,7 @@ public class ExportScanner implements IExportScanner {
                 .forEach(e -> {
                     final Field f = e.getKey();
                     final String exportName = renamedFields.getOrDefault(f, nameCase.format(f.getName()));
-                    exportFields.replace(f, FieldContainer.as(f, e.getValue().getGeneratorClass(), exportName));
+                    exportFields.replace(f, FieldContainer.as(f, e.getValue().getGenerator(), exportName));
                     renamedFields.remove(f);
                 });
 

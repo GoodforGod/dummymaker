@@ -32,7 +32,7 @@ public class ScannerImplTest {
 
     @Test
     public void baseScannerFindAllAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new BasicScanner();
+        IAnnotationScanner scanner = new AnnotationScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -79,7 +79,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForEnumerateAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new EnumerateScanner();
+        IAnnotationScanner scanner = new SequentialScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -99,7 +99,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
-        IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
+        IPopulateScanner scanner = new PopulateSimpleScanner();
 
         Map<Field, GenContainer> fields = scanner.scan(DummyCollection.class);
 
@@ -111,13 +111,13 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForExportEmbeddedFreeCollectionAnnotation() {
-        IPopulateScanner scanner = new PopulateEmbeddedFreeScanner();
+        IPopulateScanner scanner = new PopulateSimpleScanner();
 
         Map<Field, GenContainer> fields = scanner.scan(DummyNoZeroConstructor.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
-        assertFalse(fields.isEmpty());
+        assertTrue(fields.isEmpty());
     }
 
     @Test
@@ -175,7 +175,7 @@ public class ScannerImplTest {
 
     @Test
     public void scanForEnumerateWhereThereNoOne() {
-        IAnnotationScanner scanner = new EnumerateScanner();
+        IAnnotationScanner scanner = new SequentialScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 

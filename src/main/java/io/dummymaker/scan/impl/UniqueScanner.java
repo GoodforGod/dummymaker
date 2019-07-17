@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
  *
  * @author GoodforGod
  * @see IAnnotationScanner
- * @see BasicScanner
+ * @see AnnotationScanner
  * @since 08.03.2018
  */
-public class UniqueScanner extends BasicScanner {
+public class UniqueScanner extends AnnotationScanner {
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
@@ -27,7 +27,7 @@ public class UniqueScanner extends BasicScanner {
                 .peek(e -> e.setValue(e.getValue().stream()
                         .distinct()
                         .collect(Collectors.toList())))
-                .collect(LinkedHashMap<Field, List<Annotation>>::new,
+                .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
                         (m, u) -> { }
                 );

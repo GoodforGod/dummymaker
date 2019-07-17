@@ -107,8 +107,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                 1);
     }
 
-    @SuppressWarnings("SortedCollectionWithNonComparableKeys")
-    private <K, V> Map<K, V> buildMap(Field field, int size) {
+    private Map buildMap(Field field, int size) {
         if (field == null)
             return new HashMap<>(size);
 

@@ -14,12 +14,12 @@ import java.util.function.Predicate;
  * Scanner to filter fields for enumerate annotation fields
  *
  * @see GenSequential
- * @see BasicScanner
+ * @see AnnotationScanner
  *
  * @author GoodforGod
  * @since 07.06.2017
  */
-public class EnumerateScanner extends UniqueScanner {
+public class SequentialScanner extends UniqueScanner {
 
     /**
      * Predicate to check for enumerate annotation
@@ -30,18 +30,18 @@ public class EnumerateScanner extends UniqueScanner {
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> populateAnnotationMap = new HashMap<>();
+        final Map<Field, List<Annotation>> sequentialAnnotationMap = new HashMap<>();
 
         // Use only first found gen annotation on field
         for (final Field field : t.getDeclaredFields()) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (isEnumerate.test(annotation)) {
-                    populateAnnotationMap.put(field, Collections.singletonList(annotation));
+                    sequentialAnnotationMap.put(field, Collections.singletonList(annotation));
                     break;
                 }
             }
         }
 
-        return populateAnnotationMap;
+        return sequentialAnnotationMap;
     }
 }

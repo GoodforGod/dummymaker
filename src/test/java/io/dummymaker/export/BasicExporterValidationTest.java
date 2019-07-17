@@ -71,7 +71,7 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNullableDummiesReturnEmptyList() {
-        String s = exporter.exportAsString((List) null);
+        String s = exporter.exportAsString(null);
         assertTrue(s.isEmpty());
     }
 

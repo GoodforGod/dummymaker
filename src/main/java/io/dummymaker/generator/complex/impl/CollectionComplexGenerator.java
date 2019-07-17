@@ -17,25 +17,26 @@ import java.util.*;
  */
 abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
-    <T> Collection<T> genCollection(final int size,
+    Collection<?> genCollection(final int size,
                                     final Class<? extends IGenerator> valueGenerator,
-                                    final Class<T> fieldClass,
+                                    final Class<?> fieldClass,
                                     final GeneratorsStorage storage,
                                     final int depth,
                                     final int maxDepth) {
         return genCollection(size, new ArrayList<>(size), valueGenerator, fieldClass, storage, depth, maxDepth);
     }
 
-    <T> Collection<T> genCollection(final int size,
-                                    final Collection<T> collection,
-                                    final Class<? extends IGenerator> valueGenerator,
-                                    final Class<T> fieldClass,
-                                    final GeneratorsStorage storage,
-                                    final int depth,
-                                    final int maxDepth) {
+    @SuppressWarnings("unchecked")
+    Collection genCollection(final int size,
+                             final Collection<?> collection,
+                             final Class<? extends IGenerator> valueGenerator,
+                             final Class<?> fieldClass,
+                             final GeneratorsStorage storage,
+                             final int depth,
+                             final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final T initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
+        final Object initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
         if (initial == null) {
             if(collection == null || collection.getClass().isAssignableFrom(List.class)) {
                 return Collections.emptyList();
@@ -47,10 +48,10 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
             return Collections.emptyList();
         }
 
-        final Collection<T> list = (collection == null) ? new ArrayList<>(size) : collection;
+        final Collection list = (collection == null) ? new ArrayList<>(size) : collection;
         list.add(initial);
-        for (int i = 0; i < size - 1; i++) {
-            final T t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
+        for (int i = 1; i < size; i++) {
+            final Object t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
             list.add(t);
         }
 

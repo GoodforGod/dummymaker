@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
  * @author GoodforGod
  * @since 16.07.2019
  */
-public class FullAddressGenerator implements IGenerator<String> {
+public class AddressFullGenerator implements IGenerator<String> {
 
     private final IGenerator<String> generator = new AddressGenerator();
     private final IBundle<String> countryBundle = new CountryBundle();

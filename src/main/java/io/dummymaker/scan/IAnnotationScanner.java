@@ -1,5 +1,7 @@
 package io.dummymaker.scan;
 
+import io.dummymaker.scan.impl.AnnotationScanner;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.Map;
  * Field scanner used to scan for field annotations
  * Mostly used by factories to retrieve info for them
  *
- * @see io.dummymaker.scan.impl.BasicScanner
+ * @see AnnotationScanner
  * @see io.dummymaker.scan.impl.UniqueScanner
  * @see io.dummymaker.factory.IPopulateFactory
  *

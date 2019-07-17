@@ -16,11 +16,10 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 /**
  * Generates two dimension arrays based on field type
  *
+ * @author GoodforGod
  * @see GenArray2D
  * @see io.dummymaker.generator.complex.IComplexGenerator
  * @see CollectionComplexGenerator
- *
- * @author GoodforGod
  * @since 04.11.2018
  */
 public class Array2DComplexGenerator extends ArrayComplexGenerator {
@@ -57,27 +56,28 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
         return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> Object genArray2D(final int firstSize,
-                                 final int secondSize,
-                                 final Class<T> valueClass,
-                                 final Class<? extends IGenerator> valueGenerator,
-                                 final GeneratorsStorage storage,
-                                 final int depth,
-                                 final int maxDepth) {
-        final Object array = Array.newInstance(valueClass, firstSize, secondSize);
-        for (int i = 0; i < firstSize; i++) {
+    private Object genArray2D(final int rows,
+                              final int rowSize,
+                              final Class<?> valueClass,
+                              final Class<? extends IGenerator> valueGenerator,
+                              final GeneratorsStorage storage,
+                              final int depth,
+                              final int maxDepth) {
+        final Object array = Array.newInstance(valueClass, rows, rowSize);
+        for (int i = 0; i < rows; i++) {
             final Object row = Array.get(array, i);
-            final Object objects = genArray(secondSize, valueGenerator, valueClass, storage, depth, maxDepth);
-            if(objects == null)
+            final Object objects = genArray(rowSize, valueClass, valueGenerator, storage, depth, maxDepth);
+            if (objects == null)
                 break;
 
             final int length = Array.getLength(objects);
-            if(length < 1)
+            if (length < 1)
                 break;
 
-            for (int j = 0; j < length - 1; j++)
-                Array.set(row, j, Array.get(objects, i));
+            for (int j = 0; j < length; j++) {
+                final Object o = Array.get(objects, j);
+                Array.set(row, j, o);
+            }
         }
 
         return array;

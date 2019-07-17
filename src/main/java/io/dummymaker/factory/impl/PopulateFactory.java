@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.impl.EnumerateScanner;
+import io.dummymaker.scan.impl.SequentialScanner;
 import io.dummymaker.util.BasicCastUtils;
 import io.dummymaker.util.BasicCollectionUtils;
 
@@ -41,14 +41,14 @@ abstract class PopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
 
-    private final IAnnotationScanner enumerateScanner;
+    private final IAnnotationScanner sequentialScanner;
     private final IPopulateScanner populateScanner;
 
     private final GeneratorsStorage genStorage;
 
     PopulateFactory(IPopulateScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
-        this.enumerateScanner = new EnumerateScanner();
+        this.sequentialScanner = new SequentialScanner();
         this.populateScanner = populateScanner;
     }
 
@@ -140,12 +140,12 @@ abstract class PopulateFactory implements IPopulateFactory {
                                   final Map<Field, Long> enumerateMap,
                                   final Set<Field> nullableFields,
                                   final int currentEmbeddedDepth) {
-        final IGenerator generator = genStorage.getGenInstance(container.getGeneratorClass());
+        final IGenerator generator = genStorage.getGenInstance(container.getGenerator());
         final Annotation annotation = container.getMarker();
 
         Object generated;
 
-        if (EmbeddedGenerator.class.equals(container.getGeneratorClass())) {
+        if (EmbeddedGenerator.class.equals(container.getGenerator())) {
             generated = generateEmbeddedObject(annotation, field, nullableFields, currentEmbeddedDepth);
         } else if (enumerateMap.containsKey(field)) {
             generated = generateEnumerateObject(field, enumerateMap);
@@ -222,7 +222,7 @@ abstract class PopulateFactory implements IPopulateFactory {
      * @param t class to scan for enumerate fields
      */
     private Map<Field, Long> buildEnumerateMap(final Class t) {
-        return this.enumerateScanner.scan(t).entrySet().stream()
+        return this.sequentialScanner.scan(t).entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> ((GenSequential) e.getValue().get(0)).from())

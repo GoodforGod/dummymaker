@@ -1,8 +1,8 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.container.impl.GenContainer;
-import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
+import io.dummymaker.scan.impl.PopulateSimpleScanner;
 
 import java.lang.reflect.Field;
 
@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
  * Scanners used by populate factory primarily
  *
  * @see PopulateScanner
- * @see PopulateEmbeddedFreeScanner
+ * @see PopulateSimpleScanner
  *
  * @see GenContainer
  *

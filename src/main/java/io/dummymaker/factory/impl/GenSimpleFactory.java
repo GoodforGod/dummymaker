@@ -1,7 +1,7 @@
 package io.dummymaker.factory.impl;
 
 import io.dummymaker.factory.IPopulateEmbeddedFactory;
-import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
+import io.dummymaker.scan.impl.PopulateSimpleScanner;
 
 /**
  * Populate gen annotated object fields without embedded ones
@@ -16,7 +16,7 @@ import io.dummymaker.scan.impl.PopulateEmbeddedFreeScanner;
 public class GenSimpleFactory extends PopulateFactory implements IPopulateEmbeddedFactory {
 
     public GenSimpleFactory() {
-        super(new PopulateEmbeddedFreeScanner());
+        super(new PopulateSimpleScanner());
     }
 
     public <T> T populate(final T t, final int depth) {

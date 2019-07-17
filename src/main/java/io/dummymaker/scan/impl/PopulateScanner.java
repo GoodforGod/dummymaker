@@ -27,11 +27,11 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * @author GoodforGod
  * @see PrimeGen
  * @see GenEmbedded
- * @see BasicScanner
+ * @see AnnotationScanner
  * @see io.dummymaker.factory.IPopulateFactory
  * @since 29.05.2017
  */
-public class PopulateScanner implements IPopulateScanner {
+public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Predicate to check for core prime/complex marker annotation
@@ -78,17 +78,6 @@ public class PopulateScanner implements IPopulateScanner {
         }
 
         return populateAnnotationMap;
-    }
-
-    private List<Field> getAllDeclaredFields(Class tClass) {
-        if(tClass == null || Object.class.equals(tClass))
-            return Collections.emptyList();
-
-        final List<Field> fields = new ArrayList<>();
-        fields.addAll(Arrays.asList(tClass.getDeclaredFields()));
-        fields.addAll(getAllDeclaredFields(tClass.getSuperclass()));
-
-        return fields;
     }
 
     /**

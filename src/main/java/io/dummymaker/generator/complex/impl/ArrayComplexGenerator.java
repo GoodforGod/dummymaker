@@ -35,8 +35,8 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
             return genArray(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
+                    valueClass,
                     getAutoGenerator(valueClass),
-                    ((Class<?>) valueClass),
                     storage,
                     depth,
                     1);
@@ -48,37 +48,37 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());
-        return genArray(size, generatorClass, ((Class<?>) valueClass), storage, depth, a.depth());
+        return genArray(size, valueClass, generatorClass, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         return genArray(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
-                IdGenerator.class,
                 String.class,
+                IdGenerator.class,
                 null,
                 GenEmbedded.MAX,
                 1);
     }
 
-    @SuppressWarnings("unchecked")
-    <T> Object genArray(final int size,
+    Object genArray(final int size,
+                    final Class<?> valueClass,
                      final Class<? extends IGenerator> valueGenerator,
-                     final Class<T> fieldClass,
                      final GeneratorsStorage storage,
                      final int depth,
                      final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
-        final T initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
+        final Object initial = generateValue(valueGenerator, valueClass, storage, depth, maxDepth);
         if (initial == null) {
-            return new Object[0];
+            return null;
         }
 
-        final Object array = Array.newInstance(fieldClass, size);
-        for (int i = 0; i < size - 1; i++) {
-            final T t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
-            Array.set(array, i, t);
+        final Object array = Array.newInstance(valueClass, size);
+        Array.set(array, 0, initial);
+        for (int i = 1; i < size; i++) {
+            final Object o = generateValue(valueGenerator, valueClass, storage, depth, maxDepth);
+            Array.set(array, i, o);
         }
 
         return array;

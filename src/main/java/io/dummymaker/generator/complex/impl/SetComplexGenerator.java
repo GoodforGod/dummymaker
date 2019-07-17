@@ -62,7 +62,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate() {
         final int size = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
-        final Set<Object> collection = buildCollection(null, size);
+        final Set collection = buildCollection(null, size);
         return genCollection(size,
                 collection,
                 IdGenerator.class,
@@ -72,8 +72,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
                 1);
     }
 
-    @SuppressWarnings("SortedCollectionWithNonComparableKeys")
-    private <T> Set<T> buildCollection(Field field, int size) {
+    private Set buildCollection(Field field, int size) {
         if (field == null)
             return new HashSet<>(size);
 

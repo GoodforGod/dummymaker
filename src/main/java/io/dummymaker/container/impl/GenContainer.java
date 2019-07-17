@@ -39,48 +39,38 @@ public class GenContainer {
     private final boolean isComplex;
     private final boolean isAuto;
 
-    private final Class<? extends IGenerator> generatorClass;
+    private final Class<? extends IGenerator> generator;
 
     private GenContainer(final Annotation core,
                          final Annotation marker,
                          final boolean isComplex,
                          final boolean isAuto,
-                         final Class<? extends IGenerator> generatorClass) {
+                         final Class<? extends IGenerator> generator) {
         this.marker = marker;
         this.core = core;
         this.isAuto = isAuto;
         this.isComplex = isComplex;
 
-        if (generatorClass != null) {
-            this.generatorClass = generatorClass;
+        if (generator != null) {
+            this.generator = generator;
         } else {
-            this.generatorClass = (isComplex)
+            this.generator = (isComplex)
                     ? ((ComplexGen) core).value()
                     : ((PrimeGen) core).value();
         }
     }
 
-    public static GenContainer asGen(final Annotation core,
-                                     final Annotation marker) {
-        return new GenContainer(core,
-                marker,
-                ComplexGen.class.equals(core.annotationType()),
-                false,
-                null);
+    public static GenContainer asGen(final Annotation core, final Annotation marker) {
+        return new GenContainer(core, marker, ComplexGen.class.equals(core.annotationType()), false, null);
     }
 
-    public static GenContainer asAuto(final Class<? extends IGenerator> generatorClass,
-                                      final boolean isComplex) {
-        return new GenContainer(null,
-                null,
-                isComplex,
-                true,
-                generatorClass);
+    public static GenContainer asAuto(final Class<? extends IGenerator> generatorClass, final boolean isComplex) {
+        return new GenContainer(null, null, isComplex, true, generatorClass);
     }
 
 
-    public Class<? extends IGenerator> getGeneratorClass() {
-        return generatorClass;
+    public Class<? extends IGenerator> getGenerator() {
+        return generator;
     }
 
     public boolean isAuto() {
