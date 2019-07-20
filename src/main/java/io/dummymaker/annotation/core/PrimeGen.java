@@ -1,4 +1,4 @@
-package io.dummymaker.annotation;
+package io.dummymaker.annotation.core;
 
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;

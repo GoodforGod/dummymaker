@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 
 /**
  * Allow to set initial depth to generate from

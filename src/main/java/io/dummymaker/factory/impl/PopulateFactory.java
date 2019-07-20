@@ -1,7 +1,7 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenSequential;
 import io.dummymaker.container.impl.GenContainer;

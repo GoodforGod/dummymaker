@@ -150,7 +150,6 @@ public class BasicCastUtils {
      * @param <T>       generic type
      * @return generated and casted object
      */
-    @SuppressWarnings("unchecked")
     public static <T> T generateObject(final IGenerator generator,
                                        final Class<T> fieldType) {
         if (generator == null)

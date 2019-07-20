@@ -1,8 +1,8 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.special.GenExportForce;
-import io.dummymaker.annotation.special.GenExportIgnore;
-import io.dummymaker.annotation.special.GenExportName;
+import io.dummymaker.annotation.export.GenExportForce;
+import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.export.GenExportName;
 
 /**
  * Dummy Object used as data to proceed in tests

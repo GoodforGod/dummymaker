@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
@@ -94,11 +94,11 @@ public class ScannerImplTest {
         assertNotNull(numAnnotations);
 
         // Check for correct export annotations
-        assertTrue(numAnnotations.iterator().next().annotationType().equals(GenSequential.class));
+        assertEquals(numAnnotations.iterator().next().annotationType(), GenSequential.class);
     }
 
     @Test
-    public void scannerForExportEmbeddedFreeAnnotation() throws NoSuchFieldException {
+    public void scannerForExportEmbeddedFreeAnnotation() {
         IPopulateScanner scanner = new PopulateSimpleScanner();
 
         Map<Field, GenContainer> fields = scanner.scan(DummyCollection.class);
@@ -147,19 +147,19 @@ public class ScannerImplTest {
         assertNotNull(uncompaAnnotations);
 
         // Check for correct export annotations
-        assertTrue(cityAnnotations.getCore().annotationType().equals(PrimeGen.class));
-        assertTrue(numAnnotations.getCore().annotationType().equals(PrimeGen.class));
-        assertTrue(nameAnnotations.getCore().annotationType().equals(PrimeGen.class));
-        assertTrue(bigdAnnotations.getCore().annotationType().equals(PrimeGen.class));
-        assertTrue(lngAnnotations.getCore().annotationType().equals(PrimeGen.class));
-        assertTrue(uncompaAnnotations.getCore().annotationType().equals(PrimeGen.class));
+        assertEquals(cityAnnotations.getCore().annotationType(), PrimeGen.class);
+        assertEquals(numAnnotations.getCore().annotationType(), PrimeGen.class);
+        assertEquals(nameAnnotations.getCore().annotationType(), PrimeGen.class);
+        assertEquals(bigdAnnotations.getCore().annotationType(), PrimeGen.class);
+        assertEquals(lngAnnotations.getCore().annotationType(), PrimeGen.class);
+        assertEquals(uncompaAnnotations.getCore().annotationType(), PrimeGen.class);
 
-        assertTrue(cityAnnotations.getMarker().annotationType().equals(GenCity.class));
-        assertTrue(numAnnotations.getMarker().annotationType().equals(GenSequential.class));
-        assertTrue(nameAnnotations.getMarker().annotationType().equals(GenName.class));
-        assertTrue(bigdAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
-        assertTrue(lngAnnotations.getMarker().annotationType().equals(GenSequential.class));
-        assertTrue(uncompaAnnotations.getMarker().annotationType().equals(GenDoubleBig.class));
+        assertEquals(cityAnnotations.getMarker().annotationType(), GenCity.class);
+        assertEquals(numAnnotations.getMarker().annotationType(), GenSequential.class);
+        assertEquals(nameAnnotations.getMarker().annotationType(), GenName.class);
+        assertEquals(bigdAnnotations.getMarker().annotationType(), GenDoubleBig.class);
+        assertEquals(lngAnnotations.getMarker().annotationType(), GenSequential.class);
+        assertEquals(uncompaAnnotations.getMarker().annotationType(), GenDoubleBig.class);
     }
 
     @Test

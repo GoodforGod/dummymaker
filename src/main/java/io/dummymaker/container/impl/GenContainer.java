@@ -1,7 +1,7 @@
 package io.dummymaker.container.impl;
 
-import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.simple.string.GenString;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.scan.IPopulateScanner;
@@ -67,7 +67,6 @@ public class GenContainer {
     public static GenContainer asAuto(final Class<? extends IGenerator> generatorClass, final boolean isComplex) {
         return new GenContainer(null, null, isComplex, true, generatorClass);
     }
-
 
     public Class<? extends IGenerator> getGenerator() {
         return generator;

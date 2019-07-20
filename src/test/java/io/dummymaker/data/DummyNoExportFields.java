@@ -1,7 +1,7 @@
 package io.dummymaker.data;
 
-import io.dummymaker.annotation.special.GenExportIgnore;
-import io.dummymaker.annotation.special.GenExportName;
+import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.export.GenExportName;
 
 /**
  * "default comment"

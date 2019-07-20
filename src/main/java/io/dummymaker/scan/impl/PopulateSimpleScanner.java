@@ -1,8 +1,8 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.annotation.PrimeGen;
 import io.dummymaker.annotation.complex.*;
+import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;

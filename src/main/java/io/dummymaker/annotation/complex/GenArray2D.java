@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.ComplexGen;
+import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.generator.complex.impl.Array2DComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 

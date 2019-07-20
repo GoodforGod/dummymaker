@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 
 /**
  * Generator used by PrimeGen to populate field

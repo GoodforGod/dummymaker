@@ -1,10 +1,10 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.ComplexGen;
-import io.dummymaker.annotation.PrimeGen;
-import io.dummymaker.annotation.special.GenExportForce;
-import io.dummymaker.annotation.special.GenExportIgnore;
-import io.dummymaker.annotation.special.GenExportName;
+import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.export.GenExportForce;
+import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.export.naming.Cases;

@@ -1,4 +1,4 @@
-package io.dummymaker.annotation.special;
+package io.dummymaker.annotation.export;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

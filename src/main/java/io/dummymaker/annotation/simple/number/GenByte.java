@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.number;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.impl.number.ByteGenerator;
 
 import java.lang.annotation.ElementType;

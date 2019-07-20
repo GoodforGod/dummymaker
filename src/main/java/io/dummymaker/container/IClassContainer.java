@@ -1,6 +1,6 @@
 package io.dummymaker.container;
 
-import io.dummymaker.annotation.special.GenExportName;
+import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;

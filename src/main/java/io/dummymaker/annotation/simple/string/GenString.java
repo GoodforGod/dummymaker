@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.string;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.impl.string.StringGenerator;
 
 import java.lang.annotation.ElementType;

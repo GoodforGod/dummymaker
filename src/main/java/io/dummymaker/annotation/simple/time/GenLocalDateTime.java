@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.time;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.impl.time.impl.LocalDateTimeGenerator;
 
 import java.lang.annotation.ElementType;

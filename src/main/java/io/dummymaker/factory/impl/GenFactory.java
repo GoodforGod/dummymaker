@@ -1,6 +1,6 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.scan.impl.PopulateScanner;
 

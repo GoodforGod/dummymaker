@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.special;
 
-import io.dummymaker.annotation.PrimeGen;
+import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.impl.SequentialGenerator;
 
 import java.lang.annotation.ElementType;

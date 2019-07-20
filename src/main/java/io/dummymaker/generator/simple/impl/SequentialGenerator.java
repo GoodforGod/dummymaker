@@ -15,8 +15,18 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class SequentialGenerator implements IGenerator<Object> {
 
+    private long counter;
+
+    public SequentialGenerator() {
+        this(0);
+    }
+
+    public SequentialGenerator(long initial) {
+        this.counter = initial;
+    }
+
     @Override
     public Object generate() {
-        return null;
+        return counter++;
     }
 }
