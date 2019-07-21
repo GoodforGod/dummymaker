@@ -6,6 +6,7 @@ import io.dummymaker.factory.IComplexService;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,12 +31,12 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
         if (field == null)
             return null;
 
-        final Set<String> exclude = Arrays.stream(((GenEnum) annotation).exclude()).collect(Collectors.toSet());
+        final Set<String> exclude = getExcluded(annotation);
         final Predicate<String> excludePredicate = (exclude.isEmpty())
                 ? s -> true
                 : s -> !exclude.contains(s);
 
-        final Set<String> only = Arrays.stream(((GenEnum) annotation).only()).collect(Collectors.toSet());
+        final Set<String> only = getOnly(annotation);
         final Predicate<String> onlyPredicate = (exclude.isEmpty())
                 ? s -> true
                 : only::contains;
@@ -53,5 +54,19 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate() {
         return null;
+    }
+
+    private Set<String> getExcluded(Annotation annotation) {
+        if(annotation == null || !annotation.annotationType().equals(GenEnum.class))
+            return Collections.emptySet();
+
+        return Arrays.stream(((GenEnum) annotation).exclude()).collect(Collectors.toSet());
+    }
+
+    private Set<String> getOnly(Annotation annotation) {
+        if(annotation == null || !annotation.annotationType().equals(GenEnum.class))
+            return Collections.emptySet();
+
+        return Arrays.stream(((GenEnum) annotation).only()).collect(Collectors.toSet());
     }
 }

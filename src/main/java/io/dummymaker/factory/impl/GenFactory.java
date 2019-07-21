@@ -150,7 +150,7 @@ public class GenFactory implements IGenFactory {
         Object generated;
 
         if (EmbeddedGenerator.class.equals(container.getGenerator())) {
-            generated = generateEmbeddedObject(annotation, field, storage, depth);
+            generated = generateEmbeddedObject(container, field, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
         } else if (container.isComplex()) {
@@ -174,8 +174,8 @@ public class GenFactory implements IGenFactory {
      * @param field   field with embedded value
      * @param storage gen factory util class
      */
-    private Object generateEmbeddedObject(Annotation annotation, Field field, GenStorage storage, int depth) {
-        final int fieldDepth = getDepth(annotation);
+    private Object generateEmbeddedObject(GenContainer container, Field field, GenStorage storage, int depth) {
+        final int fieldDepth = getDepth(container);
         if (fieldDepth < depth)
             return null;
 
@@ -195,16 +195,12 @@ public class GenFactory implements IGenFactory {
         return BasicCastUtils.castToNumber(generator.generate(), field.getType());
     }
 
-    private int getDepth(final Annotation annotation) {
-        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
-            return 1;
+    private int getDepth(final GenContainer container) {
+        final Annotation annotation = container.getMarker();
+        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class)) {
+            return container.getAutoDepth();
+        }
 
-        final int fieldDepth = ((GenEmbedded) annotation).depth();
-        if (fieldDepth < 1)
-            return 1;
-
-        return (fieldDepth > GenEmbedded.MAX)
-                ? GenEmbedded.MAX
-                : fieldDepth;
+        return EmbeddedGenerator.toDepth(((GenEmbedded) annotation).depth());
     }
 }

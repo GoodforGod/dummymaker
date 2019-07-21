@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.impl;
 
+import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.simple.IGenerator;
 
 /**
@@ -14,5 +15,15 @@ public class EmbeddedGenerator implements IGenerator<Object> {
     @Override
     public Object generate() {
         return null;
+    }
+
+    public static int toDepth(int depth) {
+        if(depth < 1)
+            return 1;
+
+        if(depth > GenEmbedded.MAX)
+            return GenEmbedded.MAX;
+
+        return depth;
     }
 }

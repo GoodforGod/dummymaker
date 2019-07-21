@@ -34,7 +34,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
-            return genArray(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
+            return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     valueClass,
                     getAutoGenerator(valueClass),
                     storage,
@@ -53,7 +53,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        return genArray(ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT),
+        return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                 String.class,
                 IdGenerator.class,
                 null,

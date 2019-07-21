@@ -105,7 +105,7 @@ class GenStorage implements IComplexService {
      * @return was not marked or otherwise
      */
     boolean isUnmarked(Field field) {
-        return marked.contains(field);
+        return !marked.contains(field);
     }
 
     /**

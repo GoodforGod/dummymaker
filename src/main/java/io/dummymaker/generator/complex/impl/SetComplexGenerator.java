@@ -41,7 +41,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if (annotation == null) {
-            final int size = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
+            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             return genCollection(size,
                     buildCollection(field, size),
                     getAutoGenerator(valueClass),
@@ -68,7 +68,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        final int size = ThreadLocalRandom.current().nextInt(MIN_COUNT_DEFAULT, MAX_COUNT_DEFAULT);
+        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
         final Set collection = buildCollection(null, size);
         return genCollection(size,
                 collection,

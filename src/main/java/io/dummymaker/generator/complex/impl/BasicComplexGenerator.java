@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
@@ -25,8 +24,8 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  */
 abstract class BasicComplexGenerator implements IComplexGenerator {
 
-    static final int MIN_COUNT_DEFAULT = 1;
-    static final int MAX_COUNT_DEFAULT = 10;
+    static final int MIN_DEFAULT = 1;
+    static final int MAX_DEFAULT = 10;
 
     static int getDesiredSize(final int min,
                               final int max,
@@ -43,9 +42,9 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
                         final IComplexService storage,
                         final int depth,
                         final int depthLimit) {
-        final int realDepthLimit = (depthLimit > GenEmbedded.MAX) ? GenEmbedded.MAX : (depthLimit < 1 ? 1 : depthLimit);
+        final int parsedDepthLimit = EmbeddedGenerator.toDepth(depthLimit);
         if ((EmbeddedGenerator.class.equals(generatorClass) || NullGenerator.class.equals(generatorClass))
-                && depth <= realDepthLimit) {
+                && depth <= parsedDepthLimit) {
             return storage.fillWithDepth(instantiate(valueClass), depth + 1);
         }
 

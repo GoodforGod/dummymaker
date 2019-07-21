@@ -73,19 +73,19 @@ public class BasicCastUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T instantiate(final Class<T> tClass) {
+        if (tClass == null)
+            return null;
+
+        final Constructor<?> zeroArgConstructor = Arrays.stream(tClass.getDeclaredConstructors())
+                .filter(c -> c.getParameterCount() == 0)
+                .findFirst().orElse(null);
+
         try {
-            if (tClass == null)
-                return null;
-
-            final Constructor<?> zeroArgConstructor = Arrays.stream(tClass.getDeclaredConstructors())
-                    .filter(c -> c.getParameterCount() == 0)
-                    .findFirst().orElse(null);
-
             if (zeroArgConstructor == null) {
                 logger.warning("[CAN NOT INSTANTIATE] : " + tClass + ", have NO zero arg constructor.");
                 return null;
             }
-
+            zeroArgConstructor.setAccessible(true);
             return ((T) zeroArgConstructor.newInstance());
         } catch (InstantiationException | InvocationTargetException e) {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
@@ -96,6 +96,9 @@ public class BasicCastUtils {
             logger.warning("[CAN NOT INSTANTIATE] : " + tClass
                     + " - no access to instantiating object." + e.getMessage());
             return null;
+        } finally {
+            if (zeroArgConstructor != null)
+                zeroArgConstructor.setAccessible(false);
         }
     }
 
