@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see PassGenerator
- *
  * @author GoodforGod
+ * @see PassGenerator
  * @since 31.05.2017
  */
 @PrimeGen(PassGenerator.class)

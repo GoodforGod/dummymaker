@@ -11,11 +11,10 @@ import java.util.Map;
  * Field scanner used to scan for field annotations
  * Mostly used by factories to retrieve info for them
  *
+ * @author GoodforGod
  * @see AnnotationScanner
  * @see io.dummymaker.scan.impl.UniqueScanner
  * @see io.dummymaker.factory.IPopulateFactory
- *
- * @author GoodforGod
  * @since 30.05.2017
  */
 public interface IAnnotationScanner extends IScanner<Field, List<Annotation>> {

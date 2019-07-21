@@ -7,9 +7,8 @@ import io.dummymaker.generator.simple.IGenerator;
 /**
  * Country with address
  *
- * @see AddressGenerator
- *
  * @author GoodforGod
+ * @see AddressGenerator
  * @since 16.07.2019
  */
 public class AddressFullGenerator implements IGenerator<String> {

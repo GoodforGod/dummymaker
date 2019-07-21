@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 /**
  * Generate map with KEY and VALUE from generators
  *
- * @see MapComplexGenerator
- *
  * @author GoodforGod
+ * @see MapComplexGenerator
  * @since 06.03.2018
  */
 @ComplexGen(MapComplexGenerator.class)
@@ -33,8 +32,8 @@ public @interface GenMap {
     int fixed() default -1;
 
     /**
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      * @return desired embedded depth
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      */
     int depth() default 1;
 }

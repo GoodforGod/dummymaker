@@ -12,9 +12,8 @@ import java.util.stream.Collectors;
  * Scan field for all annotations
  * Core scanner implementation
  *
- * @see IAnnotationScanner
- *
  * @author GoodforGod
+ * @see IAnnotationScanner
  * @since 30.05.2017
  */
 public class AnnotationScanner extends BasicScanner implements IAnnotationScanner {
@@ -28,7 +27,7 @@ public class AnnotationScanner extends BasicScanner implements IAnnotationScanne
         try {
             final List<Field> fields = getAllDeclaredFields(t);
             for (final Field field : fields) {
-                if(field.isSynthetic())
+                if (field.isSynthetic())
                     continue;
 
                 // So we can avoid duplicates but not to use Set in contract for scanner
@@ -61,7 +60,7 @@ public class AnnotationScanner extends BasicScanner implements IAnnotationScanne
     }
 
     protected List<Field> getAllDeclaredFields(Class tClass) {
-        if(tClass == null || Object.class.equals(tClass))
+        if (tClass == null || Object.class.equals(tClass))
             return Collections.emptyList();
 
         final List<Field> fields = new ArrayList<>();

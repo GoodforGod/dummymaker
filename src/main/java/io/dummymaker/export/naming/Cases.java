@@ -7,9 +7,8 @@ import io.dummymaker.export.naming.impl.*;
  * <p>
  * Used in all exporters
  *
- * @see io.dummymaker.export.IExporter
- *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @since 21.02.2018
  */
 public enum Cases {

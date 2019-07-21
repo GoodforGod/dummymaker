@@ -10,20 +10,20 @@ public class EmailServicesBundle extends BasicBundle<String> {
 
     public EmailServicesBundle() {
         super(
-                  "zoho",
-                  "yandex",
-                  "mail",
-                  "gmail",
-                  "outlook",
-                  "proton",
-                  "aim",
-                  "icloud",
-                  "yahoo",
-                  "custom",
-                  "aol",
-                  "gmx",
-                  "hotmail",
-                  "inbox"
+                "zoho",
+                "yandex",
+                "mail",
+                "gmail",
+                "outlook",
+                "proton",
+                "aim",
+                "icloud",
+                "yahoo",
+                "custom",
+                "aol",
+                "gmx",
+                "hotmail",
+                "inbox"
         );
     }
 }

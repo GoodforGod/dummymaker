@@ -3,9 +3,8 @@ package io.dummymaker.export.naming;
 /**
  * Allow to apply naming strategy for field names or class name during export
  *
- * @see io.dummymaker.export.IExporter
- *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @since 21.02.2018
  */
 public interface ICase {

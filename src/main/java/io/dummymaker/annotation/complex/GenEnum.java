@@ -11,9 +11,8 @@ import java.lang.annotation.Target;
 /**
  * Generates random enum values
  *
- * @see EnumComplexGenerator
- *
  * @author GoodforGod
+ * @see EnumComplexGenerator
  * @since 01.03.2019
  */
 @ComplexGen(EnumComplexGenerator.class)

@@ -10,7 +10,7 @@ import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.GenOldFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +32,7 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class ExportAsFileTests extends ExportAssert {
 
-    private final IProduceFactory produceFactory = new GenFactory();
+    private final IProduceFactory produceFactory = new GenOldFactory();
 
     private final IExporter exporter;
     private final IValidator validator;

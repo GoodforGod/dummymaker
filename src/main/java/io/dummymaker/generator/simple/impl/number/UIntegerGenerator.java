@@ -7,9 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Generates int from 0 to Integer.MAX_VALUE
  *
- * @see Integer#MAX_VALUE
- *
  * @author GoodforGod
+ * @see Integer#MAX_VALUE
  * @since 05.03.2019
  */
 public class UIntegerGenerator implements IGenerator<Integer> {

@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.generator.simple.impl.time.impl.*;
@@ -20,27 +20,17 @@ import static io.dummymaker.util.BasicCastUtils.castObject;
 /**
  * Generate time object for GenTime annotation
  *
+ * @author GoodforGod
  * @see GenTime
  * @see IComplexGenerator
- *
- * @author GoodforGod
  * @since 21.04.2018
  */
 public class TimeComplexGenerator implements IComplexGenerator {
 
-    // Lazy initialisation
-    private ITimeGenerator<LocalDateTime> localDateTimeGenerator;
-    private ITimeGenerator<LocalDate> localDateGenerator;
-    private ITimeGenerator<LocalTime> localTimeGenerator;
-    private ITimeGenerator<Date> dateGenerator;
-    private ITimeGenerator<Timestamp> timestampGenerator;
-    private ITimeGenerator<Time> timeGenerator;
-    private ITimeGenerator<java.sql.Date> dateSqlGenerator;
-
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage,
+                           final IComplexService storage,
                            final int depth) {
         if (field == null)
             return null;
@@ -51,69 +41,29 @@ public class TimeComplexGenerator implements IComplexGenerator {
         final Class<?> fieldClass = field.getType();
 
         if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
-            return castObject(getLocalDateTimeGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, LocalDateTimeGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
-            return castObject(getLocalDateGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, LocalDateGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
-            return castObject(getLocalTimeGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, LocalTimeGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
-            return castObject(getDateGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, DateGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
-            return castObject(getTimestampGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, TimestampGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(Time.class)) {
-            return castObject(getTimeGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, TimeGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
-            return castObject(getDateSqlGenerator().generate(from, to), fieldClass);
+            return castObject(genTime(storage, DateSqlGenerator.class, from, to), fieldClass);
         }
         return null;
     }
 
+    private Object genTime(IComplexService storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
+        return ((ITimeGenerator) storage.getGenerator(gClass)).generate(from, to);
+    }
+
     @Override
     public Object generate() {
-        return getLocalDateTimeGenerator().generate();
+        return new LocalDateTimeGenerator().generate();
     }
-
-    private ITimeGenerator<LocalDateTime> getLocalDateTimeGenerator() {
-        if (localDateTimeGenerator == null)
-            this.localDateTimeGenerator = new LocalDateTimeGenerator();
-        return localDateTimeGenerator;
-    }
-
-    private ITimeGenerator<LocalDate> getLocalDateGenerator() {
-        if (localDateGenerator == null)
-            this.localDateGenerator = new LocalDateGenerator();
-        return localDateGenerator;
-    }
-
-    private ITimeGenerator<LocalTime> getLocalTimeGenerator() {
-        if (localTimeGenerator == null)
-            this.localTimeGenerator = new LocalTimeGenerator();
-        return localTimeGenerator;
-    }
-
-    private ITimeGenerator<Date> getDateGenerator() {
-        if (dateGenerator == null)
-            this.dateGenerator = new DateGenerator();
-        return dateGenerator;
-    }
-
-    private ITimeGenerator<Timestamp> getTimestampGenerator() {
-        if (timestampGenerator == null)
-            this.timestampGenerator = new TimestampGenerator();
-        return timestampGenerator;
-    }
-
-    private ITimeGenerator<Time> getTimeGenerator() {
-        if (timeGenerator == null)
-            this.timeGenerator = new TimeGenerator();
-        return timeGenerator;
-    }
-
-
-    private ITimeGenerator<java.sql.Date> getDateSqlGenerator() {
-        if (dateSqlGenerator == null)
-            this.dateSqlGenerator = new DateSqlGenerator();
-        return dateSqlGenerator;
-    }
-
 }

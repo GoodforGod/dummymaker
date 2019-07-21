@@ -15,6 +15,6 @@ public class BigDecimalGenerator implements IGenerator<BigDecimal> {
 
     @Override
     public BigDecimal generate() {
-        return BigDecimal.valueOf(ThreadLocalRandom.current().nextLong());
+        return BigDecimal.valueOf(ThreadLocalRandom.current().nextLong() + ThreadLocalRandom.current().nextDouble());
     }
 }

@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see TimeComplexGenerator
- *
  * @author GoodforGod
+ * @see TimeComplexGenerator
  * @since 06.03.2018
  */
 @ComplexGen(TimeComplexGenerator.class)

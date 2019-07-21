@@ -9,9 +9,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates LocalDateTime from 1970 to 3000 Year with seconds precision
- * @see LocalDateTime
  *
  * @author GoodforGod
+ * @see LocalDateTime
  * @since 26.05.2017
  */
 public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {

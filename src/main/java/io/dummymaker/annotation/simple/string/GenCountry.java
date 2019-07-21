@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see CountryGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see CountryGenerator
  * @since 07.06.2017
  */
 @PrimeGen(CountryGenerator.class)

@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see StreetGenerator
- *
  * @author GoodforGod
+ * @see StreetGenerator
  * @since 16.07.2019
  */
 @PrimeGen(StreetGenerator.class)

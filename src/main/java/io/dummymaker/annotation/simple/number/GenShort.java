@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see ShortGenerator
- *
  * @author GoodforGod
+ * @see ShortGenerator
  * @since 04.11.2018
  */
 @PrimeGen(ShortGenerator.class)

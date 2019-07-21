@@ -3,7 +3,7 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.annotation.special.GenSequential;
+import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.container.impl.GeneratorsStorage;
 import io.dummymaker.factory.IPopulateFactory;
@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.impl.SequentialScanner;
+import io.dummymaker.scan.impl.SequenceScanner;
 import io.dummymaker.util.BasicCastUtils;
 import io.dummymaker.util.BasicCollectionUtils;
 
@@ -34,9 +34,10 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * @see IComplexGenerator
  * @see PrimeGen
  * @see ComplexGen
- * @see GenSequential
+ * @see GenSequence
  * @since 10.03.2018
  */
+@SuppressWarnings("Duplicates")
 abstract class PopulateFactory implements IPopulateFactory {
 
     private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
@@ -48,7 +49,7 @@ abstract class PopulateFactory implements IPopulateFactory {
 
     PopulateFactory(IPopulateScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
-        this.sequentialScanner = new SequentialScanner();
+        this.sequentialScanner = new SequenceScanner();
         this.populateScanner = populateScanner;
     }
 
@@ -152,7 +153,7 @@ abstract class PopulateFactory implements IPopulateFactory {
         } else if (container.isComplex()) {
             // If complexGen can generate embedded objects
             // And not handling it like BasicComplexGenerator, you are StackOverFlowed
-            generated = ((IComplexGenerator) generator).generate(annotation, field, genStorage, currentEmbeddedDepth);
+            generated = ((IComplexGenerator) generator).generate(annotation, field, null, currentEmbeddedDepth);
         } else {
             generated = generator.generate();
         }
@@ -225,7 +226,7 @@ abstract class PopulateFactory implements IPopulateFactory {
         return this.sequentialScanner.scan(t).entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> ((GenSequential) e.getValue().get(0)).from())
+                        e -> ((GenSequence) e.getValue().get(0)).from())
                 );
     }
 

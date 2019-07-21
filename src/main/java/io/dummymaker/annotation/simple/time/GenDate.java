@@ -12,11 +12,9 @@ import java.lang.annotation.Target;
  * This date is exported in long milliseconds format
  * So date is the milliseconds since January 1, 1970, 00:00:00 GMT to 1/1/3000
  *
- * @see DateGenerator
- *
- * @see java.util.Date
- *
  * @author GoodforGod
+ * @see DateGenerator
+ * @see java.util.Date
  * @since 21.02.2018
  */
 @PrimeGen(DateGenerator.class)

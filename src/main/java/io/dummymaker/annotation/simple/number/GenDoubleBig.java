@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see DoubleBigGenerator
- *
  * @author GoodforGod
+ * @see DoubleBigGenerator
  * @since 30.05.2017
  */
 @PrimeGen(DoubleBigGenerator.class)

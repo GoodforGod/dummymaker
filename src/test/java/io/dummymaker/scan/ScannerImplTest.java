@@ -4,7 +4,7 @@ import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
-import io.dummymaker.annotation.special.GenSequential;
+import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.data.Dummy;
@@ -79,7 +79,7 @@ public class ScannerImplTest {
 
     @Test
     public void scannerForEnumerateAnnotations() throws NoSuchFieldException {
-        IAnnotationScanner scanner = new SequentialScanner();
+        IAnnotationScanner scanner = new SequenceScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
@@ -94,7 +94,7 @@ public class ScannerImplTest {
         assertNotNull(numAnnotations);
 
         // Check for correct export annotations
-        assertEquals(numAnnotations.iterator().next().annotationType(), GenSequential.class);
+        assertEquals(numAnnotations.iterator().next().annotationType(), GenSequence.class);
     }
 
     @Test
@@ -155,10 +155,10 @@ public class ScannerImplTest {
         assertEquals(uncompaAnnotations.getCore().annotationType(), PrimeGen.class);
 
         assertEquals(cityAnnotations.getMarker().annotationType(), GenCity.class);
-        assertEquals(numAnnotations.getMarker().annotationType(), GenSequential.class);
+        assertEquals(numAnnotations.getMarker().annotationType(), GenSequence.class);
         assertEquals(nameAnnotations.getMarker().annotationType(), GenName.class);
         assertEquals(bigdAnnotations.getMarker().annotationType(), GenDoubleBig.class);
-        assertEquals(lngAnnotations.getMarker().annotationType(), GenSequential.class);
+        assertEquals(lngAnnotations.getMarker().annotationType(), GenSequence.class);
         assertEquals(uncompaAnnotations.getMarker().annotationType(), GenDoubleBig.class);
     }
 
@@ -175,7 +175,7 @@ public class ScannerImplTest {
 
     @Test
     public void scanForEnumerateWhereThereNoOne() {
-        IAnnotationScanner scanner = new SequentialScanner();
+        IAnnotationScanner scanner = new SequenceScanner();
 
         Map<Field, List<Annotation>> fields = scanner.scan(DummyNoPopulateFields.class);
 

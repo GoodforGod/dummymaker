@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see JobGenerator
- *
  * @author GoodforGod
+ * @see JobGenerator
  * @since 16.07.2019
  */
 @PrimeGen(JobGenerator.class)

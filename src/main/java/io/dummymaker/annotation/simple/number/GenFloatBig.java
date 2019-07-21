@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see FloatBigGenerator
- *
  * @author GoodforGod
+ * @see FloatBigGenerator
  * @since 04.11.2018
  */
 @PrimeGen(FloatBigGenerator.class)

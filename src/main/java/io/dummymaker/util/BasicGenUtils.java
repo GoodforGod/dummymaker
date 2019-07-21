@@ -133,7 +133,7 @@ public class BasicGenUtils {
             return Array2DComplexGenerator.class;
         if (fieldClass.getTypeName().endsWith("[]"))
             return ArrayComplexGenerator.class;
-        if(fieldClass.isEnum())
+        if (fieldClass.isEnum())
             return EnumComplexGenerator.class;
         if (BasicCollectionUtils.isEmpty(generators))
             return NullGenerator.class;

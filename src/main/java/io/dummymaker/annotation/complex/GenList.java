@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 /**
  * Generate list collection
  *
- * @see ListComplexGenerator
- *
  * @author GoodforGod
+ * @see ListComplexGenerator
  * @since 05.03.2018
  */
 @ComplexGen(ListComplexGenerator.class)
@@ -31,8 +30,8 @@ public @interface GenList {
     int fixed() default -1;
 
     /**
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      * @return desired embedded depth
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      */
     int depth() default 1;
 }

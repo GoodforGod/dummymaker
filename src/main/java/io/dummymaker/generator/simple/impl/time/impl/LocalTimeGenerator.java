@@ -7,9 +7,9 @@ import java.time.LocalTime;
 
 /**
  * Generates localTime object with range from 00:00:00 to 24:00:00
- * @see LocalTime
  *
  * @author GoodforGod
+ * @see LocalTime
  * @since 21.02.2018
  */
 public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {

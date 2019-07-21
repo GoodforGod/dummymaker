@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see BtcAddressGenerator
- *
  * @author GoodforGod
+ * @see BtcAddressGenerator
  * @since 04.11.2018
  */
 @PrimeGen(BtcAddressGenerator.class)

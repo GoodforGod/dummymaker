@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see DescriptionGenerator
- *
  * @author GoodforGod
+ * @see DescriptionGenerator
  * @since 20.07.2019
  */
 @PrimeGen(DescriptionGenerator.class)

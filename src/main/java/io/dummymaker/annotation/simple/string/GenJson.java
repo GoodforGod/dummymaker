@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see JsonGenerator
- *
  * @author GoodforGod
+ * @see JsonGenerator
  * @since 21.02.2018
  */
 @PrimeGen(JsonGenerator.class)

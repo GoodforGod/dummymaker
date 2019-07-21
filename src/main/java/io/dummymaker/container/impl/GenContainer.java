@@ -12,11 +12,10 @@ import java.lang.annotation.Annotation;
  * Container with core annotation and its child marker annotation
  * Used by populate scanners and factories
  *
+ * @author GoodforGod
  * @see IPopulateScanner
  * @see PrimeGen
  * @see ComplexGen
- *
- * @author GoodforGod
  * @since 10.03.2018
  */
 public class GenContainer {

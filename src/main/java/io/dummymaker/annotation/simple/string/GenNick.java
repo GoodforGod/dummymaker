@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see NickGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see NickGenerator
  * @since 06.06.2017
  */
 @PrimeGen(NickGenerator.class)

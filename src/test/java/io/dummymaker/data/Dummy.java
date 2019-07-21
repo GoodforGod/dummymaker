@@ -6,7 +6,7 @@ import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
-import io.dummymaker.annotation.special.GenSequential;
+import io.dummymaker.annotation.special.GenSequence;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,10 +29,10 @@ public class Dummy {
     public enum DummyFieldNames {
         UNCOMPA("uncompatible", "uncompatible", GenDoubleBig.class, GenExportIgnore.class),
         GROUP(  "group",    "socialGroup",  GenExportName.class),
-        LNG(    "lng",      "lng",          GenSequential.class, GenExportIgnore.class),
+        LNG(    "lng",      "lng",          GenSequence.class, GenExportIgnore.class),
         BIGD(   "bigd",     "bigd",         GenDoubleBig.class, GenExportIgnore.class),
         CITY(   "city",     "city",         GenCity.class, GenExportIgnore.class),
-        NUM(    "num",      "num",          GenSequential.class),
+        NUM(    "num",      "num",          GenSequence.class),
         NAME(   "name",     "name",         GenName.class);
 
         private String originFieldName;
@@ -75,10 +75,10 @@ public class Dummy {
     private String bigd;
 
     @GenExportIgnore
-    @GenSequential
+    @GenSequence
     private Long lng;
 
-    @GenSequential
+    @GenSequence
     private Integer num;
 
     @GenName

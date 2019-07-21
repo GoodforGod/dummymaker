@@ -5,7 +5,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Generates byte from 0 to 255
+ * Generates byte from -127 to 128
  *
  * @author GoodforGod
  * @since 04.11.2018
@@ -14,6 +14,6 @@ public class ByteGenerator implements IGenerator<Byte> {
 
     @Override
     public Byte generate() {
-        return (byte) ThreadLocalRandom.current().nextInt(0, 255);
+        return (byte) ThreadLocalRandom.current().nextInt(Byte.MIN_VALUE, Byte.MAX_VALUE);
     }
 }

@@ -9,9 +9,8 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 /**
  * Prime bundle implementation
  *
- * @see IBundle
- *
  * @author GoodforGod
+ * @see IBundle
  * @since 31.05.2017
  */
 public abstract class BasicBundle<T> implements IBundle<T> {

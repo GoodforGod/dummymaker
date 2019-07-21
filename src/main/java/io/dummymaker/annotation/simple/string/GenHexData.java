@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see HexDataGenerator
- *
  * @author GoodforGod
+ * @see HexDataGenerator
  * @since 04.11.2018
  */
 @PrimeGen(HexDataGenerator.class)

@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 /**
  * Generate array
  *
- * @see ArrayComplexGenerator
- *
  * @author GoodforGod
+ * @see ArrayComplexGenerator
  * @since 04.11.2018
  */
 @ComplexGen(ArrayComplexGenerator.class)
@@ -31,8 +30,8 @@ public @interface GenArray {
     int fixed() default -1;
 
     /**
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      * @return desired embedded depth
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      */
     int depth() default 1;
 }

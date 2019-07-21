@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 /**
  * Generate set collection
  *
- * @see SetComplexGenerator
- *
  * @author GoodforGod
+ * @see SetComplexGenerator
  * @since 06.03.2018
  */
 @ComplexGen(SetComplexGenerator.class)
@@ -31,8 +30,8 @@ public @interface GenSet {
     int fixed() default -1;
 
     /**
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      * @return desired embedded depth
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      */
     int depth() default 1;
 }

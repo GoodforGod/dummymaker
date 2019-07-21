@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see TimeGenerator
- *
  * @author GoodforGod
+ * @see TimeGenerator
  * @since 10.03.2019
  */
 @PrimeGen(TimeGenerator.class)

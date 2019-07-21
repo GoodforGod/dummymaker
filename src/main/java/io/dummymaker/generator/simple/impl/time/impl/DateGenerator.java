@@ -10,9 +10,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * Generates old java date type
  * This date is exported in long milliseconds format
  * So date is the milliseconds since January 1, 1970, 00:00:00 GMT
- * @see Date
  *
  * @author GoodforGod
+ * @see Date
  * @since 21.02.2018
  */
 public class DateGenerator implements ITimeGenerator<Date> {

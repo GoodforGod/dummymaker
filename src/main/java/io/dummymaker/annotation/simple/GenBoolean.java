@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see BooleanGenerator
- *
  * @author GoodforGod
+ * @see BooleanGenerator
  * @since 21.02.2018
  */
 @PrimeGen(BooleanGenerator.class)

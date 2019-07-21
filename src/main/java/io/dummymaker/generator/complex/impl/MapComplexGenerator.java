@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -19,11 +19,10 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 /**
  * "default comment"
  *
+ * @author GoodforGod
  * @see GenMap
  * @see io.dummymaker.generator.complex.IComplexGenerator
  * @see CollectionComplexGenerator
- *
- * @author GoodforGod
  * @since 22.04.2018
  */
 public class MapComplexGenerator extends BasicComplexGenerator {
@@ -35,7 +34,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final Class<? extends IGenerator> valueGenerator,
                             final Class<?> keyFieldType,
                             final Class<?> valueFieldType,
-                            final GeneratorsStorage storage,
+                            final IComplexService storage,
                             final int depth,
                             final int maxDepth) {
 
@@ -62,7 +61,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage,
+                           final IComplexService storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;

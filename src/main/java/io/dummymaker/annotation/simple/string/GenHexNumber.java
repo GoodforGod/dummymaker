@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see HexNumberGenerator
- *
  * @author GoodforGod
+ * @see HexNumberGenerator
  * @since 04.11.2018
  */
 @PrimeGen(HexNumberGenerator.class)

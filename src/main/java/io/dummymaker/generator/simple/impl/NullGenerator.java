@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.impl;
 
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 
@@ -23,7 +23,7 @@ public class NullGenerator implements IGenerator<Object>, IComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage,
+                           final IComplexService storage,
                            final int depth) {
         return null;
     }

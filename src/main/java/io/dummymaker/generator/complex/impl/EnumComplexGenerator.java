@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenEnum;
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,6 +13,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
+ * Generates enum values
+ *
  * @author GoodforGod
  * @see GenEnum
  * @since 01.03.2019
@@ -23,7 +25,7 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage,
+                           final IComplexService storage,
                            final int depth) {
         if (field == null)
             return null;

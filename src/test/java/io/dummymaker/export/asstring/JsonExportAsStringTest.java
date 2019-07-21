@@ -6,7 +6,7 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.GenOldFactory;
 import org.junit.Test;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class JsonExportAsStringTest extends StringExportAssert {
 
-    private final IProduceFactory produceFactory = new GenFactory();
+    private final IProduceFactory produceFactory = new GenOldFactory();
 
     private final JsonValidator validation = new JsonValidator();
 

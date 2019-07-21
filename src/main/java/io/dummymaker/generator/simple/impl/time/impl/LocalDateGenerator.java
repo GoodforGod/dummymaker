@@ -7,9 +7,9 @@ import java.time.LocalDate;
 
 /**
  * Generates LocalDate objects with range from 1970 to 3000
- * @see LocalDate
  *
  * @author GoodforGod
+ * @see LocalDate
  * @since 21.02.2018
  */
 public class LocalDateGenerator implements ITimeGenerator<LocalDate> {

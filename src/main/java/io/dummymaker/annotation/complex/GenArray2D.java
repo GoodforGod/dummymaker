@@ -12,9 +12,8 @@ import java.lang.annotation.Target;
 /**
  * Generates 2 dimension array
  *
- * @see Array2DComplexGenerator
- *
  * @author GoodforGod
+ * @see Array2DComplexGenerator
  * @since 04.11.2018
  */
 @ComplexGen(Array2DComplexGenerator.class)
@@ -25,17 +24,20 @@ public @interface GenArray2D {
     Class<? extends IGenerator> value() default IGenerator.class;
 
     int minFirst() default 1;
+
     int maxFirst() default 10;
 
     int minSecond() default 1;
+
     int maxSecond() default 10;
 
     int fixedFirst() default -1;
+
     int fixedSecond() default -1;
 
     /**
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      * @return desired embedded depth
+     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
      */
     int depth() default 1;
 }

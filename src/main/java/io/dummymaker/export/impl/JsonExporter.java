@@ -22,15 +22,6 @@ import java.util.stream.Collectors;
 public class JsonExporter extends BasicExporter {
 
     /**
-     * Single mode for single T value export
-     * List for multiple T values
-     */
-    private enum Mode {
-        SINGLE,
-        LIST
-    }
-
-    /**
      * Should export in json pretty mode or raw
      */
     private boolean isPretty;
@@ -87,10 +78,10 @@ public class JsonExporter extends BasicExporter {
         if (container.getType().equals(FieldContainer.Type.ARRAY)) {
             return container.getExportValue().replace("[", "[\"").replace("]", "\"]")
                     .replace("], ", "],").replace(", ", "\",\"").replace(" ", "");
-        } else if(container.getType().equals(FieldContainer.Type.ARRAY_2D)) {
+        } else if (container.getType().equals(FieldContainer.Type.ARRAY_2D)) {
             return container.getExportValue().replace("[[", "[[\"").replace("]]", "\"]]")
                     .replace("], ", "],").replace(", ", "\",\"").replace("],[", "\"],[\"").replace(" ", "");
-        } else if(container.getType().equals(FieldContainer.Type.COLLECTION)
+        } else if (container.getType().equals(FieldContainer.Type.COLLECTION)
                 || container.getType().equals(FieldContainer.Type.MAP)) {
             return container.getExportValue();
         }
@@ -283,5 +274,14 @@ public class JsonExporter extends BasicExporter {
         return builder.append(result)
                 .append(closeJsonListTag())
                 .toString();
+    }
+
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
+    private enum Mode {
+        SINGLE,
+        LIST
     }
 }

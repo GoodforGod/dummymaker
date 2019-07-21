@@ -12,20 +12,23 @@ import java.lang.annotation.Target;
 /**
  * Use when you have your custom generator
  * But dont want to implement your custom annotation
- *
- * @see IGenerator
- * @see PrimeGen
+ * <p>
+ * Works with simple and complex generators
  *
  * @author GoodforGod
+ * @see io.dummymaker.generator.complex.IComplexGenerator
+ * @see IGenerator
+ * @see PrimeGen
  * @since 20.07.2019
  */
 @PrimeGen
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.TYPE)
+@Target(value = ElementType.FIELD)
 public @interface GenCustom {
 
     /**
      * Contains generator class to be called to generate values on factory
+     *
      * @return generator
      */
     Class<? extends IGenerator> value() default NullGenerator.class;

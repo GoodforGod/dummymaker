@@ -11,9 +11,8 @@ import java.lang.annotation.Target;
 /**
  * Generate object with fields type and populate its fields marked by gen annotations
  *
- * @see io.dummymaker.factory.IPopulateFactory
- *
  * @author GoodforGod
+ * @see io.dummymaker.factory.IPopulateFactory
  * @since 09.03.2018
  */
 @PrimeGen(EmbeddedGenerator.class)
@@ -29,6 +28,7 @@ public @interface GenEmbedded {
     /**
      * If annotation is present, than it will be 1 level depth used by factory
      * And MAX level is limit depth embedded object can have
+     *
      * @return desired embedded depth
      */
     int depth() default 1;

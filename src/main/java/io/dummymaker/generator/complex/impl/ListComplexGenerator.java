@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -28,10 +28,11 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  */
 public class ListComplexGenerator extends CollectionComplexGenerator {
 
+    @SuppressWarnings("Duplicates")
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final GeneratorsStorage storage,
+                           final IComplexService storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(List.class))
             return null;
@@ -42,7 +43,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
             return genCollection(size,
                     buildCollection(field, size),
                     getAutoGenerator(valueClass),
-                    ((Class<?>) valueClass),
+                    valueClass,
                     storage,
                     depth,
                     1);
@@ -57,7 +58,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
         return genCollection(size,
                 buildCollection(field, size),
                 generatorClass,
-                ((Class<?>) valueClass),
+                valueClass,
                 storage,
                 depth,
                 a.depth());

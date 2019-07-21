@@ -19,49 +19,6 @@ import java.util.logging.Logger;
  */
 public class BasicCastUtils {
 
-    private enum CastType {
-        UNKNOWN,
-        STRING,
-        BOOLEAN,
-        BYTE,
-        SHORT,
-        CHAR,
-        INT,
-        LONG,
-        FLOAT,
-        DOUBLE,
-        BIG_INT,
-        BIG_DECIMAL;
-
-        public static CastType of(final Class<?> type) {
-            if (type.isAssignableFrom(String.class)) {
-                return STRING;
-            } else if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(boolean.class)) {
-                return BOOLEAN;
-            } else if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
-                return BYTE;
-            } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(short.class)) {
-                return SHORT;
-            } else if (type.isAssignableFrom(Character.class) || type.isAssignableFrom(char.class)) {
-                return CHAR;
-            } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(int.class)) {
-                return INT;
-            } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(long.class)) {
-                return LONG;
-            } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(float.class)) {
-                return FLOAT;
-            } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(double.class)) {
-                return DOUBLE;
-            } else if (type.isAssignableFrom(BigInteger.class)) {
-                return BIG_INT;
-            } else if (type.isAssignableFrom(BigDecimal.class)) {
-                return BIG_DECIMAL;
-            }
-
-            return UNKNOWN;
-        }
-    }
-
     private static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
@@ -264,5 +221,48 @@ public class BasicCastUtils {
 
         // Try to force cast anyway (need more testing)
         return ((T) castObject);
+    }
+
+    private enum CastType {
+        UNKNOWN,
+        STRING,
+        BOOLEAN,
+        BYTE,
+        SHORT,
+        CHAR,
+        INT,
+        LONG,
+        FLOAT,
+        DOUBLE,
+        BIG_INT,
+        BIG_DECIMAL;
+
+        public static CastType of(final Class<?> type) {
+            if (type.isAssignableFrom(String.class)) {
+                return STRING;
+            } else if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(boolean.class)) {
+                return BOOLEAN;
+            } else if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
+                return BYTE;
+            } else if (type.isAssignableFrom(Short.class) || type.isAssignableFrom(short.class)) {
+                return SHORT;
+            } else if (type.isAssignableFrom(Character.class) || type.isAssignableFrom(char.class)) {
+                return CHAR;
+            } else if (type.isAssignableFrom(Integer.class) || type.isAssignableFrom(int.class)) {
+                return INT;
+            } else if (type.isAssignableFrom(Long.class) || type.isAssignableFrom(long.class)) {
+                return LONG;
+            } else if (type.isAssignableFrom(Float.class) || type.isAssignableFrom(float.class)) {
+                return FLOAT;
+            } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(double.class)) {
+                return DOUBLE;
+            } else if (type.isAssignableFrom(BigInteger.class)) {
+                return BIG_INT;
+            } else if (type.isAssignableFrom(BigDecimal.class)) {
+                return BIG_DECIMAL;
+            }
+
+            return UNKNOWN;
+        }
     }
 }

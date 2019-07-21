@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Ignores object field during export
  *
- * @see io.dummymaker.export.IExporter
- *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @since 03.06.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)

@@ -3,7 +3,7 @@ package io.dummymaker.container.impl;
 import io.dummymaker.generator.complex.impl.*;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.SequentialGenerator;
+import io.dummymaker.generator.simple.impl.SequenceGenerator;
 
 import java.lang.reflect.Field;
 
@@ -12,28 +12,16 @@ import static io.dummymaker.util.BasicStringUtils.isEmpty;
 /**
  * Used by ClassContainer to contain field value, and final field name
  *
- * @see ClassContainer
- *
  * @author GoodforGod
+ * @see ClassContainer
  * @since 03.09.2017
  */
 public class FieldContainer {
-
-    public enum Type {
-        SIMPLE,
-        SEQUENTIAL,
-        EMBEDDED,
-        COLLECTION,
-        MAP,
-        ARRAY,
-        ARRAY_2D
-    }
 
     /**
      * Final field name (renamed or converted by naming strategy)
      */
     private final String exportName;
-
     /**
      * Is field enumerable or not
      */
@@ -66,11 +54,11 @@ public class FieldContainer {
             return Type.MAP;
         } else if (generator.equals(EmbeddedGenerator.class)) {
             return Type.EMBEDDED;
-        } else if (generator.equals(SequentialGenerator.class)) {
+        } else if (generator.equals(SequenceGenerator.class)) {
             return Type.SEQUENTIAL;
-        } else if(generator.equals(ArrayComplexGenerator.class)) {
+        } else if (generator.equals(ArrayComplexGenerator.class)) {
             return Type.ARRAY;
-        } else if(generator.equals(Array2DComplexGenerator.class)) {
+        } else if (generator.equals(Array2DComplexGenerator.class)) {
             return Type.ARRAY_2D;
         }
 
@@ -107,5 +95,15 @@ public class FieldContainer {
 
     public String getExportName() {
         return exportName;
+    }
+
+    public enum Type {
+        SIMPLE,
+        SEQUENTIAL,
+        EMBEDDED,
+        COLLECTION,
+        MAP,
+        ARRAY,
+        ARRAY_2D
     }
 }

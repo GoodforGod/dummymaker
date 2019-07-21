@@ -31,7 +31,7 @@ abstract class BasicScanner {
     }
 
     protected List<Field> getAllDeclaredFields(Class tClass) {
-        if(tClass == null || Object.class.equals(tClass))
+        if (tClass == null || Object.class.equals(tClass))
             return Collections.emptyList();
 
         final List<Field> fields = new ArrayList<>();

@@ -9,9 +9,8 @@ import java.util.Set;
 /**
  * All available export types for exporters
  *
- * @see IExporter
- *
  * @author GoodforGod
+ * @see IExporter
  * @since 25.02.2018
  */
 public enum Format {

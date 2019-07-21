@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see UuidGenerator
- *
  * @author GoodforGod
+ * @see UuidGenerator
  * @since 21.02.2018
  */
 @PrimeGen(UuidGenerator.class)

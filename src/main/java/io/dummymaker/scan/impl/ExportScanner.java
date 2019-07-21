@@ -24,13 +24,12 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 /**
  * Scanner for special export annotations
  *
+ * @author GoodforGod
  * @see PrimeGen
  * @see ComplexGen
  * @see GenExportIgnore
  * @see GenExportForce
  * @see UniqueScanner
- *
- * @author GoodforGod
  * @since 03.06.2017
  */
 public class ExportScanner implements IExportScanner {

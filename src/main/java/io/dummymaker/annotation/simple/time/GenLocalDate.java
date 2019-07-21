@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see LocalDateGenerator
- *
  * @author GoodforGod
+ * @see LocalDateGenerator
  * @since 21.02.2018
  */
 @PrimeGen(LocalDateGenerator.class)

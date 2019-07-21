@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see TagGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see TagGenerator
  * @since 07.06.2017
  */
 @PrimeGen(TagGenerator.class)

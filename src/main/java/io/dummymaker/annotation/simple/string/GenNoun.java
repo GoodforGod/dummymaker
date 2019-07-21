@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see NounGenerator
- *
  * @author GoodforGod
+ * @see NounGenerator
  * @since 21.02.2018
  */
 @PrimeGen(NounGenerator.class)

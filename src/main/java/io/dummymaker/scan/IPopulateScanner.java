@@ -9,12 +9,10 @@ import java.lang.reflect.Field;
 /**
  * Scanners used by populate factory primarily
  *
+ * @author GoodforGod
  * @see PopulateScanner
  * @see PopulateSimpleScanner
- *
  * @see GenContainer
- *
- * @author GoodforGod
  * @since 10.03.2018
  */
 public interface IPopulateScanner extends IScanner<Field, GenContainer> {

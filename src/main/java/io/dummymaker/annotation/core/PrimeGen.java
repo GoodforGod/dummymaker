@@ -17,13 +17,12 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation is a core one to support population factory
  *
+ * @author GoodforGod
  * @see IGenerator
  * @see io.dummymaker.scan.IScanner
  * @see IAnnotationScanner
  * @see io.dummymaker.factory.IPopulateFactory
  * @see io.dummymaker.factory.IProduceFactory
- *
- * @author GoodforGod
  * @since 28.05.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)

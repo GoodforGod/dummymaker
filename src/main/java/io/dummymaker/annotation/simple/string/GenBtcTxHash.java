@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see BtcTxHashGenerator
- *
  * @author GoodforGod
+ * @see BtcTxHashGenerator
  * @since 04.11.2018
  */
 @PrimeGen(BtcTxHashGenerator.class)

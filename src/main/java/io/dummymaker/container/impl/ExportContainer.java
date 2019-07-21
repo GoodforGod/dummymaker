@@ -4,17 +4,15 @@ package io.dummymaker.container.impl;
 /**
  * ExportContainer class for BasicExporter extract class method
  *
- * @see io.dummymaker.export.IExporter
- *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @since 03.09.2017
  */
 public class ExportContainer {
 
-    private FieldContainer.Type type;
-
     private final String exportName;
     private final String exportValue;
+    private FieldContainer.Type type;
 
     private ExportContainer(final String exportName,
                             final String exportValue,
@@ -30,17 +28,17 @@ public class ExportContainer {
     }
 
     public static ExportContainer asList(final String exportName,
-                                          final String exportValue) {
+                                         final String exportValue) {
         return new ExportContainer(exportName, exportValue, FieldContainer.Type.COLLECTION);
     }
 
     public static ExportContainer asArray(final String exportName,
-                                        final String exportValue) {
+                                          final String exportValue) {
         return new ExportContainer(exportName, exportValue, FieldContainer.Type.ARRAY);
     }
 
     public static ExportContainer asArray2D(final String exportName,
-                                          final String exportValue) {
+                                            final String exportValue) {
         return new ExportContainer(exportName, exportValue, FieldContainer.Type.ARRAY_2D);
     }
 

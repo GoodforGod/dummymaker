@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see CityGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see CityGenerator
  * @since 07.06.2017
  */
 @PrimeGen(CityGenerator.class)

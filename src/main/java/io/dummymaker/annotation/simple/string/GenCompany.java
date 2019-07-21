@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see CompanyGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see CompanyGenerator
  * @since 07.06.2017
  */
 @PrimeGen(CompanyGenerator.class)

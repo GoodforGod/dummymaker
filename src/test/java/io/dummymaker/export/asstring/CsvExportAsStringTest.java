@@ -7,7 +7,7 @@ import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.GenOldFactory;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class CsvExportAsStringTest extends StringExportAssert {
 
-    private final IProduceFactory produceFactory = new GenFactory();
+    private final IProduceFactory produceFactory = new GenOldFactory();
 
     private final CsvValidator validation = new CsvValidator();
 

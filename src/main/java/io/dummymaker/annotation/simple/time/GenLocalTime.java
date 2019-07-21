@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see LocalTimeGenerator
- *
  * @author GoodforGod
+ * @see LocalTimeGenerator
  * @since 21.02.2018
  */
 @PrimeGen(LocalTimeGenerator.class)

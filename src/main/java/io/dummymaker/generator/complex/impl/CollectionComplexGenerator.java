@@ -1,6 +1,6 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.container.impl.GeneratorsStorage;
+import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -17,32 +17,23 @@ import java.util.*;
  */
 abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
-    Collection<?> genCollection(final int size,
-                                    final Class<? extends IGenerator> valueGenerator,
-                                    final Class<?> fieldClass,
-                                    final GeneratorsStorage storage,
-                                    final int depth,
-                                    final int maxDepth) {
-        return genCollection(size, new ArrayList<>(size), valueGenerator, fieldClass, storage, depth, maxDepth);
-    }
-
     @SuppressWarnings("unchecked")
     Collection genCollection(final int size,
                              final Collection<?> collection,
                              final Class<? extends IGenerator> valueGenerator,
                              final Class<?> fieldClass,
-                             final GeneratorsStorage storage,
+                             final IComplexService storage,
                              final int depth,
                              final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
         final Object initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
         if (initial == null) {
-            if(collection == null || collection.getClass().isAssignableFrom(List.class)) {
+            if (collection == null || collection.getClass().isAssignableFrom(List.class)) {
                 return Collections.emptyList();
-            } else if(collection.getClass().isAssignableFrom(Set.class)) {
+            } else if (collection.getClass().isAssignableFrom(Set.class)) {
                 return Collections.emptySet();
-            } else if(collection.getClass().isAssignableFrom(Queue.class)){
+            } else if (collection.getClass().isAssignableFrom(Queue.class)) {
                 return new ArrayDeque<>();
             }
             return Collections.emptyList();
@@ -61,7 +52,7 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
     @Override
     public abstract Object generate(final Annotation annotation,
                                     final Field field,
-                                    final GeneratorsStorage storage,
+                                    final IComplexService storage,
                                     final int depth);
 
     @Override

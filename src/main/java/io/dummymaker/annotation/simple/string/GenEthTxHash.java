@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see EthTxHashGenerator
- *
  * @author GoodforGod
+ * @see EthTxHashGenerator
  * @since 04.11.2018
  */
 @PrimeGen(EthTxHashGenerator.class)

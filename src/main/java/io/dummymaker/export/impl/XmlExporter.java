@@ -14,27 +14,16 @@ import java.util.stream.Collectors;
 /**
  * Export objects is XML format
  *
- * @see Format
- *
  * @author GoodforGod
+ * @see Format
  * @since 25.02.2018
  */
 public class XmlExporter extends BasicExporter {
 
     /**
-     * Single mode for single T value export
-     * List for multiple T values
-     */
-    private enum Mode {
-        SINGLE,
-        LIST
-    }
-
-    /**
      * Is used with className for XML list tag
      */
     private String exportClassEnding = "List";
-
     /**
      * Is used instead of class name + ending if set
      *
@@ -235,5 +224,14 @@ public class XmlExporter extends BasicExporter {
                 .append("\n")
                 .append(wrapCloseXmlTag(classListTag))
                 .toString();
+    }
+
+    /**
+     * Single mode for single T value export
+     * List for multiple T values
+     */
+    private enum Mode {
+        SINGLE,
+        LIST
     }
 }

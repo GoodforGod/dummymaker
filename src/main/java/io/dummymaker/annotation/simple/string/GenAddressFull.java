@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see AddressFullGenerator
- *
  * @author GoodforGod
+ * @see AddressFullGenerator
  * @since 16.07.2019
  */
 @PrimeGen(AddressFullGenerator.class)

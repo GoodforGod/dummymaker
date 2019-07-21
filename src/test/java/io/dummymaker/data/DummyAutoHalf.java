@@ -4,7 +4,7 @@ import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenAuto;
-import io.dummymaker.annotation.special.GenSequential;
+import io.dummymaker.annotation.special.GenSequence;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ import java.util.Map;
 @GenAuto
 public class DummyAutoHalf {
 
-    @GenSequential
+    @GenSequence
     private int anInt;
 
     @GenName

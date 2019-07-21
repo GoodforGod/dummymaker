@@ -7,9 +7,9 @@ import java.sql.Time;
 
 /**
  * Generates Sql Time from 1970 to 3000 Year
- * @see Time
  *
  * @author GoodforGod
+ * @see Time
  * @since 10.03.2019
  */
 public class TimeGenerator implements ITimeGenerator<Time> {

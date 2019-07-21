@@ -10,9 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @see IClassContainer
- *
  * @author GoodforGod
+ * @see IClassContainer
  * @since 25.02.2018
  */
 public class ClassContainer implements IClassContainer {

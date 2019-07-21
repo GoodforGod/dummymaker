@@ -11,9 +11,8 @@ import java.util.logging.Logger;
 /**
  * Buffered writer implementation
  *
- * @see IWriter
- *
  * @author GoodforGod
+ * @see IWriter
  * @since 31.05.2017
  */
 public class BufferedFileWriter implements IWriter {

@@ -26,20 +26,17 @@ public class CsvExporter extends BasicExporter {
      * CSV format separator for values: value1,value2,value3 ...
      */
     private char separator = DEFAULT_SEPARATOR;
-
+    private final Predicate<String> isValueWrappable = (s) -> s.contains(String.valueOf(this.separator))
+            || s.contains("\"")
+            || s.contains("\n");
     /**
      * Flag to indicate wrap text (String) fields with quotes
      */
     private boolean areTextValuesWrapped = false;
-
     /**
      * Generate header for CSV file
      */
     private boolean hasHeader = false;
-
-    private final Predicate<String> isValueWrappable = (s) -> s.contains(String.valueOf(this.separator))
-            || s.contains("\"")
-            || s.contains("\n");
 
     public CsvExporter() {
         super(null, Format.CSV, Cases.DEFAULT.value());

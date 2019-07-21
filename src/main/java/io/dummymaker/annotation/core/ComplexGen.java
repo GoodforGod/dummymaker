@@ -18,14 +18,13 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation is a also core one (as prime one) to support population factory
  *
+ * @author GoodforGod
  * @see PrimeGen
  * @see IGenerator
  * @see io.dummymaker.scan.IScanner
  * @see IAnnotationScanner
  * @see io.dummymaker.factory.IPopulateFactory
  * @see io.dummymaker.factory.IProduceFactory
- *
- * @author GoodforGod
  * @since 21.04.2018
  */
 @Retention(value = RetentionPolicy.RUNTIME)

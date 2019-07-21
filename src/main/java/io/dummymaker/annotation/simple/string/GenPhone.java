@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see PhoneGenerator
- *
  * @author GoodforGod
+ * @see PhoneGenerator
  * @since 31.05.2017
  */
 @PrimeGen(PhoneGenerator.class)

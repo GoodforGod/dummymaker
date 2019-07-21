@@ -10,6 +10,7 @@ public interface IBundle<T> {
 
     /**
      * Get bundle values by index
+     *
      * @param index index in bundle collection
      * @return bundle value
      */
@@ -24,12 +25,14 @@ public interface IBundle<T> {
 
     /**
      * Get random bundle value
+     *
      * @return bundle value
      */
     T getRandom();
 
     /**
      * Get bundle capacity
+     *
      * @return bundle collections capacity
      */
     int size();

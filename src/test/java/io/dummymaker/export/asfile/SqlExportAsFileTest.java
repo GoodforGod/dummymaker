@@ -9,7 +9,7 @@ import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.GenOldFactory;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class SqlExportAsFileTest extends FileExportAssert {
 
-    private final IProduceFactory produceFactory = new GenFactory();
+    private final IProduceFactory produceFactory = new GenOldFactory();
 
     private final SqlValidator validation = new SqlValidator();
 

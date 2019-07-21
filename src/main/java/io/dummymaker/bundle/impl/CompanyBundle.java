@@ -263,7 +263,7 @@ public class CompanyBundle extends BasicBundle<String> {
                 "Darden Restaurants Inc.",
                 "DaVita Inc.",
                 "Dean Foods Company",
-                "Deere & Company", 
+                "Deere & Company",
                 "Del Monte Foods Co",
                 "Dell Computer Corporation",
                 "Delphi Corp.",

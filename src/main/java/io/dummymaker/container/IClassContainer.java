@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Container class used to store class field information and different field states
- *
+ * <p>
  * Class Container for class origin/final name
  * Fields origin/final names
  * Fields values as Field type
@@ -30,20 +30,19 @@ public interface IClassContainer {
     /**
      * Export class name (after naming strategy applied or renamed)
      *
+     * @return class final export name
      * @see ICase
      * @see GenExportName
-     * @return class final export name
      */
     String getExportClassName();
 
     /**
      * Retrieve field by its export name (formatted via strategy or renamed via annotation)
      *
-     * @see ICase
-     * @see GenExportName
-     *
      * @param exportFieldName field container with final name
      * @return field value
+     * @see ICase
+     * @see GenExportName
      */
     Field getField(final String exportFieldName);
 
@@ -58,17 +57,17 @@ public interface IClassContainer {
     /**
      * Returns field containers map
      *
-     * @see FieldContainer
      * @return field container map
+     * @see FieldContainer
      */
     Map<Field, FieldContainer> getContainers();
 
     /**
      * Returns only format support field containers map
-     * @param format to filter on
      *
-     * @see FieldContainer
+     * @param format to filter on
      * @return field format supported container map
+     * @see FieldContainer
      */
     Map<Field, FieldContainer> getFormatSupported(Format format);
 }

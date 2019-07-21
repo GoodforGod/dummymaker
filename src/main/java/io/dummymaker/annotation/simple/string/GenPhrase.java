@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see PhraseGenerator
- *
  * @author GoodforGod (Anton Kurako)
+ * @see PhraseGenerator
  * @since 07.06.2017
  */
 @PrimeGen(PhraseGenerator.class)

@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.special;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.SequentialGenerator;
+import io.dummymaker.generator.simple.impl.SequenceGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-@PrimeGen(SequentialGenerator.class)
+@PrimeGen(SequenceGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenSequential {
+public @interface GenSequence {
     long from() default 0L;
 }

@@ -10,9 +10,8 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
 /**
  * Stores generators instances thought populate factory life cycle
  *
- * @see io.dummymaker.factory.IPopulateFactory
- *
  * @author GoodforGod
+ * @see io.dummymaker.factory.IPopulateFactory
  * @since 25.04.2018
  */
 public class GeneratorsStorage {

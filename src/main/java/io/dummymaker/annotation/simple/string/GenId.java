@@ -11,9 +11,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see IdBigGenerator
- *
  * @author GoodforGod
+ * @see IdBigGenerator
  * @since 30.05.2017
  */
 @PrimeGen(IdGenerator.class)

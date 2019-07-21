@@ -11,9 +11,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Full address with street, city, district and house number
  *
- * @see AddressGenerator
- *
  * @author GoodforGod
+ * @see AddressGenerator
  * @since 16.07.2019
  */
 public class AddressGenerator implements IGenerator<String> {
