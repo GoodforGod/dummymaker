@@ -2,7 +2,6 @@ package io.dummymaker.generator.simple.impl;
 
 import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,7 +12,7 @@ import java.lang.reflect.Field;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class NullGenerator implements IGenerator<Object>, IComplexGenerator {
+public class NullGenerator implements IComplexGenerator {
 
     @Override
     public Object generate() {

@@ -5,6 +5,7 @@ import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.util.BasicCastUtils;
 import io.dummymaker.util.BasicCollectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -48,7 +49,10 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
             return storage.fillWithDepth(instantiate(valueClass), depth + 1);
         }
 
-        final IGenerator generator = storage.getGenerator(generatorClass);
+        final IGenerator generator = (storage == null)
+                ? BasicCastUtils.instantiate(generatorClass)
+                : storage.getGenerator(generatorClass);
+
         return generateObject(generator, valueClass);
     }
 

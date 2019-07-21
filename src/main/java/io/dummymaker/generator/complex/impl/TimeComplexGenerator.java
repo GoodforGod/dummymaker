@@ -3,8 +3,10 @@ package io.dummymaker.generator.complex.impl;
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.factory.IComplexService;
 import io.dummymaker.generator.complex.IComplexGenerator;
+import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.generator.simple.impl.time.impl.*;
+import io.dummymaker.util.BasicCastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -59,7 +61,11 @@ public class TimeComplexGenerator implements IComplexGenerator {
     }
 
     private Object genTime(IComplexService storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
-        return ((ITimeGenerator) storage.getGenerator(gClass)).generate(from, to);
+        final IGenerator generator = (storage == null)
+                ? BasicCastUtils.instantiate(gClass)
+                : storage.getGenerator(gClass);
+
+        return ((ITimeGenerator) generator).generate(from, to);
     }
 
     @Override

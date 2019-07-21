@@ -25,7 +25,7 @@ public class UniqueGeneratorsTest {
 
         Object generated = generator.generate();
 
-        assertNull(generated);
+        assertNotNull(generated);
     }
 
     @Test

@@ -23,8 +23,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.runners.Parameterized.Parameters;
 
 /**
@@ -62,7 +61,7 @@ public class GeneratorPatternValidTest {
                 { new DoubleGenerator(),        Double.class,   Pattern.compile("1|0\\.[0-9]+") },
                 { new DoubleBigGenerator(),     Double.class,   Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new BigIntegerGenerator(),    BigInteger.class, Pattern.compile("-?[0-9]+") },
-                { new BigDecimalGenerator(),    BigDecimal.class, Pattern.compile("-?[0-9]+") },
+                { new BigDecimalGenerator(),    BigDecimal.class, Pattern.compile("-?[0-9]+\\.[0-9]+") },
                 { new IdBigGenerator(),         String.class,   Pattern.compile("[0-9a-zA-Z]+") },
                 { new BtcAddressGenerator(),    String.class,   Pattern.compile("[a-zA-Z0-9]{34}") },
                 { new BtcTxHashGenerator(),     String.class,   Pattern.compile("[a-zA-Z0-9]{64}") },
@@ -105,7 +104,7 @@ public class GeneratorPatternValidTest {
         final Object generated = generator.generate();
 
         assertNotNull(generated);
-        assertTrue(generated.getClass().equals(genClass));
+        assertEquals(generated.getClass(), genClass);
 
         final String generatedAsString = String.valueOf(generated);
         assertTrue(generatedAsString, pattern.matcher(generatedAsString).matches());

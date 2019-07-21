@@ -46,14 +46,26 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
         final int sizeFirst = getDesiredSize(a.minFirst(), a.maxFirst(), a.fixedFirst());
         final int sizeSecond = getDesiredSize(a.minSecond(), a.maxSecond(), a.fixedSecond());
-        return genArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage, depth, a.depth());
+        return genArray2D(sizeFirst,
+                sizeSecond,
+                valueClass,
+                generatorClass,
+                storage,
+                depth,
+                a.depth());
     }
 
     @Override
     public Object generate() {
         final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
         final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
+        return genArray2D(sizeFirst,
+                sizeSecond,
+                String.class,
+                IdGenerator.class,
+                null,
+                GenEmbedded.MAX,
+                1);
     }
 
     private Object genArray2D(final int rows,
