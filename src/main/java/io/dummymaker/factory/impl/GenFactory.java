@@ -26,9 +26,8 @@ import static io.dummymaker.util.CastUtils.instantiate;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
- * @see IGenFactory
- *
  * @author GoodforGod
+ * @see IGenFactory
  * @since 21.07.2019
  */
 @SuppressWarnings("Duplicates")

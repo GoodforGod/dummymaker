@@ -52,11 +52,11 @@ class GenStorage implements IGenSimpleStorage {
     }
 
     /**
-     * @see GenDepthFactory#fillWithDepth(Object, int, GenStorage)
-     * @param t entity
+     * @param t     entity
      * @param depth to start entity data fill with
-     * @param <T> type
+     * @param <T>   type
      * @return entity filled with data
+     * @see GenDepthFactory#fillWithDepth(Object, int, GenStorage)
      */
     @Override
     public <T> T fillWithDepth(T t, int depth) {
@@ -65,6 +65,7 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Full scanned containers to field map
+     *
      * @return gen container map to field
      */
     Map<Field, GenContainer> getContainers(Class<?> target) {
@@ -77,8 +78,9 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Was field marked with sequence generator
+     *
      * @param target class
-     * @param field to check
+     * @param field  to check
      * @return is marked sequential
      */
     boolean isSequential(Class<?> target, Field field) {
@@ -87,8 +89,9 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Gets sequence generator for class field
+     *
      * @param target class
-     * @param field to check
+     * @param field  to check
      * @return sequence generator
      */
     IGenerator getSequential(Class<?> target, Field field) {
@@ -101,6 +104,7 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Was field marked as nullable/invalid/etc
+     *
      * @param field to check
      * @return was not marked or otherwise
      */
@@ -110,6 +114,7 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Mark field as nullable
+     *
      * @param field to mark
      */
     void markNullable(Field field) {
@@ -118,6 +123,7 @@ class GenStorage implements IGenSimpleStorage {
 
     /**
      * Scan for sequence annotation marked fields
+     *
      * @param target class to scan
      */
     private void scanForSequentialFields(Class<?> target) {

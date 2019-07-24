@@ -35,6 +35,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Predicate to check for core prime/complex marker annotation
+     *
      * @see PrimeGen
      * @see ComplexGen
      */
@@ -49,8 +50,8 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * Scan for prime/complex gen annotation and its child annotation
      *
      * @param target class to scan
-     *          KEY is field that has populate annotations
-     *          VALUE is Gen container with generate params for that field
+     *               KEY is field that has populate annotations
+     *               VALUE is Gen container with generate params for that field
      * @return populate field map, where
      * @see GenContainer
      */

@@ -18,9 +18,10 @@ class GenDepthFactory extends GenFactory {
 
     /**
      * Fill entity with data by starting with specified depth
-     * @param t entity
-     * @param depth to start entity data fill with
-     * @param <T> type
+     *
+     * @param t              entity
+     * @param depth          to start entity data fill with
+     * @param <T>            type
      * @param factoryStorage storage as gen storage
      * @return entity filled with data
      */

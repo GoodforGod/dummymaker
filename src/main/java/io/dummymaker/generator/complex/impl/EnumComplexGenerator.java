@@ -57,14 +57,14 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
     }
 
     private Set<String> getExcluded(Annotation annotation) {
-        if(annotation == null || !annotation.annotationType().equals(GenEnum.class))
+        if (annotation == null || !annotation.annotationType().equals(GenEnum.class))
             return Collections.emptySet();
 
         return Arrays.stream(((GenEnum) annotation).exclude()).collect(Collectors.toSet());
     }
 
     private Set<String> getOnly(Annotation annotation) {
-        if(annotation == null || !annotation.annotationType().equals(GenEnum.class))
+        if (annotation == null || !annotation.annotationType().equals(GenEnum.class))
             return Collections.emptySet();
 
         return Arrays.stream(((GenEnum) annotation).only()).collect(Collectors.toSet());

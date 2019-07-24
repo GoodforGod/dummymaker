@@ -29,7 +29,7 @@ public @interface GenEmbedded {
     /**
      * If annotation is present, than it will be 1 level depth used by factory
      * And MAX level is limit depth embedded object can have
-     *
+     * <p>
      * Means that object can not be nested more than 18 times from origin one
      * Depth equals nested level from starting origin object
      *
