@@ -25,7 +25,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
  */
 class GenStorage implements IGenSimpleStorage {
 
-    private final GenDepthFactory simpleFactory;
+    private final GenEmbeddedFactory simpleFactory;
     private final IPopulateScanner populateScanner;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
@@ -36,7 +36,7 @@ class GenStorage implements IGenSimpleStorage {
     GenStorage(IPopulateScanner populateScanner) {
         this.populateScanner = populateScanner;
 
-        this.simpleFactory = new GenDepthFactory(populateScanner);
+        this.simpleFactory = new GenEmbeddedFactory(populateScanner);
 
         this.sequentialGenerators = new ConcurrentHashMap<>();
         this.containerMap = new ConcurrentHashMap<>();
@@ -56,7 +56,7 @@ class GenStorage implements IGenSimpleStorage {
      * @param depth to start entity data fill with
      * @param <T>   type
      * @return entity filled with data
-     * @see GenDepthFactory#fillWithDepth(Object, int, GenStorage)
+     * @see GenEmbeddedFactory#fillWithDepth(Object, int, GenStorage)
      */
     @Override
     public <T> T fillWithDepth(T t, int depth) {

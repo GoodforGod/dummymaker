@@ -4,7 +4,7 @@ dist: trusty
 sudo: false
 
 script:
-  - "mvn cobertura:cobertura"
+  - "gradle test jacocoTestReport"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

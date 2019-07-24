@@ -13,13 +13,10 @@ import io.dummymaker.scan.IExportScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Scanner for special export annotations
@@ -32,7 +29,7 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
  * @see UniqueScanner
  * @since 03.06.2017
  */
-public class ExportScanner implements IExportScanner {
+public class ExportScanner extends BasicScanner implements IExportScanner {
 
     @Override
     public Map<Field, FieldContainer> scan(final Class target) {
@@ -43,7 +40,8 @@ public class ExportScanner implements IExportScanner {
                                            final ICase nameCase) {
 
         // Add all fields in correct order for setup (to save order)
-        final Map<Field, FieldContainer> exportFields = Arrays.stream(target.getDeclaredFields())
+        final List<Field> declaredFields = getAllDeclaredFields(target);
+        final Map<Field, FieldContainer> exportFields = declaredFields.stream()
                 .filter(f -> !f.isSynthetic())
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e, null),
@@ -51,7 +49,7 @@ public class ExportScanner implements IExportScanner {
                         });
 
         final Map<Field, String> renamedFields = new HashMap<>();
-        for (final Field field : target.getDeclaredFields()) {
+        for (final Field field : declaredFields) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (annotation.annotationType().equals(GenExportForce.class)) {
                     exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field.getType()), field.getName()));

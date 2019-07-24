@@ -12,7 +12,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 27.04.2018
  */
-public interface IExportScanner extends IScanner<Field, FieldContainer> {
+public interface IExportScanner extends IScanner<Field, FieldContainer, Class> {
 
     Map<Field, FieldContainer> scan(Class target, ICase nameCase);
 }

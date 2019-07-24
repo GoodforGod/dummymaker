@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 import static io.dummymaker.util.CastUtils.getGenericType;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * "default comment"

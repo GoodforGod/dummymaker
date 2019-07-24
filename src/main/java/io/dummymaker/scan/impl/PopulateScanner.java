@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Scanner used by populate factory

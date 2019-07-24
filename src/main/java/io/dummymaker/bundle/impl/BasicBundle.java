@@ -16,7 +16,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 public abstract class BasicBundle<T> implements IBundle<T> {
 
     /**
-     * Bundle value collection
+     * Bundle data
      */
     private final T[] preset;
 
@@ -28,7 +28,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
 
     @Override
     public T get(int index) {
-        return (index > 0 && index < preset.length - 1)
+        return (index > -1 && index < preset.length - 1)
                 ? preset[index]
                 : preset[ThreadLocalRandom.current().nextInt(0, preset.length - 1)];
     }

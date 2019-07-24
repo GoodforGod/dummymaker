@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 import static io.dummymaker.util.CastUtils.getGenericType;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Generates Set or GenSet annotation

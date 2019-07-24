@@ -9,11 +9,10 @@ import io.dummymaker.generator.simple.impl.UuidGenerator;
 import io.dummymaker.generator.simple.impl.number.*;
 import io.dummymaker.generator.simple.impl.string.*;
 import io.dummymaker.generator.simple.impl.time.impl.*;
+import io.dummymaker.scan.impl.PackageScanner;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.net.URL;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +26,7 @@ import static java.util.Collections.singletonList;
  * @author GoodforGod
  * @since 26.04.2018
  */
-public class BasicGenUtils {
+public class GenUtils {
 
     /**
      * Salt used to select always the same generator for specific field
@@ -95,7 +94,7 @@ public class BasicGenUtils {
                 CharGenerator.class,
                 UuidGenerator.class
         ).collect(Collectors.groupingBy(
-                BasicGenUtils::getGeneratorType
+                GenUtils::getGeneratorType
         ));
 
         // Complex
@@ -112,6 +111,14 @@ public class BasicGenUtils {
         collectedGenerators.put(double.class, Arrays.asList(DoubleGenerator.class, DoubleBigGenerator.class));
         collectedGenerators.put(char.class, Arrays.asList(CharGenerator.class, CharacterGenerator.class));
         collectedGenerators.put(boolean.class, singletonList(BooleanGenerator.class));
+
+        try {
+            Enumeration<URL> resources = GenUtils.class.getClassLoader().getResources("*");
+            Map<Class<?>, String> scan = new PackageScanner().scan("io.dummymaker.generator");
+            resources.nextElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return collectedGenerators;
     }

@@ -3,18 +3,18 @@ package io.dummymaker.scan;
 import java.util.Map;
 
 /**
- * Base scanner
+ * Scanner contract
  *
  * @author GoodforGod
  * @since 06.07.2017
  */
-public interface IScanner<K, V> {
+public interface IScanner<K, V, T> {
 
     /**
-     * Base class scanner
+     * Base scanner contract
      *
-     * @param target class to scan
+     * @param target to scan
      * @return Returns Map with KEY and VALUES associated with annotated class
      */
-    Map<K, V> scan(Class target);
+    Map<K, V> scan(T target);
 }

@@ -15,6 +15,6 @@ import java.lang.reflect.Field;
  * @see GenContainer
  * @since 10.03.2018
  */
-public interface IPopulateScanner extends IScanner<Field, GenContainer> {
+public interface IPopulateScanner extends IScanner<Field, GenContainer, Class> {
 
 }

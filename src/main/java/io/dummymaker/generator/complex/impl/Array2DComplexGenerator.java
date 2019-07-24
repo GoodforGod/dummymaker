@@ -11,7 +11,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Generates two dimension arrays based on field type

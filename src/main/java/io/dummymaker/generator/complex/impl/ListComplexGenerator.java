@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 import static io.dummymaker.util.CastUtils.getGenericType;
+import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Generates List for GenList annotation

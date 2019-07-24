@@ -7,12 +7,13 @@ import io.dummymaker.scan.IPopulateScanner;
  * May lead to recursion if not used properly (when used in extensions)
  *
  * @author GoodforGod
+ * @see io.dummymaker.generator.complex.IComplexGenerator
  * @see PopulateFactory
  * @since 10.03.2018
  */
-class GenDepthFactory extends GenFactory {
+class GenEmbeddedFactory extends GenFactory {
 
-    GenDepthFactory(IPopulateScanner populateScanner) {
+    GenEmbeddedFactory(IPopulateScanner populateScanner) {
         super(populateScanner);
     }
 

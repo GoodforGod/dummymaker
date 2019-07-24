@@ -1,6 +1,7 @@
 package io.dummymaker.annotation.special;
 
 import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.util.GenUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +13,7 @@ import java.lang.annotation.Target;
  * And uses default suitable generators to fill class fields
  *
  * @author GoodforGod
- * @see io.dummymaker.util.BasicGenUtils#AUTO_GENERATORS
+ * @see GenUtils#AUTO_GENERATORS
  * @since 21.04.2018
  */
 @PrimeGen
