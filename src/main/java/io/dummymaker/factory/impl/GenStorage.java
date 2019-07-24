@@ -2,7 +2,7 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.GenContainer;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicCastUtils.instantiate;
+import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
  * Storage that facilitates generator storage, scanners, field mapping and nullable fields
@@ -23,7 +23,7 @@ import static io.dummymaker.util.BasicCastUtils.instantiate;
  * @author GoodforGod
  * @since 17.07.2019
  */
-class GenStorage implements IComplexService {
+class GenStorage implements IGenSimpleStorage {
 
     private final GenDepthFactory simpleFactory;
     private final IPopulateScanner populateScanner;

@@ -12,41 +12,41 @@ import java.time.LocalDate;
  * @author GoodforGod
  * @since 11.03.2018
  */
-public class BasicCastUtilsTest extends Assert {
+public class CastUtilsTest extends Assert {
 
     @Test
     public void generateAmountMinMoreMax() {
-        int amount = BasicCollectionUtils.generateRandomSize(10, 1);
+        int amount = CollectionUtils.generateRandomSize(10, 1);
         assertEquals(10, amount);
     }
 
     @Test
     public void generateAmountMinLessOne() {
-        int amount = BasicCollectionUtils.generateRandomSize(-10, 0);
+        int amount = CollectionUtils.generateRandomSize(-10, 0);
         assertEquals(0, amount);
     }
 
     @Test
     public void generateAmountMaxLessOne() {
-        int amount = BasicCollectionUtils.generateRandomSize(1, -1);
+        int amount = CollectionUtils.generateRandomSize(1, -1);
         assertEquals(1, amount);
     }
 
     @Test
     public void castNullFieldType() {
-        Object object = BasicCastUtils.castObject(new Object(), null);
+        Object object = CastUtils.castObject(new Object(), null);
         assertNull(object);
     }
 
     @Test
     public void castNullGenerator() {
-        Object object = BasicCastUtils.generateObject(null, LocalDate.class);
+        Object object = CastUtils.generateObject(null, LocalDate.class);
         assertNull(object);
     }
 
     @Test
     public void castNullableGenerator() {
-        Object object = BasicCastUtils.generateObject(new NullGenerator(), Long.class);
+        Object object = CastUtils.generateObject(new NullGenerator(), Long.class);
         assertNull(object);
     }
 }

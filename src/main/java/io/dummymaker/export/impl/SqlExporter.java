@@ -17,7 +17,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicDateUtils.*;
+import static io.dummymaker.util.DateUtils.*;
 
 /**
  * Export objects as SQL insert query.

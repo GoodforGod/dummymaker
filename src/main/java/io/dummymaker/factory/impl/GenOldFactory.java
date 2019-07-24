@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static io.dummymaker.util.BasicCastUtils.instantiate;
+import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
  * Produce Dummy Objects and populate them via PrimeGen generators included

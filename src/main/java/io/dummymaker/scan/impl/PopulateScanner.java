@@ -48,22 +48,22 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
     /**
      * Scan for prime/complex gen annotation and its child annotation
      *
-     * @param t class to scan
+     * @param target class to scan
      *          KEY is field that has populate annotations
      *          VALUE is Gen container with generate params for that field
      * @return populate field map, where
      * @see GenContainer
      */
     @Override
-    public Map<Field, GenContainer> scan(final Class t) {
+    public Map<Field, GenContainer> scan(final Class target) {
         final Map<Field, GenContainer> populateAnnotationMap = new LinkedHashMap<>();
 
         // Check if class is auto generative
-        final Optional<Annotation> genAuto = Arrays.stream(t.getDeclaredAnnotations())
+        final Optional<Annotation> genAuto = Arrays.stream(target.getDeclaredAnnotations())
                 .filter(isAuto)
                 .findAny();
 
-        for (final Field field : getAllDeclaredFields(t)) {
+        for (final Field field : getAllDeclaredFields(target)) {
             GenContainer genContainer = findGenAnnotation(field);
 
             // Create auto gen container class is auto generative

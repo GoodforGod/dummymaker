@@ -2,14 +2,14 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.simple.number.GenInteger;
 import io.dummymaker.annotation.simple.number.GenLong;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.impl.number.IntegerGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicCastUtils.castObject;
+import static io.dummymaker.util.CastUtils.castObject;
 
 /**
  * Generates integer/long values in specified range
@@ -25,7 +25,7 @@ public class LongComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IComplexService storage,
+                           final IGenSimpleStorage storage,
                            final int depth) {
         if (field == null || castObject(1, field.getType()) == null)
             return null;

@@ -1,18 +1,18 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
-import io.dummymaker.util.BasicCastUtils;
-import io.dummymaker.util.BasicCollectionUtils;
+import io.dummymaker.util.CastUtils;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static io.dummymaker.util.BasicCastUtils.generateObject;
-import static io.dummymaker.util.BasicCastUtils.instantiate;
+import static io.dummymaker.util.CastUtils.generateObject;
+import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
  * Basic complex generator implementation
@@ -28,10 +28,8 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     static final int MIN_DEFAULT = 1;
     static final int MAX_DEFAULT = 10;
 
-    static int getDesiredSize(final int min,
-                              final int max,
-                              final int fixed) {
-        return (fixed > -1) ? fixed : BasicCollectionUtils.generateRandomSize(min, max);
+    static int getDesiredSize(int min, int max, int fixed) {
+        return (fixed > -1) ? fixed : CollectionUtils.generateRandomSize(min, max);
     }
 
     boolean isGenDefault(Class<? extends IGenerator> generatorClass) {
@@ -40,7 +38,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
 
     <T> T generateValue(final Class<? extends IGenerator> generatorClass,
                         final Class<T> valueClass,
-                        final IComplexService storage,
+                        final IGenSimpleStorage storage,
                         final int depth,
                         final int depthLimit) {
         final int parsedDepthLimit = EmbeddedGenerator.toDepth(depthLimit);
@@ -50,17 +48,14 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
         }
 
         final IGenerator generator = (storage == null)
-                ? BasicCastUtils.instantiate(generatorClass)
+                ? CastUtils.instantiate(generatorClass)
                 : storage.getGenerator(generatorClass);
 
         return generateObject(generator, valueClass);
     }
 
     @Override
-    public abstract Object generate(final Annotation annotation,
-                                    final Field field,
-                                    final IComplexService storage,
-                                    final int depth);
+    public abstract Object generate(Annotation annotation, Field field, IGenSimpleStorage storage, int depth);
 
     @Override
     public abstract Object generate();

@@ -1,5 +1,6 @@
 package io.dummymaker.data;
 
+import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.special.GenAuto;
 
 import java.util.List;
@@ -18,11 +19,17 @@ public class DummyArray {
     private Float[] floatsff;
     private List<Float> floatList;
 
+    @GenArray2D
     private byte[][] bytes2;
+    @GenArray2D
     private short[][] shorts2;
+    @GenArray2D
     private int[][] ints2;
+    @GenArray2D
     private long[][] longs2;
+    @GenArray2D
     private float[][] floats2;
+    @GenArray2D
     private double[][] doubles2;
 
     private byte[] bytes;

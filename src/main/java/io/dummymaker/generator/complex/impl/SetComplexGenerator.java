@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicCastUtils.getGenericType;
 import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
+import static io.dummymaker.util.CastUtils.getGenericType;
 
 /**
  * Generates Set or GenSet annotation
@@ -34,7 +34,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IComplexService storage,
+                           final IGenSimpleStorage storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Set.class))
             return null;

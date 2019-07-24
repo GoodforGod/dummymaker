@@ -22,9 +22,9 @@ public interface IAnnotationScanner extends IScanner<Field, List<Annotation>> {
     /**
      * Scan class for field annotations
      *
-     * @param t class to scan
+     * @param target class to scan
      * @return Returns Map with field and annotations associated with that field
      */
     @Override
-    Map<Field, List<Annotation>> scan(final Class t);
+    Map<Field, List<Annotation>> scan(Class target);
 }

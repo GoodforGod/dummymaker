@@ -14,6 +14,5 @@ import java.util.Map;
  */
 public interface IExportScanner extends IScanner<Field, FieldContainer> {
 
-    Map<Field, FieldContainer> scan(final Class t,
-                                    final ICase nameCase);
+    Map<Field, FieldContainer> scan(Class target, ICase nameCase);
 }

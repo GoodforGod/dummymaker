@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author GoodforGod
  * @since 08.03.2018
  */
-public class BasicCollectionUtils {
+public class CollectionUtils {
 
     public static boolean isEmpty(final Collection collection) {
         return collection == null || collection.isEmpty();

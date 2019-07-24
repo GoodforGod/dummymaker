@@ -17,9 +17,9 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 06.03.2018
  */
-public class BasicCastUtils {
+public class CastUtils {
 
-    private static final Logger logger = Logger.getLogger(BasicCastUtils.class.getName());
+    private static final Logger logger = Logger.getLogger(CastUtils.class.getName());
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {

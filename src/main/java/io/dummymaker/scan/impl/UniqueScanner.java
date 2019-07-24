@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 public class UniqueScanner extends AnnotationScanner {
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class t) {
-        return super.scan(t).entrySet().stream()
+    public Map<Field, List<Annotation>> scan(final Class target) {
+        return super.scan(target).entrySet().stream()
                 .peek(e -> e.setValue(e.getValue().stream()
                         .distinct()
                         .collect(Collectors.toList())))

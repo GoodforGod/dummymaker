@@ -1,12 +1,12 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.generator.simple.impl.time.impl.*;
-import io.dummymaker.util.BasicCastUtils;
+import io.dummymaker.util.CastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
-import static io.dummymaker.util.BasicCastUtils.castObject;
+import static io.dummymaker.util.CastUtils.castObject;
 
 /**
  * Generate time object for GenTime annotation
@@ -32,7 +32,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IComplexService storage,
+                           final IGenSimpleStorage storage,
                            final int depth) {
         if (field == null)
             return null;
@@ -60,9 +60,9 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return null;
     }
 
-    private Object genTime(IComplexService storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
+    private Object genTime(IGenSimpleStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
         final IGenerator generator = (storage == null)
-                ? BasicCastUtils.instantiate(gClass)
+                ? CastUtils.instantiate(gClass)
                 : storage.getGenerator(gClass);
 
         return ((ITimeGenerator) generator).generate(from, to);

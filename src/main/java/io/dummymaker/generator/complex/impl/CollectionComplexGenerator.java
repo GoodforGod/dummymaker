@@ -1,6 +1,6 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -22,7 +22,7 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
                              final Collection<?> collection,
                              final Class<? extends IGenerator> valueGenerator,
                              final Class<?> fieldClass,
-                             final IComplexService storage,
+                             final IGenSimpleStorage storage,
                              final int depth,
                              final int maxDepth) {
 
@@ -52,7 +52,7 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
     @Override
     public abstract Object generate(final Annotation annotation,
                                     final Field field,
-                                    final IComplexService storage,
+                                    final IGenSimpleStorage storage,
                                     final int depth);
 
     @Override

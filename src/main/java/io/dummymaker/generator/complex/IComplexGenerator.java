@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -18,8 +18,14 @@ import java.lang.reflect.Field;
  */
 public interface IComplexGenerator extends IGenerator<Object> {
 
-    Object generate(final Annotation annotation,
-                    final Field field,
-                    final IComplexService storage,
-                    final int depth);
+    /**
+     * Generates object for field marked by complex annotation
+     *
+     * @param annotation field was marked by
+     * @param field for which value is generated
+     * @param storage factory storage with generators and embedded entity production
+     * @param depth current depth of the generated field
+     * @return generated object
+     */
+    Object generate(Annotation annotation, Field field, IGenSimpleStorage storage, int depth);
 }

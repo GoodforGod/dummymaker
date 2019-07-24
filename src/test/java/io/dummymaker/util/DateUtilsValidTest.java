@@ -15,57 +15,57 @@ import java.util.Date;
  * @author GoodforGod
  * @since 27.02.2018
  */
-public class BasicDateUtilsValidTest extends Assert {
+public class DateUtilsValidTest extends Assert {
 
     @Test
     public void convertToTimestampDateOldType() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp(new Date(10000));
+        final Timestamp t = DateUtils.convertToTimestamp(new Date(10000));
         assertNotNull(t);
     }
 
     @Test
     public void convertToTimestampDate() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp(LocalDate.of(1970, 1, 1));
+        final Timestamp t = DateUtils.convertToTimestamp(LocalDate.of(1970, 1, 1));
         assertNotNull(t);
     }
 
     @Test
     public void convertToTimestampTime() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp(LocalTime.of(10, 10, 10));
+        final Timestamp t = DateUtils.convertToTimestamp(LocalTime.of(10, 10, 10));
         assertNotNull(t);
     }
 
     @Test
     public void convertToTimestampDateTime() {
-        final Timestamp t = BasicDateUtils.convertToTimestamp(LocalDateTime.MIN);
+        final Timestamp t = DateUtils.convertToTimestamp(LocalDateTime.MIN);
         assertNotNull(t);
     }
 
     @Test
     public void parseDateValid() {
         final String date = "1990-10-10";
-        final LocalDate localDate = BasicDateUtils.parseDate(date);
+        final LocalDate localDate = DateUtils.parseDate(date);
         assertNotNull(localDate);
     }
 
     @Test
     public void parseDateOldTypeValid() {
         final String date = "1000000";
-        final Date dateOld = BasicDateUtils.parseSimpleDateLong(date);
+        final Date dateOld = DateUtils.parseSimpleDateLong(date);
         assertNotNull(dateOld);
     }
 
     @Test
     public void parseTimeValid() {
         final String date = "10:10:10";
-        final LocalTime localTime = BasicDateUtils.parseTime(date);
+        final LocalTime localTime = DateUtils.parseTime(date);
         assertNotNull(localTime);
     }
 
     @Test
     public void parseDateTimeValid() {
         final String date = "1990-10-10T10:10:10.111";
-        final LocalDateTime localDateTime = BasicDateUtils.parseDateTime(date);
+        final LocalDateTime localDateTime = DateUtils.parseDateTime(date);
         assertNotNull(localDateTime);
     }
 }

@@ -7,7 +7,7 @@ import io.dummymaker.generator.simple.impl.SequenceGenerator;
 
 import java.lang.reflect.Field;
 
-import static io.dummymaker.util.BasicStringUtils.isEmpty;
+import static io.dummymaker.util.StringUtils.isEmpty;
 
 /**
  * Used by ClassContainer to contain field value, and final field name

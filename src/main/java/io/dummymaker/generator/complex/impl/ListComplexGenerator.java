@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.BasicCastUtils.getGenericType;
 import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
+import static io.dummymaker.util.CastUtils.getGenericType;
 
 /**
  * Generates List for GenList annotation
@@ -32,7 +32,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IComplexService storage,
+                           final IGenSimpleStorage storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(List.class))
             return null;

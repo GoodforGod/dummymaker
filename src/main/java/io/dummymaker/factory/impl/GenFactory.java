@@ -8,7 +8,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
-import io.dummymaker.util.BasicCastUtils;
+import io.dummymaker.util.CastUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.dummymaker.util.BasicCastUtils.castObject;
-import static io.dummymaker.util.BasicCastUtils.instantiate;
-import static io.dummymaker.util.BasicCollectionUtils.isEmpty;
+import static io.dummymaker.util.CastUtils.castObject;
+import static io.dummymaker.util.CastUtils.instantiate;
+import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
  * @see IGenFactory
@@ -192,7 +192,7 @@ public class GenFactory implements IGenFactory {
      * Generate sequence number fields next value
      */
     private Object generateSequenceObject(Field field, IGenerator generator) {
-        return BasicCastUtils.castToNumber(generator.generate(), field.getType());
+        return CastUtils.castToNumber(generator.generate(), field.getType());
     }
 
     private int getDepth(final GenContainer container) {

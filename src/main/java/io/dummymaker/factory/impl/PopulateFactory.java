@@ -13,8 +13,8 @@ import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
-import io.dummymaker.util.BasicCastUtils;
-import io.dummymaker.util.BasicCollectionUtils;
+import io.dummymaker.util.CastUtils;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -22,8 +22,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicCastUtils.castObject;
-import static io.dummymaker.util.BasicCastUtils.instantiate;
+import static io.dummymaker.util.CastUtils.castObject;
+import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
  * Scan for populate annotations on entity fields
@@ -60,7 +60,7 @@ abstract class PopulateFactory implements IPopulateFactory {
 
     @Override
     public <T> List<T> populate(final List<T> list) {
-        if (BasicCollectionUtils.isEmpty(list))
+        if (CollectionUtils.isEmpty(list))
             return Collections.emptyList();
 
         final Class<?> tClass = list.get(0).getClass();
@@ -198,7 +198,7 @@ abstract class PopulateFactory implements IPopulateFactory {
     private Object generateEnumerateObject(final Field field,
                                            final Map<Field, Long> enumerateMap) {
         final Long currentEnumerateValue = enumerateMap.get(field);
-        Object objValue = BasicCastUtils.castToNumber(currentEnumerateValue, field.getType());
+        Object objValue = CastUtils.castToNumber(currentEnumerateValue, field.getType());
 
         // Increment numerate number for generated field
         enumerateMap.computeIfPresent(field, (k, v) -> v + 1);

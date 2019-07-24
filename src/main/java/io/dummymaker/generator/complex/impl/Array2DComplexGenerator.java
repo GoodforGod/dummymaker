@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IComplexService;
+import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -27,7 +27,7 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IComplexService storage,
+                           final IGenSimpleStorage storage,
                            final int depth) {
         if (field == null)
             return null;
@@ -72,7 +72,7 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
                               final int rowSize,
                               final Class<?> valueClass,
                               final Class<? extends IGenerator> valueGenerator,
-                              final IComplexService storage,
+                              final IGenSimpleStorage storage,
                               final int depth,
                               final int maxDepth) {
         final Object array = Array.newInstance(valueClass, rows, rowSize);

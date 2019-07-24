@@ -6,7 +6,7 @@ package io.dummymaker.util;
  * @author GoodforGod
  * @since 25.02.2018
  */
-public class BasicStringUtils {
+public class StringUtils {
 
     public static boolean isEmpty(String value) {
         return (value == null || value.isEmpty());

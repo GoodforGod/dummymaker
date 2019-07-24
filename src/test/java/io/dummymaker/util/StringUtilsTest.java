@@ -9,39 +9,39 @@ import org.junit.Test;
  * @author GoodforGod
  * @since 27.02.2018
  */
-public class BasicStringUtilsTest extends Assert {
+public class StringUtilsTest extends Assert {
 
     @Test
     public void nullStringIsEmpty() {
-        assertTrue(BasicStringUtils.isEmpty(null));
+        assertTrue(StringUtils.isEmpty(null));
     }
 
     @Test
     public void emptyStringIsEmpty() {
-        assertTrue(BasicStringUtils.isEmpty(""));
+        assertTrue(StringUtils.isEmpty(""));
     }
     @Test
     public void nonEmptyStringIsNonEmpty() {
-        assertFalse(BasicStringUtils.isEmpty("Bob"));
+        assertFalse(StringUtils.isEmpty("Bob"));
     }
 
     @Test
     public void nullStringIsBlank() {
-        assertTrue(BasicStringUtils.isBlank(null));
+        assertTrue(StringUtils.isBlank(null));
     }
 
     @Test
     public void emptySpaceStringIsBlank() {
-        assertTrue(BasicStringUtils.isBlank("        "));
+        assertTrue(StringUtils.isBlank("        "));
     }
 
     @Test
     public void nonBlankStringIsNonBlank() {
-        assertTrue(BasicStringUtils.isNotBlank("  Bob "));
+        assertTrue(StringUtils.isNotBlank("  Bob "));
     }
 
     @Test
     public void blankStringIsNonBlank() {
-        assertFalse(BasicStringUtils.isNotBlank("    "));
+        assertFalse(StringUtils.isNotBlank("    "));
     }
 }

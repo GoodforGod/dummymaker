@@ -35,22 +35,23 @@ import static io.dummymaker.util.BasicGenUtils.getAutoGenerator;
 public class ExportScanner implements IExportScanner {
 
     @Override
-    public Map<Field, FieldContainer> scan(final Class t) {
-        return scan(t, Cases.DEFAULT.value());
+    public Map<Field, FieldContainer> scan(final Class target) {
+        return scan(target, Cases.DEFAULT.value());
     }
 
-    public Map<Field, FieldContainer> scan(final Class t,
+    public Map<Field, FieldContainer> scan(final Class target,
                                            final ICase nameCase) {
 
         // Add all fields in correct order for setup (to save order)
-        final Map<Field, FieldContainer> exportFields = Arrays.stream(t.getDeclaredFields())
-                .collect(LinkedHashMap<Field, FieldContainer>::new,
+        final Map<Field, FieldContainer> exportFields = Arrays.stream(target.getDeclaredFields())
+                .filter(f -> !f.isSynthetic())
+                .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e, null),
                         (m, u) -> {
                         });
 
         final Map<Field, String> renamedFields = new HashMap<>();
-        for (final Field field : t.getDeclaredFields()) {
+        for (final Field field : target.getDeclaredFields()) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (annotation.annotationType().equals(GenExportForce.class)) {
                     exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field.getType()), field.getName()));
@@ -64,7 +65,7 @@ public class ExportScanner implements IExportScanner {
             }
         }
 
-        Arrays.stream(t.getDeclaredAnnotations())
+        Arrays.stream(target.getDeclaredAnnotations())
                 .filter(a -> a.annotationType().equals(GenExportName.class))
                 .findFirst()
                 .ifPresent(annotation -> exportFields.put(
@@ -72,7 +73,7 @@ public class ExportScanner implements IExportScanner {
                         FieldContainer.as(null, null, ((GenExportName) annotation).value()))
                 );
 
-        final Map<Field, GenContainer> containerMap = new PopulateScanner().scan(t);
+        final Map<Field, GenContainer> containerMap = new PopulateScanner().scan(target);
         containerMap.entrySet().stream()
                 .filter(e -> exportFields.containsKey(e.getKey()))
                 .forEach(e -> {

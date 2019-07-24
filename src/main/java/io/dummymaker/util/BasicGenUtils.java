@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.dummymaker.util.BasicCastUtils.getGenericType;
-import static io.dummymaker.util.BasicCollectionUtils.getIndexWithSalt;
+import static io.dummymaker.util.CastUtils.getGenericType;
+import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 import static java.util.Collections.singletonList;
 
 /**
@@ -135,14 +135,14 @@ public class BasicGenUtils {
             return ArrayComplexGenerator.class;
         if (fieldClass.isEnum())
             return EnumComplexGenerator.class;
-        if (BasicCollectionUtils.isEmpty(generators))
+        if (CollectionUtils.isEmpty(generators))
             return NullGenerator.class;
 
         return generators.get(getIndexWithSalt(generators.size(), fieldName, SALT));
     }
 
     public static Class<? extends IGenerator> getAutoGenerator(final String classTypeName) {
-        if (BasicStringUtils.isEmpty(classTypeName))
+        if (StringUtils.isEmpty(classTypeName))
             return NullGenerator.class;
 
         for (Map.Entry<Class, List<Class<? extends IGenerator>>> entry : AUTO_GENERATORS.entrySet()) {

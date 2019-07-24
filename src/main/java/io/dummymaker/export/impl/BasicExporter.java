@@ -7,7 +7,7 @@ import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.naming.ICase;
-import io.dummymaker.util.BasicCollectionUtils;
+import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static io.dummymaker.util.BasicStringUtils.isBlank;
+import static io.dummymaker.util.StringUtils.isBlank;
 
 /**
  * Basic abstract exporter implementation
@@ -69,7 +69,7 @@ abstract class BasicExporter implements IExporter {
      * Build class container with export entity parameters
      */
     <T> IClassContainer buildClassContainer(final List<T> list) {
-        return (BasicCollectionUtils.isNotEmpty(list))
+        return (CollectionUtils.isNotEmpty(list))
                 ? buildClassContainer(list.get(0))
                 : null;
     }
@@ -216,7 +216,7 @@ abstract class BasicExporter implements IExporter {
      * @return validation result
      */
     <T> boolean isExportEntityInvalid(final List<T> t) {
-        return (BasicCollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
+        return (CollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
     }
 
     /**

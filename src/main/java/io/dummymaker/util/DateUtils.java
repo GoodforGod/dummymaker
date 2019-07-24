@@ -15,9 +15,9 @@ import java.util.logging.Logger;
  * @author GoodforGod
  * @since 25.02.2018
  */
-public class BasicDateUtils {
+public class DateUtils {
 
-    private static final Logger logger = Logger.getLogger(BasicDateUtils.class.getName());
+    private static final Logger logger = Logger.getLogger(DateUtils.class.getName());
 
     private static final String ZONE_ID = "Europe/Moscow";
 

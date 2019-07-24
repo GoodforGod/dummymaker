@@ -12,28 +12,28 @@ import java.util.Collection;
  * @author GoodforGod
  * @since 11.03.2018
  */
-public class BasicCollectionUtilsTest extends Assert {
+public class CollectionUtilsTest extends Assert {
 
     @Test
     public void isEmptyCollectionEmpty() {
         Collection<Object> collection = new ArrayList<>();
-        assertTrue(BasicCollectionUtils.isEmpty(collection));
+        assertTrue(CollectionUtils.isEmpty(collection));
     }
 
     @Test
     public void isEmptyCollectionNull() {
-        assertTrue(BasicCollectionUtils.isEmpty(null));
+        assertTrue(CollectionUtils.isEmpty(null));
     }
 
     @Test
     public void isNotEmptyNotCollection() {
         Collection<Object> collection = new ArrayList<>();
         collection.add(new Object());
-        assertTrue(BasicCollectionUtils.isNotEmpty(collection));
+        assertTrue(CollectionUtils.isNotEmpty(collection));
     }
 
     @Test
     public void isNotEmptyNotForEmptyCollection() {
-        assertFalse(BasicCollectionUtils.isNotEmpty(null));
+        assertFalse(CollectionUtils.isNotEmpty(null));
     }
 }

@@ -52,8 +52,8 @@ public class PopulateSimpleScanner extends PopulateScanner {
             && (EmbeddedGenerator.class.equals(((GenMap) a).key()) || EmbeddedGenerator.class.equals(((GenMap) a).value())));
 
     @Override
-    public Map<Field, GenContainer> scan(final Class t) {
-        return super.scan(t).entrySet().stream()
+    public Map<Field, GenContainer> scan(final Class target) {
+        return super.scan(target).entrySet().stream()
                 .filter(e -> !EmbeddedGenerator.class.equals(e.getValue().getGenerator()))
                 .filter(e -> !isEmbeddedMap.test(e.getValue().getMarker()))
                 .filter(e -> !isEmbedded.test(e.getValue().getMarker()))

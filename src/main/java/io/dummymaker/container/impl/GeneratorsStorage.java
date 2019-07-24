@@ -5,7 +5,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.dummymaker.util.BasicCastUtils.instantiate;
+import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
  * Stores generators instances thought populate factory life cycle

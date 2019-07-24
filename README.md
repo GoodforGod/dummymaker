@@ -4,7 +4,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
 
-Library can generate Dummies using special *factories*, *populate* their fields with unique values via special *Gen* annotations, *export* them in **CSV/JSON/XML/SQL** formats.
+Library can generate your *Data Objects* filled *random data* and also export in *CSV/JSON/XML/SQL formats*.
 
 *How to produce your first **1.000.000** unique Dummies*
 1) Create Dummy. 
@@ -20,14 +20,14 @@ Library can generate Dummies using special *factories*, *populate* their fields 
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:1.2.0'
+    compile 'com.github.goodforgod:dummymaker:1.2.0-SNAPSHOT'
 }
 ```
 
