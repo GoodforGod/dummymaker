@@ -8,15 +8,17 @@ import io.dummymaker.generator.simple.impl.ObjectGenerator;
 import io.dummymaker.generator.simple.impl.UuidGenerator;
 import io.dummymaker.generator.simple.impl.number.*;
 import io.dummymaker.generator.simple.impl.string.*;
+import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.generator.simple.impl.time.impl.*;
 import io.dummymaker.scan.impl.PackageScanner;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.net.URL;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.dummymaker.util.CastUtils.getGenericType;
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 import static java.util.Collections.singletonList;
 
@@ -112,21 +114,84 @@ public class GenUtils {
         collectedGenerators.put(char.class, Arrays.asList(CharGenerator.class, CharacterGenerator.class));
         collectedGenerators.put(boolean.class, singletonList(BooleanGenerator.class));
 
-        try {
-            Enumeration<URL> resources = GenUtils.class.getClassLoader().getResources("*");
-            Map<Class<?>, String> scan = new PackageScanner().scan("io.dummymaker.generator");
-            resources.nextElement();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Map<Class<?>, String> scan = new PackageScanner().scan("io.dummymaker.generator");
+
+        Map<? extends Class<?>, List<Class<?>>> genClassMap = scan.keySet().stream()
+                .filter(IGenerator.class::isAssignableFrom)
+                .filter(c -> !c.isInterface())
+                .filter(c -> !c.isAnonymousClass())
+                .filter(c -> !c.isSynthetic())
+                .collect(Collectors.groupingBy(GenUtils::getGeneratorType));
+
+        genClassMap.toString();
 
         return collectedGenerators;
     }
 
-    private static Class<?> getGeneratorType(Class<? extends IGenerator> generator) {
-        return (generator.getGenericInterfaces().length == 0)
-                ? ((Class<?>) getGenericType(((Class<?>) generator.getGenericSuperclass()).getGenericInterfaces()[0]))
-                : ((Class<?>) getGenericType(generator.getGenericInterfaces()[0]));
+    private static Class<?> getGeneratorType(Class<?> generator) {
+        if (Object.class.equals(generator) || !IGenerator.class.isAssignableFrom(generator))
+            return Object.class;
+
+        final List<Type> types = getTypes(generator);
+        return types.stream()
+                .filter(GenUtils::isGenerator)
+                .map(GenUtils::getGeneratorInterfaceType)
+                .filter(Objects::nonNull)
+                .findFirst().orElse(Object.class);
+    }
+
+    private static Class getGeneratorInterfaceType(Type type) {
+        try {
+            return (Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0];
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static boolean isGenerator(Type type) {
+        try {
+            return ((ParameterizedTypeImpl) type).getRawType().equals(IGenerator.class)
+                    || ((ParameterizedTypeImpl) type).getRawType().equals(ITimeGenerator.class);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static List<Type> getTypes(Class<?> target) {
+        if (Object.class.equals(target))
+            return new ArrayList<>();
+
+        try {
+            final List<Type> types = getTypesFromClass(target);
+            if (target.getSuperclass() != null)
+                types.addAll(getTypes(target.getSuperclass()));
+
+            return types;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    private static List<Type> getTypesFromInterfaces(Type targetType) {
+        if (isGenerator(targetType) || ParameterizedType.class.equals(targetType))
+            return new ArrayList<>();
+
+        final Class targetClass = (Class) targetType;
+        return getTypesFromClass(targetClass);
+    }
+
+    private static List<Type> getTypesFromClass(Class targetClass) {
+        final List<Type> types = Arrays.stream((targetClass).getGenericInterfaces()).collect(Collectors.toList());
+        final List<Type> collect = types.stream()
+                .filter(i -> !ParameterizedType.class.equals(i))
+                .map(GenUtils::getTypesFromInterfaces)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        types.addAll(collect);
+
+        return types;
     }
 
     public static Class<? extends IGenerator> getAutoGenerator(final Class<?> fieldClass) {

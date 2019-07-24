@@ -17,6 +17,5 @@ public interface ITimeGenerator<T> extends IGenerator<T> {
      * @return generated time object
      * @see GenTime#MAX
      */
-    T generate(final long from,
-               final long to);
+    T generate(long from, long to);
 }
