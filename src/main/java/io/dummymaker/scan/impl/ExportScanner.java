@@ -45,14 +45,13 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                 .filter(f -> !f.isSynthetic())
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e, null),
-                        (m, u) -> {
-                        });
+                        (m, u) -> { });
 
         final Map<Field, String> renamedFields = new HashMap<>();
         for (final Field field : declaredFields) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (annotation.annotationType().equals(GenExportForce.class)) {
-                    exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field.getType()), field.getName()));
+                    exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field, field.getType()), field.getName()));
                 } else if (annotation.annotationType().equals(GenExportIgnore.class)) {
                     exportFields.remove(field);
                 }
@@ -88,7 +87,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                     final Field f = e.getKey();
                     final FieldContainer container = exportFields.get(e.getKey());
                     if (container != null) {
-                        exportFields.replace(f, FieldContainer.as(f, getAutoGenerator(f.getType()), e.getValue()));
+                        exportFields.replace(f, FieldContainer.as(f, getAutoGenerator(f, f.getType()), e.getValue()));
                     }
                 });
 

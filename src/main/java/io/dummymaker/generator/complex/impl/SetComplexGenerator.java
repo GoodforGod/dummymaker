@@ -44,7 +44,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             return genCollection(size,
                     buildCollection(field, size),
-                    getAutoGenerator(valueClass),
+                    getAutoGenerator(field, valueClass),
                     valueClass,
                     storage,
                     depth,
@@ -53,7 +53,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
         final GenSet a = ((GenSet) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? getAutoGenerator(valueClass)
+                ? getAutoGenerator(field,valueClass)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());

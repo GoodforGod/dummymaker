@@ -36,12 +36,12 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            return genArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(valueClass), storage, depth, 1);
+            return genArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(field, valueClass), storage, depth, 1);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? getAutoGenerator(valueClass)
+                ? getAutoGenerator(field, valueClass)
                 : a.value();
 
         final int sizeFirst = getDesiredSize(a.minFirst(), a.maxFirst(), a.fixedFirst());

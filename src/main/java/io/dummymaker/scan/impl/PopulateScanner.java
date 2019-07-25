@@ -69,7 +69,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
             // Create auto gen container class is auto generative
             if (genContainer == null && genAuto.isPresent()) {
-                Class<? extends IGenerator> generator = getAutoGenerator(field.getType());
+                Class<? extends IGenerator> generator = getAutoGenerator(field, field.getType());
                 if (generator.equals(NullGenerator.class)) {
                     // Try to treat field as embedded object, when no suitable generator
                     generator = EmbeddedGenerator.class;

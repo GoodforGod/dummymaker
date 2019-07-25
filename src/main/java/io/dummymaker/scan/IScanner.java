@@ -1,20 +1,20 @@
 package io.dummymaker.scan;
 
-import java.util.Map;
+import java.util.Collection;
 
 /**
- * Scanner contract
+ * List based scanner contract
  *
  * @author GoodforGod
- * @since 06.07.2017
+ * @since 25.07.2019
  */
-public interface IScanner<K, V, T> {
+public interface IScanner<V, T> {
 
     /**
-     * Base scanner contract
+     * Simple scanner contract
      *
      * @param target to scan
-     * @return Returns Map with KEY and VALUES associated with annotated class
+     * @return list with values
      */
-    Map<K, V> scan(T target);
+    Collection<V> scan(T target);
 }

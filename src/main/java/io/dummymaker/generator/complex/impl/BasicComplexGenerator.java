@@ -43,7 +43,8 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
                         final int depthLimit) {
         final int parsedDepthLimit = EmbeddedGenerator.toDepth(depthLimit);
         if ((EmbeddedGenerator.class.equals(generatorClass) || NullGenerator.class.equals(generatorClass))
-                && depth <= parsedDepthLimit) {
+                && depth <= parsedDepthLimit
+                && storage != null) {
             return storage.fillWithDepth(instantiate(valueClass), depth + 1);
         }
 

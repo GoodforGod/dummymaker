@@ -3,6 +3,7 @@ package io.dummymaker.annotation.core;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
+import io.dummymaker.scan.IMapScanner;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,7 +20,7 @@ import java.lang.annotation.Target;
  *
  * @author GoodforGod
  * @see IGenerator
- * @see io.dummymaker.scan.IScanner
+ * @see IMapScanner
  * @see IAnnotationScanner
  * @see io.dummymaker.factory.IPopulateFactory
  * @see io.dummymaker.factory.IProduceFactory

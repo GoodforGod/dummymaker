@@ -71,8 +71,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         if (annotation == null) {
             return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     field,
-                    getAutoGenerator(keyType),
-                    getAutoGenerator(valueType),
+                    getAutoGenerator(field, keyType),
+                    getAutoGenerator(field, valueType),
                     keyType,
                     valueType,
                     storage,
@@ -82,11 +82,11 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
         final GenMap a = ((GenMap) annotation);
         final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
-                ? getAutoGenerator(keyType)
+                ? getAutoGenerator(field, keyType)
                 : a.key();
 
         final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
-                ? getAutoGenerator(valueType)
+                ? getAutoGenerator(field, valueType)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());

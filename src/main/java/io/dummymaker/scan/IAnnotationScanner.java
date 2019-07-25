@@ -17,7 +17,7 @@ import java.util.Map;
  * @see io.dummymaker.factory.IPopulateFactory
  * @since 30.05.2017
  */
-public interface IAnnotationScanner extends IScanner<Field, List<Annotation>, Class> {
+public interface IAnnotationScanner extends IMapScanner<Field, List<Annotation>, Class> {
 
     /**
      * Scan class for field annotations
