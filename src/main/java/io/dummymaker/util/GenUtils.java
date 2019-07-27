@@ -35,11 +35,11 @@ public class GenUtils {
     private static final Map<Class, List<Class<? extends IGenerator>>> AUTO_GENERATORS;
 
     static {
-        AUTO_GENERATORS = instantiateAutoGeneratorsMap();
+        AUTO_GENERATORS = getClassifiedGenerators();
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<Class, List<Class<? extends IGenerator>>> instantiateAutoGeneratorsMap() {
+    private static Map<Class, List<Class<? extends IGenerator>>> getClassifiedGenerators() {
         final Collection<Class> scannedClasses = new ClassScanner().scan("io.dummymaker.generator");
         final List<Class<? extends IGenerator>> classes = scannedClasses.stream()
                 .filter(IGenerator.class::isAssignableFrom)
@@ -75,7 +75,7 @@ public class GenUtils {
         if (Object.class.equals(generator) || !IGenerator.class.isAssignableFrom(generator))
             return Collections.emptyList();
 
-        final List<Class> special = getTypeForSpecial(generator);
+        final List<Class> special = getSpecialGeneratorTypes(generator);
         if (!special.isEmpty())
             return special;
 
@@ -86,7 +86,7 @@ public class GenUtils {
                 .findFirst().orElse(Arrays.asList(Object.class));
     }
 
-    private static List<Class> getTypeForSpecial(Class<?> generator) {
+    private static List<Class> getSpecialGeneratorTypes(Class<?> generator) {
         if (generator.equals(ListComplexGenerator.class)) {
             return Arrays.asList(List.class, LinkedList.class, ArrayList.class, CopyOnWriteArrayList.class);
         } else if (generator.equals(SetComplexGenerator.class)) {

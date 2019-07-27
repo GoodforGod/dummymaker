@@ -4,6 +4,10 @@ import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CountryBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 /**
  * Country with address
  *
@@ -13,11 +17,18 @@ import io.dummymaker.generator.simple.IGenerator;
  */
 public class AddressFullGenerator implements IGenerator<String> {
 
+    private final Pattern pattern = Pattern.compile("addr(ess)?full", CASE_INSENSITIVE);
+
     private final IGenerator<String> generator = new AddressGenerator();
     private final IBundle<String> countryBundle = new CountryBundle();
 
     @Override
     public String generate() {
         return countryBundle.getRandom() + ", " + generator.generate();
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

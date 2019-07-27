@@ -4,8 +4,10 @@ import io.dummymaker.generator.simple.IGenerator;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates dummy JSON object as String
@@ -14,6 +16,8 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * @since 21.02.2018
  */
 public class JsonGenerator implements IGenerator<String> {
+
+    private final Pattern pattern = Pattern.compile("jsonb?", CASE_INSENSITIVE);
 
     private final IGenerator<String> idGenerator = new IdGenerator();
     private final IGenerator<String> nickGenerator = new NickGenerator();
@@ -77,5 +81,10 @@ public class JsonGenerator implements IGenerator<String> {
         }
 
         return fieldName;
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

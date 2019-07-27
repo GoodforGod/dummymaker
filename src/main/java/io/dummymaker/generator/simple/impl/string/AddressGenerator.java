@@ -7,6 +7,9 @@ import io.dummymaker.bundle.impl.StreetBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Full address with street, city, district and house number
@@ -16,6 +19,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 16.07.2019
  */
 public class AddressGenerator implements IGenerator<String> {
+
+    private final Pattern pattern = Pattern.compile("addr(ess)?", CASE_INSENSITIVE);
 
     private final IBundle<String> streetBundle = new StreetBundle();
     private final IBundle<String> districtBundle = new DistrictBundle();
@@ -27,5 +32,10 @@ public class AddressGenerator implements IGenerator<String> {
                 + ", " + districtBundle.getRandom()
                 + ", " + streetBundle.getRandom()
                 + " " + ThreadLocalRandom.current().nextInt(20);
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

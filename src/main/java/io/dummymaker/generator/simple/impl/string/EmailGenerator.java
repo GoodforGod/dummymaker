@@ -6,6 +6,10 @@ import io.dummymaker.bundle.impl.EmailServicesBundle;
 import io.dummymaker.bundle.impl.NicknamesBundle;
 import io.dummymaker.generator.simple.IGenerator;
 
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 /**
  * Generates email as a string
  *
@@ -13,6 +17,8 @@ import io.dummymaker.generator.simple.IGenerator;
  * @since 26.05.2017
  */
 public class EmailGenerator implements IGenerator<String> {
+
+    private final Pattern pattern = Pattern.compile("e?mail", CASE_INSENSITIVE);
 
     private final IBundle<String> nickBundle = new NicknamesBundle();
     private final IBundle<String> emailBundle = new EmailServicesBundle();
@@ -24,5 +30,10 @@ public class EmailGenerator implements IGenerator<String> {
                 + "@"
                 + emailBundle.getRandom()
                 + domainBundle.getRandom();
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

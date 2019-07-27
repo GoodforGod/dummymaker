@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates random string like "aag2151tgdsfa9352tf"
@@ -14,6 +17,8 @@ import java.util.UUID;
  * @since 21.02.2018
  */
 public class StringGenerator implements IGenerator<String> {
+
+    private final Pattern pattern = Pattern.compile("str", CASE_INSENSITIVE);
 
     @Override
     public String generate() {
@@ -28,5 +33,10 @@ public class StringGenerator implements IGenerator<String> {
             shuffled.append(letter);
 
         return shuffled.toString();
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }

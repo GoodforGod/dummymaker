@@ -3,6 +3,9 @@ package io.dummymaker.generator.simple.impl.number;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates small integer numbers from 1 up to 100
@@ -12,8 +15,15 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class IntegerSmallGenerator implements IGenerator<Integer> {
 
+    private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
+
     @Override
     public Integer generate() {
         return ThreadLocalRandom.current().nextInt(1, 101);
+    }
+
+    @Override
+    public Pattern getPattern() {
+        return pattern;
     }
 }
