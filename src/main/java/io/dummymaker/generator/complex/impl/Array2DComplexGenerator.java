@@ -11,8 +11,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
-
 /**
  * Generates two dimension arrays based on field type
  *
@@ -36,12 +34,13 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            return genArray2D(sizeFirst, sizeSecond, valueClass, getAutoGenerator(field, valueClass), storage, depth, 1);
+            final Class<? extends IGenerator> suitable = storage.getSuitable(field, valueClass);
+            return genArray2D(sizeFirst, sizeSecond, valueClass, suitable, storage, depth, 1);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? getAutoGenerator(field, valueClass)
+                ? storage.getSuitable(field, valueClass)
                 : a.value();
 
         final int sizeFirst = getDesiredSize(a.minFirst(), a.maxFirst(), a.fixedFirst());

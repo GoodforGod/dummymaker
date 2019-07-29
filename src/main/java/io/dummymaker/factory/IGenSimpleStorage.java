@@ -13,7 +13,7 @@ import io.dummymaker.generator.simple.IGenerator;
  * @see io.dummymaker.generator.complex.IComplexGenerator
  * @since 21.07.2019
  */
-public interface IGenSimpleStorage {
+public interface IGenSimpleStorage extends IGenConfig {
 
     /**
      * Fill object with random values starting from desired depth

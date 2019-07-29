@@ -12,6 +12,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
@@ -29,6 +30,7 @@ public class GenUtils {
      */
     private static final int SALT = ((Long) System.currentTimeMillis()).hashCode();
 
+    private static final Logger logger = Logger.getLogger(GenUtils.class.getSimpleName());
     /**
      * Map with class values (int, Long, String, etc) as keys and suitable generators classes
      */
@@ -82,7 +84,7 @@ public class GenUtils {
         final List<Type> types = getTypes(generator);
         return types.stream()
                 .filter(GenUtils::isGenerator)
-                .map(GenUtils::getGeneratorInterfaceType)
+                .map(GenUtils::getInterfaceType)
                 .findFirst().orElse(Arrays.asList(Object.class));
     }
 
@@ -106,7 +108,7 @@ public class GenUtils {
         return Collections.emptyList();
     }
 
-    private static List<Class> getGeneratorInterfaceType(Type type) {
+    public static List<Class> getInterfaceType(Type type) {
         try {
             return Arrays.asList((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]);
         } catch (Exception e) {
@@ -114,7 +116,7 @@ public class GenUtils {
         }
     }
 
-    private static boolean isGenerator(Type type) {
+    public static boolean isGenerator(Type type) {
         try {
             return ((ParameterizedType) type).getRawType().equals(IGenerator.class)
                     || ((ParameterizedType) type).getRawType().equals(ITimeGenerator.class);
@@ -123,7 +125,7 @@ public class GenUtils {
         }
     }
 
-    private static List<Type> getTypes(Class<?> target) {
+    public static List<Type> getTypes(Class<?> target) {
         if (Object.class.equals(target))
             return new ArrayList<>();
 
@@ -134,12 +136,12 @@ public class GenUtils {
 
             return types;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
             return Collections.emptyList();
         }
     }
 
-    private static List<Type> getTypesFromInterfaces(Type targetType) {
+    public static List<Type> getTypesFromInterfaces(Type targetType) {
         if (isGenerator(targetType) || ParameterizedType.class.equals(targetType))
             return new ArrayList<>();
 
@@ -147,7 +149,7 @@ public class GenUtils {
         return getTypesFromClass(targetClass);
     }
 
-    private static List<Type> getTypesFromClass(Class targetClass) {
+    public static List<Type> getTypesFromClass(Class targetClass) {
         final List<Type> types = Arrays.stream((targetClass).getGenericInterfaces()).collect(Collectors.toList());
         final List<Type> collect = types.stream()
                 .filter(i -> !ParameterizedType.class.equals(i))

@@ -8,7 +8,7 @@ import io.dummymaker.scan.IPopulateScanner;
  *
  * @author GoodforGod
  * @see io.dummymaker.generator.complex.IComplexGenerator
- * @see PopulateFactory
+ * @see io.dummymaker.factory.IGenFactory
  * @since 10.03.2018
  */
 class GenEmbeddedFactory extends GenFactory {

@@ -51,6 +51,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
         for (final Field field : declaredFields) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (annotation.annotationType().equals(GenExportForce.class)) {
+                    //TODO research why geb auto is presented here
                     exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field, field.getType()), field.getName()));
                 } else if (annotation.annotationType().equals(GenExportIgnore.class)) {
                     exportFields.remove(field);

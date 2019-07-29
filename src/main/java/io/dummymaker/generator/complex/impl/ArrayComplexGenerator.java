@@ -11,8 +11,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
-
 /**
  * Generates arrays based on field type
  *
@@ -36,7 +34,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
         if (annotation == null) {
             return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     valueClass,
-                    getAutoGenerator(field,valueClass),
+                    storage.getSuitable(field, valueClass),
                     storage,
                     depth,
                     1);
@@ -44,7 +42,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         final GenArray a = ((GenArray) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? getAutoGenerator(field,valueClass)
+                ? storage.getSuitable(field, valueClass)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());

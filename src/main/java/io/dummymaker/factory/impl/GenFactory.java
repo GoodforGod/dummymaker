@@ -26,7 +26,15 @@ import static io.dummymaker.util.CastUtils.instantiate;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
+ * Produce data object objects and fill their fields with data
+ * <p>
+ * Successor of initial PopulateFactory
+ *
  * @author GoodforGod
+ * @see IGenerator
+ * @see IComplexGenerator
+ * @see io.dummymaker.annotation.core.PrimeGen
+ * @see io.dummymaker.annotation.core.ComplexGen
  * @see IGenFactory
  * @since 21.07.2019
  */

@@ -2,6 +2,7 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.factory.IGenConfig;
 import io.dummymaker.factory.IGenSimpleStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
@@ -25,6 +26,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
  */
 class GenStorage implements IGenSimpleStorage {
 
+    private final IGenConfig config;
     private final GenEmbeddedFactory simpleFactory;
     private final IPopulateScanner populateScanner;
 
@@ -37,6 +39,7 @@ class GenStorage implements IGenSimpleStorage {
         this.populateScanner = populateScanner;
 
         this.simpleFactory = new GenEmbeddedFactory(populateScanner);
+        this.config = new GenConfig();
 
         this.sequentialGenerators = new ConcurrentHashMap<>();
         this.containerMap = new ConcurrentHashMap<>();
@@ -73,7 +76,18 @@ class GenStorage implements IGenSimpleStorage {
             return Collections.emptyMap();
 
         scanForSequentialFields(target);
-        return containerMap.computeIfAbsent(target, (k) -> populateScanner.scan(target));
+        return containerMap.computeIfAbsent(target, (k) -> enrichContainers(populateScanner.scan(target)));
+    }
+
+    private Map<Field, GenContainer> enrichContainers(Map<Field, GenContainer> containerMap) {
+        containerMap.forEach((k, v) -> {
+            if (v.isAuto()) {
+                final Class<? extends IGenerator> suitable = config.getSuitable(k, k.getType());
+                v.enrich(suitable);
+            }
+        });
+
+        return containerMap;
     }
 
     /**

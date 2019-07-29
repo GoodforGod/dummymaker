@@ -67,34 +67,33 @@ public class CastUtils {
     /**
      * Instantiate class if possible, or return default provided value
      *
-     * @param tClass class to instantiate
+     * @param target class to instantiate
      * @param <T>    class instance
      * @return class instance
      */
     @SuppressWarnings("unchecked")
-    public static <T> T instantiate(final Class<T> tClass) {
-        if (tClass == null)
+    public static <T> T instantiate(final Class<T> target) {
+        if (target == null)
             return null;
 
-        final Constructor<?> zeroArgConstructor = Arrays.stream(tClass.getDeclaredConstructors())
+        final Constructor<?> zeroArgConstructor = Arrays.stream(target.getDeclaredConstructors())
                 .filter(c -> c.getParameterCount() == 0)
                 .findFirst().orElse(null);
 
         try {
             if (zeroArgConstructor == null) {
-                logger.warning("[CAN NOT INSTANTIATE] : " + tClass + ", have NO zero arg constructor.");
+                logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
                 return null;
             }
             zeroArgConstructor.setAccessible(true);
             return ((T) zeroArgConstructor.newInstance());
         } catch (InstantiationException | InvocationTargetException e) {
-            logger.warning("[CAN NOT INSTANTIATE] : " + tClass
-                    + " - class may be an abstract class, an interface, "
-                    + "array, primitive." + e.getMessage());
+            logger.warning("Can not instantiate '" + target
+                    + "', may be an abstract, interface, array, primitive.\n" + e.getMessage());
             return null;
         } catch (IllegalAccessException e) {
-            logger.warning("[CAN NOT INSTANTIATE] : " + tClass
-                    + " - no access to instantiating object." + e.getMessage());
+            logger.warning("Can not instantiate, '" + target
+                    + "' due to no access to object.\n" + e.getMessage());
             return null;
         } finally {
             if (zeroArgConstructor != null)

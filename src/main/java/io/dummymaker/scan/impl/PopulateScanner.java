@@ -7,17 +7,12 @@ import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.container.impl.GenContainer;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
-
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Scanner used by populate factory
@@ -69,14 +64,8 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
             // Create auto gen container class is auto generative
             if (genContainer == null && genAuto.isPresent()) {
-                Class<? extends IGenerator> generator = getAutoGenerator(field, field.getType());
-                if (generator.equals(NullGenerator.class)) {
-                    // Try to treat field as embedded object, when no suitable generator
-                    generator = EmbeddedGenerator.class;
-                }
-
                 final int autoDepth = genAuto.map(a -> ((GenAuto) a).depth()).orElse(1);
-                genContainer = GenContainer.asAuto(generator, isComplex(field), autoDepth);
+                genContainer = GenContainer.asAuto(isComplex(field), autoDepth);
             }
 
             if (!isIgnored(field) && genContainer != null) {
