@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.CastUtils.getGenericType;
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * "default comment"
@@ -34,7 +33,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final Class<? extends IGenerator> valueGenerator,
                             final Class<?> keyFieldType,
                             final Class<?> valueFieldType,
-                            final IGenSimpleStorage storage,
+                            final IGenStorage storage,
                             final int depth,
                             final int maxDepth) {
 
@@ -61,7 +60,7 @@ public class MapComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IGenSimpleStorage storage,
+                           final IGenStorage storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Map.class))
             return null;
@@ -69,24 +68,19 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
         final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
         if (annotation == null) {
-            return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
-                    field,
-                    getAutoGenerator(field, keyType),
-                    getAutoGenerator(field, valueType),
-                    keyType,
-                    valueType,
-                    storage,
-                    depth,
-                    1);
+            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final Class<? extends IGenerator> keySuitable = suitable(storage, field, keyType);
+            final Class<? extends IGenerator> valueSuitable = suitable(storage, field, valueType);
+            return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, 1);
         }
 
         final GenMap a = ((GenMap) annotation);
         final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
-                ? getAutoGenerator(field, keyType)
+                ? suitable(storage, field, keyType)
                 : a.key();
 
         final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
-                ? getAutoGenerator(field, valueType)
+                ? suitable(storage, field, keyType)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());
@@ -95,15 +89,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
     @Override
     public Object generate() {
-        return generateMap(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
-                null,
-                IdGenerator.class,
-                IdGenerator.class,
-                Object.class,
-                Object.class,
-                null,
-                GenEmbedded.MAX,
-                1);
+        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX, 1);
     }
 
     private Map buildMap(Field field, int size) {

@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.impl;
 
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.complex.IComplexGenerator;
 
 import java.lang.annotation.Annotation;
@@ -22,7 +22,7 @@ public class NullGenerator implements IComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IGenSimpleStorage storage,
+                           final IGenStorage storage,
                            final int depth) {
         return null;
     }

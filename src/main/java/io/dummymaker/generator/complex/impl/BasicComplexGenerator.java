@@ -1,10 +1,12 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenConfig;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.simple.impl.string.IdGenerator;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
 
@@ -38,7 +40,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
 
     <T> T generateValue(final Class<? extends IGenerator> generatorClass,
                         final Class<T> valueClass,
-                        final IGenSimpleStorage storage,
+                        final IGenStorage storage,
                         final int depth,
                         final int depthLimit) {
         final int parsedDepthLimit = EmbeddedGenerator.toDepth(depthLimit);
@@ -55,8 +57,12 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
         return generateObject(generator, valueClass);
     }
 
+    protected Class<? extends IGenerator> suitable(IGenConfig config, Field field, Class<?> fieldType) {
+        return  (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
+    }
+
     @Override
-    public abstract Object generate(Annotation annotation, Field field, IGenSimpleStorage storage, int depth);
+    public abstract Object generate(Annotation annotation, Field field, IGenStorage storage, int depth);
 
     @Override
     public abstract Object generate();

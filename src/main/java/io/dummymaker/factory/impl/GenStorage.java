@@ -3,7 +3,7 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.factory.IGenConfig;
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
@@ -24,7 +24,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
  * @author GoodforGod
  * @since 17.07.2019
  */
-class GenStorage implements IGenSimpleStorage {
+class GenStorage implements IGenStorage {
 
     private final IGenConfig config;
     private final GenEmbeddedFactory simpleFactory;
@@ -52,6 +52,16 @@ class GenStorage implements IGenSimpleStorage {
         return (generatorClass == null)
                 ? generators.computeIfAbsent(NullGenerator.class, (k) -> instantiate(NullGenerator.class))
                 : generators.computeIfAbsent(generatorClass, (k) -> instantiate(generatorClass));
+    }
+
+    @Override
+    public Class<? extends IGenerator> getSuitable(Field field) {
+        return config.getSuitable(field);
+    }
+
+    @Override
+    public Class<? extends IGenerator> getSuitable(Field field, Class<?> fieldClass) {
+        return config.getSuitable(field, fieldClass);
     }
 
     /**

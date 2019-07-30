@@ -43,6 +43,11 @@ public class GenConfig implements IGenConfig {
         this.classifiers = getClassifiedGenerators();
     }
 
+    @Override
+    public Class<? extends IGenerator> getSuitable(Field field) {
+        return getSuitable(field, field.getType());
+    }
+
     /**
      * Try to find most suitable generator class for target field
      * Using field value class and field name

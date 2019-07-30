@@ -15,5 +15,7 @@ import java.lang.reflect.Field;
  */
 public interface IGenConfig {
 
+    Class<? extends IGenerator> getSuitable(Field field);
+
     Class<? extends IGenerator> getSuitable(Field field, Class<?> fieldClass);
 }

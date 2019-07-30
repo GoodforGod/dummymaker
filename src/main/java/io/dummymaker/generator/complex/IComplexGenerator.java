@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.annotation.Annotation;
@@ -27,5 +27,5 @@ public interface IComplexGenerator extends IGenerator<Object> {
      * @param depth      current depth of the generated field
      * @return generated object
      */
-    Object generate(Annotation annotation, Field field, IGenSimpleStorage storage, int depth);
+    Object generate(Annotation annotation, Field field, IGenStorage storage, int depth);
 }

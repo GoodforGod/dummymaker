@@ -27,15 +27,12 @@ public class FieldContainer {
      */
     private final Type type;
 
-    private FieldContainer(final String exportName,
-                           final Type type) {
+    private FieldContainer(String exportName, Type type) {
         this.exportName = exportName;
         this.type = type;
     }
 
-    public static FieldContainer as(final Field field,
-                                    final Class<? extends IGenerator> generator,
-                                    final String exportName) {
+    public static FieldContainer as(Field field, Class<? extends IGenerator> generator, String exportName) {
         final Type type = getType(generator);
         final String finalName = (isEmpty(exportName) && field != null)
                 ? field.getName()

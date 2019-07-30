@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
@@ -32,7 +32,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IGenSimpleStorage storage,
+                           final IGenStorage storage,
                            final int depth) {
         if (field == null)
             return null;
@@ -60,7 +60,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return null;
     }
 
-    private Object genTime(IGenSimpleStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
+    private Object genTime(IGenStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
         final IGenerator generator = (storage == null)
                 ? CastUtils.instantiate(gClass)
                 : storage.getGenerator(gClass);

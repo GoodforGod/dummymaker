@@ -2,7 +2,7 @@ package io.dummymaker.generator.complex.impl;
 
 import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IGenSimpleStorage;
+import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.string.IdGenerator;
 
@@ -17,7 +17,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.CastUtils.getGenericType;
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
 
 /**
  * Generates Set or GenSet annotation
@@ -34,7 +33,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
     @Override
     public Object generate(final Annotation annotation,
                            final Field field,
-                           final IGenSimpleStorage storage,
+                           final IGenStorage storage,
                            final int depth) {
         if (field == null || !field.getType().isAssignableFrom(Set.class))
             return null;
@@ -42,41 +41,24 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if (annotation == null) {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            return genCollection(size,
-                    buildCollection(field, size),
-                    getAutoGenerator(field, valueClass),
-                    valueClass,
-                    storage,
-                    depth,
-                    1);
+            final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
+            return genCollection(size, buildCollection(field, size), suitable, valueClass, storage, depth, 1);
         }
 
         final GenSet a = ((GenSet) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? getAutoGenerator(field,valueClass)
+                ? suitable(storage, field, valueClass)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());
-        return genCollection(size,
-                buildCollection(field, size),
-                generatorClass,
-                valueClass,
-                storage,
-                depth,
-                a.depth());
+        return genCollection(size, buildCollection(field, size), generatorClass, valueClass, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
         final Set collection = buildCollection(null, size);
-        return genCollection(size,
-                collection,
-                IdGenerator.class,
-                Object.class,
-                null,
-                GenEmbedded.MAX,
-                1);
+        return genCollection(size, collection, IdGenerator.class, Object.class, null, GenEmbedded.MAX, 1);
     }
 
     private Set buildCollection(Field field, int size) {

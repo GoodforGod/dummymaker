@@ -9,14 +9,16 @@ import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
+import io.dummymaker.factory.IGenConfig;
+import io.dummymaker.factory.impl.GenConfig;
+import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
+import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static io.dummymaker.util.GenUtils.getAutoGenerator;
+import java.util.function.Predicate;
 
 /**
  * Scanner for special export annotations
@@ -29,75 +31,59 @@ import static io.dummymaker.util.GenUtils.getAutoGenerator;
  * @see UniqueScanner
  * @since 03.06.2017
  */
+@SuppressWarnings("Duplicates")
 public class ExportScanner extends BasicScanner implements IExportScanner {
 
+    private final Predicate<Annotation> ignoreFilter = a -> a.annotationType().equals(GenExportIgnore.class);
+    private final Predicate<Annotation> exportFilter = (a) -> a.annotationType().equals(GenExportForce.class);
+    private final Predicate<Annotation> renameFilter = (a) -> a.annotationType().equals(GenExportName.class);
+
+    private final IGenConfig genConfig = new GenConfig();
+    private final IPopulateScanner populateScanner = new PopulateScanner();
+    private final IAnnotationScanner annotationScanner = new AnnotationScanner();
+
     @Override
-    public Map<Field, FieldContainer> scan(final Class target) {
+    public Map<Field, FieldContainer> scan(Class target) {
         return scan(target, Cases.DEFAULT.value());
     }
 
-    public Map<Field, FieldContainer> scan(final Class target,
-                                           final ICase nameCase) {
-
-        // Add all fields in correct order for setup (to save order)
-        final List<Field> declaredFields = getAllDeclaredFields(target);
-        final Map<Field, FieldContainer> exportFields = declaredFields.stream()
-                .filter(f -> !f.isSynthetic())
-                .collect(LinkedHashMap::new,
-                        (m, e) -> m.put(e, null),
-                        (m, u) -> { });
-
+    @Override
+    public Map<Field, FieldContainer> scan(Class target, ICase nameCase) {
+        final Map<Field, FieldContainer> resultMap = new LinkedHashMap<>();
         final Map<Field, String> renamedFields = new HashMap<>();
-        for (final Field field : declaredFields) {
-            for (Annotation annotation : field.getDeclaredAnnotations()) {
-                if (annotation.annotationType().equals(GenExportForce.class)) {
-                    //TODO research why geb auto is presented here
-                    exportFields.replace(field, FieldContainer.as(field, getAutoGenerator(field, field.getType()), field.getName()));
-                } else if (annotation.annotationType().equals(GenExportIgnore.class)) {
-                    exportFields.remove(field);
+
+        final Map<Field, GenContainer> scannedContainers = populateScanner.scan(target);
+        final Map<Field, List<Annotation>> scannedAnnotations = annotationScanner.scan(target);
+
+        // Scan for renamed fields and fill renamed map
+        scannedAnnotations.forEach((k, v) -> v.stream().filter(renameFilter)
+                .findFirst().map(a -> ((GenExportName) a).value())
+                .ifPresent(n -> renamedFields.put(k, n)));
+
+        // Fill result map with export fields containers
+        scannedAnnotations.forEach((k, v) -> {
+            // Ignored filters excluded
+            if (v.stream().noneMatch(ignoreFilter)) {
+                final GenContainer container = scannedContainers.get(k);
+                final String fieldName = renamedFields.getOrDefault(k, nameCase.format(k.getName()));
+
+                // Process export field (even if is export only)
+                if (v.stream().anyMatch(exportFilter) && container == null) {
+                    resultMap.put(k, FieldContainer.as(k, genConfig.getSuitable(k), fieldName));
+                } else if (container != null) {
+                    resultMap.put(k, FieldContainer.as(k, container.getGenerator(), fieldName));
                 }
 
-                if (annotation.annotationType().equals(GenExportName.class)) {
-                    renamedFields.put(field, ((GenExportName) annotation).value());
-                }
             }
-        }
+        });
 
+        // Fill class export name
         Arrays.stream(target.getDeclaredAnnotations())
-                .filter(a -> a.annotationType().equals(GenExportName.class))
+                .filter(renameFilter)
+                .map(a -> ((GenExportName) a).value())
                 .findFirst()
-                .ifPresent(annotation -> exportFields.put(
-                        null,
-                        FieldContainer.as(null, null, ((GenExportName) annotation).value()))
-                );
+                .ifPresent(n -> resultMap.put(null, FieldContainer.as(null, null, n)));
 
-        final Map<Field, GenContainer> containerMap = new PopulateScanner().scan(target);
-        containerMap.entrySet().stream()
-                .filter(e -> exportFields.containsKey(e.getKey()))
-                .forEach(e -> {
-                    final Field f = e.getKey();
-                    final String exportName = renamedFields.getOrDefault(f, nameCase.format(f.getName()));
-                    exportFields.replace(f, FieldContainer.as(f, e.getValue().getGenerator(), exportName));
-                    renamedFields.remove(f);
-                });
-
-        // Update renamed force export fields
-        renamedFields.entrySet().stream()
-                .filter(e -> exportFields.containsKey(e.getKey()))
-                .forEach(e -> {
-                    final Field f = e.getKey();
-                    final FieldContainer container = exportFields.get(e.getKey());
-                    if (container != null) {
-                        exportFields.replace(f, FieldContainer.as(f, getAutoGenerator(f, f.getType()), e.getValue()));
-                    }
-                });
-
-        exportFields.entrySet().stream()
-                .filter(e -> e.getValue() == null)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList())
-                .forEach(exportFields::remove);
-
-        return exportFields;
+        return resultMap;
     }
 }

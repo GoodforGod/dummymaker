@@ -21,7 +21,7 @@ public class DummyTime {
         LOCAL_TIME(Pattern.compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
         LOCAL_DATE(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
         LOCAL_DATETIME(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
-        DATE(Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}")),
+        DATE(Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3,5} \\d{4}")),
         TIMESTAMP(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),
         DATE_SQL(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
         TIME(Pattern.compile("\\d{1,2}:\\d{1,2}:\\d{1,2}"));
