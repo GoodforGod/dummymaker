@@ -34,7 +34,7 @@ public class FieldContainer {
 
     public static FieldContainer as(Field field, Class<? extends IGenerator> generator, String exportName) {
         final Type type = getType(generator);
-        final String finalName = (isEmpty(exportName) && field != null)
+        final String finalName = isEmpty(exportName) && field != null
                 ? field.getName()
                 : exportName;
 

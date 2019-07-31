@@ -1,6 +1,6 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.factory.IGenConfig;
+import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.complex.impl.*;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -24,10 +24,10 @@ import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
  * With all library generators and their patterns availability
  *
  * @author GoodforGod
- * @see IGenConfig
+ * @see IGenSupplier
  * @since 27.07.2019
  */
-public class GenConfig implements IGenConfig {
+public class GenSupplier implements IGenSupplier {
 
     /**
      * Salt used to select always the same generator for specific field
@@ -39,7 +39,7 @@ public class GenConfig implements IGenConfig {
      */
     private final Map<Class, List<Class<? extends IGenerator>>> classifiers;
 
-    public GenConfig() {
+    public GenSupplier() {
         this.classifiers = getClassifiedGenerators();
     }
 

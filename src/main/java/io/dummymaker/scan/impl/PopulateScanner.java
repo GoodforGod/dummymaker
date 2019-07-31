@@ -7,6 +7,10 @@ import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.factory.IGenSupplier;
+import io.dummymaker.factory.impl.GenSupplier;
+import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
@@ -41,6 +45,8 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
     private final Predicate<Annotation> isIgnored = (a) -> a.annotationType().equals(GenIgnore.class);
     private final Predicate<Annotation> isAuto = (a) -> a.annotationType().equals(GenAuto.class);
 
+    private final IGenSupplier supplier = new GenSupplier();
+
     /**
      * Scan for prime/complex gen annotation and its child annotation
      *
@@ -52,28 +58,18 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      */
     @Override
     public Map<Field, GenContainer> scan(final Class target) {
-        final Map<Field, GenContainer> populateAnnotationMap = new LinkedHashMap<>();
+        final Map<Field, GenContainer> containerMap = new LinkedHashMap<>();
 
         // Check if class is auto generative
-        final Optional<Annotation> genAuto = Arrays.stream(target.getDeclaredAnnotations())
+        final Annotation genAuto = Arrays.stream(target.getDeclaredAnnotations())
                 .filter(isAuto)
-                .findAny();
+                .findAny().orElse(null);
 
-        for (final Field field : getAllDeclaredFields(target)) {
-            GenContainer genContainer = findGenAnnotation(field);
+        getAllDeclaredFields(target).stream()
+                .filter(f -> !isIgnored(f))
+                .forEach(f -> getContainer(f, genAuto).ifPresent(c -> containerMap.put(f, c)));
 
-            // Create auto gen container class is auto generative
-            if (genContainer == null && genAuto.isPresent()) {
-                final int autoDepth = genAuto.map(a -> ((GenAuto) a).depth()).orElse(1);
-                genContainer = GenContainer.asAuto(isComplex(field), autoDepth);
-            }
-
-            if (!isIgnored(field) && genContainer != null) {
-                populateAnnotationMap.put(field, genContainer);
-            }
-        }
-
-        return populateAnnotationMap;
+        return containerMap;
     }
 
     /**
@@ -90,22 +86,46 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
     }
 
     /**
-     * Found gen or custom gen annotated fields and wraps them into containers
+     * Create auto gen container class is auto generative
+     * @param field target to containerize
+     * @param genAuto gen auto annotation
+     * @return gen container as gen auto
      */
-    private GenContainer findGenAnnotation(final Field field) {
+    private Optional<GenContainer> getAutoContainer(Field field, Annotation genAuto) {
+        if(genAuto == null)
+            return Optional.empty();
+
+        final int depth = EmbeddedGenerator.toDepth(((GenAuto) genAuto).depth());
+        final GenContainer container = GenContainer.asAuto(isComplex(field), depth);
+        final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
+        container.enrich(suitable);
+        return Optional.of(container);
+    }
+
+    /**
+     * Found gen or custom gen annotated fields and wraps them into containers
+     *
+     * If not presented than try to generate gen auto container
+     * @see #getAutoContainer(Field, Annotation)
+     *
+     * @param field target to containerize
+     * @param genAuto gen auto annotation
+     * @return gen container
+     */
+    private Optional<GenContainer> getContainer(Field field, Annotation genAuto) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {
             if (isGenCustom.test(annotation)) {
-                return GenContainer.asCustom(annotation);
+                return Optional.of(GenContainer.asCustom(annotation));
             }
 
             for (Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                 if (isGen.test(inline)) {
-                    return GenContainer.asGen(inline, annotation);
+                    return Optional.of(GenContainer.asGen(inline, annotation));
                 }
             }
         }
 
-        return null;
+        return getAutoContainer(field, genAuto);
     }
 
     /**

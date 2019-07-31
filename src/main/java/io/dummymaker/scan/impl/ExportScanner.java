@@ -1,7 +1,5 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
@@ -9,8 +7,8 @@ import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.container.impl.GenContainer;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
-import io.dummymaker.factory.IGenConfig;
-import io.dummymaker.factory.impl.GenConfig;
+import io.dummymaker.factory.IGenSupplier;
+import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.IPopulateScanner;
@@ -24,21 +22,18 @@ import java.util.function.Predicate;
  * Scanner for special export annotations
  *
  * @author GoodforGod
- * @see PrimeGen
- * @see ComplexGen
  * @see GenExportIgnore
  * @see GenExportForce
- * @see UniqueScanner
+ * @see GenExportName
  * @since 03.06.2017
  */
-@SuppressWarnings("Duplicates")
 public class ExportScanner extends BasicScanner implements IExportScanner {
 
     private final Predicate<Annotation> ignoreFilter = a -> a.annotationType().equals(GenExportIgnore.class);
     private final Predicate<Annotation> exportFilter = (a) -> a.annotationType().equals(GenExportForce.class);
     private final Predicate<Annotation> renameFilter = (a) -> a.annotationType().equals(GenExportName.class);
 
-    private final IGenConfig genConfig = new GenConfig();
+    private final IGenSupplier supplier = new GenSupplier();
     private final IPopulateScanner populateScanner = new PopulateScanner();
     private final IAnnotationScanner annotationScanner = new AnnotationScanner();
 
@@ -69,7 +64,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
 
                 // Process export field (even if is export only)
                 if (v.stream().anyMatch(exportFilter) && container == null) {
-                    resultMap.put(k, FieldContainer.as(k, genConfig.getSuitable(k), fieldName));
+                    resultMap.put(k, FieldContainer.as(k, supplier.getSuitable(k), fieldName));
                 } else if (container != null) {
                     resultMap.put(k, FieldContainer.as(k, container.getGenerator(), fieldName));
                 }

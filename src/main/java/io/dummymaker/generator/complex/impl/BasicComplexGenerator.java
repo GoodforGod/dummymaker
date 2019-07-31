@@ -1,7 +1,7 @@
 package io.dummymaker.generator.complex.impl;
 
-import io.dummymaker.factory.IGenConfig;
 import io.dummymaker.factory.IGenStorage;
+import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -57,7 +57,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
         return generateObject(generator, valueClass);
     }
 
-    protected Class<? extends IGenerator> suitable(IGenConfig config, Field field, Class<?> fieldType) {
+    protected Class<? extends IGenerator> suitable(IGenSupplier config, Field field, Class<?> fieldType) {
         return  (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
     }
 

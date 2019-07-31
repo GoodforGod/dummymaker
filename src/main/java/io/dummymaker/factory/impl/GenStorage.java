@@ -2,8 +2,8 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.impl.GenContainer;
-import io.dummymaker.factory.IGenConfig;
 import io.dummymaker.factory.IGenStorage;
+import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
@@ -26,7 +26,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
  */
 class GenStorage implements IGenStorage {
 
-    private final IGenConfig config;
+    private final IGenSupplier supplier;
     private final GenEmbeddedFactory simpleFactory;
     private final IPopulateScanner populateScanner;
 
@@ -39,10 +39,10 @@ class GenStorage implements IGenStorage {
         this.populateScanner = populateScanner;
 
         this.simpleFactory = new GenEmbeddedFactory(populateScanner);
-        this.config = new GenConfig();
+        this.supplier = new GenSupplier();
 
-        this.sequentialGenerators = new ConcurrentHashMap<>();
-        this.containerMap = new ConcurrentHashMap<>();
+        this.sequentialGenerators = new HashMap<>();
+        this.containerMap = new HashMap<>();
         this.generators = new HashMap<>();
         this.marked = new HashSet<>();
     }
@@ -56,12 +56,12 @@ class GenStorage implements IGenStorage {
 
     @Override
     public Class<? extends IGenerator> getSuitable(Field field) {
-        return config.getSuitable(field);
+        return supplier.getSuitable(field);
     }
 
     @Override
     public Class<? extends IGenerator> getSuitable(Field field, Class<?> fieldClass) {
-        return config.getSuitable(field, fieldClass);
+        return supplier.getSuitable(field, fieldClass);
     }
 
     /**
@@ -86,18 +86,7 @@ class GenStorage implements IGenStorage {
             return Collections.emptyMap();
 
         scanForSequentialFields(target);
-        return containerMap.computeIfAbsent(target, (k) -> enrichContainers(populateScanner.scan(target)));
-    }
-
-    private Map<Field, GenContainer> enrichContainers(Map<Field, GenContainer> containerMap) {
-        containerMap.forEach((k, v) -> {
-            if (v.isAuto()) {
-                final Class<? extends IGenerator> suitable = config.getSuitable(k, k.getType());
-                v.enrich(suitable);
-            }
-        });
-
-        return containerMap;
+        return containerMap.computeIfAbsent(target, (k) -> populateScanner.scan(target));
     }
 
     /**
@@ -151,7 +140,7 @@ class GenStorage implements IGenStorage {
      * @param target class to scan
      */
     private void scanForSequentialFields(Class<?> target) {
-        sequentialGenerators.computeIfAbsent(target, (k) -> new SequenceScanner().scan(target)
+        this.sequentialGenerators.computeIfAbsent(target, (k) -> new SequenceScanner().scan(target)
                 .entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,

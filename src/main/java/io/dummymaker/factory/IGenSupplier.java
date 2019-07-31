@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
  * @author GoodforGod
  * @since 27.07.2019
  */
-public interface IGenConfig {
+public interface IGenSupplier {
 
     Class<? extends IGenerator> getSuitable(Field field);
 

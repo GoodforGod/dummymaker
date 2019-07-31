@@ -46,10 +46,12 @@ abstract class PopulateFactory implements IPopulateFactory {
     private final IPopulateScanner populateScanner;
 
     private final GeneratorsStorage genStorage;
+    private final GenStorage storage;
 
     PopulateFactory(IPopulateScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
         this.sequentialScanner = new SequenceScanner();
+        this.storage = new GenStorage(populateScanner);
         this.populateScanner = populateScanner;
     }
 
@@ -96,7 +98,7 @@ abstract class PopulateFactory implements IPopulateFactory {
                                  final Map<Field, Long> enumeratesMap,
                                  final Set<Field> nullableFields,
                                  final int currentEmbeddedDepth) {
-        final Map<Field, GenContainer> genContainers = this.populateScanner.scan(t.getClass());
+        final Map<Field, GenContainer> genContainers = new GenStorage(populateScanner).getContainers(t.getClass());
         for (final Map.Entry<Field, GenContainer> annotatedField : genContainers.entrySet()) {
             final Field field = annotatedField.getKey();
             // If field had errors or null gen in prev populate iteration, just skip that field

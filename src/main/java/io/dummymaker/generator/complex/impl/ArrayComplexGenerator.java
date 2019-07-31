@@ -34,7 +34,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
         if (annotation == null) {
             return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
                     valueClass,
-                    storage.getSuitable(field, valueClass),
+                    suitable(storage, field, valueClass),
                     storage,
                     depth,
                     1);
@@ -42,7 +42,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         final GenArray a = ((GenArray) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? storage.getSuitable(field, valueClass)
+                ? suitable(storage, field, valueClass)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());

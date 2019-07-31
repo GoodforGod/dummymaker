@@ -34,37 +34,25 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            final Class<? extends IGenerator> suitable = storage.getSuitable(field, valueClass);
+            final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
             return genArray2D(sizeFirst, sizeSecond, valueClass, suitable, storage, depth, 1);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);
         final Class<? extends IGenerator> generatorClass = isGenDefault(a.value())
-                ? storage.getSuitable(field, valueClass)
+                ? suitable(storage, field, valueClass)
                 : a.value();
 
         final int sizeFirst = getDesiredSize(a.minFirst(), a.maxFirst(), a.fixedFirst());
         final int sizeSecond = getDesiredSize(a.minSecond(), a.maxSecond(), a.fixedSecond());
-        return genArray2D(sizeFirst,
-                sizeSecond,
-                valueClass,
-                generatorClass,
-                storage,
-                depth,
-                a.depth());
+        return genArray2D(sizeFirst, sizeSecond, valueClass, generatorClass, storage, depth, a.depth());
     }
 
     @Override
     public Object generate() {
         final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
         final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        return genArray2D(sizeFirst,
-                sizeSecond,
-                String.class,
-                IdGenerator.class,
-                null,
-                GenEmbedded.MAX,
-                1);
+        return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
     private Object genArray2D(final int rows,
