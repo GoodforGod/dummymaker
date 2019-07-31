@@ -4,7 +4,7 @@ dist: trusty
 sudo: false
 
 script:
-  - "gradle test jacocoTestReport"
+  - "./gradlew build jacocoTestReport --scan -s"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
