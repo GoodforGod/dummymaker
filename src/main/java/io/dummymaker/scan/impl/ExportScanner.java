@@ -3,8 +3,8 @@ package io.dummymaker.scan.impl;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
-import io.dummymaker.container.impl.FieldContainer;
-import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.container.FieldContainer;
+import io.dummymaker.container.GenContainer;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.factory.IGenSupplier;
@@ -19,9 +19,11 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Scanner for special export annotations
+ * Scanner for special export annotations and produces export containers
+ * Which are used in exporters
  *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @see GenExportIgnore
  * @see GenExportForce
  * @see GenExportName

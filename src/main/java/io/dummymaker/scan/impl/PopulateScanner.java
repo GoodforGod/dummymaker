@@ -6,7 +6,7 @@ import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenIgnore;
-import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.generator.simple.IGenerator;
@@ -87,12 +87,13 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Create auto gen container class is auto generative
-     * @param field target to containerize
+     *
+     * @param field   target to containerize
      * @param genAuto gen auto annotation
      * @return gen container as gen auto
      */
     private Optional<GenContainer> getAutoContainer(Field field, Annotation genAuto) {
-        if(genAuto == null)
+        if (genAuto == null)
             return Optional.empty();
 
         final int depth = EmbeddedGenerator.toDepth(((GenAuto) genAuto).depth());
@@ -104,13 +105,13 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Found gen or custom gen annotated fields and wraps them into containers
-     *
+     * <p>
      * If not presented than try to generate gen auto container
-     * @see #getAutoContainer(Field, Annotation)
      *
-     * @param field target to containerize
+     * @param field   target to containerize
      * @param genAuto gen auto annotation
      * @return gen container
+     * @see #getAutoContainer(Field, Annotation)
      */
     private Optional<GenContainer> getContainer(Field field, Annotation genAuto) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {

@@ -13,7 +13,8 @@ import java.util.jar.JarFile;
  */
 public class PackageUtils {
 
-    private PackageUtils() { }
+    private PackageUtils() {
+    }
 
     /**
      * Loads class by class name

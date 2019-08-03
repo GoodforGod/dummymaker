@@ -1,7 +1,7 @@
 package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.container.impl.GenContainer;
+import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.simple.IGenerator;

@@ -1,8 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
-import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.container.ClassContainer;
+import io.dummymaker.container.ExportContainer;
+import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -129,8 +129,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Create String of Create Table Query
      */
-    private String buildCreateTableQuery(final IClassContainer container,
-                                         final String primaryKeyField) {
+    private String buildCreateTableQuery(final ClassContainer container, final String primaryKeyField) {
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
@@ -155,8 +154,7 @@ public class SqlExporter extends BasicExporter {
      * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String buildInsertNameTypeQuery(final String finalFieldName,
-                                            final IClassContainer container) {
+    private String buildInsertNameTypeQuery(final String finalFieldName, final ClassContainer container) {
         final Class<?> exportFieldType = container.getField(finalFieldName).getType();
         switch (container.getContainer(finalFieldName).getType()) {
             case ARRAY:
@@ -174,8 +172,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Build insert query part with values
      */
-    private <T> String buildInsertQuery(final T t,
-                                        final IClassContainer container) {
+    private <T> String buildInsertQuery(final T t, final ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
                 .append(container.getExportClassName().toLowerCase())
@@ -194,8 +191,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Creates insert query field name
      */
-    private <T> String format(final T t,
-                              final IClassContainer container) {
+    private <T> String format(final T t, final ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String resultValues = exportContainers.stream()
@@ -213,7 +209,7 @@ public class SqlExporter extends BasicExporter {
      * - Is marked with enumerate gen annotation
      * - Randomly selected
      */
-    private String buildPrimaryKey(final IClassContainer container) {
+    private String buildPrimaryKey(final ClassContainer container) {
         final Map<Field, FieldContainer> containerMap = container.getFormatSupported(Format.SQL);
 
         for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
@@ -299,7 +295,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return false;
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return false;
 
@@ -320,7 +316,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return export(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
             return false;
 
@@ -366,7 +362,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return "";
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return "";
 
@@ -384,7 +380,7 @@ public class SqlExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
             return "";
 

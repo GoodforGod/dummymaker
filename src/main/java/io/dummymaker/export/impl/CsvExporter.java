@@ -1,7 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.container.ClassContainer;
+import io.dummymaker.container.ExportContainer;
+import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -103,8 +104,7 @@ public class CsvExporter extends BasicExporter {
         return "'" + value + "'";
     }
 
-    private <T> String format(final T t,
-                              final IClassContainer container) {
+    private <T> String format(final T t, final ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String separatorAsStr = String.valueOf(separator);
@@ -136,10 +136,10 @@ public class CsvExporter extends BasicExporter {
      *
      * @return csv header
      */
-    private String generateCsvHeader(final IClassContainer container) {
+    private String generateCsvHeader(final ClassContainer container) {
         final String separatorAsStr = String.valueOf(separator);
-        return container.getFormatSupported(Format.CSV).entrySet().stream()
-                .map(e -> e.getValue().getExportName())
+        return container.getFormatSupported(Format.CSV).values().stream()
+                .map(FieldContainer::getExportName)
                 .collect(Collectors.joining(separatorAsStr));
     }
 
@@ -148,7 +148,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return false;
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return false;
 
@@ -173,7 +173,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return export(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())
             return false;
 
@@ -197,7 +197,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return "";
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return "";
 
@@ -217,7 +217,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())
             return "";
 

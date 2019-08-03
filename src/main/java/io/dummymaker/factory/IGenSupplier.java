@@ -8,9 +8,8 @@ import java.lang.reflect.Field;
  * Config that providers contract for generators discovery
  * Based on fields and classes for auto generation
  *
- * @see io.dummymaker.annotation.special.GenAuto
- *
  * @author GoodforGod
+ * @see io.dummymaker.annotation.special.GenAuto
  * @since 27.07.2019
  */
 public interface IGenSupplier {

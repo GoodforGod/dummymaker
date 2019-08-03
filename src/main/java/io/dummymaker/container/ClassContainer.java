@@ -1,6 +1,6 @@
-package io.dummymaker.container.impl;
+package io.dummymaker.container;
 
-import io.dummymaker.container.IClassContainer;
+import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;
 import io.dummymaker.scan.impl.ExportScanner;
@@ -10,16 +10,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * Container class used to store class field information and different field states
+ * <p>
+ * Class Container for class origin/final name
+ * Fields origin/final names
+ * Fields values as Field type
+ *
  * @author GoodforGod
- * @see IClassContainer
  * @since 25.02.2018
  */
-public class ClassContainer implements IClassContainer {
-
-    /**
-     * Export dummy object class
-     */
-    private final Class exportClass;
+public class ClassContainer {
 
     /**
      * Export dummy object class name (renamed or formatted)
@@ -32,10 +32,7 @@ public class ClassContainer implements IClassContainer {
     private final Map<Field, FieldContainer> fieldContainerMap;
     private final Format format;
 
-    public <T> ClassContainer(final T t,
-                              final ICase strategy,
-                              final Format format) {
-        this.exportClass = t.getClass();
+    public <T> ClassContainer(final T t, final ICase strategy, final Format format) {
         this.format = format;
 
         this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy);
@@ -49,13 +46,23 @@ public class ClassContainer implements IClassContainer {
     }
 
     /**
+     * Show whenever export values are presented
      * If empty then no export values are present and export is pointless
+     *
+     * @return boolean value stated if container is exportable
      */
     public boolean isExportable() {
         return fieldContainerMap.entrySet().stream().anyMatch(e -> format.isTypeSupported(e.getValue().getType()));
     }
 
-    @Override
+    /**
+     * Retrieve field by its export name (formatted via strategy or renamed via annotation)
+     *
+     * @param exportFieldName field container with final name
+     * @return field value
+     * @see ICase
+     * @see GenExportName
+     */
     public Field getField(final String exportFieldName) {
         return this.fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
@@ -63,16 +70,23 @@ public class ClassContainer implements IClassContainer {
                 .orElseThrow(NullPointerException::new).getKey();
     }
 
-    @Override
+    /**
+     * Export class name (after naming strategy applied or renamed)
+     *
+     * @return class final export name
+     * @see ICase
+     * @see GenExportName
+     */
     public String getExportClassName() {
         return this.finalClassName;
     }
 
-    @Override
-    public Map<Field, FieldContainer> getContainers() {
-        return this.fieldContainerMap;
-    }
-
+    /**
+     * Retrieve container by its export name (formatted via strategy or renamed via annotation)
+     *
+     * @param exportFieldName field container with final name
+     * @return field container
+     */
     public FieldContainer getContainer(final String exportFieldName) {
         return this.fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
@@ -80,13 +94,18 @@ public class ClassContainer implements IClassContainer {
                 .orElseThrow(NullPointerException::new).getValue();
     }
 
-    @Override
+    /**
+     * Returns only format support field containers map
+     *
+     * @param format to filter on
+     * @return field format supported container map
+     * @see FieldContainer
+     */
     public Map<Field, FieldContainer> getFormatSupported(final Format format) {
         return this.fieldContainerMap.entrySet().stream()
                 .filter(e -> format.getSupported().contains(e.getValue().getType()))
-                .collect(LinkedHashMap<Field, FieldContainer>::new,
+                .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> {
-                        });
+                        (m, u) -> { });
     }
 }

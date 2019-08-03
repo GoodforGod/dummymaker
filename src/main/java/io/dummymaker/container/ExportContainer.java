@@ -1,4 +1,4 @@
-package io.dummymaker.container.impl;
+package io.dummymaker.container;
 
 
 /**

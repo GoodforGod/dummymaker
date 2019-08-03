@@ -58,7 +58,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     }
 
     protected Class<? extends IGenerator> suitable(IGenSupplier config, Field field, Class<?> fieldType) {
-        return  (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
+        return (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
     }
 
     @Override

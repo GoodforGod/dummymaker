@@ -1,8 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
-import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.container.ClassContainer;
+import io.dummymaker.container.ExportContainer;
+import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
@@ -68,8 +68,7 @@ public class JsonExporter extends BasicExporter {
         return "\"" + value + "\"";
     }
 
-    private String wrapWithQuotes(final ExportContainer container,
-                                  final IClassContainer classContainer) {
+    private String wrapWithQuotes(final ExportContainer container, final ClassContainer classContainer) {
         Class<?> aClass = extractType(container.getType(), classContainer.getField(container.getExportName()));
         boolean quotes = isTypeNeedQuotes(aClass);
         if (!quotes)
@@ -104,8 +103,7 @@ public class JsonExporter extends BasicExporter {
                 && !classType.equals(Float.class);
     }
 
-    private Class<?> extractType(FieldContainer.Type type,
-                                 Field field) {
+    private Class<?> extractType(FieldContainer.Type type, Field field) {
         switch (type) {
             case ARRAY:
                 return field.getType().getComponentType();
@@ -162,9 +160,7 @@ public class JsonExporter extends BasicExporter {
      *
      * @param mode represent Single JSON object or List of objects
      */
-    private <T> String format(final T t,
-                              final IClassContainer container,
-                              final Mode mode) {
+    private <T> String format(final T t, final ClassContainer container, final Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String fieldTabs = buildFieldTab(mode);
@@ -202,7 +198,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return false;
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return false;
 
@@ -220,7 +216,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return export(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
             return false;
 
@@ -245,7 +241,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return "";
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return "";
 
@@ -260,7 +256,7 @@ public class JsonExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(list);
         if (!container.isExportable())
             return "";
 

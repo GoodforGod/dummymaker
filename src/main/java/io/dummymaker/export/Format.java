@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.container.impl.FieldContainer.Type;
+import io.dummymaker.container.FieldContainer.Type;
 
 import java.util.Arrays;
 import java.util.HashSet;

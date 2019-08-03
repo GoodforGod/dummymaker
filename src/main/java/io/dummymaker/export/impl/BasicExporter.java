@@ -1,9 +1,8 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
-import io.dummymaker.container.impl.FieldContainer;
+import io.dummymaker.container.ClassContainer;
+import io.dummymaker.container.ExportContainer;
+import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.naming.ICase;
@@ -61,14 +60,14 @@ abstract class BasicExporter implements IExporter {
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(final T t) {
+    <T> ClassContainer buildClassContainer(final T t) {
         return new ClassContainer(t, caseUsed, format);
     }
 
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(final List<T> list) {
+    <T> ClassContainer buildClassContainer(final List<T> list) {
         return (CollectionUtils.isNotEmpty(list))
                 ? buildClassContainer(list.get(0))
                 : null;
@@ -80,7 +79,7 @@ abstract class BasicExporter implements IExporter {
      * @see #export(Object)
      * @see #export(List)
      */
-    IWriter buildWriter(final IClassContainer classContainer) {
+    IWriter buildWriter(final ClassContainer classContainer) {
         try {
             return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
         } catch (IOException e) {
@@ -96,8 +95,7 @@ abstract class BasicExporter implements IExporter {
      * @return export containers
      * @see ExportContainer
      */
-    <T> List<ExportContainer> extractExportContainers(final T t,
-                                                      final IClassContainer classContainer) {
+    <T> List<ExportContainer> extractExportContainers(T t, ClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
 
@@ -192,6 +190,7 @@ abstract class BasicExporter implements IExporter {
         return Arrays.toString((Object[]) exportValue);
     }
 
+    @SuppressWarnings("unchecked")
     private String convertAsMap(Object exportMap) {
         final StringBuilder builder = new StringBuilder("{");
         ((Map) exportMap).forEach((k, v) -> builder.append("\"").append(k).append("\":\"").append(v).append("\","));

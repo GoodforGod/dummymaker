@@ -51,10 +51,10 @@ public class GenSupplier implements IGenSupplier {
     /**
      * Try to find most suitable generator class for target field
      * Using field value class and field name
-     *
+     * <p>
      * In case field can not be found then treat field as embedded object
      *
-     * @param field target field
+     * @param field  target field
      * @param target target field value class
      * @return suitable generator class
      */
