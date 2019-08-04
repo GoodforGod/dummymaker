@@ -60,8 +60,8 @@ class GenStorage implements IGenStorage {
     }
 
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field, Class<?> fieldClass) {
-        return supplier.getSuitable(field, fieldClass);
+    public Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+        return supplier.getSuitable(field, type);
     }
 
     /**

@@ -14,7 +14,21 @@ import java.lang.reflect.Field;
  */
 public interface IGenSupplier {
 
+    /**
+     * Finds suitable generator for field from all available generators
+     *
+     * @param field target
+     * @return suitable generator
+     */
     Class<? extends IGenerator> getSuitable(Field field);
 
-    Class<? extends IGenerator> getSuitable(Field field, Class<?> fieldClass);
+    /**
+     * Finds suitable generator for field from all available generators
+     *
+     * @param field target
+     * @param type  target that can sometimes differ from field type
+     *              Like parent class, or implementation not interface
+     * @return suitable generator
+     */
+    Class<? extends IGenerator> getSuitable(Field field, Class<?> type);
 }

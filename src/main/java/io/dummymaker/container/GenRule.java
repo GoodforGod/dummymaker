@@ -3,9 +3,7 @@ package io.dummymaker.container;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -17,11 +15,11 @@ import java.util.function.Predicate;
 public class GenRule {
 
     private final Class<?> target;
-    private final List<GenFieldRule> rules;
+    private final Set<GenFieldRule> rules;
 
     private GenRule(Class<?> target) {
         this.target = target;
-        this.rules = new ArrayList<>();
+        this.rules = new HashSet<>();
     }
 
     public static GenRule of(Class<?> target) {
@@ -32,9 +30,6 @@ public class GenRule {
         if (rule == null || !this.getTarget().equals(rule.getTarget()))
             return this;
 
-        rule.rules.stream()
-                .filter(this::isRuleAbsent)
-                .forEach(r -> ;
         rules.addAll(rule.rules);
         return this;
     }
@@ -44,8 +39,7 @@ public class GenRule {
             throw new NullPointerException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(fieldName, generator);
-        if (isRuleAbsent(rule))
-            rules.add(rule);
+        rules.add(rule);
         return this;
     }
 
@@ -54,9 +48,6 @@ public class GenRule {
             throw new NullPointerException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(fieldType, generator);
-        if (isRuleAbsent(rule))
-            throw new IllegalArgumentException()");
-
         rules.add(rule);
         return this;
     }

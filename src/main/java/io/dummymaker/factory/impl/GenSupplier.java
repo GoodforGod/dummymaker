@@ -55,22 +55,22 @@ public class GenSupplier implements IGenSupplier {
      * In case field can not be found then treat field as embedded object
      *
      * @param field  target field
-     * @param target target field value class
+     * @param type target field value class
      * @return suitable generator class
      */
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field, Class<?> target) {
-        if (target == null)
+    public Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+        if (type == null)
             return getDefault();
 
-        final List<Class<? extends IGenerator>> generators = classifiers.get(target);
-        final String fieldName = target.getSimpleName();
+        final List<Class<? extends IGenerator>> generators = classifiers.get(type);
+        final String fieldName = type.getSimpleName();
 
-        if (target.getTypeName().endsWith("[][]"))
+        if (type.getTypeName().endsWith("[][]"))
             return Array2DComplexGenerator.class;
-        if (target.getTypeName().endsWith("[]"))
+        if (type.getTypeName().endsWith("[]"))
             return ArrayComplexGenerator.class;
-        if (target.isEnum())
+        if (type.isEnum())
             return EnumComplexGenerator.class;
         if (CollectionUtils.isEmpty(generators))
             return getDefault();

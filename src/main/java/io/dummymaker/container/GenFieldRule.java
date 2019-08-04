@@ -3,6 +3,8 @@ package io.dummymaker.container;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.util.StringUtils;
 
+import java.util.Objects;
+
 /**
  * "default comment"
  *
@@ -49,5 +51,19 @@ public class GenFieldRule {
 
     public Class<? extends IGenerator> getGenerator() {
         return generator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenFieldRule that = (GenFieldRule) o;
+        return Objects.equals(fieldType, that.fieldType) &&
+                Objects.equals(fieldName, that.fieldName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldType, fieldName);
     }
 }

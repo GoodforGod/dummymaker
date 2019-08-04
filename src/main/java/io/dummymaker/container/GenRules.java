@@ -4,7 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * "default comment"
+ * Rules for field type and field name generators overrides
+ * Allows to override gen auto generator setup without annotations
+ * Just by passing this config to factory
+ *
+ * @see io.dummymaker.factory.IGenFactory
+ * @see io.dummymaker.factory.IGenSupplier
  *
  * @author GoodforGod
  * @since 01.08.2019

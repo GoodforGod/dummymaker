@@ -5,7 +5,10 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * ! NO DESCRIPTION !
+ * Factory that generates data objects
+ * Core that handles all top level logic
+ *
+ * @see io.dummymaker.factory.impl.GenFactory
  *
  * @author GoodforGod
  * @since 21.07.2019
