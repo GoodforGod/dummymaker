@@ -2,13 +2,12 @@ package io.dummymaker.container;
 
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.annotation.simple.string.GenString;
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
-import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
 
@@ -17,7 +16,6 @@ import java.lang.annotation.Annotation;
  * Used by populate scanners and factories
  *
  * @author GoodforGod
- * @see IPopulateScanner
  * @see PrimeGen
  * @see ComplexGen
  * @since 10.03.2018
@@ -33,9 +31,7 @@ public class GenContainer {
     private final Annotation core;
 
     /**
-     * Its child marker annotation like:
-     *
-     * @see GenString
+     * Its child marker annotation like GenString, etc
      */
     private final Annotation marker;
     private final boolean isComplex;
@@ -73,28 +69,30 @@ public class GenContainer {
         }
     }
 
-    public static GenContainer asCustom(final Annotation marker) {
-        final Class<? extends IGenerator> generatorClass = ((GenCustom) marker).value();
-        final boolean isComplex = generatorClass.isAssignableFrom(IComplexGenerator.class);
-        return new GenContainer(null, marker, isComplex, false, 1, generatorClass);
+    public static GenContainer asCustom(Annotation marker) {
+        final Class<? extends IGenerator> generator = ((GenCustom) marker).value();
+        final boolean isComplex = generator.isAssignableFrom(IComplexGenerator.class);
+        return new GenContainer(null, marker, isComplex, false, 1, generator);
     }
 
-    public static GenContainer asGen(final Annotation core,
-                                     final Annotation marker) {
+    public static GenContainer asGen(Annotation core, Annotation marker) {
         final boolean isComplex = ComplexGen.class.equals(core.annotationType());
         return new GenContainer(core, marker, isComplex, false, 1, null);
     }
 
-    public static GenContainer asAuto(final Class<? extends IGenerator> generatorClass,
+    public static GenContainer asAuto(final Class<? extends IGenerator> generator,
                                       final boolean isComplex,
-                                      final int autoDepth) {
-        final int parsedDepth = (autoDepth < 1) ? 1 : (autoDepth > GenEmbedded.MAX) ? GenEmbedded.MAX : autoDepth;
-        return new GenContainer(null, null, isComplex, true, parsedDepth, generatorClass);
+                                      final int depth) {
+        final int parsedDepth = (depth < 1) ? 1 : Math.min(depth, GenEmbedded.MAX);
+        return new GenContainer(null, null, isComplex, true, parsedDepth, generator);
     }
 
-    public static GenContainer asAuto(final boolean isComplex,
-                                      final int autoDepth) {
-        return asAuto(null, isComplex, autoDepth);
+    public static GenContainer asAuto(boolean isComplex, int depth) {
+        return asAuto(null, isComplex, depth);
+    }
+
+    public boolean isEmbedded() {
+        return generator != null && generator.equals(EmbeddedGenerator.class);
     }
 
     public void enrich(Class<? extends IGenerator> generator) {

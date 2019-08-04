@@ -23,28 +23,23 @@ public class CollectionUtils {
         return generateRandomSize(0, collection.size() - 1);
     }
 
-    public static int getIndexWithSalt(final int size,
-                                       final String name,
-                                       final int salt) {
-        final int hashed = name.hashCode() + salt;
-        return Math.abs(hashed % size);
+    public static int getIndexWithSalt(int size, String name, int salt) {
+        int counter = 0;
+        for (char c : name.toCharArray())
+            counter += c;
+
+        final int shift = counter + salt;
+        return Math.abs(shift % size);
     }
 
-    public static int generateRandomSize(final int min,
-                                         final int max) {
+    public static int generateRandomSize(int min, int max) {
         final int usedMin = (min < 1) ? 0 : min;
         final int usedMax = (max < 1) ? 0 : max;
 
-        return (usedMin >= usedMax)
-                ? usedMin
-                : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
+        return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
     }
 
-    public static int generateRandomSize(final int min,
-                                         final int max,
-                                         final int fixed) {
-        return (fixed > -1)
-                ? fixed
-                : generateRandomSize(min, max);
+    public static int generateRandomSize(int min, int max, int fixed) {
+        return (fixed > -1) ? fixed : generateRandomSize(min, max);
     }
 }

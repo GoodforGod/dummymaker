@@ -1,5 +1,6 @@
 package io.dummymaker.factory.impl;
 
+import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenStorage;
@@ -8,6 +9,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
 import io.dummymaker.scan.IPopulateScanner;
+import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
@@ -45,6 +47,33 @@ class GenStorage implements IGenStorage {
         this.containerMap = new HashMap<>();
         this.generators = new HashMap<>();
         this.marked = new HashSet<>();
+    }
+
+    GenStorage(IPopulateScanner populateScanner, Class<?> target) {
+        this(populateScanner);
+
+        final int depth = PopulateScanner.getAutoAnnotation(target)
+                .map(a -> ((GenAuto) a).depth()).orElse(1);
+        scanRecursively(target, depth);
+    }
+
+    /**
+     * Scan target class and its embedded fields for gen containers
+     *
+     * @param target to scan
+     */
+    private void scanRecursively(Class<?> target, int parentDepth) {
+        final Map<Field, GenContainer> scannedTarget = populateScanner.scan(target);
+        final int depth = PopulateScanner.getAutoAnnotation(target)
+                .map(a -> ((GenAuto) a).depth()).orElse(parentDepth);
+
+        for (Map.Entry<Field, GenContainer> entry : scannedTarget.entrySet()) {
+
+            if (entry.getValue().isEmbedded())
+                scanRecursively(entry.getKey().getType(), depth);
+        }
+
+        containerMap.put(target, scannedTarget);
     }
 
     @Override

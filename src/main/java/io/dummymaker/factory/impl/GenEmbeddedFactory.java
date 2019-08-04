@@ -3,6 +3,8 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.scan.IPopulateScanner;
 
 /**
+ * Internal implementation used only for gen storage as complex generators support
+ *
  * Populate gen annotated object fields without embedded ones
  * May lead to recursion if not used properly (when used in extensions)
  *

@@ -27,7 +27,6 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
  * Produce data object objects and fill their fields with data
- * <p>
  * Successor of initial PopulateFactory
  *
  * @author GoodforGod
@@ -125,9 +124,11 @@ public class GenFactory implements IGenFactory {
                     final Field field = k.getKey();
                     try {
                         field.setAccessible(true);
-                        final Object objValue = generateObject(t.getClass(), field, container, storage, depth);
-                        if (objValue != null)
-                            field.set(t, objValue);
+                        final Object generated = generateObject(t.getClass(), field, container, storage, depth);
+                        if (generated != null)
+                            field.set(t, generated);
+                        else
+                            storage.markNullable(field);
 
                     } catch (Exception e) {
                         field.setAccessible(false);
@@ -168,11 +169,7 @@ public class GenFactory implements IGenFactory {
             generated = generator.generate();
         }
 
-        final Object casted = castObject(generated, field.getType());
-        if (casted == null)
-            storage.markNullable(field);
-
-        return casted;
+        return castObject(generated, field.getType());
     }
 
     /**
@@ -187,10 +184,8 @@ public class GenFactory implements IGenFactory {
             return null;
 
         final Object embedded = instantiate(field.getType());
-        if (embedded == null) {
-            storage.markNullable(field);
+        if (embedded == null)
             return null;
-        }
 
         return fillEntity(embedded, storage, depth + 1);
     }
@@ -204,9 +199,8 @@ public class GenFactory implements IGenFactory {
 
     private int getDepth(final GenContainer container) {
         final Annotation annotation = container.getMarker();
-        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class)) {
+        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
             return container.getAutoDepth();
-        }
 
         return EmbeddedGenerator.toDepth(((GenEmbedded) annotation).depth());
     }

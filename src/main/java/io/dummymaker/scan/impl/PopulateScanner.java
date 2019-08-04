@@ -32,18 +32,12 @@ import java.util.function.Predicate;
  */
 public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
-    /**
-     * Predicate to check for core prime/complex marker annotation
-     *
-     * @see PrimeGen
-     * @see ComplexGen
-     */
-    private final Predicate<Annotation> isGen = (a) -> a.annotationType().equals(PrimeGen.class)
-            || a.annotationType().equals(ComplexGen.class);
+    private static final Predicate<Annotation> IS_AUTO = (a) -> a.annotationType().equals(GenAuto.class);
 
     private final Predicate<Annotation> isGenCustom = (a) -> a.annotationType().equals(GenCustom.class);
     private final Predicate<Annotation> isIgnored = (a) -> a.annotationType().equals(GenIgnore.class);
-    private final Predicate<Annotation> isAuto = (a) -> a.annotationType().equals(GenAuto.class);
+    private final Predicate<Annotation> isGen = (a) -> a.annotationType().equals(PrimeGen.class)
+            || a.annotationType().equals(ComplexGen.class);
 
     private final IGenSupplier supplier = new GenSupplier();
 
@@ -58,18 +52,24 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      */
     @Override
     public Map<Field, GenContainer> scan(final Class target) {
-        final Map<Field, GenContainer> containerMap = new LinkedHashMap<>();
-
-        // Check if class is auto generative
-        final Annotation genAuto = Arrays.stream(target.getDeclaredAnnotations())
-                .filter(isAuto)
-                .findAny().orElse(null);
+        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
+        final Annotation genAuto = getAutoAnnotation(target).orElse(null);
 
         getAllDeclaredFields(target).stream()
                 .filter(f -> !isIgnored(f))
-                .forEach(f -> getContainer(f, genAuto).ifPresent(c -> containerMap.put(f, c)));
+                .forEach(f -> getContainer(f, genAuto).ifPresent(c -> containers.put(f, c)));
 
-        return containerMap;
+        return containers;
+    }
+
+    /**
+     * Check if class is auto generative
+     * @see GenAuto
+     */
+    public static Optional<Annotation> getAutoAnnotation(Class<?> target) {
+        return Arrays.stream(target.getDeclaredAnnotations())
+                .filter(IS_AUTO)
+                .findAny();
     }
 
     /**

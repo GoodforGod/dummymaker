@@ -32,12 +32,8 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
-            return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
-                    valueClass,
-                    suitable(storage, field, valueClass),
-                    storage,
-                    depth,
-                    1);
+            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            return genArray(size, valueClass, suitable(storage, field, valueClass), storage, depth, 1);
         }
 
         final GenArray a = ((GenArray) annotation);
@@ -51,12 +47,8 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        return genArray(ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT),
-                String.class,
-                IdGenerator.class,
-                null,
-                GenEmbedded.MAX,
-                1);
+        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        return genArray(size, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
     Object genArray(final int size,
@@ -68,9 +60,8 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         // Firstly try to generate initial object, so we won't allocate list if not necessary
         final Object initial = generateValue(valueGenerator, valueClass, storage, depth, maxDepth);
-        if (initial == null) {
+        if (initial == null)
             return null;
-        }
 
         final Object array = Array.newInstance(valueClass, size);
         Array.set(array, 0, initial);
