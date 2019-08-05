@@ -1,4 +1,4 @@
-package io.dummymaker.container;
+package io.dummymaker.model.export;
 
 import io.dummymaker.generator.complex.impl.*;
 import io.dummymaker.generator.simple.IGenerator;

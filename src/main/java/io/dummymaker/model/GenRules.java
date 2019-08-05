@@ -1,4 +1,4 @@
-package io.dummymaker.container;
+package io.dummymaker.model;
 
 import java.util.*;
 import java.util.stream.Collectors;

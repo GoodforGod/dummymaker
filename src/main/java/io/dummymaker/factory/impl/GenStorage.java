@@ -2,12 +2,12 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
+import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
@@ -68,7 +68,7 @@ class GenStorage implements IGenStorage {
                 .map(a -> ((GenAuto) a).depth()).orElse(parentDepth);
 
         for (Map.Entry<Field, GenContainer> entry : scannedTarget.entrySet()) {
-
+            entry.getValue().setAutoDepth(depth);
             if (entry.getValue().isEmbedded())
                 scanRecursively(entry.getKey().getType(), depth);
         }

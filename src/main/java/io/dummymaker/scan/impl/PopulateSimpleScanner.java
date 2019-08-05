@@ -4,8 +4,8 @@ import io.dummymaker.annotation.complex.*;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.container.GenContainer;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
+import io.dummymaker.model.GenContainer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

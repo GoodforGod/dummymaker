@@ -1,4 +1,4 @@
-package io.dummymaker.container;
+package io.dummymaker.model.export;
 
 
 /**

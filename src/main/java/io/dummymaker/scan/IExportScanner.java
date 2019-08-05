@@ -1,7 +1,7 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.naming.ICase;
+import io.dummymaker.model.export.FieldContainer;
 
 import java.lang.reflect.Field;
 import java.util.Map;

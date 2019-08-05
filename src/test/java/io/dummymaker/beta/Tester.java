@@ -1,10 +1,10 @@
 package io.dummymaker.beta;
 
-import io.dummymaker.container.GenRule;
-import io.dummymaker.container.GenRules;
 import io.dummymaker.data.DummyAuto;
 import io.dummymaker.generator.simple.impl.number.ByteGenerator;
 import io.dummymaker.generator.simple.impl.number.ShortGenerator;
+import io.dummymaker.model.GenRule;
+import io.dummymaker.model.GenRules;
 import org.junit.Test;
 
 /**

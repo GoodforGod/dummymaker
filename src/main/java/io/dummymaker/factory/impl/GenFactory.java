@@ -1,11 +1,13 @@
 package io.dummymaker.factory.impl;
 
+import io.dummymaker.annotation.complex.*;
+import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenFactory;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
+import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.util.CastUtils;
@@ -197,11 +199,33 @@ public class GenFactory implements IGenFactory {
         return CastUtils.castToNumber(generator.generate(), field.getType());
     }
 
+    /**
+     * Calculates allowed depth level
+     *
+     * @param container target
+     * @return allowed depth level
+     * @see GenEmbedded
+     */
     private int getDepth(final GenContainer container) {
         final Annotation annotation = container.getMarker();
-        if (annotation == null || !annotation.annotationType().equals(GenEmbedded.class))
-            return container.getAutoDepth();
+        if (annotation != null) {
+            if (annotation.annotationType().equals(GenEmbedded.class)) {
+                return EmbeddedGenerator.toDepth(((GenEmbedded) annotation).depth());
+            } else if (annotation.annotationType().equals(GenCustom.class)) {
+                return EmbeddedGenerator.toDepth(((GenCustom) annotation).depth());
+            } else if (annotation.annotationType().equals(GenList.class)) {
+                return EmbeddedGenerator.toDepth(((GenList) annotation).depth());
+            } else if (annotation.annotationType().equals(GenSet.class)) {
+                return EmbeddedGenerator.toDepth(((GenSet) annotation).depth());
+            } else if (annotation.annotationType().equals(GenMap.class)) {
+                return EmbeddedGenerator.toDepth(((GenMap) annotation).depth());
+            } else if (annotation.annotationType().equals(GenArray.class)) {
+                return EmbeddedGenerator.toDepth(((GenArray) annotation).depth());
+            } else if (annotation.annotationType().equals(GenArray2D.class)) {
+                return EmbeddedGenerator.toDepth(((GenArray2D) annotation).depth());
+            }
+        }
 
-        return EmbeddedGenerator.toDepth(((GenEmbedded) annotation).depth());
+        return container.getAutoDepth();
     }
 }

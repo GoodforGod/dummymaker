@@ -5,12 +5,12 @@ import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.container.FieldContainer;
-import io.dummymaker.container.GenContainer;
 import io.dummymaker.data.Dummy;
 import io.dummymaker.data.DummyCollection;
 import io.dummymaker.data.DummyNoPopulateFields;
 import io.dummymaker.data.DummyNoZeroConstructor;
+import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.impl.*;
 import org.junit.Test;
 

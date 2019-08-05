@@ -1,4 +1,4 @@
-package io.dummymaker.container;
+package io.dummymaker.model;
 
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
@@ -36,7 +36,8 @@ public class GenContainer {
     private final Annotation marker;
     private final boolean isComplex;
     private final boolean isAuto;
-    private final int autoDepth;
+
+    private int autoDepth;
 
     /**
      * Field set generator
@@ -121,5 +122,9 @@ public class GenContainer {
 
     public int getAutoDepth() {
         return autoDepth;
+    }
+
+    public void setAutoDepth(int autoDepth) {
+        this.autoDepth = autoDepth;
     }
 }

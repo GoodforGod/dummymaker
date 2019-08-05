@@ -1,11 +1,11 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.ClassContainer;
-import io.dummymaker.container.ExportContainer;
-import io.dummymaker.container.FieldContainer;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
+import io.dummymaker.model.export.ClassContainer;
+import io.dummymaker.model.export.ExportContainer;
+import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;

@@ -32,4 +32,10 @@ public @interface GenCustom {
      * @return generator
      */
     Class<? extends IGenerator> value() default NullGenerator.class;
+
+    /**
+     * @return allowed depth level
+     * @see io.dummymaker.annotation.special.GenEmbedded
+     */
+    int depth() default 1;
 }

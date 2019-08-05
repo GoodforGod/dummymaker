@@ -1,4 +1,4 @@
-package io.dummymaker.container;
+package io.dummymaker.model.export;
 
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;

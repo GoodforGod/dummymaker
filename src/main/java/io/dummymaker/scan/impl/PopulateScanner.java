@@ -6,11 +6,11 @@ import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenIgnore;
-import io.dummymaker.container.GenContainer;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
+import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IPopulateScanner;
 
 import java.lang.annotation.Annotation;
