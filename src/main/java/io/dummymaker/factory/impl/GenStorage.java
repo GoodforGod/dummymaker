@@ -8,13 +8,15 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.graph.Node;
+import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CastUtils.instantiate;
@@ -29,51 +31,84 @@ import static io.dummymaker.util.CastUtils.instantiate;
 class GenStorage implements IGenStorage {
 
     private final IGenSupplier supplier;
-    private final GenEmbeddedFactory simpleFactory;
-    private final IPopulateScanner populateScanner;
+    private final GenFactory embeddedFactory; // stupid? yes, have better solution pls PR
+    private final IPopulateScanner scanner;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
     private final Map<Class<?>, Map<Field, IGenerator>> sequentialGenerators;
-    private final Map<Class<?>, Map<Field, GenContainer>> containerMap;
+    private final Map<Class<?>, Map<Field, GenContainer>> containers;
     private final Set<Field> marked;
 
-    GenStorage(IPopulateScanner populateScanner) {
-        this.populateScanner = populateScanner;
+    private Node<Payload> graph;
 
-        this.simpleFactory = new GenEmbeddedFactory(populateScanner);
+    GenStorage(IPopulateScanner scanner) {
+        this.scanner = scanner;
+
+        this.embeddedFactory = new GenEmbeddedFactory(scanner);
         this.supplier = new GenSupplier();
 
         this.sequentialGenerators = new HashMap<>();
-        this.containerMap = new HashMap<>();
+        this.containers = new HashMap<>();
         this.generators = new HashMap<>();
         this.marked = new HashSet<>();
     }
 
-    GenStorage(IPopulateScanner populateScanner, Class<?> target) {
-        this(populateScanner);
-
+    private Node<Payload> buildGraph(Class<?> target) {
         final int depth = PopulateScanner.getAutoAnnotation(target)
                 .map(a -> ((GenAuto) a).depth()).orElse(1);
-        scanRecursively(target, depth);
+        final Payload payload = new Payload(target, depth);
+        return scanRecursively(payload, null);
     }
 
-    /**
-     * Scan target class and its embedded fields for gen containers
-     *
-     * @param target to scan
-     */
-    private void scanRecursively(Class<?> target, int parentDepth) {
-        final Map<Field, GenContainer> scannedTarget = populateScanner.scan(target);
+        /**
+         * Scan target class and its embedded fields for gen containers
+         *
+         * @param parentPayload to scan
+         */
+    private Node<Payload> scanRecursively(Payload parentPayload, Node parent) {
+        final Class<?> target = parentPayload.getType();
+        final Map<Field, GenContainer> scannedTarget = scanner.scan(target);
         final int depth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth()).orElse(parentDepth);
+                .map(a -> ((GenAuto) a).depth()).orElse(parentPayload.getDepth());
+
+        final Payload payload = new Payload(target, depth);
+        final Node<Payload> node = Node.as(payload, parent);
+        final Predicate<Node<Payload>> filter = (n) -> node.getValue().equals(parentPayload) && n.getValue().equals(payload);
+        if(!isSafe(node, filter))
+            return node;
 
         for (Map.Entry<Field, GenContainer> entry : scannedTarget.entrySet()) {
-            entry.getValue().setAutoDepth(depth);
-            if (entry.getValue().isEmbedded())
-                scanRecursively(entry.getKey().getType(), depth);
+            if (entry.getValue().isEmbedded()) {
+                node.add(scanRecursively(payload, node));
+            }
         }
 
-        containerMap.put(target, scannedTarget);
+        return node;
+    }
+
+    private <T> boolean isSafe(Node<T> node, Predicate<Node<T>> filter) {
+        final Node<T> root = findRoot(node);
+        return isPayloadExist(root, filter);
+    }
+
+    private <T> boolean isPayloadExist(Node<T> node, Predicate<Node<T>> filter) {
+        boolean result = false;
+        for (Node<T> n : node.getNodes()) {
+            if(filter.test(n))
+                return true;
+            else
+                result |= isPayloadExist(n, filter);
+        }
+
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Node<T> findRoot(Node<T> node) {
+        if(node.getParent() == null)
+            return node;
+
+        return findRoot(node.getParent());
     }
 
     @Override
@@ -101,8 +136,8 @@ class GenStorage implements IGenStorage {
      * @see GenEmbeddedFactory#fillWithDepth(Object, int, GenStorage)
      */
     @Override
-    public <T> T fillWithDepth(T t, int depth) {
-        return simpleFactory.fillWithDepth(t, depth, this);
+    public <T> T fillByDepth(T t, int depth) {
+        return embeddedFactory.fillEntity(t, this, depth);
     }
 
     /**
@@ -110,12 +145,18 @@ class GenStorage implements IGenStorage {
      *
      * @return gen container map to field
      */
-    Map<Field, GenContainer> getContainers(Class<?> target) {
-        if (target == null)
+    <T> Map<Field, GenContainer> getContainers(T t) {
+        if (t == null)
             return Collections.emptyMap();
 
-        scanForSequentialFields(target);
-        return containerMap.computeIfAbsent(target, (k) -> populateScanner.scan(target));
+        if(this.graph == null) {
+            this.graph = buildGraph(t.getClass());
+            System.out.println(graph);
+        }
+
+        final Class<?> targetClass = t.getClass();
+        scanForSequentialFields(targetClass);
+        return containers.computeIfAbsent(targetClass, (k) -> scanner.scan(targetClass));
     }
 
     /**
@@ -138,7 +179,7 @@ class GenStorage implements IGenStorage {
      */
     IGenerator getSequential(Class<?> target, Field field) {
         return sequentialGenerators.computeIfAbsent(target, (k) -> {
-            final Map<Field, IGenerator> map = new ConcurrentHashMap<>();
+            final Map<Field, IGenerator> map = new HashMap<>();
             map.put(field, new SequenceGenerator());
             return map;
         }).get(field);

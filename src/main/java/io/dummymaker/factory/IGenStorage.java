@@ -24,7 +24,7 @@ public interface IGenStorage extends IGenSupplier {
      * @return object with random data
      * @see IGenFactory#fill(Object)
      */
-    <T> T fillWithDepth(T t, int depth);
+    <T> T fillByDepth(T t, int depth);
 
     /**
      * Returns instance of generator class

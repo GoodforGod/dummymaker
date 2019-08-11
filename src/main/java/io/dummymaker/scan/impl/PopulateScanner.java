@@ -64,12 +64,15 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Check if class is auto generative
+     *
      * @see GenAuto
      */
     public static Optional<Annotation> getAutoAnnotation(Class<?> target) {
-        return Arrays.stream(target.getDeclaredAnnotations())
-                .filter(IS_AUTO)
-                .findAny();
+        return (target == null)
+                ? Optional.empty()
+                : Arrays.stream(target.getDeclaredAnnotations())
+                        .filter(IS_AUTO)
+                        .findAny();
     }
 
     /**

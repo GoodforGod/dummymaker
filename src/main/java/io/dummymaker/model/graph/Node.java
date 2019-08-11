@@ -25,7 +25,7 @@ public class Node<T> {
         return new Node<>(value, parent);
     }
 
-    public Node<T> add(Node child) {
+    public Node<T> add(Node<T> child) {
         this.nodes.add(child);
         return this;
     }

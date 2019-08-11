@@ -8,10 +8,16 @@ package io.dummymaker.model.graph;
  */
 public class Payload {
 
+    private final Class<?> type;
     private final int depth;
 
-    public Payload(int depth) {
+    public Payload(Class<?> type, int depth) {
+        this.type = type;
         this.depth = depth;
+    }
+
+    public Class<?> getType() {
+        return type;
     }
 
     public int getDepth() {

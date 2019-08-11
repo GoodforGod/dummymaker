@@ -40,9 +40,9 @@ public class CastUtils {
             case DOUBLE:
                 return Double.valueOf(String.valueOf(value));
             case BIG_INT:
-                return BigInteger.valueOf(Long.valueOf(String.valueOf(value)));
+                return BigInteger.valueOf(Long.parseLong(String.valueOf(value)));
             case BIG_DECIMAL:
-                return BigDecimal.valueOf(Long.valueOf(String.valueOf(value)));
+                return BigDecimal.valueOf(Long.parseLong(String.valueOf(value)));
             default:
                 return value;
         }
@@ -76,17 +76,37 @@ public class CastUtils {
         if (target == null)
             return null;
 
-        final Constructor<?> zeroArgConstructor = Arrays.stream(target.getDeclaredConstructors())
-                .filter(c -> c.getParameterCount() == 0)
-                .findFirst().orElse(null);
+        final Constructor<?> constructor = Arrays.stream(target.getDeclaredConstructors())
+                .filter(c -> c.getParameterCount() == 0) // search for zero arg constructor
+                .findFirst()
+                .orElse(Arrays.stream(target.getDeclaredConstructors())
+                        .filter(c -> c.getParameterCount() == 1) // search for potential inner class constructor
+                        .findFirst().orElse(null));
 
         try {
-            if (zeroArgConstructor == null) {
+            if (constructor == null) {
                 logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
                 return null;
             }
-            zeroArgConstructor.setAccessible(true);
-            return ((T) zeroArgConstructor.newInstance());
+
+            constructor.setAccessible(true);
+
+            if (constructor.getParameterTypes().length > 0) {
+                final Class<?> parentType = constructor.getParameterTypes()[0];
+                if(!CastType.of(parentType).equals(CastType.UNKNOWN)) {
+                    logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
+                    return null;
+                }
+
+                final Object parent = instantiate(parentType);
+                if (parent == null)
+                    return null;
+
+                return ((T) constructor.newInstance(parent));
+            } else {
+                return ((T) constructor.newInstance());
+            }
+
         } catch (InstantiationException | InvocationTargetException e) {
             logger.warning("Can not instantiate '" + target
                     + "', may be an abstract, interface, array, primitive.\n" + e.getMessage());
@@ -96,8 +116,8 @@ public class CastUtils {
                     + "' due to no access to object.\n" + e.getMessage());
             return null;
         } finally {
-            if (zeroArgConstructor != null)
-                zeroArgConstructor.setAccessible(false);
+            if (constructor != null)
+                constructor.setAccessible(false);
         }
     }
 
@@ -109,8 +129,7 @@ public class CastUtils {
      * @param <T>       generic type
      * @return generated and casted object
      */
-    public static <T> T generateObject(final IGenerator generator,
-                                       final Class<T> fieldType) {
+    public static <T> T generateObject(final IGenerator generator, final Class<T> fieldType) {
         if (generator == null)
             return null;
 
@@ -135,8 +154,7 @@ public class CastUtils {
      * @param paramNumber actual param number in parameterized type array
      * @return actual type or object if length is not presented
      */
-    public static Type getGenericType(final Type type,
-                                      final int paramNumber) {
+    public static Type getGenericType(final Type type, final int paramNumber) {
         try {
             final ParameterizedType parameterizedType = ((ParameterizedType) type);
             return (parameterizedType.getActualTypeArguments().length < paramNumber)
@@ -156,8 +174,7 @@ public class CastUtils {
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
-    public static <T> T castObject(final Object castObject,
-                                   final Class<T> fieldType) {
+    public static <T> T castObject(final Object castObject, final Class<T> fieldType) {
         if (fieldType == null)
             return null;
 
@@ -184,8 +201,7 @@ public class CastUtils {
      * Try to box downcast or box object if it is boxed primitive type
      * And field is also boxed primitive (can't cast one to another explicitly)
      */
-    private static <T> Object boxObject(final Object castObject,
-                                        final Class<T> fieldType) {
+    private static <T> Object boxObject(final Object castObject, final Class<T> fieldType) {
         final CastType firstType = CastType.of(castObject.getClass());
         final CastType secondType = CastType.of(fieldType);
 
@@ -197,8 +213,7 @@ public class CastUtils {
     /**
      * Check if objects have equals types, even if they are primitive
      */
-    private static boolean areEquals(final Class<?> firstClass,
-                                     final Class<?> secondClass) {
+    private static boolean areEquals(final Class<?> firstClass, final Class<?> secondClass) {
         final CastType firstType = CastType.of(firstClass);
         final CastType secondType = CastType.of(secondClass);
 

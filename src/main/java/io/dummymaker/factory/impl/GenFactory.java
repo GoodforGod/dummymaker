@@ -87,8 +87,8 @@ public class GenFactory implements IGenFactory {
         if (t == null)
             return null;
 
-        final GenStorage factoryStorage = new GenStorage(populateScanner);
-        return fillEntity(t, factoryStorage, 1);
+        final GenStorage storage = new GenStorage(populateScanner);
+        return fillEntity(t, storage, 1);
     }
 
     @Override
@@ -96,10 +96,10 @@ public class GenFactory implements IGenFactory {
         if (stream == null)
             return Stream.empty();
 
-        final GenStorage factoryStorage = new GenStorage(populateScanner);
+        final GenStorage storage = new GenStorage(populateScanner);
         return stream
                 .filter(Objects::nonNull)
-                .map(t -> fillEntity(t, factoryStorage, 1));
+                .map(t -> fillEntity(t, storage, 1));
     }
 
     @Override
@@ -118,7 +118,7 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     <T> T fillEntity(T t, GenStorage storage, int depth) {
-        final Map<Field, GenContainer> containers = storage.getContainers(t.getClass());
+        final Map<Field, GenContainer> containers = storage.getContainers(t);
         containers.entrySet().stream()
                 .filter(e -> storage.isUnmarked(e.getKey()))
                 .forEach(k -> {
