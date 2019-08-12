@@ -1,6 +1,7 @@
 package io.dummymaker.model.graph;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -40,5 +41,19 @@ public class Node<T> {
 
     public Set<Node<T>> getNodes() {
         return nodes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node<?> node = (Node<?>) o;
+        return Objects.equals(value, node.value) &&
+                Objects.equals(parent, node.parent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, parent);
     }
 }

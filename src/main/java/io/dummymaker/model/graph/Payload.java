@@ -1,5 +1,7 @@
 package io.dummymaker.model.graph;
 
+import java.util.Objects;
+
 /**
  * "default comment"
  *
@@ -22,5 +24,18 @@ public class Payload {
 
     public int getDepth() {
         return depth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payload payload = (Payload) o;
+        return Objects.equals(type, payload.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type);
     }
 }

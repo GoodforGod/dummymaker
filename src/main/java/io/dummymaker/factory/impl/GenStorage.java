@@ -54,47 +54,64 @@ class GenStorage implements IGenStorage {
     }
 
     private Node<Payload> buildGraph(Class<?> target) {
-        final int depth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth()).orElse(1);
-        final Payload payload = new Payload(target, depth);
-        return scanRecursively(payload, null);
+        final Payload payload = buildPayload(target, null);
+        final Node<Payload> node = Node.as(payload, null);
+        return scanRecursively(node);
     }
 
-        /**
-         * Scan target class and its embedded fields for gen containers
-         *
-         * @param parentPayload to scan
-         */
-    private Node<Payload> scanRecursively(Payload parentPayload, Node parent) {
-        final Class<?> target = parentPayload.getType();
-        final Map<Field, GenContainer> scannedTarget = scanner.scan(target);
-        final int depth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth()).orElse(parentPayload.getDepth());
+    /**
+     * Scan target class and its embedded fields for gen containers
+     *
+     * @param parent to scan
+     * @return
+     */
+    private Node<Payload> scanRecursively(Node<Payload> parent) {
+        final Payload parentPayload = parent.getValue();
+        final Class<?> type = parentPayload.getType();
+        final Map<Field, GenContainer> parentFields = scanner.scan(type);
 
-        final Payload payload = new Payload(target, depth);
-        final Node<Payload> node = Node.as(payload, parent);
-        final Predicate<Node<Payload>> filter = (n) -> node.getValue().equals(parentPayload) && n.getValue().equals(payload);
-        if(!isSafe(node, filter))
-            return node;
 
-        for (Map.Entry<Field, GenContainer> entry : scannedTarget.entrySet()) {
+        for (Map.Entry<Field, GenContainer> entry : parentFields.entrySet()) {
             if (entry.getValue().isEmbedded()) {
-                node.add(scanRecursively(payload, node));
+                final Class<?> childTarget = entry.getKey().getType();
+                final Payload payload = buildPayload(childTarget, parentPayload);
+                final Node<Payload> childBase = Node.as(payload, parent);
+
+                final Predicate<Node<Payload>> filter = (n) -> (n.getParent() == null || parent.getValue().equals(n.getParent().getValue()))
+                        && n.getValue().equals(childBase.getValue());
+
+                final Predicate<Node<Payload>> filter2 = n -> n.getValue().equals(childBase.getValue()) && n.getParent().getValue().equals(parent.getValue());
+
+                final Predicate<Node<Payload>> filter3 = n -> n.getValue().equals(parent.getValue()) && n.getParent().getValue().equals(childBase.getValue());
+                parent.add(childBase);
+
+                if (isSafe(childBase, filter3)) {
+                    final Node<Payload> child = scanRecursively(childBase);
+                    parent.add(child);
+                }
             }
         }
 
-        return node;
+        return parent;
+    }
+
+    private Payload buildPayload(Class<?> target, Payload parentPayload) {
+        final int defaultDepth = (parentPayload != null) ? parentPayload.getDepth() : 1;
+        final int depth = PopulateScanner.getAutoAnnotation(target)
+                .map(a -> ((GenAuto) a).depth()).orElse(defaultDepth);
+
+        return new Payload(target, depth);
     }
 
     private <T> boolean isSafe(Node<T> node, Predicate<Node<T>> filter) {
         final Node<T> root = findRoot(node);
-        return isPayloadExist(root, filter);
+        return !isPayloadExist(root, filter);
     }
 
     private <T> boolean isPayloadExist(Node<T> node, Predicate<Node<T>> filter) {
         boolean result = false;
         for (Node<T> n : node.getNodes()) {
-            if(filter.test(n))
+            if (filter.test(n))
                 return true;
             else
                 result |= isPayloadExist(n, filter);
@@ -105,7 +122,7 @@ class GenStorage implements IGenStorage {
 
     @SuppressWarnings("unchecked")
     private <T> Node<T> findRoot(Node<T> node) {
-        if(node.getParent() == null)
+        if (node.getParent() == null)
             return node;
 
         return findRoot(node.getParent());
@@ -149,7 +166,7 @@ class GenStorage implements IGenStorage {
         if (t == null)
             return Collections.emptyMap();
 
-        if(this.graph == null) {
+        if (this.graph == null) {
             this.graph = buildGraph(t.getClass());
             System.out.println(graph);
         }

@@ -11,6 +11,40 @@ import io.dummymaker.annotation.special.GenAuto;
 @GenAuto(depth = 3)
 public class DummyEmbedded {
 
+    public class DummyEmbeddedIntoSimple {
+        private int number;
+        private String name;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    @GenAuto(depth = 4)
+    public class DummyEmbeddedSimple {
+        private int number;
+        private String name;
+
+        private DummyEmbeddedIntoSimple embedded;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public DummyEmbeddedIntoSimple getEmbedded() {
+            return embedded;
+        }
+    }
+
+    @GenAuto(depth = 2)
     public class DummyEmbeddedChild {
 
         private int number;
@@ -33,6 +67,7 @@ public class DummyEmbedded {
     private String id;
     private String name;
     private DummyEmbeddedChild child;
+    private DummyEmbeddedSimple simpleChild;
 
     public String getId() {
         return id;
