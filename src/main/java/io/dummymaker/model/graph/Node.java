@@ -22,8 +22,12 @@ public class Node<T> {
         this.parent = parent;
     }
 
-    public static <T> Node<T> as(T value, Node parent) {
-        return new Node<>(value, parent);
+    public static <T> Node<T> of(T value, Node<T> parent) {
+        final Node<T> node = new Node<>(value, parent);
+        if(parent != null)
+            parent.add(node);
+
+        return node;
     }
 
     public Node<T> add(Node<T> child) {
@@ -31,7 +35,7 @@ public class Node<T> {
         return this;
     }
 
-    public T getValue() {
+    public T payload() {
         return value;
     }
 

@@ -1,6 +1,5 @@
 package io.dummymaker.factory.impl;
 
-import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.factory.IGenSupplier;
@@ -11,12 +10,10 @@ import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CastUtils.instantiate;
@@ -33,6 +30,7 @@ class GenStorage implements IGenStorage {
     private final IGenSupplier supplier;
     private final GenFactory embeddedFactory; // stupid? yes, have better solution pls PR
     private final IPopulateScanner scanner;
+    private final GenGraphBuilder graphBuilder;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
     private final Map<Class<?>, Map<Field, IGenerator>> sequentialGenerators;
@@ -45,87 +43,13 @@ class GenStorage implements IGenStorage {
         this.scanner = scanner;
 
         this.embeddedFactory = new GenEmbeddedFactory(scanner);
+        this.graphBuilder = new GenGraphBuilder(scanner);
         this.supplier = new GenSupplier();
 
         this.sequentialGenerators = new HashMap<>();
         this.containers = new HashMap<>();
         this.generators = new HashMap<>();
         this.marked = new HashSet<>();
-    }
-
-    private Node<Payload> buildGraph(Class<?> target) {
-        final Payload payload = buildPayload(target, null);
-        final Node<Payload> node = Node.as(payload, null);
-        return scanRecursively(node);
-    }
-
-    /**
-     * Scan target class and its embedded fields for gen containers
-     *
-     * @param parent to scan
-     * @return
-     */
-    private Node<Payload> scanRecursively(Node<Payload> parent) {
-        final Payload parentPayload = parent.getValue();
-        final Class<?> type = parentPayload.getType();
-        final Map<Field, GenContainer> parentFields = scanner.scan(type);
-
-
-        for (Map.Entry<Field, GenContainer> entry : parentFields.entrySet()) {
-            if (entry.getValue().isEmbedded()) {
-                final Class<?> childTarget = entry.getKey().getType();
-                final Payload payload = buildPayload(childTarget, parentPayload);
-                final Node<Payload> childBase = Node.as(payload, parent);
-
-                final Predicate<Node<Payload>> filter = (n) -> (n.getParent() == null || parent.getValue().equals(n.getParent().getValue()))
-                        && n.getValue().equals(childBase.getValue());
-
-                final Predicate<Node<Payload>> filter2 = n -> n.getValue().equals(childBase.getValue()) && n.getParent().getValue().equals(parent.getValue());
-
-                final Predicate<Node<Payload>> filter3 = n -> n.getValue().equals(parent.getValue()) && n.getParent().getValue().equals(childBase.getValue());
-                parent.add(childBase);
-
-                if (isSafe(childBase, filter3)) {
-                    final Node<Payload> child = scanRecursively(childBase);
-                    parent.add(child);
-                }
-            }
-        }
-
-        return parent;
-    }
-
-    private Payload buildPayload(Class<?> target, Payload parentPayload) {
-        final int defaultDepth = (parentPayload != null) ? parentPayload.getDepth() : 1;
-        final int depth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth()).orElse(defaultDepth);
-
-        return new Payload(target, depth);
-    }
-
-    private <T> boolean isSafe(Node<T> node, Predicate<Node<T>> filter) {
-        final Node<T> root = findRoot(node);
-        return !isPayloadExist(root, filter);
-    }
-
-    private <T> boolean isPayloadExist(Node<T> node, Predicate<Node<T>> filter) {
-        boolean result = false;
-        for (Node<T> n : node.getNodes()) {
-            if (filter.test(n))
-                return true;
-            else
-                result |= isPayloadExist(n, filter);
-        }
-
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Node<T> findRoot(Node<T> node) {
-        if (node.getParent() == null)
-            return node;
-
-        return findRoot(node.getParent());
     }
 
     @Override
@@ -166,14 +90,15 @@ class GenStorage implements IGenStorage {
         if (t == null)
             return Collections.emptyMap();
 
-        if (this.graph == null) {
-            this.graph = buildGraph(t.getClass());
+        final Class<?> target = t.getClass();
+        if (this.graph == null) // when encounters first object generation (always top level object)
+        {
+            this.graph = graphBuilder.build(target);
             System.out.println(graph);
         }
 
-        final Class<?> targetClass = t.getClass();
-        scanForSequentialFields(targetClass);
-        return containers.computeIfAbsent(targetClass, (k) -> scanner.scan(targetClass));
+        markSequentialFields(target);
+        return containers.computeIfAbsent(target, (k) -> scanner.scan(target));
     }
 
     /**
@@ -226,12 +151,13 @@ class GenStorage implements IGenStorage {
      *
      * @param target class to scan
      */
-    private void scanForSequentialFields(Class<?> target) {
+    private void markSequentialFields(Class<?> target) {
         this.sequentialGenerators.computeIfAbsent(target, (k) -> new SequenceScanner().scan(target)
                 .entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))
                 ));
+
     }
 }
