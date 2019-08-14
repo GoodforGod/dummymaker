@@ -91,8 +91,9 @@ class GenStorage implements IGenStorage {
             return Collections.emptyMap();
 
         final Class<?> target = t.getClass();
-        if (this.graph == null) // when encounters first object generation (always top level object)
-        {
+
+        // when encounters first object generation (always top level object)
+        if (this.graph == null) {
             this.graph = graphBuilder.build(target);
             System.out.println(graph);
         }

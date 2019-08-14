@@ -42,32 +42,16 @@ class GenGraphBuilder {
      * @return parent node with all children
      */
     private Node<Payload> scanRecursively(Node<Payload> parent) {
-        final Payload parentPayload = parent.payload();
+        final Payload parentPayload = parent.value();
         final Class<?> parentType = parentPayload.getType();
 
         scanner.scan(parentType).entrySet().stream()
                 .filter(e -> e.getValue().isEmbedded())
                 .map(e -> buildPayload(e.getKey().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
-                .filter(child -> isSafe(child, n -> n.payload().equals(parent.payload()) && n.getParent().payload().equals(child.payload())))
+                .filter(child -> isSafe(child, n -> n.value().equals(parent.value()) && n.getParent().value().equals(child.value())))
                 .map(this::scanRecursively)
                 .forEach(parent::add);
-
-//        for (Map.Entry<Field, GenContainer> entry : parentFields.entrySet()) {
-//            if (entry.getValue().isEmbedded()) {
-//                final Class<?> childTarget = entry.getKey().getType();
-//                final Payload payload = buildPayload(childTarget, parentPayload);
-//                final Node<Payload> childBase = Node.as(payload, parent);
-//
-//                final Predicate<Node<Payload>> filter3 = n -> n.getValue().equals(parent.getValue()) && n.getParent().getValue().equals(childBase.getValue());
-//                parent.add(childBase);
-//
-//                if (isSafe(childBase, filter3)) {
-//                    final Node<Payload> child = scanRecursively(childBase);
-//                    parent.add(child);
-//                }
-//            }
-//        }
 
         return parent;
     }
@@ -105,9 +89,10 @@ class GenGraphBuilder {
 
     /**
      * Checks recursively all graph for predicate match
-     * @param node graph start point
+     *
+     * @param node   graph start point
      * @param filter to check against
-     * @param <T> payload type
+     * @param <T>    payload type
      * @return whenever such linkage exists
      */
     private <T> boolean isExist(Node<T> node, Predicate<Node<T>> filter) {

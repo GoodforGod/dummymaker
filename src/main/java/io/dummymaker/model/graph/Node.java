@@ -35,7 +35,7 @@ public class Node<T> {
         return this;
     }
 
-    public T payload() {
+    public T value() {
         return value;
     }
 
