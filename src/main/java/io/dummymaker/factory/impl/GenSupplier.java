@@ -7,7 +7,6 @@ import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.ObjectGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.scan.impl.ClassScanner;
-import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.GenUtils;
 
 import java.lang.reflect.Field;
@@ -18,6 +17,7 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
  * Default gen config implementation for generators discovery
@@ -72,7 +72,7 @@ public class GenSupplier implements IGenSupplier {
             return ArrayComplexGenerator.class;
         if (type.isEnum())
             return EnumComplexGenerator.class;
-        if (CollectionUtils.isEmpty(generators))
+        if (isEmpty(generators))
             return getDefault();
 
         return generators.get(getIndexWithSalt(generators.size(), fieldName, SALT));

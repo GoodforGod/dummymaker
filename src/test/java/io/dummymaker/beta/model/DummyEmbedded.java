@@ -80,4 +80,8 @@ public class DummyEmbedded {
     public DummyEmbeddedChild getChild() {
         return child;
     }
+
+    public DummyEmbeddedSimple getSimpleChild() {
+        return simpleChild;
+    }
 }

@@ -14,10 +14,10 @@ public class Node<T> {
 
     private T value;
 
-    private Node parent;
+    private Node<T> parent;
     private Set<Node<T>> nodes = new HashSet<>();
 
-    private Node(T value, Node parent) {
+    private Node(T value, Node<T> parent) {
         this.value = value;
         this.parent = parent;
     }
@@ -39,7 +39,7 @@ public class Node<T> {
         return value;
     }
 
-    public Node getParent() {
+    public Node<T> getParent() {
         return parent;
     }
 

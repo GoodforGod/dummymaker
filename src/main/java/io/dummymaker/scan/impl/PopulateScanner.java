@@ -9,7 +9,6 @@ import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IPopulateScanner;
 
@@ -99,8 +98,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
         if (genAuto == null)
             return Optional.empty();
 
-        final int depth = EmbeddedGenerator.toDepth(((GenAuto) genAuto).depth());
-        final GenContainer container = GenContainer.asAuto(isComplex(field), depth);
+        final GenContainer container = GenContainer.asAuto(isComplex(field));
         final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
         container.enrich(suitable);
         return Optional.of(container);

@@ -34,5 +34,4 @@ public class Tester {
         DummyEmbedded build = factory.build(DummyEmbedded.class);
         System.out.println(build);
     }
-
 }

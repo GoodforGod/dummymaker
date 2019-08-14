@@ -6,6 +6,7 @@ import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -84,7 +85,7 @@ class GenGraphBuilder {
      */
     private <T> boolean isSafe(Node<T> node, Predicate<Node<T>> filter) {
         final Node<T> root = findRoot(node);
-        return !isExist(root, filter);
+        return !find(root, filter).isPresent();
     }
 
     /**
@@ -95,16 +96,16 @@ class GenGraphBuilder {
      * @param <T>    payload type
      * @return whenever such linkage exists
      */
-    private <T> boolean isExist(Node<T> node, Predicate<Node<T>> filter) {
-        boolean result = false;
+    <T> Optional<Node<T>> find(Node<T> node, Predicate<Node<T>> filter) {
+        Node<T> result = null;
         for (Node<T> n : node.getNodes()) {
             if (filter.test(n))
-                return true;
+                return Optional.of(n);
             else
-                result |= isExist(n, filter);
+                result = find(n, filter).orElse(null);
         }
 
-        return result;
+        return Optional.ofNullable(result);
     }
 
     /**

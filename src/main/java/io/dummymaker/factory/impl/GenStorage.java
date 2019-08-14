@@ -14,6 +14,7 @@ import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CastUtils.instantiate;
@@ -74,7 +75,6 @@ class GenStorage implements IGenStorage {
      * @param depth to start entity data fill with
      * @param <T>   type
      * @return entity filled with data
-     * @see GenEmbeddedFactory#fillWithDepth(Object, int, GenStorage)
      */
     @Override
     public <T> T fillByDepth(T t, int depth) {
@@ -98,6 +98,16 @@ class GenStorage implements IGenStorage {
 
         markSequentialFields(target);
         return containers.computeIfAbsent(target, k -> scanner.scan(target));
+    }
+
+    int getDepth(Class<?> parent, Class<?> target) {
+        final Predicate<Node<Payload>> filter = n -> n.getParent() != null
+                && n.getParent().value().getType().equals(parent)
+                && n.value().getType().equals(target);
+
+        return graphBuilder.find(graph, filter)
+                .map(n -> n.value().getDepth())
+                .orElse(1);
     }
 
     /**

@@ -118,6 +118,9 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     <T> T fillEntity(T t, GenStorage storage, int depth) {
+        if(t == null)
+            return null;
+
         final Map<Field, GenContainer> containers = storage.getContainers(t);
         containers.entrySet().stream()
                 .filter(e -> storage.isUnmarked(e.getKey()))
@@ -160,7 +163,7 @@ public class GenFactory implements IGenFactory {
         Object generated;
 
         if (EmbeddedGenerator.class.equals(container.getGenerator())) {
-            generated = generateEmbeddedObject(container, field, storage, depth);
+            generated = generateEmbeddedObject(target, container, field, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
         } else if (container.isComplex()) {
@@ -180,15 +183,17 @@ public class GenFactory implements IGenFactory {
      * @param field   field with embedded value
      * @param storage gen factory util class
      */
-    private Object generateEmbeddedObject(GenContainer container, Field field, GenStorage storage, int depth) {
-        final int fieldDepth = getDepth(container);
+    private Object generateEmbeddedObject(final Class<?> parent,
+                                          final GenContainer container,
+                                          final Field field,
+                                          final GenStorage storage,
+                                          final int depth) {
+        final Class<?> type = field.getType();
+        final int fieldDepth = getDepth(parent, type, container, storage);
         if (fieldDepth < depth)
             return null;
 
-        final Object embedded = instantiate(field.getType());
-        if (embedded == null)
-            return null;
-
+        final Object embedded = instantiate(type);
         return fillEntity(embedded, storage, depth + 1);
     }
 
@@ -206,7 +211,11 @@ public class GenFactory implements IGenFactory {
      * @return allowed depth level
      * @see GenEmbedded
      */
-    private int getDepth(final GenContainer container) {
+    private int getDepth(final Class<?> parent,
+                         final Class<?> target,
+                         final GenContainer container,
+                         final GenStorage storage) {
+
         final Annotation annotation = container.getMarker();
         if (annotation != null) {
             if (annotation.annotationType().equals(GenEmbedded.class)) {
@@ -226,6 +235,6 @@ public class GenFactory implements IGenFactory {
             }
         }
 
-        return container.getAutoDepth();
+        return storage.getDepth(parent, target);
     }
 }

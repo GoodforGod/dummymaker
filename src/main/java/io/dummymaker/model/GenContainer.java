@@ -3,7 +3,6 @@ package io.dummymaker.model;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenCustom;
-import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
@@ -37,8 +36,6 @@ public class GenContainer {
     private final boolean isComplex;
     private final boolean isAuto;
 
-    private int autoDepth;
-
     /**
      * Field set generator
      * Can be enriched
@@ -49,13 +46,11 @@ public class GenContainer {
                          final Annotation marker,
                          final boolean isComplex,
                          final boolean isAuto,
-                         final int autoDepth,
                          final Class<? extends IGenerator> generator) {
         this.marker = marker;
         this.core = core;
         this.isComplex = isComplex;
         this.isAuto = isAuto;
-        this.autoDepth = autoDepth;
 
         if (generator != null) {
             this.generator = generator;
@@ -73,23 +68,20 @@ public class GenContainer {
     public static GenContainer asCustom(Annotation marker) {
         final Class<? extends IGenerator> generator = ((GenCustom) marker).value();
         final boolean isComplex = generator.isAssignableFrom(IComplexGenerator.class);
-        return new GenContainer(null, marker, isComplex, false, 1, generator);
+        return new GenContainer(null, marker, isComplex, false, generator);
     }
 
     public static GenContainer asGen(Annotation core, Annotation marker) {
         final boolean isComplex = ComplexGen.class.equals(core.annotationType());
-        return new GenContainer(core, marker, isComplex, false, 1, null);
+        return new GenContainer(core, marker, isComplex, false, null);
     }
 
-    public static GenContainer asAuto(final Class<? extends IGenerator> generator,
-                                      final boolean isComplex,
-                                      final int depth) {
-        final int parsedDepth = (depth < 1) ? 1 : Math.min(depth, GenEmbedded.MAX);
-        return new GenContainer(null, null, isComplex, true, parsedDepth, generator);
+    public static GenContainer asAuto(Class<? extends IGenerator> generator, boolean isComplex) {
+        return new GenContainer(null, null, isComplex, true, generator);
     }
 
-    public static GenContainer asAuto(boolean isComplex, int depth) {
-        return asAuto(null, isComplex, depth);
+    public static GenContainer asAuto(boolean isComplex) {
+        return asAuto(null, isComplex);
     }
 
     public boolean isEmbedded() {
@@ -118,13 +110,5 @@ public class GenContainer {
 
     public Annotation getMarker() {
         return marker;
-    }
-
-    public int getAutoDepth() {
-        return autoDepth;
-    }
-
-    public void setAutoDepth(int autoDepth) {
-        this.autoDepth = autoDepth;
     }
 }
