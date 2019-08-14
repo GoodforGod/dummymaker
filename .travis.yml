@@ -4,7 +4,7 @@ dist: trusty
 install: true
 
 script:
-  - "./gradlew build jacocoTestReport --scan -s"
+  - "./gradlew clean test jacocoTestReport"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

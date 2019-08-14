@@ -63,8 +63,9 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Check if class is auto generative
-     *
+     * @param target to check for annotation
      * @see GenAuto
+     * @return optional gen auto annotation
      */
     public static Optional<Annotation> getAutoAnnotation(Class<?> target) {
         return (target == null)
@@ -76,6 +77,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Check if the field have complex suitable generator
+     * @param field to check against
      */
     private boolean isComplex(final Field field) {
         final Class<?> declaringClass = field.getType();
