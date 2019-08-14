@@ -98,7 +98,8 @@ abstract class PopulateFactory implements IPopulateFactory {
                                  final Map<Field, Long> enumeratesMap,
                                  final Set<Field> nullableFields,
                                  final int currentEmbeddedDepth) {
-        final Map<Field, GenContainer> genContainers = new GenStorage(populateScanner).getContainers(t.getClass());
+        final GenStorage storage = new GenStorage(populateScanner);
+        final Map<Field, GenContainer> genContainers = storage.getContainers(t);
         for (final Map.Entry<Field, GenContainer> annotatedField : genContainers.entrySet()) {
             final Field field = annotatedField.getKey();
             // If field had errors or null gen in prev populate iteration, just skip that field

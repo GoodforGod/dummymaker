@@ -42,7 +42,7 @@ class GenStorage implements IGenStorage {
     GenStorage(IPopulateScanner scanner) {
         this.scanner = scanner;
 
-        this.embeddedFactory = new GenEmbeddedFactory(scanner);
+        this.embeddedFactory = new GenFactory(scanner);
         this.graphBuilder = new GenGraphBuilder(scanner);
         this.supplier = new GenSupplier();
 
@@ -86,20 +86,18 @@ class GenStorage implements IGenStorage {
      *
      * @return gen container map to field
      */
-    <T> Map<Field, GenContainer> getContainers(T t) {
+    Map<Field, GenContainer> getContainers(Object t) {
         if (t == null)
             return Collections.emptyMap();
 
         final Class<?> target = t.getClass();
 
         // when encounters first object generation (always top level object)
-        if (this.graph == null) {
+        if (this.graph == null)
             this.graph = graphBuilder.build(target);
-            System.out.println(graph);
-        }
 
         markSequentialFields(target);
-        return containers.computeIfAbsent(target, (k) -> scanner.scan(target));
+        return containers.computeIfAbsent(target, k -> scanner.scan(target));
     }
 
     /**
