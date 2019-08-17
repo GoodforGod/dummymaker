@@ -97,7 +97,38 @@ class GenStorage implements IGenStorage {
             this.graph = graphBuilder.build(target);
 
         markSequentialFields(target);
-        return containers.computeIfAbsent(target, k -> scanner.scan(target));
+
+        final boolean parentMarked = isAnyParentMarked(target);
+        return containers.computeIfAbsent(target, k -> scanner.scan(target, parentMarked));
+    }
+
+    /**
+     * Checks whenever any parent is marked as gen auto
+     *
+     * @param target to check
+     * @return true if any parent marked
+     */
+    private boolean isAnyParentMarked(Class<?> target) {
+        final Predicate<Node<Payload>> filter = n -> n.value().getType().equals(target);
+        if(filter.test(graph))
+            return true;
+
+        final Optional<Node<Payload>> node = graphBuilder.find(graph, filter);
+        return node.filter(payloadNode -> haveMarkedParent(payloadNode, 1)).isPresent();
+
+    }
+
+    /**
+     * @param node  to scan
+     * @param depth level to validate
+     * @return true if parent or start node is marked
+     * @see #isAnyParentMarked(Class)
+     */
+    private boolean haveMarkedParent(Node<Payload> node, int depth) {
+        if (node.value().isMarkedAuto())
+            return node.value().getDepth() >= depth;
+
+        return node.getParent() != null && haveMarkedParent(node.getParent(), depth + 1);
     }
 
     int getDepth(Class<?> parent, Class<?> target) {
@@ -106,7 +137,7 @@ class GenStorage implements IGenStorage {
                 && n.value().getType().equals(target);
 
         return graphBuilder.find(graph, filter)
-                .map(n -> n.value().getDepth())
+                .map(n -> n.getParent().value().getDepth())
                 .orElse(1);
     }
 

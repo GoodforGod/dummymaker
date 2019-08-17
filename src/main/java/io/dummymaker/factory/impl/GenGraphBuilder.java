@@ -46,11 +46,11 @@ class GenGraphBuilder {
         final Payload parentPayload = parent.value();
         final Class<?> parentType = parentPayload.getType();
 
-        scanner.scan(parentType).entrySet().stream()
+        scanner.scan(parentType, true).entrySet().stream()
                 .filter(e -> e.getValue().isEmbedded())
                 .map(e -> buildPayload(e.getKey().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
-                .filter(child -> isSafe(child, n -> n.value().equals(parent.value()) && n.getParent().value().equals(child.value())))
+                .filter(c -> isSafe(c, n -> n.value().equals(parent.value()) && n.getParent().value().equals(c.value())))
                 .map(this::scanRecursively)
                 .forEach(parent::add);
 
@@ -65,11 +65,11 @@ class GenGraphBuilder {
      * @return payload for target class
      */
     private Payload buildPayload(Class<?> target, Payload parentPayload) {
-        final int defaultDepth = (parentPayload != null) ? parentPayload.getDepth() : 1;
-        final int depth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth()).orElse(defaultDepth);
+        final Optional<Integer> autoDepth = PopulateScanner.getAutoAnnotation(target)
+                .map(a -> ((GenAuto) a).depth());
 
-        return new Payload(target, depth);
+        final Integer markedOrDefault = autoDepth.orElseGet(() -> parentPayload == null ? 1 : parentPayload.getDepth());
+        return new Payload(target, markedOrDefault, autoDepth.isPresent());
     }
 
     /**
@@ -97,15 +97,18 @@ class GenGraphBuilder {
      * @return whenever such linkage exists
      */
     <T> Optional<Node<T>> find(Node<T> node, Predicate<Node<T>> filter) {
-        Node<T> result = null;
+        Node<T> result;
         for (Node<T> n : node.getNodes()) {
-            if (filter.test(n))
+            if (filter.test(n)) {
                 return Optional.of(n);
-            else
+            } else {
                 result = find(n, filter).orElse(null);
+                if(result != null)
+                    return Optional.of(result);
+            }
         }
 
-        return Optional.ofNullable(result);
+        return Optional.empty();
     }
 
     /**
@@ -114,10 +117,9 @@ class GenGraphBuilder {
      * @param node graph starting point
      * @return graph root
      */
-    @SuppressWarnings("unchecked")
     private <T> Node<T> findRoot(Node<T> node) {
-        return (node.getParent() != null)
-                ? findRoot(node.getParent())
-                : node;
+        return (node.getParent() == null)
+                ? node
+                : findRoot(node.getParent());
     }
 }

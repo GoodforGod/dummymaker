@@ -24,12 +24,11 @@ public class DummyEmbedded {
         }
     }
 
-    @GenAuto(depth = 4)
+    @GenAuto(depth = 3)
     public class DummyEmbeddedSimple {
         private int number;
-        private String name;
-
-        private DummyEmbeddedIntoSimple embedded;
+        private String simpleName;
+        private DummyEmbeddedIntoSimple intoEmbedded;
 
         public int getNumber() {
             return number;
@@ -39,20 +38,18 @@ public class DummyEmbedded {
             return name;
         }
 
-        public DummyEmbeddedIntoSimple getEmbedded() {
-            return embedded;
+        public DummyEmbeddedIntoSimple getIntoEmbedded() {
+            return intoEmbedded;
         }
     }
 
-    @GenAuto(depth = 2)
     public class DummyEmbeddedChild {
-
-        private int number;
         private String name;
+        private String childId;
         private DummyEmbedded embedded;
 
-        public int getNumber() {
-            return number;
+        public String getChildId() {
+            return childId;
         }
 
         public String getName() {

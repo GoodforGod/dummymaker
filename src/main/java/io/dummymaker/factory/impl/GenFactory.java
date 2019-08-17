@@ -8,6 +8,7 @@ import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
 import io.dummymaker.util.CastUtils;
@@ -42,14 +43,14 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
 @SuppressWarnings("Duplicates")
 public class GenFactory implements IGenFactory {
 
-    private final IPopulateScanner populateScanner;
+    private final IPopulateScanner scanner;
 
     public GenFactory() {
         this(new PopulateScanner());
     }
 
-    public GenFactory(IPopulateScanner populateScanner) {
-        this.populateScanner = populateScanner;
+    public GenFactory(IPopulateScanner scanner) {
+        this.scanner = scanner;
     }
 
     @Override
@@ -87,7 +88,7 @@ public class GenFactory implements IGenFactory {
         if (t == null)
             return null;
 
-        final GenStorage storage = new GenStorage(populateScanner);
+        final GenStorage storage = new GenStorage(scanner);
         return fillEntity(t, storage, 1);
     }
 
@@ -96,7 +97,7 @@ public class GenFactory implements IGenFactory {
         if (stream == null)
             return Stream.empty();
 
-        final GenStorage storage = new GenStorage(populateScanner);
+        final GenStorage storage = new GenStorage(scanner);
         return stream
                 .filter(Objects::nonNull)
                 .map(t -> fillEntity(t, storage, 1));
@@ -122,11 +123,14 @@ public class GenFactory implements IGenFactory {
             return null;
 
         final Map<Field, GenContainer> containers = storage.getContainers(t);
-        containers.entrySet().stream()
+
+        final List<Map.Entry<Field, GenContainer>> unmarked = containers.entrySet().stream()
                 .filter(e -> storage.isUnmarked(e.getKey()))
-                .forEach(k -> {
-                    final GenContainer container = k.getValue();
-                    final Field field = k.getKey();
+                .collect(Collectors.toList());
+
+        unmarked.forEach(e -> {
+                    final GenContainer container = e.getValue();
+                    final Field field = e.getKey();
                     try {
                         field.setAccessible(true);
                         final Object generated = generateObject(t.getClass(), field, container, storage, depth);
@@ -135,9 +139,9 @@ public class GenFactory implements IGenFactory {
                         else
                             storage.markNullable(field);
 
-                    } catch (Exception e) {
+                    } catch (Exception ex) {
                         field.setAccessible(false);
-                        throw new IllegalArgumentException(e);
+                        throw new GenException(ex);
                     }
                 });
 
@@ -163,7 +167,7 @@ public class GenFactory implements IGenFactory {
         Object generated;
 
         if (EmbeddedGenerator.class.equals(container.getGenerator())) {
-            generated = generateEmbeddedObject(target, container, field, storage, depth);
+            generated = generateEmbeddedObject(target, field, container, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
         } else if (container.isComplex()) {
@@ -184,13 +188,13 @@ public class GenFactory implements IGenFactory {
      * @param storage gen factory util class
      */
     private Object generateEmbeddedObject(final Class<?> parent,
-                                          final GenContainer container,
                                           final Field field,
+                                          final GenContainer container,
                                           final GenStorage storage,
                                           final int depth) {
         final Class<?> type = field.getType();
         final int fieldDepth = getDepth(parent, type, container, storage);
-        if (fieldDepth < depth)
+        if (fieldDepth <= depth)
             return null;
 
         final Object embedded = instantiate(type);

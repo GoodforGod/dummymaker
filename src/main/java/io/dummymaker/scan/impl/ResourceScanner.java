@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.PackageUtils;
 
@@ -43,7 +44,7 @@ public class ResourceScanner implements IScanner<String, String> {
 
             return resources;
         } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new GenException(e);
         }
     }
 

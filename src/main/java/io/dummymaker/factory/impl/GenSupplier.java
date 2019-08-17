@@ -7,6 +7,7 @@ import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.generator.simple.impl.ObjectGenerator;
 import io.dummymaker.generator.simple.impl.time.ITimeGenerator;
 import io.dummymaker.scan.impl.ClassScanner;
+import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
 
 import java.lang.reflect.Field;
@@ -49,13 +50,21 @@ public class GenSupplier implements IGenSupplier {
     }
 
     /**
+     * Default generator in case suitable not found
+     * @return generator class
+     */
+    protected Class<? extends IGenerator> getDefault() {
+        return EmbeddedGenerator.class;
+    }
+
+    /**
      * Try to find most suitable generator class for target field
      * Using field value class and field name
      * <p>
      * In case field can not be found then treat field as embedded object
      *
-     * @param field  target field
-     * @param type target field value class
+     * @param field target field
+     * @param type  target field value class
      * @return suitable generator class
      */
     @Override
@@ -64,7 +73,7 @@ public class GenSupplier implements IGenSupplier {
             return getDefault();
 
         final List<Class<? extends IGenerator>> generators = classifiers.get(type);
-        final String fieldName = type.getSimpleName();
+        final String fieldName = field.getName();
 
         if (type.getTypeName().endsWith("[][]"))
             return Array2DComplexGenerator.class;
@@ -75,11 +84,42 @@ public class GenSupplier implements IGenSupplier {
         if (isEmpty(generators))
             return getDefault();
 
-        return generators.get(getIndexWithSalt(generators.size(), fieldName, SALT));
+        final Optional<Class<? extends IGenerator>> patternSuitable = getPatternSuitable(field, type);
+        return patternSuitable.orElseGet(() -> getIndexWithSalt(generators, fieldName + type.getName(), SALT));
     }
 
-    protected Class<? extends IGenerator> getDefault() {
-        return EmbeddedGenerator.class;
+    /**
+     * Search for pattern suitable generator class
+     *
+     * @param field target
+     * @param type  desired target type
+     * @return suitable pattern generator
+     */
+    private Optional<Class<? extends IGenerator>> getPatternSuitable(Field field, Class<?> type) {
+        final String fieldName = field.getName();
+
+        final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
+                .flatMap(List::stream)
+                .map(CastUtils::instantiate)
+                .filter(Objects::nonNull)
+                .filter(g -> Objects.nonNull(g.getPattern()))
+                .filter(g -> g.getPattern().matcher(fieldName).find())
+                .findFirst();
+
+        if (!patternSuitable.isPresent())
+            return Optional.empty();
+
+        final Object casted = CastUtils.castObject(patternSuitable.get().generate(), type);
+        if (casted != null)
+            return Optional.of(patternSuitable.get().getClass());
+
+        return classifiers.get(type).stream()
+                .map(CastUtils::instantiate)
+                .filter(Objects::nonNull)
+                .filter(g -> Objects.nonNull(g.getPattern()))
+                .filter(g -> g.getPattern().matcher(fieldName).find())
+                .findFirst()
+                .map(g -> g.getClass());
     }
 
     @SuppressWarnings("unchecked")

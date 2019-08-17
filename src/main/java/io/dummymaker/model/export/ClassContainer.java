@@ -3,6 +3,7 @@ package io.dummymaker.model.export;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.naming.ICase;
+import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.impl.ExportScanner;
 
 import java.lang.reflect.Field;
@@ -67,7 +68,7 @@ public class ClassContainer {
         return this.fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
                 .findFirst()
-                .orElseThrow(NullPointerException::new).getKey();
+                .orElseThrow(GenException::new).getKey();
     }
 
     /**
@@ -91,7 +92,7 @@ public class ClassContainer {
         return this.fieldContainerMap.entrySet().stream()
                 .filter(e -> e.getValue().getExportName().equals(exportFieldName))
                 .findFirst()
-                .orElseThrow(NullPointerException::new).getValue();
+                .orElseThrow(GenException::new).getValue();
     }
 
     /**

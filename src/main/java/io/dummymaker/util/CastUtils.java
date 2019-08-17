@@ -179,11 +179,8 @@ public class CastUtils {
             return null;
 
         final boolean isTypeString = fieldType.equals(String.class);
-        if (castObject == null) {
-            return (isTypeString)
-                    ? ((T) "null")
-                    : null;
-        }
+        if (castObject == null)
+            return isTypeString ? ((T) "null") : null;
 
         final Class<?> castType = castObject.getClass();
         final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);

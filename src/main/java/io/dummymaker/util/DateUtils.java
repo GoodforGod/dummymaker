@@ -36,21 +36,15 @@ public class DateUtils {
     }
 
     public static Timestamp convertToTimestamp(final LocalDate localDate) {
-        return (localDate != null)
-                ? Timestamp.valueOf(localDate.atStartOfDay())
-                : null;
+        return (localDate == null) ? null : Timestamp.valueOf(localDate.atStartOfDay());
     }
 
     public static Timestamp convertToTimestamp(final LocalTime localTime) {
-        return (localTime != null)
-                ? Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime))
-                : null;
+        return (localTime == null) ? null : Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
     }
 
     public static Timestamp convertToTimestamp(final LocalDateTime localDateTime) {
-        return (localDateTime != null)
-                ? Timestamp.valueOf(localDateTime)
-                : null;
+        return (localDateTime == null) ? null : Timestamp.valueOf(localDateTime);
     }
 
     public static Date parseSimpleDateLong(final String date) {

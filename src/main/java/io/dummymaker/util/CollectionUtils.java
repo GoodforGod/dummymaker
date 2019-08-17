@@ -1,6 +1,7 @@
 package io.dummymaker.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -21,6 +22,15 @@ public class CollectionUtils {
 
     public static int getRandomIndex(final Collection collection) {
         return generateRandomSize(0, collection.size() - 1);
+    }
+
+    public static <T> T getIndexWithSalt(List<T> list, String name, int salt) {
+        int counter = 0;
+        for (char c : name.toCharArray())
+            counter += c;
+
+        final int shift = counter + salt;
+        return list.get(Math.abs(shift % list.size()));
     }
 
     public static int getIndexWithSalt(int size, String name, int salt) {

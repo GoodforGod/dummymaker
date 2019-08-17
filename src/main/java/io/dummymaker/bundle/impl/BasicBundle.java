@@ -23,7 +23,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
     @SuppressWarnings("unchecked")
     @SafeVarargs
     public BasicBundle(T... values) {
-        this.preset = (values != null) ? values : (T[]) new Object[0];
+        this.preset = (values == null) ? (T[]) new Object[0] : values;
     }
 
     @Override

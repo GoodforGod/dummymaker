@@ -137,9 +137,9 @@ public class XmlExporter extends BasicExporter {
      * @see #exportClassFullName
      */
     private <T> String buildClassListTag(final T t) {
-        return (exportClassFullName != null)
-                ? exportClassFullName
-                : t.getClass().getSimpleName() + exportClassEnding;
+        return (exportClassFullName == null)
+                ? t.getClass().getSimpleName() + exportClassEnding
+                : exportClassFullName;
     }
 
     @Override

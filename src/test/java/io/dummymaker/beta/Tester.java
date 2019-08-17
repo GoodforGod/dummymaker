@@ -33,5 +33,7 @@ public class Tester {
         GenFactory factory = new GenFactory();
         DummyEmbedded build = factory.build(DummyEmbedded.class);
         System.out.println(build);
+        System.out.println(build.getChild());
+        System.out.println(build.getSimpleChild());
     }
 }

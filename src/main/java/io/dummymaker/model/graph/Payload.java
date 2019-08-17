@@ -12,10 +12,12 @@ public class Payload {
 
     private final Class<?> type;
     private final int depth;
+    private final boolean isMarkedAuto;
 
-    public Payload(Class<?> type, int depth) {
+    public Payload(Class<?> type, int depth, boolean isMarkedAuto) {
         this.type = type;
         this.depth = depth;
+        this.isMarkedAuto = isMarkedAuto;
     }
 
     public Class<?> getType() {
@@ -24,6 +26,10 @@ public class Payload {
 
     public int getDepth() {
         return depth;
+    }
+
+    public boolean isMarkedAuto() {
+        return isMarkedAuto;
     }
 
     @Override

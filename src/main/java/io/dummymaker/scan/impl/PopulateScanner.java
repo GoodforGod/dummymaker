@@ -50,15 +50,20 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * @see GenContainer
      */
     @Override
-    public Map<Field, GenContainer> scan(final Class target) {
+    public Map<Field, GenContainer> scan(Class target, boolean defAuto) {
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        final Annotation genAuto = getAutoAnnotation(target).orElse(null);
+        final boolean isGenAuto = isMarkedGenAuto(target, defAuto);
 
         getAllDeclaredFields(target).stream()
                 .filter(f -> !isIgnored(f))
-                .forEach(f -> getContainer(f, genAuto).ifPresent(c -> containers.put(f, c)));
+                .forEach(f -> getContainer(f, isGenAuto).ifPresent(c -> containers.put(f, c)));
 
         return containers;
+    }
+
+    @Override
+    public Map<Field, GenContainer> scan(final Class target) {
+        return scan(target, false);
     }
 
     /**
@@ -67,12 +72,17 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * @see GenAuto
      * @return optional gen auto annotation
      */
+    private static boolean isMarkedGenAuto(Class<?> target, boolean defAuto) {
+        final boolean isMarked = (target != null) && Arrays.stream(target.getDeclaredAnnotations()).anyMatch(IS_AUTO);
+        return isMarked || defAuto;
+    }
+
     public static Optional<Annotation> getAutoAnnotation(Class<?> target) {
         return (target == null)
                 ? Optional.empty()
                 : Arrays.stream(target.getDeclaredAnnotations())
-                        .filter(IS_AUTO)
-                        .findAny();
+                .filter(IS_AUTO)
+                .findAny();
     }
 
     /**
@@ -93,14 +103,15 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * Create auto gen container class is auto generative
      *
      * @param field   target to containerize
-     * @param genAuto gen auto annotation
+     * @param isGenAuto is marked with gen auto annotation
      * @return gen container as gen auto
      */
-    private Optional<GenContainer> getAutoContainer(Field field, Annotation genAuto) {
-        if (genAuto == null)
+    private Optional<GenContainer> getAutoContainer(Field field, boolean isGenAuto) {
+        if (!isGenAuto)
             return Optional.empty();
 
-        final GenContainer container = GenContainer.asAuto(isComplex(field));
+        final boolean isComplex = isComplex(field);
+        final GenContainer container = GenContainer.asAuto(isComplex);
         final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
         container.enrich(suitable);
         return Optional.of(container);
@@ -112,11 +123,11 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * If not presented than try to generate gen auto container
      *
      * @param field   target to containerize
-     * @param genAuto gen auto annotation
+     * @param isGenAuto gen auto annotation
      * @return gen container
-     * @see #getAutoContainer(Field, Annotation)
+     * @see #getAutoContainer(Field, boolean)
      */
-    private Optional<GenContainer> getContainer(Field field, Annotation genAuto) {
+    private Optional<GenContainer> getContainer(Field field, boolean isGenAuto) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {
             if (isGenCustom.test(annotation)) {
                 return Optional.of(GenContainer.asCustom(annotation));
@@ -129,7 +140,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
             }
         }
 
-        return getAutoContainer(field, genAuto);
+        return getAutoContainer(field, isGenAuto);
     }
 
     /**
