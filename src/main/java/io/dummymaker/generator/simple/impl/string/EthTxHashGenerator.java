@@ -15,12 +15,12 @@ public class EthTxHashGenerator extends IdGenerator {
     private final Pattern pattern = Pattern.compile("eth(ereum)?tx(hash)?", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
-        return "0x" + super.generate() + super.generate();
+    public Pattern getPattern() {
+        return pattern;
     }
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public String generate() {
+        return "0x" + super.generate().replace("-", "") + super.generate().replace("-", "");
     }
 }

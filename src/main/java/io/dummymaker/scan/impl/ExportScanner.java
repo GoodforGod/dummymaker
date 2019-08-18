@@ -35,9 +35,15 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     private final Predicate<Annotation> exportFilter = (a) -> a.annotationType().equals(GenExportForce.class);
     private final Predicate<Annotation> renameFilter = (a) -> a.annotationType().equals(GenExportName.class);
 
-    private final IGenSupplier supplier = new GenSupplier();
-    private final IPopulateScanner populateScanner = new PopulateScanner();
-    private final IAnnotationScanner annotationScanner = new AnnotationScanner();
+    private final IGenSupplier supplier;
+    private final IPopulateScanner populateScanner;
+    private final IAnnotationScanner annotationScanner;
+
+    public ExportScanner() {
+        this.supplier = new GenSupplier();
+        this.populateScanner = new PopulateAutoScanner(this.supplier);
+        this.annotationScanner = new AnnotationScanner();
+    }
 
     @Override
     public Map<Field, FieldContainer> scan(Class target) {

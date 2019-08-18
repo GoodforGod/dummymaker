@@ -15,12 +15,12 @@ public class BtcTxHashGenerator extends IdGenerator {
     private final Pattern pattern = Pattern.compile("tx|btctx|bitcointx|btchash|bictoinhash", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
-        return super.generate() + super.generate();
+    public Pattern getPattern() {
+        return pattern;
     }
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public String generate() {
+        return super.generate().replace("-", "") + super.generate().replace("-", "");
     }
 }

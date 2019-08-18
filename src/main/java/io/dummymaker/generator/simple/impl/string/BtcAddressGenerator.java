@@ -15,12 +15,12 @@ public class BtcAddressGenerator extends IdGenerator {
     private final Pattern pattern = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
-        return super.generate() + super.generate().substring(0, 2);
+    public Pattern getPattern() {
+        return pattern;
     }
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public String generate() {
+        return super.generate().replace("-", "") + super.generate().substring(0, 2).replace("-", "");
     }
 }

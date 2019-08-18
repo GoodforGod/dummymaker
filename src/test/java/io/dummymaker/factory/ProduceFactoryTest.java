@@ -42,7 +42,7 @@ public class ProduceFactoryTest {
     public void arrayDummyToJson() {
         DummyArray dummyArray = new GenOldFactory().produce(DummyArray.class);
         String s = new JsonExporter().exportAsString(dummyArray);
-        Pattern patternSingleArray = Pattern.compile("\"floatsff\":\\[[\\-0-9.]");
+        Pattern patternSingleArray = Pattern.compile("\"floatsff\":\\[-?[0-9]+\\.[0-9]+");
         Pattern patternTwoArray = Pattern.compile("\"bytes2\":\\[\\[[\\-0-9.]");
         Pattern patternList = Pattern.compile("\"floatList\":\\[[\\-0-9.]");
         Pattern patternMap= Pattern.compile("\"mapa\":\\{\"[a-zA-Z0-9_]+\":\"[a-zA-Z0-9_]+\"");
