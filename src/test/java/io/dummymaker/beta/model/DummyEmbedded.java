@@ -24,7 +24,7 @@ public class DummyEmbedded {
         }
     }
 
-    @GenAuto(depth = 3)
+//    @GenAuto(depth = 3)
     public class DummyEmbeddedSimple {
         private int number;
         private String simpleName;

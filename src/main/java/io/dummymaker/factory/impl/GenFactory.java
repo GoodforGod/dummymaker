@@ -8,6 +8,7 @@ import io.dummymaker.generator.complex.IComplexGenerator;
 import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IPopulateScanner;
 import io.dummymaker.scan.impl.PopulateScanner;
@@ -43,6 +44,7 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
 @SuppressWarnings("Duplicates")
 public class GenFactory implements IGenFactory {
 
+    private final GenRules rules;
     private final IPopulateScanner scanner;
 
     public GenFactory() {
@@ -51,6 +53,17 @@ public class GenFactory implements IGenFactory {
 
     public GenFactory(IPopulateScanner scanner) {
         this.scanner = scanner;
+        this.rules = null;
+    }
+
+    public GenFactory(GenRules rules) {
+        this.scanner = new PopulateScanner();
+        this.rules = rules;
+    }
+
+    public GenFactory(IPopulateScanner scanner, GenRules rules) {
+        this.scanner = scanner;
+        this.rules = rules;
     }
 
     @Override
@@ -88,7 +101,7 @@ public class GenFactory implements IGenFactory {
         if (t == null)
             return null;
 
-        final GenStorage storage = new GenStorage(scanner);
+        final GenStorage storage = new GenStorage(scanner, rules);
         return fillEntity(t, storage, 1);
     }
 
@@ -97,7 +110,7 @@ public class GenFactory implements IGenFactory {
         if (stream == null)
             return Stream.empty();
 
-        final GenStorage storage = new GenStorage(scanner);
+        final GenStorage storage = new GenStorage(scanner, rules);
         return stream
                 .filter(Objects::nonNull)
                 .map(t -> fillEntity(t, storage, 1));

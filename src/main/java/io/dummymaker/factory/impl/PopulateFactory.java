@@ -51,7 +51,7 @@ abstract class PopulateFactory implements IPopulateFactory {
     PopulateFactory(IPopulateScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
         this.sequentialScanner = new SequenceScanner();
-        this.storage = new GenStorage(populateScanner);
+        this.storage = new GenStorage(populateScanner, null);
         this.populateScanner = populateScanner;
     }
 
@@ -98,7 +98,7 @@ abstract class PopulateFactory implements IPopulateFactory {
                                  final Map<Field, Long> enumeratesMap,
                                  final Set<Field> nullableFields,
                                  final int currentEmbeddedDepth) {
-        final GenStorage storage = new GenStorage(populateScanner);
+        final GenStorage storage = new GenStorage(populateScanner, null);
         final Map<Field, GenContainer> genContainers = storage.getContainers(t);
         for (final Map.Entry<Field, GenContainer> annotatedField : genContainers.entrySet()) {
             final Field field = annotatedField.getKey();
@@ -156,7 +156,7 @@ abstract class PopulateFactory implements IPopulateFactory {
         } else if (container.isComplex()) {
             // If complexGen can generate embedded objects
             // And not handling it like BasicComplexGenerator, you are StackOverFlowed
-            GenStorage storage = new GenStorage(populateScanner);
+            GenStorage storage = new GenStorage(populateScanner, null);
             generated = ((IComplexGenerator) generator).generate(annotation, field, storage, currentEmbeddedDepth);
         } else {
             generated = generator.generate();

@@ -21,8 +21,8 @@ public class Tester {
     public void test() {
         GenRules rules = GenRules.of(
                 GenRule.of(DummyAuto.class)
-                        .add("aLong", ByteGenerator.class)
-                        .add(int.class, ShortGenerator.class)
+                        .add(ByteGenerator.class, "aLong")
+                        .add(ShortGenerator.class, int.class)
         );
 
 

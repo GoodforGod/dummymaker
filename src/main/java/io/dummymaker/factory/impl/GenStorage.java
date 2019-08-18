@@ -7,6 +7,7 @@ import io.dummymaker.generator.simple.IGenerator;
 import io.dummymaker.generator.simple.impl.NullGenerator;
 import io.dummymaker.generator.simple.impl.SequenceGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IPopulateScanner;
@@ -32,6 +33,7 @@ class GenStorage implements IGenStorage {
     private final GenFactory embeddedFactory; // stupid? yes, have better solution pls PR
     private final IPopulateScanner scanner;
     private final GenGraphBuilder graphBuilder;
+    private final GenRules rules;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
     private final Map<Class<?>, Map<Field, IGenerator>> sequentialGenerators;
@@ -40,8 +42,9 @@ class GenStorage implements IGenStorage {
 
     private Node<Payload> graph;
 
-    GenStorage(IPopulateScanner scanner) {
+    GenStorage(IPopulateScanner scanner, GenRules rules) {
         this.scanner = scanner;
+        this.rules = rules;
 
         this.embeddedFactory = new GenFactory(scanner);
         this.graphBuilder = new GenGraphBuilder(scanner);

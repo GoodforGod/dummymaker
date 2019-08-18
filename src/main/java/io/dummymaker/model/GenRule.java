@@ -1,13 +1,12 @@
 package io.dummymaker.model;
 
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.util.StringUtils;
 
 import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * "default comment"
+ * Rule for settings generator type for specific field name or field type
  *
  * @author GoodforGod
  * @since 01.08.2019
@@ -34,20 +33,20 @@ public class GenRule {
         return this;
     }
 
-    public GenRule add(String fieldName, Class<? extends IGenerator> generator) {
-        if (StringUtils.isBlank(fieldName) || generator == null)
+    public GenRule add(Class<? extends IGenerator> generator, String ... fieldNames) {
+        if (fieldNames == null || fieldNames.length == 0 || generator == null)
             throw new NullPointerException("Arguments can not be null or empty");
 
-        final GenFieldRule rule = new GenFieldRule(fieldName, generator);
+        final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
         rules.add(rule);
         return this;
     }
 
-    public GenRule add(Class<?> fieldType, Class<? extends IGenerator> generator) {
+    public GenRule add(Class<? extends IGenerator> generator, Class<?> fieldType) {
         if (fieldType == null || generator == null)
             throw new NullPointerException("Arguments can not be null or empty");
 
-        final GenFieldRule rule = new GenFieldRule(fieldType, generator);
+        final GenFieldRule rule = new GenFieldRule(generator, fieldType);
         rules.add(rule);
         return this;
     }

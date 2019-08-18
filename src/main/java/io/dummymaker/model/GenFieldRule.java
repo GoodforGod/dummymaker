@@ -1,9 +1,9 @@
 package io.dummymaker.model;
 
 import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.util.StringUtils;
+import io.dummymaker.util.CollectionUtils;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * "default comment"
@@ -14,17 +14,17 @@ import java.util.Objects;
 public class GenFieldRule {
 
     private final Class<?> fieldType;
-    private final String fieldName;
+    private final Set<String> fieldNames;
     private final Class<? extends IGenerator> generator;
 
-    GenFieldRule(String fieldName, Class<? extends IGenerator> generator) {
-        this.fieldName = fieldName;
+    GenFieldRule(Class<? extends IGenerator> generator, String ... fieldNames) {
+        this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
         this.fieldType = null;
         this.generator = generator;
     }
 
-    GenFieldRule(Class<?> fieldType, Class<? extends IGenerator> generator) {
-        this.fieldName = null;
+    GenFieldRule(Class<? extends IGenerator> generator, Class<?> fieldType) {
+        this.fieldNames = Collections.emptySet();
         this.fieldType = fieldType;
         this.generator = generator;
     }
@@ -38,15 +38,15 @@ public class GenFieldRule {
     }
 
     public boolean isNamed() {
-        return !StringUtils.isBlank(fieldName);
+        return CollectionUtils.isNotEmpty(fieldNames);
     }
 
     public Class<?> getType() {
         return fieldType;
     }
 
-    public String getName() {
-        return fieldName;
+    public Set<String> getName() {
+        return fieldNames;
     }
 
     public Class<? extends IGenerator> getGenerator() {
@@ -56,14 +56,14 @@ public class GenFieldRule {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof GenFieldRule)) return false;
         GenFieldRule that = (GenFieldRule) o;
         return Objects.equals(fieldType, that.fieldType) &&
-                Objects.equals(fieldName, that.fieldName);
+                Objects.equals(fieldNames, that.fieldNames);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fieldType, fieldName);
+        return Objects.hash(fieldType, fieldNames);
     }
 }
