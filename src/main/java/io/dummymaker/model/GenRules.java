@@ -8,10 +8,9 @@ import java.util.stream.Collectors;
  * Allows to override gen auto generator setup without annotations
  * Just by passing this config to factory
  *
+ * @author GoodforGod
  * @see io.dummymaker.factory.IGenFactory
  * @see io.dummymaker.factory.IGenSupplier
- *
- * @author GoodforGod
  * @since 01.08.2019
  */
 public class GenRules {
@@ -38,6 +37,14 @@ public class GenRules {
         return genRules;
     }
 
+    public Optional<GenRule> targeted(Class<?> target) {
+        return (target == null)
+                ? Optional.empty()
+                : rules.stream()
+                        .filter(r -> r.getTarget().equals(target))
+                        .findAny();
+    }
+
     public GenRules add(GenRule rule) {
         if (rule == null)
             throw new NullPointerException("Rule can not be null");
@@ -46,7 +53,7 @@ public class GenRules {
                 .filter(r -> r.getTarget().equals(rule.getTarget()))
                 .findAny();
 
-        if(foundRule.isPresent())
+        if (foundRule.isPresent())
             foundRule.get().merge(rule);
         else
             rules.add(rule);

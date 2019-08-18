@@ -10,7 +10,7 @@ import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
-import io.dummymaker.scan.IPopulateScanner;
+import io.dummymaker.scan.IPopulateAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
@@ -31,9 +31,8 @@ class GenStorage implements IGenStorage {
 
     private final IGenSupplier supplier;
     private final GenFactory embeddedFactory; // stupid? yes, have better solution pls PR
-    private final IPopulateScanner scanner;
+    private final IPopulateAutoScanner scanner;
     private final GenGraphBuilder graphBuilder;
-    private final GenRules rules;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
     private final Map<Class<?>, Map<Field, IGenerator>> sequentialGenerators;
@@ -42,12 +41,11 @@ class GenStorage implements IGenStorage {
 
     private Node<Payload> graph;
 
-    GenStorage(IPopulateScanner scanner, GenRules rules) {
+    GenStorage(IPopulateAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
-        this.rules = rules;
 
-        this.embeddedFactory = new GenFactory(scanner);
-        this.graphBuilder = new GenGraphBuilder(scanner);
+        this.embeddedFactory = new GenFactory(rules);
+        this.graphBuilder = new GenGraphBuilder(scanner, rules);
         this.supplier = new GenSupplier();
 
         this.sequentialGenerators = new HashMap<>();
@@ -101,37 +99,37 @@ class GenStorage implements IGenStorage {
 
         markSequentialFields(target);
 
-        final boolean parentMarked = isAnyParentMarked(target);
-        return containers.computeIfAbsent(target, k -> scanner.scan(target, parentMarked));
+        final boolean isMarked = isAnyAutoMarked(target);
+        return containers.computeIfAbsent(target, k -> scanner.scan(target, isMarked));
     }
 
     /**
-     * Checks whenever any parent is marked as gen auto
+     * Checks whenever any parent or node itself is marked as gen auto
      *
      * @param target to check
-     * @return true if any parent marked
+     * @return true if any parent or node itself is marked
      */
-    private boolean isAnyParentMarked(Class<?> target) {
+    private boolean isAnyAutoMarked(Class<?> target) {
         final Predicate<Node<Payload>> filter = n -> n.value().getType().equals(target);
-        if(filter.test(graph))
+        if(filter.test(graph) && graph.value().isMarkedAuto())
             return true;
 
         final Optional<Node<Payload>> node = graphBuilder.find(graph, filter);
-        return node.filter(payloadNode -> haveMarkedParent(payloadNode, 1)).isPresent();
-
+        return node.filter(payloadNode -> isMarked(payloadNode, 1)).isPresent();
     }
 
     /**
+     * Scan recursively if any parent or node is marked
      * @param node  to scan
      * @param depth level to validate
      * @return true if parent or start node is marked
-     * @see #isAnyParentMarked(Class)
+     * @see #isAnyAutoMarked(Class)
      */
-    private boolean haveMarkedParent(Node<Payload> node, int depth) {
+    private boolean isMarked(Node<Payload> node, int depth) {
         if (node.value().isMarkedAuto())
             return node.value().getDepth() >= depth;
 
-        return node.getParent() != null && haveMarkedParent(node.getParent(), depth + 1);
+        return node.getParent() != null && isMarked(node.getParent(), depth + 1);
     }
 
     int getDepth(Class<?> parent, Class<?> target) {

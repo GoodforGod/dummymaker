@@ -15,14 +15,11 @@ import java.util.Map;
  */
 public interface IPopulateScanner extends IMapScanner<Field, GenContainer, Class> {
 
-    @Override
-    Map<Field, GenContainer> scan(Class target);
-
     /**
+     * Scan for annotated target fields
      *
      * @param target to scan
-     * @param defAuto mark target as GenAuto as default even if it is not marked
      * @return map of fields and its gen containers
      */
-    Map<Field, GenContainer> scan(Class target, boolean defAuto);
+    Map<Field, GenContainer> scan(Class target);
 }

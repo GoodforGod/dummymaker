@@ -10,8 +10,8 @@ import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.error.GenException;
-import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.impl.PopulateScanner;
+import io.dummymaker.scan.IPopulateAutoScanner;
+import io.dummymaker.scan.impl.PopulateRuledScanner;
 import io.dummymaker.util.CastUtils;
 
 import java.lang.annotation.Annotation;
@@ -45,25 +45,15 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
 public class GenFactory implements IGenFactory {
 
     private final GenRules rules;
-    private final IPopulateScanner scanner;
+    private final IPopulateAutoScanner scanner;
 
     public GenFactory() {
-        this(new PopulateScanner());
-    }
-
-    public GenFactory(IPopulateScanner scanner) {
-        this.scanner = scanner;
-        this.rules = null;
+        this(null);
     }
 
     public GenFactory(GenRules rules) {
-        this.scanner = new PopulateScanner();
         this.rules = rules;
-    }
-
-    public GenFactory(IPopulateScanner scanner, GenRules rules) {
-        this.scanner = scanner;
-        this.rules = rules;
+        this.scanner = new PopulateRuledScanner(new GenSupplier(), rules);
     }
 
     @Override
@@ -132,7 +122,7 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     <T> T fillEntity(T t, GenStorage storage, int depth) {
-        if(t == null)
+        if (t == null)
             return null;
 
         final Map<Field, GenContainer> containers = storage.getContainers(t);
@@ -142,21 +132,21 @@ public class GenFactory implements IGenFactory {
                 .collect(Collectors.toList());
 
         unmarked.forEach(e -> {
-                    final GenContainer container = e.getValue();
-                    final Field field = e.getKey();
-                    try {
-                        field.setAccessible(true);
-                        final Object generated = generateObject(t.getClass(), field, container, storage, depth);
-                        if (generated != null)
-                            field.set(t, generated);
-                        else
-                            storage.markNullable(field);
+            final GenContainer container = e.getValue();
+            final Field field = e.getKey();
+            try {
+                field.setAccessible(true);
+                final Object generated = generateObject(t.getClass(), field, container, storage, depth);
+                if (generated != null)
+                    field.set(t, generated);
+                else
+                    storage.markNullable(field);
 
-                    } catch (Exception ex) {
-                        field.setAccessible(false);
-                        throw new GenException(ex);
-                    }
-                });
+            } catch (Exception ex) {
+                field.setAccessible(false);
+                throw new GenException(ex);
+            }
+        });
 
         return t;
     }

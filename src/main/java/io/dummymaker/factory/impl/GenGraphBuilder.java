@@ -1,10 +1,12 @@
 package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.special.GenAuto;
+import io.dummymaker.model.GenRule;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
-import io.dummymaker.scan.IPopulateScanner;
-import io.dummymaker.scan.impl.PopulateScanner;
+import io.dummymaker.scan.IPopulateAutoScanner;
+import io.dummymaker.scan.impl.PopulateAutoScanner;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -18,10 +20,12 @@ import java.util.function.Predicate;
  */
 class GenGraphBuilder {
 
-    private final IPopulateScanner scanner;
+    private final GenRules rules;
+    private final IPopulateAutoScanner scanner;
 
-    GenGraphBuilder(IPopulateScanner scanner) {
+    GenGraphBuilder(IPopulateAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
+        this.rules = rules;
     }
 
     /**
@@ -65,11 +69,18 @@ class GenGraphBuilder {
      * @return payload for target class
      */
     private Payload buildPayload(Class<?> target, Payload parentPayload) {
-        final Optional<Integer> autoDepth = PopulateScanner.getAutoAnnotation(target)
-                .map(a -> ((GenAuto) a).depth());
+        // First check rules for auto depth then check annotation if present
+        final Integer autoDepth = rules.targeted(target)
+                .filter(GenRule::isAuto)
+                .map(GenRule::getDepth)
+                .orElse(PopulateAutoScanner.getAutoAnnotation(target)
+                        .map(a -> ((GenAuto) a).depth())
+                        .orElse(null));
 
-        final Integer markedOrDefault = autoDepth.orElseGet(() -> parentPayload == null ? 1 : parentPayload.getDepth());
-        return new Payload(target, markedOrDefault, autoDepth.isPresent());
+        final Optional<Integer> optionalDepth = Optional.ofNullable(autoDepth);
+
+        final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null ? 1 : parentPayload.getDepth());
+        return new Payload(target, markedOrDefault, optionalDepth.isPresent());
     }
 
     /**
@@ -103,7 +114,7 @@ class GenGraphBuilder {
                 return Optional.of(n);
             } else {
                 result = find(n, filter).orElse(null);
-                if(result != null)
+                if (result != null)
                     return Optional.of(result);
             }
         }

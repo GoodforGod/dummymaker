@@ -2,6 +2,7 @@ package io.dummymaker.model;
 
 import io.dummymaker.generator.simple.IGenerator;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -13,16 +14,31 @@ import java.util.function.Predicate;
  */
 public class GenRule {
 
+    private final int depth;
+    private final boolean isAuto;
     private final Class<?> target;
     private final Set<GenFieldRule> rules;
 
-    private GenRule(Class<?> target) {
+    private GenRule(Class<?> target, boolean isAuto, int depth) {
+        this.isAuto = isAuto;
+        this.depth = depth;
         this.target = target;
         this.rules = new HashSet<>();
     }
 
     public static GenRule of(Class<?> target) {
-        return new GenRule(Objects.requireNonNull(target));
+        return new GenRule(Objects.requireNonNull(target), false, 1);
+    }
+
+    public static GenRule auto(Class<?> target) {
+        return new GenRule(Objects.requireNonNull(target), true, 1);
+    }
+
+    public static GenRule auto(Class<?> target, int depth) {
+        if (depth < 1)
+            throw new IllegalArgumentException("Depth can not be negative");
+
+        return new GenRule(Objects.requireNonNull(target), true, depth);
     }
 
     GenRule merge(GenRule rule) {
@@ -33,7 +49,16 @@ public class GenRule {
         return this;
     }
 
-    public GenRule add(Class<? extends IGenerator> generator, String ... fieldNames) {
+    public Optional<Class<? extends IGenerator>> getDesired(Field field) {
+        return (field == null)
+                ? Optional.empty()
+                : rules.stream()
+                        .filter(r -> field.getType().equals(r.getType()) || r.getName().contains(field.getName()))
+                        .findAny()
+                        .map(GenFieldRule::getGenerator);
+    }
+
+    public GenRule add(Class<? extends IGenerator> generator, String... fieldNames) {
         if (fieldNames == null || fieldNames.length == 0 || generator == null)
             throw new NullPointerException("Arguments can not be null or empty");
 
@@ -63,6 +88,14 @@ public class GenRule {
         } else {
             return GenFieldRule::isGeneral;
         }
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public boolean isAuto() {
+        return isAuto;
     }
 
     public Class<?> getTarget() {

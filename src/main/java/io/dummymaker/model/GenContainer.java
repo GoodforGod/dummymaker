@@ -80,16 +80,8 @@ public class GenContainer {
         return new GenContainer(null, null, isComplex, true, generator);
     }
 
-    public static GenContainer asAuto(boolean isComplex) {
-        return asAuto(null, isComplex);
-    }
-
     public boolean isEmbedded() {
         return generator != null && generator.equals(EmbeddedGenerator.class);
-    }
-
-    public void enrich(Class<? extends IGenerator> generator) {
-        this.generator = generator;
     }
 
     public Class<? extends IGenerator> getGenerator() {
