@@ -38,8 +38,10 @@ public class PopulateRuledScanner extends PopulateAutoScanner {
         final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
 
         final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);
-        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
+        if(!targeted.isPresent())
+            return scanned;
 
+        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
         targeted.ifPresent(r -> getAllDeclaredFields(target).stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> {

@@ -11,7 +11,7 @@ import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GeneratorsStorage;
 import io.dummymaker.scan.IAnnotationScanner;
-import io.dummymaker.scan.IPopulateScanner;
+import io.dummymaker.scan.IPopulateAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
@@ -43,12 +43,12 @@ abstract class PopulateFactory implements IPopulateFactory {
     private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
 
     private final IAnnotationScanner sequentialScanner;
-    private final IPopulateScanner populateScanner;
+    private final IPopulateAutoScanner populateScanner;
 
     private final GeneratorsStorage genStorage;
     private final GenStorage storage;
 
-    PopulateFactory(IPopulateScanner populateScanner) {
+    PopulateFactory(IPopulateAutoScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
         this.sequentialScanner = new SequenceScanner();
         this.storage = new GenStorage(populateScanner, null);

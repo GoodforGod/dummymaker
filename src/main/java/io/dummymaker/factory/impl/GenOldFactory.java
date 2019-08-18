@@ -2,7 +2,7 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.scan.impl.PopulateScanner;
+import io.dummymaker.scan.impl.PopulateAutoScanner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +20,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
 public class GenOldFactory extends PopulateFactory implements IProduceFactory {
 
     public GenOldFactory() {
-        super(new PopulateScanner());
+        super(new PopulateAutoScanner(new GenSupplier()));
     }
 
     @Override

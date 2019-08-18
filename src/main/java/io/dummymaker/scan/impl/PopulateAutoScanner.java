@@ -41,13 +41,14 @@ public class PopulateAutoScanner extends PopulateScanner implements IPopulateAut
     public Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
         final Map<Field, GenContainer> scanned = super.scan(target);
 
-        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
         final boolean isGenAuto = isMarkedGenAuto(target, isDefaultAuto);
+        if(!isGenAuto)
+            return scanned;
 
-        if (isGenAuto)
-            getAllDeclaredFields(target).stream()
-                    .filter(f -> !isIgnored(f))
-                    .forEach(f -> containers.put(f, scanned.getOrDefault(f, getAutoContainer(f))));
+        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
+        getAllDeclaredFields(target).stream()
+                .filter(f -> !isIgnored(f))
+                .forEach(f -> containers.put(f, scanned.getOrDefault(f, getAutoContainer(f))));
 
         return containers;
     }

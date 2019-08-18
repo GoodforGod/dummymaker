@@ -70,9 +70,12 @@ class GenGraphBuilder {
      */
     private Payload buildPayload(Class<?> target, Payload parentPayload) {
         // First check rules for auto depth then check annotation if present
-        final Integer autoDepth = rules.targeted(target)
-                .filter(GenRule::isAuto)
-                .map(GenRule::getDepth)
+        final Integer autoDepth = Optional.ofNullable(rules)
+                .map(r -> r.targeted(target)
+                        .filter(GenRule::isAuto)
+                        .map(GenRule::getDepth)
+                        .orElse(-1))
+                .filter(d -> d != -1)
                 .orElse(PopulateAutoScanner.getAutoAnnotation(target)
                         .map(a -> ((GenAuto) a).depth())
                         .orElse(null));
