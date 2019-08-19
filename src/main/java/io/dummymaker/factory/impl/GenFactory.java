@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static io.dummymaker.generator.simple.impl.EmbeddedGenerator.toDepth;
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.CastUtils.instantiate;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
@@ -131,7 +132,7 @@ public class GenFactory implements IGenFactory {
                 .filter(e -> storage.isUnmarked(e.getKey()))
                 .collect(Collectors.toList());
 
-        unmarked.forEach(e -> {
+        for (Map.Entry<Field, GenContainer> e : unmarked) {
             final GenContainer container = e.getValue();
             final Field field = e.getKey();
             try {
@@ -139,14 +140,12 @@ public class GenFactory implements IGenFactory {
                 final Object generated = generateObject(t.getClass(), field, container, storage, depth);
                 if (generated != null)
                     field.set(t, generated);
-                else
-                    storage.markNullable(field);
 
             } catch (Exception ex) {
                 field.setAccessible(false);
                 throw new GenException(ex);
             }
-        });
+        }
 
         return t;
     }
@@ -169,7 +168,8 @@ public class GenFactory implements IGenFactory {
 
         Object generated;
 
-        if (EmbeddedGenerator.class.equals(container.getGenerator())) {
+        final boolean isEmbedded = EmbeddedGenerator.class.equals(container.getGenerator());
+        if (isEmbedded) {
             generated = generateEmbeddedObject(target, field, container, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
@@ -181,7 +181,11 @@ public class GenFactory implements IGenFactory {
             generated = generator.generate();
         }
 
-        return castObject(generated, field.getType());
+        final Object casted = castObject(generated, field.getType());
+        if(!isEmbedded && casted == null)
+            storage.markNullable(field);
+
+        return casted;
     }
 
     /**
@@ -201,7 +205,13 @@ public class GenFactory implements IGenFactory {
             return null;
 
         final Object embedded = instantiate(type);
-        return fillEntity(embedded, storage, depth + 1);
+        final Object entity = fillEntity(embedded, storage, depth + 1);
+        if(entity == null) {
+            storage.markNullable(field);
+            return null;
+        }
+
+        return entity;
     }
 
     /**
@@ -226,22 +236,22 @@ public class GenFactory implements IGenFactory {
         final Annotation annotation = container.getMarker();
         if (annotation != null) {
             if (annotation.annotationType().equals(GenEmbedded.class)) {
-                return EmbeddedGenerator.toDepth(((GenEmbedded) annotation).depth());
+                return toDepth(((GenEmbedded) annotation).depth());
             } else if (annotation.annotationType().equals(GenCustom.class)) {
-                return EmbeddedGenerator.toDepth(((GenCustom) annotation).depth());
+                return toDepth(((GenCustom) annotation).depth());
             } else if (annotation.annotationType().equals(GenList.class)) {
-                return EmbeddedGenerator.toDepth(((GenList) annotation).depth());
+                return toDepth(((GenList) annotation).depth());
             } else if (annotation.annotationType().equals(GenSet.class)) {
-                return EmbeddedGenerator.toDepth(((GenSet) annotation).depth());
+                return toDepth(((GenSet) annotation).depth());
             } else if (annotation.annotationType().equals(GenMap.class)) {
-                return EmbeddedGenerator.toDepth(((GenMap) annotation).depth());
+                return toDepth(((GenMap) annotation).depth());
             } else if (annotation.annotationType().equals(GenArray.class)) {
-                return EmbeddedGenerator.toDepth(((GenArray) annotation).depth());
+                return toDepth(((GenArray) annotation).depth());
             } else if (annotation.annotationType().equals(GenArray2D.class)) {
-                return EmbeddedGenerator.toDepth(((GenArray2D) annotation).depth());
+                return toDepth(((GenArray2D) annotation).depth());
             }
         }
 
-        return storage.getDepth(parent, target);
+        return toDepth(storage.getDepth(parent, target));
     }
 }

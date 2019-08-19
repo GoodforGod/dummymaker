@@ -52,6 +52,7 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
      * Check if the field have complex suitable generator
      *
      * @param field to check against
+     * @return true if field is complex
      */
     protected boolean isComplex(final Field field) {
         final Class<?> declaringClass = field.getType();
@@ -89,6 +90,8 @@ public class PopulateScanner extends BasicScanner implements IPopulateScanner {
 
     /**
      * Exclude ignored population fields
+     * @param field to validate
+     * @return true if fields is ignored
      */
     protected boolean isIgnored(final Field field) {
         return Arrays.stream(field.getDeclaredAnnotations()).anyMatch(isIgnored);

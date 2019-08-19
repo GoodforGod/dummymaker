@@ -8,12 +8,13 @@ import io.dummymaker.annotation.special.GenAuto;
  * @author GoodforGod
  * @since 11.08.2019
  */
-@GenAuto(depth = 3)
+@GenAuto(depth = 4)
 public class DummyEmbedded {
 
     public class DummyEmbeddedIntoSimple {
         private int number;
         private String name;
+        private DummyEmbedded embedded;
 
         public int getNumber() {
             return number;
@@ -21,6 +22,10 @@ public class DummyEmbedded {
 
         public String getName() {
             return name;
+        }
+
+        public DummyEmbedded getEmbedded() {
+            return embedded;
         }
     }
 

@@ -9,7 +9,6 @@ import io.dummymaker.generator.simple.impl.SequenceGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
-import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IPopulateAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
@@ -39,7 +38,7 @@ class GenStorage implements IGenStorage {
     private final Map<Class<?>, Map<Field, GenContainer>> containers;
     private final Set<Field> marked;
 
-    private Node<Payload> graph;
+    private Node graph;
 
     GenStorage(IPopulateAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
@@ -110,11 +109,11 @@ class GenStorage implements IGenStorage {
      * @return true if any parent or node itself is marked
      */
     private boolean isAnyAutoMarked(Class<?> target) {
-        final Predicate<Node<Payload>> filter = n -> n.value().getType().equals(target);
+        final Predicate<Node> filter = n -> n.value().getType().equals(target);
         if(filter.test(graph) && graph.value().isMarkedAuto())
             return true;
 
-        final Optional<Node<Payload>> node = graphBuilder.find(graph, filter);
+        final Optional<Node> node = graphBuilder.find(graph, filter);
         return node.filter(payloadNode -> isMarked(payloadNode, 1)).isPresent();
     }
 
@@ -125,7 +124,7 @@ class GenStorage implements IGenStorage {
      * @return true if parent or start node is marked
      * @see #isAnyAutoMarked(Class)
      */
-    private boolean isMarked(Node<Payload> node, int depth) {
+    private boolean isMarked(Node node, int depth) {
         if (node.value().isMarkedAuto())
             return node.value().getDepth() >= depth;
 
@@ -133,7 +132,7 @@ class GenStorage implements IGenStorage {
     }
 
     int getDepth(Class<?> parent, Class<?> target) {
-        final Predicate<Node<Payload>> filter = n -> n.getParent() != null
+        final Predicate<Node> filter = n -> n.getParent() != null
                 && n.getParent().value().getType().equals(parent)
                 && n.value().getType().equals(target);
 

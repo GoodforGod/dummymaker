@@ -34,9 +34,9 @@ class GenGraphBuilder {
      * @param target to build graph of
      * @return graph of auto depth values
      */
-    Node<Payload> build(Class<?> target) {
+    Node build(Class<?> target) {
         final Payload payload = buildPayload(target, null);
-        final Node<Payload> node = Node.of(payload, null);
+        final Node node = Node.of(payload, null);
         return scanRecursively(node);
     }
 
@@ -46,19 +46,25 @@ class GenGraphBuilder {
      * @param parent to scan
      * @return parent node with all children
      */
-    private Node<Payload> scanRecursively(Node<Payload> parent) {
+    private Node scanRecursively(Node parent) {
         final Payload parentPayload = parent.value();
         final Class<?> parentType = parentPayload.getType();
+
+        if (!isSafe(parent, buildFilter(parent)))
+            return parent;
 
         scanner.scan(parentType, true).entrySet().stream()
                 .filter(e -> e.getValue().isEmbedded())
                 .map(e -> buildPayload(e.getKey().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
-                .filter(c -> isSafe(c, n -> n.value().equals(parent.value()) && n.getParent().value().equals(c.value())))
                 .map(this::scanRecursively)
                 .forEach(parent::add);
 
         return parent;
+    }
+
+    private Predicate<Node> buildFilter(Node child) {
+        return n -> n.getParent().value().equals(child.value());
     }
 
     /**
@@ -94,11 +100,10 @@ class GenGraphBuilder {
      *
      * @param node   as graph starting point
      * @param filter check against
-     * @param <T>    payload type
      * @return whenever its safe to add node as child
      */
-    private <T> boolean isSafe(Node<T> node, Predicate<Node<T>> filter) {
-        final Node<T> root = findRoot(node);
+    private boolean isSafe(Node node, Predicate<Node> filter) {
+        final Node root = findRoot(node);
         return !find(root, filter).isPresent();
     }
 
@@ -107,12 +112,11 @@ class GenGraphBuilder {
      *
      * @param node   graph start point
      * @param filter to check against
-     * @param <T>    payload type
      * @return whenever such linkage exists
      */
-    <T> Optional<Node<T>> find(Node<T> node, Predicate<Node<T>> filter) {
-        Node<T> result;
-        for (Node<T> n : node.getNodes()) {
+    Optional<Node> find(Node node, Predicate<Node> filter) {
+        Node result;
+        for (Node n : node.getNodes()) {
             if (filter.test(n)) {
                 return Optional.of(n);
             } else {
@@ -131,7 +135,7 @@ class GenGraphBuilder {
      * @param node graph starting point
      * @return graph root
      */
-    private <T> Node<T> findRoot(Node<T> node) {
+    private Node findRoot(Node node) {
         return (node.getParent() == null)
                 ? node
                 : findRoot(node.getParent());

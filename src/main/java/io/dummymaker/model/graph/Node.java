@@ -10,48 +10,48 @@ import java.util.Set;
  * @author GoodforGod
  * @since 05.08.2019
  */
-public class Node<T> {
+public class Node {
 
-    private T value;
+    private Payload value;
 
-    private Node<T> parent;
-    private Set<Node<T>> nodes = new HashSet<>();
+    private Node parent;
+    private Set<Node> nodes = new HashSet<>();
 
-    private Node(T value, Node<T> parent) {
+    private Node(Payload value, Node parent) {
         this.value = value;
         this.parent = parent;
     }
 
-    public static <T> Node<T> of(T value, Node<T> parent) {
-        final Node<T> node = new Node<>(value, parent);
+    public static Node of(Payload value, Node parent) {
+        final Node node = new Node(value, parent);
         if(parent != null)
             parent.add(node);
 
         return node;
     }
 
-    public Node<T> add(Node<T> child) {
+    public Node add(Node child) {
         this.nodes.add(child);
         return this;
     }
 
-    public T value() {
+    public Payload value() {
         return value;
     }
 
-    public Node<T> getParent() {
+    public Node getParent() {
         return parent;
     }
 
-    public Set<Node<T>> getNodes() {
+    public Set<Node> getNodes() {
         return nodes;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Node<?> node = (Node<?>) o;
+        if (!(o instanceof Node)) return false;
+        Node node = (Node) o;
         return Objects.equals(value, node.value) &&
                 Objects.equals(parent, node.parent);
     }
