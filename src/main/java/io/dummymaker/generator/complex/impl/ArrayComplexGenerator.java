@@ -27,9 +27,6 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null)
-            return null;
-
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);

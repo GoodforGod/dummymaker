@@ -2,7 +2,7 @@ package io.dummymaker.generator.simple.impl;
 
 import io.dummymaker.generator.simple.IGenerator;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates boolean values
@@ -14,6 +14,6 @@ public class BooleanGenerator implements IGenerator<Boolean> {
 
     @Override
     public Boolean generate() {
-        return current().nextBoolean();
+        return ThreadLocalRandom.current().nextBoolean();
     }
 }

@@ -26,6 +26,42 @@ import static io.dummymaker.util.CastUtils.getGenericType;
  */
 public class MapComplexGenerator extends BasicComplexGenerator {
 
+    @Override
+    public Object generate(final Annotation annotation,
+                           final Field field,
+                           final IGenStorage storage,
+                           final int depth) {
+        if (!field.getType().isAssignableFrom(Map.class))
+            return null;
+
+        final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
+        final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
+        if (annotation == null) {
+            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final Class<? extends IGenerator> keySuitable = suitable(storage, field, keyType);
+            final Class<? extends IGenerator> valueSuitable = suitable(storage, field, valueType);
+            return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, 1);
+        }
+
+        final GenMap a = ((GenMap) annotation);
+        final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
+                ? suitable(storage, field, keyType)
+                : a.key();
+
+        final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
+                ? suitable(storage, field, keyType)
+                : a.value();
+
+        final int size = getDesiredSize(a.min(), a.max(), a.fixed());
+        return generateMap(size, field, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
+    }
+
+    @Override
+    public Object generate() {
+        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX, 1);
+    }
+
     @SuppressWarnings("unchecked")
     private Map generateMap(final int size,
                             final Field field,
@@ -55,42 +91,6 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         }
 
         return map;
-    }
-
-    @Override
-    public Object generate(final Annotation annotation,
-                           final Field field,
-                           final IGenStorage storage,
-                           final int depth) {
-        if (field == null || !field.getType().isAssignableFrom(Map.class))
-            return null;
-
-        final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
-        final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
-        if (annotation == null) {
-            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            final Class<? extends IGenerator> keySuitable = suitable(storage, field, keyType);
-            final Class<? extends IGenerator> valueSuitable = suitable(storage, field, valueType);
-            return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, 1);
-        }
-
-        final GenMap a = ((GenMap) annotation);
-        final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
-                ? suitable(storage, field, keyType)
-                : a.key();
-
-        final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
-                ? suitable(storage, field, keyType)
-                : a.value();
-
-        final int size = getDesiredSize(a.min(), a.max(), a.fixed());
-        return generateMap(size, field, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
-    }
-
-    @Override
-    public Object generate() {
-        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX, 1);
     }
 
     private Map buildMap(Field field, int size) {

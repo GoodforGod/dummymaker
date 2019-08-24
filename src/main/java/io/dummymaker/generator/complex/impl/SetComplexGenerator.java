@@ -35,7 +35,7 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null || !field.getType().isAssignableFrom(Set.class))
+        if (!field.getType().isAssignableFrom(Set.class))
             return null;
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());

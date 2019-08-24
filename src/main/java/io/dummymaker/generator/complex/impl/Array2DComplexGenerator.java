@@ -27,9 +27,6 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null)
-            return null;
-
         final Class<?> valueClass = field.getType().getComponentType().getComponentType();
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);

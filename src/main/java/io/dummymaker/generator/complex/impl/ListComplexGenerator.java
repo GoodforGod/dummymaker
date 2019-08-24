@@ -33,7 +33,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null || !field.getType().isAssignableFrom(List.class))
+        if (!field.getType().isAssignableFrom(List.class))
             return null;
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());

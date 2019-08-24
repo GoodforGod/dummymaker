@@ -28,9 +28,6 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null)
-            return null;
-
         final Set<String> exclude = getExcluded(annotation);
         final Predicate<String> excludePredicate = (exclude.isEmpty())
                 ? s -> true

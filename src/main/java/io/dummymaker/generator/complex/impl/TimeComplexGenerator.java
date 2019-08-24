@@ -34,9 +34,6 @@ public class TimeComplexGenerator implements IComplexGenerator {
                            final Field field,
                            final IGenStorage storage,
                            final int depth) {
-        if (field == null)
-            return null;
-
         final long from = (annotation == null) ? 0 : ((GenTime) annotation).from();
         final long to = (annotation == null) ? GenTime.MAX : ((GenTime) annotation).to();
 

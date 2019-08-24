@@ -19,11 +19,19 @@ import java.lang.annotation.Target;
 public @interface GenTime {
 
     /**
-     * Epoch Unix Time Stamp - 1/1/3000
+     * Epoch Unix Time Stamp for 1/1/3000
      */
     long MAX = 32503680000L;
 
+    /**
+     * Minimum generated time from 01.01.1970 in long UTC format
+     * @return min time to gen
+     */
     long from() default 0L;
 
+    /**
+     * Maximum generated time in long UTC format
+     * @return max gen time
+     */
     long to() default MAX;
 }

@@ -23,10 +23,23 @@ public @interface GenArray {
 
     Class<? extends IGenerator> value() default IGenerator.class;
 
+    /**
+     * Minimum entities to generate
+     * @return min amount
+     */
     int min() default 1;
 
+    /**
+     * Max entities to generate
+     * @return max amount
+     */
     int max() default 10;
 
+    /**
+     * Fixed number entities to generate
+     * Turned off by default
+     * @return fixed amount
+     */
     int fixed() default -1;
 
     /**
