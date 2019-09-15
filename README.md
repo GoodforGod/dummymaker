@@ -40,7 +40,6 @@ dependencies {
   - [Factories](#factories-examples)
 - [Customization](#customization)
   - [IGenerator](#igenerator)
-  - [Gen Annotation](#gen-annotation)
   - [IComplexGenerator](#icomplexgenerator)
   - [Complex Gen Annotation](#complex-gen-annotation)
 - [Version History](#version-history)
@@ -317,6 +316,9 @@ public @interface GenInteger {
 }
 ```
 
+In case you want custom annotation for simple generator you can do it as well, 
+just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
+
 ### Gen Annotation
 
 For custom *IGenerator*s or *IComplexGenerator*s that don't require special annotation
@@ -330,8 +332,6 @@ public class User {
     private String number;
 }
 ```
-
-## Exporters
 
 
 ## Version History

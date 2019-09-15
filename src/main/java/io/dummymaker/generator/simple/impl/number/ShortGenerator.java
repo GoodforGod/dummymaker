@@ -5,15 +5,16 @@ import io.dummymaker.generator.simple.IGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Generates short numbers
+ * Generates short from 0 to Short.MAX_VALUE
  *
  * @author GoodforGod
- * @since 04.11.2018
+ * @see Short#MAX_VALUE
+ * @since 05.03.2019
  */
 public class ShortGenerator implements IGenerator<Short> {
 
     @Override
     public Short generate() {
-        return (short) ThreadLocalRandom.current().nextInt(0, 65535);
+        return ((short) ThreadLocalRandom.current().nextInt(Short.MAX_VALUE));
     }
 }

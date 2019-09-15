@@ -15,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class HexNumberGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("hexnum(ber)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("hex(num(ber)?)?", CASE_INSENSITIVE);
 
     @Override
     public String generate() {

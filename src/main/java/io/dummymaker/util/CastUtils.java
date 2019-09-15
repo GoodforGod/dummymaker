@@ -233,8 +233,12 @@ public class CastUtils {
         else if (isTypeAssignable)
             return fieldType.cast(castObject);
 
-        // Try to force cast anyway (need more testing)
-        return ((T) castObject);
+        // Try to force cast anyway
+        try {
+            return fieldType.cast(castObject);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private enum CastType {

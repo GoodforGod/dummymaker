@@ -1,6 +1,6 @@
 package io.dummymaker.beta;
 
-import io.dummymaker.beta.model.DummyEmbedded;
+import io.dummymaker.beta.model.DummyComplex;
 import io.dummymaker.data.DummyAuto;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.simple.impl.number.ByteGenerator;
@@ -31,7 +31,7 @@ public class Tester {
     @Test
     public void testEmbedded() {
         GenFactory factory = new GenFactory();
-        DummyEmbedded build = factory.build(DummyEmbedded.class);
+        DummyComplex build = factory.build(DummyComplex.class);
         System.out.println(build);
     }
 }

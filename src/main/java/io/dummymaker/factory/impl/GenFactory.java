@@ -173,7 +173,7 @@ public class GenFactory implements IGenFactory {
             generated = generateEmbeddedObject(target, field, container, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
-        } else if (container.isComplex()) {
+        } else if (container.isComplex() && generator instanceof IComplexGenerator) {
             // If complexGen can generate embedded objects
             // And not handling it like BasicComplexGenerator, you are probably StackOverFlowed
             generated = ((IComplexGenerator) generator).generate(annotation, field, storage, depth);
