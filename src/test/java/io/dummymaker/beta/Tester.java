@@ -23,9 +23,12 @@ public class Tester {
                 GenRule.of(DummyAuto.class)
                         .add(ByteGenerator.class, "aLong")
                         .add(ShortGenerator.class, int.class)
+                        .ignore("aLong")
         );
 
-
+        GenFactory factory = new GenFactory(rules);
+        DummyAuto build = factory.build(DummyAuto.class);
+        System.out.println(build);
     }
 
     @Test

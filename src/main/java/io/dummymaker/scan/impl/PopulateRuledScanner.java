@@ -49,7 +49,7 @@ public class PopulateRuledScanner extends PopulateAutoScanner {
                             .map(g -> GenContainer.asAuto(g, isComplex(f)))
                             .orElse(scanned.get(f));
 
-                    if (container != null)
+                    if (container != null && !r.isIgnored(f))
                         containers.put(f, container);
                 }));
 

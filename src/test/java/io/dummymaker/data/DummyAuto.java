@@ -15,7 +15,7 @@ import java.util.Map;
  * @author GoodforGod
  * @since 26.04.2018
  */
-@GenAuto
+@GenAuto(depth = 2)
 public class DummyAuto {
 
     private int anInt;

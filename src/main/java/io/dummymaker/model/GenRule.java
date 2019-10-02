@@ -4,7 +4,6 @@ import io.dummymaker.generator.simple.IGenerator;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * Rule for settings generator type for specific field name or field type
@@ -13,6 +12,8 @@ import java.util.function.Predicate;
  * @since 01.08.2019
  */
 public class GenRule {
+
+    private final Set<String> ignored = new HashSet<>();
 
     private final int depth;
     private final boolean isAuto;
@@ -49,18 +50,23 @@ public class GenRule {
         return this;
     }
 
+    public boolean isIgnored(Field field) {
+        return ignored.contains(field.getName());
+    }
+
     public Optional<Class<? extends IGenerator>> getDesired(Field field) {
-        return (field == null)
-                ? Optional.empty()
-                : rules.stream()
-                        .filter(r -> field.getType().equals(r.getType()) || r.getName().contains(field.getName()))
-                        .findAny()
-                        .map(GenFieldRule::getGenerator);
+        if (field == null || isIgnored(field))
+            return Optional.empty();
+
+        return rules.stream()
+                .filter(r -> field.getType().equals(r.getType()) || r.getName().contains(field.getName()))
+                .findAny()
+                .map(GenFieldRule::getGenerator);
     }
 
     public GenRule add(Class<? extends IGenerator> generator, String... fieldNames) {
         if (fieldNames == null || fieldNames.length == 0 || generator == null)
-            throw new NullPointerException("Arguments can not be null or empty");
+            throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
         rules.add(rule);
@@ -69,25 +75,19 @@ public class GenRule {
 
     public GenRule add(Class<? extends IGenerator> generator, Class<?> fieldType) {
         if (fieldType == null || generator == null)
-            throw new NullPointerException("Arguments can not be null or empty");
+            throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldType);
         rules.add(rule);
         return this;
     }
 
-    private boolean isRuleAbsent(GenFieldRule fieldRule) {
-        return rules.stream().noneMatch(getRuleFilter(fieldRule));
-    }
+    public GenRule ignore(String... fieldNames) {
+        if (fieldNames == null || fieldNames.length == 0)
+            throw new IllegalArgumentException("Arguments can not be null or empty");
 
-    private Predicate<GenFieldRule> getRuleFilter(GenFieldRule fieldRule) {
-        if (fieldRule.isNamed()) {
-            return GenFieldRule::isNamed;
-        } else if (fieldRule.isTyped()) {
-            return GenFieldRule::isTyped;
-        } else {
-            return GenFieldRule::isGeneral;
-        }
+        this.ignored.addAll(Arrays.asList(fieldNames));
+        return this;
     }
 
     public int getDepth() {
