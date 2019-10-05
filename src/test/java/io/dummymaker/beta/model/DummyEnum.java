@@ -1,7 +1,6 @@
 package io.dummymaker.beta.model;
 
 import io.dummymaker.annotation.complex.GenEnum;
-import io.dummymaker.annotation.special.GenAuto;
 
 /**
  * ! NO DESCRIPTION !
@@ -9,7 +8,6 @@ import io.dummymaker.annotation.special.GenAuto;
  * @author GoodforGod
  * @since 15.09.2019
  */
-@GenAuto
 public class DummyEnum {
 
     public enum DummyType {

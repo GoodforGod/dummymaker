@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.number;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.number.DoubleGenerator;
+import io.dummymaker.generator.simple.number.DoubleGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

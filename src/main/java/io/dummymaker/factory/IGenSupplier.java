@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.IGenerator;
 
 import java.lang.reflect.Field;
 

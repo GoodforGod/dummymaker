@@ -1,7 +1,7 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.data.Dummy;
-import io.dummymaker.data.DummyNoPopulateFields;
+import io.dummymaker.beta.model.Dummy;
+import io.dummymaker.beta.model.DummyNoFillFields;
 import io.dummymaker.factory.impl.GenOldFactory;
 import org.junit.Test;
 
@@ -93,7 +93,7 @@ public class PopulateFactoryTest {
     public void populateWithNoPopulateFields() {
         final String group = "300";
 
-        DummyNoPopulateFields dummy = new DummyNoPopulateFields();
+        DummyNoFillFields dummy = new DummyNoFillFields();
         dummy.setGroup(group);
 
         dummy = factory.populate(dummy);

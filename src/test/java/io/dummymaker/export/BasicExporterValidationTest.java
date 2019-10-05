@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.data.DummyNoZeroConstructor;
+import io.dummymaker.beta.model.DummyNoZeroConstructor;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;

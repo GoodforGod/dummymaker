@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.BooleanGenerator;
+import io.dummymaker.generator.simple.BooleanGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.string;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.string.JsonGenerator;
+import io.dummymaker.generator.simple.string.JsonGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

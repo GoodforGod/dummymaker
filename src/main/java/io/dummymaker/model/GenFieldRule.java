@@ -1,6 +1,6 @@
 package io.dummymaker.model;
 
-import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 
 import java.util.*;

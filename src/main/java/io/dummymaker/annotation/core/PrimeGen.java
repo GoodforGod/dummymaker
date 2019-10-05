@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.core;
 
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IMapScanner;
 

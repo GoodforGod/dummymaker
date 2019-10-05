@@ -1,5 +1,7 @@
 package io.dummymaker.beta.model;
 
+import io.dummymaker.annotation.special.GenSequence;
+
 /**
  * ! NO DESCRIPTION !
  *
@@ -8,4 +10,20 @@ package io.dummymaker.beta.model;
  */
 public class DummySimple {
 
+    @GenSequence
+    private int number;
+    private String name;
+    private String female;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFemale() {
+        return female;
+    }
 }

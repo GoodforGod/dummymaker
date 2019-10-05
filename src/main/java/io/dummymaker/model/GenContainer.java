@@ -3,10 +3,10 @@ package io.dummymaker.model;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenCustom;
-import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.IComplexGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.generator.simple.NullGenerator;
 
 import java.lang.annotation.Annotation;
 

@@ -2,8 +2,8 @@ package io.dummymaker.annotation.simple.string;
 
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.string.IdBigGenerator;
-import io.dummymaker.generator.simple.impl.string.IdGenerator;
+import io.dummymaker.generator.simple.string.IdBigGenerator;
+import io.dummymaker.generator.simple.string.IdGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

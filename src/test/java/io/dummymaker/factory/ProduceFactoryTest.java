@@ -1,5 +1,9 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.beta.model.Dummy;
+import io.dummymaker.beta.model.DummyCollectionWrong;
+import io.dummymaker.beta.model.DummyNoFillFields;
+import io.dummymaker.beta.model.DummyTime;
 import io.dummymaker.data.*;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenOldFactory;
@@ -28,13 +32,13 @@ public class ProduceFactoryTest {
 
     @Test
     public void noZeroConstructorErrorList() {
-        final List<DummyNoZeroConstructor> dummies = factory.produce(DummyNoZeroConstructor.class, 20);
+        final List<DummyNoFillFieldsTests> dummies = factory.produce(DummyNoFillFieldsTests.class, 20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorError() {
-        final DummyNoZeroConstructor dummy = factory.produce(DummyNoZeroConstructor.class);
+        final DummyNoFillFieldsTests dummy = factory.produce(DummyNoFillFieldsTests.class);
         assertNull(dummy);
     }
 
@@ -92,7 +96,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithNoPopulateFields() {
-        final DummyNoPopulateFields dummy = factory.produce(DummyNoPopulateFields.class);
+        final DummyNoFillFields dummy = factory.produce(DummyNoFillFields.class);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());

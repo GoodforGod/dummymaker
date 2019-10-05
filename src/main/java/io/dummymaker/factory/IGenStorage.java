@@ -1,6 +1,7 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.IComplexGenerator;
+import io.dummymaker.generator.IGenerator;
 
 /**
  * Used to extend complex generator functionality by providing
@@ -10,7 +11,7 @@ import io.dummymaker.generator.simple.IGenerator;
  * @author GoodforGod
  * @see io.dummymaker.annotation.special.GenEmbedded
  * @see IGenFactory
- * @see io.dummymaker.generator.complex.IComplexGenerator
+ * @see IComplexGenerator
  * @since 21.07.2019
  */
 public interface IGenStorage extends IGenSupplier {

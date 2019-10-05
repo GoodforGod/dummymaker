@@ -4,8 +4,8 @@ import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.generator.simple.impl.BooleanGenerator;
-import io.dummymaker.generator.simple.impl.string.HexDataGenerator;
+import io.dummymaker.generator.simple.BooleanGenerator;
+import io.dummymaker.generator.simple.string.HexDataGenerator;
 
 import java.util.List;
 import java.util.Map;

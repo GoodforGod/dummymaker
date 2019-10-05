@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.string;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.impl.string.PassGenerator;
+import io.dummymaker.generator.simple.string.PassGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

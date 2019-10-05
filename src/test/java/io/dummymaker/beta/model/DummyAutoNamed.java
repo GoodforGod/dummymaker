@@ -8,4 +8,7 @@ package io.dummymaker.beta.model;
  */
 public class DummyAutoNamed {
 
+    private String code;
+    private String name;
+    private String surname;
 }

@@ -5,13 +5,13 @@ import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.factory.IPopulateFactory;
-import io.dummymaker.generator.complex.IComplexGenerator;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
+import io.dummymaker.generator.IComplexGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GeneratorsStorage;
 import io.dummymaker.scan.IAnnotationScanner;
-import io.dummymaker.scan.IPopulateAutoScanner;
+import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
@@ -43,12 +43,12 @@ abstract class PopulateFactory implements IPopulateFactory {
     private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
 
     private final IAnnotationScanner sequentialScanner;
-    private final IPopulateAutoScanner populateScanner;
+    private final IGenAutoScanner populateScanner;
 
     private final GeneratorsStorage genStorage;
     private final GenStorage storage;
 
-    PopulateFactory(IPopulateAutoScanner populateScanner) {
+    PopulateFactory(IGenAutoScanner populateScanner) {
         this.genStorage = new GeneratorsStorage();
         this.sequentialScanner = new SequenceScanner();
         this.storage = new GenStorage(populateScanner, null);

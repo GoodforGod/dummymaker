@@ -11,7 +11,7 @@ import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
-import io.dummymaker.scan.IPopulateScanner;
+import io.dummymaker.scan.IGenScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -31,17 +31,17 @@ import java.util.function.Predicate;
  */
 public class ExportScanner extends BasicScanner implements IExportScanner {
 
-    private final Predicate<Annotation> ignoreFilter = a -> a.annotationType().equals(GenExportIgnore.class);
-    private final Predicate<Annotation> exportFilter = (a) -> a.annotationType().equals(GenExportForce.class);
-    private final Predicate<Annotation> renameFilter = (a) -> a.annotationType().equals(GenExportName.class);
+    private final Predicate<Annotation> ignoreFilter = a -> GenExportIgnore.class.equals(a.annotationType());
+    private final Predicate<Annotation> exportFilter = (a) -> GenExportForce.class.equals(a.annotationType());
+    private final Predicate<Annotation> renameFilter = (a) -> GenExportName.class.equals(a.annotationType());
 
     private final IGenSupplier supplier;
-    private final IPopulateScanner populateScanner;
+    private final IGenScanner genScanner;
     private final IAnnotationScanner annotationScanner;
 
     public ExportScanner() {
         this.supplier = new GenSupplier();
-        this.populateScanner = new PopulateAutoScanner(this.supplier);
+        this.genScanner = new GenAutoScanner(this.supplier);
         this.annotationScanner = new AnnotationScanner();
     }
 
@@ -55,7 +55,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
         final Map<Field, FieldContainer> resultMap = new LinkedHashMap<>();
         final Map<Field, String> renamedFields = new HashMap<>();
 
-        final Map<Field, GenContainer> scannedContainers = populateScanner.scan(target);
+        final Map<Field, GenContainer> scannedContainers = genScanner.scan(target);
         final Map<Field, List<Annotation>> scannedAnnotations = annotationScanner.scan(target);
 
         // Scan for renamed fields and fill renamed map

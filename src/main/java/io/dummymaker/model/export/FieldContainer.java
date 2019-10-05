@@ -1,9 +1,9 @@
 package io.dummymaker.model.export;
 
-import io.dummymaker.generator.complex.impl.*;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.SequenceGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.*;
+import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.generator.simple.SequenceGenerator;
 
 import java.lang.reflect.Field;
 

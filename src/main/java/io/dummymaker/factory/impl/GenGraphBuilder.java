@@ -5,8 +5,8 @@ import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
-import io.dummymaker.scan.IPopulateAutoScanner;
-import io.dummymaker.scan.impl.PopulateAutoScanner;
+import io.dummymaker.scan.IGenAutoScanner;
+import io.dummymaker.scan.impl.GenAutoScanner;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -21,9 +21,9 @@ import java.util.function.Predicate;
 class GenGraphBuilder {
 
     private final GenRules rules;
-    private final IPopulateAutoScanner scanner;
+    private final IGenAutoScanner scanner;
 
-    GenGraphBuilder(IPopulateAutoScanner scanner, GenRules rules) {
+    GenGraphBuilder(IGenAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
         this.rules = rules;
     }
@@ -82,7 +82,7 @@ class GenGraphBuilder {
                         .map(GenRule::getDepth)
                         .orElse(-1))
                 .filter(d -> d != -1)
-                .orElse(PopulateAutoScanner.getAutoAnnotation(target)
+                .orElse(GenAutoScanner.getAutoAnnotation(target)
                         .map(a -> ((GenAuto) a).depth())
                         .orElse(null));
 

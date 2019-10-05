@@ -1,16 +1,15 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.data.DummyTime;
-import io.dummymaker.generator.complex.impl.ListComplexGenerator;
-import io.dummymaker.generator.complex.impl.MapComplexGenerator;
-import io.dummymaker.generator.complex.impl.SetComplexGenerator;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.BooleanGenerator;
-import io.dummymaker.generator.simple.impl.ObjectGenerator;
-import io.dummymaker.generator.simple.impl.UuidGenerator;
-import io.dummymaker.generator.simple.impl.number.*;
-import io.dummymaker.generator.simple.impl.string.*;
-import io.dummymaker.generator.simple.impl.time.impl.*;
+import io.dummymaker.beta.model.DummyTime;
+import io.dummymaker.generator.complex.ListComplexGenerator;
+import io.dummymaker.generator.complex.MapComplexGenerator;
+import io.dummymaker.generator.complex.SetComplexGenerator;
+import io.dummymaker.generator.simple.BooleanGenerator;
+import io.dummymaker.generator.simple.ObjectGenerator;
+import io.dummymaker.generator.simple.UuidGenerator;
+import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.string.*;
+import io.dummymaker.generator.simple.time.impl.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

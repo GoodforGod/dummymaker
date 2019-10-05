@@ -1,6 +1,6 @@
 package io.dummymaker.export.asfile;
 
-import io.dummymaker.data.Dummy;
+import io.dummymaker.beta.model.Dummy;
 import io.dummymaker.data.DummyTimestamp;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;

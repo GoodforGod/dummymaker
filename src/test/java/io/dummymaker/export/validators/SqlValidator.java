@@ -1,12 +1,12 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.data.DummyTime;
-import io.dummymaker.data.DummyTime.Fields;
+import io.dummymaker.beta.model.DummyTime;
+import io.dummymaker.beta.model.DummyTime.Fields;
 import io.dummymaker.data.DummyTimestamp.FieldNames;
 import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.naming.ICase;
 
-import static io.dummymaker.data.Dummy.DummyFieldNames.*;
+import static io.dummymaker.beta.model.Dummy.DummyFields.*;
 import static org.junit.Assert.assertTrue;
 
 /**

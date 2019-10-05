@@ -3,13 +3,13 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.factory.IGenSupplier;
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.NullGenerator;
-import io.dummymaker.generator.simple.impl.SequenceGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.NullGenerator;
+import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
-import io.dummymaker.scan.IPopulateAutoScanner;
+import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 
 import java.lang.reflect.Field;
@@ -30,7 +30,7 @@ class GenStorage implements IGenStorage {
 
     private final IGenSupplier supplier;
     private final GenFactory embeddedFactory; // stupid? yes, have better solution pls PR
-    private final IPopulateAutoScanner scanner;
+    private final IGenAutoScanner scanner;
     private final GenGraphBuilder graphBuilder;
 
     private final Map<Class<? extends IGenerator>, IGenerator> generators;
@@ -40,7 +40,7 @@ class GenStorage implements IGenStorage {
 
     private Node graph;
 
-    GenStorage(IPopulateAutoScanner scanner, GenRules rules) {
+    GenStorage(IGenAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
 
         this.embeddedFactory = new GenFactory(rules);

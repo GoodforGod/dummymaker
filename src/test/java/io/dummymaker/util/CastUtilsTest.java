@@ -1,6 +1,6 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.simple.impl.NullGenerator;
+import io.dummymaker.generator.simple.NullGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package io.dummymaker.data;
 
 import io.dummymaker.annotation.simple.number.GenDouble;
-import io.dummymaker.annotation.simple.number.GenInteger;
+import io.dummymaker.annotation.simple.number.GenInt;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.special.GenEmbedded;
 
@@ -13,7 +13,7 @@ import io.dummymaker.annotation.special.GenEmbedded;
  */
 public class DummyEmbedded {
 
-    @GenInteger
+    @GenInt
     private int anInt;
 
     @GenLong

@@ -25,7 +25,7 @@ public class SequenceScanner extends UniqueScanner {
      *
      * @see GenSequence
      */
-    private final Predicate<Annotation> isEnumerate = (a) -> a.annotationType().equals(GenSequence.class);
+    private final Predicate<Annotation> isSequence = (a) -> GenSequence.class.equals(a.annotationType());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class target) {
@@ -34,9 +34,8 @@ public class SequenceScanner extends UniqueScanner {
         // Use only first found gen annotation on field
         for (final Field field : getAllDeclaredFields(target)) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
-                if (isEnumerate.test(annotation)) {
+                if (isSequence.test(annotation)) {
                     sequentialAnnotationMap.put(field, Collections.singletonList(annotation));
-                    break;
                 }
             }
         }

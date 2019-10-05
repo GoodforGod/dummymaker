@@ -1,8 +1,8 @@
 package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.generator.complex.impl.MapComplexGenerator;
-import io.dummymaker.generator.simple.IGenerator;
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.MapComplexGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

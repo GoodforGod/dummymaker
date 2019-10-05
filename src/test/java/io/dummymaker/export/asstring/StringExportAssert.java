@@ -1,7 +1,7 @@
 package io.dummymaker.export.asstring;
 
-import io.dummymaker.data.Dummy;
-import io.dummymaker.data.DummyNoExportFields;
+import io.dummymaker.beta.model.Dummy;
+import io.dummymaker.beta.model.DummyNoExportFields;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
