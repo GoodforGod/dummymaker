@@ -2,6 +2,7 @@ package io.dummymaker.scan.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,10 +36,12 @@ abstract class BasicScanner {
 
         final List<Field> collected = Arrays.stream(target.getDeclaredFields())
                 .filter(f -> !f.isSynthetic())
+                .filter(f -> !Modifier.isStatic(f.getModifiers()))
+                .filter(f -> !Modifier.isNative(f.getModifiers()))
+                .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .collect(Collectors.toList());
 
         collected.addAll(getAllDeclaredFields(target.getSuperclass()));
-
         return collected;
     }
 }

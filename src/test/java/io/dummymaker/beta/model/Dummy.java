@@ -22,6 +22,12 @@ import java.util.Set;
  */
 public class Dummy {
 
+    private static final int IGNORED_INT = 1;
+
+    public static long IGNORED_LONG = 2;
+
+    private final int ignoredAuto = 10;
+
     /**
      * Used for scanners test, to check for correct fields
      */
@@ -59,6 +65,18 @@ public class Dummy {
         public Set<Class> getAnnotations() {
             return annotations;
         }
+    }
+
+    public int getIgnoredInt() {
+        return IGNORED_INT;
+    }
+
+    public long getIgnoredLong() {
+        return IGNORED_LONG;
+    }
+
+    public int getIgnoredAuto() {
+        return ignoredAuto;
     }
 
     @GenExportName("socialGroup")
