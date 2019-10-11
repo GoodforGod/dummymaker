@@ -176,7 +176,7 @@ public class GenFactory implements IGenFactory {
         } else if (container.isComplex() && generator instanceof IComplexGenerator) {
             // If complexGen can generate embedded objects
             // And not handling it like BasicComplexGenerator, you are probably StackOverFlowed
-            generated = ((IComplexGenerator) generator).generate(annotation, field, storage, depth);
+            generated = ((IComplexGenerator) generator).generate(target, field, storage, annotation, depth);
         } else {
             generated = generator.generate();
         }
@@ -200,7 +200,7 @@ public class GenFactory implements IGenFactory {
                                           final GenStorage storage,
                                           final int depth) {
         final Class<?> type = field.getType();
-        final int fieldDepth = getDepth(parent, type, container, storage);
+        final int fieldDepth = getDepth(parent, type, container.getMarker(), storage);
         if (fieldDepth <= depth)
             return null;
 
@@ -224,16 +224,14 @@ public class GenFactory implements IGenFactory {
     /**
      * Calculates allowed depth level
      *
-     * @param container target
+     * @param annotation target
      * @return allowed depth level
      * @see GenEmbedded
      */
     private int getDepth(final Class<?> parent,
                          final Class<?> target,
-                         final GenContainer container,
+                         final Annotation annotation,
                          final GenStorage storage) {
-
-        final Annotation annotation = container.getMarker();
         if (annotation != null) {
             if (annotation.annotationType().equals(GenEmbedded.class)) {
                 return toDepth(((GenEmbedded) annotation).depth());

@@ -56,9 +56,9 @@ public class GenScanner extends BasicScanner implements IGenScanner {
      */
     protected boolean isComplex(final Field field) {
         final Class<?> declaringClass = field.getType();
-        return (declaringClass.isAssignableFrom(List.class)
-                || declaringClass.isAssignableFrom(Set.class)
-                || declaringClass.isAssignableFrom(Map.class))
+        return (List.class.isAssignableFrom(declaringClass)
+                || Set.class.isAssignableFrom(declaringClass)
+                || Map.class.isAssignableFrom(declaringClass))
                 || declaringClass.getTypeName().endsWith("[][]")
                 || declaringClass.getTypeName().endsWith("[]")
                 || declaringClass.isEnum();

@@ -157,7 +157,7 @@ abstract class PopulateFactory implements IPopulateFactory {
             // If complexGen can generate embedded objects
             // And not handling it like BasicComplexGenerator, you are StackOverFlowed
             GenStorage storage = new GenStorage(populateScanner, null);
-            generated = ((IComplexGenerator) generator).generate(annotation, field, storage, currentEmbeddedDepth);
+            generated = ((IComplexGenerator) generator).generate(field.getType(), field, storage, annotation, currentEmbeddedDepth);
         } else {
             generated = generator.generate();
         }

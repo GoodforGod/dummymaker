@@ -24,7 +24,8 @@ public interface IComplexGenerator extends IGenerator<Object> {
      * @param field      for which value is generated
      * @param storage    factory storage with generators and embedded entity production
      * @param depth      current depth of the generated field
+     * @param parent     parent object class
      * @return generated object
      */
-    Object generate(Annotation annotation, Field field, IGenStorage storage, int depth);
+    Object generate(Class<?> parent, Field field, IGenStorage storage, Annotation annotation, int depth);
 }

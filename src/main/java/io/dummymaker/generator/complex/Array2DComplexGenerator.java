@@ -24,16 +24,21 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
+        if (!field.getType().getTypeName().endsWith("[][]"))
+            return null;
+
         final Class<?> valueClass = field.getType().getComponentType().getComponentType();
         if (annotation == null) {
             final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
-            return genArray2D(sizeFirst, sizeSecond, valueClass, suitable, storage, depth, 1);
+            final int maxDepth = storage.getDepth(parent, valueClass);
+            return genArray2D(sizeFirst, sizeSecond, valueClass, suitable, storage, depth, maxDepth);
         }
 
         final GenArray2D a = ((GenArray2D) annotation);

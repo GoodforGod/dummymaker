@@ -62,7 +62,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     }
 
     @Override
-    public abstract Object generate(Annotation annotation, Field field, IGenStorage storage, int depth);
+    public abstract Object generate(Class<?> parent, Field field, IGenStorage storage, Annotation annotation, int depth);
 
     @Override
     public abstract Object generate();

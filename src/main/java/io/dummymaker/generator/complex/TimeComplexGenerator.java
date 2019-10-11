@@ -30,9 +30,10 @@ import static io.dummymaker.util.CastUtils.castObject;
 public class TimeComplexGenerator implements IComplexGenerator {
 
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
         final long from = (annotation == null) ? 0 : ((GenTime) annotation).from();
         final long to = (annotation == null) ? GenTime.MAX : ((GenTime) annotation).to();

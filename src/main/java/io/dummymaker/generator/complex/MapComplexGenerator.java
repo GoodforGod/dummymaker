@@ -27,10 +27,12 @@ import static io.dummymaker.util.CastUtils.getGenericType;
  */
 public class MapComplexGenerator extends BasicComplexGenerator {
 
+    @SuppressWarnings("Duplicates")
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
         if (!field.getType().isAssignableFrom(Map.class))
             return null;
@@ -41,7 +43,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final Class<? extends IGenerator> keySuitable = suitable(storage, field, keyType);
             final Class<? extends IGenerator> valueSuitable = suitable(storage, field, valueType);
-            return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, 1);
+            final int maxDepth = storage.getDepth(parent, field.getType());
+            return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, maxDepth);
         }
 
         final GenMap a = ((GenMap) annotation);

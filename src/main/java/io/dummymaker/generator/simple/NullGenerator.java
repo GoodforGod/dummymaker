@@ -20,9 +20,10 @@ public class NullGenerator implements IComplexGenerator {
     }
 
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
         return null;
     }

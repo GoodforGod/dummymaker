@@ -24,9 +24,10 @@ import static io.dummymaker.util.CastUtils.castObject;
 public class LongComplexGenerator implements IComplexGenerator {
 
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
         if (castObject(1, field.getType()) == null)
             return null;

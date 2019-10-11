@@ -4,8 +4,6 @@ import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -49,13 +47,4 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
         return list;
     }
-
-    @Override
-    public abstract Object generate(final Annotation annotation,
-                                    final Field field,
-                                    final IGenStorage storage,
-                                    final int depth);
-
-    @Override
-    public abstract Object generate();
 }

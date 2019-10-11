@@ -24,14 +24,19 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
+        if (!field.getType().getTypeName().endsWith("[]"))
+            return null;
+
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            return genArray(size, valueClass, suitable(storage, field, valueClass), storage, depth, 1);
+            final int maxDepth = storage.getDepth(parent, valueClass);
+            return genArray(size, valueClass, suitable(storage, field, valueClass), storage, depth, maxDepth);
         }
 
         final GenArray a = ((GenArray) annotation);

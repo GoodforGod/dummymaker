@@ -30,18 +30,20 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
-        if (!field.getType().isAssignableFrom(List.class))
+        if (!List.class.isAssignableFrom(field.getType()))
             return null;
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if (annotation == null) {
             final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
             final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
-            return genCollection(size, buildCollection(field, size), suitable, valueClass, storage, depth, 1);
+            final int maxDepth = storage.getDepth(parent, field.getType());
+            return genCollection(size, buildCollection(field, size), suitable, valueClass, storage, depth, maxDepth);
         }
 
         final GenList a = ((GenList) annotation);

@@ -17,6 +17,16 @@ import io.dummymaker.generator.IGenerator;
 public interface IGenStorage extends IGenSupplier {
 
     /**
+     * Gets depth for target based on its parent
+     * @param parent class
+     * @param target class
+     * @return depth
+     */
+    default int getDepth(Class<?> parent, Class<?> target) {
+        return 1;
+    }
+
+    /**
      * Fill object with random values starting from desired depth
      *
      * @param t     objects to fill

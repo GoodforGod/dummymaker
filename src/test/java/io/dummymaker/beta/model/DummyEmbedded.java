@@ -2,13 +2,15 @@ package io.dummymaker.beta.model;
 
 import io.dummymaker.annotation.special.GenAuto;
 
+import java.util.List;
+
 /**
  * "default comment"
  *
  * @author GoodforGod
  * @since 11.08.2019
  */
-@GenAuto(depth = 2)
+@GenAuto(depth = 3)
 public class DummyEmbedded {
 
     public class DummyEmbeddedIntoSimple {
@@ -29,7 +31,7 @@ public class DummyEmbedded {
         }
     }
 
-    @GenAuto(depth = 3)
+    @GenAuto(depth = 4)
     public class DummyEmbeddedSimple {
         private int number;
         private String simpleName;
@@ -64,12 +66,18 @@ public class DummyEmbedded {
         public DummyEmbedded getEmbedded() {
             return embedded;
         }
+
     }
 
     private String id;
     private String name;
     private DummyEmbeddedChild child;
     private DummyEmbeddedSimple simpleChild;
+    private List<DummyEmbedded> embeddedList;
+
+    public List<DummyEmbedded> getEmbeddedList() {
+        return embeddedList;
+    }
 
     public String getId() {
         return id;

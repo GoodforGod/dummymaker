@@ -54,7 +54,7 @@ class GenGraphBuilder {
             return parent;
 
         scanner.scan(parentType, true).entrySet().stream()
-                .filter(e -> e.getValue().isEmbedded())
+                .filter(e -> e.getValue().isEmbedded() || e.getValue().isComplex())
                 .map(e -> buildPayload(e.getKey().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
                 .map(this::scanRecursively)

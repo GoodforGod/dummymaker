@@ -70,15 +70,23 @@ class GenStorage implements IGenStorage {
         return supplier.getSuitable(field, type);
     }
 
-    /**
-     * @param t     entity
-     * @param depth to start entity data fill with
-     * @param <T>   type
-     * @return entity filled with data
-     */
     @Override
     public <T> T fillByDepth(T t, int depth) {
         return embeddedFactory.fillEntity(t, this, depth);
+    }
+
+    @Override
+    public int getDepth(Class<?> parent, Class<?> target) {
+        if(target == null)
+            return 1;
+
+        final Predicate<Node> filter = n -> n.getParent() != null
+                && n.getParent().value().getType().equals(parent)
+                && n.value().getType().equals(target);
+
+        return graphBuilder.find(graph, filter)
+                .map(n -> n.getParent().value().getDepth())
+                .orElse(1);
     }
 
     /**
@@ -131,15 +139,6 @@ class GenStorage implements IGenStorage {
         return node.getParent() != null && isMarked(node.getParent(), depth + 1);
     }
 
-    int getDepth(Class<?> parent, Class<?> target) {
-        final Predicate<Node> filter = n -> n.getParent() != null
-                && n.getParent().value().getType().equals(parent)
-                && n.value().getType().equals(target);
-
-        return graphBuilder.find(graph, filter)
-                .map(n -> n.getParent().value().getDepth())
-                .orElse(1);
-    }
 
     /**
      * Was field marked with sequence generator

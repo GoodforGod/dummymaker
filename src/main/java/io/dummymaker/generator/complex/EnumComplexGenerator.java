@@ -24,9 +24,10 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object generate(final Annotation annotation,
+    public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
+                           final Annotation annotation,
                            final int depth) {
         final Set<String> exclude = getExcluded(annotation);
         final Predicate<String> excludePredicate = (exclude.isEmpty())

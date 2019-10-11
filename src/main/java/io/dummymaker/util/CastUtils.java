@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -93,7 +94,7 @@ public class CastUtils {
 
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
-                if(!CastType.of(parentType).equals(CastType.UNKNOWN)) {
+                if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
                     logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
                     return null;
                 }
@@ -141,6 +142,20 @@ public class CastUtils {
      * Extracts generic type
      *
      * @param type to extract from
+     * @return actual type or empty
+     */
+    public static Optional<Class<?>> getGenericClass(final Type type) {
+        try {
+            return Optional.ofNullable(((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Extracts generic type
+     *
+     * @param type to extract from
      * @return actual type or object if length is not presented
      */
     public static Type getGenericType(final Type type) {
@@ -157,7 +172,7 @@ public class CastUtils {
     public static Type getGenericType(final Type type, final int paramNumber) {
         try {
             final ParameterizedType parameterizedType = ((ParameterizedType) type);
-            return (parameterizedType.getActualTypeArguments().length < paramNumber)
+            return (parameterizedType.getActualTypeArguments().length < paramNumber + 1)
                     ? Object.class
                     : parameterizedType.getActualTypeArguments()[paramNumber];
         } catch (Exception e) {
