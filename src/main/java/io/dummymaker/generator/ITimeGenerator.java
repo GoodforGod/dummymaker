@@ -1,7 +1,6 @@
-package io.dummymaker.generator.simple.time;
+package io.dummymaker.generator;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.IGenerator;
 
 /**
  * Generates time/datetime/timestamp in range if necessary

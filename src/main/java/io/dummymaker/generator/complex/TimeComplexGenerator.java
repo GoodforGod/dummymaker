@@ -4,8 +4,8 @@ import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.simple.time.ITimeGenerator;
-import io.dummymaker.generator.simple.time.impl.*;
+import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
 
 import java.lang.annotation.Annotation;

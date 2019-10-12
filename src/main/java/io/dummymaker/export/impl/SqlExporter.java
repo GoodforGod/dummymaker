@@ -1,8 +1,8 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.naming.Cases;
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;

@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.time;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.time.impl.TimestampGenerator;
+import io.dummymaker.generator.simple.time.TimestampGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

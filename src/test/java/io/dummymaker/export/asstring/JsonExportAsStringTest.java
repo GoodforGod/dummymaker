@@ -1,9 +1,9 @@
 package io.dummymaker.export.asstring;
 
 import io.dummymaker.beta.model.Dummy;
+import io.dummymaker.export.Cases;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.naming.Cases;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenOldFactory;

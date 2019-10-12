@@ -2,11 +2,11 @@ package io.dummymaker.export.asfile;
 
 import io.dummymaker.beta.model.Dummy;
 import io.dummymaker.data.DummyTimestamp;
+import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
+import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.naming.Cases;
-import io.dummymaker.export.naming.ICase;
 import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenOldFactory;

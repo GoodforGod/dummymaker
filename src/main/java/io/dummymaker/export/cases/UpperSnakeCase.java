@@ -1,16 +1,16 @@
-package io.dummymaker.export.naming.impl;
+package io.dummymaker.export.cases;
 
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
 
 /**
- * Each upper letter separated with underscore symbol, and transform to low case
- * EXCLUDE FIRST LETTER, first letter to low case
- * Example: ( DummyList - dummy_list )
+ * Each upper letter separated with underscore symbol, and transform to upper case
+ * EXCLUDING FIRST LETTER, first letter to low case
+ * Example: ( DummyList - DUMMY_LIST )
  *
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class SnakeCase implements ICase {
+public class UpperSnakeCase implements ICase {
 
     @Override
     public String format(String value) {
@@ -21,7 +21,7 @@ public class SnakeCase implements ICase {
                 builder.append("_");
             }
 
-            builder.append(Character.toLowerCase(letter));
+            builder.append(Character.toUpperCase(letter));
         }
 
         return builder.toString();

@@ -1,4 +1,4 @@
-package io.dummymaker.export.naming;
+package io.dummymaker.export;
 
 /**
  * Allow to apply naming strategy for field names or class name during export

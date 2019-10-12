@@ -1,6 +1,6 @@
-package io.dummymaker.export.naming;
+package io.dummymaker.export;
 
-import io.dummymaker.export.naming.impl.*;
+import io.dummymaker.export.cases.*;
 
 /**
  * Naming strategy for class and field names

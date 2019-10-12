@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import io.dummymaker.export.naming.Cases;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

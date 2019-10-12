@@ -2,10 +2,10 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
-import io.dummymaker.generator.simple.time.ITimeGenerator;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;

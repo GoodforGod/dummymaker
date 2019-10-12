@@ -1,7 +1,7 @@
-package io.dummymaker.generator.simple.time.impl;
+package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.simple.time.ITimeGenerator;
+import io.dummymaker.generator.ITimeGenerator;
 
 import java.sql.Time;
 

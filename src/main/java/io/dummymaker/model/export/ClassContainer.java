@@ -2,7 +2,7 @@ package io.dummymaker.model.export;
 
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.impl.ExportScanner;
 

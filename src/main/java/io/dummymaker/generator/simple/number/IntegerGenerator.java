@@ -8,14 +8,15 @@ import java.util.regex.Pattern;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
- * Generates small integer numbers from 1 up to 100
+ * Generates int from 0 to Integer.MAX_VALUE
  *
  * @author GoodforGod
- * @since 25.07.2019
+ * @see Integer#MAX_VALUE
+ * @since 05.03.2019
  */
-public class IntegerSmallGenerator implements IGenerator<Integer> {
+public class IntegerGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("num(ber)?|counter", CASE_INSENSITIVE);
 
     @Override
     public Pattern getPattern() {
@@ -24,6 +25,6 @@ public class IntegerSmallGenerator implements IGenerator<Integer> {
 
     @Override
     public Integer generate() {
-        return ThreadLocalRandom.current().nextInt(1, 99);
+        return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
     }
 }

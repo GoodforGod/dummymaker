@@ -1,7 +1,7 @@
-package io.dummymaker.export.naming.impl;
+package io.dummymaker.export.cases;
 
 
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
 
 /**
  * All words are in low case: Bob - bob, TOnY - tony

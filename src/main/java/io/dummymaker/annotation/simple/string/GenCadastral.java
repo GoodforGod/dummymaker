@@ -1,7 +1,7 @@
-package io.dummymaker.annotation.simple.time;
+package io.dummymaker.annotation.simple.string;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.time.DateSqlGenerator;
+import io.dummymaker.generator.simple.string.CadastralGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,13 +10,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author GoodforGod
- * @see DateSqlGenerator
- * @see java.sql.Date
- * @since 10.03.2019
+ * @see CadastralGenerator
+ * @since 12.10.2019
  */
-@PrimeGen(DateSqlGenerator.class)
+@PrimeGen(CadastralGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenDateSql {
+public @interface GenCadastral {
 
 }

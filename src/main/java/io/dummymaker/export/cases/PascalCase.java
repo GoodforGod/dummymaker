@@ -1,6 +1,6 @@
-package io.dummymaker.export.naming.impl;
+package io.dummymaker.export.cases;
 
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
 
 /**
  * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy - TonNy

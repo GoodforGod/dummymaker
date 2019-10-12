@@ -16,7 +16,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class StreetGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("str(eet)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("street", CASE_INSENSITIVE);
 
     private final IBundle<String> bundle = new StreetBundle();
 

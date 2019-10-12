@@ -3,7 +3,7 @@ package io.dummymaker.generator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.generator.simple.SequenceGenerator;
-import io.dummymaker.generator.simple.time.impl.LocalDateTimeGenerator;
+import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

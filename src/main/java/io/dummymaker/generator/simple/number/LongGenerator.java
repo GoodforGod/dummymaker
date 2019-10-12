@@ -15,6 +15,6 @@ public class LongGenerator implements IGenerator<Long> {
 
     @Override
     public Long generate() {
-        return ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
+        return ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE);
     }
 }

@@ -1,7 +1,7 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.simple.time.ITimeGenerator;
+import io.dummymaker.generator.ITimeGenerator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

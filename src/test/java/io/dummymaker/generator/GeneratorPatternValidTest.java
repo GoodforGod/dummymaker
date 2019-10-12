@@ -9,7 +9,7 @@ import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.generator.simple.UuidGenerator;
 import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.string.*;
-import io.dummymaker.generator.simple.time.impl.*;
+import io.dummymaker.generator.simple.time.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

@@ -1,9 +1,9 @@
 package io.dummymaker.export.validators;
 
 import io.dummymaker.beta.model.DummyTime.Patterns;
+import io.dummymaker.export.Cases;
+import io.dummymaker.export.ICase;
 import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.naming.Cases;
-import io.dummymaker.export.naming.ICase;
 
 import static io.dummymaker.beta.model.Dummy.DummyFields.*;
 import static org.junit.Assert.assertEquals;
