@@ -1,6 +1,8 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.IGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +12,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * Utils for object casting
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class CastUtils {
 
-    private static final Logger logger = Logger.getLogger(CastUtils.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {
@@ -86,7 +87,7 @@ public class CastUtils {
 
         try {
             if (constructor == null) {
-                logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
+                logger.warn("Can not instantiate '" + target + "', zero argument constructor not found");
                 return null;
             }
 
@@ -95,7 +96,7 @@ public class CastUtils {
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
                 if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
-                    logger.warning("Can not instantiate '" + target + "', zero argument constructor not found");
+                    logger.warn("Can not instantiate '" + target + "', zero argument constructor not found");
                     return null;
                 }
 
@@ -109,11 +110,11 @@ public class CastUtils {
             }
 
         } catch (InstantiationException | InvocationTargetException e) {
-            logger.warning("Can not instantiate '" + target
+            logger.warn("Can not instantiate '" + target
                     + "', may be an abstract, interface, array, primitive.\n" + e.getMessage());
             return null;
         } catch (IllegalAccessException e) {
-            logger.warning("Can not instantiate, '" + target
+            logger.warn("Can not instantiate, '" + target
                     + "' due to no access to object.\n" + e.getMessage());
             return null;
         } finally {

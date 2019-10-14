@@ -1,5 +1,8 @@
 package io.dummymaker.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,7 +10,6 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.logging.Logger;
 
 /**
  * Contains basic date util methods and functions
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class DateUtils {
 
-    private static final Logger logger = Logger.getLogger(DateUtils.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
     private static final String ZONE_ID = "Europe/Moscow";
 
@@ -51,7 +53,7 @@ public class DateUtils {
         try {
             return new Date(Long.valueOf(date));
         } catch (NumberFormatException e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
             return null;
         }
     }
@@ -60,7 +62,7 @@ public class DateUtils {
         try {
             return LocalDateTime.parse(dateTime);
         } catch (Exception e) {
-            logger.warning("Can not parse date time: " + e.getMessage());
+            logger.warn("Can not parse date time: " + e.getMessage());
             return null;
         }
     }
@@ -69,7 +71,7 @@ public class DateUtils {
         try {
             return LocalTime.parse(time);
         } catch (Exception e) {
-            logger.warning("Can not parse time: " + e.getMessage());
+            logger.warn("Can not parse time: " + e.getMessage());
             return null;
         }
     }
@@ -78,7 +80,7 @@ public class DateUtils {
         try {
             return LocalDate.parse(date);
         } catch (Exception e) {
-            logger.warning("Can not parse date: " + e.getMessage());
+            logger.warn("Can not parse date: " + e.getMessage());
             return null;
         }
     }

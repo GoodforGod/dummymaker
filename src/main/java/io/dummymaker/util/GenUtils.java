@@ -2,6 +2,8 @@ package io.dummymaker.util;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.ITimeGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class GenUtils {
 
-    private static final Logger logger = Logger.getLogger(GenUtils.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
 
     public static List<Class> getInterfaceType(Type type) {
@@ -51,7 +52,7 @@ public class GenUtils {
 
             return types;
         } catch (Exception e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
             return Collections.emptyList();
         }
     }

@@ -9,10 +9,11 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
 
 import static io.dummymaker.util.StringUtils.isBlank;
 
@@ -25,7 +26,7 @@ import static io.dummymaker.util.StringUtils.isBlank;
  */
 abstract class BasicExporter implements IExporter {
 
-    private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String path;
     private Format format;
@@ -83,7 +84,7 @@ abstract class BasicExporter implements IExporter {
         try {
             return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
         } catch (IOException e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
             return null;
         }
     }
@@ -111,7 +112,7 @@ abstract class BasicExporter implements IExporter {
 
                 k.setAccessible(false);
             } catch (Exception ex) {
-                logger.warning(ex.getMessage());
+                logger.warn(ex.getMessage());
             }
         });
 

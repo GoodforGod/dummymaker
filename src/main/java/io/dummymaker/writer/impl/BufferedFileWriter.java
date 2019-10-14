@@ -1,12 +1,13 @@
 package io.dummymaker.writer.impl;
 
 import io.dummymaker.writer.IWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.logging.Logger;
 
 /**
  * Buffered writer implementation
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class BufferedFileWriter implements IWriter {
 
-    private final Logger logger = Logger.getLogger(BufferedFileWriter.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private BufferedWriter writer;
 
@@ -36,7 +37,7 @@ public class BufferedFileWriter implements IWriter {
                             new FileOutputStream(workPath), "UTF-8")
             );
         } catch (IOException e) {
-            logger.warning(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
+            logger.warn(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
             throw e;
         }
     }
@@ -55,7 +56,7 @@ public class BufferedFileWriter implements IWriter {
             writer.write(value);
             return true;
         } catch (IOException e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
             return flush();
         }
     }
@@ -67,7 +68,7 @@ public class BufferedFileWriter implements IWriter {
                 writer.close();
             return true;
         } catch (IOException e) {
-            logger.warning(e.getMessage() + " | CAN NOT CLOSE WRITER");
+            logger.warn(e.getMessage() + " | CAN NOT CLOSE WRITER");
             return false;
         }
     }

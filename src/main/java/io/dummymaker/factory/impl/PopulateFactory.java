@@ -15,11 +15,12 @@ import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.CastUtils.castObject;
@@ -40,7 +41,7 @@ import static io.dummymaker.util.CastUtils.instantiate;
 @SuppressWarnings("Duplicates")
 abstract class PopulateFactory implements IPopulateFactory {
 
-    private static final Logger logger = Logger.getLogger(PopulateFactory.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final IAnnotationScanner sequentialScanner;
     private final IGenAutoScanner populateScanner;
@@ -118,11 +119,11 @@ abstract class PopulateFactory implements IPopulateFactory {
                     field.set(t, objValue);
 
             } catch (ClassCastException e) {
-                logger.warning(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
+                logger.warn(e.getMessage() + " | field TYPE and GENERATE TYPE are not compatible");
                 nullableFields.add(field); // skip field due to error as if it null
                 throw e;
             } catch (Exception e) {
-                logger.warning(e.getMessage());
+                logger.warn(e.getMessage());
                 nullableFields.add(field); // skip field due to error as if it null
             } finally {
                 annotatedField.getKey().setAccessible(false);
