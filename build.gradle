@@ -61,7 +61,7 @@ publishing {
             pom {
                 name = 'DummyMaker'
                 url = 'https://github.com/GoodforGod/dummymaker'
-                description = 'Library can generate Data Objects filled random data for your workloads and also export data in CSV/JSON/XML/SQL formats.'
+                description = 'Library can generate POJOs filled random data for your workloads and also export data in CSV/JSON/XML/SQL formats.'
 
                 license {
                     name = 'MIT License'
