@@ -45,7 +45,7 @@ public class GenFieldRule {
         return fieldType;
     }
 
-    public Set<String> getName() {
+    public Set<String> getNames() {
         return fieldNames;
     }
 

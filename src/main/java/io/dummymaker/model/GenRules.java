@@ -21,6 +21,11 @@ public class GenRules {
         this.rules = new ArrayList<>();
     }
 
+    /**
+     * Initialize gen rules with rules in sequence
+     * @param rules to add
+     * @return gen rules
+     */
     public static GenRules of(GenRule... rules) {
         final GenRules genRules = new GenRules();
         final Map<? extends Class<?>, List<GenRule>> collected = Arrays.stream(rules)
@@ -37,14 +42,31 @@ public class GenRules {
         return genRules;
     }
 
+    /**
+     * Retrieves targeted rule for such class
+     * @param target to check
+     * @return rule
+     */
     public Optional<GenRule> targeted(Class<?> target) {
-        return (target == null)
-                ? Optional.empty()
+        if (target == null)
+            return Optional.empty();
+
+        final Optional<GenRule> targetRule = rules.stream()
+                .filter(r -> r.getTarget().equals(target))
+                .findFirst();
+
+        return targetRule.isPresent()
+                ? targetRule
                 : rules.stream()
-                        .filter(r -> r.getTarget().equals(target))
-                        .findAny();
+                        .filter(GenRule::isGlobal)
+                        .findFirst();
     }
 
+    /**
+     * Add rule to list
+     * @param rule to add
+     * @return same gen rules
+     */
     public GenRules add(GenRule rule) {
         if (rule == null)
             throw new NullPointerException("Rule can not be null");
