@@ -41,8 +41,8 @@ public class DummyEmbedded {
             return number;
         }
 
-        public String getName() {
-            return name;
+        public String getSimpleName() {
+            return simpleName;
         }
 
         public DummyEmbeddedIntoSimple getIntoEmbedded() {
