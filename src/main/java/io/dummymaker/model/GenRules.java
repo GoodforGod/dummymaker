@@ -23,6 +23,7 @@ public class GenRules {
 
     /**
      * Initialize gen rules with rules in sequence
+     *
      * @param rules to add
      * @return gen rules
      */
@@ -32,18 +33,16 @@ public class GenRules {
                 .collect(Collectors.groupingBy(GenRule::getTarget));
 
         // Merge rules if they have same target class
-        final List<GenRule> mergedRules = collected.values().stream()
+        collected.values().stream()
                 .map(genRuleList -> genRuleList.stream().reduce(GenRule::merge))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+                .forEach(r -> r.ifPresent(genRules.rules::add));
 
-        genRules.rules.addAll(mergedRules);
         return genRules;
     }
 
     /**
      * Retrieves targeted rule for such class
+     *
      * @param target to check
      * @return rule
      */
@@ -58,12 +57,13 @@ public class GenRules {
         return targetRule.isPresent()
                 ? targetRule
                 : rules.stream()
-                        .filter(GenRule::isGlobal)
-                        .findFirst();
+                .filter(GenRule::isGlobal)
+                .findFirst();
     }
 
     /**
      * Add rule to list
+     *
      * @param rule to add
      * @return same gen rules
      */

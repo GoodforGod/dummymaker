@@ -13,6 +13,8 @@ import java.util.*;
  */
 public class GenRule {
 
+    private static final Class<?> GLOBAL_MARKER = Object.class;
+
     private final Set<String> ignored = new HashSet<>();
 
     private final int depth;
@@ -33,7 +35,10 @@ public class GenRule {
      * @return targeted class rule
      */
     public static GenRule of(Class<?> target) {
-        return new GenRule(Objects.requireNonNull(target), false, 1);
+        if (target == null || GLOBAL_MARKER.equals(target))
+            throw new IllegalArgumentException("Invalid target class");
+
+        return new GenRule(target, false, 1);
     }
 
     /**
@@ -44,7 +49,10 @@ public class GenRule {
      * @return gen auto class rule
      */
     public static GenRule auto(Class<?> target) {
-        return new GenRule(Objects.requireNonNull(target), true, 1);
+        if (target == null || GLOBAL_MARKER.equals(target))
+            throw new IllegalArgumentException("Invalid target class");
+
+        return new GenRule(target, true, 1);
     }
 
     /**
@@ -56,10 +64,13 @@ public class GenRule {
      * @return gen auto class rule
      */
     public static GenRule auto(Class<?> target, int depth) {
+        if (target == null || GLOBAL_MARKER.equals(target))
+            throw new IllegalArgumentException("Invalid target class");
+
         if (depth < 1)
             throw new IllegalArgumentException("Depth can not be negative");
 
-        return new GenRule(Objects.requireNonNull(target), true, depth);
+        return new GenRule(target, true, depth);
     }
 
     /**
@@ -71,7 +82,7 @@ public class GenRule {
         if (depth < 1)
             throw new IllegalArgumentException("Depth can not be negative");
 
-        return new GenRule(null, true, depth);
+        return new GenRule(Object.class, true, depth);
     }
 
     /**
@@ -88,7 +99,7 @@ public class GenRule {
     }
 
     public boolean isGlobal() {
-        return target == null;
+        return GLOBAL_MARKER.equals(target);
     }
 
     public boolean isIgnored(Field field) {
