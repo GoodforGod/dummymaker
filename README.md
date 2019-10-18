@@ -44,17 +44,23 @@ dependencies {
   - [Complex Gen Annotation](#complex-gen-annotation)
 - [Version History](#version-history)
 
-## Start Example
+## Factory example
 
 Example how to produce *1001* Users in no time.
 
 All user data is automatically generated and proper generators 
 are selected due to *@GenAuto* annotation.
 
+Class that is instantiated by factory via *build* method **must** 
+have zero argument constructor (*Can be private*).
+
 ```java
 @GenAuto
 public class User {
-
+ 
+    /**
+     * All fields will have unique data after being processed by factory
+     */
     private int number;
     private String name;
     private String surname;
@@ -62,19 +68,46 @@ public class User {
 }
 
 public static List<User> getUsers() {
-    GenFactory factory = new GenFactory();
+    final GenFactory factory = new GenFactory();
 
     User user = factory.build(User.class);
 
+    // All users have unique data in their fields
     List<User> users = factory.build(User.class, 1000);
     
     return users;
 }
 ```
 
-### **Auto Annotation**
+### Factory Methods
 
-@GenAuto annotation provides *depth* field 
+Factory can not only instantiate classes but also provides other
+contracts to manipulate with dummies.
+
+```java
+final GenFactory factory = new GenFactory();
+
+Set<User> users = factory.stream(() -> new User(), 1)
+                            .collect(Collectors.toSet());
+
+User user = new User();
+User filled = factory.fill(user);
+```
+
+There are more other contracts available just check *GenFactory*.
+
+### Gen Auto annotation
+
+*@GenAuto* annotation provides *depth* field that is required for embedded
+fields such as *relatives* in this example.
+
+For such class, each *User* will have field *relatives* filled with data
+up to level *3* in depth.
+Because each User will have other users as its data and such data can be represented
+as a tree. So leaf that has its depth of *3* from root will be the last who have
+field *relatives* filled with data.
+
+Maximum depth allowed is *20*.
 
 ```java
 @GenAuto(depth = 3)
@@ -86,6 +119,35 @@ public class User {
     private List<User> relatives;
 }
 ```
+
+## Factory configuration
+
+In case you have no intention or opportunity to annotate class 
+even with *@GenAuto* annotation, you can configure all generators
+and fields you want to ignore with factory configuration.
+
+### Manual rules
+
+In case you want to fill only specific field to be filled with data
+you can configure such behavior via *rules*.
+
+```java
+GenRules rules = GenRules.of(
+        GenRule.of(User.class)
+                .add(NameGenerator.class, "name")
+                .add(ShortGenerator.class, int.class)
+);
+
+GenFactory factory = new GenFactory(rules);
+User user = factory.build(User.class);
+```
+
+In this case only *name* and *number* fields will be filled with data, 
+as they are the only ones suited to factory *rules*.
+
+
+
+
 
 ### **Array Annotations**
 
