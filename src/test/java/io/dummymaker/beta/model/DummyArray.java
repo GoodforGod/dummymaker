@@ -1,7 +1,7 @@
 package io.dummymaker.beta.model;
 
+import io.dummymaker.annotation.complex.GenArray;
 import io.dummymaker.annotation.complex.GenArray2D;
-import io.dummymaker.annotation.special.GenAuto;
 
 /**
  * ! NO DESCRIPTION !
@@ -9,45 +9,44 @@ import io.dummymaker.annotation.special.GenAuto;
  * @author GoodforGod
  * @since 15.09.2019
  */
-@GenAuto
 public class DummyArray {
 
     private byte[] byteSimple;
     private byte[][] byteDouble;
 
-    @GenArray2D
+    @GenArray
     private short[] shortSimple;
     private short[][] shortDouble;
 
     private int[] intSimple;
     private int[][] intDouble;
 
-    @GenArray2D
+    @GenArray
     private long[] longSimple;
     private long[][] longDouble;
 
     private float[] floatSimple;
     private float[][] floatDouble;
 
-    private Byte[] ByteSimple;
-    private Byte[][] ByteDouble;
+    private Byte[] ByteObjSimple;
+    private Byte[][] ByteObjDouble;
 
-    private Short[] ShortSimple;
-    private Short[][] ShortDouble;
+    private Short[] ShortObjSimple;
+    private Short[][] ShortObjDouble;
 
+    private Integer[] IntegerObjSimple;
     @GenArray2D
-    private Integer[] IntegerSimple;
-    private Integer[][] IntegerDouble;
+    private Integer[][] IntegerObjDouble;
 
-    private Long[] LongSimple;
-    private Long[][] LongDouble;
+    private Long[] LongObjSimple;
+    private Long[][] LongObjDouble;
 
-    private Float[] FloatSimple;
-    private Float[][] FloatDouble;
+    private Float[] FloatObjSimple;
+    private Float[][] FloatObjDouble;
 
+    private Double[] DoubleObjSimple;
     @GenArray2D
-    private Double[] DoubleSimple;
-    private Double[][] DoubleDouble;
+    private Double[][] DoubleObjDouble;
 
     private DummyEnum[] dummies;
 
@@ -69,14 +68,6 @@ public class DummyArray {
 
     public short[][] getShortDouble() {
         return shortDouble;
-    }
-
-    public Integer[] getIntegerSimple() {
-        return IntegerSimple;
-    }
-
-    public Integer[][] getIntegerDouble() {
-        return IntegerDouble;
     }
 
     public int[] getIntSimple() {
@@ -103,11 +94,51 @@ public class DummyArray {
         return floatDouble;
     }
 
-    public Double[] getDoubleSimple() {
-        return DoubleSimple;
+    public Byte[] getByteObjSimple() {
+        return ByteObjSimple;
     }
 
-    public Double[][] getDoubleDouble() {
-        return DoubleDouble;
+    public Byte[][] getByteObjDouble() {
+        return ByteObjDouble;
+    }
+
+    public Short[] getShortObjSimple() {
+        return ShortObjSimple;
+    }
+
+    public Short[][] getShortObjDouble() {
+        return ShortObjDouble;
+    }
+
+    public Integer[] getIntegerObjSimple() {
+        return IntegerObjSimple;
+    }
+
+    public Integer[][] getIntegerObjDouble() {
+        return IntegerObjDouble;
+    }
+
+    public Long[] getLongObjSimple() {
+        return LongObjSimple;
+    }
+
+    public Long[][] getLongObjDouble() {
+        return LongObjDouble;
+    }
+
+    public Float[] getFloatObjSimple() {
+        return FloatObjSimple;
+    }
+
+    public Float[][] getFloatObjDouble() {
+        return FloatObjDouble;
+    }
+
+    public Double[] getDoubleObjSimple() {
+        return DoubleObjSimple;
+    }
+
+    public Double[][] getDoubleObjDouble() {
+        return DoubleObjDouble;
     }
 }

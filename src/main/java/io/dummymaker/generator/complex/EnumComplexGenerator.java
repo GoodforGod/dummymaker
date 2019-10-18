@@ -44,7 +44,9 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
                 .filter(f -> excludePredicate.test(f.getName()))
                 .collect(Collectors.toList());
 
-        final int i = ThreadLocalRandom.current().nextInt(0, candidates.size());
+        final int i = (candidates.isEmpty())
+                ? 0
+                : ThreadLocalRandom.current().nextInt(0, candidates.size());
 
         return Enum.valueOf((Class<? extends Enum>) field.getType(), field.getType().getFields()[i].getName());
     }
