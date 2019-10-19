@@ -6,9 +6,9 @@ import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyCollection;
 import io.dummymaker.model.DummyNoFillFields;
 import io.dummymaker.model.GenContainer;
-import io.dummymaker.model.deprecated.DummyCollection;
 import io.dummymaker.scan.impl.GenScanner;
 import org.junit.Test;
 

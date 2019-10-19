@@ -1,6 +1,7 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.annotation.export.GenExportName;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
  * @author GoodforGod
  * @since 07.03.2018
  */
+@GenExportName("TimeDummyClass")
 public class DummyTime {
 
     public enum Patterns {

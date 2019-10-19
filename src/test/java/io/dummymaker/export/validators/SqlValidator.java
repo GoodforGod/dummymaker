@@ -4,9 +4,9 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTime.Fields;
-import io.dummymaker.model.deprecated.DummyTimestamp.FieldNames;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
+import static io.dummymaker.model.DummyTime.Patterns.LOCAL_DATETIME;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -72,38 +72,63 @@ public class SqlValidator implements IValidator {
     }
 
     public void isTwoTimestampedDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedDateField = strategy.format(FieldNames.LOCAL_DATE.getName());
-        final String expectedTimeField = strategy.format(FieldNames.LOCAL_TIME.getName());
-        final String expectedDateTimeField = strategy.format(FieldNames.LOCAL_DATETIME.getName());
-        final String expectedTimestampField = strategy.format(FieldNames.TIMESTAMP.getName());
-        final String expectedDateOldField = strategy.format(FieldNames.DATE.getName());
+        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
+        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
+        final String dateOldField = strategy.format(Fields.DATE.getName());
+        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
 
         final String timestampPattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{0,3}";
+        final String bigIntPattern = "[0-9]+";
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("TimeDummyClass") + "\\("));
-        assertTrue(dummies[1].matches("\\t" + expectedTimeField + "\\tTIMESTAMP,"));
-        assertTrue(dummies[2].matches("\\t" + expectedDateField + "\\tTIMESTAMP,"));
-        assertTrue(dummies[3].matches("\\t" + expectedDateTimeField + "\\tTIMESTAMP,"));
-        assertTrue(dummies[4].matches("\\t" + expectedTimestampField + "\\tTIMESTAMP,"));
-        assertTrue(dummies[5].matches("\\t" + expectedDateOldField + "\\tBIGINT,"));
-        assertTrue(dummies[6].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
-        assertTrue(dummies[7].matches("\\);"));
+        assertTrue(dummies[1].matches("\\t" + timeField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[2].matches("\\t" + dateField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[4].matches("\\t" + timestampField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[5].matches("\\t" + dateOldField + "\\tBIGINT,"));
+        assertTrue(dummies[6].matches("\\t" + dateOldCoverageField + "\\tBIGINT,"));
+        assertTrue(dummies[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
+        assertTrue(dummies[8].matches("\\t" + dateTimeObjectField + "\\tTIMESTAMP,"));
+        assertTrue(dummies[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummies[10].matches("\\);"));
 
-        assertTrue(dummies[8].matches(""));
+        assertTrue(dummies[11].matches(""));
 
-        assertTrue(dummies[9].matches("INSERT INTO " + strategy.format("TimeDummyClass") + " \\(" + strategy.format(expectedTimeField) + ", "
-                + expectedDateField + ", " + expectedDateTimeField + ", "
-                + expectedTimestampField + ", " + expectedDateOldField + "\\) VALUES"));
-        assertTrue(dummies[10].matches("\\('" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "[0-9]+" + "\\),"));
-        assertTrue(dummies[11].matches("\\('" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "'" + timestampPattern + "', "
-                + "[0-9]+" + "\\);"));
+        assertTrue(dummies[12].matches("INSERT INTO " + strategy.format("TimeDummyClass")
+                + " \\("
+                + timeField + ", "
+                + dateField + ", "
+                + dateTimeField + ", "
+                + timestampField + ", "
+                + dateOldField + ", "
+                + dateOldCoverageField + ", "
+                + dateTimeStringField + ", "
+                + dateTimeObjectField
+                + "\\) VALUES"));
+
+        assertTrue(dummies[13].matches("\\('"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', "
+                + bigIntPattern + ", "
+                + bigIntPattern + ", '"
+                + LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + timestampPattern + "'\\),"));
+
+        assertTrue(dummies[14].matches("\\('"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', "
+                + bigIntPattern + ", "
+                + bigIntPattern + ", '"
+                + LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + timestampPattern + "'\\);"));
     }
 
     @Override
@@ -136,8 +161,8 @@ public class SqlValidator implements IValidator {
                 + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
                 + ", " + "[0-9]+"
                 + ", " + "[0-9]+"
-                + ", '" + DummyTime.Patterns.LOCAL_DATETIME.getPattern() + "'"
-                + ", " + DummyTime.Patterns.LOCAL_DATETIME.getPattern()
+                + ", '" + LOCAL_DATETIME.getPattern() + "'"
+                + ", " + LOCAL_DATETIME.getPattern()
                 + "\\);"));
     }
 }

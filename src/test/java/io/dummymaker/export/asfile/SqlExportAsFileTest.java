@@ -7,9 +7,10 @@ import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.IProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.factory.impl.GenOldFactory;
 import io.dummymaker.model.Dummy;
-import io.dummymaker.model.deprecated.DummyTimestamp;
+import io.dummymaker.model.DummyTime;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -58,14 +59,17 @@ public class SqlExportAsFileTest extends FileExportAssert {
     }
 
     @Test
-    public void exportListOfDummiesWithTimestampAndDataTypesWithNamingStrategy() throws Exception {
+    public void exportSqlWithTimestampWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.LOW_CASE.value();
+        final GenFactory factory = new GenFactory();
 
         final Map<Class, String> dataTypes = new HashMap<>();
-        dataTypes.put(Dummy.class, "keks");
+        dataTypes.put(Object.class, "TIMESTAMP");
 
-        final List<DummyTimestamp> dummies = produceFactory.produce(DummyTimestamp.class, 2);
-        final IExporter exporter = new SqlExporter().withTypes(dataTypes).withCase(strategy);
+        final List<DummyTime> dummies = factory.build(DummyTime.class, 2);
+        final IExporter exporter = new SqlExporter()
+                .withTypes(dataTypes)
+                .withCase(strategy);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
@@ -78,7 +82,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertFalse(dummyAsString.isEmpty());
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(12, sqlArray.length);
+        assertEquals(15, sqlArray.length);
 
         validation.isTwoTimestampedDummiesValidWithNamingStrategy(sqlArray, strategy);
     }

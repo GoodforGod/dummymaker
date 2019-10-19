@@ -41,9 +41,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     private final IAnnotationScanner annotationScanner;
 
     public ExportScanner() {
-        this.supplier = new GenSupplier();
-        this.genScanner = new GenAutoScanner(this.supplier);
-        this.annotationScanner = new AnnotationScanner();
+        this(null);
     }
 
     public ExportScanner(GenRules rules) {

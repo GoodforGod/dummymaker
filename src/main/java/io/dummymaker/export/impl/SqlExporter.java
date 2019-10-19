@@ -39,7 +39,7 @@ public class SqlExporter extends BasicExporter {
      * Map is used to convert Java Field Data Type to Sql Data Type
      * You can add your specific values here by using constructor with Map'String, String'
      */
-    private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
+    private final Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
         this(null);
@@ -55,7 +55,7 @@ public class SqlExporter extends BasicExporter {
      */
     public SqlExporter withTypes(final Map<Class, String> dataTypes) {
         if (dataTypes != null && !dataTypes.isEmpty())
-            dataTypes.forEach((key, value) -> this.dataTypes.put(key, value));
+            dataTypes.forEach(this.dataTypes::put);
 
         return this;
     }
@@ -139,8 +139,8 @@ public class SqlExporter extends BasicExporter {
                 .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
 
-        final String resultValues = container.getFormatSupported(Format.SQL).entrySet().stream()
-                .map(e -> "\t" + buildInsertNameTypeQuery(e.getValue().getExportName(), container))
+        final String resultValues = container.getFormatSupported(Format.SQL).values().stream()
+                .map(fieldContainer -> "\t" + buildInsertNameTypeQuery(fieldContainer.getExportName(), container))
                 .collect(Collectors.joining(",\n"));
 
         builder.append(resultValues);
@@ -240,15 +240,13 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container value to Sql specific value type
      */
-    private String convertFieldValue(final Field field,
-                                     final ExportContainer container) {
-        final boolean isArray2D = (container.getType() == FieldContainer.Type.ARRAY_2D);
+    private String convertFieldValue(final Field field, final ExportContainer container) {
         if (field.getType().equals(String.class)) {
             return wrapWithComma(container.getExportValue());
         } else if (isTypeTimestampConvertible(field)) {
             return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
         } else if (container.getType() == FieldContainer.Type.ARRAY
-                || isArray2D
+                || container.getType() == FieldContainer.Type.ARRAY_2D
                 || container.getType() == FieldContainer.Type.COLLECTION) {
 
             final Class<?> componentType = extractType(container.getType(), field);
@@ -279,20 +277,24 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container export value to timestamp value type
      */
-    private Timestamp convertFieldValueToTimestamp(final Field field,
-                                                   final ExportContainer exportContainer) {
-        if (field.getType().equals(LocalDateTime.class)) {
+    private Timestamp convertFieldValueToTimestamp(final Field field, final ExportContainer exportContainer) {
+        try {
+            if (LocalDateTime.class.equals(field.getType())) {
+                return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
+            } else if (LocalDate.class.equals(field.getType())) {
+                return convertToTimestamp(parseDate(exportContainer.getExportValue()));
+            } else if (LocalTime.class.equals(field.getType())) {
+                return convertToTimestamp(parseTime(exportContainer.getExportValue()));
+            } else if (Date.class.equals(field.getType())) {
+                return convertToTimestamp(parseSimpleDateLong(exportContainer.getExportValue()));
+            } else if (Timestamp.class.equals(field.getType())) {
+                return Timestamp.valueOf(exportContainer.getExportValue());
+            }
+
             return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
-        } else if (field.getType().equals(LocalDate.class)) {
-            return convertToTimestamp(parseDate(exportContainer.getExportValue()));
-        } else if (field.getType().equals(LocalTime.class)) {
-            return convertToTimestamp(parseTime(exportContainer.getExportValue()));
-        } else if (field.getType().equals(Date.class)) {
-            return convertToTimestamp(parseSimpleDateLong(exportContainer.getExportValue()));
-        } else if (field.getType().equals(Timestamp.class)) {
-            return Timestamp.valueOf(exportContainer.getExportValue());
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     @Override

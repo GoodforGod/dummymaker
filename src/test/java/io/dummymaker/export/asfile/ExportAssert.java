@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.stream.Collectors;
 
 /**
  * "default comment"
@@ -42,20 +43,8 @@ abstract class ExportAssert extends Assert {
     }
 
     String readDummyFromFile(String filename) throws Exception {
-        final StringBuilder builder = new StringBuilder();
-        final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(filename), StandardCharsets.UTF_8)
-        );
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            builder.append(line).append("\n");
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
         }
-
-        builder.deleteCharAt(builder.length() - 1);
-
-        reader.close();
-        return builder.toString();
     }
 }
