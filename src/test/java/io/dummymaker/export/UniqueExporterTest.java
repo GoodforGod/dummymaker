@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-import io.dummymaker.beta.model.DummyTime;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
@@ -8,6 +7,7 @@ import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.model.DummyTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

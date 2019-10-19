@@ -1,11 +1,11 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.beta.model.DummyTime;
-import io.dummymaker.data.DummyCollection;
 import io.dummymaker.generator.complex.ListComplexGenerator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
 import io.dummymaker.generator.complex.SetComplexGenerator;
 import io.dummymaker.generator.complex.TimeComplexGenerator;
+import io.dummymaker.model.DummyTime;
+import io.dummymaker.model.deprecated.DummyCollection;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

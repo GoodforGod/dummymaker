@@ -1,10 +1,10 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.beta.model.DummyEmbedded;
 import io.dummymaker.bundle.impl.NounBundle;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.generator.simple.string.NounGenerator;
+import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import org.junit.Assert;

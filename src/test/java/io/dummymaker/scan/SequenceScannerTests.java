@@ -1,8 +1,8 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.beta.model.DummyArray;
-import io.dummymaker.beta.model.DummySimple;
+import io.dummymaker.model.DummyArray;
+import io.dummymaker.model.DummySimple;
 import io.dummymaker.scan.impl.SequenceScanner;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import static io.dummymaker.beta.model.Dummy.DummyFields.LNG;
+import static io.dummymaker.model.Dummy.DummyFields.LNG;
 import static org.junit.Assert.*;
 
 /**

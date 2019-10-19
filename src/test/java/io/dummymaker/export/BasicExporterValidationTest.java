@@ -1,10 +1,10 @@
 package io.dummymaker.export;
 
-import io.dummymaker.beta.model.DummyNoZeroConstructor;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
+import io.dummymaker.model.DummyNoZeroConstructor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

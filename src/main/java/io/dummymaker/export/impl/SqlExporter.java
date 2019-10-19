@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
@@ -41,7 +42,11 @@ public class SqlExporter extends BasicExporter {
     private Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
-        super(null, Format.SQL, Cases.DEFAULT.value());
+        this(null);
+    }
+
+    public SqlExporter(GenRules rules) {
+        super(Format.SQL, Cases.DEFAULT.value(), rules);
     }
 
     /**

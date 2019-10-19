@@ -1,12 +1,12 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.beta.model.Dummy;
-import io.dummymaker.beta.model.DummyCollectionWrong;
-import io.dummymaker.beta.model.DummyNoFillFields;
-import io.dummymaker.beta.model.DummyTime;
-import io.dummymaker.data.*;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyCollectionWrong;
+import io.dummymaker.model.DummyNoFillFields;
+import io.dummymaker.model.DummyTime;
+import io.dummymaker.model.deprecated.*;
 import org.junit.Test;
 
 import java.util.List;

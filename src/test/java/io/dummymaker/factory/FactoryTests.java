@@ -1,8 +1,8 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.beta.model.Dummy;
-import io.dummymaker.beta.model.DummyNoZeroConstructor;
 import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyNoZeroConstructor;
 import org.junit.Test;
 
 import java.util.Collections;

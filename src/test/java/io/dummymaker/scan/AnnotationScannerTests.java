@@ -1,6 +1,6 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.beta.model.Dummy;
+import io.dummymaker.model.Dummy;
 import io.dummymaker.scan.impl.AnnotationScanner;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import static io.dummymaker.beta.model.Dummy.DummyFields.*;
+import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
 /**

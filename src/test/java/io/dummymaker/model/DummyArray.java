@@ -1,4 +1,4 @@
-package io.dummymaker.beta.model;
+package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenArray;
 import io.dummymaker.annotation.complex.GenArray2D;
@@ -14,14 +14,14 @@ public class DummyArray {
     private byte[] byteSimple;
     private byte[][] byteDouble;
 
-    @GenArray
+    @GenArray(fixed = 15)
     private short[] shortSimple;
     private short[][] shortDouble;
 
     private int[] intSimple;
     private int[][] intDouble;
 
-    @GenArray
+    @GenArray(fixed = 15)
     private long[] longSimple;
     private long[][] longDouble;
 
@@ -35,7 +35,7 @@ public class DummyArray {
     private Short[][] ShortObjDouble;
 
     private Integer[] IntegerObjSimple;
-    @GenArray2D
+    @GenArray2D(fixedFirst = 15)
     private Integer[][] IntegerObjDouble;
 
     private Long[] LongObjSimple;
@@ -45,7 +45,7 @@ public class DummyArray {
     private Float[][] FloatObjDouble;
 
     private Double[] DoubleObjSimple;
-    @GenArray2D
+    @GenArray2D(fixedFirst = 15)
     private Double[][] DoubleObjDouble;
 
     private DummyEnum[] dummies;

@@ -1,4 +1,4 @@
-package io.dummymaker.beta.model;
+package io.dummymaker.model;
 
 import java.util.List;
 

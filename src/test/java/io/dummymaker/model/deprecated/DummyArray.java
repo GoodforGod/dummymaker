@@ -1,4 +1,4 @@
-package io.dummymaker.data;
+package io.dummymaker.model.deprecated;
 
 import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.special.GenAuto;

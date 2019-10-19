@@ -1,7 +1,7 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.beta.model.DummyNoFillFields;
 import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.model.DummyNoFillFields;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

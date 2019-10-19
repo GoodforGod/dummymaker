@@ -1,4 +1,4 @@
-package io.dummymaker.data;
+package io.dummymaker.model.deprecated;
 
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.time.*;

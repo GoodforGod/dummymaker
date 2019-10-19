@@ -3,7 +3,7 @@ package io.dummymaker.scan;
 import io.dummymaker.annotation.simple.number.GenInt;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.simple.number.GenShort;
-import io.dummymaker.beta.model.DummyCast;
+import io.dummymaker.model.DummyCast;
 import io.dummymaker.scan.impl.UniqueScanner;
 import org.junit.Assert;
 import org.junit.Test;

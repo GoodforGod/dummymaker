@@ -1,4 +1,4 @@
-package io.dummymaker.beta.model;
+package io.dummymaker.model;
 
 import io.dummymaker.annotation.special.GenAuto;
 

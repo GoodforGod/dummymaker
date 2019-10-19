@@ -5,17 +5,17 @@ import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.beta.model.Dummy;
-import io.dummymaker.beta.model.DummyNoFillFields;
-import io.dummymaker.data.DummyCollection;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyNoFillFields;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.deprecated.DummyCollection;
 import io.dummymaker.scan.impl.GenScanner;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import static io.dummymaker.beta.model.Dummy.DummyFields.*;
+import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
 /**

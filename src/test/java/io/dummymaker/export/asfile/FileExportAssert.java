@@ -1,13 +1,13 @@
 package io.dummymaker.export.asfile;
 
-import io.dummymaker.beta.model.Dummy;
-import io.dummymaker.beta.model.DummyNoExportFields;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
 import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyNoExportFields;
 import org.junit.Test;
 
 import java.util.Collections;

@@ -1,8 +1,8 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.beta.model.Dummy;
-import io.dummymaker.beta.model.DummyNoFillFields;
 import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyNoFillFields;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -3,6 +3,7 @@ package io.dummymaker.model.export;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.impl.ExportScanner;
 
@@ -33,10 +34,10 @@ public class ClassContainer {
     private final Map<Field, FieldContainer> fieldContainerMap;
     private final Format format;
 
-    public <T> ClassContainer(final T t, final ICase strategy, final Format format) {
+    public <T> ClassContainer(T t, ICase strategy, Format format, GenRules rules) {
         this.format = format;
 
-        this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy);
+        this.fieldContainerMap = new ExportScanner(rules).scan(t.getClass(), strategy);
         final FieldContainer container = this.fieldContainerMap.get(null);
         if (container != null) {
             this.finalClassName = container.getExportName();

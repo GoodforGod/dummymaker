@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
@@ -40,7 +41,11 @@ public class CsvExporter extends BasicExporter {
     private boolean hasHeader = false;
 
     public CsvExporter() {
-        super(null, Format.CSV, Cases.DEFAULT.value());
+        this(null);
+    }
+
+    public CsvExporter(GenRules rules) {
+        super(Format.CSV, Cases.DEFAULT.value(), rules);
     }
 
     /**

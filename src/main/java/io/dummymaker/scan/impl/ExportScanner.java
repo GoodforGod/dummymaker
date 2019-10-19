@@ -8,6 +8,7 @@ import io.dummymaker.export.ICase;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
@@ -42,6 +43,12 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     public ExportScanner() {
         this.supplier = new GenSupplier();
         this.genScanner = new GenAutoScanner(this.supplier);
+        this.annotationScanner = new AnnotationScanner();
+    }
+
+    public ExportScanner(GenRules rules) {
+        this.supplier = new GenSupplier();
+        this.genScanner = new GenRuledScanner(this.supplier, rules);
         this.annotationScanner = new AnnotationScanner();
     }
 

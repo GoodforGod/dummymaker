@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
@@ -28,29 +29,30 @@ abstract class BasicExporter implements IExporter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * Points as default to directory from where code is running
+     */
     private String path;
-    private Format format;
     private ICase caseUsed;
+    private final Format format;
+    private final GenRules rules;
 
     /**
+     * @param rules from gen factory
      * @param caseUsed naming strategy
-     * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
      * @see ICase
      * @see Format
      */
-    BasicExporter(final String path,
-                  final Format format,
-                  final ICase caseUsed) {
+    BasicExporter(Format format, ICase caseUsed, GenRules rules) {
         setPath(path);
+        setCase(caseUsed);
         this.format = format;
-        this.caseUsed = caseUsed;
+        this.rules = rules;
     }
 
     void setPath(final String path) {
-        this.path = (isBlank(path))
-                ? null
-                : path;
+        this.path = isBlank(path) ? null : path;
     }
 
     void setCase(final ICase caseUsed) {
@@ -62,7 +64,7 @@ abstract class BasicExporter implements IExporter {
      * Build class container with export entity parameters
      */
     <T> ClassContainer buildClassContainer(final T t) {
-        return new ClassContainer(t, caseUsed, format);
+        return new ClassContainer(t, caseUsed, format, rules);
     }
 
     /**

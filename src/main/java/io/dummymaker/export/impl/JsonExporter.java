@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
@@ -27,7 +28,11 @@ public class JsonExporter extends BasicExporter {
     private boolean isPretty;
 
     public JsonExporter() {
-        super(null, Format.JSON, Cases.DEFAULT.value());
+        this(null);
+    }
+
+    public JsonExporter(GenRules rules) {
+        super(Format.JSON, Cases.DEFAULT.value(), rules);
         this.isPretty = false;
     }
 

@@ -3,6 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.writer.IWriter;
@@ -32,7 +33,11 @@ public class XmlExporter extends BasicExporter {
     private String exportClassFullName = null;
 
     public XmlExporter() {
-        super(null, Format.XML, Cases.DEFAULT.value());
+        this(null);
+    }
+
+    public XmlExporter(GenRules rules) {
+        super(Format.XML, Cases.DEFAULT.value(), rules);
     }
 
     /**

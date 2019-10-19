@@ -1,4 +1,4 @@
-package io.dummymaker.data;
+package io.dummymaker.model.deprecated;
 
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;

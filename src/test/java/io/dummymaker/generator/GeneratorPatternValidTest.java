@@ -1,6 +1,5 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.beta.model.DummyTime;
 import io.dummymaker.generator.complex.ListComplexGenerator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
 import io.dummymaker.generator.complex.SetComplexGenerator;
@@ -10,6 +9,7 @@ import io.dummymaker.generator.simple.UuidGenerator;
 import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
+import io.dummymaker.model.DummyTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

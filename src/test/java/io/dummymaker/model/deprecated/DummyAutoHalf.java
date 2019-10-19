@@ -1,10 +1,11 @@
-package io.dummymaker.data;
+package io.dummymaker.model.deprecated;
 
-import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.annotation.simple.number.GenLong;
+import io.dummymaker.annotation.export.GenExportName;
+import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.annotation.special.GenSequence;
 
 import java.util.List;
 import java.util.Map;
@@ -13,20 +14,21 @@ import java.util.Map;
  * "default comment"
  *
  * @author GoodforGod
- * @since 26.04.2018
+ * @since 28.04.2018
  */
-@GenAuto(depth = 2)
-public class DummyAuto {
+@GenAuto
+public class DummyAutoHalf {
 
+    @GenSequence
     private int anInt;
 
-    @GenLong
-    private Long aLong;
+    @GenName
+    private String name;
 
-    @GenList
+    @GenExportName("superlist")
     private List list;
 
-    @GenMap
+    @GenMap(fixed = 6)
     private Map<Integer, String> map;
 
     @GenEmbedded
@@ -36,12 +38,16 @@ public class DummyAuto {
         return dummyAuto;
     }
 
+    public void setAnInt(int anInt) {
+        this.anInt = anInt;
+    }
+
     public int getAnInt() {
         return anInt;
     }
 
-    public Long getaLong() {
-        return aLong;
+    public String getName() {
+        return name;
     }
 
     public List getList() {
