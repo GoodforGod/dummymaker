@@ -81,7 +81,7 @@ public class DummyArrayTests extends Assert {
 
         assertNotEquals(0, build.getFloatSimple().length);
         assertNotEquals(0, build.getFloatDouble().length);
-        assertTrue(build.getFloatSimple()[0] < 1.1);
+        assertTrue(build.getFloatSimple()[0] < 10000.1);
 
         assertNotEquals(0, build.getByteObjSimple().length);
         assertNotEquals(0, build.getByteObjDouble().length);

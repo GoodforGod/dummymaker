@@ -22,7 +22,7 @@ abstract class BasicScanner {
      * @param annotation parent annotation
      * @return parent annotation and its declared ones
      */
-    protected List<Annotation> getAllDeclaredAnnotations(final Annotation annotation) {
+    protected List<Annotation> getAllAnnotations(final Annotation annotation) {
         final List<Annotation> list = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
                 .collect(Collectors.toList());
 
@@ -30,18 +30,24 @@ abstract class BasicScanner {
         return list;
     }
 
-    protected List<Field> getAllDeclaredFields(Class target) {
-        if (target == null || Object.class.equals(target))
-            return Collections.emptyList();
-
-        final List<Field> collected = Arrays.stream(target.getDeclaredFields())
+    protected List<Field> getAllFilteredFields(Class target) {
+        return getAllFields(target).stream()
                 .filter(f -> !f.isSynthetic())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
                 .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
+                .filter(f -> !Modifier.isFinal(f.getModifiers()))
+                .collect(Collectors.toList());
+    }
+
+    protected List<Field> getAllFields(Class target) {
+        if (target == null || Object.class.equals(target))
+            return Collections.emptyList();
+
+        final List<Field> collected = Arrays.stream(target.getDeclaredFields())
                 .collect(Collectors.toList());
 
-        collected.addAll(getAllDeclaredFields(target.getSuperclass()));
+        collected.addAll(getAllFilteredFields(target.getSuperclass()));
         return collected;
     }
 }

@@ -1,5 +1,7 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.bundle.impl.FemaleNameBundle;
+import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.bundle.impl.NounBundle;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.simple.number.ByteGenerator;
@@ -12,7 +14,10 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Global Gen rules tests
@@ -33,6 +38,10 @@ public class DummyGlobalRulesTests extends Assert {
         final DummyEmbedded build = factory.build(DummyEmbedded.class);
 
         final Set<String> nouns = new HashSet<>(Arrays.asList(new NounBundle().getAll()));
+        final Set<String> names = Stream.of(new MaleNameBundle().getAll(), new FemaleNameBundle().getAll())
+                .map(Arrays::asList)
+                .flatMap(List::stream)
+                .collect(Collectors.toSet());
 
         assertNotNull(build.getId());
         assertNotNull(build.getChild());
@@ -42,7 +51,7 @@ public class DummyGlobalRulesTests extends Assert {
 
         assertTrue(build.getSimpleChild().getNumber() < Byte.MAX_VALUE);
         assertNotNull(build.getSimpleChild().getSimpleName());
-        assertTrue(nouns.contains(build.getSimpleChild().getSimpleName()));
+        assertTrue(names.contains(build.getSimpleChild().getSimpleName()));
 
         assertNotNull(build.getChild().getName());
         assertTrue(nouns.contains(build.getChild().getName()));

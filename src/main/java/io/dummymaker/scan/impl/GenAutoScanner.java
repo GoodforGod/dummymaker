@@ -46,7 +46,7 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
             return scanned;
 
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        getAllDeclaredFields(target).stream()
+        getAllFilteredFields(target).stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> containers.put(f, scanned.getOrDefault(f, getAutoContainer(f))));
 

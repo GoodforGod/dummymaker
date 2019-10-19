@@ -47,9 +47,12 @@ public class UniqueExporterTest {
 
     @Test
     public void checkDateClassActsAsMillisLongWhenExport() {
-        DummyTime dummyTime = factory.produce(DummyTime.class);
-        String s = exporter.exportAsString(dummyTime);
-        String[] split = s.split((exporter.getClass().equals(CsvExporter.class)) ? "," : "\n");
+        final DummyTime dummyTime = factory.produce(DummyTime.class);
+        final String exported = exporter.exportAsString(dummyTime);
+
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String[] split = exported.split(splitter);
+
         validator.isDummyTimeValid(split);
     }
 }

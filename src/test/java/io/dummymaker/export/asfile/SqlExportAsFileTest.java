@@ -84,6 +84,6 @@ public class SqlExportAsFileTest extends FileExportAssert {
         final String[] sqlArray = dummyAsString.split("\n");
         assertEquals(15, sqlArray.length);
 
-        validation.isTwoTimestampedDummiesValidWithNamingStrategy(sqlArray, strategy);
+        validation.isDummyTimeValidWithNamingStrategy(sqlArray, strategy);
     }
 }

@@ -28,13 +28,13 @@ public class ProduceFactoryTest {
 
     @Test
     public void noZeroConstructorErrorList() {
-        final List<DummyNoFillFieldsTests> dummies = factory.produce(DummyNoFillFieldsTests.class, 20);
+        final List<DummyNoZeroConstructor> dummies = factory.produce(DummyNoZeroConstructor.class, 20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorError() {
-        final DummyNoFillFieldsTests dummy = factory.produce(DummyNoFillFieldsTests.class);
+        final DummyNoZeroConstructor dummy = factory.produce(DummyNoZeroConstructor.class);
         assertNull(dummy);
     }
 

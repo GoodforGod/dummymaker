@@ -241,7 +241,7 @@ public class SqlExporter extends BasicExporter {
      * Convert container value to Sql specific value type
      */
     private String convertFieldValue(final Field field, final ExportContainer container) {
-        if (field.getType().equals(String.class)) {
+        if (String.class.equals(field.getType()) || "VARCHAR".equals(translateJavaTypeToSqlType(field.getType()))) {
             return wrapWithComma(container.getExportValue());
         } else if (isTypeTimestampConvertible(field)) {
             return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));

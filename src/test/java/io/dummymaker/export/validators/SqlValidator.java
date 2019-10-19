@@ -2,7 +2,7 @@ package io.dummymaker.export.validators;
 
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
-import io.dummymaker.model.DummyTime;
+import io.dummymaker.export.cases.DefaultCase;
 import io.dummymaker.model.DummyTime.Fields;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
@@ -71,7 +71,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[9].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
-    public void isTwoTimestampedDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+    public void isDummyTimeValidWithNamingStrategy(String[] dummies, ICase strategy) {
         final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
         final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
         final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
@@ -133,36 +133,54 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummytime\\("));
-        assertTrue(dummy[1].matches("\\t" + Fields.LOCAL_TIME.getName() + "\\tTIMESTAMP,"));
-        assertTrue(dummy[2].matches("\\t" + Fields.LOCAL_DATE.getName() + "\\tTIMESTAMP,"));
-        assertTrue(dummy[3].matches("\\t" + Fields.LOCAL_DATETIME.getName() + "\\tTIMESTAMP,"));
-        assertTrue(dummy[4].matches("\\t" + Fields.TIMESTAMP.getName() + "\\tTIMESTAMP,"));
-        assertTrue(dummy[5].matches("\\t" + Fields.DATE.getName() + "\\tBIGINT,"));
-        assertTrue(dummy[6].matches("\\t" + Fields.DATE_COVERAGE.getName() + "\\tBIGINT,"));
-        assertTrue(dummy[7].matches("\\t" + Fields.LOCAL_DATETIME_STRING.getName() + "\\tVARCHAR,"));
-        assertTrue(dummy[8].matches("\\t" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\\tVARCHAR,"));
+        final ICase strategy = new DefaultCase();
+
+        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
+        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
+        final String dateOldField = strategy.format(Fields.DATE.getName());
+        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
+
+        final String timestampPattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{0,3}";
+        final String bigIntPattern = "[0-9]+";
+
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("timedummyclass") + "\\("));
+        assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[2].matches("\\t" + dateField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[4].matches("\\t" + timestampField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[5].matches("\\t" + dateOldField + "\\tBIGINT,"));
+        assertTrue(dummy[6].matches("\\t" + dateOldCoverageField + "\\tBIGINT,"));
+        assertTrue(dummy[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
+        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tVARCHAR,"));
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
         assertTrue(dummy[11].matches(""));
 
-        assertTrue(dummy[12].matches("INSERT INTO dummytime \\(" + Fields.LOCAL_TIME.getName()
-                + ", " + Fields.LOCAL_DATE.getName() + ", " + Fields.LOCAL_DATETIME.getName()
-                + ", " + Fields.TIMESTAMP.getName()
-                + ", " + Fields.DATE.getName() + ", " + Fields.DATE_COVERAGE.getName()
-                + ", " + Fields.LOCAL_DATETIME_STRING.getName() + ", " + Fields.LOCAL_DATETIME_OBJECT.getName()
+        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("timedummyclass")
+                + " \\("
+                + timeField + ", "
+                + dateField + ", "
+                + dateTimeField + ", "
+                + timestampField + ", "
+                + dateOldField + ", "
+                + dateOldCoverageField + ", "
+                + dateTimeStringField + ", "
+                + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\(" +
-                "'" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
-                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
-                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
-                + ", '" + DummyTime.Patterns.TIMESTAMP.getPattern() + "'"
-                + ", " + "[0-9]+"
-                + ", " + "[0-9]+"
-                + ", '" + LOCAL_DATETIME.getPattern() + "'"
-                + ", " + LOCAL_DATETIME.getPattern()
-                + "\\);"));
+        assertTrue(dummy[13].matches("\\('"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', '"
+                + timestampPattern + "', "
+                + bigIntPattern + ", "
+                + bigIntPattern + ", '"
+                + LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + LOCAL_DATETIME.getPattern().pattern() + "'\\);"));
     }
 }

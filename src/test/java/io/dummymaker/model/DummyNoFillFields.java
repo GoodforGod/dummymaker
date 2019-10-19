@@ -3,7 +3,6 @@ package io.dummymaker.model;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
-import io.dummymaker.annotation.special.GenAuto;
 
 /**
  * Dummy Object used as data to proceed in tests
@@ -12,7 +11,6 @@ import io.dummymaker.annotation.special.GenAuto;
  * @author GoodforGod
  * @since 18.08.2017
  */
-@GenAuto
 public class DummyNoFillFields {
 
     @GenExportName("socialGroup")

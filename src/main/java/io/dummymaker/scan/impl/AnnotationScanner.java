@@ -28,11 +28,11 @@ public class AnnotationScanner extends BasicScanner implements IAnnotationScanne
     public Map<Field, List<Annotation>> scan(final Class target) {
         final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
 
-        for (final Field field : getAllDeclaredFields(target)) {
+        for (final Field field : getAllFilteredFields(target)) {
             try {
                 // So we can avoid duplicates but not to use Set in contract for scanner
                 final List<Annotation> annotations = Arrays.stream(field.getAnnotations())
-                        .map(this::getAllDeclaredAnnotations)
+                        .map(this::getAllAnnotations)
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
 

@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-import static io.dummymaker.model.Dummy.DummyFields.LNG;
 import static org.junit.Assert.*;
 
 /**
@@ -42,7 +41,7 @@ public class SequenceScannerTests {
         assertEquals(1, fields.size());
 
         // Check for correct map values
-        final List<Annotation> numAnnotations = fields.get(LNG.getField());
+        final List<Annotation> numAnnotations = fields.get(DummySimple.class.getDeclaredField("number"));
         assertNotNull(numAnnotations);
 
         // Check for correct export annotations

@@ -34,7 +34,7 @@ public class GenScannerTests {
         // Check for correct fields number in map
         assertNotNull(fields);
         assertFalse(fields.isEmpty());
-        assertEquals(6, fields.size());
+        assertEquals(7, fields.size());
     }
 
     @Test
