@@ -1,5 +1,7 @@
 package io.dummymaker.writer.impl;
 
+import io.dummymaker.model.error.GenException;
+import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Buffered writer implementation
@@ -19,34 +22,28 @@ import java.io.OutputStreamWriter;
 public class BufferedFileWriter implements IWriter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private BufferedWriter writer;
+    private final BufferedWriter writer;
 
     /**
      * @param fileName  file name
      * @param path      path where to create file (NULL or UNKNOWN for home dir)
      * @param extension file extension
-     * @throws IOException if can not instantiate writer
      */
-    public BufferedFileWriter(final String fileName, final String path, final String extension)
-            throws IOException {
+    public BufferedFileWriter(final String fileName, final String path, final String extension) {
         try {
             final String workPath = buildPath(fileName, path, extension);
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(workPath), "UTF-8")
+                            new FileOutputStream(workPath), StandardCharsets.UTF_8)
             );
         } catch (IOException e) {
-            logger.warn(e.getMessage() + " | CAN NOT CREATE BUFFERED WRITER.");
-            throw e;
+            logger.warn(e.getMessage());
+            throw new GenException(e);
         }
     }
 
     private String buildPath(final String fileName, final String path, final String extension) {
-        final String workPath = (path == null || path.trim().isEmpty())
-                ? ""
-                : path;
-
+        final String workPath = StringUtils.isBlank(path) ? "" : path;
         return workPath + fileName + extension;
     }
 
@@ -68,7 +65,7 @@ public class BufferedFileWriter implements IWriter {
                 writer.close();
             return true;
         } catch (IOException e) {
-            logger.warn(e.getMessage() + " | CAN NOT CLOSE WRITER");
+            logger.warn(e.getMessage());
             return false;
         }
     }
