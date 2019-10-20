@@ -5,8 +5,7 @@ import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.CsvValidator;
-import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import org.junit.Test;
 
@@ -20,8 +19,7 @@ import java.util.List;
  */
 public class CsvExportAsStringTest extends StringExportAssert {
 
-    private final IProduceFactory produceFactory = new GenOldFactory();
-
+    private final GenFactory factory = new GenFactory();
     private final CsvValidator validation = new CsvValidator();
 
     public CsvExportAsStringTest() {
@@ -31,7 +29,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final Dummy dummy = factory.build(Dummy.class);
         final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
 
         final String dummyAsString = exporter.exportAsString(dummy);
@@ -46,7 +44,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(null);
 
         final String dummyAsString = exporter.exportAsString(dummies);
@@ -62,7 +60,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(strategy);
 
         final String dummyAsString = exporter.exportAsString(dummies);

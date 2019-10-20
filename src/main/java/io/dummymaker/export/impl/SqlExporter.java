@@ -241,11 +241,7 @@ public class SqlExporter extends BasicExporter {
      * Convert container value to Sql specific value type
      */
     private String convertFieldValue(final Field field, final ExportContainer container) {
-        if (String.class.equals(field.getType()) || "VARCHAR".equals(translateJavaTypeToSqlType(field.getType()))) {
-            return wrapWithComma(container.getExportValue());
-        } else if (isTypeTimestampConvertible(field)) {
-            return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
-        } else if (container.getType() == FieldContainer.Type.ARRAY
+        if (container.getType() == FieldContainer.Type.ARRAY
                 || container.getType() == FieldContainer.Type.ARRAY_2D
                 || container.getType() == FieldContainer.Type.COLLECTION) {
 
@@ -255,13 +251,16 @@ public class SqlExporter extends BasicExporter {
                     ? container.getExportValue().replace("[", "{\"").replace("]", "\"}").replace(",", "\",\"").replace(" ", "")
                     : container.getExportValue().replace("[", "{").replace("]", "}");
             return wrapWithComma(result);
+        } else if (isTypeTimestampConvertible(field)) {
+            return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
+        } else if (String.class.equals(field.getType()) || "VARCHAR".equals(translateJavaTypeToSqlType(field.getType()))) {
+            return wrapWithComma(container.getExportValue());
         }
 
         return container.getExportValue();
     }
 
-    private Class<?> extractType(FieldContainer.Type type,
-                                 Field field) {
+    private Class<?> extractType(FieldContainer.Type type, Field field) {
         switch (type) {
             case ARRAY:
                 return field.getType().getComponentType();

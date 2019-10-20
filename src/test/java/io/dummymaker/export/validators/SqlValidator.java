@@ -3,6 +3,7 @@ package io.dummymaker.export.validators;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.cases.DefaultCase;
+import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.DummyTime.Fields;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
@@ -69,6 +70,26 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedGroupField + ", " + expectedNumField + ", " + expectedNameField + "\\) VALUES"));
         assertTrue(dummies[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\),"));
         assertTrue(dummies[9].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
+    }
+
+    public void isTwoDummiesArrayValidWithNamingStrategy(String[] dummies, ICase strategy) {
+        final String className = strategy.format(DummyArray.class.getSimpleName());
+        final String shortSimple = strategy.format("shortSimple");
+        final String longSimple = strategy.format("longSimple");
+        final String IntegerObjDouble = strategy.format("IntegerObjDouble");
+        final String DoubleObjDouble = strategy.format("DoubleObjDouble");
+
+        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + className + "\\("));
+        assertTrue(dummies[1].matches("\\t" + shortSimple + "\\tINT\\[],"));
+        assertTrue(dummies[2].matches("\\t" + longSimple + "\\tBIGINT\\[],"));
+        assertTrue(dummies[3].matches("\\t" + IntegerObjDouble + "\\tINT\\[]\\[],"));
+        assertTrue(dummies[4].matches("\\t" + DoubleObjDouble + "\\tDOUBLE PRECISION\\[]\\[],"));
+        assertTrue(dummies[5].matches("\\tPRIMARY KEY \\([a-zA-Z_]+\\)"));
+        assertTrue(dummies[6].matches("\\);"));
+
+        assertTrue(dummies[7].matches(""));
+
+        assertTrue(dummies[8].matches("INSERT INTO " + className + " \\(" + shortSimple + ", " + longSimple + ", " + IntegerObjDouble + ", " + DoubleObjDouble + "\\) VALUES"));
     }
 
     public void isDummyTimeValidWithNamingStrategy(String[] dummies, ICase strategy) {

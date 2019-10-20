@@ -124,19 +124,17 @@ abstract class BasicExporter implements IExporter {
     private ExportContainer buildContainer(final String exportFieldName,
                                            final Object exportFieldValue,
                                            final FieldContainer.Type type) {
-        if (exportFieldValue == null) {
+        if (exportFieldValue == null)
             return ExportContainer.asValue(exportFieldName, "");
-        }
 
-        //TODO Check this in SQL exporter
-        if (exportFieldValue.getClass().equals(Date.class))
+        if (Date.class.equals(exportFieldValue.getClass()))
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
 
         if (this.format.isTypeSupported(type)) {
             switch (type) {
                 case ARRAY:
-                    String convertValue = convertAsArray(exportFieldValue);
-                    return ExportContainer.asArray(exportFieldName, convertValue);
+                    return ExportContainer.asArray(exportFieldName,
+                            convertAsArray(exportFieldValue));
                 case ARRAY_2D:
                     return ExportContainer.asArray2D(exportFieldName,
                             Arrays.deepToString((Object[]) exportFieldValue));
@@ -153,28 +151,8 @@ abstract class BasicExporter implements IExporter {
         return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
     }
 
-    private String convertAsArray2D(Object exportValue) {
-        Class<?> arrayType = exportValue.getClass().getComponentType();
-        if (arrayType.equals(byte.class)) {
-            return Arrays.toString((byte[][]) exportValue);
-        } else if (arrayType.equals(short.class)) {
-            return Arrays.toString((short[][]) exportValue);
-        } else if (arrayType.equals(char.class)) {
-            return Arrays.toString((char[][]) exportValue);
-        } else if (arrayType.equals(int.class)) {
-            return Arrays.toString((int[][]) exportValue);
-        } else if (arrayType.equals(long.class)) {
-            return Arrays.toString((long[][]) exportValue);
-        } else if (arrayType.equals(float.class)) {
-            return Arrays.toString((float[][]) exportValue);
-        } else if (arrayType.equals(double.class)) {
-            return Arrays.toString((double[][]) exportValue);
-        }
-        return Arrays.toString((Object[][]) exportValue);
-    }
-
     private String convertAsArray(Object exportValue) {
-        Class<?> arrayType = exportValue.getClass().getComponentType();
+        final Class<?> arrayType = exportValue.getClass().getComponentType();
         if (arrayType.equals(byte.class)) {
             return Arrays.toString((byte[]) exportValue);
         } else if (arrayType.equals(short.class)) {

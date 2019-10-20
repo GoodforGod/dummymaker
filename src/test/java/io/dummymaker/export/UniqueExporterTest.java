@@ -5,8 +5,7 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +24,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class UniqueExporterTest {
 
-    private final IProduceFactory factory = new GenOldFactory();
+    private final GenFactory factory = new GenFactory();
 
     private IExporter exporter;
     private IValidator validator;
@@ -47,7 +46,7 @@ public class UniqueExporterTest {
 
     @Test
     public void checkDateClassActsAsMillisLongWhenExport() {
-        final DummyTime dummyTime = factory.produce(DummyTime.class);
+        final DummyTime dummyTime = factory.build(DummyTime.class);
         final String exported = exporter.exportAsString(dummyTime);
 
         final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";

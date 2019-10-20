@@ -3,8 +3,7 @@ package io.dummymaker.export.asstring;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
-import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import org.junit.Assert;
@@ -21,8 +20,7 @@ import java.util.List;
  */
 public abstract class StringExportAssert extends Assert {
 
-    private final IProduceFactory produceFactory = new GenOldFactory();
-
+    private final GenFactory factory = new GenFactory();
     private final IExporter exporter;
     private final IValidator validator;
 
@@ -56,7 +54,7 @@ public abstract class StringExportAssert extends Assert {
 
     @Test
     public void exportSingleDummyEmptyContainer() {
-        final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
+        final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
 
         final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
@@ -65,7 +63,7 @@ public abstract class StringExportAssert extends Assert {
 
     @Test
     public void exportDummyListEmptyContainer() {
-        final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
+        final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
         final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
@@ -74,7 +72,7 @@ public abstract class StringExportAssert extends Assert {
 
     @Test
     public void exportSingleDummy() {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final Dummy dummy = factory.build(Dummy.class);
 
         final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -90,7 +88,7 @@ public abstract class StringExportAssert extends Assert {
 
     @Test
     public void exportSingleDummyList() {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
+        final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
         final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -106,7 +104,7 @@ public abstract class StringExportAssert extends Assert {
 
     @Test
     public void exportListOfDummies() {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

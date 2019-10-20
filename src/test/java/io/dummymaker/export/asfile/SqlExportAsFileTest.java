@@ -6,9 +6,7 @@ import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.validators.SqlValidator;
-import io.dummymaker.factory.IProduceFactory;
 import io.dummymaker.factory.impl.GenFactory;
-import io.dummymaker.factory.impl.GenOldFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyTime;
 import org.junit.Test;
@@ -25,10 +23,8 @@ import java.util.Map;
  */
 public class SqlExportAsFileTest extends FileExportAssert {
 
-    private final IProduceFactory produceFactory = new GenOldFactory();
-
+    private final GenFactory factory = new GenFactory();
     private final SqlValidator validation = new SqlValidator();
-
     private final Format format = Format.SQL;
 
     public SqlExportAsFileTest() {
@@ -40,7 +36,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.SNAKE_CASE.value();
 
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final IExporter exporter = new SqlExporter().withCase(strategy).withPath("    ");
 

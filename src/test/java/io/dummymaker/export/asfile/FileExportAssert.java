@@ -4,8 +4,7 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
-import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import org.junit.Test;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 abstract class FileExportAssert extends ExportAssert {
 
-    private final IProduceFactory produceFactory = new GenOldFactory();
+    private final GenFactory factory = new GenFactory();
 
     private final IExporter exporter;
     private final IValidator validator;
@@ -55,7 +54,7 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportSingleDummyEmptyContainer() throws Exception {
-        final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
+        final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
 
         final boolean exportResult = exporter.export(dummy);
         assertFalse(exportResult);
@@ -63,7 +62,7 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportDummyListEmptyContainer() throws Exception {
-        final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
+        final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
         final boolean exportResult = exporter.export(dummy);
         assertFalse(exportResult);
@@ -71,7 +70,7 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportSingleDummy() throws Exception {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
@@ -92,7 +91,7 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportSingleDummyList() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
+        final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
@@ -113,7 +112,7 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportListOfDummies() throws Exception {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
