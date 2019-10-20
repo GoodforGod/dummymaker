@@ -4,7 +4,6 @@ import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.special.GenAuto;
-import io.dummymaker.annotation.special.GenEmbedded;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ public class DummyAuto {
     @GenMap
     private Map<Integer, String> map;
 
-    @GenEmbedded
     private DummyAuto dummyAuto;
 
     public DummyAuto getDummyAuto() {

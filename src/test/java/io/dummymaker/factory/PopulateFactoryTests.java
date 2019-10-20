@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoFillFields;
 import org.junit.Test;
@@ -19,21 +19,21 @@ import static org.junit.Assert.*;
  */
 public class PopulateFactoryTests {
 
-    private final IPopulateFactory factory = new GenOldFactory();
+    private final GenFactory factory = new GenFactory();
 
     @Test
     public void genPopulateTestEmptyList() {
-        assertTrue(factory.populate(Collections.emptyList()).isEmpty());
+        assertTrue(factory.fill(Collections.emptyList()).isEmpty());
     }
 
     @Test
     public void genPopulateTestNullList() {
-        assertTrue(factory.populate(null).isEmpty());
+        assertTrue(factory.fill((List<Object>) null).isEmpty());
     }
 
     @Test
     public void genPopulateTestNull() {
-        assertNull(factory.populate((Dummy) null));
+        assertNull(factory.fill((Dummy) null));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class PopulateFactoryTests {
         dummies.get(0).setGroup(group1);
         dummies.get(1).setGroup(group2);
 
-        dummies = factory.populate(dummies);
+        dummies = factory.fill(dummies);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -75,7 +75,7 @@ public class PopulateFactoryTests {
         Dummy dummy = new Dummy();
         dummy.setGroup(group);
 
-        dummy = factory.populate(dummy);
+        dummy = factory.fill(dummy);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -96,7 +96,7 @@ public class PopulateFactoryTests {
         DummyNoFillFields dummy = new DummyNoFillFields();
         dummy.setGroup(group);
 
-        dummy = factory.populate(dummy);
+        dummy = factory.fill(dummy);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());

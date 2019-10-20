@@ -2,7 +2,6 @@ package io.dummymaker.factory.impl;
 
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
@@ -11,7 +10,6 @@ import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
@@ -172,15 +170,6 @@ public class GenSupplier implements IGenSupplier {
                 .filter(GenUtils::isGenerator)
                 .map(GenUtils::getInterfaceType)
                 .findFirst().orElse(Arrays.asList(Object.class));
-    }
-
-    protected boolean isGenerator(Type type) {
-        try {
-            return ((ParameterizedType) type).getRawType().equals(IGenerator.class)
-                    || ((ParameterizedType) type).getRawType().equals(ITimeGenerator.class);
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     protected List<Class> getSpecialGeneratorTypes(Class<?> generator) {

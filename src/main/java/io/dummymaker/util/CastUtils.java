@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * Utils for object casting
@@ -22,6 +21,8 @@ import java.util.Optional;
 public class CastUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
+
+    private CastUtils() { }
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {
@@ -87,7 +88,7 @@ public class CastUtils {
 
         try {
             if (constructor == null) {
-                logger.warn("Can not instantiate '" + target + "', zero argument constructor not found");
+                logger.warn("Can not instantiate '{}', zero argument constructor not found", target);
                 return null;
             }
 
@@ -96,7 +97,7 @@ public class CastUtils {
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
                 if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
-                    logger.warn("Can not instantiate '" + target + "', zero argument constructor not found");
+                    logger.warn("Can not instantiate '{}', zero argument constructor not found", target);
                     return null;
                 }
 
@@ -110,12 +111,12 @@ public class CastUtils {
             }
 
         } catch (InstantiationException | InvocationTargetException e) {
-            logger.warn("Can not instantiate '" + target
-                    + "', may be an abstract, interface, array, primitive.\n" + e.getMessage());
+            logger.warn(e.getMessage());
+            logger.warn("Can not instantiate '{}', may be an abstract, interface, array, primitive.", target);
             return null;
         } catch (IllegalAccessException e) {
-            logger.warn("Can not instantiate, '" + target
-                    + "' due to no access to object.\n" + e.getMessage());
+            logger.warn(e.getMessage());
+            logger.warn("Can not instantiate, '{}' due to no access to object.", target);
             return null;
         } finally {
             if (constructor != null)
@@ -137,20 +138,6 @@ public class CastUtils {
 
         final Object object = generator.generate();
         return castObject(object, fieldType);
-    }
-
-    /**
-     * Extracts generic type
-     *
-     * @param type to extract from
-     * @return actual type or empty
-     */
-    public static Optional<Class<?>> getGenericClass(final Type type) {
-        try {
-            return Optional.ofNullable(((Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0]));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
     }
 
     /**

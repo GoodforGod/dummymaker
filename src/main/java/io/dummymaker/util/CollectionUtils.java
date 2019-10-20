@@ -12,16 +12,14 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class CollectionUtils {
 
+    private CollectionUtils() { }
+
     public static boolean isEmpty(final Collection collection) {
         return collection == null || collection.isEmpty();
     }
 
     public static boolean isNotEmpty(final Collection collection) {
         return !isEmpty(collection);
-    }
-
-    public static int getRandomIndex(final Collection collection) {
-        return generateRandomSize(0, collection.size() - 1);
     }
 
     public static <T> T getIndexWithSalt(List<T> list, String name, int salt) {
@@ -47,9 +45,5 @@ public class CollectionUtils {
         final int usedMax = (max < 1) ? 0 : max;
 
         return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
-    }
-
-    public static int generateRandomSize(int min, int max, int fixed) {
-        return (fixed > -1) ? fixed : generateRandomSize(min, max);
     }
 }

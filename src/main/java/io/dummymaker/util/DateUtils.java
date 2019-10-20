@@ -23,6 +23,8 @@ public class DateUtils {
 
     private static final String ZONE_ID = "Europe/Moscow";
 
+    private DateUtils() { }
+
     private static Calendar genCalendar() {
         return Calendar.getInstance(TimeZone.getTimeZone(ZONE_ID));
     }
@@ -62,7 +64,7 @@ public class DateUtils {
         try {
             return LocalDateTime.parse(dateTime);
         } catch (Exception e) {
-            logger.warn("Can not parse date time: " + e.getMessage());
+            logger.warn("Can not parse date time: {}", e.getMessage());
             return null;
         }
     }
@@ -71,7 +73,7 @@ public class DateUtils {
         try {
             return LocalTime.parse(time);
         } catch (Exception e) {
-            logger.warn("Can not parse time: " + e.getMessage());
+            logger.warn("Can not parse time: {}", e.getMessage());
             return null;
         }
     }
@@ -80,7 +82,7 @@ public class DateUtils {
         try {
             return LocalDate.parse(date);
         } catch (Exception e) {
-            logger.warn("Can not parse date: " + e.getMessage());
+            logger.warn("Can not parse date: {}", e.getMessage());
             return null;
         }
     }

@@ -13,7 +13,6 @@ import io.dummymaker.writer.impl.BufferedFileWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 
 import static io.dummymaker.util.StringUtils.isBlank;
@@ -85,7 +84,7 @@ abstract class BasicExporter implements IExporter {
     IWriter buildWriter(final ClassContainer classContainer) {
         try {
             return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.warn(e.getMessage());
             return null;
         }

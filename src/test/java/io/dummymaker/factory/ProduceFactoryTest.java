@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenOldFactory;
+import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.*;
 import io.dummymaker.model.deprecated.DummyAuto;
 import org.junit.Test;
@@ -18,29 +18,29 @@ import static org.junit.Assert.*;
  */
 public class ProduceFactoryTest {
 
-    private final IProduceFactory factory = new GenOldFactory();
+    private final GenFactory factory = new GenFactory();
 
     @Test
     public void produceLessThanZeroAmount() {
-        final List<Dummy> dummies = factory.produce(Dummy.class, -20);
+        final List<Dummy> dummies = factory.build(Dummy.class, -20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorErrorList() {
-        final List<DummyNoZeroConstructor> dummies = factory.produce(DummyNoZeroConstructor.class, 20);
+        final List<DummyNoZeroConstructor> dummies = factory.build(DummyNoZeroConstructor.class, 20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
     public void noZeroConstructorError() {
-        final DummyNoZeroConstructor dummy = factory.produce(DummyNoZeroConstructor.class);
+        final DummyNoZeroConstructor dummy = factory.build(DummyNoZeroConstructor.class);
         assertNull(dummy);
     }
 
     @Test
     public void produceListOfTwo() {
-        final List<Dummy> dummies = factory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         assertNotNull(dummies);
         assertFalse(dummies.isEmpty());
@@ -62,7 +62,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceSingleDummy() {
-        final Dummy dummy = factory.produce(Dummy.class);
+        final Dummy dummy = factory.build(Dummy.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getCity());
@@ -78,7 +78,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithNoPopulateFields() {
-        final DummyNoFillFields dummy = factory.produce(DummyNoFillFields.class);
+        final DummyNoFillFields dummy = factory.build(DummyNoFillFields.class);
 
         assertNotNull(dummy);
         assertNull(dummy.getCity());
@@ -89,7 +89,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithCollectionFields() {
-        final DummyCollection dummy = factory.produce(DummyCollection.class);
+        final DummyCollection dummy = factory.build(DummyCollection.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getObjects());
@@ -115,22 +115,22 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceAutoDummy() {
-        final DummyAuto dummyAuto = factory.produce(DummyAuto.class);
-        assertNotNull(dummyAuto);
+        final DummyAuto build = factory.build(DummyAuto.class);
+        assertNotNull(build);
 
-        assertNotNull(dummyAuto.getaLong());
-        assertNotEquals(0, dummyAuto.getAnInt());
+        assertNotNull(build.getaLong());
+        assertNotEquals(0, build.getAnInt());
 
-        assertNotNull(dummyAuto.getList());
-        assertNotNull(dummyAuto.getMap());
-        assertFalse(dummyAuto.getList().isEmpty());
-        assertFalse(dummyAuto.getMap().isEmpty());
-        assertNotEquals(0, dummyAuto.getList().size());
-        assertNotEquals(0, dummyAuto.getMap().size());
+        assertNotNull(build.getList());
+        assertNotNull(build.getMap());
+        assertFalse(build.getList().isEmpty());
+        assertFalse(build.getMap().isEmpty());
+        assertNotEquals(0, build.getList().size());
+        assertNotEquals(0, build.getMap().size());
 
-        assertNotNull(dummyAuto.getDummyAuto());
+        assertNotNull(build.getDummyAuto());
 
-        final DummyAuto innerDummy = dummyAuto.getDummyAuto();
+        final DummyAuto innerDummy = build.getDummyAuto();
         assertNotNull(innerDummy.getaLong());
         assertNotEquals(0, innerDummy.getAnInt());
 
@@ -144,7 +144,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithWrongCollectionFields() {
-        final DummyCollectionWrong dummy = factory.produce(DummyCollectionWrong.class);
+        final DummyCollectionWrong dummy = factory.build(DummyCollectionWrong.class);
 
         assertNotNull(dummy);
 
@@ -155,7 +155,7 @@ public class ProduceFactoryTest {
 
     @Test
     public void produceWithTimeFields() {
-        final DummyTime dummy = factory.produce(DummyTime.class);
+        final DummyTime dummy = factory.build(DummyTime.class);
 
         assertNotNull(dummy);
         assertNotNull(dummy.getDateOld());
