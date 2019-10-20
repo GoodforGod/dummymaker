@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
+import java.util.stream.Collectors;
 
 /**
  * Scan for resources at runtime by package
@@ -21,26 +22,55 @@ public class ResourceScanner implements IScanner<String, String> {
     /**
      * Scans for all resources under specified package and its subdirectories
      *
-     * @param packageName to scan from
-     * @return list of resources under target package
+     * @param packageOrPath package or path to start scan from
+     * @return list of resources under target package or path
      */
     @Override
-    public Collection<String> scan(String packageName) {
+    public Collection<String> scan(String packageOrPath) {
+        final String path = PackageUtils.toRelativePath(packageOrPath);
+        return getSystemResources(packageOrPath).stream()
+                .map(r -> r.getPath().startsWith("jar:")
+                        ? loadFromJar(r)
+                        : loadFromDirectory(new File(r.getPath()), path))
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Scan resource with absolute path added
+     *
+     * @param packageOrPath package or path to start scan from
+     * @return list of resources under target package or path
+     */
+    public Collection<String> scanAbsolute(String packageOrPath) {
+        final Collection<String> scanned = scan(packageOrPath);
+        if (scanned.isEmpty())
+            return Collections.emptySet();
+
+        final String path = PackageUtils.toRelativePath(packageOrPath);
+        return getSystemResources(packageOrPath).stream()
+                .findFirst()
+                .map(absolute -> scanned.stream()
+                        .map(p -> p.replace(path, absolute.getFile()))
+                        .collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
+    }
+
+    /**
+     * Loads system resources as URLs
+     * @param packageOrPath to load resources from
+     * @return resources urls
+     */
+    private List<URL> getSystemResources(String packageOrPath) {
         try {
-            final String path = PackageUtils.toRelativePath(packageName);
+            final String path = PackageUtils.toRelativePath(packageOrPath);
             final Enumeration<URL> resourceUrls = ClassLoader.getSystemClassLoader().getResources(path);
             if (!resourceUrls.hasMoreElements())
-                return Collections.emptySet();
+                return Collections.emptyList();
 
-            final Set<String> resources = new HashSet<>();
-            while (resourceUrls.hasMoreElements()) {
-                final URL resource = resourceUrls.nextElement();
-                final Set<String> classes = (resource.toString().startsWith("jar:"))
-                        ? loadFromJar(resource)
-                        : loadFromDirectory(new File(resource.getPath()), packageName);
-
-                resources.addAll(classes);
-            }
+            final List<URL> resources = new ArrayList<>();
+            while (resourceUrls.hasMoreElements())
+                resources.add(resourceUrls.nextElement());
 
             return resources;
         } catch (IOException e) {
@@ -62,12 +92,12 @@ public class ResourceScanner implements IScanner<String, String> {
 
         final Set<String> classes = new HashSet<>();
         for (String file : files) {
-            classes.add(packageName + "." + file);
+            classes.add(packageName + "/" + file);
 
             // If is directory recursively load all classes
             final File subdir = new File(directory, file);
             if (subdir.isDirectory())
-                classes.addAll(loadFromDirectory(subdir, packageName + "." + file));
+                classes.addAll(loadFromDirectory(subdir, packageName + "/" + file));
         }
 
         return classes;

@@ -22,7 +22,7 @@ public class ClassScannerTests extends Assert {
         final Collection<Class> classes = scanner.scan("io.dummymaker.writer");
 
         assertNotNull(scanner);
-        assertFalse(classes.isEmpty());
+        assertEquals(2, classes.size());
         assertTrue(classes.contains(IWriter.class));
         assertTrue(classes.contains(BufferedFileWriter.class));
     }
