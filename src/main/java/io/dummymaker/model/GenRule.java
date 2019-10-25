@@ -4,11 +4,13 @@ import io.dummymaker.generator.IGenerator;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Rule for settings generator type for specific field name or field type
  *
  * @author GoodforGod
+ * @see GenRules
  * @since 01.08.2019
  */
 public class GenRule {
@@ -31,6 +33,7 @@ public class GenRule {
 
     /**
      * Specific class rule
+     *
      * @param target for rule
      * @return targeted class rule
      */
@@ -44,9 +47,10 @@ public class GenRule {
     /**
      * Gen auto class rule with default 1 depth
      * All fields will be auto generated for such class if not ignored otherwise
-     * @see io.dummymaker.annotation.special.GenAuto
+     *
      * @param target for rule
      * @return gen auto class rule
+     * @see io.dummymaker.annotation.special.GenAuto
      */
     public static GenRule auto(Class<?> target) {
         if (target == null || GLOBAL_MARKER.equals(target))
@@ -58,10 +62,11 @@ public class GenRule {
     /**
      * Gen auto class rule with specified depth
      * All fields will be auto generated for such class if not ignored otherwise
-     * @see io.dummymaker.annotation.special.GenAuto
+     *
      * @param target for rule
-     * @param depth to set
+     * @param depth  to set
      * @return gen auto class rule
+     * @see io.dummymaker.annotation.special.GenAuto
      */
     public static GenRule auto(Class<?> target, int depth) {
         if (target == null || GLOBAL_MARKER.equals(target))
@@ -75,6 +80,7 @@ public class GenRule {
 
     /**
      * Creates global rule that will affect all classes
+     *
      * @param depth to set
      * @return global rule
      */
@@ -87,12 +93,26 @@ public class GenRule {
 
     /**
      * Merges rules together
+     *
      * @param rule to merge with
      * @return merged rule
      */
     GenRule merge(GenRule rule) {
         if (rule == null || !this.getTarget().equals(rule.getTarget()))
             return this;
+
+        final Set<GenFieldRule> equalFields = rule.rules.stream()
+                .filter(r -> rules.stream().anyMatch(mr -> mr.equals(r)))
+                .collect(Collectors.toSet());
+
+        equalFields.stream()
+                .filter(GenFieldRule::isTyped)
+                .findFirst()
+                .ifPresent(r -> {
+                    throw new IllegalArgumentException("Equal typed field is present for type " + r.getType());
+                });
+
+
 
         rules.addAll(rule.rules);
         return this;
@@ -108,6 +128,7 @@ public class GenRule {
 
     /**
      * Retries desired generator for field
+     *
      * @param field targeted
      * @return generator for named field or optional generator for specific type from rules
      */
@@ -123,15 +144,16 @@ public class GenRule {
         return (namedGenerator.isPresent())
                 ? namedGenerator
                 : rules.stream()
-                        .filter(r -> field.getType().equals(r.getType()) || r.getNames().contains(field.getName()))
-                        .findAny()
-                        .map(GenFieldRule::getGenerator);
+                .filter(r -> field.getType().equals(r.getType()) || r.getNames().contains(field.getName()))
+                .findAny()
+                .map(GenFieldRule::getGenerator);
 
     }
 
     /**
      * Setups generator for fields which names are in sequence
-     * @param generator to set
+     *
+     * @param generator  to set
      * @param fieldNames fields with names to affect
      * @return same rule
      */
@@ -146,6 +168,7 @@ public class GenRule {
 
     /**
      * Setups generator for fields which types are in sequence
+     *
      * @param generator to set
      * @param fieldType field type to affect
      * @return same rule
@@ -161,6 +184,7 @@ public class GenRule {
 
     /**
      * Setups fields in sequence to be ignored for generating values
+     *
      * @param fieldNames fields with names to affect
      * @return same rule
      */

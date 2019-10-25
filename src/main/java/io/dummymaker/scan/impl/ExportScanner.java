@@ -33,8 +33,8 @@ import java.util.function.Predicate;
 public class ExportScanner extends BasicScanner implements IExportScanner {
 
     private final Predicate<Annotation> ignoreFilter = a -> GenExportIgnore.class.equals(a.annotationType());
-    private final Predicate<Annotation> exportFilter = (a) -> GenExportForce.class.equals(a.annotationType());
-    private final Predicate<Annotation> renameFilter = (a) -> GenExportName.class.equals(a.annotationType());
+    private final Predicate<Annotation> exportFilter = a -> GenExportForce.class.equals(a.annotationType());
+    private final Predicate<Annotation> renameFilter = a -> GenExportName.class.equals(a.annotationType());
 
     private final IGenSupplier supplier;
     private final IGenScanner genScanner;

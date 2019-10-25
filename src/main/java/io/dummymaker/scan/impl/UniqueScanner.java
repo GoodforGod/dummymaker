@@ -29,8 +29,7 @@ public class UniqueScanner extends AnnotationScanner {
                         .collect(Collectors.toList())))
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> {
-                        }
+                        (m, e) -> { }
                 );
     }
 }

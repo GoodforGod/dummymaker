@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  */
 public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
 
-    private static final Predicate<Annotation> IS_AUTO = (a) -> GenAuto.class.equals(a.annotationType());
+    private static final Predicate<Annotation> IS_AUTO = a -> GenAuto.class.equals(a.annotationType());
 
     private final IGenSupplier supplier;
 

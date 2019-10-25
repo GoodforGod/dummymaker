@@ -25,7 +25,7 @@ public class SequenceScanner extends UniqueScanner {
      *
      * @see GenSequence
      */
-    private final Predicate<Annotation> isSequence = (a) -> GenSequence.class.equals(a.annotationType());
+    private final Predicate<Annotation> isSequence = a -> GenSequence.class.equals(a.annotationType());
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class target) {

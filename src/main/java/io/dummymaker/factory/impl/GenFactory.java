@@ -142,7 +142,6 @@ public class GenFactory implements IGenFactory {
                     field.set(t, generated);
 
             } catch (Exception ex) {
-                field.setAccessible(false);
                 throw new GenException(ex);
             }
         }

@@ -12,10 +12,6 @@ public class GenException extends RuntimeException {
         super("Unexpected exception occurred");
     }
 
-    public GenException(String s) {
-        super(s);
-    }
-
     public GenException(Throwable throwable) {
         super(throwable.getMessage());
     }

@@ -23,9 +23,9 @@ import java.util.function.Predicate;
  */
 public class GenScanner extends BasicScanner implements IGenScanner {
 
-    private final Predicate<Annotation> isGenCustom = (a) -> GenCustom.class.equals(a.annotationType());
-    private final Predicate<Annotation> isIgnored = (a) -> GenIgnore.class.equals(a.annotationType());
-    private final Predicate<Annotation> isGen = (a) -> PrimeGen.class.equals(a.annotationType())
+    private final Predicate<Annotation> isGenCustom = a -> GenCustom.class.equals(a.annotationType());
+    private final Predicate<Annotation> isIgnored = a -> GenIgnore.class.equals(a.annotationType());
+    private final Predicate<Annotation> isGen = a -> PrimeGen.class.equals(a.annotationType())
             || ComplexGen.class.equals(a.annotationType());
 
     /**

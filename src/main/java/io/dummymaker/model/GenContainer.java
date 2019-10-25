@@ -81,7 +81,7 @@ public class GenContainer {
     }
 
     public boolean isEmbedded() {
-        return generator != null && EmbeddedGenerator.class.equals(generator);
+        return EmbeddedGenerator.class.equals(generator);
     }
 
     public Class<? extends IGenerator> getGenerator() {

@@ -1,12 +1,12 @@
 package io.dummymaker.model;
 
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.util.CollectionUtils;
 
 import java.util.*;
 
 /**
- * "default comment"
+ * Gen rules for specific field
+ * @see GenRules
  *
  * @author GoodforGod
  * @since 01.08.2019
@@ -29,16 +29,8 @@ public class GenFieldRule {
         this.generator = generator;
     }
 
-    public boolean isGeneral() {
-        return !isTyped() && !isNamed();
-    }
-
-    public boolean isTyped() {
+    boolean isTyped() {
         return fieldType != null;
-    }
-
-    public boolean isNamed() {
-        return CollectionUtils.isNotEmpty(fieldNames);
     }
 
     public Class<?> getType() {

@@ -57,8 +57,8 @@ public class GenRules {
         return targetRule.isPresent()
                 ? targetRule
                 : rules.stream()
-                .filter(GenRule::isGlobal)
-                .findFirst();
+                        .filter(GenRule::isGlobal)
+                        .findFirst();
     }
 
     /**

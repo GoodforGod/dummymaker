@@ -3,6 +3,7 @@ package io.dummymaker.scan.impl;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.PackageUtils;
+import io.dummymaker.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,9 @@ public class ResourceScanner implements IScanner<String, String> {
      */
     @Override
     public Collection<String> scan(String packageOrPath) {
+        if(StringUtils.isBlank(packageOrPath))
+            return Collections.emptyList();
+
         final String path = PackageUtils.toRelativePath(packageOrPath);
         return getSystemResources(packageOrPath).stream()
                 .map(r -> r.getPath().startsWith("jar:")
