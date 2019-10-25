@@ -70,14 +70,14 @@ public class GenRulesTests extends Assert {
         assertEquals(rule1, rule2);
     }
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void genRuleOfTargetInvalidForNull() {
         GenRule.of(null)
                 .add(ByteGenerator.class, "a")
                 .getRules();
     }
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void genRuleOfTargetInvalidForObject() {
         GenRule.of(Object.class)
                 .add(ByteGenerator.class, "a")
@@ -95,21 +95,21 @@ public class GenRulesTests extends Assert {
     }
 
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void genRuleAutoDepthInvalidForNull() {
         GenRule.auto(null, 2)
                 .add(ByteGenerator.class, "a")
                 .getRules();
     }
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void genRuleAutoDepthInvalidForObject() {
         GenRule.auto(Object.class, 2)
                 .add(ByteGenerator.class, "a")
                 .getRules();
     }
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void genRuleAutoDepthInvalidDepthLessOne() {
         GenRule.auto(DummyEmbedded.class, 0)
                 .add(ByteGenerator.class, "a")
@@ -132,9 +132,8 @@ public class GenRulesTests extends Assert {
 
         final List<GenFieldRule> mergedFieldRules = merged.getRules();
         assertNotNull(mergedFieldRules);
-        assertEquals(1, mergedFieldRules.size());
-        assertTrue(mergedFieldRules.get(0).getNames().contains("a"));
+        assertEquals(2, mergedFieldRules.size());
+        assertTrue(mergedFieldRules.get(1).getNames().contains("a"));
         assertTrue(mergedFieldRules.get(0).getNames().contains("aa"));
     }
-
 }

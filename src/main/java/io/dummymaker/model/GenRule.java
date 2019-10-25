@@ -144,9 +144,9 @@ public class GenRule {
         return (namedGenerator.isPresent())
                 ? namedGenerator
                 : rules.stream()
-                .filter(r -> field.getType().equals(r.getType()) || r.getNames().contains(field.getName()))
-                .findAny()
-                .map(GenFieldRule::getGenerator);
+                        .filter(r -> field.getType().equals(r.getType()))
+                        .findAny()
+                        .map(GenFieldRule::getGenerator);
 
     }
 

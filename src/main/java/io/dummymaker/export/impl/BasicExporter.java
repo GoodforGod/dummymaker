@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.dummymaker.util.StringUtils.isBlank;
 
@@ -37,7 +38,7 @@ abstract class BasicExporter implements IExporter {
     private final GenRules rules;
 
     /**
-     * @param rules from gen factory
+     * @param rules    from gen factory
      * @param caseUsed naming strategy
      * @param format   export format
      * @see ICase
@@ -140,7 +141,7 @@ abstract class BasicExporter implements IExporter {
                 case COLLECTION:
                     return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
                 case MAP:
-                    return ExportContainer.asMap(exportFieldName, convertAsMap(exportFieldValue));
+                    return ExportContainer.asMap(exportFieldName, convertAsMap((Map) exportFieldValue));
 
                 default:
                     break;
@@ -171,11 +172,10 @@ abstract class BasicExporter implements IExporter {
     }
 
     @SuppressWarnings("unchecked")
-    private String convertAsMap(Object exportMap) {
-        final StringBuilder builder = new StringBuilder("{");
-        ((Map) exportMap).forEach((k, v) -> builder.append("\"").append(k).append("\":\"").append(v).append("\","));
-        int length = builder.length();
-        return builder.toString().substring(0, length - 1) + "}";
+    private String convertAsMap(Map exportMap) {
+        return ((Set<Map.Entry>) exportMap.entrySet()).stream()
+                .map(e -> String.format("\"%s\":\"%s\"", e.getKey(), e.getValue()))
+                .collect(Collectors.joining(",", "{", "}"));
     }
 
     /**
