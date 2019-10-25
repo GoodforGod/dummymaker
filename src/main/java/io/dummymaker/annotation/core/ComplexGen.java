@@ -24,8 +24,6 @@ import java.lang.annotation.Target;
  * @see IGenerator
  * @see IMapScanner
  * @see IAnnotationScanner
- * @see io.dummymaker.factory.IPopulateFactory
- * @see io.dummymaker.factory.IProduceFactory
  * @since 21.04.2018
  */
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -36,7 +34,6 @@ public @interface ComplexGen {
      * Contains complex generator class to be called to generate values on populate factory
      *
      * @return generator
-     * @see io.dummymaker.factory.IPopulateFactory
      */
     Class<? extends IComplexGenerator> value() default NullGenerator.class;
 }

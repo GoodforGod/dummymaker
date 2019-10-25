@@ -22,8 +22,6 @@ import java.lang.annotation.Target;
  * @see IGenerator
  * @see IMapScanner
  * @see IAnnotationScanner
- * @see io.dummymaker.factory.IPopulateFactory
- * @see io.dummymaker.factory.IProduceFactory
  * @since 28.05.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -34,7 +32,6 @@ public @interface PrimeGen {
      * Contains generator class to be called to generate values on factory
      *
      * @return generator
-     * @see io.dummymaker.factory.IPopulateFactory
      */
     Class<? extends IGenerator> value() default NullGenerator.class;
 }

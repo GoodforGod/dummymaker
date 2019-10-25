@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  * Ignores object production
  *
  * @author GoodforGod
- * @see io.dummymaker.factory.IProduceFactory
  * @see io.dummymaker.export.IExporter
  * @since 01.03.2019
  */

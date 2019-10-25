@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
  * When annotation have attributes or value generates for multiple field types
  *
  * @author GoodforGod
- * @see io.dummymaker.factory.IPopulateFactory
  * @see ComplexGen
  * @since 21.04.2018
  */

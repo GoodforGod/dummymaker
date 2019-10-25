@@ -42,7 +42,6 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
  * @see IGenFactory
  * @since 21.07.2019
  */
-@SuppressWarnings("Duplicates")
 public class GenFactory implements IGenFactory {
 
     private final GenRules rules;

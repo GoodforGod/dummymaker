@@ -8,7 +8,6 @@ import io.dummymaker.generator.IGenerator;
  * Used by populate factory and genEnumerate
  *
  * @author GoodforGod
- * @see io.dummymaker.factory.IPopulateFactory
  * @see GenSequence
  * @since 07.06.2017
  */

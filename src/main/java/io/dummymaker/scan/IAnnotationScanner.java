@@ -14,7 +14,6 @@ import java.util.Map;
  * @author GoodforGod
  * @see AnnotationScanner
  * @see io.dummymaker.scan.impl.UniqueScanner
- * @see io.dummymaker.factory.IPopulateFactory
  * @since 30.05.2017
  */
 public interface IAnnotationScanner extends IMapScanner<Field, List<Annotation>, Class> {

@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
  * Generate object with fields type and populate its fields marked by gen annotations
  *
  * @author GoodforGod
- * @see io.dummymaker.factory.IPopulateFactory
  * @since 09.03.2018
  */
 @PrimeGen(EmbeddedGenerator.class)
