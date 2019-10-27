@@ -1,14 +1,16 @@
 # DummyMaker  :hotsprings:
 
-[![travis](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)](https://travis-ci.org/GoodforGod/dummymaker)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
+[![travis](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)](https://travis-ci.org/GoodforGod/dummymaker)
 
 Library can generate *Data Objects* filled *random data* for your tests, 
 database setup, Big Data setups or other workloads. 
 Library is very flexible at tuning.
 
 It can even do little bit of export in *CSV/JSON/XML/SQL formats*.
+
+For versions **earlier than 2.0.0** refer to [this documentation](/README-VERSION-1.X.md).
 
 ## Dependency :rocket:
 **Gradle**
@@ -145,7 +147,53 @@ User user = factory.build(User.class);
 In this case only *name* and *number* fields will be filled with data, 
 as they are the only ones suited to factory *rules*.
 
+## Auto rules
 
+In case you want factory automatically fill fields based on their types
+and names, you can setup *auto* rules (same as *GenAuto* annotation).
+
+```java
+GenRules rules = GenRules.of(
+        GenRule.auto(User.class, 2)
+                .add(NameGenerator.class, "name")
+                .add(ShortGenerator.class, int.class)
+);
+
+GenFactory factory = new GenFactory(rules);
+User user = factory.build(User.class);
+```
+
+In this case fields *name* and *number* will be filled as previously but
+also all other fields will be automatically filled.
+
+```java
+GenRules rules = GenRules.of(GenRule.auto(User.class, 2));
+
+GenFactory factory = new GenFactory(rules);
+User user = factory.build(User.class);
+```
+
+This will have same affect as previous rules, due to fields *name* and *number*
+been automatically filled.
+
+## Global rules
+
+In case you have a lot of common fields with same values in different classes
+you can setup *global* rules for all classes that will be filled.
+
+```java
+GenRules rules = GenRules.of(
+            GenRule.global(2)
+                .add(NameGenerator.class, "name")
+                .add(ShortGenerator.class, int.class)
+);
+
+GenFactory factory = new GenFactory(rules);
+User user = factory.build(User.class);
+```
+
+In this case all fields with name *name* in all classes will be
+filled using *NameGenerator* and same for *int* fields with *ShortGenerator*.
 
 
 

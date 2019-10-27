@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * @author GoodforGod
  * @since 31.07.2017
  */
-public class ProduceFactoryTest {
+public class GenFactoryBuildTests {
 
     private final GenFactory factory = new GenFactory();
 
