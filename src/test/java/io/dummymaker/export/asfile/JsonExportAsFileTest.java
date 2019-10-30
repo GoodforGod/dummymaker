@@ -8,7 +8,6 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
-import org.junit.Test;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
                 new JsonValidator(), Format.JSON, 5, 14);
     }
 
-    @Test
+//    @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 

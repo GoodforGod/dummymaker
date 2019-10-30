@@ -8,7 +8,6 @@ import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.XmlValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
-import org.junit.Test;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
                 new XmlValidator(), Format.XML, 5, 12);
     }
 
-    @Test
+//    @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.CAMEL_CASE.value();
 
