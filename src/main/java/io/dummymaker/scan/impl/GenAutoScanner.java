@@ -32,39 +32,6 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
         this.supplier = supplier;
     }
 
-    @Override
-    public Map<Field, GenContainer> scan(Class target) {
-        return scan(target, false);
-    }
-
-    @Override
-    public Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
-        final Map<Field, GenContainer> scanned = super.scan(target);
-
-        final boolean isGenAuto = isMarkedGenAuto(target, isDefaultAuto);
-        if(!isGenAuto)
-            return scanned;
-
-        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        getAllFilteredFields(target).stream()
-                .filter(f -> !isIgnored(f))
-                .forEach(f -> containers.put(f, scanned.getOrDefault(f, getAutoContainer(f))));
-
-        return containers;
-    }
-
-    /**
-     * Create auto gen container
-     *
-     * @param field target to containerize
-     * @return gen auto container
-     */
-    private GenContainer getAutoContainer(Field field) {
-        final boolean isComplex = isComplex(field);
-        final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
-        return GenContainer.asAuto(suitable, isComplex);
-    }
-
     /**
      * Check if class is auto generative
      *
@@ -89,5 +56,38 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
                 : Arrays.stream(target.getDeclaredAnnotations())
                 .filter(IS_AUTO)
                 .findAny();
+    }
+
+    @Override
+    public Map<Field, GenContainer> scan(Class target) {
+        return scan(target, false);
+    }
+
+    @Override
+    public Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
+        final Map<Field, GenContainer> scanned = super.scan(target);
+
+        final boolean isGenAuto = isMarkedGenAuto(target, isDefaultAuto);
+        if (!isGenAuto)
+            return scanned;
+
+        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
+        getAllFilteredFields(target).stream()
+                .filter(f -> !isIgnored(f))
+                .forEach(f -> containers.put(f, scanned.getOrDefault(f, getAutoContainer(f))));
+
+        return containers;
+    }
+
+    /**
+     * Create auto gen container
+     *
+     * @param field target to containerize
+     * @return gen auto container
+     */
+    private GenContainer getAutoContainer(Field field) {
+        final boolean isComplex = isComplex(field);
+        final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
+        return GenContainer.asAuto(field, suitable, isComplex);
     }
 }

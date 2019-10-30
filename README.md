@@ -352,8 +352,8 @@ And embedded list will have only 1 depth level.
 You can extend basic functionality with your own annotations and generators. All infrastructure will support custom generators, annotations, generate factories with no doubt.
 
 You need to:
-* Create generator using *IGenerator* interface ir *IComplexGenerator*.
-* Mark Dummy object field with **GenCustom** annotation and your generator as value.
+* Create generator via *IGenerator* or *IComplexGenerator* interface.
+* Annotated class field with **GenCustom** and your generator.
 * *Magic*.
 * Done.
 

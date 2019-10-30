@@ -22,7 +22,8 @@ public class CastUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
 
-    private CastUtils() { }
+    private CastUtils() {
+    }
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {

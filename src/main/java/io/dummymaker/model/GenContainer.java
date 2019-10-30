@@ -9,6 +9,7 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 /**
  * Container with core annotation and its child marker annotation
@@ -29,6 +30,8 @@ public class GenContainer {
      */
     private final Annotation core;
 
+    private final Field field;
+
     /**
      * Its child marker annotation like GenString, etc
      */
@@ -42,11 +45,13 @@ public class GenContainer {
      */
     private Class<? extends IGenerator> generator;
 
-    private GenContainer(final Annotation core,
+    private GenContainer(final Field field,
+                         final Annotation core,
                          final Annotation marker,
                          final boolean isComplex,
                          final boolean isAuto,
                          final Class<? extends IGenerator> generator) {
+        this.field = field;
         this.marker = marker;
         this.core = core;
         this.isComplex = isComplex;
@@ -65,19 +70,19 @@ public class GenContainer {
         }
     }
 
-    public static GenContainer asCustom(Annotation marker) {
+    public static GenContainer asCustom(Field field, Annotation marker) {
         final Class<? extends IGenerator> generator = ((GenCustom) marker).value();
         final boolean isComplex = generator.isAssignableFrom(IComplexGenerator.class);
-        return new GenContainer(null, marker, isComplex, false, generator);
+        return new GenContainer(field, null, marker, isComplex, false, generator);
     }
 
-    public static GenContainer asGen(Annotation core, Annotation marker) {
+    public static GenContainer asGen(Field field, Annotation core, Annotation marker) {
         final boolean isComplex = ComplexGen.class.equals(core.annotationType());
-        return new GenContainer(core, marker, isComplex, false, null);
+        return new GenContainer(field, core, marker, isComplex, false, null);
     }
 
-    public static GenContainer asAuto(Class<? extends IGenerator> generator, boolean isComplex) {
-        return new GenContainer(null, null, isComplex, true, generator);
+    public static GenContainer asAuto(Field field, Class<? extends IGenerator> generator, boolean isComplex) {
+        return new GenContainer(field, null, null, isComplex, true, generator);
     }
 
     public boolean isEmbedded() {
@@ -94,6 +99,10 @@ public class GenContainer {
 
     public boolean isAuto() {
         return isAuto;
+    }
+
+    public Field getField() {
+        return field;
     }
 
     public Annotation getCore() {

@@ -69,18 +69,18 @@ public class GenScanner extends BasicScanner implements IGenScanner {
      * <p>
      * If not presented than try to generate gen auto container
      *
-     * @param field     target to containerize
+     * @param field target to containerize
      * @return gen container
      */
     private Optional<GenContainer> getContainer(Field field) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {
             if (isGenCustom.test(annotation)) {
-                return Optional.of(GenContainer.asCustom(annotation));
+                return Optional.of(GenContainer.asCustom(field, annotation));
             }
 
             for (Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                 if (isGen.test(inline)) {
-                    return Optional.of(GenContainer.asGen(inline, annotation));
+                    return Optional.of(GenContainer.asGen(field, inline, annotation));
                 }
             }
         }
@@ -90,6 +90,7 @@ public class GenScanner extends BasicScanner implements IGenScanner {
 
     /**
      * Exclude ignored population fields
+     *
      * @param field to validate
      * @return true if fields is ignored
      */

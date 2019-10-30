@@ -18,6 +18,7 @@ public interface IGenStorage extends IGenSupplier {
 
     /**
      * Gets depth for target based on its parent
+     *
      * @param parent class
      * @param target class
      * @return depth

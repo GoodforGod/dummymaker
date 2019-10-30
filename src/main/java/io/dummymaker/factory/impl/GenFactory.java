@@ -180,7 +180,7 @@ public class GenFactory implements IGenFactory {
         }
 
         final Object casted = castObject(generated, field.getType());
-        if(!isEmbedded && casted == null)
+        if (!isEmbedded && casted == null)
             storage.markNullable(field);
 
         return casted;
@@ -204,7 +204,7 @@ public class GenFactory implements IGenFactory {
 
         final Object embedded = instantiate(type);
         final Object entity = fillEntity(embedded, storage, depth + 1);
-        if(entity == null) {
+        if (entity == null) {
             storage.markNullable(field);
             return null;
         }

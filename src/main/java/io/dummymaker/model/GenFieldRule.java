@@ -6,9 +6,9 @@ import java.util.*;
 
 /**
  * Gen rules for specific field
- * @see GenRules
  *
  * @author GoodforGod
+ * @see GenRules
  * @since 01.08.2019
  */
 public class GenFieldRule {
@@ -17,7 +17,7 @@ public class GenFieldRule {
     private final Set<String> fieldNames;
     private final Class<? extends IGenerator> generator;
 
-    GenFieldRule(Class<? extends IGenerator> generator, String ... fieldNames) {
+    GenFieldRule(Class<? extends IGenerator> generator, String... fieldNames) {
         this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
         this.fieldType = null;
         this.generator = generator;

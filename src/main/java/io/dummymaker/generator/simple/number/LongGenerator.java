@@ -7,8 +7,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Long positive number generator
  *
- * @see Long#MAX_VALUE
  * @author GoodforGod
+ * @see Long#MAX_VALUE
  * @since 15.09.2019
  */
 public class LongGenerator implements IGenerator<Long> {

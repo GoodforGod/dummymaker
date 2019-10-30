@@ -108,6 +108,7 @@ public class ClassContainer {
                 .filter(e -> format.getSupported().contains(e.getValue().getType()))
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> { });
+                        (m, u) -> {
+                        });
     }
 }

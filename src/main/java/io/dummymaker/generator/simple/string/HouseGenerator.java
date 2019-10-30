@@ -25,7 +25,7 @@ public class HouseGenerator implements IGenerator<String> {
     @Override
     public String generate() {
         final String number = String.valueOf(ThreadLocalRandom.current().nextInt(1, 99));
-        if(ThreadLocalRandom.current().nextDouble() > 0.33)
+        if (ThreadLocalRandom.current().nextDouble() > 0.33)
             return number;
 
         final char postfix = (ThreadLocalRandom.current().nextBoolean())

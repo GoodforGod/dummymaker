@@ -113,7 +113,6 @@ public class GenRule {
                 });
 
 
-
         rules.addAll(rule.rules);
         return this;
     }
@@ -144,9 +143,9 @@ public class GenRule {
         return (namedGenerator.isPresent())
                 ? namedGenerator
                 : rules.stream()
-                        .filter(r -> field.getType().equals(r.getType()))
-                        .findAny()
-                        .map(GenFieldRule::getGenerator);
+                .filter(r -> field.getType().equals(r.getType()))
+                .findAny()
+                .map(GenFieldRule::getGenerator);
 
     }
 

@@ -13,7 +13,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  * @author GoodforGod
  * @since 12.10.2019
  */
-public class IntegetMediumGenerator  implements IGenerator<Integer> {
+public class IntegetMediumGenerator implements IGenerator<Integer> {
 
     private final Pattern pattern = Pattern.compile("postal|code|index ", CASE_INSENSITIVE);
 

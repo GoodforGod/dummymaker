@@ -8,9 +8,8 @@ import java.util.stream.Stream;
  * Factory that generates data objects
  * Core that handles all top level logic
  *
- * @see io.dummymaker.factory.impl.GenFactory
- *
  * @author GoodforGod
+ * @see io.dummymaker.factory.impl.GenFactory
  * @since 21.07.2019
  */
 public interface IGenFactory {

@@ -77,7 +77,7 @@ class GenStorage implements IGenStorage {
 
     @Override
     public int getDepth(Class<?> parent, Class<?> target) {
-        if(target == null)
+        if (target == null)
             return 1;
 
         final Predicate<Node> filter = n -> n.getParent() != null
@@ -118,7 +118,7 @@ class GenStorage implements IGenStorage {
      */
     private boolean isAnyAutoMarked(Class<?> target) {
         final Predicate<Node> filter = n -> n.value().getType().equals(target);
-        if(filter.test(graph) && graph.value().isMarkedAuto())
+        if (filter.test(graph) && graph.value().isMarkedAuto())
             return true;
 
         final Optional<Node> node = graphBuilder.find(graph, filter);
@@ -127,6 +127,7 @@ class GenStorage implements IGenStorage {
 
     /**
      * Scan recursively if any parent or node is marked
+     *
      * @param node  to scan
      * @param depth level to validate
      * @return true if parent or start node is marked

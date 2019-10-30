@@ -28,14 +28,13 @@ import static io.dummymaker.util.StringUtils.isBlank;
 abstract class BasicExporter implements IExporter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
+    private final Format format;
+    private final GenRules rules;
     /**
      * Points as default to directory from where code is running
      */
     private String path;
     private ICase caseUsed;
-    private final Format format;
-    private final GenRules rules;
 
     /**
      * @param rules    from gen factory

@@ -24,7 +24,7 @@ public class Node {
 
     public static Node of(Payload value, Node parent) {
         final Node node = new Node(value, parent);
-        if(parent != null)
+        if (parent != null)
             parent.add(node);
 
         return node;

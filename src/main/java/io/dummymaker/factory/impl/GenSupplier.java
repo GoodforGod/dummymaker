@@ -49,6 +49,7 @@ public class GenSupplier implements IGenSupplier {
 
     /**
      * Default generator in case suitable not found
+     *
      * @return generator class
      */
     protected Class<? extends IGenerator> getDefault() {

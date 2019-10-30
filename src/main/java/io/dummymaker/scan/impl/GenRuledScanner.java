@@ -38,7 +38,7 @@ public class GenRuledScanner extends GenAutoScanner {
         final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
 
         final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);
-        if(!targeted.isPresent())
+        if (!targeted.isPresent())
             return scanned;
 
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
@@ -46,7 +46,7 @@ public class GenRuledScanner extends GenAutoScanner {
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> {
                     final GenContainer container = r.getDesired(f)
-                            .map(g -> GenContainer.asAuto(g, isComplex(f)))
+                            .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
                             .orElse(scanned.get(f));
 
                     if (container != null && !r.isIgnored(f))

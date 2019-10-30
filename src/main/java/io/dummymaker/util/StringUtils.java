@@ -8,7 +8,8 @@ package io.dummymaker.util;
  */
 public class StringUtils {
 
-    private StringUtils() { }
+    private StringUtils() {
+    }
 
     public static boolean isEmpty(String value) {
         return (value == null || value.isEmpty());
