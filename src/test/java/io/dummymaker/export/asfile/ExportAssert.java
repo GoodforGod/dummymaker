@@ -43,7 +43,7 @@ abstract class ExportAssert extends Assert {
     }
 
     String readDummyFromFile(String filename) throws Exception {
-        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("./" + filename), StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
