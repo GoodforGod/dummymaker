@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class DummyAutoNamedTests extends Assert {
 
-    private final GenFactory factory = new GenFactory(GenRules.of(GenRule.auto(DummyAutoNamed.class)));
+    private final GenFactory factory = new GenFactory(GenRules.of().add(GenRule.auto(DummyAutoNamed.class)));
 
     @Test
     public void allNamedFieldsCorrect() {

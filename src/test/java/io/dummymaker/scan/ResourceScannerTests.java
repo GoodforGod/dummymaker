@@ -17,6 +17,17 @@ import java.util.Collection;
 public class ResourceScannerTests extends Assert {
 
     @Test
+    public void validJarResourcesForLogLibrary() {
+        final ResourceScanner scanner = new ResourceScanner();
+        final Collection<String> packages = scanner.scan("org.slf4j");
+
+        assertNotNull(packages);
+        assertFalse(packages.isEmpty());
+
+        assertTrue(packages.contains("org/slf4j/"));
+    }
+
+    @Test
     public void validResourcesScanned() {
         final ResourceScanner scanner = new ResourceScanner();
         final Collection<String> packages = scanner.scan("io.dummymaker.writer");

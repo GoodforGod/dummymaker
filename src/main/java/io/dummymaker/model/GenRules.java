@@ -68,9 +68,6 @@ public class GenRules {
      * @return same gen rules
      */
     public GenRules add(GenRule rule) {
-        if (rule == null)
-            throw new NullPointerException("Rule can not be null");
-
         final Optional<GenRule> foundRule = rules.stream()
                 .filter(r -> r.getTarget().equals(rule.getTarget()))
                 .findAny();

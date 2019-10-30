@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -110,14 +109,8 @@ public class CastUtils {
             } else {
                 return ((T) constructor.newInstance());
             }
-
-        } catch (InstantiationException | InvocationTargetException e) {
+        } catch (Exception e) {
             logger.warn(e.getMessage());
-            logger.warn("Can not instantiate '{}', may be an abstract, interface, array, primitive.", target);
-            return null;
-        } catch (IllegalAccessException e) {
-            logger.warn(e.getMessage());
-            logger.warn("Can not instantiate, '{}' due to no access to object.", target);
             return null;
         } finally {
             if (constructor != null)

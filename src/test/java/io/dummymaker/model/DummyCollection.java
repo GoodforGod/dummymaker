@@ -25,8 +25,12 @@ public class DummyCollection {
     @GenSet(value = BooleanGenerator.class)
     private Set<String> strings;
 
+    private Set<String> stringsAuto;
+
     @GenMap
     private Map<String, Object> map;
+
+    private Map<String, Object> mapAuto;
 
     @GenList(value = BooleanGenerator.class, fixed = 4)
     private List<String> objectsFix;
