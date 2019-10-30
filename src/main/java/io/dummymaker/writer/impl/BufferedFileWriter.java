@@ -43,7 +43,7 @@ public class BufferedFileWriter implements IWriter {
     }
 
     private String buildPath(final String fileName, final String path, final String extension) {
-        final String workPath = StringUtils.isBlank(path) ? "" : path;
+        final String workPath = StringUtils.isBlank(path) ? "./" : path;
         return workPath + fileName + extension;
     }
 
