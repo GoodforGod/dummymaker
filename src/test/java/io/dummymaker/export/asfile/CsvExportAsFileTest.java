@@ -72,7 +72,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
         validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
-    @Test
+//    @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
