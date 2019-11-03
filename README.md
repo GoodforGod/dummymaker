@@ -10,13 +10,13 @@ Library is very flexible at tuning.
 
 It can even do little bit of export in *CSV/JSON/XML/SQL formats*.
 
-For versions **earlier than 2.0.0** refer to [this documentation](/README-VERSION-1.X.md).
+Documentation for **versions earlier than 2.0.0** present in [this document](/README-VERSION-1.X.md).
 
 ## Dependency :rocket:
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:2.0.0-SNAPSHOT'
+    compile 'com.github.goodforgod:dummymaker:2.0.0'
 }
 ```
 
@@ -25,25 +25,29 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 ## Content
-- [Example](#start-example)
-- [Annotations](#annotations)
-  - [Auto Annotation](#auto-annotation)
+- [Factory Example](#factory-example)
+    - [Methods](#factory-methods)
+    - [Gen Auto](#gen-auto-annotation)
+- [Factory Configuration (GenRules)](#factory-configuration)
+    - [Manual rules](#manual-rules)
+    - [Auto rules](#auto-rules)
+    - [Global rules](#global-rules)
+- [Annotation Examples](#annotation-examples)
   - [Array Annotations](#array-annotations)  
   - [Collection Annotations](#collection-annotations)  
   - [Time Annotation](#time-annotation)  
   - [Special Annotations](#special-annotations)  
-- [Getting Started Examples](#getting-started-examples)
-  - [Annotations](#annotations-examples)
-  - [Factories](#factories-examples)
+- [Export](#export)
 - [Customization](#customization)
-  - [IGenerator](#igenerator)
-  - [IComplexGenerator](#icomplexgenerator)
-  - [Complex Gen Annotation](#complex-gen-annotation)
+  - [Simple Generator](#igenerator)
+  - [Complex Generator](#icomplexgenerator)
+  - [Gen Custom Annotation](#gen-custom-annotation)
+  - [Gen Complex Annotation](#gen-complex-annotation)
 - [Version History](#version-history)
 
 ## Factory example
@@ -84,7 +88,7 @@ public static List<User> getUsers() {
 ### Factory Methods
 
 Factory can not only instantiate classes but also provides other
-contracts to manipulate with dummies.
+contracts to manipulate with objects like using provided supplier.
 
 ```java
 final GenFactory factory = new GenFactory();
@@ -147,7 +151,7 @@ User user = factory.build(User.class);
 In this case only *name* and *number* fields will be filled with data, 
 as they are the only ones suited to factory *rules*.
 
-## Auto rules
+### Auto rules
 
 In case you want factory automatically fill fields based on their types
 and names, you can setup *auto* rules (same as *GenAuto* annotation).
@@ -176,7 +180,7 @@ User user = factory.build(User.class);
 This will have same affect as previous rules, due to fields *name* and *number*
 been automatically filled.
 
-## Global rules
+### Global rules
 
 In case you have a lot of common fields with same values in different classes
 you can setup *global* rules for all classes that will be filled.
@@ -195,48 +199,87 @@ User user = factory.build(User.class);
 In this case all fields with name *name* in all classes will be
 filled using *NameGenerator* and same for *int* fields with *ShortGenerator*.
 
+## Annotation Examples
+
+### Array Annotations
+
+Responsible for filling arrays data, could be applied annotation, 
+*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
 
 
-### **Array Annotations**
+```java
+public class User {
 
-**GenArray** annotation allow you to generate an array of any type library provides generators for. 
-Arrays in classes annotated with *@GenAuto* will be generated automatically.
+    @GenArray
+    private int[] numbers;
+    
+    @GenArray
+    private int[][] numberArrays;
+}
+```
 
-**GenArray2D** annotation allow you to generate two dimension array of any type library provides generators for. 
-Arrays in classes annotated with *@GenAuto* will be generated automatically.
 
-Arrays exports are supported only by **JsonExporter** in mean time.
+### Collection Annotations
 
-### **Collection Annotations**
+Responsible for filling collections data, like list, set or map. Could be applied annotation, 
+*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
 
-Collection annotations like: **GenList, GenSet, GenMap** used 
-to populate fields with associated types.
 
-Collection exports are supported only by **JsonExporter** in mean time.
+```java
+public class User {
 
-### **Time Annotation**
+    @GenList
+    private List<Integer> numberList;
+    
+    @GenSet
+    private Set<Integer> numberSet;
+    
+    @GenMap
+    private Map<Integer, String> numberMap;
+}
+```
+
+
+### Time Annotation
+
+Responsible for filling time data, could be applied via annotation, 
+*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
 
 **GenTime** annotation is used to create time/dateTime/timestamps for field.
 Automatically identify field time *type* and generate value for it. 
 
-**Supported time fields types**
+Supported time fields types:
 * *LocalDate*
 * *LocalTime*
 * *LocalDateTime*
 * *Date (java.util.Date)*
 * *Timestamp (java.sql.Timestamp)*
 
-### **Embedded Annotation**
+```java
+public class User {
 
-*GenEmbedded* annotation used to mark complex object fields 
-(like fields which also contain *Gen* annotations inside).
+    @GenTime
+    private Timestamp timestamp;
+    
+    @GenTime
+    private LocalDateTime dateTime;
+}
+```
 
-Annotation support **depth** parameter, which indicates maximum depth of the Dummy 
-from its root and can have 20 levels as maximum.
+### Embedded Annotation
 
-Embedded fields are **NOT SUPPORTED** by any *IExporter* in mean time.
+Responsible for filling complex data, could be applied annotation, 
+*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
 
-### **Special Annotations**
+```java
+public class User {
+
+    @GenEmbedded
+    private User parent;
+}
+```
+
+### Special Annotations
 
 * ***GenExportForce*** allow to *force* export object field, even if it is not generated by *Gen*Annotation.
 
@@ -252,100 +295,9 @@ Embedded fields are **NOT SUPPORTED** by any *IExporter* in mean time.
 
 * ***GenCustom*** used to mark [field with custom generators](#gen-annotation).
 
-## *Getting Started Examples*
+## Export
 
-### **Annotations Examples**
-
-####  *Field annotate example*
-
-Make sure that *Gen* annotation *generate type* is **same** or is **castable** to field type, or *field type* is **string** so in this case any object can be casted to *string*.
-
-![](https://media.giphy.com/media/1FT9ZdjTrfzVe/giphy.gif)
-
-#### *Auto Gen magic*
-
-Just simple use *GenAuto* on class and library will do all for you.
-All fields will be populated automatically if such generators are available.
-
-Check *Auto Annotation* [part for details](#auto-annotation).
-
-![](https://media.giphy.com/media/2fOt0kmS5Zk99CldyU/giphy.gif)
-
-#### *Force and Ignore annotations*
-
-In this case, field city will be export despite it isn't marked with *Gen* annotation, value will be "Saint-Petersburg".
-And field *id* will **NOT** be export if *ignore* annotation will have *true* (*default*) value.
-
-![](https://media.giphy.com/media/fGUhbzqFXGO18YDdmM/giphy.gif)
-
-#### *Enumerate and Rename field example*
-
-*GenEnumerate* annotation will enumerate Dummy field starting from 10 in this case (*from 0 is default*).
-It means if we want to produce 10 Dummy Objects, they will have *id* from 10 to 19.
-
-*GenRenameExport* annotation will change *field* or *class* export name.
-
-![](https://media.giphy.com/media/1lAKHEbMtZ0ISV1HMp/giphy.gif)
-
-#### *Class name Rename example*
-
-*GenRenameExport* annotation will change **class** *export* name.in this case.
-
-![](https://media.giphy.com/media/cdMPMc4OcXoBb0erSO/giphy.gif)
-
-#### *Gen Time annotation example*
-
-You can generate time/date values using this annotation.
-
-Read more in *time annotation* section.
-
-![](https://media.giphy.com/media/MuCzQ6BfY1Y1HrggsP/giphy.gif)
-
-#### *Arrays annotation example*
-
-You can populate single or two dimension array any generic type you want, if such *IGenerator* is available (or you can create your own generator).
-
-Read more in *array annotation* section.
-
-![](https://media.giphy.com/media/eB5X49oQHkClApV3PA/giphy.gif)
-
-#### *Collection annotation example*
-
-You can populate collections such as *Set, List, Map* with any generic type you want, if such *IGenerator* is available (or you can create your own generator).
-
-Read more in *collection annotation* section.
-
-![](https://media.giphy.com/media/8FrjAE955A2vTmxgal/giphy.gif)
-
-#### *Collection parameters*
-
-*List* will have from 50 to 100 elements and values will be generated by *NameGenerator*
-*Set* will always have a fixed 13 elements (or less if hash codes will be the same for different objects)
-
-![](https://media.giphy.com/media/3b8NNh405Y9ORC8NMa/giphy.gif)
-
-#### *Embedded fields example*
-
-You can populate complex object fields using *GenEmbedded* annotation.
-
-In this case depth of embedded object field will be 5 levels.
-
-And embedded list will have only 1 depth level.
-
-![](https://media.giphy.com/media/kFezIHBLZ961ariUc7/giphy.gif)
-
-### **Factories Examples**
-
-*GenPopulateFactory/GenProvideFactory* this factories allow you to populate/produce Dummy objects.
-
-#### *Produce 1 or more Dummy objects demonstration*
-![](https://media.giphy.com/media/QmJ3rXQntaRYcgeLPM/giphy.gif)
-
-#### *Populate 1 or more Dummy objects demonstration*
-
-*GenPopulateFactory* will be useful in case, you already have complex objects and you want just to populate some of their fields.
-
-![](https://media.giphy.com/media/1ffn6PiFgTQKaakZ8B/giphy.gif)
+Information about different exporters can be [found here](/README-EXPORT.md).
 
 ## Customization
 
@@ -409,8 +361,22 @@ public class CustomComplexGenerator implements IComplexGenerator {
 }
 ```
 
+### Gen Custom Annotation
 
-### Complex Gen Annotation
+For custom *IGenerator*s or *IComplexGenerator*s that don't require special annotation
+fields just use **@GenCustom** annotation that is provided by library to mark fields with your
+custom generators.
+
+```java
+public class User {
+
+    @GenCustom(CustomComplexGenerator.class)
+    private String number;
+}
+```
+
+
+### Gen Complex Annotation
 
 Is required when you need properties for your *IComplexGenerator*.
 
@@ -429,24 +395,10 @@ public @interface GenInteger {
 In case you want custom annotation for simple generator you can do it as well, 
 just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
-### Gen Annotation
-
-For custom *IGenerator*s or *IComplexGenerator*s that don't require special annotation
-fields just use **@GenCustom** annotation that is provided by library to mark fields with your
-custom generators.
-
-```java
-public class User {
-
-    @GenCustom(CustomComplexGenerator.class)
-    private String number;
-}
-```
-
 
 ## Version History
 
-**2.0.0** - Unsigned int and byte, @Ignore annotation, @GenEnum enum generation, minor improvements.
+**2.0.0** - Redesign factory and contracts, improved complex and other generators, GenRules added for configuration without annotations, @Ignore annotation, @GenEnum enum generation, minor improvements and more.
 
 **1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
 
