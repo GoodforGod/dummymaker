@@ -201,10 +201,16 @@ filled using *NameGenerator* and same for *int* fields with *ShortGenerator*.
 
 ## Annotation Examples
 
+There are a lot of generators available such as *IntegerGenerator, LongGenerator, CityGenerator, etc.*
+
+All generators can be found in package *io.dummymaker.generator*.
+
+As well as all annotations such as *GenInteger, GenLong, GenCity, etc.* can be found in package *io.dummymaker.annotation.simple*.
+
 ### Array Annotations
 
-Responsible for filling arrays data, could be applied annotation, 
-*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
+Responsible for filling array data, can be applied as annotation or
+[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
 
 
 ```java
@@ -221,8 +227,8 @@ public class User {
 
 ### Collection Annotations
 
-Responsible for filling collections data, like list, set or map. Could be applied annotation, 
-*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
+Responsible for filling collection data, can be applied as annotation or
+[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
 
 
 ```java
@@ -242,8 +248,8 @@ public class User {
 
 ### Time Annotation
 
-Responsible for filling time data, could be applied via annotation, 
-*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
+Responsible for filling time data, can be applied as annotation or
+[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
 
 **GenTime** annotation is used to create time/dateTime/timestamps for field.
 Automatically identify field time *type* and generate value for it. 
@@ -268,8 +274,8 @@ public class User {
 
 ### Embedded Annotation
 
-Responsible for filling complex data, could be applied annotation, 
-*GenRule* or automatically applied via *@GenAuto* or auto *GenRule*.
+Responsible for filling complex data, can be applied as annotation or
+[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
 
 ```java
 public class User {
@@ -293,7 +299,7 @@ public class User {
 
 * ***GenSequence*** annotation with option (*from*) used to numerate Dummies fields as sequence (Works on *Integer/Long/String* field types).
 
-* ***GenCustom*** used to mark [field with custom generators](#gen-annotation).
+* ***GenCustom*** used to mark [field with custom generators](#gen-custom-annotation).
 
 ## Export
 
