@@ -10,7 +10,7 @@ Library is very flexible at tuning.
 
 It can even do little bit of export in *CSV/JSON/XML/SQL formats*.
 
-Documentation for **versions earlier than 2.0.0** present in [this document](/README-VERSION-1.X.md).
+Documentation for **versions earlier than 2.0.0** in [this document](/README-VERSION-1.X.md).
 
 ## Dependency :rocket:
 **Gradle**
@@ -311,7 +311,7 @@ You can extend basic functionality with your own annotations and generators. All
 
 You need to:
 * Create generator via *IGenerator* or *IComplexGenerator* interface.
-* Annotated class field with **GenCustom** and your generator.
+* Annotated class field with **GenCustom** (or your annotation) with your generator.
 * *Magic*.
 * Done.
 

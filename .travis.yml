@@ -4,11 +4,10 @@ dist: trusty
 install: true
 
 script:
-  - "./gradlew clean test jacocoTestReport"
+  - "./gradlew test jacocoTestReport"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 jdk:
-  - oraclejdk8
   - openjdk8
