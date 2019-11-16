@@ -12,11 +12,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Container class used to store class field information and different field states
+ * Container class used to store class field information and different field
+ * states
  * <p>
- * Class Container for class origin/final name
- * Fields origin/final names
- * Fields values as Field type
+ * Class Container for class origin/final name Fields origin/final names Fields
+ * values as Field type
  *
  * @author GoodforGod
  * @since 25.02.2018
@@ -48,8 +48,8 @@ public class ClassContainer {
     }
 
     /**
-     * Show whenever export values are presented
-     * If empty then no export values are present and export is pointless
+     * Show whenever export values are presented If empty then no export values are
+     * present and export is pointless
      *
      * @return boolean value stated if container is exportable
      */
@@ -58,7 +58,8 @@ public class ClassContainer {
     }
 
     /**
-     * Retrieve field by its export name (formatted via strategy or renamed via annotation)
+     * Retrieve field by its export name (formatted via strategy or renamed via
+     * annotation)
      *
      * @param exportFieldName field container with final name
      * @return field value
@@ -84,7 +85,8 @@ public class ClassContainer {
     }
 
     /**
-     * Retrieve container by its export name (formatted via strategy or renamed via annotation)
+     * Retrieve container by its export name (formatted via strategy or renamed via
+     * annotation)
      *
      * @param exportFieldName field container with final name
      * @return field container
@@ -108,7 +110,6 @@ public class ClassContainer {
                 .filter(e -> format.getSupported().contains(e.getValue().getType()))
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> {
-                        });
+                        (m, u) -> {});
     }
 }

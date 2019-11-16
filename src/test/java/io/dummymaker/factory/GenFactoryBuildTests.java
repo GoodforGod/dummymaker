@@ -72,7 +72,7 @@ public class GenFactoryBuildTests {
 
         assertTrue(dummy.getCity().matches("[a-zA-Z\\-]+"));
         assertTrue(dummy.getName().matches("[a-zA-Z]+"));
-        assertEquals((int) dummy.getNum(), 0);
+        assertEquals(0, (int) dummy.getNum());
         assertEquals("100", dummy.getGroup());
     }
 
@@ -178,7 +178,8 @@ public class GenFactoryBuildTests {
         assertTrue(dummy.getDateTime().toString(), localDateTimePattern.matcher(dummy.getDateTime().toString()).matches());
         assertTrue(dummy.getTimestamp().toString(), timestampPattern.matcher(dummy.getTimestamp().toString()).matches());
 
-        assertTrue(dummy.getDateTimeObject().toString(), localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
+        assertTrue(dummy.getDateTimeObject().toString(),
+                localDateTimePattern.matcher(dummy.getDateTimeObject().toString()).matches());
         assertTrue(dummy.getDateTimeString(), localDateTimePattern.matcher(dummy.getDateTimeString()).matches());
     }
 }

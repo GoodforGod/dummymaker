@@ -94,7 +94,6 @@ public class GenRulesTests extends Assert {
         assertFalse(rules.isEmpty());
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void genRuleAutoDepthInvalidForNull() {
         GenRule.auto(null, 2)

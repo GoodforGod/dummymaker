@@ -28,7 +28,6 @@ public class CadastralGenerator implements IGenerator<String> {
                 ThreadLocalRandom.current().nextInt(10, 99),
                 ThreadLocalRandom.current().nextInt(10, 99),
                 ThreadLocalRandom.current().nextInt(100000, 9999999),
-                ThreadLocalRandom.current().nextInt(10, 99)
-        );
+                ThreadLocalRandom.current().nextInt(10, 99));
     }
 }

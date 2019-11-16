@@ -23,8 +23,7 @@ public class GenUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
-    private GenUtils() {
-    }
+    private GenUtils() {}
 
     public static List<Class> getInterfaceType(Type type) {
         try {

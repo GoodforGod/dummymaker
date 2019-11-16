@@ -16,12 +16,10 @@ import org.junit.Test;
 public class DummyIgnoredRulesTests extends Assert {
 
     private final GenFactory factory = new GenFactory(GenRules.of(
-            GenRule.auto(Dummy.class).ignore("city")
-    ));
+            GenRule.auto(Dummy.class).ignore("city")));
 
     private final GenFactory factoryGlobal = new GenFactory(GenRules.of(
-            GenRule.global(1).ignore("city")
-    ));
+            GenRule.global(1).ignore("city")));
 
     @Test
     public void cityIsNotPresentForAuto() {

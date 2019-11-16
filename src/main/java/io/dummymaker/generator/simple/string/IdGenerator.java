@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class IdGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("[ug]?u?id|(.*Id.*)");
+    private final Pattern pattern = Pattern.compile("[ug]?u?id|[Ii]d");
 
     @Override
     public String generate() {

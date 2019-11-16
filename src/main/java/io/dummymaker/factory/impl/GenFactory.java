@@ -31,8 +31,8 @@ import static io.dummymaker.util.CastUtils.instantiate;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 /**
- * Produce data object objects and fill their fields with data
- * Successor of initial PopulateFactory
+ * Produce data object objects and fill their fields with data Successor of
+ * initial PopulateFactory
  *
  * @author GoodforGod
  * @see IGenerator
@@ -173,7 +173,8 @@ public class GenFactory implements IGenFactory {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
         } else if (container.isComplex() && generator instanceof IComplexGenerator) {
             // If complexGen can generate embedded objects
-            // And not handling it like BasicComplexGenerator, you are probably StackOverFlowed
+            // And not handling it like BasicComplexGenerator, you are probably
+            // StackOverFlowed
             generated = ((IComplexGenerator) generator).generate(target, field, storage, annotation, depth);
         } else {
             generated = generator.generate();

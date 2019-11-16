@@ -32,13 +32,14 @@ public class Dummy {
      * Used for scanners test, to check for correct fields
      */
     public enum DummyFields {
+
         UNCOMPA("uncompatible", "uncompatible", GenDoubleBig.class, GenExportIgnore.class),
-        GROUP(  "group",    "socialGroup",  GenExportName.class),
-        LNG(    "lng",      "lng",          GenSequence.class, GenExportIgnore.class),
-        BIGD(   "bigd",     "bigd",         GenDoubleBig.class, GenExportIgnore.class),
-        CITY(   "city",     "city",         GenCity.class, GenExportIgnore.class),
-        NUM(    "num",      "num",          GenSequence.class),
-        NAME(   "name",     "name",         GenName.class);
+        GROUP("group", "socialGroup", GenExportName.class),
+        LNG("lng", "lng", GenSequence.class, GenExportIgnore.class),
+        BIGD("bigd", "bigd", GenDoubleBig.class, GenExportIgnore.class),
+        CITY("city", "city", GenCity.class, GenExportIgnore.class),
+        NUM("num", "num", GenSequence.class),
+        NAME("name", "name", GenName.class);
 
         private String origin;
         private String export;

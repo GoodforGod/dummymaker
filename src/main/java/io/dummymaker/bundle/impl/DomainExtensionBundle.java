@@ -52,7 +52,6 @@ public class DomainExtensionBundle extends BasicBundle<String> {
                 ".is",
                 ".life",
                 ".pl",
-                ".sg"
-        );
+                ".sg");
     }
 }

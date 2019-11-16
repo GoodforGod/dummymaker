@@ -28,7 +28,7 @@ public class CsvExporter extends BasicExporter {
      * CSV format separator for values: value1,value2,value3 ...
      */
     private char separator = DEFAULT_SEPARATOR;
-    private final Predicate<String> isValueWrappable = (s) -> s.contains(String.valueOf(this.separator))
+    private final Predicate<String> isValueWrappable = s -> s.contains(String.valueOf(this.separator))
             || s.contains("\"")
             || s.contains("\n");
     /**
@@ -119,8 +119,8 @@ public class CsvExporter extends BasicExporter {
     }
 
     /**
-     * Build correct final export field value in CSV format
-     * Check for wrap option for field value
+     * Build correct final export field value in CSV format Check for wrap option
+     * for field value
      *
      * @param field      export field
      * @param fieldValue export field value
@@ -129,11 +129,10 @@ public class CsvExporter extends BasicExporter {
     private String buildCsvValue(final Field field,
                                  final String fieldValue) {
 
-
         return (areTextValuesWrapped && field.getType().equals(String.class)
                 || isValueWrappable.test(fieldValue))
-                ? wrapWithQuotes(fieldValue)
-                : fieldValue;
+                        ? wrapWithQuotes(fieldValue)
+                        : fieldValue;
     }
 
     /**
@@ -161,10 +160,8 @@ public class CsvExporter extends BasicExporter {
         if (writer == null)
             return false;
 
-        if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container) + "\n"))
-                return false;
-        }
+        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
+            return false;
 
         return writer.write(format(t, container))
                 && writer.flush();
@@ -186,10 +183,8 @@ public class CsvExporter extends BasicExporter {
         if (writer == null)
             return false;
 
-        if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container) + "\n"))
-                return false;
-        }
+        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
+            return false;
 
         final boolean writerHadError = list.stream()
                 .anyMatch(t -> !writer.write(format(t, container) + "\n"));

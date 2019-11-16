@@ -63,7 +63,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
     @Override
     public Object generate() {
         final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX, 1);
+        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX,
+                1);
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +78,8 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                             final int depth,
                             final int maxDepth) {
 
-        // Firstly try to generate initial object, so we won't allocate map if not necessary
+        // Firstly try to generate initial object, so we won't allocate map if not
+        // necessary
         final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);
         final Object initialValue = generateValue(valueGenerator, valueFieldType, storage, depth, maxDepth);
         if (initialKey == null && initialValue == null)

@@ -3,9 +3,9 @@ package io.dummymaker.export.cases;
 import io.dummymaker.export.ICase;
 
 /**
- * Each upper letter separated with underscore symbol, and transform to upper case
- * EXCLUDING FIRST LETTER, first letter to low case
- * Example: ( DummyList - DUMMY_LIST )
+ * Each upper letter separated with underscore symbol, and transform to upper
+ * case EXCLUDING FIRST LETTER, first letter to low case Example: ( DummyList -
+ * DUMMY_LIST )
  *
  * @author GoodforGod
  * @since 21.02.2018

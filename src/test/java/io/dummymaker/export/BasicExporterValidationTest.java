@@ -33,11 +33,11 @@ public class BasicExporterValidationTest extends Assert {
 
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {new CsvExporter()},
-                {new JsonExporter()},
-                {new XmlExporter()},
-                {new SqlExporter()}
+        return Arrays.asList(new Object[][] {
+                { new CsvExporter() },
+                { new JsonExporter() },
+                { new XmlExporter() },
+                { new SqlExporter() }
         });
     }
 

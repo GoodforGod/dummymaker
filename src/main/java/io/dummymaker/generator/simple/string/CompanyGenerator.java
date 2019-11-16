@@ -16,7 +16,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class CompanyGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("organization|company|corp(oration)?|fund|business|shop|store", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("organization|company|corp(oration)?|fund|business|shop|store",
+            CASE_INSENSITIVE);
 
     private final IBundle<String> bundle = new CompanyBundle();
 

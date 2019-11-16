@@ -20,8 +20,9 @@ import java.util.stream.Collectors;
 import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
- * Storage that facilitates generator storage, scanners, field mapping and nullable fields
- * To improve factory performance and extend complex generators abilities
+ * Storage that facilitates generator storage, scanners, field mapping and
+ * nullable fields To improve factory performance and extend complex generators
+ * abilities
  *
  * @author GoodforGod
  * @since 17.07.2019
@@ -56,8 +57,8 @@ class GenStorage implements IGenStorage {
     @Override
     public IGenerator getGenerator(Class<? extends IGenerator> generatorClass) {
         return (generatorClass == null)
-                ? generators.computeIfAbsent(NullGenerator.class, (k) -> instantiate(NullGenerator.class))
-                : generators.computeIfAbsent(generatorClass, (k) -> instantiate(generatorClass));
+                ? generators.computeIfAbsent(NullGenerator.class, k -> instantiate(NullGenerator.class))
+                : generators.computeIfAbsent(generatorClass, k -> instantiate(generatorClass));
     }
 
     @Override
@@ -140,7 +141,6 @@ class GenStorage implements IGenStorage {
         return node.getParent() != null && isMarked(node.getParent(), depth + 1);
     }
 
-
     /**
      * Was field marked with sequence generator
      *
@@ -160,7 +160,7 @@ class GenStorage implements IGenStorage {
      * @return sequence generator
      */
     IGenerator getSequential(Class<?> target, Field field) {
-        return sequentialGenerators.computeIfAbsent(target, (k) -> {
+        return sequentialGenerators.computeIfAbsent(target, k -> {
             final Map<Field, IGenerator> map = new HashMap<>();
             map.put(field, new SequenceGenerator());
             return map;
@@ -192,12 +192,11 @@ class GenStorage implements IGenStorage {
      * @param target class to scan
      */
     private void markSequentialFields(Class<?> target) {
-        this.sequentialGenerators.computeIfAbsent(target, (k) -> new SequenceScanner().scan(target)
+        this.sequentialGenerators.computeIfAbsent(target, k -> new SequenceScanner().scan(target)
                 .entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))
-                ));
+                        e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))));
 
     }
 }

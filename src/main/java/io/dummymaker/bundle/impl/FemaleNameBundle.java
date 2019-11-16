@@ -221,7 +221,6 @@ public class FemaleNameBundle extends BasicBundle<String> {
                 "Pearl",
                 "Arlene",
                 "Maureen",
-                "Colleen"
-        );
+                "Colleen");
     }
 }

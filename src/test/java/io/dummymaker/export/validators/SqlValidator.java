@@ -29,7 +29,8 @@ public class SqlValidator implements IValidator {
 
         assertTrue(dummy[6].matches(""));
 
-        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", " + NAME.exportName() + "\\) VALUES"));
+        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
+                + NAME.exportName() + "\\) VALUES"));
         assertTrue(dummy[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
@@ -67,7 +68,8 @@ public class SqlValidator implements IValidator {
 
         assertTrue(dummies[6].matches(""));
 
-        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedGroupField + ", " + expectedNumField + ", " + expectedNameField + "\\) VALUES"));
+        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedGroupField + ", " + expectedNumField + ", "
+                + expectedNameField + "\\) VALUES"));
         assertTrue(dummies[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\),"));
         assertTrue(dummies[9].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
@@ -89,7 +91,8 @@ public class SqlValidator implements IValidator {
 
         assertTrue(dummies[7].matches(""));
 
-        assertTrue(dummies[8].matches("INSERT INTO " + className + " \\(" + shortSimple + ", " + longSimple + ", " + IntegerObjDouble + ", " + DoubleObjDouble + "\\) VALUES"));
+        assertTrue(dummies[8].matches("INSERT INTO " + className + " \\(" + shortSimple + ", " + longSimple + ", "
+                + IntegerObjDouble + ", " + DoubleObjDouble + "\\) VALUES"));
     }
 
     public void isDummyTimeValidWithNamingStrategy(String[] dummies, ICase strategy) {

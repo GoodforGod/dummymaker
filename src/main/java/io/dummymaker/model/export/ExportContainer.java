@@ -1,6 +1,5 @@
 package io.dummymaker.model.export;
 
-
 /**
  * ExportContainer class for BasicExporter extract class method
  *

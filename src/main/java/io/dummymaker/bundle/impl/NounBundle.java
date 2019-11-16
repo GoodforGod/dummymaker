@@ -109,7 +109,6 @@ public class NounBundle extends BasicBundle<String> {
                 "air",
                 "teacher",
                 "force",
-                "education"
-        );
+                "education");
     }
 }

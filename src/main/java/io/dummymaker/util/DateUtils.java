@@ -23,8 +23,7 @@ public class DateUtils {
 
     private static final String ZONE_ID = "Europe/Moscow";
 
-    private DateUtils() {
-    }
+    private DateUtils() {}
 
     private static Calendar genCalendar() {
         return Calendar.getInstance(TimeZone.getTimeZone(ZONE_ID));

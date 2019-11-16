@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.string;
 
-
 import io.dummymaker.generator.IGenerator;
 
 import java.util.regex.Pattern;

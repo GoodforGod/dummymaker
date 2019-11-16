@@ -5,8 +5,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Factory that generates data objects
- * Core that handles all top level logic
+ * Factory that generates data objects Core that handles all top level logic
  *
  * @author GoodforGod
  * @see io.dummymaker.factory.impl.GenFactory
@@ -44,8 +43,8 @@ public interface IGenFactory {
     <T> Stream<T> stream(Class<T> target, int amount);
 
     /**
-     * Instantiates class instance and populate its fields
-     * Use in case class have no empty constructor of have complex initialization logic
+     * Instantiates class instance and populate its fields Use in case class have no
+     * empty constructor of have complex initialization logic
      *
      * @param supplier of class to build
      * @param amount   of objects to produce
@@ -55,8 +54,8 @@ public interface IGenFactory {
     <T> List<T> build(Supplier<T> supplier, int amount);
 
     /**
-     * Instantiates class instance and populate its fields
-     * Use in case class have no empty constructor of have complex initialization logic
+     * Instantiates class instance and populate its fields Use in case class have no
+     * empty constructor of have complex initialization logic
      *
      * @param supplier of class to build
      * @param amount   of objects to produce

@@ -202,7 +202,6 @@ public class CountryBundle extends BasicBundle<String> {
                 "Vietnam",
                 "Yemen",
                 "Zambia",
-                "Zimbabwe"
-        );
+                "Zimbabwe");
     }
 }

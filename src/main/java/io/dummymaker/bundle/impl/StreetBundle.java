@@ -109,7 +109,6 @@ public class StreetBundle extends BasicBundle<String> {
                 "Grange Road",
                 "Stoney Lane",
                 "Westfield Road",
-                "Chester Street"
-        );
+                "Chester Street");
     }
 }

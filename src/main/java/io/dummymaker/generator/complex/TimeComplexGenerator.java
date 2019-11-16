@@ -40,7 +40,8 @@ public class TimeComplexGenerator implements IComplexGenerator {
 
         final Class<?> fieldClass = field.getType();
 
-        if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
+        if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class)
+                || fieldClass.equals(String.class)) {
             return castObject(genTime(storage, LocalDateTimeGenerator.class, from, to), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
             return castObject(genTime(storage, LocalDateGenerator.class, from, to), fieldClass);

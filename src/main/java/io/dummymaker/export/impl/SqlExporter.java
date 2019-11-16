@@ -30,14 +30,15 @@ import static io.dummymaker.util.DateUtils.*;
 public class SqlExporter extends BasicExporter {
 
     /**
-     * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
+     * Insert values limit per single insert query (due to 1000 row insert limit in
+     * SQL)
      */
     private static final Integer INSERT_QUERY_LIMIT = 999;
 
     /**
-     * Java & Sql Type Representation
-     * Map is used to convert Java Field Data Type to Sql Data Type
-     * You can add your specific values here by using constructor with Map'String, String'
+     * Java & Sql Type Representation Map is used to convert Java Field Data Type to
+     * Sql Data Type You can add your specific values here by using constructor with
+     * Map'String, String'
      */
     private final Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
@@ -53,7 +54,7 @@ public class SqlExporter extends BasicExporter {
      * @param dataTypes map with user custom types for 'dataTypeMap'
      * @return exporter
      */
-    public SqlExporter withTypes(final Map<Class, String> dataTypes) {
+    public SqlExporter withTypes(Map<Class, String> dataTypes) {
         if (dataTypes != null && !dataTypes.isEmpty())
             dataTypes.forEach(this.dataTypes::put);
 
@@ -66,7 +67,7 @@ public class SqlExporter extends BasicExporter {
      * @param path path for export file
      * @return exporter
      */
-    public SqlExporter withPath(final String path) {
+    public SqlExporter withPath(String path) {
         setPath(path);
         return this;
     }
@@ -79,7 +80,7 @@ public class SqlExporter extends BasicExporter {
      * @see ICase
      * @see Cases
      */
-    public SqlExporter withCase(final ICase nameCase) {
+    public SqlExporter withCase(ICase nameCase) {
         setCase(nameCase);
         return this;
     }
@@ -89,35 +90,35 @@ public class SqlExporter extends BasicExporter {
      *
      * @see #dataTypes
      */
-    private HashMap<Class, String> buildDefaultDataTypeMap() {
-        return new HashMap<Class, String>() {{
-            put(boolean.class, "BOOLEAN");
-            put(Boolean.class, "BOOLEAN");
-            put(byte.class, "BYTE");
-            put(Byte.class, "BYTE");
-            put(short.class, "INT");
-            put(Short.class, "INT");
-            put(int.class, "INT");
-            put(Integer.class, "INT");
-            put(long.class, "BIGINT");
-            put(Long.class, "BIGINT");
-            put(float.class, "DOUBLE PRECISION");
-            put(Float.class, "DOUBLE PRECISION");
-            put(double.class, "DOUBLE PRECISION");
-            put(Double.class, "DOUBLE PRECISION");
-            put(char.class, "CHAR");
-            put(Character.class, "CHAR");
-            put(Date.class, "BIGINT");
-            put(String.class, "VARCHAR");
-            put(Object.class, "VARCHAR");
-            put(Timestamp.class, "TIMESTAMP");
-            put(LocalDate.class, "TIMESTAMP");
-            put(LocalTime.class, "TIMESTAMP");
-            put(LocalDateTime.class, "TIMESTAMP");
-        }};
+    private Map<Class, String> buildDefaultDataTypeMap() {
+        final Map<Class, String> typeMap = new HashMap<>();
+        typeMap.put(boolean.class, "BOOLEAN");
+        typeMap.put(Boolean.class, "BOOLEAN");
+        typeMap.put(byte.class, "BYTE");
+        typeMap.put(Byte.class, "BYTE");
+        typeMap.put(short.class, "INT");
+        typeMap.put(Short.class, "INT");
+        typeMap.put(int.class, "INT");
+        typeMap.put(Integer.class, "INT");
+        typeMap.put(long.class, "BIGINT");
+        typeMap.put(Long.class, "BIGINT");
+        typeMap.put(float.class, "DOUBLE PRECISION");
+        typeMap.put(Float.class, "DOUBLE PRECISION");
+        typeMap.put(double.class, "DOUBLE PRECISION");
+        typeMap.put(Double.class, "DOUBLE PRECISION");
+        typeMap.put(char.class, "CHAR");
+        typeMap.put(Character.class, "CHAR");
+        typeMap.put(Date.class, "BIGINT");
+        typeMap.put(String.class, "VARCHAR");
+        typeMap.put(Object.class, "VARCHAR");
+        typeMap.put(Timestamp.class, "TIMESTAMP");
+        typeMap.put(LocalDate.class, "TIMESTAMP");
+        typeMap.put(LocalTime.class, "TIMESTAMP");
+        typeMap.put(LocalDateTime.class, "TIMESTAMP");
+        return typeMap;
     }
 
-    private String wrapWithComma(final String value) {
+    private String wrapWithComma(String value) {
         return "'" + value + "'";
     }
 
@@ -127,14 +128,14 @@ public class SqlExporter extends BasicExporter {
      * @param exportFieldType final field name
      * @return sql data type
      */
-    private String translateJavaTypeToSqlType(final Class<?> exportFieldType) {
+    private String translateJavaTypeToSqlType(Class<?> exportFieldType) {
         return dataTypes.getOrDefault(exportFieldType, "VARCHAR");
     }
 
     /**
      * Create String of Create Table Query
      */
-    private String buildCreateTableQuery(final ClassContainer container, final String primaryKeyField) {
+    private String buildCreateTableQuery(ClassContainer container, String primaryKeyField) {
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(container.getExportClassName().toLowerCase())
                 .append("(\n");
@@ -159,7 +160,7 @@ public class SqlExporter extends BasicExporter {
      * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String buildInsertNameTypeQuery(final String finalFieldName, final ClassContainer container) {
+    private String buildInsertNameTypeQuery(String finalFieldName, ClassContainer container) {
         final Class<?> exportFieldType = container.getField(finalFieldName).getType();
         switch (container.getContainer(finalFieldName).getType()) {
             case ARRAY:
@@ -177,7 +178,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Build insert query part with values
      */
-    private <T> String buildInsertQuery(final T t, final ClassContainer container) {
+    private <T> String buildInsertQuery(T t, ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
                 .append(container.getExportClassName().toLowerCase())
@@ -196,7 +197,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Creates insert query field name
      */
-    private <T> String format(final T t, final ClassContainer container) {
+    private <T> String format(T t, ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String resultValues = exportContainers.stream()
@@ -207,20 +208,18 @@ public class SqlExporter extends BasicExporter {
     }
 
     /**
-     * Search for primary key entity candidate field and retrieve its export field name
+     * Search for primary key entity candidate field and retrieve its export field
+     * name
      * <p>
-     * Primary key is field that (in that order):
-     * - Have ID or UID name (case ignored)
-     * - Is marked with enumerate gen annotation
-     * - Randomly selected
+     * Primary key is field that (in that order): - Have ID or UID name (case
+     * ignored) - Is marked with enumerate gen annotation - Randomly selected
      */
-    private String buildPrimaryKey(final ClassContainer container) {
+    private String buildPrimaryKey(ClassContainer container) {
         final Map<Field, FieldContainer> containerMap = container.getFormatSupported(Format.SQL);
 
         for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
-            if (entry.getValue().isSequential()) {
-                return entry.getValue().getExportName();
-            } else if (entry.getKey().getName().equalsIgnoreCase("id")
+            if (entry.getValue().isSequential()
+                    || entry.getKey().getName().equalsIgnoreCase("id")
                     || entry.getKey().getName().equalsIgnoreCase("uid")) {
                 return entry.getValue().getExportName();
             }
@@ -232,7 +231,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Check data types for field class compatibility with Timestamp class
      */
-    private boolean isTypeTimestampConvertible(final Field field) {
+    private boolean isTypeTimestampConvertible(Field field) {
         return dataTypes.entrySet().stream()
                 .anyMatch(e -> e.getValue().equals("TIMESTAMP") && e.getKey().equals(field.getType()));
     }
@@ -240,7 +239,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container value to Sql specific value type
      */
-    private String convertFieldValue(final Field field, final ExportContainer container) {
+    private String convertFieldValue(Field field, ExportContainer container) {
         if (container.getType() == FieldContainer.Type.ARRAY
                 || container.getType() == FieldContainer.Type.ARRAY_2D
                 || container.getType() == FieldContainer.Type.COLLECTION) {
@@ -276,7 +275,7 @@ public class SqlExporter extends BasicExporter {
     /**
      * Convert container export value to timestamp value type
      */
-    private Timestamp convertFieldValueToTimestamp(final Field field, final ExportContainer exportContainer) {
+    private Timestamp convertFieldValueToTimestamp(Field field, ExportContainer exportContainer) {
         try {
             if (LocalDateTime.class.equals(field.getType())) {
                 return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
@@ -297,7 +296,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> boolean export(final T t) {
+    public <T> boolean export(T t) {
         if (isExportEntityInvalid(t))
             return false;
 
@@ -315,7 +314,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> boolean export(final List<T> list) {
+    public <T> boolean export(List<T> list) {
         if (isExportEntityInvalid(list))
             return false;
 
@@ -364,7 +363,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final T t) {
+    public <T> String exportAsString(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -379,7 +378,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final List<T> list) {
+    public <T> String exportAsString(List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 
@@ -417,7 +416,7 @@ public class SqlExporter extends BasicExporter {
         return builder.toString();
     }
 
-    private int nextInsertValue(final int current) {
+    private int nextInsertValue(int current) {
         return (current <= 0)
                 ? INSERT_QUERY_LIMIT
                 : current - 1;

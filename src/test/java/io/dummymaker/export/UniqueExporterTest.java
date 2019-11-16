@@ -36,11 +36,11 @@ public class UniqueExporterTest {
 
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return Arrays.asList(new Object[][] {
                 { new CsvExporter(), new CsvValidator() },
-                { new JsonExporter().withPretty(), new JsonValidator()},
-                { new XmlExporter(), new XmlValidator()},
-                { new SqlExporter(), new SqlValidator()}
+                { new JsonExporter().withPretty(), new JsonValidator() },
+                { new XmlExporter(), new XmlValidator() },
+                { new SqlExporter(), new SqlValidator() }
         });
     }
 

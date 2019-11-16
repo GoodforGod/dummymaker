@@ -25,9 +25,9 @@ public class SqlExportAsStringTest extends StringExportAssert {
 
     public SqlExportAsStringTest() {
         super(new SqlExporter()
-                        .withPath(null)
-                        .withCase(null)
-                        .withPath("            "), new SqlValidator(), 9, 10);
+                .withPath(null)
+                .withCase(null)
+                .withPath("            "), new SqlValidator(), 9, 10);
     }
 
     @Test

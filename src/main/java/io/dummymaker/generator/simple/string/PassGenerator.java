@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.string;
 
-
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 

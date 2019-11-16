@@ -4,9 +4,8 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 
 /**
- * Used to extend complex generator functionality by providing
- * Generators storage for performance improvement and
- * Embedded object generation
+ * Used to extend complex generator functionality by providing Generators
+ * storage for performance improvement and Embedded object generation
  *
  * @author GoodforGod
  * @see io.dummymaker.annotation.special.GenEmbedded

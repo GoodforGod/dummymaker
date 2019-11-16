@@ -34,10 +34,8 @@ public class BufferedFileWriter implements IWriter {
             final String workPath = buildPath(fileName, path, extension);
             this.writer = new BufferedWriter(
                     new OutputStreamWriter(
-                            new FileOutputStream(workPath), StandardCharsets.UTF_8)
-            );
+                            new FileOutputStream(workPath), StandardCharsets.UTF_8));
         } catch (IOException e) {
-            logger.warn(e.getMessage());
             throw new GenException(e);
         }
     }

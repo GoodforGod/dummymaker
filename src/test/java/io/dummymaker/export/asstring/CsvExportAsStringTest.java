@@ -41,7 +41,6 @@ public class CsvExportAsStringTest extends StringExportAssert {
         validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
-
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);

@@ -1,10 +1,5 @@
 package io.dummymaker.util;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 /**
  * Utility methods to help scan for classes at runtime
  *
@@ -13,8 +8,7 @@ import java.util.jar.JarFile;
  */
 public class PackageUtils {
 
-    private PackageUtils() {
-    }
+    private PackageUtils() {}
 
     /**
      * Loads class by class name
@@ -38,20 +32,5 @@ public class PackageUtils {
      */
     public static String toRelativePath(String packageName) {
         return packageName.replace('.', '/');
-    }
-
-    /**
-     * Get contents of jar file
-     *
-     * @param path to jar
-     * @return files inside jar
-     */
-    public static Enumeration<JarEntry> getJarFiles(String path) {
-        try {
-            final JarFile jar = new JarFile(path);
-            return jar.entries();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Unexpected IOException reading JAR File '" + path + "'", e);
-        }
     }
 }

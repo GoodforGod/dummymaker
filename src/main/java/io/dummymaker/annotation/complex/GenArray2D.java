@@ -52,16 +52,14 @@ public @interface GenArray2D {
     int maxSecond() default 10;
 
     /**
-     * First dimension fixed amount entities to generate
-     * Turned off by default
+     * First dimension fixed amount entities to generate Turned off by default
      *
      * @return fixed amount
      */
     int fixedFirst() default -1;
 
     /**
-     * Second dimension fixed amount entities to generate
-     * Turned off by default
+     * Second dimension fixed amount entities to generate Turned off by default
      *
      * @return fixed amount
      */

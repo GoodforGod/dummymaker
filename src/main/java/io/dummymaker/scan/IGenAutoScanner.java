@@ -18,7 +18,8 @@ public interface IGenAutoScanner extends IGenScanner {
      * Same as default scan but also scan for suitable gen auto generators
      *
      * @param target        to scan
-     * @param isDefaultAuto mark target as GenAuto as default even if it is not annotated
+     * @param isDefaultAuto mark target as GenAuto as default even if it is not
+     *                      annotated
      * @return map of fields and its gen containers
      * @see io.dummymaker.annotation.special.GenAuto
      */

@@ -17,6 +17,7 @@ import java.time.LocalTime;
 public class DummyCollectionWrong {
 
     public enum FieldNames {
+
         LIST("list"),
         SET("set"),
         MAP("map");

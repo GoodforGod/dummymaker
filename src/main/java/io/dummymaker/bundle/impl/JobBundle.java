@@ -357,7 +357,6 @@ public class JobBundle extends BasicBundle<String> {
                 "Web developer",
                 "Welfare rights adviser",
                 "Writer",
-                "Youth worker"
-        );
+                "Youth worker");
     }
 }

@@ -4,8 +4,8 @@ import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.generator.IGenerator;
 
 /**
- * Used to generate enumerated sequence for dummies
- * Used by populate factory and genEnumerate
+ * Used to generate enumerated sequence for dummies Used by populate factory and
+ * genEnumerate
  *
  * @author GoodforGod
  * @see GenSequence

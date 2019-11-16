@@ -1,6 +1,5 @@
 package io.dummymaker.bundle.impl;
 
-
 /**
  * Bundle with city names string values
  *
@@ -195,9 +194,6 @@ public class CityBundle extends BasicBundle<String> {
                 "Hanoi",
                 "Sanaa",
                 "Lusaka",
-                "Harare"
-        );
+                "Harare");
     }
 }
-
-

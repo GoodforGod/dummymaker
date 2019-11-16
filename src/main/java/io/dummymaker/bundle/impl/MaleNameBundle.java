@@ -256,7 +256,6 @@ public class MaleNameBundle extends BasicBundle<String> {
                 "Benedict",
                 "Mose",
                 "Hong",
-                "Leigh"
-        );
+                "Leigh");
     }
 }

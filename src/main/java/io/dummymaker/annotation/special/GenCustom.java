@@ -11,8 +11,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Use when you have your custom generator
- * But dont want to implement your custom annotation
+ * Use when you have your custom generator But dont want to implement your
+ * custom annotation
  * <p>
  * Works with simple and complex generators
  *

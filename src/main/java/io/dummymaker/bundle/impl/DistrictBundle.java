@@ -79,7 +79,6 @@ public class DistrictBundle extends BasicBundle<String> {
                 "South Prisec",
                 "Ceppat Road",
                 "Stehiroopt Vale",
-                "Feliwnad"
-        );
+                "Feliwnad");
     }
 }

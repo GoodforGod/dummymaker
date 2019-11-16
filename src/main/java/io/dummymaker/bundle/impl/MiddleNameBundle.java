@@ -32,7 +32,6 @@ public class MiddleNameBundle extends BasicBundle<String> {
                 "Christopher",
                 "Frederick",
                 "Nicholas",
-                "Robert"
-        );
+                "Robert");
     }
 }

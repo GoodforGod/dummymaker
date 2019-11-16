@@ -67,7 +67,7 @@ public class DummyTests {
 
         assertTrue(filled.getCity().matches("[a-zA-Z0-9\\-]+"));
         assertTrue(filled.getName().matches("[a-zA-Z]+"));
-        assertEquals((int) filled.getNum(), 0);
+        assertEquals(0, (int) filled.getNum());
         assertTrue(filled.getGroup().matches("[0-9]+"));
     }
 

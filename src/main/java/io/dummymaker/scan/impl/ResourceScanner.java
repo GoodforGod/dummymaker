@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +22,8 @@ import java.util.stream.Collectors;
 public class ResourceScanner implements IScanner<String, String> {
 
     /**
-     * Given a package name and a directory returns all classes within that directory
+     * Given a package name and a directory returns all classes within that
+     * directory
      *
      * @param directory   to process
      * @param packageName to process
@@ -46,7 +48,8 @@ public class ResourceScanner implements IScanner<String, String> {
     }
 
     /**
-     * Given a jar file's URL and a package name returns all classes within jar file.
+     * Given a jar file's URL and a package name returns all classes within jar
+     * file.
      *
      * @param resource as jar to process
      */
@@ -57,10 +60,14 @@ public class ResourceScanner implements IScanner<String, String> {
                 .replaceFirst("file:", "")
                 .replace(" ", "\\ ");
 
-        final Enumeration<JarEntry> files = PackageUtils.getJarFiles(jarPath);
-        while (files.hasMoreElements()) {
-            final JarEntry file = files.nextElement();
-            classes.add(file.getName());
+        try (final JarFile jar = new JarFile(jarPath)) {
+            final Enumeration<JarEntry> files = jar.entries();
+            while (files.hasMoreElements()) {
+                final JarEntry file = files.nextElement();
+                classes.add(file.getName());
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
         }
 
         return classes;

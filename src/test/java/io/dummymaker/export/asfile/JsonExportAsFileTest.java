@@ -28,7 +28,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
                 new JsonValidator(), Format.JSON, 5, 14);
     }
 
-//    @Test
+    // @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 

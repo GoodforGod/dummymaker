@@ -14,6 +14,7 @@ import java.util.Set;
  * @since 25.02.2018
  */
 public enum Format {
+
     CSV(".csv", Type.SIMPLE, Type.SEQUENTIAL),
     JSON(".json", Type.SIMPLE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION, Type.MAP),
     XML(".xml", Type.SIMPLE, Type.SEQUENTIAL),

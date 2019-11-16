@@ -45,8 +45,8 @@ public class GenRule {
     }
 
     /**
-     * Gen auto class rule with default 1 depth
-     * All fields will be auto generated for such class if not ignored otherwise
+     * Gen auto class rule with default 1 depth All fields will be auto generated
+     * for such class if not ignored otherwise
      *
      * @param target for rule
      * @return gen auto class rule
@@ -60,8 +60,8 @@ public class GenRule {
     }
 
     /**
-     * Gen auto class rule with specified depth
-     * All fields will be auto generated for such class if not ignored otherwise
+     * Gen auto class rule with specified depth All fields will be auto generated
+     * for such class if not ignored otherwise
      *
      * @param target for rule
      * @param depth  to set
@@ -112,7 +112,6 @@ public class GenRule {
                     throw new IllegalArgumentException("Equal typed field is present for type " + r.getType());
                 });
 
-
         rules.addAll(rule.rules);
         return this;
     }
@@ -129,7 +128,8 @@ public class GenRule {
      * Retries desired generator for field
      *
      * @param field targeted
-     * @return generator for named field or optional generator for specific type from rules
+     * @return generator for named field or optional generator for specific type
+     *         from rules
      */
     public Optional<Class<? extends IGenerator>> getDesired(Field field) {
         if (field == null || isIgnored(field))
@@ -143,9 +143,9 @@ public class GenRule {
         return (namedGenerator.isPresent())
                 ? namedGenerator
                 : rules.stream()
-                .filter(r -> field.getType().equals(r.getType()))
-                .findAny()
-                .map(GenFieldRule::getGenerator);
+                        .filter(r -> field.getType().equals(r.getType()))
+                        .findAny()
+                        .map(GenFieldRule::getGenerator);
 
     }
 

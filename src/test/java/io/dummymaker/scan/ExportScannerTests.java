@@ -30,9 +30,9 @@ public class ExportScannerTests {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        final FieldContainer groupAnnotations    = fields.get(GROUP.getField());
-        final FieldContainer numAnnotations      = fields.get(NUM.getField());
-        final FieldContainer nameAnnotations     = fields.get(NAME.getField());
+        final FieldContainer groupAnnotations = fields.get(GROUP.getField());
+        final FieldContainer numAnnotations = fields.get(NUM.getField());
+        final FieldContainer nameAnnotations = fields.get(NAME.getField());
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);

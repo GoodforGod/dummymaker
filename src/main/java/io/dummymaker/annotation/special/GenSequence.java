@@ -9,8 +9,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generates numeric sequence from given number (default 0) to all produced/populated Dummies
- * Works only when populate/produce list of dummies, not a single dummy
+ * Generates numeric sequence from given number (default 0) to all
+ * produced/populated Dummies Works only when populate/produce list of dummies,
+ * not a single dummy
  *
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
@@ -19,5 +20,6 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenSequence {
+
     long from() default 0L;
 }

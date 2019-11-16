@@ -4,9 +4,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Rules for field type and field name generators overrides
- * Allows to override gen auto generator setup without annotations
- * Just by passing this config to factory
+ * Rules for field type and field name generators overrides Allows to override
+ * gen auto generator setup without annotations Just by passing this config to
+ * factory
  *
  * @author GoodforGod
  * @see io.dummymaker.factory.IGenFactory
@@ -57,8 +57,8 @@ public class GenRules {
         return targetRule.isPresent()
                 ? targetRule
                 : rules.stream()
-                .filter(GenRule::isGlobal)
-                .findFirst();
+                        .filter(GenRule::isGlobal)
+                        .findFirst();
     }
 
     /**

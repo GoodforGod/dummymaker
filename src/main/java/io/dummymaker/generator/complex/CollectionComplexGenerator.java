@@ -7,8 +7,8 @@ import io.dummymaker.generator.IGenerator;
 import java.util.*;
 
 /**
- * Basic collection complex generator implementation
- * Can be used by other collection complex generators
+ * Basic collection complex generator implementation Can be used by other
+ * collection complex generators
  *
  * @author GoodforGod
  * @see IComplexGenerator
@@ -25,7 +25,8 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
                              final int depth,
                              final int maxDepth) {
 
-        // Firstly try to generate initial object, so we won't allocate list if not necessary
+        // Firstly try to generate initial object, so we won't allocate list if not
+        // necessary
         final Object initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
         if (initial == null) {
             if (collection == null || collection.getClass().isAssignableFrom(List.class)) {

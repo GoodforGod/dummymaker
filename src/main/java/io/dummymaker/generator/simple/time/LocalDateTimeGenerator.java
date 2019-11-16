@@ -37,7 +37,6 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
         return LocalDateTime.ofEpochSecond(
                 amount,
                 0,
-                ZoneOffset.UTC
-        );
+                ZoneOffset.UTC);
     }
 }

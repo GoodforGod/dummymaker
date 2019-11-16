@@ -28,7 +28,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
                 new XmlValidator(), Format.XML, 5, 12);
     }
 
-//    @Test
+    // @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.CAMEL_CASE.value();
 

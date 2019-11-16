@@ -21,8 +21,7 @@ public class CastUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
 
-    private CastUtils() {
-    }
+    private CastUtils() {}
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
         switch (CastType.of(fieldType)) {
@@ -192,8 +191,8 @@ public class CastUtils {
     }
 
     /**
-     * Try to box downcast or box object if it is boxed primitive type
-     * And field is also boxed primitive (can't cast one to another explicitly)
+     * Try to box downcast or box object if it is boxed primitive type And field is
+     * also boxed primitive (can't cast one to another explicitly)
      */
     private static <T> Object boxObject(final Object castObject, final Class<T> fieldType) {
         final CastType firstType = CastType.of(castObject.getClass());
@@ -239,6 +238,7 @@ public class CastUtils {
     }
 
     private enum CastType {
+
         UNKNOWN,
         STRING,
         BOOLEAN,

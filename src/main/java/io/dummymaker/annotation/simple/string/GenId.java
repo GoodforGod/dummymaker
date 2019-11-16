@@ -1,6 +1,5 @@
 package io.dummymaker.annotation.simple.string;
 
-
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.string.IdBigGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;

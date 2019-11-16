@@ -48,11 +48,11 @@ public class GenScannerTests {
         assertEquals(6, fields.size());
 
         // Check for correct map values
-        final GenContainer cityAnnotations    = fields.get(CITY.getField());
-        final GenContainer numAnnotations     = fields.get(NUM.getField());
-        final GenContainer nameAnnotations    = fields.get(NAME.getField());
-        final GenContainer bigdAnnotations    = fields.get(BIGD.getField());
-        final GenContainer lngAnnotations     = fields.get(LNG.getField());
+        final GenContainer cityAnnotations = fields.get(CITY.getField());
+        final GenContainer numAnnotations = fields.get(NUM.getField());
+        final GenContainer nameAnnotations = fields.get(NAME.getField());
+        final GenContainer bigdAnnotations = fields.get(BIGD.getField());
+        final GenContainer lngAnnotations = fields.get(LNG.getField());
         final GenContainer uncompaAnnotations = fields.get(UNCOMPA.getField());
 
         assertNotNull(cityAnnotations);

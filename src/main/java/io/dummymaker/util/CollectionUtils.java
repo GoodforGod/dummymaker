@@ -12,8 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class CollectionUtils {
 
-    private CollectionUtils() {
-    }
+    private CollectionUtils() {}
 
     public static boolean isEmpty(final Collection collection) {
         return collection == null || collection.isEmpty();

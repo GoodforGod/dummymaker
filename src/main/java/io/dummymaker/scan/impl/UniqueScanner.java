@@ -10,9 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Scan for field and its unique annotations (without duplicates)
- * And return fields in correct order
- * Core scanner implementation
+ * Scan for field and its unique annotations (without duplicates) And return
+ * fields in correct order Core scanner implementation
  *
  * @author GoodforGod
  * @see IAnnotationScanner
@@ -29,8 +28,6 @@ public class UniqueScanner extends AnnotationScanner {
                         .collect(Collectors.toList())))
                 .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, e) -> {
-                        }
-                );
+                        (m, e) -> {});
     }
 }

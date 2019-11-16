@@ -3,7 +3,8 @@ package io.dummymaker.export.cases;
 import io.dummymaker.export.ICase;
 
 /**
- * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy - TonNy
+ * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy -
+ * TonNy
  *
  * @author GoodforGod
  * @since 21.04.2018

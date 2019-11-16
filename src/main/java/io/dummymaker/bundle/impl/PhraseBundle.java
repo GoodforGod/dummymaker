@@ -285,7 +285,6 @@ public class PhraseBundle extends BasicBundle<String> {
                 "Beyond our ken",
                 "Beyond the pale",
                 "Biblical phrases",
-                "Big Apple - The"
-        );
+                "Big Apple - The");
     }
 }

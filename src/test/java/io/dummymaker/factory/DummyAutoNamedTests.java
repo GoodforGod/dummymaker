@@ -7,6 +7,8 @@ import io.dummymaker.model.GenRules;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.UUID;
+
 /**
  * ! NO DESCRIPTION !
  *
@@ -22,6 +24,9 @@ public class DummyAutoNamedTests extends Assert {
         final DummyAutoNamed build = factory.build(DummyAutoNamed.class);
 
         assertNotNull(build);
+        assertNotNull(build.getId());
+        final UUID uuid = UUID.fromString(build.getId());
+        assertNotNull(uuid);
         assertNotNull(build.getName());
         assertNotNull(build.getSurname());
         assertNotNull(build.getCode());

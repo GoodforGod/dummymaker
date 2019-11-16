@@ -14,6 +14,7 @@ import java.util.List;
 public class DummyEmbedded {
 
     public class DummyEmbeddedIntoSimple {
+
         private int number;
         private String name;
         private DummyEmbedded embedded;
@@ -33,6 +34,7 @@ public class DummyEmbedded {
 
     @GenAuto(depth = 4)
     public class DummyEmbeddedSimple {
+
         private int number;
         private String simpleName;
         private DummyEmbeddedIntoSimple intoEmbedded;
@@ -51,6 +53,7 @@ public class DummyEmbedded {
     }
 
     public class DummyEmbeddedChild {
+
         private String name;
         private String childId;
         private DummyEmbedded embedded;

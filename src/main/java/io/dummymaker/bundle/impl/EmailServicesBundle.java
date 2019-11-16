@@ -23,7 +23,6 @@ public class EmailServicesBundle extends BasicBundle<String> {
                 "aol",
                 "gmx",
                 "hotmail",
-                "inbox"
-        );
+                "inbox");
     }
 }

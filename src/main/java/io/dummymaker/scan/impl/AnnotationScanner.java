@@ -13,8 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Scan field for all annotations
- * Core scanner implementation
+ * Scan field for all annotations Core scanner implementation
  *
  * @author GoodforGod
  * @see IAnnotationScanner

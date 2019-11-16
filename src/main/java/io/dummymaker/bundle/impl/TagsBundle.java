@@ -156,7 +156,6 @@ public class TagsBundle extends BasicBundle<String> {
                 "#literate",
                 "#stories",
                 "#words",
-                "#text"
-        );
+                "#text");
     }
 }

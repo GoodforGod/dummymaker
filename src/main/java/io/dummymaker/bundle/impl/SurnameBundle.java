@@ -109,7 +109,6 @@ public class SurnameBundle extends BasicBundle<String> {
                 "Russell",
                 "Griffin",
                 "Diaz",
-                "Hayes"
-        );
+                "Hayes");
     }
 }

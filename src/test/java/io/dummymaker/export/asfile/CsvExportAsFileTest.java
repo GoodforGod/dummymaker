@@ -30,7 +30,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
                 new CsvValidator(), Format.CSV, 3, 2);
     }
 
-//    @Test
+    // @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
@@ -50,7 +50,6 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
         validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
-
 
     @Test
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
@@ -72,7 +71,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
         validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
 
-//    @Test
+    // @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 

@@ -30,8 +30,7 @@ public class DummyGlobalRulesTests extends Assert {
     private final GenFactory factory = new GenFactory(GenRules.of(
             GenRule.global(2)
                     .add(ByteGenerator.class, int.class)
-                    .add(NounGenerator.class, "name")
-    ));
+                    .add(NounGenerator.class, "name")));
 
     @Test
     public void validFieldsGeneration() {

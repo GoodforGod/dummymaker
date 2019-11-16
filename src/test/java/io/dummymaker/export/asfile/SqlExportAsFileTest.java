@@ -32,7 +32,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
                 new SqlValidator(), Format.SQL, 9, 10);
     }
 
-//    @Test
+    // @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
         final ICase strategy = Cases.SNAKE_CASE.value();
 

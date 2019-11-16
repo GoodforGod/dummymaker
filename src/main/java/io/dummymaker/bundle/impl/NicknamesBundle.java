@@ -190,7 +190,6 @@ public class NicknamesBundle extends BasicBundle<String> {
                 "HighlanderMonk",
                 "Overrun",
                 "ZestyDragon",
-                "Zod"
-        );
+                "Zod");
     }
 }

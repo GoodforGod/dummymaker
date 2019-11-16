@@ -54,8 +54,8 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
         return (target == null)
                 ? Optional.empty()
                 : Arrays.stream(target.getDeclaredAnnotations())
-                .filter(IS_AUTO)
-                .findAny();
+                        .filter(IS_AUTO)
+                        .findAny();
     }
 
     @Override

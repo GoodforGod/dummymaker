@@ -278,8 +278,7 @@ public class JsonExporter extends BasicExporter {
     }
 
     /**
-     * Single mode for single T value export
-     * List for multiple T values
+     * Single mode for single T value export List for multiple T values
      */
     private enum Mode {
         SINGLE,

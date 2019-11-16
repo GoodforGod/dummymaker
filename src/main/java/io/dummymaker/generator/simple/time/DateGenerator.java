@@ -7,9 +7,8 @@ import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Generates old java date type
- * This date is exported in long milliseconds format
- * So date is the milliseconds since January 1, 1970, 00:00:00 GMT
+ * Generates old java date type This date is exported in long milliseconds
+ * format So date is the milliseconds since January 1, 1970, 00:00:00 GMT
  *
  * @author GoodforGod
  * @see Date

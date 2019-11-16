@@ -2,7 +2,6 @@ package io.dummymaker.export.cases;
 
 import io.dummymaker.export.ICase;
 
-
 /**
  * Returns default value as is.
  *

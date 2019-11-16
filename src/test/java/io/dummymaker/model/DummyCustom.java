@@ -41,7 +41,6 @@ public class DummyCustom {
         return queue;
     }
 
-
     public class QueueGenerator implements IComplexGenerator {
 
         private final FloatGenerator generator = new FloatGenerator();

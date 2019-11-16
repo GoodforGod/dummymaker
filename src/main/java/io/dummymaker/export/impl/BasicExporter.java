@@ -206,12 +206,4 @@ abstract class BasicExporter implements IExporter {
     <T> boolean isExportEntitySingleList(final List<T> t) {
         return (t.size() == 1);
     }
-
-    public abstract <T> boolean export(final T t);
-
-    public abstract <T> boolean export(final List<T> t);
-
-    public abstract <T> String exportAsString(final T t);
-
-    public abstract <T> String exportAsString(final List<T> list);
 }

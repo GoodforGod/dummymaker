@@ -47,8 +47,10 @@ public class GenFieldRule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GenFieldRule)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof GenFieldRule))
+            return false;
         GenFieldRule that = (GenFieldRule) o;
         return Objects.equals(fieldType, that.fieldType) &&
                 Objects.equals(fieldNames, that.fieldNames);

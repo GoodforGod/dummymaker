@@ -10,16 +10,15 @@ import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import static io.dummymaker.util.CastUtils.generateObject;
 import static io.dummymaker.util.CastUtils.instantiate;
 
 /**
- * Basic complex generator implementation
- * Can be used by other Complex generators
- * Providing basic methods, to build new generators on top of this one
+ * Basic complex generator implementation Can be used by other Complex
+ * generators Providing basic methods, to build new generators on top of this
+ * one
  *
  * @author GoodforGod
  * @see IComplexGenerator
@@ -60,10 +59,4 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     protected Class<? extends IGenerator> suitable(IGenSupplier config, Field field, Class<?> fieldType) {
         return (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
     }
-
-    @Override
-    public abstract Object generate(Class<?> parent, Field field, IGenStorage storage, Annotation annotation, int depth);
-
-    @Override
-    public abstract Object generate();
 }

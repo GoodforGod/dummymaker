@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class DummyTime {
 
     public enum Patterns {
+
         LOCAL_TIME(Pattern.compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
         LOCAL_DATE(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
         LOCAL_DATETIME(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
@@ -40,6 +41,7 @@ public class DummyTime {
     }
 
     public enum Fields {
+
         LOCAL_TIME("time"),
         LOCAL_DATE("date"),
         LOCAL_DATETIME("dateTime"),

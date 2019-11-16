@@ -20,6 +20,7 @@ public class StringUtilsTest extends Assert {
     public void emptyStringIsEmpty() {
         assertTrue(StringUtils.isEmpty(""));
     }
+
     @Test
     public void nonEmptyStringIsNonEmpty() {
         assertFalse(StringUtils.isEmpty("Bob"));

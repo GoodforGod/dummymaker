@@ -20,8 +20,8 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Scanner for special export annotations and produces export containers
- * Which are used in exporters
+ * Scanner for special export annotations and produces export containers Which
+ * are used in exporters
  *
  * @author GoodforGod
  * @see io.dummymaker.export.IExporter

@@ -8,7 +8,6 @@ import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.writer.IWriter;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,7 @@ public class XmlExporter extends BasicExporter {
      * @param path path for export file
      * @return exporter
      */
-    public XmlExporter withPath(final String path) {
+    public XmlExporter withPath(String path) {
         setPath(path);
         return this;
     }
@@ -59,7 +58,7 @@ public class XmlExporter extends BasicExporter {
      * @see ICase
      * @see Cases
      */
-    public XmlExporter withCase(final ICase nameCase) {
+    public XmlExporter withCase(ICase nameCase) {
         setCase(nameCase);
         return this;
     }
@@ -69,7 +68,7 @@ public class XmlExporter extends BasicExporter {
      * @return exporter
      * @see #exportClassFullName
      */
-    public XmlExporter withFullname(final String fullName) {
+    public XmlExporter withFullname(String fullName) {
         this.exportClassFullName = fullName;
         return this;
     }
@@ -79,16 +78,16 @@ public class XmlExporter extends BasicExporter {
      * @return exporter
      * @see #exportClassEnding
      */
-    public XmlExporter withEnding(final String ending) {
+    public XmlExporter withEnding(String ending) {
         this.exportClassEnding = ending;
         return this;
     }
 
-    private String wrapOpenXmlTag(final String value) {
+    private String wrapOpenXmlTag(String value) {
         return "<" + value + ">";
     }
 
-    private String wrapCloseXmlTag(final String value) {
+    private String wrapCloseXmlTag(String value) {
         return "</" + value + ">";
     }
 
@@ -97,7 +96,7 @@ public class XmlExporter extends BasicExporter {
      *
      * @param mode represent Single JSON object or List of objects
      */
-    private <T> String format(final T t, final ClassContainer container, final Mode mode) {
+    private <T> String format(T t, ClassContainer container, Mode mode) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String tabObject = (mode == Mode.SINGLE) ? "" : "\t";
@@ -108,7 +107,7 @@ public class XmlExporter extends BasicExporter {
                 .append("\n");
 
         final String resultValues = exportContainers.stream()
-                .map(c -> buildXmlValue(mode, container.getField(c.getExportName()), c))
+                .map(c -> buildXmlValue(mode, c))
                 .collect(Collectors.joining("\n"));
 
         builder.append(resultValues)
@@ -119,14 +118,11 @@ public class XmlExporter extends BasicExporter {
                 .toString();
     }
 
-    private String buildXmlValue(final Mode mode,
-                                 final Field field,
-                                 final ExportContainer container) {
+    private String buildXmlValue(Mode mode, ExportContainer container) {
         return buildXmlSimpleValue(mode, container);
     }
 
-    private String buildXmlSimpleValue(final Mode mode,
-                                       final ExportContainer container) {
+    private String buildXmlSimpleValue(Mode mode, ExportContainer container) {
         final String tabField = (mode == Mode.SINGLE) ? "\t" : "\t\t";
 
         return tabField + wrapOpenXmlTag(container.getExportName())
@@ -141,14 +137,14 @@ public class XmlExporter extends BasicExporter {
      * @see #exportClassEnding
      * @see #exportClassFullName
      */
-    private <T> String buildClassListTag(final T t) {
+    private <T> String buildClassListTag(T t) {
         return (exportClassFullName == null)
                 ? t.getClass().getSimpleName() + exportClassEnding
                 : exportClassFullName;
     }
 
     @Override
-    public <T> boolean export(final T t) {
+    public <T> boolean export(T t) {
         if (isExportEntityInvalid(t))
             return false;
 
@@ -163,7 +159,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> boolean export(final List<T> list) {
+    public <T> boolean export(List<T> list) {
         if (isExportEntityInvalid(list))
             return false;
 
@@ -191,7 +187,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final T t) {
+    public <T> String exportAsString(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -203,7 +199,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final List<T> list) {
+    public <T> String exportAsString(List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 
@@ -230,8 +226,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     /**
-     * Single mode for single T value export
-     * List for multiple T values
+     * Single mode for single T value export List for multiple T values
      */
     private enum Mode {
         SINGLE,

@@ -32,15 +32,15 @@ public class CaseParameterizedTest extends Assert {
     @Parameters(name = "Case used - {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "MyTomEx", "MyTomEx",     Cases.DEFAULT },
-                { "MyTomEx", "mytomex",     Cases.LOW_CASE },
-                { "MyTomEx", "MYTOMEX",     Cases.UPPER_CASE },
-                { "MyTomEx", "my-tom-ex",   Cases.KEBAB_CASE },
-                { "MyTomEx", "MY-TOM-EX",   Cases.UPPER_KEBAB_CASE },
-                { "MyTomEx", "my_tom_ex",   Cases.SNAKE_CASE },
-                { "MyTomEx", "MY_TOM_EX",   Cases.UPPER_SNAKE_CASE },
-                { "MyTomEx", "myTomEx",     Cases.CAMEL_CASE },
-                { "myTomEx", "MyTomEx",     Cases.PASCAL_CASE },
+                { "MyTomEx", "MyTomEx", Cases.DEFAULT },
+                { "MyTomEx", "mytomex", Cases.LOW_CASE },
+                { "MyTomEx", "MYTOMEX", Cases.UPPER_CASE },
+                { "MyTomEx", "my-tom-ex", Cases.KEBAB_CASE },
+                { "MyTomEx", "MY-TOM-EX", Cases.UPPER_KEBAB_CASE },
+                { "MyTomEx", "my_tom_ex", Cases.SNAKE_CASE },
+                { "MyTomEx", "MY_TOM_EX", Cases.UPPER_SNAKE_CASE },
+                { "MyTomEx", "myTomEx", Cases.CAMEL_CASE },
+                { "myTomEx", "MyTomEx", Cases.PASCAL_CASE },
         });
     }
 

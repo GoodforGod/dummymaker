@@ -11,8 +11,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Prime annotations, used to create new annotations of specific generator provided type
- * Used as a marker annotation for other annotations
+ * Prime annotations, used to create new annotations of specific generator
+ * provided type Used as a marker annotation for other annotations
  * <p>
  * Is used by scanners and populate/produce factories
  * <p>

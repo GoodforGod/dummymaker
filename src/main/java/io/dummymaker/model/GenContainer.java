@@ -12,8 +12,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * Container with core annotation and its child marker annotation
- * Used by populate scanners and factories
+ * Container with core annotation and its child marker annotation Used by
+ * populate scanners and factories
  *
  * @author GoodforGod
  * @see PrimeGen
@@ -40,8 +40,7 @@ public class GenContainer {
     private final boolean isAuto;
 
     /**
-     * Field set generator
-     * Can be enriched
+     * Field set generator Can be enriched
      */
     private Class<? extends IGenerator> generator;
 

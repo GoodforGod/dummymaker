@@ -10,12 +10,17 @@ import java.util.List;
  */
 public class DummyAutoNamed {
 
+    private String id;
     private String code;
     private String name;
     private String surname;
 
     private List<String> surnames;
     private List<String> btcHexes;
+
+    public String getId() {
+        return id;
+    }
 
     public String getCode() {
         return code;

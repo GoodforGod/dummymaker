@@ -28,10 +28,9 @@ public class NickGenerator implements IGenerator<String> {
         final String first = bundle.getRandom();
         final String second = bundle.getRandom();
 
-        return (!tuple)
-                ? first
-                : (revert) ? second + first
-                : first + second;
+        final String full = (revert) ? second + first : first + second;
+
+        return (!tuple) ? first : full;
     }
 
     @Override
