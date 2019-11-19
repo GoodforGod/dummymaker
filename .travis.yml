@@ -1,13 +1,15 @@
 language: java
 
-dist: trusty
-install: true
+addons:
+  sonarcloud:
+    organization: "goodforgod"
 
 script:
-  - "./gradlew test jacocoTestReport"
+  - "./gradlew test jacocoTestReport sonarqube -Dsonar.login=$SONAR_TOKEN"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 jdk:
   - openjdk8
+  - openjdk11
