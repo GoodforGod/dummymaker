@@ -1,8 +1,8 @@
 # DummyMaker  :hotsprings:
 
+[![GitHub Action](https://github.com/goodforgod/dummymaker/workflows/Java%20CI/badge.svg)](https://github.com/GoodforGod/dummymaker/actions?query=workflow%3A%22Java+CI%22)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
 [![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
-[![travis](https://travis-ci.org/GoodforGod/dummymaker.svg?branch=master)](https://travis-ci.org/GoodforGod/dummymaker)
 
 Library can generate *Data Objects* filled *random data* for your tests, 
 database setup, Big Data setups or other workloads. 
