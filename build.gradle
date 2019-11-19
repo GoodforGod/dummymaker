@@ -63,7 +63,8 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "GoodforGod_dummymaker"
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'goodforgod'
     }
 }
 
