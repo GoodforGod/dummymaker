@@ -1,10 +1,9 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.generator.simple.IGenerator;
-import io.dummymaker.generator.simple.impl.EmbeddedGenerator;
-import io.dummymaker.generator.simple.impl.EnumerateGenerator;
-import io.dummymaker.generator.simple.impl.NullGenerator;
-import io.dummymaker.generator.simple.impl.time.impl.LocalDateTimeGenerator;
+import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.generator.simple.NullGenerator;
+import io.dummymaker.generator.simple.SequenceGenerator;
+import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -21,11 +20,11 @@ public class UniqueGeneratorsTest {
 
     @Test
     public void enumerateGen() {
-        IGenerator generator = new EnumerateGenerator();
+        IGenerator generator = new SequenceGenerator();
 
         Object generated = generator.generate();
 
-        assertNull(generated);
+        assertNotNull(generated);
     }
 
     @Test

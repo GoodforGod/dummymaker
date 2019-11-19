@@ -1,21 +1,22 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
-import io.dummymaker.container.impl.FieldContainer;
 import io.dummymaker.export.Format;
+import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.export.naming.ICase;
-import io.dummymaker.util.BasicCollectionUtils;
+import io.dummymaker.model.GenRules;
+import io.dummymaker.model.export.ClassContainer;
+import io.dummymaker.model.export.ExportContainer;
+import io.dummymaker.model.export.FieldContainer;
+import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import static io.dummymaker.util.BasicStringUtils.isBlank;
+import static io.dummymaker.util.StringUtils.isBlank;
 
 /**
  * Basic abstract exporter implementation
@@ -26,31 +27,31 @@ import static io.dummymaker.util.BasicStringUtils.isBlank;
  */
 abstract class BasicExporter implements IExporter {
 
-    private final Logger logger = Logger.getLogger(BasicExporter.class.getName());
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Format format;
+    private final GenRules rules;
+    /**
+     * Points as default to directory from where code is running
+     */
     private String path;
-    private Format format;
     private ICase caseUsed;
 
     /**
+     * @param rules    from gen factory
      * @param caseUsed naming strategy
-     * @param path     path where to export (NULL IF HOME DIR)
      * @param format   export format
      * @see ICase
      * @see Format
      */
-    BasicExporter(final String path,
-                  final Format format,
-                  final ICase caseUsed) {
+    BasicExporter(Format format, ICase caseUsed, GenRules rules) {
         setPath(path);
+        setCase(caseUsed);
         this.format = format;
-        this.caseUsed = caseUsed;
+        this.rules = rules;
     }
 
     void setPath(final String path) {
-        this.path = (isBlank(path))
-                ? null
-                : path;
+        this.path = isBlank(path) ? null : path;
     }
 
     void setCase(final ICase caseUsed) {
@@ -61,15 +62,15 @@ abstract class BasicExporter implements IExporter {
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(final T t) {
-        return new ClassContainer(t, caseUsed, format);
+    <T> ClassContainer buildClassContainer(final T t) {
+        return new ClassContainer(t, caseUsed, format, rules);
     }
 
     /**
      * Build class container with export entity parameters
      */
-    <T> IClassContainer buildClassContainer(final List<T> list) {
-        return (BasicCollectionUtils.isNotEmpty(list))
+    <T> ClassContainer buildClassContainer(final List<T> list) {
+        return (CollectionUtils.isNotEmpty(list))
                 ? buildClassContainer(list.get(0))
                 : null;
     }
@@ -80,11 +81,11 @@ abstract class BasicExporter implements IExporter {
      * @see #export(Object)
      * @see #export(List)
      */
-    IWriter buildWriter(final IClassContainer classContainer) {
+    IWriter buildWriter(final ClassContainer classContainer) {
         try {
             return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
             return null;
         }
     }
@@ -96,8 +97,7 @@ abstract class BasicExporter implements IExporter {
      * @return export containers
      * @see ExportContainer
      */
-    <T> List<ExportContainer> extractExportContainers(final T t,
-                                                      final IClassContainer classContainer) {
+    <T> List<ExportContainer> extractExportContainers(T t, ClassContainer classContainer) {
 
         final List<ExportContainer> exports = new ArrayList<>();
 
@@ -113,7 +113,7 @@ abstract class BasicExporter implements IExporter {
 
                 k.setAccessible(false);
             } catch (Exception ex) {
-                logger.warning(ex.getMessage());
+                logger.warn(ex.getMessage());
             }
         });
 
@@ -123,26 +123,24 @@ abstract class BasicExporter implements IExporter {
     private ExportContainer buildContainer(final String exportFieldName,
                                            final Object exportFieldValue,
                                            final FieldContainer.Type type) {
-        if (exportFieldValue == null) {
+        if (exportFieldValue == null)
             return ExportContainer.asValue(exportFieldName, "");
-        }
 
-        //TODO Check this in SQL exporter
-        if (exportFieldValue.getClass().equals(Date.class))
+        if (Date.class.equals(exportFieldValue.getClass()))
             return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
 
         if (this.format.isTypeSupported(type)) {
             switch (type) {
                 case ARRAY:
-                    String convertValue = convertAsArray(exportFieldValue);
-                    return ExportContainer.asArray(exportFieldName, convertValue);
+                    return ExportContainer.asArray(exportFieldName,
+                            convertAsArray(exportFieldValue));
                 case ARRAY_2D:
                     return ExportContainer.asArray2D(exportFieldName,
                             Arrays.deepToString((Object[]) exportFieldValue));
                 case COLLECTION:
                     return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
                 case MAP:
-                    return ExportContainer.asMap(exportFieldName, convertAsMap(exportFieldValue));
+                    return ExportContainer.asMap(exportFieldName, convertAsMap((Map) exportFieldValue));
 
                 default:
                     break;
@@ -152,28 +150,8 @@ abstract class BasicExporter implements IExporter {
         return ExportContainer.asValue(exportFieldName, String.valueOf(exportFieldValue));
     }
 
-    private String convertAsArray2D(Object exportValue) {
-        Class<?> arrayType = exportValue.getClass().getComponentType();
-        if (arrayType.equals(byte.class)) {
-            return Arrays.toString((byte[][]) exportValue);
-        } else if (arrayType.equals(short.class)) {
-            return Arrays.toString((short[][]) exportValue);
-        } else if (arrayType.equals(char.class)) {
-            return Arrays.toString((char[][]) exportValue);
-        } else if (arrayType.equals(int.class)) {
-            return Arrays.toString((int[][]) exportValue);
-        } else if (arrayType.equals(long.class)) {
-            return Arrays.toString((long[][]) exportValue);
-        } else if (arrayType.equals(float.class)) {
-            return Arrays.toString((float[][]) exportValue);
-        } else if (arrayType.equals(double.class)) {
-            return Arrays.toString((double[][]) exportValue);
-        }
-        return Arrays.toString((Object[][]) exportValue);
-    }
-
     private String convertAsArray(Object exportValue) {
-        Class<?> arrayType = exportValue.getClass().getComponentType();
+        final Class<?> arrayType = exportValue.getClass().getComponentType();
         if (arrayType.equals(byte.class)) {
             return Arrays.toString((byte[]) exportValue);
         } else if (arrayType.equals(short.class)) {
@@ -192,11 +170,11 @@ abstract class BasicExporter implements IExporter {
         return Arrays.toString((Object[]) exportValue);
     }
 
-    private String convertAsMap(Object exportMap) {
-        final StringBuilder builder = new StringBuilder("{");
-        ((Map) exportMap).forEach((k, v) -> builder.append("\"").append(k).append("\":\"").append(v).append("\","));
-        int length = builder.length();
-        return builder.toString().substring(0, length - 1) + "}";
+    @SuppressWarnings("unchecked")
+    private String convertAsMap(Map exportMap) {
+        return ((Set<Map.Entry>) exportMap.entrySet()).stream()
+                .map(e -> String.format("\"%s\":\"%s\"", e.getKey(), e.getValue()))
+                .collect(Collectors.joining(",", "{", "}"));
     }
 
     /**
@@ -216,7 +194,7 @@ abstract class BasicExporter implements IExporter {
      * @return validation result
      */
     <T> boolean isExportEntityInvalid(final List<T> t) {
-        return (BasicCollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
+        return (CollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
     }
 
     /**
@@ -228,12 +206,4 @@ abstract class BasicExporter implements IExporter {
     <T> boolean isExportEntitySingleList(final List<T> t) {
         return (t.size() == 1);
     }
-
-    public abstract <T> boolean export(final T t);
-
-    public abstract <T> boolean export(final List<T> t);
-
-    public abstract <T> String exportAsString(final T t);
-
-    public abstract <T> String exportAsString(final List<T> list);
 }

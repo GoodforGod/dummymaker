@@ -1,14 +1,15 @@
 language: java
 
-dist: trusty
-sudo: false
+addons:
+  sonarcloud:
+    organization: "goodforgod"
 
 script:
-  - "mvn cobertura:cobertura"
+  - "./gradlew test jacocoTestReport sonarqube -Dsonar.login=$SONAR_TOKEN"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 jdk:
-  - oraclejdk8
   - openjdk8
+  - openjdk11

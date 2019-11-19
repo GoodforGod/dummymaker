@@ -1,50 +1,20 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.IAnnotationScanner;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Scan field for all annotations
- * Core scanner implementation
- *
- * @see IAnnotationScanner
+ * Basic scanner utility class
  *
  * @author GoodforGod
- * @since 30.05.2017
+ * @since 17.07.2019
  */
-public class BasicScanner implements IAnnotationScanner {
-
-    protected final Logger logger = Logger.getLogger(BasicScanner.class.getName());
-
-    @Override
-    public Map<Field, List<Annotation>> scan(final Class t) {
-        final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
-
-        try {
-            for (final Field field : t.getDeclaredFields()) {
-
-                // So we can avoid duplicates but not to use Set in contract for scanner
-                final List<Annotation> annotations = Arrays.stream(field.getAnnotations())
-                        .map(this::buildDeclaredAnnotationList)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList());
-
-                fieldAnnotationsMap.put(field, annotations);
-            }
-        } catch (SecurityException e) {
-            logger.warning(e.toString());
-        }
-
-        return fieldAnnotationsMap;
-    }
+abstract class BasicScanner {
 
     /**
      * Retrieve declared annotations from parent one and build set of them all
@@ -52,10 +22,32 @@ public class BasicScanner implements IAnnotationScanner {
      * @param annotation parent annotation
      * @return parent annotation and its declared ones
      */
-    private List<Annotation> buildDeclaredAnnotationList(final Annotation annotation) {
+    protected List<Annotation> getAllAnnotations(final Annotation annotation) {
         final List<Annotation> list = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
                 .collect(Collectors.toList());
+
         list.add(annotation);
         return list;
+    }
+
+    protected List<Field> getAllFilteredFields(Class target) {
+        return getAllFields(target).stream()
+                .filter(f -> !f.isSynthetic())
+                .filter(f -> !Modifier.isStatic(f.getModifiers()))
+                .filter(f -> !Modifier.isNative(f.getModifiers()))
+                .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
+                .filter(f -> !Modifier.isFinal(f.getModifiers()))
+                .collect(Collectors.toList());
+    }
+
+    protected List<Field> getAllFields(Class target) {
+        if (target == null || Object.class.equals(target))
+            return Collections.emptyList();
+
+        final List<Field> collected = Arrays.stream(target.getDeclaredFields())
+                .collect(Collectors.toList());
+
+        collected.addAll(getAllFilteredFields(target.getSuperclass()));
+        return collected;
     }
 }

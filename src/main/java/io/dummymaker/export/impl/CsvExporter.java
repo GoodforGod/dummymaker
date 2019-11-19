@@ -1,10 +1,12 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.container.IClassContainer;
-import io.dummymaker.container.impl.ExportContainer;
+import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.naming.Cases;
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
+import io.dummymaker.model.GenRules;
+import io.dummymaker.model.export.ClassContainer;
+import io.dummymaker.model.export.ExportContainer;
+import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
@@ -26,23 +28,24 @@ public class CsvExporter extends BasicExporter {
      * CSV format separator for values: value1,value2,value3 ...
      */
     private char separator = DEFAULT_SEPARATOR;
-
+    private final Predicate<String> isValueWrappable = s -> s.contains(String.valueOf(this.separator))
+            || s.contains("\"")
+            || s.contains("\n");
     /**
      * Flag to indicate wrap text (String) fields with quotes
      */
     private boolean areTextValuesWrapped = false;
-
     /**
      * Generate header for CSV file
      */
     private boolean hasHeader = false;
 
-    private final Predicate<String> isValueWrappable = (s) -> s.contains(String.valueOf(this.separator))
-            || s.contains("\"")
-            || s.contains("\n");
-
     public CsvExporter() {
-        super(null, Format.CSV, Cases.DEFAULT.value());
+        this(null);
+    }
+
+    public CsvExporter(GenRules rules) {
+        super(Format.CSV, Cases.DEFAULT.value(), rules);
     }
 
     /**
@@ -106,8 +109,7 @@ public class CsvExporter extends BasicExporter {
         return "'" + value + "'";
     }
 
-    private <T> String format(final T t,
-                              final IClassContainer container) {
+    private <T> String format(final T t, final ClassContainer container) {
         final List<ExportContainer> exportContainers = extractExportContainers(t, container);
 
         final String separatorAsStr = String.valueOf(separator);
@@ -117,8 +119,8 @@ public class CsvExporter extends BasicExporter {
     }
 
     /**
-     * Build correct final export field value in CSV format
-     * Check for wrap option for field value
+     * Build correct final export field value in CSV format Check for wrap option
+     * for field value
      *
      * @param field      export field
      * @param fieldValue export field value
@@ -127,11 +129,10 @@ public class CsvExporter extends BasicExporter {
     private String buildCsvValue(final Field field,
                                  final String fieldValue) {
 
-
         return (areTextValuesWrapped && field.getType().equals(String.class)
                 || isValueWrappable.test(fieldValue))
-                ? wrapWithQuotes(fieldValue)
-                : fieldValue;
+                        ? wrapWithQuotes(fieldValue)
+                        : fieldValue;
     }
 
     /**
@@ -139,10 +140,10 @@ public class CsvExporter extends BasicExporter {
      *
      * @return csv header
      */
-    private String generateCsvHeader(final IClassContainer container) {
+    private String generateCsvHeader(final ClassContainer container) {
         final String separatorAsStr = String.valueOf(separator);
-        return container.getFormatSupported(Format.CSV).entrySet().stream()
-                .map(e -> e.getValue().getExportName())
+        return container.getFormatSupported(Format.CSV).values().stream()
+                .map(FieldContainer::getExportName)
                 .collect(Collectors.joining(separatorAsStr));
     }
 
@@ -151,7 +152,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return false;
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return false;
 
@@ -159,10 +160,8 @@ public class CsvExporter extends BasicExporter {
         if (writer == null)
             return false;
 
-        if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container) + "\n"))
-                return false;
-        }
+        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
+            return false;
 
         return writer.write(format(t, container))
                 && writer.flush();
@@ -176,7 +175,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return export(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())
             return false;
 
@@ -184,10 +183,8 @@ public class CsvExporter extends BasicExporter {
         if (writer == null)
             return false;
 
-        if (hasHeader) {
-            if (!writer.write(generateCsvHeader(container) + "\n"))
-                return false;
-        }
+        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
+            return false;
 
         final boolean writerHadError = list.stream()
                 .anyMatch(t -> !writer.write(format(t, container) + "\n"));
@@ -200,7 +197,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntityInvalid(t))
             return "";
 
-        final IClassContainer container = buildClassContainer(t);
+        final ClassContainer container = buildClassContainer(t);
         if (!container.isExportable())
             return "";
 
@@ -220,7 +217,7 @@ public class CsvExporter extends BasicExporter {
         if (isExportEntitySingleList(list))
             return exportAsString(list.get(0));
 
-        final IClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(list.get(0));
         if (!container.isExportable())
             return "";
 

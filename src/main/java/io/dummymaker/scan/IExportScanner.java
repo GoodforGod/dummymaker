@@ -1,7 +1,7 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.container.impl.FieldContainer;
-import io.dummymaker.export.naming.ICase;
+import io.dummymaker.export.ICase;
+import io.dummymaker.model.export.FieldContainer;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -12,8 +12,10 @@ import java.util.Map;
  * @author GoodforGod
  * @since 27.04.2018
  */
-public interface IExportScanner extends IScanner<Field, FieldContainer> {
+public interface IExportScanner extends IMapScanner<Field, FieldContainer, Class> {
 
-    Map<Field, FieldContainer> scan(final Class t,
-                                    final ICase nameCase);
+    @Override
+    Map<Field, FieldContainer> scan(Class target);
+
+    Map<Field, FieldContainer> scan(Class target, ICase nameCase);
 }

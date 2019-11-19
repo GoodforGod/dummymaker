@@ -1,10 +1,10 @@
 package io.dummymaker.export;
 
-import io.dummymaker.data.DummyNoZeroConstructor;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
+import io.dummymaker.model.DummyNoZeroConstructor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,11 +33,11 @@ public class BasicExporterValidationTest extends Assert {
 
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {new CsvExporter()},
-                {new JsonExporter()},
-                {new XmlExporter()},
-                {new SqlExporter()}
+        return Arrays.asList(new Object[][] {
+                { new CsvExporter() },
+                { new JsonExporter() },
+                { new XmlExporter() },
+                { new SqlExporter() }
         });
     }
 
@@ -71,7 +71,7 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNullableDummiesReturnEmptyList() {
-        String s = exporter.exportAsString((List) null);
+        String s = exporter.exportAsString(null);
         assertTrue(s.isEmpty());
     }
 

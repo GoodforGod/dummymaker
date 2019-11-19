@@ -10,27 +10,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Scan for field and its unique annotations (without duplicates)
- * And return fields in correct order
- * Core scanner implementation
+ * Scan for field and its unique annotations (without duplicates) And return
+ * fields in correct order Core scanner implementation
  *
  * @author GoodforGod
  * @see IAnnotationScanner
- * @see BasicScanner
+ * @see AnnotationScanner
  * @since 08.03.2018
  */
-public class UniqueScanner extends BasicScanner {
+public class UniqueScanner extends AnnotationScanner {
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class t) {
-        return super.scan(t).entrySet().stream()
+    public Map<Field, List<Annotation>> scan(final Class target) {
+        return super.scan(target).entrySet().stream()
                 .peek(e -> e.setValue(e.getValue().stream()
                         .distinct()
                         .collect(Collectors.toList())))
-                .collect(LinkedHashMap<Field, List<Annotation>>::new,
+                .collect(LinkedHashMap::new,
                         (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, u) -> {
-                        }
-                );
+                        (m, e) -> {});
     }
 }

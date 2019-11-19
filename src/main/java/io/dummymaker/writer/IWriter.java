@@ -3,9 +3,8 @@ package io.dummymaker.writer;
 /**
  * Writer interface used by exporters to write values as files
  *
- * @see io.dummymaker.export.IExporter
- *
  * @author GoodforGod
+ * @see io.dummymaker.export.IExporter
  * @since 31.05.2017
  */
 public interface IWriter {
@@ -20,6 +19,7 @@ public interface IWriter {
 
     /**
      * Closes write stream
+     *
      * @return indicates operation success
      */
     boolean flush();

@@ -1,16 +1,15 @@
 package io.dummymaker.export.asstring;
 
-import io.dummymaker.data.Dummy;
-import io.dummymaker.data.DummyAuto;
-import io.dummymaker.data.DummyNoExportFields;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.IProduceFactory;
-import io.dummymaker.factory.impl.GenProduceFactory;
+import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.model.Dummy;
+import io.dummymaker.model.DummyNoExportFields;
+import io.dummymaker.model.deprecated.DummyAuto;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,8 +32,7 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class ExportAsStringTests extends Assert {
 
-    private final IProduceFactory produceFactory = new GenProduceFactory();
-
+    private final GenFactory factory = new GenFactory();
     private final IExporter exporter;
     private final IValidator validator;
 
@@ -50,29 +48,27 @@ public class ExportAsStringTests extends Assert {
 
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]
-                {
-                        { new JsonExporter().withPretty(), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withPath(null), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), 5, 14 },
-                        { new JsonExporter().withPretty().withCase(null), new JsonValidator(), 5, 14 },
+        return Arrays.asList(new Object[][] {
+                { new JsonExporter().withPretty(), new JsonValidator(), 5, 14 },
+                { new JsonExporter().withPretty().withPath(null), new JsonValidator(), 5, 14 },
+                { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), 5, 14 },
+                { new JsonExporter().withPretty().withCase(null), new JsonValidator(), 5, 14 },
 
-                        { new CsvExporter(), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withPath(null), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withPath("    "), new CsvValidator(), 3, 2 },
-                        { new CsvExporter().withCase(null), new CsvValidator(), 3, 2 },
+                { new CsvExporter(), new CsvValidator(), 3, 2 },
+                { new CsvExporter().withPath(null), new CsvValidator(), 3, 2 },
+                { new CsvExporter().withPath("    "), new CsvValidator(), 3, 2 },
+                { new CsvExporter().withCase(null), new CsvValidator(), 3, 2 },
 
-                        { new SqlExporter(), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withPath(null), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withPath("    "), new SqlValidator(), 9, 10 },
-                        { new SqlExporter().withCase(null), new SqlValidator(), 9, 10 },
+                { new SqlExporter(), new SqlValidator(), 9, 10 },
+                { new SqlExporter().withPath(null), new SqlValidator(), 9, 10 },
+                { new SqlExporter().withPath("    "), new SqlValidator(), 9, 10 },
+                { new SqlExporter().withCase(null), new SqlValidator(), 9, 10 },
 
-                        { new XmlExporter(), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withPath(null), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withPath("     "), new XmlValidator(), 5, 12 },
-                        { new XmlExporter().withCase(null), new XmlValidator(), 5, 12 }
-                }
-        );
+                { new XmlExporter(), new XmlValidator(), 5, 12 },
+                { new XmlExporter().withPath(null), new XmlValidator(), 5, 12 },
+                { new XmlExporter().withPath("     "), new XmlValidator(), 5, 12 },
+                { new XmlExporter().withCase(null), new XmlValidator(), 5, 12 }
+        });
     }
 
     @Test
@@ -95,7 +91,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportSingleDummyEmptyContainer() {
-        final DummyNoExportFields dummy = produceFactory.produce(DummyNoExportFields.class);
+        final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
 
         final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
@@ -104,7 +100,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportDummyListEmptyContainer() {
-        final List<DummyNoExportFields> dummy = produceFactory.produce(DummyNoExportFields.class, 2);
+        final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
         final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
@@ -113,7 +109,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportSingleDummy() {
-        final Dummy dummy = produceFactory.produce(Dummy.class);
+        final Dummy dummy = factory.build(Dummy.class);
 
         final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -129,7 +125,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportSingleAutoDummy() {
-        final DummyAuto dummy = produceFactory.produce(DummyAuto.class);
+        final DummyAuto dummy = factory.build(DummyAuto.class);
 
         final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
@@ -145,7 +141,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportSingleDummyList() {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 1);
+        final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
         final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
@@ -161,7 +157,7 @@ public class ExportAsStringTests extends Assert {
 
     @Test
     public void exportListOfDummies() {
-        final List<Dummy> dummies = produceFactory.produce(Dummy.class, 2);
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);

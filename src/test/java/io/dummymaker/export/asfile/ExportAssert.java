@@ -2,13 +2,16 @@ package io.dummymaker.export.asfile;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * "default comment"
@@ -18,42 +21,31 @@ import java.util.logging.Logger;
  */
 abstract class ExportAssert extends Assert {
 
-    private static final Logger logger = Logger.getLogger(FileExportAssert.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String fileToDelete;
 
     @After
     public void cleanFile() {
         try {
-            if(fileToDelete != null) {
+            if (fileToDelete != null) {
                 final File file = new File(fileToDelete);
                 Files.deleteIfExists(file.toPath());
                 fileToDelete = null;
             }
         } catch (Exception e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
         }
     }
 
-    protected void setFilenameToBeRemoved(String filename) {
+    void setFilenameToBeRemoved(String filename) {
         this.fileToDelete = filename;
     }
 
-    protected String readDummyFromFile(String filename) throws Exception {
-        final StringBuilder builder = new StringBuilder();
-        final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(filename), "UTF-8")
-        );
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            builder.append(line).append("\n");
+    String readDummyFromFile(String filename) throws Exception {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream("./" + filename), StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
         }
-
-        builder.deleteCharAt(builder.length() - 1);
-
-        reader.close();
-        return builder.toString();
     }
 }
