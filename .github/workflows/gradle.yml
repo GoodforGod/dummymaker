@@ -21,7 +21,7 @@ jobs:
     name: Java ${{ matrix.java }} setup
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1
     - name: Set up JDK
       uses: actions/setup-java@v1
 
@@ -32,4 +32,7 @@ jobs:
       run: ./gradlew build
 
     - name: Analyze with SonarQube
-      run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew sonarqube
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
