@@ -1,8 +1,10 @@
 # DummyMaker  :hotsprings:
 
 [![GitHub Action](https://github.com/goodforgod/dummymaker/workflows/Java%20CI/badge.svg)](https://github.com/GoodforGod/dummymaker/actions?query=workflow%3A%22Java+CI%22)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c180e591ba7558c3add2/maintainability)](https://codeclimate.com/github/GoodforGod/dummymaker/maintainability)
-[![codecov](https://codecov.io/gh/GoodforGod/dummymaker/branch/master/graph/badge.svg)](https://codecov.io/gh/GoodforGod/dummymaker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=alert_status)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=coverage)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=ncloc)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 
 Library can generate *Data Objects* filled *random data* for your tests, 
 database setup, Big Data setups or other workloads. 
