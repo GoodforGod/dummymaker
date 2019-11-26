@@ -12,7 +12,7 @@ repositories {
 }
 
 group = 'com.github.goodforgod'
-version = '2.0.0'
+version = '2.0.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
