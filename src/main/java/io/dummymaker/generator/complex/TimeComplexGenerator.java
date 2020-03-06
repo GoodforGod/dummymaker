@@ -7,6 +7,8 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -18,6 +20,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 import static io.dummymaker.util.CastUtils.castObject;
+import static io.dummymaker.util.StringUtils.isNotBlank;
 
 /**
  * Generate time object for GenTime annotation
@@ -29,32 +32,34 @@ import static io.dummymaker.util.CastUtils.castObject;
  */
 public class TimeComplexGenerator implements IComplexGenerator {
 
+    private static final Logger logger = LoggerFactory.getLogger(TimeComplexGenerator.class);
+
     @Override
     public Object generate(final Class<?> parent,
                            final Field field,
                            final IGenStorage storage,
                            final Annotation annotation,
                            final int depth) {
-        final long from = (annotation == null) ? 0 : ((GenTime) annotation).from();
-        final long to = (annotation == null) ? GenTime.MAX : ((GenTime) annotation).to();
+        final long minUnix = getMin((GenTime) annotation);
+        final long maxUnix = getMax((GenTime) annotation);
 
         final Class<?> fieldClass = field.getType();
 
         if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class)
                 || fieldClass.equals(String.class)) {
-            return castObject(genTime(storage, LocalDateTimeGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
-            return castObject(genTime(storage, LocalDateGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, LocalDateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
-            return castObject(genTime(storage, LocalTimeGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, LocalTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
-            return castObject(genTime(storage, DateGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, DateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
-            return castObject(genTime(storage, TimestampGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, TimestampGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Time.class)) {
-            return castObject(genTime(storage, TimeGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, TimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
-            return castObject(genTime(storage, DateSqlGenerator.class, from, to), fieldClass);
+            return castObject(genTime(storage, DateSqlGenerator.class, minUnix, maxUnix), fieldClass);
         }
         return null;
     }
@@ -65,6 +70,36 @@ public class TimeComplexGenerator implements IComplexGenerator {
                 : storage.getGenerator(gClass);
 
         return ((ITimeGenerator) generator).generate(from, to);
+    }
+
+    private long getMin(GenTime annotation) {
+        if (annotation == null)
+            return 0;
+
+        try {
+            final String min = annotation.min();
+            if (isNotBlank(min) && !GenTime.MIN_DATE_TIME.equals(min))
+                return LocalDate.parse(min).toEpochDay();
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+
+        return annotation.minUnix();
+    }
+
+    private long getMax(GenTime annotation) {
+        if (annotation == null)
+            return 0;
+
+        try {
+            final String max = annotation.max();
+            if (isNotBlank(max) && !GenTime.MAX_DATE_TIME.equals(max))
+                return LocalDate.parse(max).toEpochDay();
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+
+        return annotation.minUnix();
     }
 
     @Override

@@ -11,10 +11,10 @@ import io.dummymaker.annotation.complex.GenTime;
 public interface ITimeGenerator<T> extends IGenerator<T> {
 
     /**
-     * @param from minimum 0 represents 1970.1.1
-     * @param to   as a maximum of GenTime.MAX
+     * @param minUnix minimum 0 represents 1970.1.1
+     * @param maxUnix as a maximum of GenTime.MAX
      * @return generated time object
-     * @see GenTime#MAX
+     * @see GenTime#MAX_UNIX
      */
-    T generate(long from, long to);
+    T generate(long minUnix, long maxUnix);
 }

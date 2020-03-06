@@ -18,17 +18,17 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
     @Override
     public LocalDateTime generate() {
-        return generate(0, GenTime.MAX);
+        return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public LocalDateTime generate(final long from, final long to) {
-        long usedFrom = from;
-        long usedTo = to;
+    public LocalDateTime generate(final long minUnix, final long maxUnix) {
+        long usedFrom = minUnix;
+        long usedTo = maxUnix;
         if (usedFrom < 0)
             usedFrom = 0;
-        if (usedTo > GenTime.MAX)
-            usedTo = GenTime.MAX;
+        if (usedTo > GenTime.MAX_UNIX)
+            usedTo = GenTime.MAX_UNIX;
 
         final long amount = (usedTo < usedFrom)
                 ? usedFrom

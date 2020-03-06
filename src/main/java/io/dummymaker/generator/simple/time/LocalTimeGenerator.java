@@ -18,11 +18,11 @@ public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
 
     @Override
     public LocalTime generate() {
-        return generate(0, GenTime.MAX);
+        return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public LocalTime generate(final long from, final long to) {
-        return generator.generate(from, to).toLocalTime();
+    public LocalTime generate(final long minUnix, final long maxUnix) {
+        return generator.generate(minUnix, maxUnix).toLocalTime();
     }
 }

@@ -18,11 +18,11 @@ public class DateSqlGenerator implements ITimeGenerator<Date> {
 
     @Override
     public Date generate() {
-        return generate(0, GenTime.MAX);
+        return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public Date generate(long from, long to) {
-        return Date.valueOf(generator.generate(from, to));
+    public Date generate(long minUnix, long maxUnix) {
+        return Date.valueOf(generator.generate(minUnix, maxUnix));
     }
 }

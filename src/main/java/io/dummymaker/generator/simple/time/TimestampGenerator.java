@@ -18,11 +18,11 @@ public class TimestampGenerator implements ITimeGenerator<Timestamp> {
 
     @Override
     public Timestamp generate() {
-        return generate(0, GenTime.MAX);
+        return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public Timestamp generate(final long from, final long to) {
-        return Timestamp.valueOf(generator.generate(from, to));
+    public Timestamp generate(final long minUnix, final long maxUnix) {
+        return Timestamp.valueOf(generator.generate(minUnix, maxUnix));
     }
 }

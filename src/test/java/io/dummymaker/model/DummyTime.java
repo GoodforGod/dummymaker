@@ -65,19 +65,19 @@ public class DummyTime {
     @GenTime
     private LocalTime time;
 
-    @GenTime(from = 1000, to = 999)
+    @GenTime(minUnix = 1000, maxUnix = 999)
     private LocalDate date;
 
-    @GenTime(from = -100)
+    @GenTime(minUnix = -100)
     private LocalDateTime dateTime;
 
-    @GenTime(from = 1)
+    @GenTime(minUnix = 1)
     private Timestamp timestamp;
 
-    @GenTime(to = GenTime.MAX + 1000)
+    @GenTime(maxUnix = GenTime.MAX_UNIX + 1000)
     private Date dateOld;
 
-    @GenTime(from = -100, to = GenTime.MAX + 1000)
+    @GenTime(minUnix = -100, maxUnix = GenTime.MAX_UNIX + 1000)
     private Date dateOldCoverage;
 
     @GenTime

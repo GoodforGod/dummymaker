@@ -18,11 +18,11 @@ public class TimeGenerator implements ITimeGenerator<Time> {
 
     @Override
     public Time generate() {
-        return generate(0, GenTime.MAX);
+        return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public Time generate(final long from, final long to) {
-        return Time.valueOf(generator.generate(from, to));
+    public Time generate(final long minUnix, final long maxUnix) {
+        return Time.valueOf(generator.generate(minUnix, maxUnix));
     }
 }
