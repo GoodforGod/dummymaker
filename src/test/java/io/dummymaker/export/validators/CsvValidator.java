@@ -127,4 +127,16 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
         assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
+
+    @Override
+    public void isDummyUnixTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches("[0-9]+"));
+        assertTrue(dummy[1].matches("[0-9]+"));
+        assertTrue(dummy[2].matches("[0-9]+"));
+        assertTrue(dummy[3].matches("[0-9]+"));
+        assertTrue(dummy[4].matches("[0-9]+"));
+        assertTrue(dummy[5].matches("[0-9]+"));
+        assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[7].matches("[0-9]+"));
+    }
 }

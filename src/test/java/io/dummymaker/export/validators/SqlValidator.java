@@ -205,4 +205,58 @@ public class SqlValidator implements IValidator {
                 + ISO_DATE_TIME_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "'\\);"));
     }
+
+    @Override
+    public void isDummyUnixTimeValid(String[] dummy) {
+        final ICase strategy = new DefaultCase();
+
+        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
+        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
+        final String dateOldField = strategy.format(Fields.DATE.getName());
+        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
+
+        final String timePattern = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
+        final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
+        final String timestampPattern = datePattern + "T" + timePattern;
+
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummyunixtime") + "\\("));
+        assertTrue(dummy[1].matches("\\t" + timeField + "\\tBIGINT,"));
+        assertTrue(dummy[2].matches("\\t" + dateField + "\\tBIGINT,"));
+        assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tBIGINT,"));
+        assertTrue(dummy[4].matches("\\t" + timestampField + "\\tBIGINT,"));
+        assertTrue(dummy[5].matches("\\t" + dateOldField + "\\tBIGINT,"));
+        assertTrue(dummy[6].matches("\\t" + dateOldCoverageField + "\\tBIGINT,"));
+        assertTrue(dummy[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
+        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tBIGINT,"));
+        assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummy[10].matches("\\);"));
+
+        assertTrue(dummy[11].matches(""));
+
+        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummyunixtime")
+                + " \\("
+                + timeField + ", "
+                + dateField + ", "
+                + dateTimeField + ", "
+                + timestampField + ", "
+                + dateOldField + ", "
+                + dateOldCoverageField + ", "
+                + dateTimeStringField + ", "
+                + dateTimeObjectField
+                + "\\) VALUES"));
+
+        assertTrue(dummy[13].matches("\\('"
+                + "[0-9]+" + "', '"
+                + "[0-9]+" + "', '"
+                + "[0-9]+" + "', '"
+                + "[0-9]+" + "', '"
+                + "[0-9]+" + "', '"
+                + "[0-9]+" + "', '"
+                + Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + "[0-9]+" + "'\\);"));
+    }
 }

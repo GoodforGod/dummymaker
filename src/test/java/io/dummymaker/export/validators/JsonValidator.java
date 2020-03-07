@@ -77,4 +77,19 @@ public class JsonValidator implements IValidator {
                 "\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\""));
         assertTrue(dummy[9].matches("}"));
     }
+
+    @Override
+    public void isDummyUnixTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches("\\t\"" + Fields.LOCAL_TIME.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[2].matches("\\t\"" + Fields.LOCAL_DATE.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[3].matches("\\t\"" + Fields.LOCAL_DATETIME.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[4].matches("\\t\"" + Fields.TIMESTAMP.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[5].matches("\\t\"" + Fields.DATE.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[6].matches("\\t\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + "[0-9]+" + "\","));
+        assertTrue(dummy[7].matches("\\t\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\""
+                + Patterns.LOCAL_DATETIME.getPattern().pattern() + "\","));
+        assertTrue(dummy[8].matches("\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + "[0-9]+" + "\""));
+        assertTrue(dummy[9].matches("}"));
+    }
 }

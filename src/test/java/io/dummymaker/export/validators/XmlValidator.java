@@ -87,4 +87,34 @@ public class XmlValidator implements IValidator {
                 + "</" + Fields.LOCAL_DATETIME_OBJECT.getName() + ">"));
         assertTrue(dummy[9].matches("</TimeDummyClass>"));
     }
+
+    @Override
+    public void isDummyUnixTimeValid(String[] dummy) {
+        assertTrue(dummy[0].matches("<DummyUnixTime>"));
+        assertTrue(dummy[1].matches("\\t<" + Fields.LOCAL_TIME.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.LOCAL_TIME.getName() + ">"));
+        assertTrue(dummy[2].matches("\\t<" + Fields.LOCAL_DATE.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.LOCAL_DATE.getName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + Fields.LOCAL_DATETIME.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.LOCAL_DATETIME.getName() + ">"));
+        assertTrue(dummy[4].matches("\\t<" + Fields.TIMESTAMP.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.TIMESTAMP.getName() + ">"));
+        assertTrue(dummy[5].matches("\\t<" + Fields.DATE.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.DATE.getName() + ">"));
+        assertTrue(dummy[6].matches("\\t<" + Fields.DATE_COVERAGE.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.DATE_COVERAGE.getName() + ">"));
+        assertTrue(dummy[7].matches("\\t<" + Fields.LOCAL_DATETIME_STRING.getName() + ">"
+                + Patterns.LOCAL_DATETIME.getPattern().pattern()
+                + "</" + Fields.LOCAL_DATETIME_STRING.getName() + ">"));
+        assertTrue(dummy[8].matches("\\t<" + Fields.LOCAL_DATETIME_OBJECT.getName() + ">"
+                + "[0-9]+"
+                + "</" + Fields.LOCAL_DATETIME_OBJECT.getName() + ">"));
+        assertTrue(dummy[9].matches("</DummyUnixTime>"));
+    }
 }

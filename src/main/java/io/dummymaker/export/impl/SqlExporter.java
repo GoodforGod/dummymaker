@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.dummymaker.util.DateUtils.*;
-
 /**
  * Export objects as SQL insert query.
  *
@@ -178,6 +176,8 @@ public class SqlExporter extends BasicExporter {
                                 ? "BIGINT"
                                 : translateJavaTypeToSqlType(exportFieldType);
 
+                if (String.class.equals(container.getField(finalFieldName).getType()))
+                    return finalFieldName + "\t" + "VARCHAR";
                 return finalFieldName + "\t" + dateType;
             case ARRAY:
             case COLLECTION:
@@ -280,7 +280,6 @@ public class SqlExporter extends BasicExporter {
 
     private Class<?> extractType(FieldContainer.Type type, Field field) {
         switch (type) {
-            case DATETIME:
             case ARRAY:
                 return field.getType().getComponentType();
             case ARRAY_2D:
