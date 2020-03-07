@@ -90,7 +90,7 @@ public class JsonExporter extends BasicExporter {
             return container.getExportValue();
         }
 
-        return "\"" + container.getExportValue() + "\"";
+        return wrapWithQuotes(container.getExportValue());
     }
 
     private boolean isTypeNeedQuotes(Class<?> classType) {
@@ -186,16 +186,8 @@ public class JsonExporter extends BasicExporter {
         return builder.toString();
     }
 
-    private String openJsonListTag(final String exportClassName) {
-        return (isPretty)
-                ? "{\n\t\"" + exportClassName + "\": ["
-                : "{\"" + exportClassName + "\": [";
-    }
-
     private String closeJsonListTag() {
-        return (isPretty)
-                ? "\n\t]\n}"
-                : "]}";
+        return (isPretty) ? "\n\t]" : "]";
     }
 
     @Override
@@ -230,7 +222,7 @@ public class JsonExporter extends BasicExporter {
             return false;
 
         // Open JSON Object List
-        writer.write(openJsonListTag(container.getExportClassName()) + "\n");
+        writer.write("[\n");
 
         final String result = list.stream()
                 .map(t -> format(t, container, Mode.LIST))
@@ -265,9 +257,7 @@ public class JsonExporter extends BasicExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder builder = new StringBuilder(openJsonListTag(container.getExportClassName()))
-                .append("\n");
-
+        final StringBuilder builder = new StringBuilder("[\n");
         final String result = list.stream()
                 .map(t -> format(t, container, Mode.LIST))
                 .collect(Collectors.joining(",\n"));

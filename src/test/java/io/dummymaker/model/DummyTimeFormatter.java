@@ -1,7 +1,6 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.annotation.export.GenExportName;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -18,12 +17,11 @@ import static java.util.regex.Pattern.compile;
  * @author GoodforGod
  * @since 07.03.2018
  */
-@GenExportName("TimeDummyClass")
-public class DummyTime {
+public class DummyTimeFormatter {
 
-    public static final String ISO_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
-    public static final String ISO_DATE_PATTERN = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
-    public static final String ISO_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_TIME_PATTERN;
+    public static final String ISO_TIME_PATTERN = "[0-9]{2}:[0-9]{2}";
+    public static final String ISO_DATE_PATTERN = "[1-9][0-9]{3}-[0-9]{2}";
+    public static final String ISO_DATE_TIME_PATTERN = ISO_DATE_PATTERN + " " + ISO_TIME_PATTERN;
 
     public enum Patterns {
 
@@ -76,28 +74,28 @@ public class DummyTime {
         }
     }
 
-    @GenTime
+    @GenTime(formatter = "HH:mm")
     private LocalTime time;
 
-    @GenTime(minUnix = 1000, maxUnix = 999)
+    @GenTime(formatter = "yyyy-MM")
     private LocalDate date;
 
-    @GenTime(minUnix = -100)
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private LocalDateTime dateTime;
 
-    @GenTime(minUnix = 1)
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private Timestamp timestamp;
 
-    @GenTime(maxUnix = GenTime.MAX_UNIX + 1000)
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private Date dateOld;
 
-    @GenTime(minUnix = -100, maxUnix = GenTime.MAX_UNIX + 1000)
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private Date dateOldCoverage;
 
-    @GenTime
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private String dateTimeString;
 
-    @GenTime
+    @GenTime(formatter = "yyyy-MM HH:mm")
     private Object dateTimeObject;
 
     public LocalTime getTime() {

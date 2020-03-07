@@ -26,6 +26,11 @@ public class ExportContainer {
         return new ExportContainer(exportName, exportValue, FieldContainer.Type.SIMPLE);
     }
 
+    public static ExportContainer asDatetime(final String exportName,
+                                             final String exportValue) {
+        return new ExportContainer(exportName, exportValue, FieldContainer.Type.DATETIME);
+    }
+
     public static ExportContainer asList(final String exportName,
                                          final String exportValue) {
         return new ExportContainer(exportName, exportValue, FieldContainer.Type.COLLECTION);

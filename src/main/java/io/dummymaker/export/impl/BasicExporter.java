@@ -1,9 +1,11 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.model.GenRules;
+import io.dummymaker.model.error.GenException;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
@@ -13,6 +15,11 @@ import io.dummymaker.writer.impl.BufferedFileWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.sql.Time;
+import java.time.*;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -109,11 +116,11 @@ abstract class BasicExporter implements IExporter {
                 final String exportFieldName = v.getExportName();
                 final Object exportFieldValue = k.get(t);
 
-                exports.add(buildContainer(exportFieldName, exportFieldValue, v.getType()));
+                exports.add(buildContainer(exportFieldName, exportFieldValue, k, v));
 
                 k.setAccessible(false);
             } catch (Exception ex) {
-                logger.warn(ex.getMessage());
+                throw new GenException(ex);
             }
         });
 
@@ -122,28 +129,24 @@ abstract class BasicExporter implements IExporter {
 
     private ExportContainer buildContainer(final String exportFieldName,
                                            final Object exportFieldValue,
-                                           final FieldContainer.Type type) {
+                                           final Field field,
+                                           final FieldContainer container) {
         if (exportFieldValue == null)
             return ExportContainer.asValue(exportFieldName, "");
 
-        if (Date.class.equals(exportFieldValue.getClass()))
-            return ExportContainer.asValue(exportFieldName, String.valueOf(((Date) exportFieldValue).getTime()));
-
-        if (this.format.isTypeSupported(type)) {
-            switch (type) {
+        if (this.format.isTypeSupported(container.getType())) {
+            switch (container.getType()) {
+                case DATETIME:
+                    return ExportContainer.asDatetime(exportFieldName, convertAsDatetime(field, exportFieldValue));
                 case ARRAY:
-                    return ExportContainer.asArray(exportFieldName,
-                            convertAsArray(exportFieldValue));
+                    return ExportContainer.asArray(exportFieldName, convertAsArray(exportFieldValue));
                 case ARRAY_2D:
-                    return ExportContainer.asArray2D(exportFieldName,
-                            Arrays.deepToString((Object[]) exportFieldValue));
+                    return ExportContainer.asArray2D(exportFieldName, Arrays.deepToString((Object[]) exportFieldValue));
                 case COLLECTION:
                     return ExportContainer.asList(exportFieldName, exportFieldValue.toString());
                 case MAP:
                     return ExportContainer.asMap(exportFieldName, convertAsMap((Map) exportFieldValue));
-
-                default:
-                    break;
+                default: // will be exported as value after
             }
         }
 
@@ -173,8 +176,87 @@ abstract class BasicExporter implements IExporter {
     @SuppressWarnings("unchecked")
     private String convertAsMap(Map exportMap) {
         return ((Set<Map.Entry>) exportMap.entrySet()).stream()
-                .map(e -> String.format("\"%s\":\"%s\"", e.getKey(), e.getValue()))
+                .map(e -> "\"" + e.getKey() + "\":\"" + e.getValue() + "\"")
                 .collect(Collectors.joining(",", "{", "}"));
+    }
+
+    private String convertAsDatetime(Field field, Object exportFieldValue) {
+        final GenTime annotation = field.getAnnotation(GenTime.class);
+        if (annotation == null)
+            return String.valueOf(exportFieldValue);
+
+        try {
+            if (annotation.exportAsUnixTime()) {
+                return exportAsUnixTime(exportFieldValue);
+            } else {
+                return exportWithFormatter(annotation, exportFieldValue);
+            }
+        } catch (Exception e) {
+            logger.warn(e.getMessage());
+        }
+
+        return String.valueOf(exportFieldValue);
+    }
+
+    private String exportAsUnixTime(Object exportFieldValue) {
+        if (exportFieldValue instanceof Date) {
+            return String.valueOf(((Date) exportFieldValue).getTime());
+        } else if (exportFieldValue instanceof ChronoLocalDate) {
+            return String.valueOf(((LocalDate) exportFieldValue).toEpochDay());
+        } else if (exportFieldValue instanceof LocalTime) {
+            return String.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1),
+                    ((LocalTime) exportFieldValue)).toEpochSecond(getZoneOffset()));
+        } else if (exportFieldValue instanceof LocalDateTime) {
+            return String.valueOf(((LocalDateTime) exportFieldValue).toEpochSecond(getZoneOffset()));
+        } else {
+            return String.valueOf(exportFieldValue);
+        }
+    }
+
+    private String exportWithFormatter(GenTime annotation, Object exportFieldValue) {
+        if (exportFieldValue instanceof Time) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+                    ? DateTimeFormatter.ISO_TIME
+                    : DateTimeFormatter.ofPattern(annotation.formatter());
+
+            return LocalDateTime
+                    .ofInstant(Instant.ofEpochMilli(((Time) exportFieldValue).getTime()),
+                            TimeZone.getDefault().toZoneId())
+                    .format(formatter);
+        } else if (exportFieldValue instanceof Date) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+                    ? DateTimeFormatter.ISO_DATE_TIME
+                    : DateTimeFormatter.ofPattern(annotation.formatter());
+
+            return LocalDateTime
+                    .ofInstant(Instant.ofEpochMilli(((Date) exportFieldValue).getTime()),
+                            TimeZone.getDefault().toZoneId())
+                    .format(formatter);
+        } else if (exportFieldValue instanceof LocalDate) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+                    ? DateTimeFormatter.ISO_DATE
+                    : DateTimeFormatter.ofPattern(annotation.formatter());
+
+            return ((LocalDate) exportFieldValue).format(formatter);
+        } else if (exportFieldValue instanceof LocalTime) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+                    ? DateTimeFormatter.ISO_TIME
+                    : DateTimeFormatter.ofPattern(annotation.formatter());
+
+            return ((LocalTime) exportFieldValue).format(formatter);
+        } else if (exportFieldValue instanceof LocalDateTime) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+                    ? DateTimeFormatter.ISO_DATE_TIME
+                    : DateTimeFormatter.ofPattern(annotation.formatter());
+
+            return ((LocalDateTime) exportFieldValue).format(formatter);
+        } else {
+            return String.valueOf(exportFieldValue);
+        }
+    }
+
+    private ZoneOffset getZoneOffset() {
+        return ZoneOffset.UTC;
     }
 
     /**

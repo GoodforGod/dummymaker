@@ -10,6 +10,7 @@ import io.dummymaker.factory.impl.GenSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.FieldContainer;
+import io.dummymaker.model.export.FieldContainerFactory;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.IGenScanner;
@@ -39,12 +40,14 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     private final IGenSupplier supplier;
     private final IGenScanner genScanner;
     private final IAnnotationScanner annotationScanner;
+    private final FieldContainerFactory factory;
 
     public ExportScanner() {
         this(null);
     }
 
     public ExportScanner(GenRules rules) {
+        this.factory = new FieldContainerFactory();
         this.supplier = new GenSupplier();
         this.genScanner = new GenRuledScanner(this.supplier, rules);
         this.annotationScanner = new AnnotationScanner();
@@ -77,9 +80,9 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
 
                 // Process export field (even if is export only)
                 if (v.stream().anyMatch(exportFilter) && container == null) {
-                    resultMap.put(k, FieldContainer.as(k, supplier.getSuitable(k), fieldName));
+                    resultMap.put(k, factory.build(k, supplier.getSuitable(k), fieldName));
                 } else if (container != null) {
-                    resultMap.put(k, FieldContainer.as(k, container.getGenerator(), fieldName));
+                    resultMap.put(k, factory.build(k, container.getGenerator(), fieldName));
                 }
 
             }
@@ -90,7 +93,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                 .filter(renameFilter)
                 .map(a -> ((GenExportName) a).value())
                 .findFirst()
-                .ifPresent(n -> resultMap.put(null, FieldContainer.as(null, null, n)));
+                .ifPresent(n -> resultMap.put(null, factory.build(null, null, n)));
 
         return resultMap;
     }

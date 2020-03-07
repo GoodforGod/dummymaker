@@ -19,21 +19,70 @@ import java.lang.annotation.Target;
 public @interface GenTime {
 
     /**
-     * Epoch Unix Time Stamp for 1/1/3000
+     * Unix Timestamp for 12-31-2099.
      */
-    long MAX = 32503680000L;
+    long MAX_UNIX = 4102358400L;
 
     /**
-     * Minimum generated time from 01.01.1970 in long UTC format
-     *
-     * @return min time to gen
+     * Unix Timestamp for 1-1-1970.
      */
-    long from() default 0L;
+    long MIN_UNIX = 0L;
+
+    String MIN_DATE_TIME = "1-1-1970";
+
+    String MAX_DATE_TIME = "30-12-2099";
 
     /**
-     * Maximum generated time in long UTC format
-     *
-     * @return max gen time
+     * ISO 8601 datetime format for DateTime and timestamps
+     * 
+     * @see java.time.format.DateTimeFormatter#ISO_DATE_TIME default for datetimes
+     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only
+     *      formats
+     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only
+     *      formats
      */
-    long to() default MAX;
+    String EXPORT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+
+    /**
+     * Minimum generated time from 01-01-1970 as unix timestamp.
+     *
+     * @return min datetime where to start generate timestamps.
+     */
+    long minUnix() default MIN_UNIX;
+
+    /**
+     * Maximum generated time as unix timestamp.
+     *
+     * @return max datetime where to stop generate timestamps.
+     */
+    long maxUnix() default MAX_UNIX;
+
+    /**
+     * Minimum generated time. This has MORE PRIORITY than unix time.
+     *
+     * @return min datetime where to start generate timestamps.
+     */
+    String min() default MIN_DATE_TIME;
+
+    /**
+     * Maximum generated time. This has MORE PRIORITY than unix time.
+     *
+     * @return max datetime where to stop generate timestamps.
+     */
+
+    String max() default MAX_DATE_TIME;
+
+    /**
+     * Format in which export date the it is converted to string.
+     * 
+     * @return export format (default is ISO 8601)
+     */
+    String formatter() default EXPORT_FORMAT;
+
+    /**
+     * Exports date as Unix Time
+     *
+     * @return true if export as unix is set
+     */
+    boolean exportAsUnixTime() default false;
 }

@@ -18,7 +18,7 @@ Documentation for **versions earlier than 2.0.0** in [this document](/README-VER
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:2.0.1'
+    compile 'com.github.goodforgod:dummymaker:2.0.2'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 </dependency>
 ```
 
@@ -274,6 +274,37 @@ public class User {
 }
 ```
 
+
+#### Date Time Formatter
+
+You cas specify formatter to export dates \ times.
+
+```java
+public class User {
+
+    @GenTime(formatter = "HH:mm")
+    private LocalTime localTime;
+    
+    @GenTime(formatter = "yyyy-MM HH:mm")
+    private LocalDateTime dateTime;
+}
+```
+
+#### Date Time As Unix Time
+
+You can export dates \ times as unix time format.
+
+```java
+public class User {
+
+    @GenTime(exportAsUnixTime = true)
+    private Timestamp timestamp;
+    
+    @GenTime(exportAsUnixTime = true)
+    private LocalDateTime dateTime;
+}
+```
+
 ### Embedded Annotation
 
 Responsible for filling complex data, can be applied as annotation or
@@ -405,6 +436,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 
 ## Version History
+
+**2.0.2** - @GenTime export formatter added and export as unix time, SqlExporter fixed issue with INSERT queries.
 
 **2.0.0** - Redesign factory and contracts, improved complex and other generators, GenRules added for configuration without annotations, @Ignore annotation, @GenEnum enum generation, minor improvements and more.
 

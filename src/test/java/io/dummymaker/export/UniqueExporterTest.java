@@ -7,6 +7,9 @@ import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyTime;
+import io.dummymaker.model.DummyTimeFormatter;
+import io.dummymaker.model.DummyUnixTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -22,7 +25,7 @@ import java.util.Collection;
  * @since 28.04.2018
  */
 @RunWith(Parameterized.class)
-public class UniqueExporterTest {
+public class UniqueExporterTest extends Assert {
 
     private final GenFactory factory = new GenFactory();
 
@@ -45,13 +48,44 @@ public class UniqueExporterTest {
     }
 
     @Test
-    public void checkDateClassActsAsMillisLongWhenExport() {
-        final DummyTime dummyTime = factory.build(DummyTime.class);
-        final String exported = exporter.exportAsString(dummyTime);
+    public void datesPatternMatchWhenExported() {
+        final DummyTime dummy = factory.build(DummyTime.class);
+        assertNotNull(dummy);
+
+        final String exported = exporter.exportAsString(dummy);
 
         final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
         final String[] split = exported.split(splitter);
+        assertNotNull(split);
 
         validator.isDummyTimeValid(split);
+    }
+
+    @Test
+    public void datetimeUnixWhenExported() {
+        final DummyUnixTime dummy = factory.build(DummyUnixTime.class);
+        assertNotNull(dummy);
+
+        final String exported = exporter.exportAsString(dummy);
+
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String[] split = exported.split(splitter);
+        assertNotNull(split);
+
+        validator.isDummyUnixTimeValid(split);
+    }
+
+    @Test
+    public void datetimeFormatterWhenExported() {
+        final DummyTimeFormatter dummy = factory.build(DummyTimeFormatter.class);
+        assertNotNull(dummy);
+
+        final String exported = exporter.exportAsString(dummy);
+
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String[] split = exported.split(splitter);
+        assertNotNull(split);
+
+        validator.isDummyTimeFormatterValid(split);
     }
 }
