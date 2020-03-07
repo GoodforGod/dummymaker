@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static io.dummymaker.util.CastUtils.castObject;
@@ -40,13 +41,25 @@ public class TimeComplexGenerator implements IComplexGenerator {
                            final IGenStorage storage,
                            final Annotation annotation,
                            final int depth) {
-        final long minUnix = getMin((GenTime) annotation);
-        final long maxUnix = getMax((GenTime) annotation);
+        final GenTime genTime = (GenTime) annotation;
+        final long minUnix = getMin(genTime);
+        final long maxUnix = getMax(genTime);
 
         final Class<?> fieldClass = field.getType();
 
-        if (fieldClass.isAssignableFrom(LocalDateTime.class) || fieldClass.equals(Object.class)
-                || fieldClass.equals(String.class)) {
+        if (fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
+            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(genTime.formatter())
+                    ? DateTimeFormatter.ISO_DATE_TIME
+                    : DateTimeFormatter.ofPattern(genTime.formatter());
+
+            final LocalDateTime dateTime = (LocalDateTime) genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix);
+            try {
+                final String formatted = dateTime.format(formatter);
+                return castObject(formatted, fieldClass);
+            } catch (Exception e) {
+                return castObject(dateTime, fieldClass);
+            }
+        } else if (fieldClass.isAssignableFrom(LocalDateTime.class)) {
             return castObject(genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
             return castObject(genTime(storage, LocalDateGenerator.class, minUnix, maxUnix), fieldClass);

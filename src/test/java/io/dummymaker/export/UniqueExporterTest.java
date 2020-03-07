@@ -7,6 +7,7 @@ import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyTime;
+import io.dummymaker.model.DummyTimeFormatter;
 import io.dummymaker.model.DummyUnixTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class UniqueExporterTest {
     }
 
     @Test
-    public void dateClassPatternMatchWhenExported() {
+    public void datesPatternMatchWhenExported() {
         final DummyTime dummy = factory.build(DummyTime.class);
         final String exported = exporter.exportAsString(dummy);
 
@@ -57,7 +58,7 @@ public class UniqueExporterTest {
     }
 
     @Test
-    public void dateClassUnixTimeWhenExported() {
+    public void datetimeUnixWhenExported() {
         final DummyUnixTime dummy = factory.build(DummyUnixTime.class);
         final String exported = exporter.exportAsString(dummy);
 
@@ -65,5 +66,16 @@ public class UniqueExporterTest {
         final String[] split = exported.split(splitter);
 
         validator.isDummyUnixTimeValid(split);
+    }
+
+    @Test
+    public void datetimeFormatterWhenExported() {
+        final DummyTimeFormatter dummy = factory.build(DummyTimeFormatter.class);
+        final String exported = exporter.exportAsString(dummy);
+
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String[] split = exported.split(splitter);
+
+        validator.isDummyTimeFormatterValid(split);
     }
 }

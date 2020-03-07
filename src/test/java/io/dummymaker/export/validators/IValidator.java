@@ -21,4 +21,6 @@ public interface IValidator {
     void isDummyTimeValid(String[] dummy);
 
     void isDummyUnixTimeValid(String[] dummy);
+
+    void isDummyTimeFormatterValid(String[] dummy);
 }

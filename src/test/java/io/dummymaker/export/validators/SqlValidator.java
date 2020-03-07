@@ -4,10 +4,11 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.cases.DefaultCase;
 import io.dummymaker.model.DummyArray;
-import io.dummymaker.model.DummyTime.Fields;
+import io.dummymaker.model.DummyTimeFormatter;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTime.*;
+import static io.dummymaker.model.DummyTime.Fields.*;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -96,14 +97,14 @@ public class SqlValidator implements IValidator {
     }
 
     public void isDummyTimeValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
-        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
-        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
-        final String dateOldField = strategy.format(Fields.DATE.getName());
-        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
+        final String timeField = strategy.format(LOCAL_TIME.getName());
+        final String dateField = strategy.format(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(TIMESTAMP.getName());
+        final String dateOldField = strategy.format(DATE.getName());
+        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("TimeDummyClass") + "\\("));
         assertTrue(dummies[1].matches("\\t" + timeField + "\\tTIME,"));
@@ -156,14 +157,14 @@ public class SqlValidator implements IValidator {
     public void isDummyTimeValid(String[] dummy) {
         final ICase strategy = new DefaultCase();
 
-        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
-        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
-        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
-        final String dateOldField = strategy.format(Fields.DATE.getName());
-        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
+        final String timeField = strategy.format(LOCAL_TIME.getName());
+        final String dateField = strategy.format(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(TIMESTAMP.getName());
+        final String dateOldField = strategy.format(DATE.getName());
+        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
 
         final String timePattern = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
         final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
@@ -210,18 +211,14 @@ public class SqlValidator implements IValidator {
     public void isDummyUnixTimeValid(String[] dummy) {
         final ICase strategy = new DefaultCase();
 
-        final String timeField = strategy.format(Fields.LOCAL_TIME.getName());
-        final String dateField = strategy.format(Fields.LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(Fields.LOCAL_DATETIME.getName());
-        final String timestampField = strategy.format(Fields.TIMESTAMP.getName());
-        final String dateOldField = strategy.format(Fields.DATE.getName());
-        final String dateOldCoverageField = strategy.format(Fields.DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(Fields.LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(Fields.LOCAL_DATETIME_OBJECT.getName());
-
-        final String timePattern = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
-        final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
-        final String timestampPattern = datePattern + "T" + timePattern;
+        final String timeField = strategy.format(LOCAL_TIME.getName());
+        final String dateField = strategy.format(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(TIMESTAMP.getName());
+        final String dateOldField = strategy.format(DATE.getName());
+        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
 
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummyunixtime") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tBIGINT,"));
@@ -257,6 +254,56 @@ public class SqlValidator implements IValidator {
                 + "[0-9]+" + "', '"
                 + "[0-9]+" + "', '"
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
-                + "[0-9]+" + "'\\);"));
+                + Patterns.LOCAL_DATETIME.getPattern().pattern() + "'\\);"));
+    }
+
+    @Override
+    public void isDummyTimeFormatterValid(String[] dummy) {
+        final ICase strategy = new DefaultCase();
+
+        final String timeField = strategy.format(LOCAL_TIME.getName());
+        final String dateField = strategy.format(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
+        final String timestampField = strategy.format(TIMESTAMP.getName());
+        final String dateOldField = strategy.format(DATE.getName());
+        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
+
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummytimeformatter") + "\\("));
+        assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIME,"));
+        assertTrue(dummy[2].matches("\\t" + dateField + "\\tDATE,"));
+        assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[4].matches("\\t" + timestampField + "\\tTIMESTAMP,"));
+        assertTrue(dummy[5].matches("\\t" + dateOldField + "\\tDATETIME,"));
+        assertTrue(dummy[6].matches("\\t" + dateOldCoverageField + "\\tDATETIME,"));
+        assertTrue(dummy[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
+        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tVARCHAR,"));
+        assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummy[10].matches("\\);"));
+
+        assertTrue(dummy[11].matches(""));
+
+        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummytimeformatter")
+                + " \\("
+                + timeField + ", "
+                + dateField + ", "
+                + dateTimeField + ", "
+                + timestampField + ", "
+                + dateOldField + ", "
+                + dateOldCoverageField + ", "
+                + dateTimeStringField + ", "
+                + dateTimeObjectField
+                + "\\) VALUES"));
+
+        assertTrue(dummy[13].matches("\\('"
+                + DummyTimeFormatter.Patterns.TIME.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.LOCAL_DATE.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.TIMESTAMP.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.DATE.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.DATE_SQL.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
+                + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern() + "'\\);"));
     }
 }

@@ -4,6 +4,7 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
+import io.dummymaker.model.DummyTimeFormatter;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.assertTrue;
@@ -89,7 +90,33 @@ public class JsonValidator implements IValidator {
         assertTrue(dummy[6].matches("\\t\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + "[0-9]+" + "\","));
         assertTrue(dummy[7].matches("\\t\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\""
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "\","));
-        assertTrue(dummy[8].matches("\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + "[0-9]+" + "\""));
+        assertTrue(dummy[8].matches("\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\""
+                + Patterns.LOCAL_DATETIME.getPattern().pattern() + "\""));
+        assertTrue(dummy[9].matches("}"));
+    }
+
+    @Override
+    public void isDummyTimeFormatterValid(String[] dummy) {
+        assertTrue(dummy[0].matches("\\{"));
+        assertTrue(dummy[1].matches(
+                "\\t\"" + Fields.LOCAL_TIME.getName() + "\":\"" + DummyTimeFormatter.Patterns.LOCAL_TIME.getPattern() + "\","));
+        assertTrue(dummy[2].matches(
+                "\\t\"" + Fields.LOCAL_DATE.getName() + "\":\"" + DummyTimeFormatter.Patterns.LOCAL_DATE.getPattern() + "\","));
+        assertTrue(dummy[3]
+                .matches("\\t\"" + Fields.LOCAL_DATETIME.getName() + "\":\""
+                        + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[4].matches(
+                "\\t\"" + Fields.TIMESTAMP.getName() + "\":\"" + DummyTimeFormatter.Patterns.TIMESTAMP.getPattern() + "\","));
+        assertTrue(dummy[5]
+                .matches("\\t\"" + Fields.DATE.getName() + "\":\"" + DummyTimeFormatter.Patterns.DATE_SQL.getPattern() + "\","));
+        assertTrue(dummy[6].matches(
+                "\\t\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + DummyTimeFormatter.Patterns.DATE.getPattern() + "\","));
+        assertTrue(dummy[7].matches(
+                "\\t\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\""
+                        + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern() + "\","));
+        assertTrue(dummy[8].matches(
+                "\\t\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\""
+                        + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern() + "\""));
         assertTrue(dummy[9].matches("}"));
     }
 }
