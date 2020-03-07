@@ -47,9 +47,10 @@ public class TimeComplexGenerator implements IComplexGenerator {
         final Class<?> fieldClass = field.getType();
 
         if (fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
-            final DateTimeFormatter formatter = (annotation != null && !GenTime.EXPORT_FORMAT.equals(((GenTime) annotation).formatter()))
-                    ? DateTimeFormatter.ofPattern(((GenTime) annotation).formatter())
-                    : DateTimeFormatter.ISO_DATE_TIME;
+            final DateTimeFormatter formatter = (annotation != null
+                    && !GenTime.EXPORT_FORMAT.equals(((GenTime) annotation).formatter()))
+                            ? DateTimeFormatter.ofPattern(((GenTime) annotation).formatter())
+                            : DateTimeFormatter.ISO_DATE_TIME;
 
             final LocalDateTime dateTime = (LocalDateTime) genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix);
             try {
