@@ -41,16 +41,15 @@ public class TimeComplexGenerator implements IComplexGenerator {
                            final IGenStorage storage,
                            final Annotation annotation,
                            final int depth) {
-        final GenTime genTime = (GenTime) annotation;
-        final long minUnix = getMin(genTime);
-        final long maxUnix = getMax(genTime);
+        final long minUnix = (annotation == null) ? GenTime.MIN_UNIX : getMin(((GenTime) annotation));
+        final long maxUnix = (annotation == null) ? GenTime.MAX_UNIX : getMax(((GenTime) annotation));
 
         final Class<?> fieldClass = field.getType();
 
         if (fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(genTime.formatter())
-                    ? DateTimeFormatter.ISO_DATE_TIME
-                    : DateTimeFormatter.ofPattern(genTime.formatter());
+            final DateTimeFormatter formatter = (annotation != null && !GenTime.EXPORT_FORMAT.equals(((GenTime) annotation).formatter()))
+                    ? DateTimeFormatter.ofPattern(((GenTime) annotation).formatter())
+                    : DateTimeFormatter.ISO_DATE_TIME;
 
             final LocalDateTime dateTime = (LocalDateTime) genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix);
             try {
@@ -86,9 +85,6 @@ public class TimeComplexGenerator implements IComplexGenerator {
     }
 
     private long getMin(GenTime annotation) {
-        if (annotation == null)
-            return 0;
-
         try {
             final String min = annotation.min();
             if (isNotBlank(min) && !GenTime.MIN_DATE_TIME.equals(min))
@@ -101,9 +97,6 @@ public class TimeComplexGenerator implements IComplexGenerator {
     }
 
     private long getMax(GenTime annotation) {
-        if (annotation == null)
-            return GenTime.MAX_UNIX;
-
         try {
             final String max = annotation.max();
             if (isNotBlank(max) && !GenTime.MAX_DATE_TIME.equals(max))
