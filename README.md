@@ -437,6 +437,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## Version History
 
+**2.0.2** - @GenTime export formatter added and export as unix time, SqlExporter fixed issue with INSERT queries.
+
 **2.0.0** - Redesign factory and contracts, improved complex and other generators, GenRules added for configuration without annotations, @Ignore annotation, @GenEnum enum generation, minor improvements and more.
 
 **1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
