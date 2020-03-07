@@ -89,7 +89,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
 
     private long getMax(GenTime annotation) {
         if (annotation == null)
-            return 0;
+            return GenTime.MAX_UNIX;
 
         try {
             final String max = annotation.max();
@@ -99,7 +99,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
             logger.warn(e.getMessage());
         }
 
-        return annotation.minUnix();
+        return annotation.maxUnix();
     }
 
     @Override

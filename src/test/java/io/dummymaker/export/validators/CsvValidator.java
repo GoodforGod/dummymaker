@@ -122,8 +122,8 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[1].matches(Patterns.LOCAL_DATE.getPattern().pattern()));
         assertTrue(dummy[2].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
         assertTrue(dummy[3].matches(Patterns.TIMESTAMP.getPattern().pattern()));
-        assertTrue(dummy[4].matches("[0-9]+"));
-        assertTrue(dummy[5].matches("[0-9]+"));
+        assertTrue(dummy[4].matches(Patterns.DATE.getPattern().pattern()));
+        assertTrue(dummy[5].matches(Patterns.DATE_SQL.getPattern().pattern()));
         assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
         assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }

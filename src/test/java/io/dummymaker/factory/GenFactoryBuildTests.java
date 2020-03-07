@@ -166,11 +166,11 @@ public class GenFactoryBuildTests {
         assertNotNull(dummy.getDateTimeString());
         assertNotNull(dummy.getDateTimeObject());
 
-        final Pattern localDatePattern = DummyTime.Patterns.LOCAL_DATE.getPattern();
-        final Pattern localTimePattern = DummyTime.Patterns.LOCAL_TIME.getPattern();
-        final Pattern localDateTimePattern = DummyTime.Patterns.LOCAL_DATETIME.getPattern();
-        final Pattern timestampPattern = DummyTime.Patterns.TIMESTAMP.getPattern();
-        final Pattern datePattern = DummyTime.Patterns.DATE.getPattern();
+        final Pattern localDatePattern = DummyTime.Patterns.LOCAL_DATE.getToStringPattern();
+        final Pattern localTimePattern = DummyTime.Patterns.LOCAL_TIME.getToStringPattern();
+        final Pattern localDateTimePattern = DummyTime.Patterns.LOCAL_DATETIME.getToStringPattern();
+        final Pattern timestampPattern = DummyTime.Patterns.TIMESTAMP.getToStringPattern();
+        final Pattern datePattern = DummyTime.Patterns.DATE.getToStringPattern();
 
         assertTrue(dummy.getDateOld().toString(), datePattern.matcher(dummy.getDateOld().toString()).matches());
         assertTrue(dummy.getDate().toString(), localDatePattern.matcher(dummy.getDate().toString()).matches());

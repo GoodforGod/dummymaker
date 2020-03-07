@@ -5,17 +5,23 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
+import io.dummymaker.model.export.DatetimeFieldContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.dummymaker.util.DateUtils.*;
@@ -96,8 +102,8 @@ public class SqlExporter extends BasicExporter {
         typeMap.put(Boolean.class, "BOOLEAN");
         typeMap.put(byte.class, "BYTE");
         typeMap.put(Byte.class, "BYTE");
-        typeMap.put(short.class, "INT");
-        typeMap.put(Short.class, "INT");
+        typeMap.put(short.class, "SMALLINT");
+        typeMap.put(Short.class, "SMALLINT");
         typeMap.put(int.class, "INT");
         typeMap.put(Integer.class, "INT");
         typeMap.put(long.class, "BIGINT");
@@ -108,12 +114,14 @@ public class SqlExporter extends BasicExporter {
         typeMap.put(Double.class, "DOUBLE PRECISION");
         typeMap.put(char.class, "CHAR");
         typeMap.put(Character.class, "CHAR");
-        typeMap.put(Date.class, "BIGINT");
         typeMap.put(String.class, "VARCHAR");
         typeMap.put(Object.class, "VARCHAR");
+        typeMap.put(Time.class, "TIME");
+        typeMap.put(LocalTime.class, "TIME");
+        typeMap.put(LocalDate.class, "DATE");
+        typeMap.put(Date.class, "DATETIME");
+        typeMap.put(java.util.Date.class, "DATETIME");
         typeMap.put(Timestamp.class, "TIMESTAMP");
-        typeMap.put(LocalDate.class, "TIMESTAMP");
-        typeMap.put(LocalTime.class, "TIMESTAMP");
         typeMap.put(LocalDateTime.class, "TIMESTAMP");
         return typeMap;
     }
@@ -162,7 +170,15 @@ public class SqlExporter extends BasicExporter {
      */
     private String buildInsertNameTypeQuery(String finalFieldName, ClassContainer container) {
         final Class<?> exportFieldType = container.getField(finalFieldName).getType();
-        switch (container.getContainer(finalFieldName).getType()) {
+        final FieldContainer fieldContainer = container.getContainer(finalFieldName);
+        switch (fieldContainer.getType()) {
+            case DATETIME:
+                final String dateType = (fieldContainer instanceof DatetimeFieldContainer
+                        && ((DatetimeFieldContainer) fieldContainer).isUnixTime())
+                                ? "BIGINT"
+                                : translateJavaTypeToSqlType(exportFieldType);
+
+                return finalFieldName + "\t" + dateType;
             case ARRAY:
             case COLLECTION:
                 final Class<?> type = exportFieldType.getComponentType();
@@ -232,8 +248,11 @@ public class SqlExporter extends BasicExporter {
      * Check data types for field class compatibility with Timestamp class
      */
     private boolean isTypeTimestampConvertible(Field field) {
-        return dataTypes.entrySet().stream()
-                .anyMatch(e -> e.getValue().equals("TIMESTAMP") && e.getKey().equals(field.getType()));
+        final String sqlType = translateJavaTypeToSqlType(field.getType());
+        return ("TIMESTAMP".equals(sqlType)
+                || "DATETIME".equals(sqlType)
+                || "DATE".equals(sqlType)
+                || "TIME".equals(sqlType));
     }
 
     /**
@@ -245,13 +264,13 @@ public class SqlExporter extends BasicExporter {
                 || container.getType() == FieldContainer.Type.COLLECTION) {
 
             final Class<?> componentType = extractType(container.getType(), field);
-            final String sqlType = dataTypes.getOrDefault(componentType, "VARCHAR");
+            final String sqlType = translateJavaTypeToSqlType(componentType);
             final String result = (sqlType.equals("VARCHAR") || sqlType.equals("CHAR"))
                     ? container.getExportValue().replace("[", "{\"").replace("]", "\"}").replace(",", "\",\"").replace(" ", "")
                     : container.getExportValue().replace("[", "{").replace("]", "}");
             return wrapWithComma(result);
         } else if (isTypeTimestampConvertible(field)) {
-            return wrapWithComma(String.valueOf(convertFieldValueToTimestamp(field, container)));
+            return wrapWithComma(container.getExportValue());
         } else if (String.class.equals(field.getType()) || "VARCHAR".equals(translateJavaTypeToSqlType(field.getType()))) {
             return wrapWithComma(container.getExportValue());
         }
@@ -261,6 +280,7 @@ public class SqlExporter extends BasicExporter {
 
     private Class<?> extractType(FieldContainer.Type type, Field field) {
         switch (type) {
+            case DATETIME:
             case ARRAY:
                 return field.getType().getComponentType();
             case ARRAY_2D:
@@ -269,29 +289,6 @@ public class SqlExporter extends BasicExporter {
                 return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
             default:
                 return String.class;
-        }
-    }
-
-    /**
-     * Convert container export value to timestamp value type
-     */
-    private Timestamp convertFieldValueToTimestamp(Field field, ExportContainer exportContainer) {
-        try {
-            if (LocalDateTime.class.equals(field.getType())) {
-                return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
-            } else if (LocalDate.class.equals(field.getType())) {
-                return convertToTimestamp(parseDate(exportContainer.getExportValue()));
-            } else if (LocalTime.class.equals(field.getType())) {
-                return convertToTimestamp(parseTime(exportContainer.getExportValue()));
-            } else if (Date.class.equals(field.getType())) {
-                return convertToTimestamp(parseSimpleDateLong(exportContainer.getExportValue()));
-            } else if (Timestamp.class.equals(field.getType())) {
-                return Timestamp.valueOf(exportContainer.getExportValue());
-            }
-
-            return convertToTimestamp(parseDateTime(exportContainer.getExportValue()));
-        } catch (Exception e) {
-            return null;
         }
     }
 
@@ -338,9 +335,9 @@ public class SqlExporter extends BasicExporter {
         if (!writer.write(buildCreateTableQuery(container, primaryKey)))
             return false;
 
+        final StringBuilder builder = new StringBuilder();
         while (iterator.hasNext()) {
             final T t = iterator.next();
-            final StringBuilder builder = new StringBuilder();
             if (i == INSERT_QUERY_LIMIT) {
                 builder.append("\n").append(buildInsertQuery(t, container));
             }
@@ -349,17 +346,16 @@ public class SqlExporter extends BasicExporter {
 
             // End insert Query if no elements left or need to organize next batch
             final boolean hasNext = iterator.hasNext();
-            if (i < 0 || !hasNext) {
+            if (i <= 0 || !hasNext) {
                 builder.append(";\n");
             } else {
                 builder.append(",\n");
             }
 
             i = nextInsertValue(i);
-            writer.write(builder.toString());
         }
 
-        return writer.flush();
+        return writer.write(builder.toString()) && writer.flush();
     }
 
     @Override
@@ -404,7 +400,7 @@ public class SqlExporter extends BasicExporter {
             builder.append(format(t, container));
 
             // End insert Query if no elements left or need to organize next batch
-            if (i < 0 || !iterator.hasNext()) {
+            if (i <= 0 || !iterator.hasNext()) {
                 builder.append(";\n");
             } else {
                 builder.append(",\n");

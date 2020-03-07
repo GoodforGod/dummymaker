@@ -90,7 +90,7 @@ public class JsonExporter extends BasicExporter {
             return container.getExportValue();
         }
 
-        return "\"" + container.getExportValue() + "\"";
+        return wrapWithQuotes(container.getExportValue());
     }
 
     private boolean isTypeNeedQuotes(Class<?> classType) {
@@ -187,15 +187,13 @@ public class JsonExporter extends BasicExporter {
     }
 
     private String openJsonListTag(final String exportClassName) {
-        return (isPretty)
-                ? "{\n\t\"" + exportClassName + "\": ["
-                : "{\"" + exportClassName + "\": [";
+        return "[";
     }
 
     private String closeJsonListTag() {
         return (isPretty)
-                ? "\n\t]\n}"
-                : "]}";
+                ? "\n\t]"
+                : "]";
     }
 
     @Override

@@ -33,6 +33,17 @@ public @interface GenTime {
     String MAX_DATE_TIME = "30-12-2099";
 
     /**
+     * ISO 8601 datetime format for DateTime and timestamps
+     * 
+     * @see java.time.format.DateTimeFormatter#ISO_DATE_TIME default for datetimes
+     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only
+     *      formats
+     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only
+     *      formats
+     */
+    String EXPORT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+
+    /**
      * Minimum generated time from 01-01-1970 as unix timestamp.
      *
      * @return min datetime where to start generate timestamps.
@@ -47,16 +58,14 @@ public @interface GenTime {
     long maxUnix() default MAX_UNIX;
 
     /**
-     * Minimum generated time.
-     * This has MORE PRIORITY than unix time.
+     * Minimum generated time. This has MORE PRIORITY than unix time.
      *
      * @return min datetime where to start generate timestamps.
      */
     String min() default MIN_DATE_TIME;
 
     /**
-     * Maximum generated time.
-     * This has MORE PRIORITY than unix time.
+     * Maximum generated time. This has MORE PRIORITY than unix time.
      *
      * @return max datetime where to stop generate timestamps.
      */
@@ -68,5 +77,12 @@ public @interface GenTime {
      * 
      * @return export format (default is ISO 8601)
      */
-    String format() default "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    String formatter() default EXPORT_FORMAT;
+
+    /**
+     * Exports date as Unix Time
+     *
+     * @return true if export as unix is set
+     */
+    boolean exportAsUnixTime() default false;
 }

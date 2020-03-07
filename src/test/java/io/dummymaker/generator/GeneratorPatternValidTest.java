@@ -89,11 +89,11 @@ public class GeneratorPatternValidTest {
                 { new SetComplexGenerator(), HashSet.class, Pattern.compile("\\[(" + uuidPattern + "(, )?)+]") },
                 { new MapComplexGenerator(), HashMap.class,
                         Pattern.compile("\\{(" + uuidPattern + "=" + uuidPattern + "(, )?)+}") },
-                { new DateGenerator(), Date.class, DummyTime.Patterns.DATE.getPattern() },
-                { new LocalDateGenerator(), LocalDate.class, DummyTime.Patterns.LOCAL_DATE.getPattern() },
-                { new LocalDateTimeGenerator(), LocalDateTime.class, DummyTime.Patterns.LOCAL_DATETIME.getPattern() },
-                { new DateSqlGenerator(), java.sql.Date.class, DummyTime.Patterns.DATE_SQL.getPattern() },
-                { new TimeGenerator(), Time.class, DummyTime.Patterns.TIME.getPattern() }
+                { new DateGenerator(), Date.class, DummyTime.Patterns.DATE.getToStringPattern() },
+                { new LocalDateGenerator(), LocalDate.class, DummyTime.Patterns.LOCAL_DATE.getToStringPattern() },
+                { new LocalDateTimeGenerator(), LocalDateTime.class, DummyTime.Patterns.LOCAL_DATETIME.getToStringPattern() },
+                { new DateSqlGenerator(), java.sql.Date.class, DummyTime.Patterns.DATE_SQL.getToStringPattern() },
+                { new TimeGenerator(), Time.class, DummyTime.Patterns.TIME.getToStringPattern() }
         });
     }
 

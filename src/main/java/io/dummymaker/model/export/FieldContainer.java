@@ -1,13 +1,7 @@
 package io.dummymaker.model.export;
 
-import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.*;
-import io.dummymaker.generator.simple.EmbeddedGenerator;
-import io.dummymaker.generator.simple.SequenceGenerator;
-
-import java.lang.reflect.Field;
-
-import static io.dummymaker.util.StringUtils.isEmpty;
+import io.dummymaker.generator.simple.time.*;
 
 /**
  * Used by ClassContainer to contain field value, and final field name
@@ -18,48 +12,30 @@ import static io.dummymaker.util.StringUtils.isEmpty;
  */
 public class FieldContainer {
 
+    public enum Type {
+        SIMPLE,
+        DATETIME,
+        SEQUENTIAL,
+        EMBEDDED,
+        COLLECTION,
+        MAP,
+        ARRAY,
+        ARRAY_2D
+    }
+
     /**
      * Final field name (renamed or converted by naming strategy)
      */
     private final String exportName;
+
     /**
      * Is field enumerable or not
      */
     private final Type type;
 
-    private FieldContainer(String exportName, Type type) {
+    public FieldContainer(Type type, String exportName) {
         this.exportName = exportName;
         this.type = type;
-    }
-
-    public static FieldContainer as(Field field, Class<? extends IGenerator> generator, String exportName) {
-        final Type type = getType(generator);
-        final String finalName = isEmpty(exportName) && field != null
-                ? field.getName()
-                : exportName;
-
-        return new FieldContainer(finalName, type);
-    }
-
-    private static Type getType(final Class<? extends IGenerator> generator) {
-        if (generator == null)
-            return Type.SIMPLE;
-
-        if (generator.equals(SetComplexGenerator.class) || generator.equals(ListComplexGenerator.class)) {
-            return Type.COLLECTION;
-        } else if (generator.equals(MapComplexGenerator.class)) {
-            return Type.MAP;
-        } else if (generator.equals(EmbeddedGenerator.class)) {
-            return Type.EMBEDDED;
-        } else if (generator.equals(SequenceGenerator.class)) {
-            return Type.SEQUENTIAL;
-        } else if (generator.equals(ArrayComplexGenerator.class)) {
-            return Type.ARRAY;
-        } else if (generator.equals(Array2DComplexGenerator.class)) {
-            return Type.ARRAY_2D;
-        }
-
-        return Type.SIMPLE;
     }
 
     public Type getType() {
@@ -68,6 +44,10 @@ public class FieldContainer {
 
     public boolean isSimple() {
         return type.equals(Type.SIMPLE);
+    }
+
+    public boolean isDatetime() {
+        return type.equals(Type.DATETIME);
     }
 
     public boolean isEmbedded() {
@@ -92,15 +72,5 @@ public class FieldContainer {
 
     public String getExportName() {
         return exportName;
-    }
-
-    public enum Type {
-        SIMPLE,
-        SEQUENTIAL,
-        EMBEDDED,
-        COLLECTION,
-        MAP,
-        ARRAY,
-        ARRAY_2D
     }
 }

@@ -25,7 +25,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     public JsonExportAsFileTest() {
         super(new JsonExporter().withPretty().withPath(null).withCase(null).withPath("            "),
-                new JsonValidator(), Format.JSON, 5, 14);
+                new JsonValidator(), Format.JSON, 5, 12);
     }
 
     // @Test

@@ -10,6 +10,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.compile;
+
 /**
  * "default comment"
  *
@@ -19,24 +21,36 @@ import java.util.regex.Pattern;
 @GenExportName("TimeDummyClass")
 public class DummyTime {
 
+    public static final String ISO_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
+    public static final String ISO_DATE_PATTERN = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
+    public static final String ISO_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_TIME_PATTERN;
+
     public enum Patterns {
 
-        LOCAL_TIME(Pattern.compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
-        LOCAL_DATE(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
-        LOCAL_DATETIME(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
-        DATE(Pattern.compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3,5} \\d{4}")),
-        TIMESTAMP(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),
-        DATE_SQL(Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
-        TIME(Pattern.compile("\\d{1,2}:\\d{1,2}:\\d{1,2}"));
+        LOCAL_TIME(compile(ISO_TIME_PATTERN), compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
+        LOCAL_DATE(compile(ISO_DATE_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
+        LOCAL_DATETIME(compile(ISO_DATE_TIME_PATTERN),
+                compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
+        DATE(compile(ISO_DATE_TIME_PATTERN),
+                compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3,5} \\d{4}")),
+        TIMESTAMP(compile(ISO_DATE_TIME_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),
+        DATE_SQL(compile(ISO_DATE_TIME_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
+        TIME(compile(ISO_TIME_PATTERN), compile("\\d{1,2}:\\d{1,2}:\\d{1,2}"));
 
         private final Pattern pattern;
+        private final Pattern toStringPattern;
 
-        Patterns(Pattern pattern) {
+        Patterns(Pattern pattern, Pattern toStringPattern) {
             this.pattern = pattern;
+            this.toStringPattern = toStringPattern;
         }
 
         public Pattern getPattern() {
             return pattern;
+        }
+
+        public Pattern getToStringPattern() {
+            return toStringPattern;
         }
     }
 

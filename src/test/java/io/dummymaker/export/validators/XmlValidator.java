@@ -74,10 +74,10 @@ public class XmlValidator implements IValidator {
                 + Patterns.TIMESTAMP.getPattern()
                 + "</" + Fields.TIMESTAMP.getName() + ">"));
         assertTrue(dummy[5].matches("\\t<" + Fields.DATE.getName() + ">"
-                + "[0-9]+"
+                + Patterns.DATE_SQL.getPattern()
                 + "</" + Fields.DATE.getName() + ">"));
         assertTrue(dummy[6].matches("\\t<" + Fields.DATE_COVERAGE.getName() + ">"
-                + "[0-9]+"
+                + Patterns.DATE.getPattern()
                 + "</" + Fields.DATE_COVERAGE.getName() + ">"));
         assertTrue(dummy[7].matches("\\t<" + Fields.LOCAL_DATETIME_STRING.getName() + ">"
                 + Patterns.LOCAL_DATETIME.getPattern()
