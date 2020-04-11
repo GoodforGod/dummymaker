@@ -112,7 +112,7 @@ public class GenRule {
                     throw new IllegalArgumentException("Equal typed field is present for type " + r.getType());
                 });
 
-        rules.addAll(rule.rules);
+        this.rules.addAll(rule.rules);
         return this;
     }
 
@@ -131,22 +131,80 @@ public class GenRule {
      * @return generator for named field or optional generator for specific type
      *         from rules
      */
+    public Optional<IGenerator<?>> getDesiredExample(Field field) {
+        if (field == null || isIgnored(field))
+            return Optional.empty();
+
+        final Optional<IGenerator<?>> namedGenerator = this.rules.stream()
+                .filter(GenFieldRule::haveExample)
+                .filter(r -> r.getNames().contains(field.getName()))
+                .findAny()
+                .map(GenFieldRule::getGeneratorExample);
+
+        return (namedGenerator.isPresent())
+                ? namedGenerator
+                : this.rules.stream()
+                        .filter(GenFieldRule::haveExample)
+                        .filter(r -> field.getType().equals(r.getType()))
+                        .findAny()
+                        .map(GenFieldRule::getGeneratorExample);
+    }
+
+    /**
+     * Retries desired generator for field
+     *
+     * @param field targeted
+     * @return generator for named field or optional generator for specific type
+     *         from rules
+     */
     public Optional<Class<? extends IGenerator>> getDesired(Field field) {
         if (field == null || isIgnored(field))
             return Optional.empty();
 
-        final Optional<Class<? extends IGenerator>> namedGenerator = rules.stream()
+        final Optional<Class<? extends IGenerator>> namedGenerator = this.rules.stream()
                 .filter(r -> r.getNames().contains(field.getName()))
                 .findAny()
                 .map(GenFieldRule::getGenerator);
 
         return (namedGenerator.isPresent())
                 ? namedGenerator
-                : rules.stream()
+                : this.rules.stream()
                         .filter(r -> field.getType().equals(r.getType()))
                         .findAny()
                         .map(GenFieldRule::getGenerator);
 
+    }
+
+    /**
+     * Setups generator for fields which names are in sequence
+     *
+     * @param generator  to set
+     * @param fieldNames fields with names to affect
+     * @return same rule
+     */
+    public GenRule add(IGenerator<?> generator, String... fieldNames) {
+        if (fieldNames == null || fieldNames.length == 0 || generator == null)
+            throw new IllegalArgumentException("Arguments can not be null or empty");
+
+        final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
+        this.rules.add(rule);
+        return this;
+    }
+
+    /**
+     * Setups generator for fields which types are in sequence
+     *
+     * @param generator to set
+     * @param fieldType field type to affect
+     * @return same rule
+     */
+    public GenRule add(IGenerator<?> generator, Class<?> fieldType) {
+        if (fieldType == null || generator == null)
+            throw new IllegalArgumentException("Arguments can not be null or empty");
+
+        final GenFieldRule rule = new GenFieldRule(generator, fieldType);
+        this.rules.add(rule);
+        return this;
     }
 
     /**
@@ -161,7 +219,7 @@ public class GenRule {
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
-        rules.add(rule);
+        this.rules.add(rule);
         return this;
     }
 
@@ -177,7 +235,7 @@ public class GenRule {
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldType);
-        rules.add(rule);
+        this.rules.add(rule);
         return this;
     }
 

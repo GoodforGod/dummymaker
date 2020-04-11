@@ -161,7 +161,10 @@ public class GenFactory implements IGenFactory {
                                   final GenContainer container,
                                   final GenStorage storage,
                                   final int depth) {
-        final IGenerator generator = storage.getGenerator(container.getGenerator());
+        final IGenerator generator = (container.haveGeneratorExample())
+                ? container.getGeneratorExample()
+                : storage.getGenerator(container.getGenerator());
+
         final Annotation annotation = container.getMarker();
 
         Object generated;

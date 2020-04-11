@@ -170,7 +170,8 @@ public class GenSupplier implements IGenSupplier {
         return types.stream()
                 .filter(GenUtils::isGenerator)
                 .map(GenUtils::getInterfaceType)
-                .findFirst().orElse(Arrays.asList(Object.class));
+                .findFirst()
+                .orElseGet(() -> Arrays.asList(Object.class));
     }
 
     protected List<Class> getSpecialGeneratorTypes(Class<?> generator) {

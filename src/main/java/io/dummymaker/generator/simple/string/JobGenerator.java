@@ -16,7 +16,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class JobGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("job|work", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("job|work|position", CASE_INSENSITIVE);
 
     private final IBundle<String> bundle = new JobBundle();
 

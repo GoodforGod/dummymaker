@@ -33,16 +33,6 @@ public interface IGenFactory {
     <T> List<T> build(Class<T> target, int amount);
 
     /**
-     * Instantiates class instance and populate its fields
-     *
-     * @param target class to build and fill with data
-     * @param amount of objects to produce
-     * @param <T>    object type
-     * @return generates class filled with data
-     */
-    <T> Stream<T> stream(Class<T> target, int amount);
-
-    /**
      * Instantiates class instance and populate its fields Use in case class have no
      * empty constructor of have complex initialization logic
      *
@@ -52,6 +42,16 @@ public interface IGenFactory {
      * @return generates class filled with data
      */
     <T> List<T> build(Supplier<T> supplier, int amount);
+
+    /**
+     * Instantiates class instance and populate its fields
+     *
+     * @param target class to build and fill with data
+     * @param amount of objects to produce
+     * @param <T>    object type
+     * @return generates class filled with data
+     */
+    <T> Stream<T> stream(Class<T> target, int amount);
 
     /**
      * Instantiates class instance and populate its fields Use in case class have no

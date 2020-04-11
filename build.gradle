@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 
     id 'org.sonarqube' version '2.8'
-    id 'com.diffplug.gradle.spotless' version '3.26.0'
+    id 'com.diffplug.gradle.spotless' version '3.28.1'
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 }
 
 group = 'com.github.goodforgod'
-version = '2.0.2'
+version = '2.0.2-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -26,30 +26,14 @@ spotless {
 }
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api:1.7.28'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
     testImplementation 'junit:junit:4.12'
 }
 
 test {
     testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
-    }
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-javadoc {
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
     }
 }
 
@@ -67,6 +51,16 @@ sonarqube {
         property 'sonar.organization', 'goodforgod'
         property 'sonar.projectKey', 'GoodforGod_dummymaker'
     }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc
 }
 
 publishing {
@@ -117,10 +111,10 @@ publishing {
     }
 }
 
-if (project.hasProperty("signing.keyId")) {
-    apply plugin: 'signing'
-    signing {
-        sign publishing.publications.mavenJava
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
 
@@ -128,5 +122,12 @@ jar {
     into("META-INF/maven/$project.group/$project.name") {
         from { generatePomFileForMavenJavaPublication }
         rename ".*", "pom.xml"
+    }
+}
+
+if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
+    signing {
+        sign publishing.publications.mavenJava
     }
 }

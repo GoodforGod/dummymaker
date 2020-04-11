@@ -161,7 +161,7 @@ class GenStorage implements IGenStorage {
      */
     IGenerator getSequential(Class<?> target, Field field) {
         return sequentialGenerators.computeIfAbsent(target, k -> {
-            final Map<Field, IGenerator> map = new HashMap<>();
+            final Map<Field, IGenerator> map = new HashMap<>(1);
             map.put(field, new SequenceGenerator());
             return map;
         }).get(field);
