@@ -5,6 +5,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
+import io.dummymaker.generator.simple.string.JsonGenerator;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
@@ -36,10 +37,17 @@ public class GenSupplier implements IGenSupplier {
     /**
      * Map of classified generators and their target classes
      */
-    private final Map<Class, List<Class<? extends IGenerator>>> classifiers;
+    private final Map<Class, List<? extends IGenerator>> classifiers;
 
     public GenSupplier() {
-        this.classifiers = getClassifiedGenerators();
+        this.classifiers = new HashMap<>();
+        getClassifiedGenerators().forEach((k, v) -> {
+            final List<? extends IGenerator> generators = v.stream()
+                    .map(CastUtils::instantiate)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            classifiers.put(k, generators);
+        });
     }
 
     @Override
@@ -71,7 +79,7 @@ public class GenSupplier implements IGenSupplier {
         if (type == null)
             return getDefault();
 
-        final List<Class<? extends IGenerator>> generators = classifiers.get(type);
+        final List<? extends IGenerator> generators = classifiers.get(type);
         final String fieldName = field.getName();
 
         if (type.getTypeName().endsWith("[][]"))
@@ -83,8 +91,14 @@ public class GenSupplier implements IGenSupplier {
         if (isEmpty(generators))
             return getDefault();
 
-        final Optional<Class<? extends IGenerator>> patternSuitable = getPatternSuitable(field, type);
-        return patternSuitable.orElseGet(() -> getIndexWithSalt(generators, fieldName + type.getName(), SALT));
+        return getPatternSuitable(field, type).orElseGet(() -> {
+            // Json generator is not great example of random generator to choose
+            final List<? extends IGenerator> nonJsonGenerators = generators.stream()
+                    .filter(g -> !(g instanceof JsonGenerator))
+                    .collect(Collectors.toList());
+
+            return getIndexWithSalt(nonJsonGenerators, fieldName + type.getName(), SALT).getClass();
+        });
     }
 
     /**
@@ -99,8 +113,6 @@ public class GenSupplier implements IGenSupplier {
 
         final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
                 .flatMap(List::stream)
-                .map(CastUtils::instantiate)
-                .filter(Objects::nonNull)
                 .filter(g -> Objects.nonNull(g.getPattern()))
                 .filter(g -> g.getPattern().matcher(fieldName).find())
                 .findFirst();
@@ -113,8 +125,6 @@ public class GenSupplier implements IGenSupplier {
             return Optional.of(patternSuitable.get().getClass());
 
         return classifiers.get(type).stream()
-                .map(CastUtils::instantiate)
-                .filter(Objects::nonNull)
                 .filter(g -> Objects.nonNull(g.getPattern()))
                 .filter(g -> g.getPattern().matcher(fieldName).find())
                 .findFirst()
