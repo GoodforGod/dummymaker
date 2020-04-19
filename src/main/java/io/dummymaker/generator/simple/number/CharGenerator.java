@@ -14,6 +14,6 @@ public class CharGenerator implements IGenerator<Character> {
 
     @Override
     public Character generate() {
-        return ((char) ThreadLocalRandom.current().nextInt(0, 255));
+        return ((char) ThreadLocalRandom.current().nextInt(0, 256));
     }
 }

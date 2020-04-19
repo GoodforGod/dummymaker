@@ -25,14 +25,14 @@ import java.util.Collection;
  * @since 28.04.2018
  */
 @RunWith(Parameterized.class)
-public class UniqueExporterTest extends Assert {
+public class ValidatorExporterTest extends Assert {
 
     private final GenFactory factory = new GenFactory();
 
     private IExporter exporter;
     private IValidator validator;
 
-    public UniqueExporterTest(IExporter exporter, IValidator validator) {
+    public ValidatorExporterTest(IExporter exporter, IValidator validator) {
         this.exporter = exporter;
         this.validator = validator;
     }
