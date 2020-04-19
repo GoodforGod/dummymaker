@@ -19,11 +19,11 @@ public class VersionGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return ThreadLocalRandom.current().nextInt(0, 1)
+        return ThreadLocalRandom.current().nextInt(1, 9)
                 + "."
-                + ThreadLocalRandom.current().nextInt(1, 9)
+                + ThreadLocalRandom.current().nextInt(1, 99)
                 + "."
-                + ThreadLocalRandom.current().nextInt(1, 9)
+                + ThreadLocalRandom.current().nextInt(1, 99)
                 + (ThreadLocalRandom.current().nextBoolean() ? "-SNAPSHOT" : "");
     }
 

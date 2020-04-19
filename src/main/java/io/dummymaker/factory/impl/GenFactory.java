@@ -8,6 +8,7 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IGenAutoScanner;
@@ -18,10 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -50,7 +48,13 @@ public class GenFactory implements IGenFactory {
     private final IGenAutoScanner scanner;
 
     public GenFactory() {
-        this(null);
+        this(((GenRules) null));
+    }
+
+    public GenFactory(@Nullable GenRule... rules) {
+        this((rules == null || rules.length == 0 || rules[0] == null)
+                ? null
+                : GenRules.of(rules));
     }
 
     public GenFactory(@Nullable GenRules rules) {
@@ -61,6 +65,11 @@ public class GenFactory implements IGenFactory {
     @Override
     public <T> T build(@Nullable Class<T> target) {
         return fill(instantiate(target));
+    }
+
+    @Override
+    public <T> @Nullable T build(@NotNull Supplier<T> supplier) {
+        return fill(supplier.get());
     }
 
     @NotNull
@@ -109,17 +118,16 @@ public class GenFactory implements IGenFactory {
             return Stream.empty();
 
         final GenStorage storage = new GenStorage(scanner, rules);
-        return stream
-                .filter(Objects::nonNull)
+        return stream.filter(Objects::nonNull)
                 .map(t -> fillEntity(t, storage, 1));
     }
 
     @NotNull
     @Override
-    public <T> List<T> fill(@Nullable List<T> list) {
-        return isEmpty(list)
+    public <T> List<T> fill(@Nullable Collection<T> collection) {
+        return isEmpty(collection)
                 ? Collections.emptyList()
-                : fill(list.stream()).collect(Collectors.toList());
+                : fill(collection.stream()).collect(Collectors.toList());
     }
 
     /**

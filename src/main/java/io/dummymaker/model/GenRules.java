@@ -29,7 +29,7 @@ public class GenRules {
      * @param rules to add
      * @return gen rules
      */
-    public static @NotNull GenRules of(GenRule... rules) {
+    public static @NotNull GenRules of(@NotNull GenRule... rules) {
         final GenRules genRules = new GenRules();
         final Map<? extends Class<?>, List<GenRule>> collected = Arrays.stream(rules)
                 .collect(Collectors.groupingBy(GenRule::getTarget));

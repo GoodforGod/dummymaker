@@ -3,6 +3,7 @@ package io.dummymaker.factory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -28,6 +29,15 @@ public interface IGenFactory {
     /**
      * Instantiates class instance and populate its fields
      *
+     * @param supplier of class to build
+     * @param <T>      object type
+     * @return generates class filled with data
+     */
+    <T> @Nullable T build(@NotNull Supplier<T> supplier);
+
+    /**
+     * Instantiates class instance and populate its fields
+     *
      * @param target class to build and fill with data
      * @param amount of objects to produce
      * @param <T>    object type
@@ -44,7 +54,7 @@ public interface IGenFactory {
      * @param <T>      object type
      * @return generates class filled with data
      */
-    <T> @NotNull List<T> build(Supplier<T> supplier, int amount);
+    <T> @NotNull List<T> build(@NotNull Supplier<T> supplier, int amount);
 
     /**
      * Instantiates class instance and populate its fields
@@ -65,7 +75,7 @@ public interface IGenFactory {
      * @param <T>      object type
      * @return generates class filled with data
      */
-    <T> @NotNull Stream<T> stream(Supplier<T> supplier, int amount);
+    <T> @NotNull Stream<T> stream(@NotNull Supplier<T> supplier, int amount);
 
     /**
      * Populates dummy object fields
@@ -88,9 +98,9 @@ public interface IGenFactory {
     /**
      * Populates dummy object fields
      *
-     * @param list of objects to fill with data
-     * @param <T>  object type
+     * @param collection of objects to fill with data
+     * @param <T>        object type
      * @return Populated Object
      */
-    <T> @NotNull List<T> fill(List<T> list);
+    <T> @NotNull List<T> fill(Collection<T> collection);
 }

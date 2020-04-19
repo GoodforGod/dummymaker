@@ -1,5 +1,7 @@
 package io.dummymaker.rules;
 
+import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenFieldRule;
@@ -9,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author GoodforGod
@@ -17,6 +20,23 @@ import java.util.List;
  * @since 20.10.2019
  */
 public class GenRulesTests extends Assert {
+
+    @Test
+    public void genLambdaGeneratorRule() {
+        final IGenerator<String> generator = () -> ThreadLocalRandom.current().nextBoolean()
+                ? "Bob"
+                : "Bill";
+
+        final GenRule rule = GenRule.of(DummyEmbedded.class)
+                .add(generator, "name");
+
+        final GenFactory factory = new GenFactory(rule);
+        final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
+
+        assertNotNull(dummy);
+        assertNotNull(dummy.getName());
+        assertTrue(dummy.getName().equals("Bob") || dummy.getName().equals("Bill"));
+    }
 
     @Test
     public void genFieldRuleNotEqualsForTypeTargets() {

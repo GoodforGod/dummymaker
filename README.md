@@ -36,9 +36,10 @@ dependencies {
     - [Methods](#factory-methods)
     - [Gen Auto](#gen-auto-annotation)
 - [Factory Configuration (GenRules)](#factory-configuration)
-    - [Manual rules](#manual-rules)
-    - [Auto rules](#auto-rules)
-    - [Global rules](#global-rules)
+    - [Manual](#manual-rule)
+    - [Auto](#auto-rule)
+    - [Global](#global-rule)
+    - [Lambda](#lambda-rule)
 - [Annotation Examples](#annotation-examples)
   - [Array Annotations](#array-annotations)  
   - [Collection Annotations](#collection-annotations)  
@@ -104,7 +105,7 @@ User filled = factory.fill(user);
 
 There are more other contracts available just check *GenFactory*.
 
-### Gen Auto annotation
+### Gen Auto Annotation
 
 *@GenAuto* annotation provides *depth* field that is required for embedded
 fields such as *relatives* in this example.
@@ -115,7 +116,7 @@ Because each User will have other users as its data and such data can be represe
 as a tree. So leaf that has its depth of *3* from root will be the last who have
 field *relatives* filled with data.
 
-Maximum depth allowed is *20*.
+Maximum depth allowed is *20* (Check @GenAuto.MAX parameter).
 
 ```java
 @GenAuto(depth = 3)
@@ -132,40 +133,38 @@ public class User {
 
 In case you have no intention or opportunity to annotate class 
 even with *@GenAuto* annotation, you can configure all generators
-and fields you want to ignore with factory configuration.
+and fields you want to fill or ignore with factory *GenRules* configuration.
 
-### Manual rules
+### Manual Rule
 
 In case you want to fill only specific field to be filled with data
-you can configure such behavior via *rules*.
+you can configure such behavior via *GenRule* for specific class.
 
 ```java
-GenRules rules = GenRules.of(
-        GenRule.of(User.class)
+GenRule rule = GenRule.of(User.class)
                 .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class)
-);
+                .add(ShortGenerator.class, int.class);
 
-GenFactory factory = new GenFactory(rules);
+GenFactory factory = new GenFactory(rule);
 User user = factory.build(User.class);
 ```
 
 In this case only *name* and *number* fields will be filled with data, 
-as they are the only ones suited to factory *rules*.
+as they are the only one specified per *GenRule* configuration.
 
-### Auto rules
+### Auto Rule
 
 In case you want factory automatically fill fields based on their types
-and names, you can setup *auto* rules (same as *GenAuto* annotation).
+and names, you can setup *auto* (same as *GenAuto* annotation).
+
+Second argument specifies depth of complex objects generation, [check this section for more info](#gen-auto-annotation).
 
 ```java
-GenRules rules = GenRules.of(
-        GenRule.auto(User.class, 2)
+GenRule rule = GenRule.auto(User.class, 2)
                 .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class)
-);
+                .add(ShortGenerator.class, int.class);
 
-GenFactory factory = new GenFactory(rules);
+GenFactory factory = new GenFactory(rule);
 User user = factory.build(User.class);
 ```
 
@@ -173,33 +172,47 @@ In this case fields *name* and *number* will be filled as previously but
 also all other fields will be automatically filled.
 
 ```java
-GenRules rules = GenRules.of(GenRule.auto(User.class, 2));
+GenRule rule = GenRule.auto(User.class, 2);
 
-GenFactory factory = new GenFactory(rules);
+GenFactory factory = new GenFactory(rule);
 User user = factory.build(User.class);
 ```
 
-This will have same affect as previous rules, due to fields *name* and *number*
+This will have same affect as previous , due to fields *name* and *number*
 been automatically filled.
 
-### Global rules
+### Global Rule
 
 In case you have a lot of common fields with same values in different classes
-you can setup *global* rules for all classes that will be filled.
+you can setup *global*  for all classes that will be filled.
 
 ```java
-GenRules rules = GenRules.of(
-            GenRule.global(2)
+GenRule rule = GenRule.global(2)
                 .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class)
-);
+                .add(ShortGenerator.class, int.class);
 
-GenFactory factory = new GenFactory(rules);
+GenFactory factory = new GenFactory(rule);
 User user = factory.build(User.class);
 ```
 
 In this case all fields with name *name* in all classes will be
 filled using *NameGenerator* and same for *int* fields with *ShortGenerator*.
+
+### Lambda Rule
+
+You can add anonymous generator or lambda generator as run for your *GenRules* configuration.
+
+```java
+final IGenerator<String> generator = () -> ThreadLocalRandom.current().nextBoolean()
+        ? "Bob"
+        : "Bill";
+
+GenRule rule = GenRule.auto(User.class, 1)
+                .add(generator, "name");
+
+GenFactory factory = new GenFactory(rule);
+User user = factory.build(User.class);
+```
 
 ## Annotation Examples
 
@@ -212,7 +225,7 @@ As well as all annotations such as *GenInteger, GenLong, GenCity, etc.* can be f
 ### Array Annotations
 
 Responsible for filling array data, can be applied as annotation or
-[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
+[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
 
 
 ```java
@@ -230,7 +243,7 @@ public class User {
 ### Collection Annotations
 
 Responsible for filling collection data, can be applied as annotation or
-[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
+[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
 
 
 ```java
@@ -251,7 +264,7 @@ public class User {
 ### Time Annotation
 
 Responsible for filling time data, can be applied as annotation or
-[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
+[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
 
 **GenTime** annotation is used to create time/dateTime/timestamps for field.
 Automatically identify field time *type* and generate value for it. 
@@ -308,7 +321,7 @@ public class User {
 ### Embedded Annotation
 
 Responsible for filling complex data, can be applied as annotation or
-[*GenRule*](#manual-rules). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rules).
+[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
 
 ```java
 public class User {
@@ -436,6 +449,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 
 ## Version History
+
+**2.1.0** - Lambda generator *GenRule* configuration added, some default generators added, minor improvements.
 
 **2.0.2** - @GenTime export formatter added and export as unix time, SqlExporter fixed issue with INSERT queries.
 
