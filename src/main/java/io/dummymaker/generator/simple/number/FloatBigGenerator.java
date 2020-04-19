@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.number;
 
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
 
 /**
  * Generates float number from 0 to 10000
@@ -12,6 +12,6 @@ public class FloatBigGenerator extends FloatGenerator {
 
     @Override
     public Float generate() {
-        return super.generate() * ThreadLocalRandom.current().nextInt(10, 10000);
+        return super.generate() * CollectionUtils.random(10, 10000);
     }
 }

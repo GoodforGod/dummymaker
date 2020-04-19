@@ -1,12 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
@@ -27,12 +27,12 @@ public class JsonGenerator implements IGenerator<String> {
     public String generate() {
         final StringBuilder builder = new StringBuilder();
 
-        final int depth = current().nextInt(1, 6);
+        final int depth = CollectionUtils.random(1, 6);
         for (int i = 0; i < depth; i++) {
             final boolean lastDepth = (i == (depth - 1));
             builder.append("{");
 
-            final int lines = current().nextInt(1, 5);
+            final int lines = CollectionUtils.random(1, 5);
             final Set<String> usedFieldNames = new HashSet<>();
             for (int j = 0; j < lines; j++) {
                 final String fieldName = generateFieldName(usedFieldNames);

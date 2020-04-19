@@ -1,10 +1,10 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -24,7 +24,7 @@ public class TypeGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return types.get(ThreadLocalRandom.current().nextInt(types.size() - 1));
+        return types.get(CollectionUtils.random(types.size()));
     }
 
     @Override

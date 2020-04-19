@@ -2,9 +2,9 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.Date;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates old java date type This date is exported in long milliseconds
@@ -32,7 +32,7 @@ public class DateGenerator implements ITimeGenerator<Date> {
 
         final long amount = (usedTo < usedFrom)
                 ? usedFrom
-                : ThreadLocalRandom.current().nextLong(usedFrom, usedTo);
+                : CollectionUtils.random(usedFrom, usedTo);
 
         return new Date(amount);
     }

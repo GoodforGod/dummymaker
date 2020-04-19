@@ -1,8 +1,8 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -25,6 +25,6 @@ public class IntegerGenerator implements IGenerator<Integer> {
 
     @Override
     public Integer generate() {
-        return ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
+        return CollectionUtils.random(Integer.MAX_VALUE);
     }
 }

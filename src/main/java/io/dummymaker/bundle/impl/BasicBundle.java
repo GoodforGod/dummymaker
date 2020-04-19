@@ -1,10 +1,7 @@
 package io.dummymaker.bundle.impl;
 
 import io.dummymaker.bundle.IBundle;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
+import io.dummymaker.util.CollectionUtils;
 
 /**
  * Prime bundle implementation
@@ -30,7 +27,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
     public T get(int index) {
         return (index > -1 && index < preset.length - 1)
                 ? preset[index]
-                : preset[ThreadLocalRandom.current().nextInt(0, preset.length - 1)];
+                : preset[CollectionUtils.random(preset.length)];
     }
 
     @Override
@@ -40,7 +37,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
 
     @Override
     public T getRandom() {
-        return preset[current().nextInt(0, preset.length - 1)];
+        return preset[CollectionUtils.random(preset.length)];
     }
 
     @Override

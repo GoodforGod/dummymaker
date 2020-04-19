@@ -1,8 +1,8 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -25,9 +25,9 @@ public class CadastralGenerator implements IGenerator<String> {
     @Override
     public String generate() {
         return String.format("%s:%s:%s:%s",
-                ThreadLocalRandom.current().nextInt(10, 99),
-                ThreadLocalRandom.current().nextInt(10, 99),
-                ThreadLocalRandom.current().nextInt(100000, 9999999),
-                ThreadLocalRandom.current().nextInt(10, 99));
+                CollectionUtils.random(10, 99),
+                CollectionUtils.random(10, 99),
+                CollectionUtils.random(100000, 9999999),
+                CollectionUtils.random(10, 99));
     }
 }

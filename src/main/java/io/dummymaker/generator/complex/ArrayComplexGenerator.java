@@ -6,11 +6,11 @@ import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates arrays based on field type
@@ -34,7 +34,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = field.getType().getComponentType();
         if (annotation == null) {
-            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
             final int maxDepth = storage.getDepth(parent, valueClass);
             return genArray(size, valueClass, suitable(storage, field, valueClass), storage, depth, maxDepth);
         }
@@ -50,7 +50,7 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return genArray(size, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 

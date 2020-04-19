@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
+
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -17,7 +18,7 @@ public class PassGenerator extends IdBigGenerator {
 
     @Override
     public String generate() {
-        int passLength = ThreadLocalRandom.current().nextInt(6, 31);
+        int passLength = CollectionUtils.random(6, 31);
         return super.generate().substring(0, passLength);
     }
 

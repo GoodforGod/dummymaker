@@ -1,9 +1,9 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.math.BigInteger;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates big integer numbers
@@ -15,6 +15,6 @@ public class BigIntegerGenerator implements IGenerator<BigInteger> {
 
     @Override
     public BigInteger generate() {
-        return BigInteger.valueOf(ThreadLocalRandom.current().nextLong());
+        return BigInteger.valueOf(CollectionUtils.random());
     }
 }

@@ -1,8 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
-
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
 
 /**
  * Generates short from 0 to Short.MAX_VALUE
@@ -15,6 +14,6 @@ public class ShortGenerator implements IGenerator<Short> {
 
     @Override
     public Short generate() {
-        return ((short) ThreadLocalRandom.current().nextInt(Short.MAX_VALUE));
+        return ((short) CollectionUtils.random(Short.MAX_VALUE));
     }
 }

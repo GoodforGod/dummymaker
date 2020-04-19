@@ -14,11 +14,11 @@ public class CollectionUtils {
 
     private CollectionUtils() {}
 
-    public static boolean isEmpty(final Collection collection) {
+    public static boolean isEmpty(Collection collection) {
         return collection == null || collection.isEmpty();
     }
 
-    public static boolean isNotEmpty(final Collection collection) {
+    public static boolean isNotEmpty(Collection collection) {
         return !isEmpty(collection);
     }
 
@@ -40,10 +40,37 @@ public class CollectionUtils {
         return Math.abs(shift % size);
     }
 
-    public static int generateRandomSize(int min, int max) {
-        final int usedMin = (min < 1) ? 0 : min;
-        final int usedMax = (max < 1) ? 0 : max;
+    public static int random() {
+        return ThreadLocalRandom.current().nextInt();
+    }
 
-        return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextInt(usedMin, usedMax);
+    public static int random(int max) {
+        return random(0, max);
+    }
+
+    /**
+     * @param min to get
+     * @param max to get
+     * @return random from min (included) to max (excluded)
+     */
+    public static int random(int min, int max) {
+        return ((int) random(min, ((long) max)));
+    }
+
+    public static long random(long max) {
+        return random(0, max);
+    }
+
+    /**
+     *
+     * @param min to get
+     * @param max to get
+     * @return random from min (included) to max (excluded)
+     */
+    public static long random(long min, long max) {
+        final long usedMin = (min < 1) ? 0 : min;
+        final long usedMax = (max < 1) ? 0 : max;
+
+        return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextLong(usedMin, usedMax);
     }
 }

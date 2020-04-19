@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -19,11 +20,11 @@ public class VersionGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return ThreadLocalRandom.current().nextInt(1, 9)
+        return CollectionUtils.random(1, 9)
                 + "."
-                + ThreadLocalRandom.current().nextInt(1, 99)
+                + CollectionUtils.random(1, 99)
                 + "."
-                + ThreadLocalRandom.current().nextInt(1, 99)
+                + CollectionUtils.random(1, 99)
                 + (ThreadLocalRandom.current().nextBoolean() ? "-SNAPSHOT" : "");
     }
 

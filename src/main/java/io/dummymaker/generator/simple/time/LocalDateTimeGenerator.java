@@ -2,10 +2,10 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates LocalDateTime from 1970 to 3000 Year with seconds precision
@@ -32,7 +32,7 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
         final long amount = (usedTo < usedFrom)
                 ? usedFrom
-                : ThreadLocalRandom.current().nextLong(usedFrom, usedTo);
+                : CollectionUtils.random(usedFrom, usedTo);
 
         return LocalDateTime.ofEpochSecond(
                 amount,

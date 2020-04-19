@@ -5,10 +5,10 @@ import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.simple.number.IntegerGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.CastUtils.castObject;
 
@@ -35,7 +35,7 @@ public class LongComplexGenerator implements IComplexGenerator {
         final long from = getFrom(annotation);
         final long to = getTo(annotation);
 
-        return ThreadLocalRandom.current().nextLong(from, to);
+        return CollectionUtils.random(from, to);
     }
 
     private long getFrom(Annotation annotation) {

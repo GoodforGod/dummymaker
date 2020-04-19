@@ -1,8 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
-
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
 
 /**
  * Generates random UTF-8 character in range of 0-255
@@ -14,6 +13,6 @@ public class CharGenerator implements IGenerator<Character> {
 
     @Override
     public Character generate() {
-        return ((char) ThreadLocalRandom.current().nextInt(0, 256));
+        return ((char) CollectionUtils.random(0, 256));
     }
 }
