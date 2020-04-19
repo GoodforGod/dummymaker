@@ -3,7 +3,6 @@ package io.dummymaker.export;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.DummyEmbedded.DummyEmbeddedIntoSimple;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
