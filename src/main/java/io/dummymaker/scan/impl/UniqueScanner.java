@@ -22,12 +22,13 @@ public class UniqueScanner extends AnnotationScanner {
 
     @Override
     public Map<Field, List<Annotation>> scan(final Class target) {
-        return super.scan(target).entrySet().stream()
-                .peek(e -> e.setValue(e.getValue().stream()
-                        .distinct()
-                        .collect(Collectors.toList())))
-                .collect(LinkedHashMap::new,
-                        (m, e) -> m.put(e.getKey(), e.getValue()),
-                        (m, e) -> {});
+        final Map<Field, List<Annotation>> scanned = new LinkedHashMap<>();
+
+        super.scan(target).forEach((k, v) -> {
+            final List<Annotation> annotations = v.stream().distinct().collect(Collectors.toList());
+            scanned.put(k, annotations);
+        });
+
+        return scanned;
     }
 }
