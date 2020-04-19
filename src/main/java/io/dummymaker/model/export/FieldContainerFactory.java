@@ -7,8 +7,6 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
-import io.dummymaker.util.CollectionUtils;
-import io.dummymaker.util.GenUtils;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
@@ -17,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import static io.dummymaker.util.StringUtils.isEmpty;
@@ -54,11 +51,11 @@ public class FieldContainerFactory {
     }
 
     private static FieldContainer.Type getType(final IGenerator<?> generator) {
-        final List<Class> types = GenUtils.getInterfaceType(generator.getClass());
-        if (CollectionUtils.isEmpty(types))
+        final Object data = generator.generate();
+        if (data == null)
             return FieldContainer.Type.SIMPLE;
 
-        final Class type = types.get(0);
+        final Class type = data.getClass();
         if (type.equals(LocalDate.class)
                 || type.equals(LocalTime.class)
                 || type.equals(LocalDateTime.class)
