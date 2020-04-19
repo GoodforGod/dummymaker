@@ -30,7 +30,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     static final int MAX_DEFAULT = 10;
 
     static int getDesiredSize(int min, int max, int fixed) {
-        return (fixed > -1) ? fixed : CollectionUtils.generateRandomSize(min, max);
+        return (fixed > -1) ? fixed : CollectionUtils.random(min, max);
     }
 
     boolean isGenDefault(Class<? extends IGenerator> generatorClass) {

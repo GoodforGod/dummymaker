@@ -8,18 +8,18 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.GenRuledScanner;
 import io.dummymaker.util.CastUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,31 +48,45 @@ public class GenFactory implements IGenFactory {
     private final IGenAutoScanner scanner;
 
     public GenFactory() {
-        this(null);
+        this(((GenRules) null));
     }
 
-    public GenFactory(GenRules rules) {
+    public GenFactory(@Nullable GenRule... rules) {
+        this((rules == null || rules.length == 0 || rules[0] == null)
+                ? null
+                : GenRules.of(rules));
+    }
+
+    public GenFactory(@Nullable GenRules rules) {
         this.rules = rules;
         this.scanner = new GenRuledScanner(new GenSupplier(), rules);
     }
 
     @Override
-    public <T> T build(Class<T> target) {
+    public <T> T build(@Nullable Class<T> target) {
         return fill(instantiate(target));
     }
 
     @Override
-    public <T> List<T> build(Class<T> target, int amount) {
+    public <T> @Nullable T build(@NotNull Supplier<T> supplier) {
+        return fill(supplier.get());
+    }
+
+    @NotNull
+    @Override
+    public <T> List<T> build(@Nullable Class<T> target, int amount) {
         return stream(target, amount).collect(Collectors.toList());
     }
 
+    @NotNull
     @Override
-    public <T> List<T> build(Supplier<T> supplier, int amount) {
+    public <T> List<T> build(@NotNull Supplier<T> supplier, int amount) {
         return stream(supplier, amount).collect(Collectors.toList());
     }
 
+    @NotNull
     @Override
-    public <T> Stream<T> stream(Class<T> target, int amount) {
+    public <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
         if (amount < 1 || instantiate(target) == null)
             return Stream.empty();
 
@@ -80,14 +94,16 @@ public class GenFactory implements IGenFactory {
         return fill(stream);
     }
 
+    @NotNull
     @Override
-    public <T> Stream<T> stream(Supplier<T> supplier, int amount) {
+    public <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
         final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
         return fill(stream);
     }
 
+    @Nullable
     @Override
-    public <T> T fill(T t) {
+    public <T> T fill(@Nullable T t) {
         if (t == null)
             return null;
 
@@ -95,22 +111,23 @@ public class GenFactory implements IGenFactory {
         return fillEntity(t, storage, 1);
     }
 
+    @NotNull
     @Override
-    public <T> Stream<T> fill(Stream<T> stream) {
+    public <T> Stream<T> fill(@Nullable Stream<T> stream) {
         if (stream == null)
             return Stream.empty();
 
         final GenStorage storage = new GenStorage(scanner, rules);
-        return stream
-                .filter(Objects::nonNull)
+        return stream.filter(Objects::nonNull)
                 .map(t -> fillEntity(t, storage, 1));
     }
 
+    @NotNull
     @Override
-    public <T> List<T> fill(List<T> list) {
-        return isEmpty(list)
+    public <T> List<T> fill(@Nullable Collection<T> collection) {
+        return isEmpty(collection)
                 ? Collections.emptyList()
-                : fill(list.stream()).collect(Collectors.toList());
+                : fill(collection.stream()).collect(Collectors.toList());
     }
 
     /**
@@ -121,7 +138,8 @@ public class GenFactory implements IGenFactory {
      * @param depth   current embedded depth level
      * @return populated entity
      */
-    <T> T fillEntity(T t, GenStorage storage, int depth) {
+    @Nullable
+    <T> T fillEntity(@Nullable T t, GenStorage storage, int depth) {
         if (t == null)
             return null;
 
@@ -161,7 +179,10 @@ public class GenFactory implements IGenFactory {
                                   final GenContainer container,
                                   final GenStorage storage,
                                   final int depth) {
-        final IGenerator generator = storage.getGenerator(container.getGenerator());
+        final IGenerator generator = (container.haveGeneratorExample())
+                ? container.getGeneratorExample()
+                : storage.getGenerator(container.getGenerator());
+
         final Annotation annotation = container.getMarker();
 
         Object generated;

@@ -53,7 +53,7 @@ public class DateUtils {
 
     public static Date parseSimpleDateLong(final String date) {
         try {
-            return new Date(Long.valueOf(date));
+            return new Date(Long.parseLong(date));
         } catch (NumberFormatException e) {
             logger.warn(e.getMessage());
             return null;

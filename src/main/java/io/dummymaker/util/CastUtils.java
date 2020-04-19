@@ -237,7 +237,7 @@ public class CastUtils {
         }
     }
 
-    private enum CastType {
+    public enum CastType {
 
         UNKNOWN,
         STRING,

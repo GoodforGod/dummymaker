@@ -6,6 +6,7 @@ import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static io.dummymaker.util.CastUtils.getGenericType;
 
@@ -40,7 +40,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
 
         final Class<?> valueClass = (Class<?>) getGenericType(field.getGenericType());
         if (annotation == null) {
-            final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
             final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
             final int maxDepth = storage.getDepth(parent, field.getType());
             return genCollection(size, buildCollection(field, size), suitable, valueClass, storage, depth, maxDepth);
@@ -57,7 +57,7 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
 
     @Override
     public Object generate() {
-        final int size = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         final List<Object> list = buildCollection(null, size);
         return genCollection(size, list, IdGenerator.class, String.class, null, GenEmbedded.MAX, 1);
     }

@@ -2,6 +2,7 @@ package io.dummymaker.generator.complex;
 
 import io.dummymaker.annotation.complex.GenEnum;
 import io.dummymaker.factory.IGenStorage;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -44,10 +44,7 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
                 .filter(f -> excludePredicate.test(f.getName()))
                 .collect(Collectors.toList());
 
-        final int i = (candidates.isEmpty())
-                ? 0
-                : ThreadLocalRandom.current().nextInt(0, candidates.size());
-
+        final int i = CollectionUtils.random(candidates.size());
         return Enum.valueOf((Class<? extends Enum>) field.getType(), field.getType().getFields()[i].getName());
     }
 

@@ -6,11 +6,11 @@ import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Generates two dimension arrays based on field type
@@ -34,8 +34,8 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
         final Class<?> valueClass = field.getType().getComponentType().getComponentType();
         if (annotation == null) {
-            final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-            final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+            final int sizeFirst = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
+            final int sizeSecond = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
             final Class<? extends IGenerator> suitable = suitable(storage, field, valueClass);
             final int maxDepth = storage.getDepth(parent, valueClass);
             return genArray2D(sizeFirst, sizeSecond, valueClass, suitable, storage, depth, maxDepth);
@@ -53,8 +53,8 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
     @Override
     public Object generate() {
-        final int sizeFirst = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
-        final int sizeSecond = ThreadLocalRandom.current().nextInt(MIN_DEFAULT, MAX_DEFAULT);
+        final int sizeFirst = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
+        final int sizeSecond = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 

@@ -1,8 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
-
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
 
 /**
  * Generates byte from -127 to 128
@@ -14,6 +13,6 @@ public class ByteGenerator implements IGenerator<Byte> {
 
     @Override
     public Byte generate() {
-        return (byte) ThreadLocalRandom.current().nextInt(Byte.MIN_VALUE, Byte.MAX_VALUE);
+        return (byte) CollectionUtils.random(Byte.MIN_VALUE, Byte.MAX_VALUE);
     }
 }

@@ -95,7 +95,7 @@ public class SqlExporter extends BasicExporter {
      * @see #dataTypes
      */
     private Map<Class, String> buildDefaultDataTypeMap() {
-        final Map<Class, String> typeMap = new HashMap<>();
+        final Map<Class, String> typeMap = new HashMap<>(25);
         typeMap.put(boolean.class, "BOOLEAN");
         typeMap.put(Boolean.class, "BOOLEAN");
         typeMap.put(byte.class, "BYTE");

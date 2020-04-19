@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
-import java.util.concurrent.ThreadLocalRandom;
+import io.dummymaker.util.CollectionUtils;
+
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -17,7 +18,7 @@ public class HexDataGenerator extends IdBigGenerator {
 
     @Override
     public String generate() {
-        return (super.generate() + super.generate()).substring(0, ThreadLocalRandom.current().nextInt(16, 128));
+        return (super.generate() + super.generate()).substring(0, CollectionUtils.random(16, 128));
     }
 
     @Override

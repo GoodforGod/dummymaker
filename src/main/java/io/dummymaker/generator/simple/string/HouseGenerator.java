@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -24,13 +25,13 @@ public class HouseGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        final String number = String.valueOf(ThreadLocalRandom.current().nextInt(1, 99));
+        final String number = String.valueOf(CollectionUtils.random(1, 100));
         if (ThreadLocalRandom.current().nextDouble() > 0.33)
             return number;
 
-        final char postfix = (ThreadLocalRandom.current().nextBoolean())
-                ? (char) ThreadLocalRandom.current().nextInt(65, 90)
-                : (char) ThreadLocalRandom.current().nextInt(97, 122);
+        final char postfix = ThreadLocalRandom.current().nextBoolean()
+                ? (char) CollectionUtils.random(65, 90)
+                : (char) CollectionUtils.random(97, 122);
 
         return number + postfix;
     }

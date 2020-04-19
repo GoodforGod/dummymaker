@@ -1,10 +1,10 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.regex.Pattern;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
@@ -19,12 +19,12 @@ public class PhoneGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return current().nextInt(1, 9)
+        return CollectionUtils.random(1, 9)
                 + "("
-                + current().nextInt(100, 999)
+                + CollectionUtils.random(100, 999)
                 + ")"
-                + current().nextInt(100, 999)
-                + current().nextInt(1000, 9999);
+                + CollectionUtils.random(100, 999)
+                + CollectionUtils.random(1000, 9999);
     }
 
     @Override

@@ -4,10 +4,10 @@ import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FemaleNameBundle;
 import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.regex.Pattern;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
@@ -25,7 +25,7 @@ public class NameGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        int gender = current().nextInt(100);
+        int gender = CollectionUtils.random(100);
 
         return (gender > 50)
                 ? maleBundle.getRandom()

@@ -7,6 +7,7 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.factory.impl.GenSupplier;
+import io.dummymaker.generator.IGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.FieldContainer;
@@ -76,15 +77,18 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
             // Ignored filters excluded
             if (v.stream().noneMatch(ignoreFilter)) {
                 final GenContainer container = scannedContainers.get(k);
-                final String fieldName = renamedFields.getOrDefault(k, nameCase.format(k.getName()));
+                final String fieldName = renamedFields.computeIfAbsent(k, key -> nameCase.format(k.getName()));
 
                 // Process export field (even if is export only)
                 if (v.stream().anyMatch(exportFilter) && container == null) {
                     resultMap.put(k, factory.build(k, supplier.getSuitable(k), fieldName));
                 } else if (container != null) {
-                    resultMap.put(k, factory.build(k, container.getGenerator(), fieldName));
-                }
+                    final FieldContainer fieldContainer = container.haveGeneratorExample()
+                            ? factory.build(k, container.getGeneratorExample(), fieldName)
+                            : factory.build(k, container.getGenerator(), fieldName);
 
+                    resultMap.put(k, fieldContainer);
+                }
             }
         });
 
@@ -93,7 +97,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                 .filter(renameFilter)
                 .map(a -> ((GenExportName) a).value())
                 .findFirst()
-                .ifPresent(n -> resultMap.put(null, factory.build(null, null, n)));
+                .ifPresent(n -> resultMap.put(null, factory.build(null, (Class<? extends IGenerator>) null, n)));
 
         return resultMap;
     }

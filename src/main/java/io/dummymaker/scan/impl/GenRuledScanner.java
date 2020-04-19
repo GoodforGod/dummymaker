@@ -45,9 +45,11 @@ public class GenRuledScanner extends GenAutoScanner {
         targeted.ifPresent(r -> getAllFilteredFields(target).stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> {
-                    final GenContainer container = r.getDesired(f)
-                            .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
-                            .orElse(scanned.get(f));
+                    final GenContainer container = r.getDesiredExample(f)
+                            .map(g -> GenContainer.asExample(f, g, isComplex(f)))
+                            .orElseGet(() -> r.getDesired(f)
+                                    .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
+                                    .orElse(scanned.get(f)));
 
                     if (container != null && !r.isIgnored(f))
                         containers.put(f, container);

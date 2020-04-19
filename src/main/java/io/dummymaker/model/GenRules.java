@@ -1,5 +1,7 @@
 package io.dummymaker.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,7 @@ public class GenRules {
      * @param rules to add
      * @return gen rules
      */
-    public static GenRules of(GenRule... rules) {
+    public static @NotNull GenRules of(@NotNull GenRule... rules) {
         final GenRules genRules = new GenRules();
         final Map<? extends Class<?>, List<GenRule>> collected = Arrays.stream(rules)
                 .collect(Collectors.groupingBy(GenRule::getTarget));
@@ -46,7 +48,7 @@ public class GenRules {
      * @param target to check
      * @return rule
      */
-    public Optional<GenRule> targeted(Class<?> target) {
+    public @NotNull Optional<GenRule> targeted(Class<?> target) {
         if (target == null)
             return Optional.empty();
 
@@ -67,7 +69,7 @@ public class GenRules {
      * @param rule to add
      * @return same gen rules
      */
-    public GenRules add(GenRule rule) {
+    public @NotNull GenRules add(GenRule rule) {
         final Optional<GenRule> foundRule = rules.stream()
                 .filter(r -> r.getTarget().equals(rule.getTarget()))
                 .findAny();
@@ -80,7 +82,7 @@ public class GenRules {
         return this;
     }
 
-    public List<GenRule> getRules() {
+    public @NotNull List<GenRule> getRules() {
         return new ArrayList<>(rules);
     }
 }

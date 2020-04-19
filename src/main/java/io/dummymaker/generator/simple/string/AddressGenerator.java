@@ -5,8 +5,8 @@ import io.dummymaker.bundle.impl.CityBundle;
 import io.dummymaker.bundle.impl.DistrictBundle;
 import io.dummymaker.bundle.impl.StreetBundle;
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -31,7 +31,7 @@ public class AddressGenerator implements IGenerator<String> {
         return cityBundle.getRandom()
                 + ", " + districtBundle.getRandom()
                 + ", " + streetBundle.getRandom()
-                + " " + ThreadLocalRandom.current().nextInt(20);
+                + " " + CollectionUtils.random(20);
     }
 
     @Override

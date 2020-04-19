@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -20,7 +21,7 @@ public class CharacterGenerator implements IGenerator<Character> {
     @Override
     public Character generate() {
         boolean b = ThreadLocalRandom.current().nextBoolean();
-        char c = (char) ThreadLocalRandom.current().nextInt(97, 122);
+        char c = (char) CollectionUtils.random(97, 122);
         return (b) ? Character.toUpperCase(c) : c;
     }
 

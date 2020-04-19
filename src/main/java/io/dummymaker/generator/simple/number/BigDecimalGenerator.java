@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 
 import java.math.BigDecimal;
 
@@ -16,7 +17,7 @@ public class BigDecimalGenerator implements IGenerator<BigDecimal> {
 
     @Override
     public BigDecimal generate() {
-        final BigDecimal decimal = BigDecimal.valueOf(current().nextLong(Long.MIN_VALUE, Long.MAX_VALUE));
+        final BigDecimal decimal = BigDecimal.valueOf(CollectionUtils.random(Long.MIN_VALUE, Long.MAX_VALUE));
         return decimal.add(BigDecimal.valueOf(current().nextDouble(0.0001, 0.9999)));
     }
 }

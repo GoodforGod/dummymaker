@@ -1,5 +1,7 @@
 package io.dummymaker.rules;
 
+import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenFieldRule;
@@ -17,6 +19,37 @@ import java.util.List;
  * @since 20.10.2019
  */
 public class GenRulesTests extends Assert {
+
+    @Test
+    public void genLambdaGeneratorRuleForNamedField() {
+        final IGenerator<String> generator = () -> "BILL";
+
+        final GenRule rule = GenRule.of(DummyEmbedded.class)
+                .add(generator, "name");
+
+        final GenFactory factory = new GenFactory(rule);
+        final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
+
+        assertNotNull(dummy);
+        assertNotNull(dummy.getName());
+        assertEquals("BILL", dummy.getName());
+    }
+
+    @Test
+    public void genLambdaGeneratorRuleForType() {
+        final IGenerator<String> generator = () -> "BILL";
+
+        final GenRule rule = GenRule.auto(DummyEmbedded.class)
+                .add(generator, String.class);
+
+        final GenFactory factory = new GenFactory(rule);
+        final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
+
+        assertNotNull(dummy);
+        assertNotNull(dummy.getName());
+        assertEquals("BILL", dummy.getName());
+        assertEquals("BILL", dummy.getId());
+    }
 
     @Test
     public void genFieldRuleNotEqualsForTypeTargets() {
