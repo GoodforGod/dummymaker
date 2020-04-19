@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author GoodforGod
@@ -22,10 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GenRulesTests extends Assert {
 
     @Test
-    public void genLambdaGeneratorRule() {
-        final IGenerator<String> generator = () -> ThreadLocalRandom.current().nextBoolean()
-                ? "Bob"
-                : "Bill";
+    public void genLambdaGeneratorRuleForNamedField() {
+        final IGenerator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.of(DummyEmbedded.class)
                 .add(generator, "name");
@@ -35,7 +32,23 @@ public class GenRulesTests extends Assert {
 
         assertNotNull(dummy);
         assertNotNull(dummy.getName());
-        assertTrue(dummy.getName().equals("Bob") || dummy.getName().equals("Bill"));
+        assertEquals("BILL", dummy.getName());
+    }
+
+    @Test
+    public void genLambdaGeneratorRuleForType() {
+        final IGenerator<String> generator = () -> "BILL";
+
+        final GenRule rule = GenRule.auto(DummyEmbedded.class)
+                .add(generator, String.class);
+
+        final GenFactory factory = new GenFactory(rule);
+        final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
+
+        assertNotNull(dummy);
+        assertNotNull(dummy.getName());
+        assertEquals("BILL", dummy.getName());
+        assertEquals("BILL", dummy.getId());
     }
 
     @Test
