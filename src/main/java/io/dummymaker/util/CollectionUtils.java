@@ -1,6 +1,10 @@
 package io.dummymaker.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,6 +48,42 @@ public class CollectionUtils {
         return ThreadLocalRandom.current().nextInt();
     }
 
+    /**
+     * @param array to get element
+     * @param <T>   type of element
+     * @return random element of array or null if array is empty
+     */
+    public static @Nullable <T> T random(@NotNull T[] array) {
+        return (array.length == 0)
+                ? null
+                : array[random(array.length)];
+    }
+
+    /**
+     * Consider that accessing random element for {@link java.util.LinkedList} or
+     * {@link java.util.Set} is O(N) where N is index of random element, this is due
+     * to this collections does not have random access.
+     *
+     * @param collection to get random element from
+     * @param <T>        type of element
+     * @return random element of collection or null if collection is empty
+     */
+    public static @Nullable <T> T random(@NotNull Collection<T> collection) {
+        if (collection.size() == 0)
+            return null;
+
+        final int random = random(collection.size());
+        if (collection instanceof List) {
+            return ((List<T>) collection).get(random);
+        } else {
+            final Iterator<T> iterator = collection.iterator();
+            for (int i = 0; i < random; i++)
+                iterator.next();
+
+            return iterator.next();
+        }
+    }
+
     public static int random(int max) {
         return random(0, max);
     }
@@ -62,7 +102,6 @@ public class CollectionUtils {
     }
 
     /**
-     *
      * @param min to get
      * @param max to get
      * @return random from min (included) to max (excluded)

@@ -24,7 +24,7 @@ public class TypeGenerator implements IGenerator<String> {
 
     @Override
     public String generate() {
-        return types.get(CollectionUtils.random(types.size()));
+        return CollectionUtils.random(types);
     }
 
     @Override
