@@ -62,13 +62,15 @@ public class GenFactory implements IGenFactory {
         this.scanner = new GenRuledScanner(new GenSupplier(), rules);
     }
 
+    @Nullable
     @Override
     public <T> T build(@Nullable Class<T> target) {
         return fill(instantiate(target));
     }
 
+    @Nullable
     @Override
-    public <T> @Nullable T build(@NotNull Supplier<T> supplier) {
+    public <T> T build(@NotNull Supplier<T> supplier) {
         return fill(supplier.get());
     }
 
@@ -97,6 +99,9 @@ public class GenFactory implements IGenFactory {
     @NotNull
     @Override
     public <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
+        if(supplier.get() == null)
+            return Stream.empty();
+
         final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
         return fill(stream);
     }
@@ -179,7 +184,7 @@ public class GenFactory implements IGenFactory {
                                   final GenContainer container,
                                   final GenStorage storage,
                                   final int depth) {
-        final IGenerator generator = (container.haveGeneratorExample())
+        final IGenerator<?> generator = container.haveGeneratorExample()
                 ? container.getGeneratorExample()
                 : storage.getGenerator(container.getGenerator());
 
@@ -237,7 +242,7 @@ public class GenFactory implements IGenFactory {
     /**
      * Generate sequence number fields next value
      */
-    private Object generateSequenceObject(Field field, IGenerator generator) {
+    private Object generateSequenceObject(Field field, IGenerator<?> generator) {
         return CastUtils.castToNumber(generator.generate(), field.getType());
     }
 
