@@ -48,13 +48,15 @@ public class GenFactory implements IGenFactory {
     private final IGenAutoScanner scanner;
 
     public GenFactory() {
-        this(((GenRules) null));
+        this(Collections.emptyList());
     }
 
     public GenFactory(@Nullable GenRule... rules) {
-        this((rules == null || rules.length == 0 || rules[0] == null)
-                ? null
-                : GenRules.of(rules));
+        this(Arrays.asList(rules));
+    }
+
+    public GenFactory(@NotNull Collection<GenRule> rules) {
+        this(isEmpty(rules) ? null : GenRules.of(rules));
     }
 
     public GenFactory(@Nullable GenRules rules) {
@@ -99,7 +101,7 @@ public class GenFactory implements IGenFactory {
     @NotNull
     @Override
     public <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
-        if(supplier.get() == null)
+        if (supplier.get() == null)
             return Stream.empty();
 
         final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
