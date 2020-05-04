@@ -17,7 +17,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class AddressFullGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("addr(ess)?full", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("addr(ess)?full|place|residence|home|location", CASE_INSENSITIVE);
 
     private final IGenerator<String> generator = new AddressGenerator();
     private final IBundle<String> countryBundle = new CountryBundle();

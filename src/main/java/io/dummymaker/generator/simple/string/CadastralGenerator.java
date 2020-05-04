@@ -15,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class CadastralGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("cadastral|cadnum", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("cadastral|cad(num)?", CASE_INSENSITIVE);
 
     @Override
     public Pattern getPattern() {

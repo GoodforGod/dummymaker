@@ -16,10 +16,8 @@ public class EmbeddedGenerator implements IGenerator<Object> {
         if (depth < 1)
             return 1;
 
-        if (depth > GenEmbedded.MAX)
-            return GenEmbedded.MAX;
+        return Math.min(depth, GenEmbedded.MAX);
 
-        return depth;
     }
 
     @Override

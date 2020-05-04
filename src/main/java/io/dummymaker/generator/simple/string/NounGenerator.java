@@ -3,6 +3,7 @@ package io.dummymaker.generator.simple.string;
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.NounBundle;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -20,6 +21,7 @@ public class NounGenerator implements IGenerator<String> {
 
     private final IBundle<String> bundle = new NounBundle();
 
+    @NotNull
     @Override
     public String generate() {
         return bundle.getRandom();

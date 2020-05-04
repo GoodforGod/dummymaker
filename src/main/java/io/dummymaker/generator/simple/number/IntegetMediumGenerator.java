@@ -15,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class IntegetMediumGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("postal|code|index ", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("postal|code|index|zip(code)?", CASE_INSENSITIVE);
 
     @Override
     public Pattern getPattern() {
