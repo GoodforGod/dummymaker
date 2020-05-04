@@ -3,6 +3,7 @@ package io.dummymaker.generator.simple;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -16,16 +17,16 @@ import java.lang.reflect.Field;
 public class NullGenerator implements IComplexGenerator {
 
     @Override
-    public Object generate() {
+    public @Nullable Object generate() {
         return null;
     }
 
     @Override
-    public Object generate(final @NotNull Class<?> parent,
-                           final @NotNull Field field,
-                           final @NotNull IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         return null;
     }
 }

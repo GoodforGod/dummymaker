@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -18,12 +19,12 @@ public class IntegetMediumGenerator implements IGenerator<Integer> {
     private final Pattern pattern = Pattern.compile("postal|code|index|zip(code)?", CASE_INSENSITIVE);
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public @NotNull Integer generate() {
+        return CollectionUtils.random(100000, 999999);
     }
 
     @Override
-    public Integer generate() {
-        return CollectionUtils.random(100000, 999999);
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }

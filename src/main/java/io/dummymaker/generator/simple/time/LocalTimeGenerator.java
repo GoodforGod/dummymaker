@@ -2,8 +2,12 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalTime;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates localTime object with range from 00:00:00 to 24:00:00
@@ -14,15 +18,22 @@ import java.time.LocalTime;
  */
 public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
 
+    private final Pattern pattern = Pattern.compile("time", CASE_INSENSITIVE);
+
     private final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 
     @Override
-    public LocalTime generate() {
+    public @NotNull LocalTime generate() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public LocalTime generate(final long minUnix, final long maxUnix) {
+    public @NotNull LocalTime generate(final long minUnix, final long maxUnix) {
         return generator.generate(minUnix, maxUnix).toLocalTime();
+    }
+
+    @Override
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }

@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -18,8 +19,13 @@ public class StringGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("[a-zA-Z]|strs?", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return UUID.randomUUID().toString().replace("-", "")
                 + UUID.randomUUID().toString().replace("-", "");
+    }
+
+    @Override
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }

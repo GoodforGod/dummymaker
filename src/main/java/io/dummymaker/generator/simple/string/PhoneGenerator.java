@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -18,7 +19,7 @@ public class PhoneGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("phone|mobile(phone)?|dial", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return CollectionUtils.random(1, 9)
                 + "("
                 + CollectionUtils.random(100, 999)
@@ -28,7 +29,7 @@ public class PhoneGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

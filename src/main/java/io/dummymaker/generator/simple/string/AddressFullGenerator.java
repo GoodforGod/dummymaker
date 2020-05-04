@@ -3,6 +3,7 @@ package io.dummymaker.generator.simple.string;
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CountryBundle;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -23,12 +24,12 @@ public class AddressFullGenerator implements IGenerator<String> {
     private final IBundle<String> countryBundle = new CountryBundle();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return countryBundle.getRandom() + ", " + generator.generate();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

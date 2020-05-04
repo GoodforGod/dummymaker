@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple;
 
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Used as a marker generator for embedded annotation
@@ -17,11 +18,10 @@ public class EmbeddedGenerator implements IGenerator<Object> {
             return 1;
 
         return Math.min(depth, GenEmbedded.MAX);
-
     }
 
     @Override
-    public Object generate() {
+    public @Nullable Object generate() {
         return null;
     }
 }

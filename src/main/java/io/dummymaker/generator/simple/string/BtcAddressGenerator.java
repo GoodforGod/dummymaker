@@ -16,14 +16,13 @@ public class BtcAddressGenerator extends IdGenerator {
 
     private final Pattern pattern = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return super.generate().replace("-", "") + super.generate().substring(0, 2).replace("-", "");
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

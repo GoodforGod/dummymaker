@@ -3,6 +3,7 @@ package io.dummymaker.generator.complex;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ import java.util.*;
 abstract class CollectionComplexGenerator extends BasicComplexGenerator {
 
     @SuppressWarnings("unchecked")
+    @NotNull
     Collection genCollection(final int size,
                              final Collection<?> collection,
                              final Class<? extends IGenerator> valueGenerator,

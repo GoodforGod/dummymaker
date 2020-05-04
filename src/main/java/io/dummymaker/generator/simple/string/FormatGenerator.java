@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.string;
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FormatBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -21,14 +21,13 @@ public class FormatGenerator implements IGenerator<String> {
 
     private final IBundle<String> formats = new FormatBundle();
 
-    @Nullable
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return formats.getRandom();
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

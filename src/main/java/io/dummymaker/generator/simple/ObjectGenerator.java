@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates object as string like: object_1245155
@@ -12,7 +13,7 @@ import io.dummymaker.util.CollectionUtils;
 public class ObjectGenerator implements IGenerator<Object> {
 
     @Override
-    public Object generate() {
+    public @NotNull Object generate() {
         return "object_" + CollectionUtils.random(Integer.MAX_VALUE);
     }
 }

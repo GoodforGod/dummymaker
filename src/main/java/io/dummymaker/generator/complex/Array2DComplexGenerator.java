@@ -8,6 +8,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -25,11 +26,11 @@ import java.lang.reflect.Field;
 public class Array2DComplexGenerator extends ArrayComplexGenerator {
 
     @Override
-    public Object generate(final @NotNull Class<?> parent,
-                           final @NotNull Field field,
-                           final @NotNull IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         if (!field.getType().getTypeName().endsWith("[][]"))
             return null;
 
@@ -53,19 +54,19 @@ public class Array2DComplexGenerator extends ArrayComplexGenerator {
     }
 
     @Override
-    public Object generate() {
+    public @NotNull Object generate() {
         final int sizeFirst = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         final int sizeSecond = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return genArray2D(sizeFirst, sizeSecond, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
-    private Object genArray2D(final int rows,
-                              final int rowSize,
-                              final Class<?> valueClass,
-                              final Class<? extends IGenerator> valueGenerator,
-                              final IGenStorage storage,
-                              final int depth,
-                              final int maxDepth) {
+    private @NotNull Object genArray2D(final int rows,
+                                       final int rowSize,
+                                       final Class<?> valueClass,
+                                       final Class<? extends IGenerator> valueGenerator,
+                                       final IGenStorage storage,
+                                       final int depth,
+                                       final int maxDepth) {
         final Object array = Array.newInstance(valueClass, rows, rowSize);
         for (int i = 0; i < rows; i++) {
             final Object row = Array.get(array, i);

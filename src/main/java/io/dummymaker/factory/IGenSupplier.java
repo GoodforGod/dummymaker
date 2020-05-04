@@ -1,6 +1,7 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
@@ -20,6 +21,7 @@ public interface IGenSupplier {
      * @param field target
      * @return suitable generator
      */
+    @NotNull
     Class<? extends IGenerator> getSuitable(Field field);
 
     /**
@@ -30,5 +32,6 @@ public interface IGenSupplier {
      *              class, or implementation not interface
      * @return suitable generator
      */
+    @NotNull
     Class<? extends IGenerator> getSuitable(Field field, Class<?> type);
 }

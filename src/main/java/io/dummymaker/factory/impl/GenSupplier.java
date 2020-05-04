@@ -9,6 +9,7 @@ import io.dummymaker.generator.simple.string.JsonGenerator;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -51,7 +52,7 @@ public class GenSupplier implements IGenSupplier {
     }
 
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field) {
+    public @NotNull Class<? extends IGenerator> getSuitable(Field field) {
         return getSuitable(field, field.getType());
     }
 
@@ -60,7 +61,7 @@ public class GenSupplier implements IGenSupplier {
      *
      * @return generator class
      */
-    protected Class<? extends IGenerator> getDefault() {
+    protected @NotNull Class<? extends IGenerator> getDefault() {
         return EmbeddedGenerator.class;
     }
 
@@ -75,7 +76,7 @@ public class GenSupplier implements IGenSupplier {
      * @return suitable generator class
      */
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+    public @NotNull Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
         if (type == null)
             return getDefault();
 

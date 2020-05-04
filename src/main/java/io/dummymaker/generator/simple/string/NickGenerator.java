@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.bundle.impl.NicknamesBundle;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ public class NickGenerator implements IGenerator<String> {
     private final NicknamesBundle bundle = new NicknamesBundle();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         boolean revert = current().nextBoolean();
         boolean tuple = current().nextBoolean();
 
@@ -34,7 +35,7 @@ public class NickGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

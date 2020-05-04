@@ -19,9 +19,8 @@ public class VersionGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("ver(sion)?", CASE_INSENSITIVE);
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return CollectionUtils.random(1, 9)
                 + "."
                 + CollectionUtils.random(1, 99)
@@ -31,7 +30,7 @@ public class VersionGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

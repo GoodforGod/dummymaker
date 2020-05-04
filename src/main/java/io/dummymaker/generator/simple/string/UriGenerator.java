@@ -17,9 +17,8 @@ public class UriGenerator extends NounGenerator {
 
     private final Pattern pattern = Pattern.compile("uri|resource|path", CASE_INSENSITIVE);
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         final StringBuilder builder = new StringBuilder("");
         final int total = ThreadLocalRandom.current().nextInt(1, 5);
         for (int i = 0; i < total; i++)
@@ -29,7 +28,7 @@ public class UriGenerator extends NounGenerator {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

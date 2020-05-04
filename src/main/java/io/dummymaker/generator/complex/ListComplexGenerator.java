@@ -8,6 +8,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -31,11 +32,11 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public Object generate(final @NotNull Class<?> parent,
-                           final @NotNull Field field,
-                           final @NotNull IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         if (!List.class.isAssignableFrom(field.getType()))
             return null;
 
@@ -57,13 +58,13 @@ public class ListComplexGenerator extends CollectionComplexGenerator {
     }
 
     @Override
-    public Object generate() {
+    public @NotNull Object generate() {
         final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         final List<Object> list = buildCollection(null, size);
         return genCollection(size, list, IdGenerator.class, String.class, null, GenEmbedded.MAX, 1);
     }
 
-    private <T> List<T> buildCollection(Field field, int size) {
+    private @NotNull <T> List<T> buildCollection(Field field, int size) {
         if (field == null)
             return new ArrayList<>(size);
 

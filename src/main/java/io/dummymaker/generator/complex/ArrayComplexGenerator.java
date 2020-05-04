@@ -8,6 +8,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -25,11 +26,11 @@ import java.lang.reflect.Field;
 public class ArrayComplexGenerator extends CollectionComplexGenerator {
 
     @Override
-    public Object generate(final @NotNull Class<?> parent,
-                           final @NotNull Field field,
-                           final @NotNull IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         if (!field.getType().getTypeName().endsWith("[]"))
             return null;
 
@@ -50,11 +51,12 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
     }
 
     @Override
-    public Object generate() {
+    public @NotNull Object generate() {
         final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return genArray(size, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
+    @NotNull
     Object genArray(final int size,
                     final Class<?> valueClass,
                     final Class<? extends IGenerator> valueGenerator,

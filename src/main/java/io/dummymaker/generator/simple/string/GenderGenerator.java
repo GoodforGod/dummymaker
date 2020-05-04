@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -18,16 +18,15 @@ public class GenderGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("sex|gender", CASE_INSENSITIVE);
 
-    @Nullable
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return ThreadLocalRandom.current().nextBoolean()
                 ? "male"
                 : "female";
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

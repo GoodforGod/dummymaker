@@ -2,6 +2,7 @@ package io.dummymaker.factory;
 
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used to extend complex generator functionality by providing Generators
@@ -43,5 +44,6 @@ public interface IGenStorage extends IGenSupplier {
      * @param generatorClass instance to get
      * @return instance of generator
      */
+    @NotNull
     IGenerator getGenerator(Class<? extends IGenerator> generatorClass);
 }

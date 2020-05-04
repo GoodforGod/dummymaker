@@ -11,6 +11,7 @@ import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -55,19 +56,19 @@ class GenStorage implements IGenStorage {
     }
 
     @Override
-    public IGenerator getGenerator(Class<? extends IGenerator> generatorClass) {
+    public @NotNull IGenerator getGenerator(Class<? extends IGenerator> generatorClass) {
         return (generatorClass == null)
                 ? generators.computeIfAbsent(NullGenerator.class, k -> instantiate(NullGenerator.class))
                 : generators.computeIfAbsent(generatorClass, k -> instantiate(generatorClass));
     }
 
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field) {
+    public @NotNull Class<? extends IGenerator> getSuitable(Field field) {
         return supplier.getSuitable(field);
     }
 
     @Override
-    public Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+    public @NotNull Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
         return supplier.getSuitable(field, type);
     }
 

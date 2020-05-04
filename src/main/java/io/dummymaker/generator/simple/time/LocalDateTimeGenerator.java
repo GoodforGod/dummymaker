@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.time;
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -21,15 +21,15 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
-    private final Pattern pattern = Pattern.compile("stamp|timestamp|birth(date)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("stamp|timestamp|expired?", CASE_INSENSITIVE);
 
     @Override
-    public LocalDateTime generate() {
+    public @NotNull LocalDateTime generate() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public LocalDateTime generate(final long minUnix, final long maxUnix) {
+    public @NotNull LocalDateTime generate(final long minUnix, final long maxUnix) {
         long usedFrom = minUnix;
         long usedTo = maxUnix;
         if (usedFrom < 0)
@@ -48,7 +48,7 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

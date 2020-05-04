@@ -21,14 +21,13 @@ public class NounGenerator implements IGenerator<String> {
 
     private final IBundle<String> bundle = new NounBundle();
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return bundle.getRandom();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

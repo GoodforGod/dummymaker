@@ -3,6 +3,7 @@ package io.dummymaker.generator.simple.string;
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.PhraseBundle;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -21,12 +22,12 @@ public class PhraseGenerator implements IGenerator<String> {
     private final IBundle<String> bundle = new PhraseBundle();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return bundle.getRandom();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

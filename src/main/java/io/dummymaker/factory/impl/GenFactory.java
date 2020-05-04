@@ -64,33 +64,28 @@ public class GenFactory implements IGenFactory {
         this.scanner = new GenRuledScanner(new GenSupplier(), rules);
     }
 
-    @Nullable
     @Override
-    public <T> T build(@Nullable Class<T> target) {
+    public @Nullable <T> T build(@Nullable Class<T> target) {
         return fill(instantiate(target));
     }
 
-    @Nullable
     @Override
-    public <T> T build(@NotNull Supplier<T> supplier) {
+    public @Nullable <T> T build(@NotNull Supplier<T> supplier) {
         return fill(supplier.get());
     }
 
-    @NotNull
     @Override
-    public <T> List<T> build(@Nullable Class<T> target, int amount) {
+    public @NotNull <T> List<T> build(@Nullable Class<T> target, int amount) {
         return stream(target, amount).collect(Collectors.toList());
     }
 
-    @NotNull
     @Override
-    public <T> List<T> build(@NotNull Supplier<T> supplier, int amount) {
+    public @NotNull <T> List<T> build(@NotNull Supplier<T> supplier, int amount) {
         return stream(supplier, amount).collect(Collectors.toList());
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
+    public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
         if (amount < 1 || instantiate(target) == null)
             return Stream.empty();
 
@@ -98,9 +93,8 @@ public class GenFactory implements IGenFactory {
         return fill(stream);
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
+    public @NotNull <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
         if (supplier.get() == null)
             return Stream.empty();
 
@@ -108,9 +102,8 @@ public class GenFactory implements IGenFactory {
         return fill(stream);
     }
 
-    @Nullable
     @Override
-    public <T> T fill(@Nullable T t) {
+    public @Nullable <T> T fill(@Nullable T t) {
         if (t == null)
             return null;
 
@@ -118,9 +111,8 @@ public class GenFactory implements IGenFactory {
         return fillEntity(t, storage, 1);
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> fill(@Nullable Stream<T> stream) {
+    public @NotNull <T> Stream<T> fill(@Nullable Stream<T> stream) {
         if (stream == null)
             return Stream.empty();
 
@@ -129,9 +121,8 @@ public class GenFactory implements IGenFactory {
                 .map(t -> fillEntity(t, storage, 1));
     }
 
-    @NotNull
     @Override
-    public <T> List<T> fill(@Nullable Collection<T> collection) {
+    public @NotNull <T> List<T> fill(@Nullable Collection<T> collection) {
         return isEmpty(collection)
                 ? Collections.emptyList()
                 : fill(collection.stream()).collect(Collectors.toList());

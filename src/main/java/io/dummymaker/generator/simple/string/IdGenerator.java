@@ -16,14 +16,13 @@ public class IdGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("[ug]?u?id|[Ii]d");
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return UUID.randomUUID().toString();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

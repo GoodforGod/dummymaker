@@ -6,6 +6,7 @@ import io.dummymaker.bundle.impl.DistrictBundle;
 import io.dummymaker.bundle.impl.StreetBundle;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +28,7 @@ public class AddressGenerator implements IGenerator<String> {
     private final IBundle<String> cityBundle = new CityBundle();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return cityBundle.getRandom()
                 + ", " + districtBundle.getRandom()
                 + ", " + streetBundle.getRandom()
@@ -35,7 +36,7 @@ public class AddressGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -19,14 +20,14 @@ public class CharacterGenerator implements IGenerator<Character> {
     private final Pattern pattern = Pattern.compile("letter|character", CASE_INSENSITIVE);
 
     @Override
-    public Character generate() {
+    public @NotNull Character generate() {
         boolean b = ThreadLocalRandom.current().nextBoolean();
         char c = (char) CollectionUtils.random(97, 122);
         return (b) ? Character.toUpperCase(c) : c;
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

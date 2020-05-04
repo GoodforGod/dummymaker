@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class JsonGenerator implements IGenerator<String> {
     private final IGenerator<String> fieldGenerator = new NounGenerator();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         final StringBuilder builder = new StringBuilder();
 
         final int depth = CollectionUtils.random(1, 6);
@@ -84,7 +85,7 @@ public class JsonGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

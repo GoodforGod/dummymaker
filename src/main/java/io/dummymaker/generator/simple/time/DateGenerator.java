@@ -3,6 +3,7 @@ package io.dummymaker.generator.simple.time;
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -17,12 +18,12 @@ import java.util.Date;
 public class DateGenerator implements ITimeGenerator<Date> {
 
     @Override
-    public Date generate() {
+    public @NotNull Date generate() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public Date generate(final long minUnix, final long maxUnix) {
+    public @NotNull Date generate(final long minUnix, final long maxUnix) {
         long usedFrom = minUnix;
         long usedTo = maxUnix;
         if (usedFrom < 0)

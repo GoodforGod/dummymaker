@@ -22,14 +22,13 @@ public class UrlGenerator extends UriGenerator {
     private final IBundle<String> domains = new NicknamesBundle();
     private final IBundle<String> zones = new DomainExtensionBundle();
 
-    @NotNull
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return "https://" + domains.getRandom().replace(".", "") + zones.getRandom() + super.generate();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

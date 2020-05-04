@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +24,12 @@ public class TypeGenerator implements IGenerator<String> {
             "superior");
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return CollectionUtils.random(types);
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

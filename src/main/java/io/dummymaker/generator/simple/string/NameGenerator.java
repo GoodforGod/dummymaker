@@ -4,8 +4,9 @@ import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FemaleNameBundle;
 import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.generator.IGenerator;
-import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -24,16 +25,14 @@ public class NameGenerator implements IGenerator<String> {
     private final IBundle<String> femaleBundle = new FemaleNameBundle();
 
     @Override
-    public String generate() {
-        int gender = CollectionUtils.random(100);
-
-        return (gender > 50)
+    public @NotNull String generate() {
+        return ThreadLocalRandom.current().nextBoolean()
                 ? maleBundle.getRandom()
                 : femaleBundle.getRandom();
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

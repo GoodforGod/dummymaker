@@ -5,6 +5,7 @@ import io.dummymaker.bundle.impl.DomainExtensionBundle;
 import io.dummymaker.bundle.impl.EmailServicesBundle;
 import io.dummymaker.bundle.impl.NicknamesBundle;
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -25,7 +26,7 @@ public class EmailGenerator implements IGenerator<String> {
     private final IBundle<String> domainBundle = new DomainExtensionBundle();
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return nickBundle.getRandom()
                 + "@"
                 + emailBundle.getRandom()
@@ -33,7 +34,7 @@ public class EmailGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }
