@@ -1,5 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -20,7 +22,7 @@ public class BtcTxHashGenerator extends IdGenerator {
     }
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return super.generate().replace("-", "") + super.generate().replace("-", "");
     }
 }
