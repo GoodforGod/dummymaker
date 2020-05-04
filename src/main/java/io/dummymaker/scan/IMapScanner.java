@@ -1,5 +1,7 @@
 package io.dummymaker.scan;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 /**
@@ -16,5 +18,6 @@ public interface IMapScanner<K, V, T> {
      * @param target to scan
      * @return map as scanner result
      */
+    @NotNull
     Map<K, V> scan(T target);
 }

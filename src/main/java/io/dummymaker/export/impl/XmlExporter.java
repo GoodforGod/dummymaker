@@ -7,6 +7,7 @@ import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.writer.IWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -187,7 +188,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(T t) {
+    public <T> @NotNull String exportAsString(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -199,7 +200,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(List<T> list) {
+    public <T> @NotNull String exportAsString(List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 

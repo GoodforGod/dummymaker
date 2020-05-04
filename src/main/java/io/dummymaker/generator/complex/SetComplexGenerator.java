@@ -7,6 +7,7 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -32,9 +33,9 @@ public class SetComplexGenerator extends CollectionComplexGenerator {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public Object generate(final Class<?> parent,
-                           final Field field,
-                           final IGenStorage storage,
+    public Object generate(final @NotNull Class<?> parent,
+                           final @NotNull Field field,
+                           final @NotNull IGenStorage storage,
                            final Annotation annotation,
                            final int depth) {
         if (!Set.class.isAssignableFrom(field.getType()))

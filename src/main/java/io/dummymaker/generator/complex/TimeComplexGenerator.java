@@ -7,6 +7,7 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +37,9 @@ public class TimeComplexGenerator implements IComplexGenerator {
     private static final Logger logger = LoggerFactory.getLogger(TimeComplexGenerator.class);
 
     @Override
-    public Object generate(final Class<?> parent,
-                           final Field field,
-                           final IGenStorage storage,
+    public Object generate(final @NotNull Class<?> parent,
+                           final @NotNull Field field,
+                           final @NotNull IGenStorage storage,
                            final Annotation annotation,
                            final int depth) {
         final long minUnix = (annotation == null) ? GenTime.MIN_UNIX : getMin(((GenTime) annotation));

@@ -15,6 +15,7 @@ import io.dummymaker.model.export.FieldContainerFactory;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.IGenScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -55,7 +56,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     }
 
     @Override
-    public Map<Field, FieldContainer> scan(Class target) {
+    public @NotNull Map<Field, FieldContainer> scan(Class target) {
         return scan(target, Cases.DEFAULT.value());
     }
 

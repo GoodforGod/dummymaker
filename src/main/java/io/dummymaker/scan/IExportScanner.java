@@ -2,6 +2,7 @@ package io.dummymaker.scan;
 
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.export.FieldContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
 public interface IExportScanner extends IMapScanner<Field, FieldContainer, Class> {
 
     @Override
+    @NotNull
     Map<Field, FieldContainer> scan(Class target);
 
     Map<Field, FieldContainer> scan(Class target, ICase nameCase);

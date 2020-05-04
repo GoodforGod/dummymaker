@@ -9,6 +9,7 @@ import io.dummymaker.model.export.DatetimeFieldContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -358,7 +359,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(T t) {
+    public <T> @NotNull String exportAsString(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -373,7 +374,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(List<T> list) {
+    public <T> @NotNull String exportAsString(List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 

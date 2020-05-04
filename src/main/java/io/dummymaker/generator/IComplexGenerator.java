@@ -2,6 +2,8 @@ package io.dummymaker.generator;
 
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.factory.IGenStorage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -27,5 +29,11 @@ public interface IComplexGenerator extends IGenerator<Object> {
      * @param parent     parent object class
      * @return generated object
      */
-    Object generate(Class<?> parent, Field field, IGenStorage storage, Annotation annotation, int depth);
+    @Nullable
+    Object generate(@NotNull Class<?> parent,
+                    @NotNull Field field,
+                    @NotNull IGenStorage storage,
+                    @Nullable Annotation annotation,
+                    int depth);
+
 }

@@ -6,6 +6,7 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.number.FloatGenerator;
 import io.dummymaker.generator.simple.number.ShortGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -46,7 +47,8 @@ public class DummyCustom {
         private final FloatGenerator generator = new FloatGenerator();
 
         @Override
-        public Object generate(Class<?> parent, Field field, IGenStorage storage, Annotation annotation, int depth) {
+        public Object generate(@NotNull Class<?> parent, @NotNull Field field, @NotNull IGenStorage storage,
+                               Annotation annotation, int depth) {
             return generate();
         }
 

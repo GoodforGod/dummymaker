@@ -1,6 +1,7 @@
 package io.dummymaker.export.cases;
 
 import io.dummymaker.export.ICase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Each upper letter separated with underscore symbol, and transform to low case
@@ -13,7 +14,7 @@ import io.dummymaker.export.ICase;
 public class KebabCase implements ICase {
 
     @Override
-    public String format(String value) {
+    public @NotNull String format(@NotNull String value) {
         final StringBuilder builder = new StringBuilder();
 
         for (final char letter : value.toCharArray()) {

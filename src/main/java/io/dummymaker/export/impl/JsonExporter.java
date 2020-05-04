@@ -8,6 +8,7 @@ import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -234,7 +235,7 @@ public class JsonExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final T t) {
+    public <T> @NotNull String exportAsString(final T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -246,7 +247,7 @@ public class JsonExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(final List<T> list) {
+    public <T> @NotNull String exportAsString(final List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 

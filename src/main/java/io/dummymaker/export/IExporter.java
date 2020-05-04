@@ -1,5 +1,7 @@
 package io.dummymaker.export;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public interface IExporter {
      * @param <T> object type
      * @return object string representation
      */
+    @NotNull
     <T> String exportAsString(final T t);
 
     /**
@@ -45,5 +48,6 @@ public interface IExporter {
      * @param <T> object type
      * @return objects string representation
      */
+    @NotNull
     <T> String exportAsString(final List<T> t);
 }

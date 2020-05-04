@@ -5,6 +5,7 @@ import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IGenAutoScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -59,12 +60,12 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
     }
 
     @Override
-    public Map<Field, GenContainer> scan(Class target) {
+    public @NotNull Map<Field, GenContainer> scan(Class target) {
         return scan(target, false);
     }
 
     @Override
-    public Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
+    public @NotNull Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
         final Map<Field, GenContainer> scanned = super.scan(target);
 
         final boolean isGenAuto = isMarkedGenAuto(target, isDefaultAuto);

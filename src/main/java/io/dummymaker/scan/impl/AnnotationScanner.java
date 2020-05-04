@@ -1,6 +1,7 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.scan.IAnnotationScanner;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class AnnotationScanner extends BasicScanner implements IAnnotationScanne
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class target) {
+    public @NotNull Map<Field, List<Annotation>> scan(final Class target) {
         final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
 
         for (final Field field : getAllFilteredFields(target)) {

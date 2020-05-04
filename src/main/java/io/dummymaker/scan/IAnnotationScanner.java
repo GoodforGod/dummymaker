@@ -1,6 +1,7 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.scan.impl.AnnotationScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -25,5 +26,6 @@ public interface IAnnotationScanner extends IMapScanner<Field, List<Annotation>,
      * @return Returns Map with field and annotations associated with that field
      */
     @Override
+    @NotNull
     Map<Field, List<Annotation>> scan(Class target);
 }

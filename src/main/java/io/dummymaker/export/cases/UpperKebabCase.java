@@ -1,6 +1,7 @@
 package io.dummymaker.export.cases;
 
 import io.dummymaker.export.ICase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Example: ( DummyList - DUMMY-LIST )
@@ -11,7 +12,7 @@ import io.dummymaker.export.ICase;
 public class UpperKebabCase implements ICase {
 
     @Override
-    public String format(String value) {
+    public @NotNull String format(@NotNull String value) {
         final StringBuilder builder = new StringBuilder();
 
         for (final char letter : value.toCharArray()) {

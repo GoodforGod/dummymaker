@@ -1,5 +1,7 @@
 package io.dummymaker.export;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Allow to apply naming strategy for field names or class name during export
  *
@@ -15,5 +17,6 @@ public interface ICase {
      * @param value value to formatted via strategy
      * @return formatted value
      */
-    String format(final String value);
+    @NotNull
+    String format(@NotNull final String value);
 }
