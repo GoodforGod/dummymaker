@@ -46,7 +46,7 @@ public class SqlExporter extends BasicExporter {
      * Sql Data Type You can add your specific values here by using constructor with
      * Map'String, String'
      */
-    private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
+    private final Map<Class, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
         this(null);
@@ -60,9 +60,9 @@ public class SqlExporter extends BasicExporter {
      * @param dataTypes map with user custom types for 'dataTypeMap'
      * @return exporter
      */
-    public SqlExporter withTypes(Map<Class<?>, String> dataTypes) {
+    public SqlExporter withTypes(Map<Class, String> dataTypes) {
         if (CollectionUtils.isNotEmpty(dataTypes))
-            dataTypes.forEach(this.dataTypes::put);
+            this.dataTypes.putAll(dataTypes);
 
         return this;
     }
@@ -96,8 +96,8 @@ public class SqlExporter extends BasicExporter {
      *
      * @see #dataTypes
      */
-    private Map<Class<?>, String> buildDefaultDataTypeMap() {
-        final Map<Class<?>, String> typeMap = new HashMap<>(25);
+    private Map<Class, String> buildDefaultDataTypeMap() {
+        final Map<Class, String> typeMap = new HashMap<>(25);
         typeMap.put(boolean.class, "BOOLEAN");
         typeMap.put(Boolean.class, "BOOLEAN");
         typeMap.put(byte.class, "BYTE");

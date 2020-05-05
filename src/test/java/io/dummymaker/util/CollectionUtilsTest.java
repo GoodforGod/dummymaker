@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * "default comment"
@@ -22,7 +24,7 @@ public class CollectionUtilsTest extends Assert {
 
     @Test
     public void isEmptyCollectionNull() {
-        assertTrue(CollectionUtils.isEmpty(null));
+        assertTrue(CollectionUtils.isEmpty((Collection<?>) null));
     }
 
     @Test
@@ -34,6 +36,30 @@ public class CollectionUtilsTest extends Assert {
 
     @Test
     public void isNotEmptyNotForEmptyCollection() {
-        assertFalse(CollectionUtils.isNotEmpty(null));
+        assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isEmptyMapEmpty() {
+        Map<?, ?> map = new HashMap<>();
+        assertTrue(CollectionUtils.isEmpty(map));
+    }
+
+    @Test
+    public void isEmptyMapNull() {
+        assertTrue(CollectionUtils.isEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isNotEmptyNotMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("s", "s");
+        assertTrue(CollectionUtils.isNotEmpty(map));
+        assertFalse(CollectionUtils.isEmpty(map));
+    }
+
+    @Test
+    public void isNotEmptyNotForEmptyMap() {
+        assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
     }
 }
