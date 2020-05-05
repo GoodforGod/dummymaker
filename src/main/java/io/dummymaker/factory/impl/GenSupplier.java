@@ -6,6 +6,7 @@ import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.generator.simple.string.JsonGenerator;
+import io.dummymaker.model.Pair;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
@@ -16,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
@@ -38,17 +40,15 @@ public class GenSupplier implements IGenSupplier {
     /**
      * Map of classified generators and their target classes
      */
-    private final Map<Class, List<? extends IGenerator>> classifiers;
+    private final Map<Class, List<IGenerator>> classifiers;
 
     public GenSupplier() {
-        this.classifiers = new HashMap<>();
-        getClassifiedGenerators().forEach((k, v) -> {
-            final List<? extends IGenerator> generators = v.stream()
-                    .map(CastUtils::instantiate)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            classifiers.put(k, generators);
-        });
+        this.classifiers = getClassifiedGenerators().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream()
+                        .map(CastUtils::instantiate)
+                        .filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(g -> g.getClass().getSimpleName()))
+                        .collect(Collectors.toList())));
     }
 
     @Override
@@ -114,8 +114,7 @@ public class GenSupplier implements IGenSupplier {
 
         final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
                 .flatMap(List::stream)
-                .filter(g -> g.getPattern() != null)
-                .filter(g -> g.getPattern().matcher(fieldName).find())
+                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
                 .findFirst();
 
         if (!patternSuitable.isPresent())
@@ -126,33 +125,28 @@ public class GenSupplier implements IGenSupplier {
             return Optional.of(patternSuitable.get().getClass());
 
         return classifiers.get(type).stream()
-                .filter(g -> Objects.nonNull(g.getPattern()))
-                .filter(g -> g.getPattern().matcher(fieldName).find())
+                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
                 .findFirst()
                 .map(g -> g.getClass());
     }
 
     @SuppressWarnings("unchecked")
     protected Map<Class, List<Class<? extends IGenerator>>> getClassifiedGenerators() {
-        final Collection<Class> scannedClasses = new ClassScanner().scan("io.dummymaker.generator");
-        final List<Class<? extends IGenerator>> classes = scannedClasses.stream()
+        final String genPackage = "io.dummymaker.generator";
+        final Map<Class, List<Class<? extends IGenerator>>> scannedClasses = new ClassScanner().scan(genPackage).stream()
                 .filter(IGenerator.class::isAssignableFrom)
                 .filter(c -> !c.isInterface())
                 .filter(c -> !c.isAnonymousClass())
                 .filter(c -> !c.isSynthetic())
                 .map(c -> ((Class<? extends IGenerator>) c))
-                .collect(Collectors.toList());
+                .flatMap(c -> getGeneratorType(c).stream()
+                        .map(t -> Pair.of(t, c)))
+                .collect(Collectors.toMap(
+                        Pair::left,
+                        p -> Collections.singletonList(p.right()),
+                        (l1, l2) -> Stream.of(l1, l2).flatMap(List::stream).collect(Collectors.toList())));
 
-        final Map<Class, List<Class<? extends IGenerator>>> generators = new HashMap<>();
-        classes.forEach(c -> {
-            final List<Class> types = getGeneratorType(c);
-            types.forEach(t -> {
-                final List<Class<? extends IGenerator>> list = generators.computeIfAbsent(t, k -> new ArrayList<>());
-                list.add(c);
-            });
-        });
-
-        return setPrimitiveClassifiers(generators);
+        return setPrimitiveClassifiers(scannedClasses);
     }
 
     protected Map<Class, List<Class<? extends IGenerator>>> setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
