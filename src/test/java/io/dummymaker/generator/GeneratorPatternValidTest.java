@@ -62,7 +62,7 @@ public class GeneratorPatternValidTest {
                 { new DoubleBigGenerator(), Double.class, compile("[0-9]+\\.[0-9]+") },
                 { new BigIntegerGenerator(), BigInteger.class, compile("-?[0-9]+") },
                 { new BigDecimalGenerator(), BigDecimal.class, compile("-?[0-9]+\\.[0-9]+") },
-                { new IdBigGenerator(), String.class, compile("[0-9a-zA-Z]+") },
+                { new IdBigGenerator(), String.class, compile("[0-9a-zA-Z\\-]+") },
                 { new UnixTimeGenerator(), Long.class, compile("[0-9]+") },
                 { new BtcAddressGenerator(), String.class, compile("[a-zA-Z0-9]{34}") },
                 { new BtcTxHashGenerator(), String.class, compile("[a-zA-Z0-9]{64}") },
