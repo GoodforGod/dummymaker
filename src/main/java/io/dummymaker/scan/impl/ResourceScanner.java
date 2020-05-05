@@ -2,6 +2,7 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.model.error.GenException;
 import io.dummymaker.scan.IScanner;
+import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
 import io.dummymaker.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class ResourceScanner implements IScanner<String, String> {
      */
     private static Set<String> loadFromDirectory(File directory, String packageName) {
         final String[] files = directory.list();
-        if (files == null || files.length == 0)
+        if (CollectionUtils.isEmpty(files))
             return Collections.emptySet();
 
         final Set<String> classes = new HashSet<>();

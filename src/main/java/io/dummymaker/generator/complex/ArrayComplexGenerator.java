@@ -51,12 +51,12 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
     }
 
     @Override
-    public @NotNull Object generate() {
+    public @Nullable Object generate() {
         final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return genArray(size, String.class, IdGenerator.class, null, GenEmbedded.MAX, 1);
     }
 
-    @NotNull
+    @Nullable
     Object genArray(final int size,
                     final Class<?> valueClass,
                     final Class<? extends IGenerator> valueGenerator,

@@ -1,6 +1,7 @@
 package io.dummymaker.model;
 
 import io.dummymaker.generator.IGenerator;
+import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -184,7 +185,7 @@ public class GenRule {
      * @return same rule
      */
     public @NotNull GenRule add(IGenerator<?> generator, String... fieldNames) {
-        if (fieldNames == null || fieldNames.length == 0 || generator == null)
+        if (CollectionUtils.isEmpty(fieldNames) || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
@@ -216,7 +217,7 @@ public class GenRule {
      * @return same rule
      */
     public @NotNull GenRule add(Class<? extends IGenerator> generator, String... fieldNames) {
-        if (fieldNames == null || fieldNames.length == 0 || generator == null)
+        if (CollectionUtils.isEmpty(fieldNames) || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
         final GenFieldRule rule = new GenFieldRule(generator, fieldNames);
@@ -247,7 +248,7 @@ public class GenRule {
      * @return same rule
      */
     public @NotNull GenRule ignore(String... fieldNames) {
-        if (fieldNames == null || fieldNames.length == 0)
+        if (CollectionUtils.isEmpty(fieldNames))
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
         this.ignored.addAll(Arrays.asList(fieldNames));

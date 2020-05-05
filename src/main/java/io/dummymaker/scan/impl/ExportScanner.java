@@ -81,7 +81,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                 final String fieldName = renamedFields.computeIfAbsent(k, key -> nameCase.format(k.getName()));
 
                 // Process export field (even if is export only)
-                if (v.stream().anyMatch(exportFilter) && container == null) {
+                if (container == null && v.stream().anyMatch(exportFilter)) {
                     resultMap.put(k, factory.build(k, supplier.getSuitable(k), fieldName));
                 } else if (container != null) {
                     final FieldContainer fieldContainer = container.haveGeneratorExample()
