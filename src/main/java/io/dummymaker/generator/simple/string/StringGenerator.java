@@ -16,12 +16,12 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class StringGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("[a-zA-Z]|strs?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("strs?", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String generate() {
-        return UUID.randomUUID().toString().replace("-", "")
-                + UUID.randomUUID().toString().replace("-", "");
+        final String s = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+        return s.replace("-", "");
     }
 
     @Override

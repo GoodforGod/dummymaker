@@ -9,10 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -72,8 +69,9 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
         if (!isGenAuto)
             return scanned;
 
-        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        getAllFilteredFields(target).stream()
+        final List<Field> fields = getAllFilteredFields(target);
+        final Map<Field, GenContainer> containers = new LinkedHashMap<>(fields.size());
+        fields.stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> containers.put(f, scanned.computeIfAbsent(f, k -> getAutoContainer(f))));
 

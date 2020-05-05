@@ -137,7 +137,7 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     @Nullable
-    <T> T fillEntity(@Nullable T t, GenStorage storage, int depth) {
+    <T> T fillEntity(@Nullable T t, @NotNull GenStorage storage, int depth) {
         if (t == null)
             return null;
 

@@ -114,7 +114,7 @@ public class GenSupplier implements IGenSupplier {
 
         final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
                 .flatMap(List::stream)
-                .filter(g -> Objects.nonNull(g.getPattern()))
+                .filter(g -> g.getPattern() != null)
                 .filter(g -> g.getPattern().matcher(fieldName).find())
                 .findFirst();
 
