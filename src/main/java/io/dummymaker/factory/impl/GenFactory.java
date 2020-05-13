@@ -17,6 +17,7 @@ import io.dummymaker.util.CastUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -42,6 +43,7 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
  * @see IGenFactory
  * @since 21.07.2019
  */
+@Singleton
 public class GenFactory implements IGenFactory {
 
     private final GenRules rules;

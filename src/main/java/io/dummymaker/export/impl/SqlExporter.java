@@ -12,6 +12,8 @@ import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Date;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
  * @see Format
  * @since 25.02.2018
  */
+@Named("sql")
+@Singleton
 public class SqlExporter extends BasicExporter {
 
     /**

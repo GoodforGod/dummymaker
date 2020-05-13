@@ -10,6 +10,8 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
  * @author GoodforGod
  * @since 25.02.2018
  */
+@Named("json")
+@Singleton
 public class JsonExporter extends BasicExporter {
 
     /**

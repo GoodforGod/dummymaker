@@ -9,6 +9,8 @@ import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
  * @see Format
  * @since 25.02.2018
  */
+@Named("xml")
+@Singleton
 public class XmlExporter extends BasicExporter {
 
     /**
