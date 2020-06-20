@@ -117,8 +117,6 @@ abstract class BasicExporter implements IExporter {
                 final Object exportFieldValue = k.get(t);
 
                 exports.add(buildContainer(exportFieldName, exportFieldValue, k, v));
-
-                k.setAccessible(false);
             } catch (Exception ex) {
                 throw new GenException(ex);
             }
