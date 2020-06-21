@@ -3,10 +3,7 @@ package io.dummymaker.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * "default comment"
@@ -61,5 +58,43 @@ public class CollectionUtilsTest extends Assert {
     @Test
     public void isNotEmptyNotForEmptyMap() {
         assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isEmptyArray() {
+        String[] arr = new String[0];
+        assertTrue(CollectionUtils.isEmpty(arr));
+    }
+
+    @Test
+    public void isEmptyArrayWhenNull() {
+        assertTrue(CollectionUtils.isEmpty((Object[]) null));
+    }
+
+    @Test
+    public void isNonEmptyArray() {
+        String[] arr = new String[] { "my" };
+        assertFalse(CollectionUtils.isEmpty(arr));
+    }
+
+    @Test
+    public void getRandomFromArray() {
+        String[] arr = new String[] { "my" };
+        String random = CollectionUtils.random(arr);
+        assertEquals("my", random);
+    }
+
+    @Test
+    public void getRandomFromCollection() {
+        List<String> list = Arrays.asList("my");
+        String random = CollectionUtils.random(list);
+        assertEquals("my", random);
+    }
+
+    @Test
+    public void getRandomFromCollectionOfTwo() {
+        List<String> list = Arrays.asList("my", "his");
+        String random = CollectionUtils.random(list);
+        assertTrue("my".equals(random) || "his".equals(random));
     }
 }

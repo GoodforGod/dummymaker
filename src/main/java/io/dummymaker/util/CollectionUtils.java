@@ -1,7 +1,6 @@
 package io.dummymaker.util;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -70,7 +69,7 @@ public class CollectionUtils {
      * @param <T>   type of element
      * @return random element of array or null if array is empty
      */
-    public static @Nullable <T> T random(@NotNull T[] array) {
+    public static <T> T random(@NotNull T[] array) {
         return (array.length == 0)
                 ? null
                 : array[random(array.length)];
@@ -85,8 +84,8 @@ public class CollectionUtils {
      * @param <T>        type of element
      * @return random element of collection or null if collection is empty
      */
-    public static @Nullable <T> T random(@NotNull Collection<T> collection) {
-        if (collection.size() == 0)
+    public static <T> T random(@NotNull Collection<T> collection) {
+        if (collection.isEmpty())
             return null;
 
         final int random = random(collection.size());
