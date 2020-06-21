@@ -1,6 +1,7 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.model.GenContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -23,5 +24,6 @@ public interface IGenAutoScanner extends IGenScanner {
      * @return map of fields and its gen containers
      * @see io.dummymaker.annotation.special.GenAuto
      */
+    @NotNull
     Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto);
 }

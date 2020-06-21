@@ -35,7 +35,7 @@ public @interface GenSet {
      *
      * @return max amount
      */
-    int max() default 10;
+    int max() default 5;
 
     /**
      * Fixed number entities to generate Turned off by default

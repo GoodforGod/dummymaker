@@ -42,8 +42,8 @@ public class GenContainer {
     /**
      * Field set generator Can be enriched
      */
-    private Class<? extends IGenerator> generator;
-    private IGenerator<?> generatorExample;
+    private final Class<? extends IGenerator> generator;
+    private final IGenerator<?> generatorExample;
 
     private GenContainer(final Field field,
                          final Annotation core,

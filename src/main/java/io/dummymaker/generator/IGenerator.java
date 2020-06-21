@@ -1,6 +1,7 @@
 package io.dummymaker.generator;
 
 import io.dummymaker.annotation.core.PrimeGen;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
@@ -13,8 +14,10 @@ import java.util.regex.Pattern;
  */
 public interface IGenerator<T> {
 
+    @Nullable
     T generate();
 
+    @Nullable
     default Pattern getPattern() {
         return null;
     }

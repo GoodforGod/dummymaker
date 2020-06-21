@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 
@@ -17,12 +18,12 @@ public class TimestampGenerator implements ITimeGenerator<Timestamp> {
     private final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 
     @Override
-    public Timestamp generate() {
+    public @NotNull Timestamp generate() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public Timestamp generate(final long minUnix, final long maxUnix) {
+    public @NotNull Timestamp generate(final long minUnix, final long maxUnix) {
         return Timestamp.valueOf(generator.generate(minUnix, maxUnix));
     }
 }

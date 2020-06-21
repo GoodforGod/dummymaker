@@ -1,5 +1,7 @@
 package io.dummymaker.scan;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 /**
@@ -16,5 +18,6 @@ public interface IScanner<V, T> {
      * @param target to scan
      * @return list with values
      */
+    @NotNull
     Collection<V> scan(T target);
 }

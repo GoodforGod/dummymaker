@@ -8,8 +8,12 @@ import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.DatetimeFieldContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
+import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
+import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Date;
@@ -31,6 +35,8 @@ import java.util.stream.Collectors;
  * @see Format
  * @since 25.02.2018
  */
+@Named("sql")
+@Singleton
 public class SqlExporter extends BasicExporter {
 
     /**
@@ -59,8 +65,8 @@ public class SqlExporter extends BasicExporter {
      * @return exporter
      */
     public SqlExporter withTypes(Map<Class, String> dataTypes) {
-        if (dataTypes != null && !dataTypes.isEmpty())
-            dataTypes.forEach(this.dataTypes::put);
+        if (CollectionUtils.isNotEmpty(dataTypes))
+            this.dataTypes.putAll(dataTypes);
 
         return this;
     }
@@ -358,7 +364,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(T t) {
+    public <T> @NotNull String exportAsString(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -373,7 +379,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> String exportAsString(List<T> list) {
+    public <T> @NotNull String exportAsString(List<T> list) {
         if (isExportEntityInvalid(list))
             return "";
 

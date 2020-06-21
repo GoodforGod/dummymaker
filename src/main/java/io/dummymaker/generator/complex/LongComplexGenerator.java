@@ -4,8 +4,9 @@ import io.dummymaker.annotation.simple.number.GenInt;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.simple.number.IntegerGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -24,11 +25,11 @@ import static io.dummymaker.util.CastUtils.castObject;
 public class LongComplexGenerator implements IComplexGenerator {
 
     @Override
-    public Object generate(final Class<?> parent,
-                           final Field field,
-                           final IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         if (castObject(1, field.getType()) == null)
             return null;
 
@@ -57,7 +58,7 @@ public class LongComplexGenerator implements IComplexGenerator {
     }
 
     @Override
-    public Object generate() {
-        return new IntegerGenerator().generate();
+    public @NotNull Object generate() {
+        return CollectionUtils.random(Long.MAX_VALUE);
     }
 }

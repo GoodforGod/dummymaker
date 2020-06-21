@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -13,9 +14,7 @@ import java.util.UUID;
 public class IdBigGenerator implements IGenerator<String> {
 
     @Override
-    public String generate() {
-        return UUID.randomUUID().toString().replace("-", "")
-                + UUID.randomUUID().toString().replace("-", "")
-                + UUID.randomUUID().toString().replace("-", "");
+    public @NotNull String generate() {
+        return UUID.randomUUID().toString() + "-" + UUID.randomUUID().toString();
     }
 }

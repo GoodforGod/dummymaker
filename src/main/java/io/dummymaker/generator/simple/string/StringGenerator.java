@@ -1,11 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates random string like "aag2151tgdsfa9352tf"
@@ -15,18 +16,16 @@ import java.util.UUID;
  */
 public class StringGenerator implements IGenerator<String> {
 
+    private final Pattern pattern = Pattern.compile("strs?", CASE_INSENSITIVE);
+
     @Override
-    public String generate() {
-        final String result = UUID.randomUUID().toString().replace("-", "")
-                + UUID.randomUUID().toString().replace("-", "");
+    public @NotNull String generate() {
+        final String s = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+        return s.replace("-", "");
+    }
 
-        final List<String> letters = Arrays.asList(result.split(""));
-        Collections.shuffle(letters);
-
-        final StringBuilder shuffled = new StringBuilder();
-        for (String letter : letters)
-            shuffled.append(letter);
-
-        return shuffled.toString();
+    @Override
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }

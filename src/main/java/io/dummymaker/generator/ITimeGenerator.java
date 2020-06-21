@@ -1,6 +1,7 @@
 package io.dummymaker.generator;
 
 import io.dummymaker.annotation.complex.GenTime;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates time/datetime/timestamp in range if necessary
@@ -16,5 +17,6 @@ public interface ITimeGenerator<T> extends IGenerator<T> {
      * @return generated time object
      * @see GenTime#MAX_UNIX
      */
+    @Nullable
     T generate(long minUnix, long maxUnix);
 }

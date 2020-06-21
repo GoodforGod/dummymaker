@@ -15,6 +15,7 @@ import io.dummymaker.model.export.FieldContainerFactory;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.IGenScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -55,7 +56,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     }
 
     @Override
-    public Map<Field, FieldContainer> scan(Class target) {
+    public @NotNull Map<Field, FieldContainer> scan(Class target) {
         return scan(target, Cases.DEFAULT.value());
     }
 
@@ -80,7 +81,7 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
                 final String fieldName = renamedFields.computeIfAbsent(k, key -> nameCase.format(k.getName()));
 
                 // Process export field (even if is export only)
-                if (v.stream().anyMatch(exportFilter) && container == null) {
+                if (container == null && v.stream().anyMatch(exportFilter)) {
                     resultMap.put(k, factory.build(k, supplier.getSuitable(k), fieldName));
                 } else if (container != null) {
                     final FieldContainer fieldContainer = container.haveGeneratorExample()

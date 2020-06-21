@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.LongGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -18,12 +19,12 @@ public class HexNumberGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("hex(num(ber)?)?", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return Long.toHexString(new LongGenerator().generate());
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

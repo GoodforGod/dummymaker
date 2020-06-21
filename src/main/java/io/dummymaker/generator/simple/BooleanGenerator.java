@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BooleanGenerator implements IGenerator<Boolean> {
 
     @Override
-    public Boolean generate() {
+    public @NotNull Boolean generate() {
         return ThreadLocalRandom.current().nextBoolean();
     }
 }

@@ -2,6 +2,7 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.PackageUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class ClassScanner implements IScanner<Class, String> {
     private final ResourceScanner resourceScanner = new ResourceScanner();
 
     @Override
-    public Collection<Class> scan(String packageName) {
+    public @NotNull Collection<Class> scan(String packageName) {
         final Collection<String> resources = resourceScanner.scan(packageName);
 
         return resources.stream()

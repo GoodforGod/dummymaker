@@ -3,8 +3,7 @@ package io.dummymaker.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * "default comment"
@@ -22,7 +21,7 @@ public class CollectionUtilsTest extends Assert {
 
     @Test
     public void isEmptyCollectionNull() {
-        assertTrue(CollectionUtils.isEmpty(null));
+        assertTrue(CollectionUtils.isEmpty((Collection<?>) null));
     }
 
     @Test
@@ -34,6 +33,68 @@ public class CollectionUtilsTest extends Assert {
 
     @Test
     public void isNotEmptyNotForEmptyCollection() {
-        assertFalse(CollectionUtils.isNotEmpty(null));
+        assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isEmptyMapEmpty() {
+        Map<?, ?> map = new HashMap<>();
+        assertTrue(CollectionUtils.isEmpty(map));
+    }
+
+    @Test
+    public void isEmptyMapNull() {
+        assertTrue(CollectionUtils.isEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isNotEmptyNotMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("s", "s");
+        assertTrue(CollectionUtils.isNotEmpty(map));
+        assertFalse(CollectionUtils.isEmpty(map));
+    }
+
+    @Test
+    public void isNotEmptyNotForEmptyMap() {
+        assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
+    }
+
+    @Test
+    public void isEmptyArray() {
+        String[] arr = new String[0];
+        assertTrue(CollectionUtils.isEmpty(arr));
+    }
+
+    @Test
+    public void isEmptyArrayWhenNull() {
+        assertTrue(CollectionUtils.isEmpty((Object[]) null));
+    }
+
+    @Test
+    public void isNonEmptyArray() {
+        String[] arr = new String[] { "my" };
+        assertFalse(CollectionUtils.isEmpty(arr));
+    }
+
+    @Test
+    public void getRandomFromArray() {
+        String[] arr = new String[] { "my" };
+        String random = CollectionUtils.random(arr);
+        assertEquals("my", random);
+    }
+
+    @Test
+    public void getRandomFromCollection() {
+        List<String> list = Arrays.asList("my");
+        String random = CollectionUtils.random(list);
+        assertEquals("my", random);
+    }
+
+    @Test
+    public void getRandomFromCollectionOfTwo() {
+        List<String> list = Arrays.asList("my", "his");
+        String random = CollectionUtils.random(list);
+        assertTrue("my".equals(random) || "his".equals(random));
     }
 }

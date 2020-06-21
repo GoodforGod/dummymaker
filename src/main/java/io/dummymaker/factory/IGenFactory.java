@@ -24,7 +24,7 @@ public interface IGenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @Nullable T build(Class<T> target);
+    <T> @Nullable T build(@Nullable Class<T> target);
 
     /**
      * Instantiates class instance and populate its fields
@@ -43,7 +43,7 @@ public interface IGenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull List<T> build(Class<T> target, int amount);
+    <T> @NotNull List<T> build(@Nullable Class<T> target, int amount);
 
     /**
      * Instantiates class instance and populate its fields Use in case class have no
@@ -64,7 +64,7 @@ public interface IGenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull Stream<T> stream(Class<T> target, int amount);
+    <T> @NotNull Stream<T> stream(@Nullable Class<T> target, int amount);
 
     /**
      * Instantiates class instance and populate its fields Use in case class have no
@@ -84,7 +84,7 @@ public interface IGenFactory {
      * @param <T> object type
      * @return Populated Object
      */
-    <T> @Nullable T fill(T t);
+    <T> @Nullable T fill(@Nullable T t);
 
     /**
      * Populates dummy object fields
@@ -93,7 +93,7 @@ public interface IGenFactory {
      * @param <T>    object type
      * @return Populated Object
      */
-    <T> @NotNull Stream<T> fill(Stream<T> stream);
+    <T> @NotNull Stream<T> fill(@Nullable Stream<T> stream);
 
     /**
      * Populates dummy object fields
@@ -102,5 +102,5 @@ public interface IGenFactory {
      * @param <T>        object type
      * @return Populated Object
      */
-    <T> @NotNull List<T> fill(Collection<T> collection);
+    <T> @NotNull List<T> fill(@Nullable Collection<T> collection);
 }

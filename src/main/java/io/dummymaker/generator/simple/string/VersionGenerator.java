@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -19,7 +20,7 @@ public class VersionGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("ver(sion)?", CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
+    public @NotNull String generate() {
         return CollectionUtils.random(1, 9)
                 + "."
                 + CollectionUtils.random(1, 99)
@@ -29,7 +30,7 @@ public class VersionGenerator implements IGenerator<String> {
     }
 
     @Override
-    public Pattern getPattern() {
+    public @NotNull Pattern getPattern() {
         return pattern;
     }
 }

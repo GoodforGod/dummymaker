@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -19,12 +20,12 @@ public class IntegerGenerator implements IGenerator<Integer> {
     private final Pattern pattern = Pattern.compile("num(ber)?|counter", CASE_INSENSITIVE);
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public @NotNull Integer generate() {
+        return CollectionUtils.random(Integer.MAX_VALUE);
     }
 
     @Override
-    public Integer generate() {
-        return CollectionUtils.random(Integer.MAX_VALUE);
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }

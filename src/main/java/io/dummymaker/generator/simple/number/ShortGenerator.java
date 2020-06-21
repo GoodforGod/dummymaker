@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates short from 0 to Short.MAX_VALUE
@@ -13,7 +14,7 @@ import io.dummymaker.util.CollectionUtils;
 public class ShortGenerator implements IGenerator<Short> {
 
     @Override
-    public Short generate() {
+    public @NotNull Short generate() {
         return ((short) CollectionUtils.random(Short.MAX_VALUE));
     }
 }

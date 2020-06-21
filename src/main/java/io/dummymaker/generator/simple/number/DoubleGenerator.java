@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DoubleGenerator implements IGenerator<Double> {
 
     @Override
-    public Double generate() {
+    public @NotNull Double generate() {
         return ThreadLocalRandom.current().nextDouble();
     }
 }

@@ -1,6 +1,7 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.special.GenSequence;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -28,7 +29,7 @@ public class SequenceScanner extends UniqueScanner {
     private final Predicate<Annotation> isSequence = a -> GenSequence.class.equals(a.annotationType());
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class target) {
+    public @NotNull Map<Field, List<Annotation>> scan(final Class target) {
         final Map<Field, List<Annotation>> sequentialAnnotationMap = new HashMap<>();
 
         // Use only first found gen annotation on field

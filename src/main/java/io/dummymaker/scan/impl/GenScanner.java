@@ -6,6 +6,7 @@ import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IGenScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -37,7 +38,7 @@ public class GenScanner extends BasicScanner implements IGenScanner {
      * @see GenContainer
      */
     @Override
-    public Map<Field, GenContainer> scan(final Class target) {
+    public @NotNull Map<Field, GenContainer> scan(final Class target) {
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
 
         getAllFilteredFields(target).stream()

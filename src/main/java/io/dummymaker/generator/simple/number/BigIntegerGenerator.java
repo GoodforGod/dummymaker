@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
@@ -14,7 +15,7 @@ import java.math.BigInteger;
 public class BigIntegerGenerator implements IGenerator<BigInteger> {
 
     @Override
-    public BigInteger generate() {
+    public @NotNull BigInteger generate() {
         return BigInteger.valueOf(CollectionUtils.random());
     }
 }

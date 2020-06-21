@@ -18,7 +18,7 @@ Documentation for **versions earlier than 2.0.0** in [this document](/README-VER
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:2.1.0'
+    compile 'com.github.goodforgod:dummymaker:2.2.0'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 
@@ -449,6 +449,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 
 ## Version History
+
+**2.2.0** - More generators, improve pattern matching, Javax CDI annotations added.
 
 **2.1.0** - Lambda generator *GenRule* configuration added, some default generators added, minor improvements.
 

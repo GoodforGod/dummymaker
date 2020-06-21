@@ -17,6 +17,7 @@ import io.dummymaker.util.CastUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -42,19 +43,22 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
  * @see IGenFactory
  * @since 21.07.2019
  */
+@Singleton
 public class GenFactory implements IGenFactory {
 
     private final GenRules rules;
     private final IGenAutoScanner scanner;
 
     public GenFactory() {
-        this(((GenRules) null));
+        this(Collections.emptyList());
     }
 
     public GenFactory(@Nullable GenRule... rules) {
-        this((rules == null || rules.length == 0 || rules[0] == null)
-                ? null
-                : GenRules.of(rules));
+        this(Arrays.asList(rules));
+    }
+
+    public GenFactory(@NotNull Collection<GenRule> rules) {
+        this(isEmpty(rules) ? null : GenRules.of(rules));
     }
 
     public GenFactory(@Nullable GenRules rules) {
@@ -63,30 +67,27 @@ public class GenFactory implements IGenFactory {
     }
 
     @Override
-    public <T> T build(@Nullable Class<T> target) {
+    public @Nullable <T> T build(@Nullable Class<T> target) {
         return fill(instantiate(target));
     }
 
     @Override
-    public <T> @Nullable T build(@NotNull Supplier<T> supplier) {
+    public @Nullable <T> T build(@NotNull Supplier<T> supplier) {
         return fill(supplier.get());
     }
 
-    @NotNull
     @Override
-    public <T> List<T> build(@Nullable Class<T> target, int amount) {
+    public @NotNull <T> List<T> build(@Nullable Class<T> target, int amount) {
         return stream(target, amount).collect(Collectors.toList());
     }
 
-    @NotNull
     @Override
-    public <T> List<T> build(@NotNull Supplier<T> supplier, int amount) {
+    public @NotNull <T> List<T> build(@NotNull Supplier<T> supplier, int amount) {
         return stream(supplier, amount).collect(Collectors.toList());
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
+    public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
         if (amount < 1 || instantiate(target) == null)
             return Stream.empty();
 
@@ -94,16 +95,17 @@ public class GenFactory implements IGenFactory {
         return fill(stream);
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
+    public @NotNull <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
+        if (supplier.get() == null)
+            return Stream.empty();
+
         final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
         return fill(stream);
     }
 
-    @Nullable
     @Override
-    public <T> T fill(@Nullable T t) {
+    public @Nullable <T> T fill(@Nullable T t) {
         if (t == null)
             return null;
 
@@ -111,9 +113,8 @@ public class GenFactory implements IGenFactory {
         return fillEntity(t, storage, 1);
     }
 
-    @NotNull
     @Override
-    public <T> Stream<T> fill(@Nullable Stream<T> stream) {
+    public @NotNull <T> Stream<T> fill(@Nullable Stream<T> stream) {
         if (stream == null)
             return Stream.empty();
 
@@ -122,9 +123,8 @@ public class GenFactory implements IGenFactory {
                 .map(t -> fillEntity(t, storage, 1));
     }
 
-    @NotNull
     @Override
-    public <T> List<T> fill(@Nullable Collection<T> collection) {
+    public @NotNull <T> List<T> fill(@Nullable Collection<T> collection) {
         return isEmpty(collection)
                 ? Collections.emptyList()
                 : fill(collection.stream()).collect(Collectors.toList());
@@ -139,7 +139,7 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     @Nullable
-    <T> T fillEntity(@Nullable T t, GenStorage storage, int depth) {
+    <T> T fillEntity(@Nullable T t, @NotNull GenStorage storage, int depth) {
         if (t == null)
             return null;
 
@@ -179,7 +179,7 @@ public class GenFactory implements IGenFactory {
                                   final GenContainer container,
                                   final GenStorage storage,
                                   final int depth) {
-        final IGenerator generator = (container.haveGeneratorExample())
+        final IGenerator<?> generator = container.haveGeneratorExample()
                 ? container.getGeneratorExample()
                 : storage.getGenerator(container.getGenerator());
 
@@ -237,7 +237,7 @@ public class GenFactory implements IGenFactory {
     /**
      * Generate sequence number fields next value
      */
-    private Object generateSequenceObject(Field field, IGenerator generator) {
+    private Object generateSequenceObject(Field field, IGenerator<?> generator) {
         return CastUtils.castToNumber(generator.generate(), field.getType());
     }
 

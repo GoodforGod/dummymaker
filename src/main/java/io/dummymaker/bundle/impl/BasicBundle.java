@@ -20,14 +20,14 @@ public abstract class BasicBundle<T> implements IBundle<T> {
     @SuppressWarnings("unchecked")
     @SafeVarargs
     public BasicBundle(T... values) {
-        this.preset = (values == null) ? (T[]) new Object[0] : values;
+        this.preset = CollectionUtils.isEmpty(values) ? (T[]) new Object[0] : values;
     }
 
     @Override
     public T get(int index) {
         return (index > -1 && index < preset.length - 1)
                 ? preset[index]
-                : preset[CollectionUtils.random(preset.length)];
+                : CollectionUtils.random(preset);
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class BasicBundle<T> implements IBundle<T> {
 
     @Override
     public T getRandom() {
-        return preset[CollectionUtils.random(preset.length)];
+        return CollectionUtils.random(preset);
     }
 
     @Override

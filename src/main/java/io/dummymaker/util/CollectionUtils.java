@@ -1,7 +1,11 @@
 package io.dummymaker.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -14,12 +18,28 @@ public class CollectionUtils {
 
     private CollectionUtils() {}
 
-    public static boolean isEmpty(Collection collection) {
+    public static <T> boolean isEmpty(T[] array) {
+        return array == null || array.length == 0;
+    }
+
+    public static <T> boolean isNotEmpty(T[] array) {
+        return !isEmpty(array);
+    }
+
+    public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
 
-    public static boolean isNotEmpty(Collection collection) {
+    public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
+    }
+
+    public static boolean isEmpty(Map<?, ?> map) {
+        return map == null || map.isEmpty();
+    }
+
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
     }
 
     public static <T> T getIndexWithSalt(List<T> list, String name, int salt) {
@@ -44,6 +64,42 @@ public class CollectionUtils {
         return ThreadLocalRandom.current().nextInt();
     }
 
+    /**
+     * @param array to get element
+     * @param <T>   type of element
+     * @return random element of array or null if array is empty
+     */
+    public static <T> T random(@NotNull T[] array) {
+        return (array.length == 0)
+                ? null
+                : array[random(array.length)];
+    }
+
+    /**
+     * Consider that accessing random element for {@link java.util.LinkedList} or
+     * {@link java.util.Set} is O(N) where N is index of random element, this is due
+     * to this collections does not have random access.
+     *
+     * @param collection to get random element from
+     * @param <T>        type of element
+     * @return random element of collection or null if collection is empty
+     */
+    public static <T> T random(@NotNull Collection<T> collection) {
+        if (collection.isEmpty())
+            return null;
+
+        final int random = random(collection.size());
+        if (collection instanceof List) {
+            return ((List<T>) collection).get(random);
+        } else {
+            final Iterator<T> iterator = collection.iterator();
+            for (int i = 0; i < random; i++)
+                iterator.next();
+
+            return iterator.next();
+        }
+    }
+
     public static int random(int max) {
         return random(0, max);
     }
@@ -62,7 +118,6 @@ public class CollectionUtils {
     }
 
     /**
-     *
      * @param min to get
      * @param max to get
      * @return random from min (included) to max (excluded)

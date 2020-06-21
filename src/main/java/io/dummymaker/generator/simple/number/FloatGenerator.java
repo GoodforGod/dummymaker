@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class FloatGenerator implements IGenerator<Float> {
 
     @Override
-    public Float generate() {
+    public @NotNull Float generate() {
         return ThreadLocalRandom.current().nextFloat();
     }
 }

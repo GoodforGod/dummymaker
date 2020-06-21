@@ -1,6 +1,7 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.scan.IAnnotationScanner;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class UniqueScanner extends AnnotationScanner {
 
     @Override
-    public Map<Field, List<Annotation>> scan(final Class target) {
+    public @NotNull Map<Field, List<Annotation>> scan(final Class target) {
         final Map<Field, List<Annotation>> scanned = new LinkedHashMap<>();
 
         super.scan(target).forEach((k, v) -> {

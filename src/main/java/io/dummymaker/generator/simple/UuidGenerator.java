@@ -1,6 +1,7 @@
 package io.dummymaker.generator.simple;
 
 import io.dummymaker.generator.IGenerator;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class UuidGenerator implements IGenerator<UUID> {
 
     @Override
-    public UUID generate() {
+    public @NotNull UUID generate() {
         return UUID.randomUUID();
     }
 }

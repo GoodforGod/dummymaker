@@ -92,7 +92,6 @@ public class CastUtils {
             }
 
             constructor.setAccessible(true);
-
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
                 if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
@@ -111,9 +110,6 @@ public class CastUtils {
         } catch (Exception e) {
             logger.warn(e.getMessage());
             return null;
-        } finally {
-            if (constructor != null)
-                constructor.setAccessible(false);
         }
     }
 

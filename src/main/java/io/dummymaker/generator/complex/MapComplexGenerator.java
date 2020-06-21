@@ -7,6 +7,8 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,11 +31,11 @@ public class MapComplexGenerator extends BasicComplexGenerator {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public Object generate(final Class<?> parent,
-                           final Field field,
-                           final IGenStorage storage,
-                           final Annotation annotation,
-                           final int depth) {
+    public @Nullable Object generate(final @NotNull Class<?> parent,
+                                     final @NotNull Field field,
+                                     final @NotNull IGenStorage storage,
+                                     final Annotation annotation,
+                                     final int depth) {
         if (!field.getType().isAssignableFrom(Map.class))
             return null;
 
@@ -61,22 +63,22 @@ public class MapComplexGenerator extends BasicComplexGenerator {
     }
 
     @Override
-    public Object generate() {
+    public @NotNull Object generate() {
         final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
         return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX,
                 1);
     }
 
     @SuppressWarnings("unchecked")
-    private Map generateMap(final int size,
-                            final Field field,
-                            final Class<? extends IGenerator> keyGenerator,
-                            final Class<? extends IGenerator> valueGenerator,
-                            final Class<?> keyFieldType,
-                            final Class<?> valueFieldType,
-                            final IGenStorage storage,
-                            final int depth,
-                            final int maxDepth) {
+    private @NotNull Map generateMap(final int size,
+                                     final Field field,
+                                     final Class<? extends IGenerator> keyGenerator,
+                                     final Class<? extends IGenerator> valueGenerator,
+                                     final Class<?> keyFieldType,
+                                     final Class<?> valueFieldType,
+                                     final IGenStorage storage,
+                                     final int depth,
+                                     final int maxDepth) {
 
         // Firstly try to generate initial object, so we won't allocate map if not
         // necessary

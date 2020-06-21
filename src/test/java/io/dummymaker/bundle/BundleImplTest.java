@@ -31,6 +31,7 @@ public class BundleImplTest extends Assert {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new CityBundle() },
+                { new FormatBundle() },
                 { new JobBundle() },
                 { new StreetBundle() },
                 { new DistrictBundle() },

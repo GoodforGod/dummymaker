@@ -1,5 +1,7 @@
 package io.dummymaker.scan.impl;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -22,6 +24,7 @@ abstract class BasicScanner {
      * @param annotation parent annotation
      * @return parent annotation and its declared ones
      */
+    @NotNull
     protected List<Annotation> getAllAnnotations(final Annotation annotation) {
         final List<Annotation> list = Arrays.stream(annotation.annotationType().getDeclaredAnnotations())
                 .collect(Collectors.toList());
@@ -30,6 +33,7 @@ abstract class BasicScanner {
         return list;
     }
 
+    @NotNull
     protected List<Field> getAllFilteredFields(Class target) {
         return getAllFields(target).stream()
                 .filter(f -> !f.isSynthetic())
@@ -40,6 +44,7 @@ abstract class BasicScanner {
                 .collect(Collectors.toList());
     }
 
+    @NotNull
     protected List<Field> getAllFields(Class target) {
         if (target == null || Object.class.equals(target))
             return Collections.emptyList();

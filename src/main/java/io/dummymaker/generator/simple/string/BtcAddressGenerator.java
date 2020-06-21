@@ -1,5 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -15,12 +17,12 @@ public class BtcAddressGenerator extends IdGenerator {
     private final Pattern pattern = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
 
     @Override
-    public Pattern getPattern() {
-        return pattern;
+    public @NotNull String generate() {
+        return super.generate().replace("-", "") + super.generate().substring(0, 2).replace("-", "");
     }
 
     @Override
-    public String generate() {
-        return super.generate().replace("-", "") + super.generate().substring(0, 2).replace("-", "");
+    public @NotNull Pattern getPattern() {
+        return pattern;
     }
 }
