@@ -450,6 +450,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## Version History
 
+**2.2.0** - More generators, improve pattern matching, Javax CDI annotations added.
+
 **2.1.0** - Lambda generator *GenRule* configuration added, some default generators added, minor improvements.
 
 **2.0.2** - @GenTime export formatter added and export as unix time, SqlExporter fixed issue with INSERT queries.
