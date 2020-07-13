@@ -19,11 +19,11 @@ public class DescriptionGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("info|desc(ription)?", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new PhraseBundle();
+    private final IBundle bundle = new PhraseBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom() + ", " + bundle.getRandom();
+        return bundle.random() + ", " + bundle.random();
     }
 
     @Override

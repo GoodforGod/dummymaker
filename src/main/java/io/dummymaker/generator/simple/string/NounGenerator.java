@@ -19,11 +19,11 @@ public class NounGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("word|noun|field", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new NounBundle();
+    private final IBundle bundle = new NounBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override

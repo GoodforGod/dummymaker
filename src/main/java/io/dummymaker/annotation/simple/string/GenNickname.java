@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.string;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.string.NickGenerator;
+import io.dummymaker.generator.simple.string.LoginGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,12 +10,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author GoodforGod (Anton Kurako)
- * @see NickGenerator
+ * @see LoginGenerator
  * @since 06.06.2017
  */
-@PrimeGen(NickGenerator.class)
+@PrimeGen(LoginGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenNick {
+public @interface GenNickname {
 
 }

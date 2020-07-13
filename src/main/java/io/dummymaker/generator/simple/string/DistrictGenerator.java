@@ -19,11 +19,11 @@ public class DistrictGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("state|district|locale?", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new DistrictBundle();
+    private final IBundle bundle = new DistrictBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override

@@ -23,6 +23,7 @@ public class TypeGenerator implements IGenerator<String> {
     private final List<String> types = Arrays.asList("terrible", "bad", "poor", "limited", "neutral", "average", "Decent", "fine",
             "superior");
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull String generate() {
         return CollectionUtils.random(types);

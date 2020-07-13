@@ -6,7 +6,7 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod
  * @since 16.07.2019
  */
-public class MiddleNameBundle extends BasicBundle<String> {
+public class MiddleNameBundle extends BasicBundle {
 
     public MiddleNameBundle() {
         super(

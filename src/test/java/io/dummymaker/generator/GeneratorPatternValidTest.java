@@ -82,7 +82,7 @@ public class GeneratorPatternValidTest {
                 { new GenderGenerator(), String.class, compile("male|female") },
                 { new NameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
-                { new NickGenerator(), String.class, compile("[0-9a-zA-Z\\-.]+") },
+                { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new DocGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
@@ -108,12 +108,17 @@ public class GeneratorPatternValidTest {
     }
 
     @Test
-    public void genValueRegexCheck() {
-        final Object generated = generator.generate();
-        assertNotNull(generated);
-        assertEquals(generated.getClass(), genClass);
+    public void valueRegexMatching() {
+        // Due to bundles for some generators, need more than 1 iteration
+        // for more confidence that value is matching
+        for (int i = 0; i < 5; i++) {
+            final Object generated = generator.generate();
+            assertNotNull(generated);
+            assertEquals(generated.getClass(), genClass);
 
-        final String generatedAsString = String.valueOf(generated);
-        assertTrue(pattern.pattern() + " : " + generatedAsString, pattern.matcher(generatedAsString).matches());
+            final String generatedAsString = String.valueOf(generated);
+            final String msg = pattern.pattern() + " : " + generatedAsString;
+            assertTrue(msg, pattern.matcher(generatedAsString).matches());
+        }
     }
 }

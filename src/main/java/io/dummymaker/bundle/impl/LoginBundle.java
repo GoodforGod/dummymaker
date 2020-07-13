@@ -6,9 +6,9 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod
  * @since 03.06.2017
  */
-public class NicknamesBundle extends BasicBundle<String> {
+public class LoginBundle extends BasicBundle {
 
-    public NicknamesBundle() {
+    public LoginBundle() {
         super(
                 "3DWaffle",
                 "Hightower",
@@ -38,7 +38,7 @@ public class NicknamesBundle extends BasicBundle<String> {
                 "JunkyardDog",
                 "RiffRaff",
                 "Blister",
-                "K-9",
+                "K9",
                 "Roadblock",
                 "Bowie",
                 "Keystone",
@@ -116,28 +116,28 @@ public class NicknamesBundle extends BasicBundle<String> {
                 "MindlessBobcat",
                 "Tacklebox",
                 "Dangle",
-                "Mr.44",
+                "Mr44",
                 "TakeAway",
                 "DarkHorse",
-                "Mr.Fabulous",
+                "MrFabulous",
                 "TanStallion",
                 "DayHawk",
-                "Mr.Gadget",
+                "MrGadget",
                 "TheChinaWall",
                 "DesertHaze",
-                "Mr.Lucky",
+                "MrLucky",
                 "TheDude",
                 "Digger",
-                "Mr.Peppermint",
+                "MrPeppermint",
                 "TheFlyingMouse",
                 "DiscoThunder",
-                "Mr.Spy",
+                "MrSpy",
                 "TheHappyJock",
                 "DiscoPotato",
-                "Mr.Thanksgiving",
+                "MrThanksgiving",
                 "TheHowlingSwede",
-                "Dr.Cocktail",
-                "Mr.Wholesome",
+                "DrCocktail",
+                "MrWholesome",
                 "Thrasher",
                 "Dredd",
                 "MudPieMan",

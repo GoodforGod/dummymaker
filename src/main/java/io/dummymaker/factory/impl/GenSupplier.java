@@ -92,26 +92,30 @@ public class GenSupplier implements IGenSupplier {
         if (isEmpty(generators))
             return getDefault();
 
-        return getPatternSuitable(field, type).orElseGet(() -> {
-            // Json generator is not great example of random generator to choose
-            final List<? extends IGenerator> nonJsonGenerators = generators.stream()
-                    .filter(g -> !(g instanceof JsonGenerator))
-                    .collect(Collectors.toList());
+        return getPatternSuitable(fieldName, type)
+                .orElseGet(() -> {
+                    final Optional<Class<? extends IGenerator>> pluralSuitable = fieldName.endsWith("s")
+                            ? getPatternSuitable(fieldName.substring(0, fieldName.length() - 1), type)
+                            : Optional.empty();
 
-            return getIndexWithSalt(nonJsonGenerators, fieldName + type.getName(), SALT).getClass();
-        });
+                    return pluralSuitable.orElseGet(() -> {
+                        final List<? extends IGenerator> nonJsonGenerators = generators.stream()
+                                .filter(g -> !(g instanceof JsonGenerator))
+                                .collect(Collectors.toList());
+
+                        return getIndexWithSalt(nonJsonGenerators, fieldName + type.getName(), SALT).getClass();
+                    });
+                });
     }
 
     /**
      * Search for pattern suitable generator class
      *
-     * @param field target
-     * @param type  desired target type
+     * @param fieldName to check for pattern mathing with generator
+     * @param type      desired target type
      * @return suitable pattern generator
      */
-    private Optional<Class<? extends IGenerator>> getPatternSuitable(Field field, Class<?> type) {
-        final String fieldName = field.getName();
-
+    private Optional<Class<? extends IGenerator>> getPatternSuitable(String fieldName, Class<?> type) {
         final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
                 .flatMap(List::stream)
                 .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())

@@ -1,12 +1,12 @@
 package io.dummymaker.bundle.impl;
 
 /**
- * ! NO DESCRIPTION !
+ * Bundle with names of districts of cities
  *
  * @author GoodforGod
  * @since 16.07.2019
  */
-public class DistrictBundle extends BasicBundle<String> {
+public class DistrictBundle extends BasicBundle {
 
     public DistrictBundle() {
         super(

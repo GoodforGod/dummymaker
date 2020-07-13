@@ -19,11 +19,11 @@ public class MiddleNameGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("middle(name)?", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new MiddleNameBundle();
+    private final IBundle bundle = new MiddleNameBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override

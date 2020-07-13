@@ -19,11 +19,11 @@ public class TagGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("(hash)?tag", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new TagsBundle();
+    private final IBundle bundle = new TagsBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override

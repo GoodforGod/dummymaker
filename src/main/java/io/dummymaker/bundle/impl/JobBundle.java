@@ -6,7 +6,7 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod
  * @since 16.07.2019
  */
-public class JobBundle extends BasicBundle<String> {
+public class JobBundle extends BasicBundle {
 
     public JobBundle() {
         super(

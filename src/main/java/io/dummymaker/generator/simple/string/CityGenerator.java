@@ -19,11 +19,11 @@ public class CityGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("city|town|village|settlement", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new CityBundle();
+    private final IBundle bundle = new CityBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override

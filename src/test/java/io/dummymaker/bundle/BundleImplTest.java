@@ -42,7 +42,7 @@ public class BundleImplTest extends Assert {
                 { new EmailServicesBundle() },
                 { new FemaleNameBundle() },
                 { new MaleNameBundle() },
-                { new NicknamesBundle() },
+                { new LoginBundle() },
                 { new NounBundle() },
                 { new PhraseBundle() },
                 { new SurnameBundle() },
@@ -52,13 +52,13 @@ public class BundleImplTest extends Assert {
 
     @Test
     public void bundlePresentSizeCheck() {
-        assertEquals(bundle.getAll().length, bundle.size());
+        assertEquals(bundle.all().length, bundle.size());
     }
 
     @Test
     public void bundlePresentIndexGet() {
         int index = current().nextInt(0, bundle.size() - 1);
-        assertEquals(bundle.getAll()[index], bundle.get(index));
+        assertEquals(bundle.all()[index], bundle.get(index));
     }
 
     @Test
@@ -69,6 +69,6 @@ public class BundleImplTest extends Assert {
 
     @Test
     public void bundlePresentRandomGet() {
-        assertNotNull(bundle.getRandom());
+        assertNotNull(bundle.random());
     }
 }

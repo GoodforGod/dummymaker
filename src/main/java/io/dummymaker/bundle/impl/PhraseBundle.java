@@ -6,7 +6,7 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod (Anton Kurako)
  * @since 07.06.2017
  */
-public class PhraseBundle extends BasicBundle<String> {
+public class PhraseBundle extends BasicBundle {
 
     public PhraseBundle() {
         super(

@@ -2,7 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.DomainExtensionBundle;
-import io.dummymaker.bundle.impl.NicknamesBundle;
+import io.dummymaker.bundle.impl.LoginBundle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
@@ -19,12 +19,12 @@ public class UrlGenerator extends UriGenerator {
 
     private final Pattern pattern = Pattern.compile("url|server", CASE_INSENSITIVE);
 
-    private final IBundle<String> domains = new NicknamesBundle();
-    private final IBundle<String> zones = new DomainExtensionBundle();
+    private final IBundle domains = new LoginBundle();
+    private final IBundle zones = new DomainExtensionBundle();
 
     @Override
     public @NotNull String generate() {
-        return "https://" + domains.getRandom().replace(".", "") + zones.getRandom() + super.generate();
+        return "https://" + domains.random().replace(".", "") + zones.random() + super.generate();
     }
 
     @Override

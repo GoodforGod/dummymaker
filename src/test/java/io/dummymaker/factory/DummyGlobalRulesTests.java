@@ -13,8 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,25 +32,25 @@ public class DummyGlobalRulesTests extends Assert {
 
     @Test
     public void validFieldsGeneration() {
-        final DummyEmbedded build = factory.build(DummyEmbedded.class);
+        final DummyEmbedded dummy = factory.build(DummyEmbedded.class);
 
-        final Set<String> nouns = new HashSet<>(Arrays.asList(new NounBundle().getAll()));
-        final Set<String> names = Stream.of(new MaleNameBundle().getAll(), new FemaleNameBundle().getAll())
-                .map(Arrays::asList)
-                .flatMap(List::stream)
+        final Set<String> nouns = Arrays.stream(new NounBundle().all()).collect(Collectors.toSet());
+        final Set<String> names = Stream.of(new MaleNameBundle().all(), new FemaleNameBundle().all())
+                .flatMap(Arrays::stream)
                 .collect(Collectors.toSet());
 
-        assertNotNull(build.getId());
-        assertNotNull(build.getChild());
-        assertNotNull(build.getSimpleChild());
-        assertNotNull(build.getName());
-        assertTrue(nouns.contains(build.getName()));
+        assertNotNull(dummy);
+        assertNotNull(dummy.getId());
+        assertNotNull(dummy.getChild());
+        assertNotNull(dummy.getSimpleChild());
+        assertNotNull(dummy.getName());
+        assertTrue(nouns.contains(dummy.getName()));
 
-        assertTrue(build.getSimpleChild().getNumber() < Byte.MAX_VALUE);
-        assertNotNull(build.getSimpleChild().getSimpleName());
-        assertTrue(names.contains(build.getSimpleChild().getSimpleName()));
+        assertTrue(dummy.getSimpleChild().getNumber() < Byte.MAX_VALUE);
+        assertNotNull(dummy.getSimpleChild().getSimpleName());
+        assertTrue(names.contains(dummy.getSimpleChild().getSimpleName()));
 
-        assertNotNull(build.getChild().getName());
-        assertTrue(nouns.contains(build.getChild().getName()));
+        assertNotNull(dummy.getChild().getName());
+        assertTrue(nouns.contains(dummy.getChild().getName()));
     }
 }

@@ -17,14 +17,14 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class RoleGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("roles?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("role", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new JobBundle();
+    private final IBundle bundle = new JobBundle();
 
     @Nullable
     @Override
     public String generate() {
-        return bundle.getRandom().toLowerCase().replace(' ', '-');
+        return bundle.random().toLowerCase().replace(' ', '-');
     }
 
     @Override

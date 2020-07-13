@@ -4,9 +4,9 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.CharacterGenerator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
@@ -23,8 +23,8 @@ public class DocGenerator implements IGenerator<String> {
 
     @Override
     public @NotNull String generate() {
-        final int id = ThreadLocalRandom.current().nextInt(10_000_000, 999_999_999);
-        return (ThreadLocalRandom.current().nextBoolean())
+        final int id = current().nextInt(10_000_000, 999_999_999);
+        return current().nextBoolean()
                 ? prefixGenerator.generate() + String.valueOf(id)
                 : String.valueOf(id);
     }
