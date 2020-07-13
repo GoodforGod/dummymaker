@@ -17,7 +17,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class NickGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("nick(name)?|login", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("nick(name)?s?|logins?", CASE_INSENSITIVE);
 
     private final NicknamesBundle bundle = new NicknamesBundle();
 
