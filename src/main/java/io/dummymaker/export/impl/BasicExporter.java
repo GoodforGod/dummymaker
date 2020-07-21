@@ -12,6 +12,7 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.BufferedFileWriter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +38,13 @@ abstract class BasicExporter implements IExporter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Format format;
     private final GenRules rules;
+
     /**
      * Points as default to directory from where code is running
      */
     private String path;
     private ICase caseUsed;
+    protected boolean append = false;
 
     /**
      * @param rules    from gen factory
@@ -66,6 +69,12 @@ abstract class BasicExporter implements IExporter {
             this.caseUsed = caseUsed;
     }
 
+    @Override
+    public @NotNull IExporter withAppend() {
+        this.append = true;
+        return this;
+    }
+
     /**
      * Build class container with export entity parameters
      */
@@ -76,9 +85,9 @@ abstract class BasicExporter implements IExporter {
     /**
      * Build class container with export entity parameters
      */
-    <T> ClassContainer buildClassContainer(final List<T> list) {
-        return (CollectionUtils.isNotEmpty(list))
-                ? buildClassContainer(list.get(0))
+    <T> ClassContainer buildClassContainer(final Collection<T> collection) {
+        return CollectionUtils.isNotEmpty(collection)
+                ? buildClassContainer(collection.iterator().next())
                 : null;
     }
 
@@ -86,14 +95,13 @@ abstract class BasicExporter implements IExporter {
      * Build buffered writer for export
      *
      * @see #export(Object)
-     * @see #export(List)
+     * @see #export(Collection)
      */
-    IWriter buildWriter(final ClassContainer classContainer) {
+    IWriter getWriter(final ClassContainer container) {
         try {
-            return new BufferedFileWriter(classContainer.getExportClassName(), path, format.getExtension());
+            return new BufferedFileWriter(container.getExportClassName(), path, format.getExtension(), append);
         } catch (Exception e) {
-            logger.warn(e.getMessage());
-            return null;
+            throw new IllegalStateException(e.getMessage(), e.getCause());
         }
     }
 
@@ -273,8 +281,8 @@ abstract class BasicExporter implements IExporter {
      * @param t class to validate
      * @return validation result
      */
-    <T> boolean isExportEntityInvalid(final List<T> t) {
-        return (CollectionUtils.isEmpty(t) || isExportEntityInvalid(t.get(0)));
+    <T> boolean isExportEntityInvalid(final Collection<T> t) {
+        return CollectionUtils.isEmpty(t) || isExportEntityInvalid(t.iterator().next());
     }
 
     /**
@@ -283,7 +291,7 @@ abstract class BasicExporter implements IExporter {
      * @param t class to validate
      * @return validation result
      */
-    <T> boolean isExportEntitySingleList(final List<T> t) {
+    <T> boolean isExportEntitySingleList(final Collection<T> t) {
         return (t.size() == 1);
     }
 }

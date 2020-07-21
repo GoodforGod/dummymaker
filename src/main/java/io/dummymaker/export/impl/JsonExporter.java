@@ -14,6 +14,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,12 +106,14 @@ public class JsonExporter extends BasicExporter {
                 && !classType.equals(byte.class)
                 && !classType.equals(double.class)
                 && !classType.equals(float.class)
+                && !classType.equals(boolean.class)
                 && !classType.equals(Integer.class)
                 && !classType.equals(Byte.class)
                 && !classType.equals(Long.class)
                 && !classType.equals(Short.class)
                 && !classType.equals(Double.class)
-                && !classType.equals(Float.class);
+                && !classType.equals(Float.class)
+                && !classType.equals(Boolean.class);
     }
 
     private Class<?> extractType(FieldContainer.Type type, Field field) {
@@ -204,32 +207,32 @@ public class JsonExporter extends BasicExporter {
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         return writer != null
                 && writer.write(format(t, container, Mode.SINGLE))
                 && writer.flush();
     }
 
     @Override
-    public <T> boolean export(final List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> boolean export(final Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return false;
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return export(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         if (writer == null)
             return false;
 
         // Open JSON Object List
         writer.write("[\n");
 
-        final String result = list.stream()
+        final String result = collection.stream()
                 .map(t -> format(t, container, Mode.LIST))
                 .collect(Collectors.joining(",\n"));
 
@@ -239,7 +242,7 @@ public class JsonExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final T t) {
+    public <T> @NotNull String convert(final T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -251,19 +254,19 @@ public class JsonExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> @NotNull String convert(final Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return "";
 
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return convert(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return "";
 
         final StringBuilder builder = new StringBuilder("[\n");
-        final String result = list.stream()
+        final String result = collection.stream()
                 .map(t -> format(t, container, Mode.LIST))
                 .collect(Collectors.joining(",\n"));
 

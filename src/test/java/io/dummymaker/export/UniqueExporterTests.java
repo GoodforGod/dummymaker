@@ -31,7 +31,7 @@ public class UniqueExporterTests extends Assert {
         final GenFactory factory = new GenFactory(rule);
         final DummyEmbeddedIntoSimple dummy = factory.build(DummyEmbeddedIntoSimple.class);
 
-        final String json = new JsonExporter(GenRules.of(rule)).exportAsString(dummy);
+        final String json = new JsonExporter(GenRules.of(rule)).convert(dummy);
         assertTrue(json.contains("\"number\":1") || json.contains("\"number\":2"));
     }
 }

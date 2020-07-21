@@ -22,10 +22,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -306,7 +303,7 @@ public class SqlExporter extends BasicExporter {
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         final String primaryKey = buildPrimaryKey(container);
         return writer != null
                 && writer.write(buildCreateTableQuery(container, primaryKey) + "\n")
@@ -316,24 +313,24 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> boolean export(List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> boolean export(Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return false;
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return export(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         if (writer == null)
             return false;
 
         int i = INSERT_QUERY_LIMIT;
 
-        final Iterator<T> iterator = list.iterator();
+        final Iterator<T> iterator = collection.iterator();
         final String primaryKey = buildPrimaryKey(container);
 
         // Create Table Query
@@ -364,7 +361,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(T t) {
+    public <T> @NotNull String convert(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -379,21 +376,21 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> @NotNull String convert(Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return "";
 
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return convert(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return "";
 
         // Create Table Query
         final String primaryKey = buildPrimaryKey(container);
         final StringBuilder builder = new StringBuilder(buildCreateTableQuery(container, primaryKey));
-        final Iterator<T> iterator = list.iterator();
+        final Iterator<T> iterator = collection.iterator();
         int i = INSERT_QUERY_LIMIT;
 
         while (iterator.hasNext()) {

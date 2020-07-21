@@ -19,7 +19,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class NameGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("name", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("name|assignee|employe|worker", CASE_INSENSITIVE);
 
     private final IBundle maleBundle = new MaleNameBundle();
     private final IBundle femaleBundle = new FemaleNameBundle();

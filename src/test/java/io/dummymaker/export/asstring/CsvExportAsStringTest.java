@@ -32,7 +32,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
         final Dummy dummy = factory.build(Dummy.class);
         final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
 
-        final String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
@@ -46,7 +46,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(null);
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
@@ -62,7 +62,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(strategy);
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");

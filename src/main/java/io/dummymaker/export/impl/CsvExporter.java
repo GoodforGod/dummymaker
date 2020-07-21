@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -136,8 +137,8 @@ public class CsvExporter extends BasicExporter {
 
         return (areTextValuesWrapped && field.getType().equals(String.class)
                 || isValueWrappable.test(fieldValue))
-                        ? wrapWithQuotes(fieldValue)
-                        : fieldValue;
+                ? wrapWithQuotes(fieldValue)
+                : fieldValue;
     }
 
     /**
@@ -161,44 +162,48 @@ public class CsvExporter extends BasicExporter {
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         if (writer == null)
             return false;
 
-        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
-            return false;
+        if (hasHeader && writer.isEmpty()) {
+            if (!writer.write(generateCsvHeader(container) + "\n"))
+                return false;
+        }
 
         return writer.write(format(t, container))
                 && writer.flush();
     }
 
     @Override
-    public <T> boolean export(final List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> boolean export(final Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return false;
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return export(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(collection.iterator().next());
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         if (writer == null)
             return false;
 
-        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
-            return false;
+        if (hasHeader && writer.isEmpty()) {
+            if (!writer.write(generateCsvHeader(container) + "\n"))
+                return false;
+        }
 
-        final boolean writerHadError = list.stream()
+        final boolean writerHadError = collection.stream()
                 .anyMatch(t -> !writer.write(format(t, container) + "\n"));
 
         return !writerHadError && writer.flush();
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final T t) {
+    public <T> @NotNull String convert(final T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -206,32 +211,30 @@ public class CsvExporter extends BasicExporter {
         if (!container.isExportable())
             return "";
 
-        final StringBuilder builder = new StringBuilder("");
-        if (hasHeader) {
+        final StringBuilder builder = new StringBuilder();
+        if (hasHeader)
             builder.append(generateCsvHeader(container)).append("\n");
-        }
 
         return builder.append(format(t, container)).toString();
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> @NotNull String convert(final Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return "";
 
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return convert(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list.get(0));
+        final ClassContainer container = buildClassContainer(collection.iterator().next());
         if (!container.isExportable())
             return "";
 
-        final StringBuilder builder = new StringBuilder("");
-        if (hasHeader) {
+        final StringBuilder builder = new StringBuilder();
+        if (hasHeader)
             builder.append(generateCsvHeader(container)).append("\n");
-        }
 
-        final String result = list.stream()
+        final String result = collection.stream()
                 .map(t -> format(t, container))
                 .collect(Collectors.joining("\n"));
 

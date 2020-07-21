@@ -2,7 +2,7 @@ package io.dummymaker.export;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Allow to export objects in desired format
@@ -25,11 +25,11 @@ public interface IExporter {
     /**
      * Allow to export list of objects
      *
-     * @param tList objects to export
-     * @param <T>   object type
+     * @param collection objects to export
+     * @param <T>        object type
      * @return indicates was export successful
      */
-    <T> boolean export(final List<T> tList);
+    <T> boolean export(final Collection<T> collection);
 
     /**
      * Allow to export single object as a single string value
@@ -39,15 +39,18 @@ public interface IExporter {
      * @return object string representation
      */
     @NotNull
-    <T> String exportAsString(final T t);
+    <T> String convert(final T t);
 
     /**
      * Allow to export list of objects as single a string value
      *
-     * @param t   objects to export
-     * @param <T> object type
+     * @param <T>        object type
+     * @param collection objects to export
      * @return objects string representation
      */
     @NotNull
-    <T> String exportAsString(final List<T> t);
+    <T> String convert(final Collection<T> collection);
+
+    @NotNull
+    IExporter withAppend();
 }

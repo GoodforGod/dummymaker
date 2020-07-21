@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -157,33 +158,33 @@ public class XmlExporter extends BasicExporter {
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         return (writer != null)
                 && writer.write(format(t, container, Mode.SINGLE))
                 && writer.flush();
     }
 
     @Override
-    public <T> boolean export(List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> boolean export(Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return false;
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return export(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return false;
 
-        final IWriter writer = buildWriter(container);
+        final IWriter writer = getWriter(container);
         if (writer == null)
             return false;
 
-        final String classListTag = buildClassListTag(list.get(0));
+        final String classListTag = buildClassListTag(collection.iterator().next());
         if (!writer.write(wrapOpenXmlTag(classListTag) + "\n"))
             return false;
 
-        final boolean writerHadErrors = list.stream()
+        final boolean writerHadErrors = collection.stream()
                 .anyMatch(t -> !writer.write(format(t, container, Mode.LIST) + "\n"));
 
         return !writerHadErrors
@@ -192,7 +193,7 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(T t) {
+    public <T> @NotNull String convert(T t) {
         if (isExportEntityInvalid(t))
             return "";
 
@@ -204,23 +205,23 @@ public class XmlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(List<T> list) {
-        if (isExportEntityInvalid(list))
+    public <T> @NotNull String convert(Collection<T> collection) {
+        if (isExportEntityInvalid(collection))
             return "";
 
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
+        if (isExportEntitySingleList(collection))
+            return convert(collection.iterator().next());
 
-        final ClassContainer container = buildClassContainer(list);
+        final ClassContainer container = buildClassContainer(collection);
         if (!container.isExportable())
             return "";
 
-        final String classListTag = buildClassListTag(list.get(0));
+        final String classListTag = buildClassListTag(collection.iterator().next());
 
         final StringBuilder builder = new StringBuilder(wrapOpenXmlTag(classListTag))
                 .append("\n");
 
-        final String result = list.stream()
+        final String result = collection.stream()
                 .map(t -> format(t, container, Mode.LIST))
                 .collect(Collectors.joining("\n"));
 

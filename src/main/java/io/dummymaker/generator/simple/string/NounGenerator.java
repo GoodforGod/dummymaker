@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
- * "default comment"
+ * Generates single noun word
  *
  * @author GoodforGod
  * @since 21.02.2018

@@ -86,7 +86,6 @@ public class GeneratorPatternValidTest {
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new DocGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
-                { new PhraseGenerator(), String.class, compile(".+(\\t.+)?") },
                 { new StringGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new VersionGenerator(), String.class, compile("[0-9]\\.[0-9]{1,2}\\.[0-9]{1,2}(-SNAPSHOT)?") },
                 { new TagGenerator(), String.class, compile("#[0-9a-zA-Z]+") },

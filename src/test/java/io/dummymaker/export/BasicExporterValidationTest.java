@@ -44,7 +44,7 @@ public class BasicExporterValidationTest extends Assert {
     @Test
     public void exportNotExportable() {
         DummyNoZeroConstructor d = new DummyNoZeroConstructor(1);
-        String s = exporter.exportAsString(d);
+        String s = exporter.convert(d);
         if (exporter.getClass().equals(XmlExporter.class) || exporter.getClass().equals(CsvExporter.class))
             assertTrue(s.isEmpty());
         else
@@ -56,7 +56,7 @@ public class BasicExporterValidationTest extends Assert {
         List<DummyNoZeroConstructor> dummyNoZeroConstructors = new ArrayList<>();
         dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
         dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
-        String s = exporter.exportAsString(dummyNoZeroConstructors);
+        String s = exporter.convert(dummyNoZeroConstructors);
         if (exporter.getClass().equals(XmlExporter.class) || exporter.getClass().equals(CsvExporter.class))
             assertTrue(s.isEmpty());
         else
@@ -65,19 +65,19 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNullableDummyReturnEmpty() {
-        String s = exporter.exportAsString(null);
+        String s = exporter.convert(null);
         assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportNullableDummiesReturnEmptyList() {
-        String s = exporter.exportAsString(null);
+        String s = exporter.convert(null);
         assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportEmptyDummiesReturnEmptyList() {
-        String s = exporter.exportAsString(new ArrayList<>());
+        String s = exporter.convert(new ArrayList<>());
         assertTrue(s.isEmpty());
     }
 }

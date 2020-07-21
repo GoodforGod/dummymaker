@@ -9,6 +9,8 @@ package io.dummymaker.writer;
  */
 public interface IWriter {
 
+    boolean isEmpty();
+
     /**
      * Writes string and add newline symbol to the end
      *

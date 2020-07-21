@@ -3,6 +3,7 @@ package io.dummymaker.factory.impl;
 import io.dummymaker.annotation.complex.*;
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.export.IExporter;
 import io.dummymaker.factory.IGenFactory;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
@@ -102,6 +103,19 @@ public class GenFactory implements IGenFactory {
 
         final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
         return fill(stream);
+    }
+
+    @Override
+    public <T> boolean export(@Nullable Class<T> target, int amount, @NotNull IExporter exporter) {
+        final int batchSize = 1000;
+        final int batches = amount / batchSize;
+        final int left = (amount > batchSize) ? amount % batchSize : amount;
+
+        for (int i = 0; i < batches; i++)
+            if (!exporter.export(build(target, batchSize)))
+                return false;
+
+        return left <= 0 || exporter.export(build(target, left));
     }
 
     @Override

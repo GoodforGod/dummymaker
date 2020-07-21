@@ -113,7 +113,7 @@ public class DummyArrayTests extends Assert {
 
         final Pattern patternSingleArray = Pattern.compile("\"floatSimple\":\\[-?[0-9]+\\.[0-9]+");
         final Pattern patternDoubleArray = Pattern.compile("\"byteDouble\":\\[\\[[\\-0-9.]");
-        final String json = new JsonExporter(rules).exportAsString(dummyArray);
+        final String json = new JsonExporter(rules).convert(dummyArray);
 
         assertTrue(patternSingleArray.matcher(json).find());
         assertTrue(patternDoubleArray.matcher(json).find());

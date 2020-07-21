@@ -34,7 +34,7 @@ public class XmlExportAsStringTest extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final IExporter exporter = new XmlExporter().withCase(strategy).withPath("    ");
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
 
         final String[] xmlArray = dummyAsString.split("\n");
