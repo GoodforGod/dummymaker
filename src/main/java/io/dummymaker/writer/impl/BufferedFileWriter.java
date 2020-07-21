@@ -30,7 +30,8 @@ public class BufferedFileWriter implements IWriter {
     public BufferedFileWriter(final String fileName, final String path, final String extension, boolean append) {
         try {
             this.path = buildPath(fileName, path, extension);
-            this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.path, append), StandardCharsets.UTF_8));
+            this.writer = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(this.path, append), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new GenException(e);
         }

@@ -137,8 +137,8 @@ public class CsvExporter extends BasicExporter {
 
         return (areTextValuesWrapped && field.getType().equals(String.class)
                 || isValueWrappable.test(fieldValue))
-                ? wrapWithQuotes(fieldValue)
-                : fieldValue;
+                        ? wrapWithQuotes(fieldValue)
+                        : fieldValue;
     }
 
     /**
