@@ -34,7 +34,7 @@ abstract class BasicScanner {
     }
 
     @NotNull
-    protected List<Field> getAllFilteredFields(Class target) {
+    protected List<Field> getValidFields(Class<?> target) {
         return getAllFields(target).stream()
                 .filter(f -> !f.isSynthetic())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
@@ -45,14 +45,14 @@ abstract class BasicScanner {
     }
 
     @NotNull
-    protected List<Field> getAllFields(Class target) {
+    protected List<Field> getAllFields(Class<?> target) {
         if (target == null || Object.class.equals(target))
             return Collections.emptyList();
 
         final List<Field> collected = Arrays.stream(target.getDeclaredFields())
                 .collect(Collectors.toList());
 
-        collected.addAll(getAllFilteredFields(target.getSuperclass()));
+        collected.addAll(getValidFields(target.getSuperclass()));
         return collected;
     }
 }

@@ -4,7 +4,7 @@ import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.model.error.GenException;
+import io.dummymaker.error.GenException;
 import io.dummymaker.scan.impl.ExportScanner;
 
 import java.lang.reflect.Field;

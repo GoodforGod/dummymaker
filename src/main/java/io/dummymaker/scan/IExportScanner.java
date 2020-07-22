@@ -5,6 +5,7 @@ import io.dummymaker.model.export.FieldContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -13,11 +14,12 @@ import java.util.Map;
  * @author GoodforGod
  * @since 27.04.2018
  */
-public interface IExportScanner extends IMapScanner<Field, FieldContainer, Class> {
+public interface IExportScanner extends IScanner<FieldContainer, Class<?>> {
 
-    @Override
     @NotNull
-    Map<Field, FieldContainer> scan(Class target);
+    @Override
+    Collection<FieldContainer> scan(Class<?> target);
 
-    Map<Field, FieldContainer> scan(Class target, ICase nameCase);
+    @NotNull
+    Collection<FieldContainer> scan(Class<?> target, ICase nameCase);
 }

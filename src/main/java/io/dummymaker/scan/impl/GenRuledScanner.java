@@ -43,7 +43,7 @@ public class GenRuledScanner extends GenAutoScanner {
             return scanned;
 
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        targeted.ifPresent(r -> getAllFilteredFields(target).stream()
+        targeted.ifPresent(r -> getValidFields(target).stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> {
                     final GenContainer container = r.getDesiredExample(f)

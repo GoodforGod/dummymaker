@@ -11,7 +11,7 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.model.error.GenException;
+import io.dummymaker.error.GenException;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.GenRuledScanner;
 import io.dummymaker.util.CastUtils;

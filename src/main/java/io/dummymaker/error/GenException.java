@@ -1,4 +1,4 @@
-package io.dummymaker.model.error;
+package io.dummymaker.error;
 
 /**
  * Base runtime exception

@@ -33,7 +33,7 @@ public class SequenceScanner extends UniqueScanner {
         final Map<Field, List<Annotation>> sequentialAnnotationMap = new HashMap<>();
 
         // Use only first found gen annotation on field
-        for (final Field field : getAllFilteredFields(target)) {
+        for (final Field field : getValidFields(target)) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
                 if (isSequence.test(annotation)) {
                     sequentialAnnotationMap.put(field, Collections.singletonList(annotation));

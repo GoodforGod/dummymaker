@@ -69,7 +69,7 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
         if (!isGenAuto)
             return scanned;
 
-        final List<Field> fields = getAllFilteredFields(target);
+        final List<Field> fields = getValidFields(target);
         final Map<Field, GenContainer> containers = new LinkedHashMap<>(fields.size());
         fields.stream()
                 .filter(f -> !isIgnored(f))

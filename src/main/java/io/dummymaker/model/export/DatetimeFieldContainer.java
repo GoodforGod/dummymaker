@@ -2,6 +2,8 @@ package io.dummymaker.model.export;
 
 import io.dummymaker.annotation.complex.GenTime;
 
+import java.lang.reflect.Field;
+
 /**
  * Description in progress
  *
@@ -12,8 +14,8 @@ public class DatetimeFieldContainer extends FieldContainer {
 
     private final boolean isUnixTime;
 
-    public DatetimeFieldContainer(Type type, String exportName, GenTime annotation) {
-        super(type, exportName);
+    public DatetimeFieldContainer(Field field, Type type, String exportName, GenTime annotation) {
+        super(field, type, exportName);
         this.isUnixTime = (annotation != null) && annotation.exportAsUnixTime();
     }
 

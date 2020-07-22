@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.model.error.GenException;
+import io.dummymaker.error.GenException;
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;

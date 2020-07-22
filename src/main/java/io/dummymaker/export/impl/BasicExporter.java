@@ -5,13 +5,13 @@ import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.model.error.GenException;
+import io.dummymaker.error.GenException;
 import io.dummymaker.model.export.ClassContainer;
 import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
-import io.dummymaker.writer.impl.BufferedFileWriter;
+import io.dummymaker.writer.impl.FileWriter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ abstract class BasicExporter implements IExporter {
      */
     IWriter getWriter(final ClassContainer container) {
         try {
-            return new BufferedFileWriter(container.getExportClassName(), path, format.getExtension(), append);
+            return new FileWriter(container.getExportClassName(), path, format.getExtension(), append);
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e.getCause());
         }

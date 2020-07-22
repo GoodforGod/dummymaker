@@ -20,9 +20,10 @@ public interface IWriter {
     boolean write(String value);
 
     /**
-     * Closes write stream
+     * Appends string and add newline symbol to the end
      *
+     * @param value string to write
      * @return indicates operation success
      */
-    boolean flush();
+    boolean append(String value);
 }

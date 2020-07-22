@@ -51,7 +51,4 @@ public interface IExporter {
      */
     @NotNull
     <T> String convert(@NotNull Collection<T> collection);
-
-    @NotNull
-    IExporter withAppend();
 }
