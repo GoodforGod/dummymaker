@@ -52,7 +52,7 @@ public class GenSupplier implements IGenSupplier {
     }
 
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(Field field) {
+    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field) {
         return getSuitable(field, field.getType());
     }
 
@@ -76,7 +76,7 @@ public class GenSupplier implements IGenSupplier {
      * @return suitable generator class
      */
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field, @NotNull Class<?> type) {
         if (type == null)
             return getDefault();
 

@@ -49,7 +49,7 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
             return storage.fillByDepth(instantiate(valueClass), depth + 1);
         }
 
-        final IGenerator generator = (storage == null)
+        final IGenerator<?> generator = (storage == null)
                 ? CastUtils.instantiate(generatorClass)
                 : storage.getGenerator(generatorClass);
 

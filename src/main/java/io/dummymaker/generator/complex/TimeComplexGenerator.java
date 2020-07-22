@@ -79,8 +79,9 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private @NotNull Object genTime(IGenStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
-        final IGenerator generator = (storage == null)
+        final IGenerator<?> generator = (storage == null)
                 ? CastUtils.instantiate(gClass)
                 : storage.getGenerator(gClass);
 

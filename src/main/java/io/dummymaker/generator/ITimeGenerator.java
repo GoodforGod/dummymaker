@@ -17,6 +17,5 @@ public interface ITimeGenerator<T> extends IGenerator<T> {
      * @return generated time object
      * @see GenTime#MAX_UNIX
      */
-    @Nullable
     T generate(long minUnix, long maxUnix);
 }

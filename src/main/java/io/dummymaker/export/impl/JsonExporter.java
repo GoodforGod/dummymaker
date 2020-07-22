@@ -254,7 +254,7 @@ public class JsonExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String convert(final Collection<T> collection) {
+    public <T> @NotNull String convert(final @NotNull Collection<T> collection) {
         if (isExportEntityInvalid(collection))
             return "";
 

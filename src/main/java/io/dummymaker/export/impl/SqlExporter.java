@@ -376,7 +376,7 @@ public class SqlExporter extends BasicExporter {
     }
 
     @Override
-    public <T> @NotNull String convert(Collection<T> collection) {
+    public <T> @NotNull String convert(@NotNull Collection<T> collection) {
         if (isExportEntityInvalid(collection))
             return "";
 
