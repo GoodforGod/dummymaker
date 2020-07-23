@@ -50,7 +50,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
 
         if (fieldClass.equals(Object.class) || fieldClass.equals(String.class)) {
             final DateTimeFormatter formatter = (annotation != null
-                    && !GenTime.EXPORT_FORMAT.equals(((GenTime) annotation).formatter()))
+                    && !GenTime.DEFAULT_FORMAT.equals(((GenTime) annotation).formatter()))
                             ? DateTimeFormatter.ofPattern(((GenTime) annotation).formatter())
                             : DateTimeFormatter.ISO_DATE_TIME;
 
@@ -79,7 +79,6 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return null;
     }
 
-    @SuppressWarnings("ConstantConditions")
     private @NotNull Object genTime(IGenStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
         final IGenerator<?> generator = (storage == null)
                 ? CastUtils.instantiate(gClass)

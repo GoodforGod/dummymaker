@@ -69,7 +69,6 @@ abstract class BasicExporter implements IExporter {
             this.caseUsed = caseUsed;
     }
 
-    @Override
     public @NotNull IExporter withAppend() {
         this.append = true;
         return this;
@@ -142,7 +141,7 @@ abstract class BasicExporter implements IExporter {
 
         if (this.format.isTypeSupported(container.getType())) {
             switch (container.getType()) {
-                case DATETIME:
+                case DATE:
                     return ExportContainer.asDatetime(exportFieldName, convertAsDatetime(field, exportFieldValue));
                 case ARRAY:
                     return ExportContainer.asArray(exportFieldName, convertAsArray(exportFieldValue));
@@ -160,22 +159,6 @@ abstract class BasicExporter implements IExporter {
     }
 
     private String convertAsArray(Object exportValue) {
-        final Class<?> arrayType = exportValue.getClass().getComponentType();
-        if (arrayType.equals(byte.class)) {
-            return Arrays.toString((byte[]) exportValue);
-        } else if (arrayType.equals(short.class)) {
-            return Arrays.toString((short[]) exportValue);
-        } else if (arrayType.equals(char.class)) {
-            return Arrays.toString((char[]) exportValue);
-        } else if (arrayType.equals(int.class)) {
-            return Arrays.toString((int[]) exportValue);
-        } else if (arrayType.equals(long.class)) {
-            return Arrays.toString((long[]) exportValue);
-        } else if (arrayType.equals(float.class)) {
-            return Arrays.toString((float[]) exportValue);
-        } else if (arrayType.equals(double.class)) {
-            return Arrays.toString((double[]) exportValue);
-        }
         return Arrays.toString((Object[]) exportValue);
     }
 
@@ -221,7 +204,7 @@ abstract class BasicExporter implements IExporter {
 
     private String exportWithFormatter(GenTime annotation, Object exportFieldValue) {
         if (exportFieldValue instanceof Time) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+            final DateTimeFormatter formatter = GenTime.DEFAULT_FORMAT.equals(annotation.formatter())
                     ? DateTimeFormatter.ISO_TIME
                     : DateTimeFormatter.ofPattern(annotation.formatter());
 
@@ -230,7 +213,7 @@ abstract class BasicExporter implements IExporter {
                             TimeZone.getDefault().toZoneId())
                     .format(formatter);
         } else if (exportFieldValue instanceof Date) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+            final DateTimeFormatter formatter = GenTime.DEFAULT_FORMAT.equals(annotation.formatter())
                     ? DateTimeFormatter.ISO_DATE_TIME
                     : DateTimeFormatter.ofPattern(annotation.formatter());
 
@@ -239,19 +222,19 @@ abstract class BasicExporter implements IExporter {
                             TimeZone.getDefault().toZoneId())
                     .format(formatter);
         } else if (exportFieldValue instanceof LocalDate) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+            final DateTimeFormatter formatter = GenTime.DEFAULT_FORMAT.equals(annotation.formatter())
                     ? DateTimeFormatter.ISO_DATE
                     : DateTimeFormatter.ofPattern(annotation.formatter());
 
             return ((LocalDate) exportFieldValue).format(formatter);
         } else if (exportFieldValue instanceof LocalTime) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+            final DateTimeFormatter formatter = GenTime.DEFAULT_FORMAT.equals(annotation.formatter())
                     ? DateTimeFormatter.ISO_TIME
                     : DateTimeFormatter.ofPattern(annotation.formatter());
 
             return ((LocalTime) exportFieldValue).format(formatter);
         } else if (exportFieldValue instanceof LocalDateTime) {
-            final DateTimeFormatter formatter = GenTime.EXPORT_FORMAT.equals(annotation.formatter())
+            final DateTimeFormatter formatter = GenTime.DEFAULT_FORMAT.equals(annotation.formatter())
                     ? DateTimeFormatter.ISO_DATE_TIME
                     : DateTimeFormatter.ofPattern(annotation.formatter());
 

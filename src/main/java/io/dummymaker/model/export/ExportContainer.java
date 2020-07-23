@@ -28,7 +28,7 @@ public class ExportContainer {
 
     public static ExportContainer asDatetime(final String exportName,
                                              final String exportValue) {
-        return new ExportContainer(exportName, exportValue, FieldContainer.Type.DATETIME);
+        return new ExportContainer(exportName, exportValue, FieldContainer.Type.DATE);
     }
 
     public static ExportContainer asList(final String exportName,

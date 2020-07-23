@@ -41,7 +41,7 @@ public @interface GenTime {
      * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only
      *      formats
      */
-    String EXPORT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
     /**
      * Minimum generated time from 01-01-1970 as unix timestamp.
@@ -77,7 +77,7 @@ public @interface GenTime {
      * 
      * @return export format (default is ISO 8601)
      */
-    String formatter() default EXPORT_FORMAT;
+    String formatter() default DEFAULT_FORMAT;
 
     /**
      * Exports date as Unix Time

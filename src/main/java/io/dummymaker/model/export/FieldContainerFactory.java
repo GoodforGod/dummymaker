@@ -4,12 +4,6 @@ import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
-import io.dummymaker.export.cases.DefaultCase;
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.complex.*;
-import io.dummymaker.generator.simple.EmbeddedGenerator;
-import io.dummymaker.generator.simple.SequenceGenerator;
-import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
 
 import java.lang.reflect.Field;
@@ -51,7 +45,7 @@ public class FieldContainerFactory {
     private FieldContainer build(Field field, FieldContainer.Type type, String exportName) {
         final String finalName = isEmpty(exportName) ? field.getName() : exportName;
 
-        if (type.equals(FieldContainer.Type.DATETIME) && field != null) {
+        if (type.equals(FieldContainer.Type.DATE) && field != null) {
             final GenTime annotation = field.getAnnotation(GenTime.class);
             return new DatetimeFieldContainer(field, type, finalName, annotation);
         }
@@ -84,7 +78,7 @@ public class FieldContainerFactory {
                 || type.equals(java.sql.Date.class)
                 || type.equals(Timestamp.class)
                 || type.equals(Time.class))
-            return FieldContainer.Type.DATETIME;
+            return FieldContainer.Type.DATE;
         else if (Iterable.class.isAssignableFrom(type))
             return FieldContainer.Type.COLLECTION;
         else if (Map.class.isAssignableFrom(type))

@@ -23,13 +23,13 @@ public class FileWriter implements IWriter {
      * @param path      path where to create file (NULL or UNKNOWN for home dir)
      * @param extension file extension
      */
-    public FileWriter(final String fileName, final String path, final String extension, boolean append) {
+    public FileWriter(String fileName, String path, String extension, boolean append) {
         this.path = getPath(fileName, path, extension);
     }
 
-    private String getPath(final String fileName, final String path, final String extension) {
+    private String getPath(String fileName, String path, String extension) {
         final String workPath = StringUtils.isBlank(path) ? "./" : path;
-        return workPath + fileName + extension;
+        return workPath + fileName + "." + extension;
     }
 
     @Override
@@ -40,6 +40,9 @@ public class FileWriter implements IWriter {
 
     @Override
     public boolean write(final String value) {
+        if(StringUtils.isEmpty(value))
+            return true;
+
         try(Writer writer = getWriter(false)) {
             writer.write(value);
             return true;
@@ -50,6 +53,9 @@ public class FileWriter implements IWriter {
 
     @Override
     public boolean append(String value) {
+        if(StringUtils.isEmpty(value))
+            return true;
+
         try(Writer writer = getWriter(true)) {
             writer.append(value);
             return true;

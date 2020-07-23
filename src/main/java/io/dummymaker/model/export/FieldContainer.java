@@ -15,7 +15,7 @@ public class FieldContainer {
         STRING,
         NUMBER,
         BOOLEAN,
-        DATETIME,
+        DATE,
         SEQUENTIAL,
         COMPLEX,
         COLLECTION,
@@ -50,7 +50,7 @@ public class FieldContainer {
     }
 
     public boolean isDatetime() {
-        return type.equals(Type.DATETIME);
+        return type.equals(Type.DATE);
     }
 
     public boolean isEmbedded() {

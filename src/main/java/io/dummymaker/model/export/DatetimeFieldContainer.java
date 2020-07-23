@@ -13,10 +13,16 @@ import java.lang.reflect.Field;
 public class DatetimeFieldContainer extends FieldContainer {
 
     private final boolean isUnixTime;
+    private final String formatter;
 
     public DatetimeFieldContainer(Field field, Type type, String exportName, GenTime annotation) {
         super(field, type, exportName);
         this.isUnixTime = (annotation != null) && annotation.exportAsUnixTime();
+        this.formatter = annotation.formatter();
+    }
+
+    public String getFormatter() {
+        return formatter;
     }
 
     public boolean isUnixTime() {
