@@ -40,10 +40,10 @@ public class FileWriter implements IWriter {
 
     @Override
     public boolean write(final String value) {
-        if(StringUtils.isEmpty(value))
+        if (StringUtils.isEmpty(value))
             return true;
 
-        try(Writer writer = getWriter(false)) {
+        try (Writer writer = getWriter(false)) {
             writer.write(value);
             return true;
         } catch (IOException e) {
@@ -53,10 +53,10 @@ public class FileWriter implements IWriter {
 
     @Override
     public boolean append(String value) {
-        if(StringUtils.isEmpty(value))
+        if (StringUtils.isEmpty(value))
             return true;
 
-        try(Writer writer = getWriter(true)) {
+        try (Writer writer = getWriter(true)) {
             writer.append(value);
             return true;
         } catch (IOException e) {

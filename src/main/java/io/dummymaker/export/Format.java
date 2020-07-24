@@ -16,7 +16,8 @@ import java.util.Set;
 public enum Format {
 
     CSV(".csv", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL),
-    JSON(".json", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION, Type.MAP),
+    JSON(".json", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION,
+            Type.MAP),
     XML(".xml", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL),
     SQL(".sql", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION);
 

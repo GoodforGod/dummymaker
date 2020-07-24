@@ -10,12 +10,12 @@ import java.lang.reflect.Field;
  * @author Anton Kurako (GoodforGod)
  * @since 7.3.2020
  */
-public class DatetimeFieldContainer extends FieldContainer {
+public class DateFieldContainer extends FieldContainer {
 
     private final boolean isUnixTime;
     private final String formatter;
 
-    public DatetimeFieldContainer(Field field, Type type, String exportName, GenTime annotation) {
+    public DateFieldContainer(Field field, Type type, String exportName, GenTime annotation) {
         super(field, type, exportName);
         this.isUnixTime = (annotation != null) && annotation.exportAsUnixTime();
         this.formatter = annotation.formatter();

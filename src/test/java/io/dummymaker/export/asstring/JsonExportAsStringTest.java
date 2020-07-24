@@ -22,16 +22,15 @@ public class JsonExportAsStringTest extends StringExportAssert {
     private final JsonValidator validation = new JsonValidator();
 
     public JsonExportAsStringTest() {
-        super(new JsonExporter().withPretty().withPath(null).withCase(null).withPath("            "),
-                new JsonValidator(), 5, 12);
+        super(new JsonExporter(), new JsonValidator(), 5, 12);
     }
 
     @Test
-    public void exportListOfDummiesInJsonWithNamingStrategy() throws Exception {
+    public void exportListOfDummiesInJsonWithNamingStrategy() {
         final Cases strategy = Cases.UPPER_SNAKE_CASE;
 
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
-        final IExporter exporter = new JsonExporter().withCase(strategy.value()).withPretty().withCase(null);
+        final IExporter exporter = new JsonExporter().withCase(strategy.value());
 
         final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);

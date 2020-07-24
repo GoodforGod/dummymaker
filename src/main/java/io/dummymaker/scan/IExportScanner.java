@@ -4,9 +4,7 @@ import io.dummymaker.export.ICase;
 import io.dummymaker.model.export.FieldContainer;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Scanner for special export annotations

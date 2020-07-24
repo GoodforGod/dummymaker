@@ -47,7 +47,7 @@ public class FieldContainerFactory {
 
         if (type.equals(FieldContainer.Type.DATE) && field != null) {
             final GenTime annotation = field.getAnnotation(GenTime.class);
-            return new DatetimeFieldContainer(field, type, finalName, annotation);
+            return new DateFieldContainer(field, type, finalName, annotation);
         }
 
         return new FieldContainer(field, type, finalName);

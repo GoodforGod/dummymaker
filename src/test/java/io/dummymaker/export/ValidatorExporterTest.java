@@ -41,7 +41,7 @@ public class ValidatorExporterTest extends Assert {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new CsvExporter(), new CsvValidator() },
-                { new JsonExporter().withPretty(), new JsonValidator() },
+                { new JsonExporter(), new JsonValidator() },
                 { new XmlExporter(), new XmlValidator() },
                 { new SqlExporter(), new SqlValidator() }
         });

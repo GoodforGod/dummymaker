@@ -1,9 +1,11 @@
-package io.dummymaker.export.experimental;
+package io.dummymaker.export.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.error.GenException;
+import io.dummymaker.export.Cases;
+import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
-import io.dummymaker.model.export.DatetimeFieldContainer;
+import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.impl.ExportScanner;
@@ -18,7 +20,9 @@ import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Core exporter class with mapping and converting functionality
@@ -31,25 +35,49 @@ public abstract class BaseExporter implements IExporter {
     protected final IExportScanner scanner = new ExportScanner();
 
     protected boolean append = false;
+    protected ICase naming = Cases.DEFAULT.value();
 
-    abstract @NotNull String getExtension();
+    protected abstract @NotNull String getExtension();
 
-    abstract <T> @NotNull String map(T t, Collection<FieldContainer> containers);
+    protected abstract <T> @NotNull String map(T t, Collection<FieldContainer> containers);
+
+    /**
+     * Build exporter with naming strategy
+     *
+     * @param naming naming strategy for exporter
+     * @see Cases
+     */
+    public IExporter withCase(@NotNull ICase naming) {
+        this.naming = naming;
+        return this;
+    }
 
     public @NotNull IExporter withAppend() {
         this.append = true;
         return this;
     }
 
-    <T> @NotNull String getValue(T t, FieldContainer container) {
-        if(t == null)
+    protected Predicate<FieldContainer> filter() {
+        return c -> true;
+    }
+
+    protected Stream<FieldContainer> scan(Class<?> type) {
+        return scan(type, filter());
+    }
+
+    protected Stream<FieldContainer> scan(Class<?> type, Predicate<FieldContainer> filter) {
+        return scanner.scan(type).stream().filter(filter);
+    }
+
+    protected <T> @NotNull String getValue(T t, FieldContainer container) {
+        if (t == null)
             return "";
 
         try {
             final Field field = container.getField();
             field.setAccessible(true);
             final Object value = field.get(t);
-            if(value == null)
+            if (value == null)
                 return convertNull();
 
             switch (container.getType()) {
@@ -61,7 +89,7 @@ public abstract class BaseExporter implements IExporter {
                 case STRING:
                     return convertString((String) value);
                 case DATE:
-                    return convertDate(value, (DatetimeFieldContainer) container);
+                    return convertDate(value, (DateFieldContainer) container);
                 case ARRAY:
                     return convertArray((Object[]) value);
                 case ARRAY_2D:
@@ -79,25 +107,25 @@ public abstract class BaseExporter implements IExporter {
         }
     }
 
-    String convertNull() {
+    protected String convertNull() {
         return "";
     }
 
-    String convertBoolean(Boolean bool) {
+    protected String convertBoolean(Boolean bool) {
         return bool.toString();
     }
 
-    String convertString(String s) {
+    protected String convertString(String s) {
         return s;
     }
 
-    String convertNumber(Object number) {
+    protected String convertNumber(Object number) {
         return String.valueOf(number);
     }
 
-    String convertDate(Object date, DatetimeFieldContainer container) {
-        if(container.isUnixTime())
-           return convertDateUnix(date);
+    protected String convertDate(Object date, DateFieldContainer container) {
+        if (container.isUnixTime())
+            return convertDateUnix(date);
 
         final String formatterPattern = container.getFormatter();
         final DateTimeFormatter formatter = getDateFormatter(date, formatterPattern);
@@ -115,7 +143,7 @@ public abstract class BaseExporter implements IExporter {
         }
     }
 
-    String convertDateUnix(Object date) {
+    protected String convertDateUnix(Object date) {
         if (date instanceof Date) {
             return String.valueOf(((Date) date).getTime());
         } else if (date instanceof ChronoLocalDate) {
@@ -130,7 +158,7 @@ public abstract class BaseExporter implements IExporter {
         }
     }
 
-    DateTimeFormatter getDateFormatter(Object date, String formatter) {
+    protected DateTimeFormatter getDateFormatter(Object date, String formatter) {
         if (date instanceof Time) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_TIME
@@ -156,62 +184,63 @@ public abstract class BaseExporter implements IExporter {
         }
     }
 
-    String convertArray(Object[] array) {
+    protected String convertArray(Object[] array) {
         return Arrays.stream(array)
                 .map(v -> v instanceof String ? convertString((String) v) : v.toString())
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    String convertArray2D(Object[][] array) {
+    protected String convertArray2D(Object[][] array) {
         return Arrays.deepToString(array);
     }
 
-    String convertCollection(Collection<?> collection) {
+    protected String convertCollection(Collection<?> collection) {
         return collection.stream()
                 .map(v -> v instanceof String ? convertString((String) v) : v.toString())
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    String convertMap(Map<?, ?> map) {
+    protected String convertMap(Map<?, ?> map) {
         return map.entrySet().stream()
                 .map(e -> {
                     final String key = e.getKey() instanceof String ? convertString((String) e.getKey()) : e.getKey().toString();
-                    final String value = e.getValue() instanceof String ? convertString((String) e.getValue()) : e.getValue().toString();
+                    final String value = e.getValue() instanceof String ? convertString((String) e.getValue())
+                            : e.getValue().toString();
                     return key + ":" + value;
                 })
                 .collect(Collectors.joining(",", "{", "}"));
     }
 
-    String convertComplex(Object object) {
+    protected String convertComplex(Object object) {
         return "";
     }
 
-    <T> @NotNull String prefix(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String prefix(T t, Collection<FieldContainer> containers) {
         return "";
     }
 
-    <T> @NotNull String suffix(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String suffix(T t, Collection<FieldContainer> containers) {
         return "";
     }
 
-    <T> @NotNull String head(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers) {
         return "";
     }
 
-    <T> @NotNull String tail(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String tail(T t, Collection<FieldContainer> containers) {
         return "";
     }
 
-    <T> @NotNull IWriter getWriter(String typeName) {
+    protected <T> @NotNull IWriter getWriter(String typeName) {
         return new FileWriter(typeName, ".", getExtension(), append);
     }
 
     @Override
     public <T> boolean export(T t) {
-        if(t == null)
+        if (t == null)
             return false;
 
-        final Collection<FieldContainer> containers = scanner.scan(t.getClass());
+        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
@@ -222,11 +251,11 @@ public abstract class BaseExporter implements IExporter {
 
     @Override
     public <T> boolean export(Collection<T> collection) {
-        if(CollectionUtils.isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection))
             return false;
 
         final T t = collection.iterator().next();
-        final Collection<FieldContainer> containers = scanner.scan(t.getClass());
+        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = collection.stream()
@@ -241,21 +270,21 @@ public abstract class BaseExporter implements IExporter {
 
     @Override
     public <T> @NotNull String convert(T t) {
-        if(t == null)
+        if (t == null)
             return "";
 
-        final Collection<FieldContainer> containers = scanner.scan(t.getClass());
+        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
         return head(t, containers) + data + tail(t, containers);
     }
 
     @Override
     public <T> @NotNull String convert(@NotNull Collection<T> collection) {
-        if(CollectionUtils.isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection))
             return "";
 
         final T t = collection.iterator().next();
-        final Collection<FieldContainer> containers = scanner.scan(t.getClass());
+        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
 
         final String data = collection.stream()
                 .filter(Objects::nonNull)

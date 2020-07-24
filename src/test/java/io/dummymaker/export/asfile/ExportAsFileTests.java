@@ -52,25 +52,13 @@ public class ExportAsFileTests extends ExportAssert {
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new JsonExporter().withPretty(), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withPath(null), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withCase(null), new JsonValidator(), Format.JSON, 5, 14 },
+                { new JsonExporter(), new JsonValidator(), Format.JSON, 5, 14 },
 
                 { new CsvExporter(), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withPath(null), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withPath("    "), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withCase(null), new CsvValidator(), Format.CSV, 3, 2 },
 
                 { new SqlExporter(), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withPath(null), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withPath("    "), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withCase(null), new SqlValidator(), Format.SQL, 9, 10 },
 
                 { new XmlExporter(), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withPath(null), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withPath("     "), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withCase(null), new XmlValidator(), Format.XML, 5, 12 }
         });
     }
 

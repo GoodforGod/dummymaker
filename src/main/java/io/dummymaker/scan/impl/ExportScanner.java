@@ -5,22 +5,12 @@ import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
-import io.dummymaker.factory.IGenSupplier;
-import io.dummymaker.factory.impl.GenSupplier;
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.model.GenContainer;
-import io.dummymaker.model.GenRules;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainerFactory;
-import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IExportScanner;
-import io.dummymaker.scan.IGenScanner;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +40,8 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
     @Override
     public @NotNull Collection<FieldContainer> scan(Class<?> target, ICase naming) {
         return getAllFields(target).stream()
-                .filter(f -> Arrays.stream(f.getDeclaredAnnotations()).noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
+                .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
+                        .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
                 .map(f -> factory.build(f, naming))
                 .collect(Collectors.toList());
     }

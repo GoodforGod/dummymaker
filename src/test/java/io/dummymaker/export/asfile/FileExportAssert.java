@@ -38,13 +38,13 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyInvalidExportEntity() throws Exception {
+    public void exportSingleDummyInvalidExportEntity() {
         final boolean exportResult = exporter.export((DummyNoExportFields) null);
         assertFalse(exportResult);
     }
 
     @Test
-    public void exportDummyListInvalidExportEntity() throws Exception {
+    public void exportDummyListInvalidExportEntity() {
         final boolean exportResult = exporter.export(null);
         assertFalse(exportResult);
 
@@ -53,7 +53,7 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyEmptyContainer() throws Exception {
+    public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
 
         final boolean exportResult = exporter.export(dummy);
@@ -61,7 +61,7 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportDummyListEmptyContainer() throws Exception {
+    public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
         final boolean exportResult = exporter.export(dummy);

@@ -24,8 +24,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
     private final Format format = Format.JSON;
 
     public JsonExportAsFileTest() {
-        super(new JsonExporter().withPretty().withPath(null).withCase(null).withPath("            "),
-                new JsonValidator(), Format.JSON, 5, 12);
+        super(new JsonExporter(), new JsonValidator(), Format.JSON, 5, 12);
     }
 
     // @Test
@@ -34,7 +33,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new JsonExporter().withCase(strategy).withPretty().withCase(null);
+        final IExporter exporter = new JsonExporter().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);

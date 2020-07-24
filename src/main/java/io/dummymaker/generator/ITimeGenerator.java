@@ -1,7 +1,6 @@
 package io.dummymaker.generator;
 
 import io.dummymaker.annotation.complex.GenTime;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates time/datetime/timestamp in range if necessary

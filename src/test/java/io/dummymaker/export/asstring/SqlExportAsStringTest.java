@@ -24,10 +24,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
     private final SqlValidator validation = new SqlValidator();
 
     public SqlExportAsStringTest() {
-        super(new SqlExporter()
-                .withPath(null)
-                .withCase(null)
-                .withPath("            "), new SqlValidator(), 9, 10);
+        super(new SqlExporter(), new SqlValidator(), 9, 10);
     }
 
     @Test
@@ -35,7 +32,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
         final ICase strategy = Cases.SNAKE_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new SqlExporter().withCase(strategy).withPath("    ");
+        final IExporter exporter = new SqlExporter().withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
@@ -52,8 +49,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
 
         final List<DummyArray> dummies = factory.build(DummyArray.class, 2);
         final IExporter exporter = new SqlExporter()
-                .withCase(strategy)
-                .withPath("    ");
+                .withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);

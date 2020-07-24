@@ -23,14 +23,13 @@ public class CsvExportAsStringTest extends StringExportAssert {
     private final CsvValidator validation = new CsvValidator();
 
     public CsvExportAsStringTest() {
-        super(new CsvExporter().withPath(null).withPath("             ").withCase(null),
-                new CsvValidator(), 3, 2);
+        super(new CsvExporter(), new CsvValidator(), 3, 2);
     }
 
     @Test
-    public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
+    public void exportSingleDummyWithStringWrapAndHeader() {
         final Dummy dummy = factory.build(Dummy.class);
-        final IExporter exporter = new CsvExporter().withTextWrap().withHeader().withPath(null);
+        final IExporter exporter = new CsvExporter().withHeader();
 
         final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);
@@ -42,9 +41,9 @@ public class CsvExportAsStringTest extends StringExportAssert {
     }
 
     @Test
-    public void exportListDummyWithStringWrapAndHeader() throws Exception {
+    public void exportListDummyWithStringWrapAndHeader() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(null);
+        final IExporter exporter = new CsvExporter().withHeader();
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
@@ -56,11 +55,11 @@ public class CsvExportAsStringTest extends StringExportAssert {
     }
 
     @Test
-    public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() throws Exception {
+    public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(strategy);
+        final IExporter exporter = new CsvExporter().withHeader().withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);

@@ -24,8 +24,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.XML;
 
     public XmlExportAsFileTest() {
-        super(new XmlExporter().withPath(null).withCase(null).withPath("             "),
-                new XmlValidator(), Format.XML, 5, 12);
+        super(new XmlExporter(), new XmlValidator(), Format.XML, 5, 12);
     }
 
     // @Test
@@ -34,7 +33,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withCase(strategy).withPath("    ");
+        final IExporter exporter = new XmlExporter().withCase(strategy);
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
