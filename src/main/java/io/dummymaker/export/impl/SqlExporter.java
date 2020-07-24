@@ -96,7 +96,7 @@ public class SqlExporter extends BaseExporter {
     }
 
     private <T> String getCollectionName(T t) {
-        return t.getClass().getSimpleName().toLowerCase();
+        return naming.format(t.getClass().getSimpleName()).toLowerCase();
     }
 
     /**
@@ -115,7 +115,7 @@ public class SqlExporter extends BaseExporter {
      * @return sql create table (name - type)
      */
     private String translateContainerToSqlType(FieldContainer container) {
-        final String exportName = container.getExportName();
+        final String exportName = container.getExportName(naming);
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
@@ -155,6 +155,8 @@ public class SqlExporter extends BaseExporter {
 
     private String getPrimaryField(Collection<FieldContainer> containers) {
         final Pattern pattern = Pattern.compile("id|[gu]?uid");
+        if(containers.isEmpty())
+            return "";
 
         return containers.stream()
                 .filter(FieldContainer::isSequential)
@@ -168,7 +170,7 @@ public class SqlExporter extends BaseExporter {
     }
 
     @Override
-    protected String convertArray(Object[] array) {
+    protected String convertArray(Object array) {
         final Class<?> type = array.getClass().getComponentType();
         final String sqlType = translateJavaTypeToSqlType(type);
 
@@ -238,7 +240,7 @@ public class SqlExporter extends BaseExporter {
         // Write primary key constraint
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
-                .append(primaryKeyField)
+                .append(naming.format(primaryKeyField))
                 .append(")\n);\n")
                 .toString();
     }
@@ -269,11 +271,13 @@ public class SqlExporter extends BaseExporter {
 
         final T t = collection.iterator().next();
         final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return false;
 
         final IWriter writer = getWriter(getCollectionName(t));
 
         // Create Table Query
-        if (!writer.write(head(t, containers)))
+        if (!writer.append(head(t, containers)))
             return false;
 
         int i = INSERT_QUERY_LIMIT;
@@ -291,7 +295,7 @@ public class SqlExporter extends BaseExporter {
             final boolean hasNext = iterator.hasNext();
             if (i <= 0 || !hasNext) {
                 builder.append(";\n");
-                if (writer.write(builder.toString()))
+                if (writer.append(builder.toString()))
                     return false;
 
                 builder = new StringBuilder();
@@ -302,7 +306,7 @@ public class SqlExporter extends BaseExporter {
             i = nextInsertValue(i);
         }
 
-        return writer.write(builder.toString());
+        return writer.append(builder.toString());
     }
 
     @Override
@@ -312,6 +316,8 @@ public class SqlExporter extends BaseExporter {
 
         final T t = collection.iterator().next();
         final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return "";
 
         // Create Table Query
         final StringBuilder builder = new StringBuilder(head(t, containers));

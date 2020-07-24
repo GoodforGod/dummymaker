@@ -10,6 +10,7 @@ import io.dummymaker.scan.impl.ExportScanner;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Container class used to store class field information and different field
@@ -37,7 +38,10 @@ public class ClassContainer {
     public <T> ClassContainer(T t, ICase strategy, Format format, GenRules rules) {
         this.format = format;
 
-        this.fieldContainerMap = new ExportScanner(rules).scan(t.getClass(), strategy);
+        this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy)
+        .stream()
+        .collect(Collectors.toMap(FieldContainer::getField, c -> c));
+
         final FieldContainer container = this.fieldContainerMap.get(null);
         if (container != null) {
             this.finalClassName = container.getExportName();

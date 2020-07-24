@@ -10,6 +10,8 @@ import io.dummymaker.export.ICase;
  */
 public interface IValidator {
 
+    void isSingleDummyListValid(String[] dummy);
+
     void isSingleDummyValid(String[] dummy);
 
     void isSingleAutoDummyValid(String[] dummy);

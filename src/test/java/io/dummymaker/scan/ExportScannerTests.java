@@ -6,23 +6,22 @@ import io.dummymaker.scan.impl.ExportScanner;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Map;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 05.10.2019
  */
 public class ExportScannerTests {
 
     @Test
-    public void verifyThatExportFieldsContains() throws NoSuchFieldException {
+    public void verifyThatExportFieldsContains() {
         final IExportScanner scanner = new ExportScanner();
-        final Map<Field, FieldContainer> fields = scanner.scan(Dummy.class);
+        final Collection<FieldContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -30,9 +29,9 @@ public class ExportScannerTests {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        final FieldContainer groupAnnotations = fields.get(GROUP.getField());
-        final FieldContainer numAnnotations = fields.get(NUM.getField());
-        final FieldContainer nameAnnotations = fields.get(NAME.getField());
+        final FieldContainer groupAnnotations = fields.stream().filter(c -> c.getExportName().equals(GROUP.exportName())).findFirst().get();
+        final FieldContainer numAnnotations = fields.stream().filter(c -> c.getExportName().equals(NUM.exportName())).findFirst().get();
+        final FieldContainer nameAnnotations = fields.stream().filter(c -> c.getExportName().equals(NAME.exportName())).findFirst().get();
 
         assertNotNull(groupAnnotations);
         assertNotNull(numAnnotations);

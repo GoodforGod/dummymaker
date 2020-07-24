@@ -24,7 +24,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
     private final Format format = Format.JSON;
 
     public JsonExportAsFileTest() {
-        super(new JsonExporter(), new JsonValidator(), Format.JSON, 5, 12);
+        super(new JsonExporter(), new JsonValidator(), Format.JSON, 5,5, 12);
     }
 
     // @Test

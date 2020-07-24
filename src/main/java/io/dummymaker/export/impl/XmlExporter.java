@@ -45,18 +45,25 @@ public class XmlExporter extends BaseExporter {
 
     @Override
     protected @NotNull <T> String prefix(T t, Collection<FieldContainer> containers) {
-        return openXmlTag(t.getClass().getSimpleName()) + "\n";
+        return openXmlTag(naming.format(t.getClass().getSimpleName())) + "\n";
     }
 
     @Override
     protected @NotNull <T> String suffix(T t, Collection<FieldContainer> containers) {
-        return closeXmlTag(t.getClass().getSimpleName());
+        return "\n" + closeXmlTag(naming.format(t.getClass().getSimpleName()));
+    }
+
+    @Override
+    protected @NotNull <T> String separator(T t, Collection<FieldContainer> containers) {
+        return "\n";
     }
 
     @Override
     protected @NotNull <T> String map(T t, Collection<FieldContainer> containers) {
         return containers.stream()
-                .map(c -> "\t" + openXmlTag(c.getExportName()) + getValue(t, c) + closeXmlTag(c.getExportName()))
+                .map(c -> "\t" + openXmlTag(c.getExportName(naming))
+                        + getValue(t, c)
+                        + closeXmlTag(c.getExportName(naming)))
                 .collect(Collectors.joining("\n"));
     }
 
@@ -68,9 +75,9 @@ public class XmlExporter extends BaseExporter {
         final String type = collection.iterator().next().getClass().getSimpleName();
         final IWriter writer = getWriter(type);
 
-        return writer.write(openXmlTag(type + tagEnding))
+        return writer.append(openXmlTag(naming.format(type + tagEnding)) + "\n")
                 && super.export(collection)
-                && writer.write(closeXmlTag(type + tagEnding));
+                && writer.append("\n" + closeXmlTag(naming.format(type + tagEnding)));
     }
 
     @Override
@@ -80,8 +87,10 @@ public class XmlExporter extends BaseExporter {
             return convert;
 
         final String type = collection.iterator().next().getClass().getSimpleName();
-        return openXmlTag(type + tagEnding)
+        return openXmlTag(naming.format(type + tagEnding))
+                + "\n"
                 + convert
-                + closeXmlTag(type + tagEnding);
+                +"\n"
+                + closeXmlTag(naming.format(type + tagEnding));
     }
 }

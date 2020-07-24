@@ -39,10 +39,12 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
 
     @Override
     public @NotNull Collection<FieldContainer> scan(Class<?> target, ICase naming) {
-        return getAllFields(target).stream()
+        final List<FieldContainer> collect = getValidFields(target).stream()
                 .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
                         .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
                 .map(f -> factory.build(f, naming))
                 .collect(Collectors.toList());
+
+        return collect;
     }
 }

@@ -23,8 +23,13 @@ public class FileWriter implements IWriter {
      * @param path      path where to create file (NULL or UNKNOWN for home dir)
      * @param extension file extension
      */
-    public FileWriter(String fileName, String path, String extension, boolean append) {
+    public FileWriter(String fileName, String path, String extension, boolean cleanFile) {
         this.path = getPath(fileName, path, extension);
+        if(cleanFile) {
+            final File file = new File(path);
+            if(file.exists())
+                file.delete();
+        }
     }
 
     private String getPath(String fileName, String path, String extension) {

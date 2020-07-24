@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.GenRule;
@@ -112,7 +113,7 @@ public class DummyArrayTests extends Assert {
 
         final Pattern patternSingleArray = Pattern.compile("\"floatSimple\":\\[-?[0-9]+\\.[0-9]+");
         final Pattern patternDoubleArray = Pattern.compile("\"byteDouble\":\\[\\[[\\-0-9.]");
-        final String json = new JsonExporter(rules).convert(dummyArray);
+        final String json = new JsonExporter().convert(dummyArray);
 
         assertTrue(patternSingleArray.matcher(json).find());
         assertTrue(patternDoubleArray.matcher(json).find());

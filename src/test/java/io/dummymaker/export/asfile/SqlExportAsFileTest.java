@@ -28,7 +28,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.SQL;
 
     public SqlExportAsFileTest() {
-        super(new SqlExporter(), new SqlValidator(), Format.SQL, 9, 10);
+        super(new SqlExporter(), new SqlValidator(), Format.SQL, 9, 9, 10);
     }
 
     // @Test

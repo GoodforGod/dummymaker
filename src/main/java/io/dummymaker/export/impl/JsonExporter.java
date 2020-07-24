@@ -50,9 +50,20 @@ public class JsonExporter extends BaseExporter {
     }
 
     @Override
+    protected @NotNull <T> String separator(T t, Collection<FieldContainer> containers) {
+        return ",\n";
+    }
+
+    @Override
     protected <T> @NotNull String map(T t, Collection<FieldContainer> containers) {
         return containers.stream()
-                .map(c -> getValue(t, c))
+                .map(c -> {
+                    final String value = getValue(t, c);
+                    return StringUtils.isEmpty(value)
+                            ? ""
+                            : convertString(c.getExportName(naming)) + ":" + value;
+                })
+                .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(","));
     }
 
@@ -64,14 +75,13 @@ public class JsonExporter extends BaseExporter {
         final T t = collection.iterator().next();
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
-        return writer.write("[")
+        return writer.append("[")
                 && super.export(collection)
-                && writer.write("]");
+                && writer.append("]");
     }
 
     @Override
     public @NotNull <T> String convert(@NotNull Collection<T> collection) {
-        final String convert = super.convert(collection);
-        return StringUtils.isEmpty(convert) ? convert : "[" + convert + "]";
+        return "[" + super.convert(collection) + "]";
     }
 }

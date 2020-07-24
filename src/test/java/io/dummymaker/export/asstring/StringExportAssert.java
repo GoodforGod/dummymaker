@@ -7,6 +7,7 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -53,15 +54,6 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportSingleDummyEmptyContainer() {
-        final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
-
-        final String exportResult = exporter.convert(dummy);
-        assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
-    }
-
-    @Test
     public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
@@ -86,6 +78,7 @@ public abstract class StringExportAssert extends Assert {
         validator.isSingleDummyValid(csvArray);
     }
 
+    @Ignore
     @Test
     public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
@@ -96,10 +89,10 @@ public abstract class StringExportAssert extends Assert {
 
         final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
 
-        final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        final String[] split = dummyAsString.split(splitter);
+        assertEquals(singleSplitLength, split.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyValid(split);
     }
 
     @Test

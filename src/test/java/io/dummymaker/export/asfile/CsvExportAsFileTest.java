@@ -26,7 +26,7 @@ public class CsvExportAsFileTest extends FileExportAssert {
     private final Format format = Format.CSV;
 
     public CsvExportAsFileTest() {
-        super(new CsvExporter(), new CsvValidator(), Format.CSV, 3, 2);
+        super(new CsvExporter(), new CsvValidator(), Format.CSV, 3, 3, 2);
     }
 
     // @Test

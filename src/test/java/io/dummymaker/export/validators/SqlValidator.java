@@ -20,6 +20,11 @@ import static org.junit.Assert.assertTrue;
 public class SqlValidator implements IValidator {
 
     @Override
+    public void isSingleDummyListValid(String[] dummy) {
+        isSingleDummyValid(dummy);
+    }
+
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummy[1].matches("\\t" + GROUP.exportName() + "\\tVARCHAR,"));

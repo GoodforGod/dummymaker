@@ -19,6 +19,14 @@ import static org.junit.Assert.assertTrue;
 public class CsvValidator implements IValidator {
 
     @Override
+    public void isSingleDummyListValid(String[] dummy) {
+        // first line values check
+        assertTrue(dummy[0].matches("[0-9]+"));
+        assertTrue(dummy[1].matches("[0-9]+"));
+        assertTrue(dummy[2].matches("[a-zA-Z0-9]+"));
+    }
+
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         // first line values check
         assertTrue(dummy[0].matches("[0-9]+"));

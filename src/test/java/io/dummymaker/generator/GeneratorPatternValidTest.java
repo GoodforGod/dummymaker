@@ -115,9 +115,9 @@ public class GeneratorPatternValidTest {
             assertNotNull(generated);
             assertEquals(generated.getClass(), genClass);
 
-            final String generatedAsString = String.valueOf(generated);
-            final String msg = pattern.pattern() + " : " + generatedAsString;
-            assertTrue(msg, pattern.matcher(generatedAsString).matches());
+            final String v = String.valueOf(generated);
+            final String msg = generator.getClass().getSimpleName() + " : Pattern -" + pattern.pattern() + " : Value - " + v;
+            assertTrue(msg, pattern.matcher(v).matches());
         }
     }
 }

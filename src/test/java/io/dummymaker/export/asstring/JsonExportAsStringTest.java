@@ -22,7 +22,7 @@ public class JsonExportAsStringTest extends StringExportAssert {
     private final JsonValidator validation = new JsonValidator();
 
     public JsonExportAsStringTest() {
-        super(new JsonExporter(), new JsonValidator(), 5, 12);
+        super(new JsonExporter(), new JsonValidator(), 1, 2);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class JsonExportAsStringTest extends StringExportAssert {
         assertNotNull(dummyAsString);
 
         final String[] jsonArray = dummyAsString.split("\n");
-        assertEquals(12, jsonArray.length);
+        assertEquals(2, jsonArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(jsonArray, strategy.value());
     }

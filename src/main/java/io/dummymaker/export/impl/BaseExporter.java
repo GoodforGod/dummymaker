@@ -1,7 +1,7 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.error.GenException;
+import io.dummymaker.error.ExportException;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.IExporter;
@@ -10,6 +10,7 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.IExportScanner;
 import io.dummymaker.scan.impl.ExportScanner;
 import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.FileWriter;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public abstract class BaseExporter implements IExporter {
 
     protected final IExportScanner scanner = new ExportScanner();
 
-    protected boolean append = false;
+    protected boolean cleanExportFile = true;
     protected ICase naming = Cases.DEFAULT.value();
 
     protected abstract @NotNull String getExtension();
@@ -53,7 +54,7 @@ public abstract class BaseExporter implements IExporter {
     }
 
     public @NotNull IExporter withAppend() {
-        this.append = true;
+        this.cleanExportFile = false;
         return this;
     }
 
@@ -91,9 +92,9 @@ public abstract class BaseExporter implements IExporter {
                 case DATE:
                     return convertDate(value, (DateFieldContainer) container);
                 case ARRAY:
-                    return convertArray((Object[]) value);
+                    return convertArray(value);
                 case ARRAY_2D:
-                    return convertArray2D((Object[][]) value);
+                    return convertArray2D(value);
                 case MAP:
                     return convertMap((Map) value);
                 case COLLECTION:
@@ -103,7 +104,7 @@ public abstract class BaseExporter implements IExporter {
                     return convertComplex(value);
             }
         } catch (Exception ex) {
-            throw new GenException(ex);
+            throw new ExportException(ex);
         }
     }
 
@@ -184,14 +185,32 @@ public abstract class BaseExporter implements IExporter {
         }
     }
 
-    protected String convertArray(Object[] array) {
-        return Arrays.stream(array)
+    protected String convertArray(Object array) {
+        final Class<?> type = array.getClass().getComponentType();
+        if(type == byte.class)
+            return Arrays.toString(((byte[]) array));
+        else if(type == short.class)
+            return Arrays.toString(((short[]) array));
+        else if(type == int .class)
+            return Arrays.toString(((int[]) array));
+       else if(type == long.class)
+            return Arrays.toString(((long[]) array));
+        else if(type == float.class)
+            return Arrays.toString(((float[]) array));
+        else if(type == double.class)
+            return Arrays.toString(((double[]) array));
+        else if(type == boolean.class)
+            return Arrays.toString(((boolean[]) array));
+        else if(type == char.class)
+            return Arrays.toString(((char[]) array));
+
+        return Arrays.stream(((Object[]) array))
                 .map(v -> v instanceof String ? convertString((String) v) : v.toString())
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    protected String convertArray2D(Object[][] array) {
-        return Arrays.deepToString(array);
+    protected String convertArray2D(Object array) {
+        return Arrays.deepToString((Object[]) array);
     }
 
     protected String convertCollection(Collection<?> collection) {
@@ -223,6 +242,10 @@ public abstract class BaseExporter implements IExporter {
         return "";
     }
 
+    protected <T> @NotNull String separator(T t, Collection<FieldContainer> containers) {
+        return "";
+    }
+
     protected <T> @NotNull String head(T t, Collection<FieldContainer> containers) {
         return "";
     }
@@ -232,7 +255,7 @@ public abstract class BaseExporter implements IExporter {
     }
 
     protected <T> @NotNull IWriter getWriter(String typeName) {
-        return new FileWriter(typeName, ".", getExtension(), append);
+        return new FileWriter(typeName, "./", getExtension(), cleanExportFile);
     }
 
     @Override
@@ -241,12 +264,15 @@ public abstract class BaseExporter implements IExporter {
             return false;
 
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return false;
+
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
-        return writer.write(head(t, containers))
-                && writer.write(data)
-                && writer.write(tail(t, containers));
+        return writer.append(head(t, containers))
+                && writer.append(data)
+                && writer.append(tail(t, containers));
     }
 
     @Override
@@ -256,16 +282,15 @@ public abstract class BaseExporter implements IExporter {
 
         final T t = collection.iterator().next();
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return false;
+
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
-        final String data = collection.stream()
-                .filter(Objects::nonNull)
-                .map(v -> prefix(v, containers) + map(v, containers) + suffix(v, containers))
-                .collect(Collectors.joining());
-
-        return writer.write(head(t, containers))
-                && writer.write(data)
-                && writer.write(tail(t, containers));
+        final String data = convertData(collection, containers);
+        return writer.append(head(t, containers))
+                && writer.append(data)
+                && writer.append(tail(t, containers));
     }
 
     @Override
@@ -274,6 +299,9 @@ public abstract class BaseExporter implements IExporter {
             return "";
 
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return "";
+
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
         return head(t, containers) + data + tail(t, containers);
     }
@@ -285,12 +313,22 @@ public abstract class BaseExporter implements IExporter {
 
         final T t = collection.iterator().next();
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if(containers.isEmpty())
+            return "";
 
-        final String data = collection.stream()
-                .filter(Objects::nonNull)
-                .map(v -> prefix(v, containers) + map(v, containers) + suffix(v, containers))
-                .collect(Collectors.joining());
-
+        final String data = convertData(collection, containers);
         return head(t, containers) + data + tail(t, containers);
+    }
+
+    private <T> String convertData(Collection<T> collection, Collection<FieldContainer> containers) {
+        final T t = collection.iterator().next();
+        return collection.stream()
+                .filter(Objects::nonNull)
+                .map(v -> {
+                    final String value = map(v, containers);
+                    return StringUtils.isEmpty(value) ? "" : prefix(v, containers) + value + suffix(v, containers);
+                })
+                .filter(StringUtils::isNotEmpty)
+                .collect(Collectors.joining(separator(t, containers)));
     }
 }

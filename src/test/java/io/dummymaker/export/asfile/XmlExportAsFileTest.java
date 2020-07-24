@@ -24,7 +24,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.XML;
 
     public XmlExportAsFileTest() {
-        super(new XmlExporter(), new XmlValidator(), Format.XML, 5, 12);
+        super(new XmlExporter(), new XmlValidator(), Format.XML, 5,7, 12);
     }
 
     // @Test

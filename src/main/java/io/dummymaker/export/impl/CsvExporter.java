@@ -63,7 +63,7 @@ public class CsvExporter extends BaseExporter {
             return "";
 
         return containers.stream()
-                .map(FieldContainer::getExportName)
+                .map(c -> c.getExportName(naming))
                 .collect(Collectors.joining(separator));
     }
 
@@ -72,5 +72,10 @@ public class CsvExporter extends BaseExporter {
         return containers.stream()
                 .map(c -> getValue(t, c))
                 .collect(Collectors.joining(separator));
+    }
+
+    @Override
+    protected @NotNull <T> String separator(T t, Collection<FieldContainer> containers) {
+        return "\n";
     }
 }

@@ -12,12 +12,15 @@ import io.dummymaker.annotation.export.GenExportName;
 public class DummyNoExportFields {
 
     @GenExportName("socialGroup")
+    @GenExportIgnore
     private String group = "100";
 
     @GenExportIgnore
     private String city;
 
+    @GenExportIgnore
     private Integer num;
 
+    @GenExportIgnore
     private String name;
 }

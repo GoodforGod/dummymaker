@@ -1,5 +1,8 @@
 package io.dummymaker.model.export;
 
+import io.dummymaker.export.Cases;
+import io.dummymaker.export.ICase;
+
 import java.lang.reflect.Field;
 
 /**
@@ -74,6 +77,12 @@ public class FieldContainer {
     }
 
     public String getExportName() {
-        return exportName;
+        return getExportName(Cases.DEFAULT.value());
+    }
+
+    public String getExportName(ICase naming) {
+        return (field.getName().equals(exportName))
+                ? naming.format(exportName)
+                : exportName;
     }
 }

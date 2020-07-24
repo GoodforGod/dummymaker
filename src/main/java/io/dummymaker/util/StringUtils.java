@@ -14,6 +14,10 @@ public class StringUtils {
         return (value == null || value.isEmpty());
     }
 
+    public static boolean isNotEmpty(String value) {
+        return !isEmpty(value);
+    }
+
     public static boolean isBlank(String value) {
         return (isEmpty(value) || value.trim().isEmpty());
     }

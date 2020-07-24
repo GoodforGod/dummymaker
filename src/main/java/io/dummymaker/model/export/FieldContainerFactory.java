@@ -2,6 +2,7 @@ package io.dummymaker.model.export;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.annotation.export.GenExportName;
+import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.util.CastUtils;
@@ -32,7 +33,7 @@ public class FieldContainerFactory {
     }
 
     public FieldContainer build(Field field, ICase naming) {
-        final FieldContainer.Type type = getType(field.getType());
+        final FieldContainer.Type type = isSequential(field) ? FieldContainer.Type.SEQUENTIAL : getType(field.getType());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
@@ -51,6 +52,10 @@ public class FieldContainerFactory {
         }
 
         return new FieldContainer(field, type, finalName);
+    }
+
+    private boolean isSequential(Field field) {
+        return Arrays.stream(field.getDeclaredAnnotations()).anyMatch(a -> a.annotationType().equals(GenSequence.class));
     }
 
     private static FieldContainer.Type getType(final Class<?> type) {

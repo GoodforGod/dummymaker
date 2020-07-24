@@ -23,7 +23,7 @@ public class ExportContainer {
 
     public static ExportContainer asValue(final String exportName,
                                           final String exportValue) {
-        return new ExportContainer(exportName, exportValue, FieldContainer.Type.SIMPLE);
+        return new ExportContainer(exportName, exportValue, FieldContainer.Type.STRING);
     }
 
     public static ExportContainer asDatetime(final String exportName,
