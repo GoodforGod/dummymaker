@@ -34,7 +34,7 @@ dependencies {
 }
 
 test {
-    failFast = true
+//    failFast = true
 
     useJUnit()
     testLogging {

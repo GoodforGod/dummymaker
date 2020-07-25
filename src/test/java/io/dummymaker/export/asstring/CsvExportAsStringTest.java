@@ -49,7 +49,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(3, csvArray.length);
+        assertEquals(2, csvArray.length);
 
         validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }
