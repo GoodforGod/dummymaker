@@ -173,7 +173,7 @@ public class SqlValidator implements IValidator {
         final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
         final String timestampPattern = datePattern + "T" + timePattern;
 
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("timedummyclass") + "\\("));
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummytime") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummy[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -185,9 +185,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("timedummyclass")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummytime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -199,7 +197,7 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
+        assertTrue(dummy[12].matches("\\('"
                 + ISO_TIME_PATTERN + "', '"
                 + ISO_DATE_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "', '"
@@ -231,13 +229,11 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[5].matches("\\t" + dateOldField + "\\tBIGINT,"));
         assertTrue(dummy[6].matches("\\t" + dateOldCoverageField + "\\tBIGINT,"));
         assertTrue(dummy[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
-        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tBIGINT,"));
+        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tVARCHAR,"));
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummyunixtime")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummyunixtime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -249,13 +245,13 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
+        assertTrue(dummy[12].matches("\\("
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", '"
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "'\\);"));
     }
@@ -285,9 +281,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummytimeformatter")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummytimeformatter")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -299,7 +293,7 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
+        assertTrue(dummy[12].matches("\\('"
                 + DummyTimeFormatter.Patterns.TIME.getPattern().pattern() + "', '"
                 + DummyTimeFormatter.Patterns.LOCAL_DATE.getPattern().pattern() + "', '"
                 + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"

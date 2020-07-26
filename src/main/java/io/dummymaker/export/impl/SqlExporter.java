@@ -188,8 +188,8 @@ public class SqlExporter extends BaseExporter {
     }
 
     @Override
-    protected String convertDate(Object date, DateFieldContainer container) {
-        return wrap(super.convertDate(date, container));
+    protected String convertDate(Object date, String formatterPattern) {
+        return wrap(super.convertDate(date, formatterPattern));
     }
 
     @Override
@@ -220,6 +220,11 @@ public class SqlExporter extends BaseExporter {
                 || c.getType() == FieldContainer.Type.ARRAY
                 || c.getType() == FieldContainer.Type.ARRAY_2D
                 || c.getType() == FieldContainer.Type.COLLECTION;
+    }
+
+    @Override
+    protected String convertNull() {
+        return "NULL";
     }
 
     @Override

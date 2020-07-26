@@ -35,6 +35,10 @@ public abstract class StringExportAssert extends Assert {
         this.listSplitLength = listSplitLength;
     }
 
+    protected String getEmptyListResult() {
+        return "";
+    }
+
     @Test
     public void exportSingleDummyInvalidExportEntity() {
         final String exportResult = exporter.convert((DummyNoExportFields) null);
@@ -46,11 +50,11 @@ public abstract class StringExportAssert extends Assert {
     public void exportDummyListInvalidExportEntity() {
         final String exportResult = exporter.convert(null);
         assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
 
         final String exportEmptyResult = exporter.convert(Collections.emptyList());
         assertNotNull(exportEmptyResult);
-        assertTrue(exportEmptyResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
     }
 
     @Test
@@ -59,7 +63,7 @@ public abstract class StringExportAssert extends Assert {
 
         final String exportResult = exporter.convert(dummy);
         assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
     }
 
     @Test

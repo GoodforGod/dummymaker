@@ -43,9 +43,9 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNotExportable() {
-        DummyNoZeroConstructor d = new DummyNoZeroConstructor(1);
+        DummyNoZeroConstructor d = new DummyNoZeroConstructor(null);
         String s = exporter.convert(d);
-        if (exporter.getClass().equals(XmlExporter.class) || exporter.getClass().equals(CsvExporter.class))
+        if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
         else
             assertFalse(s.isEmpty());
@@ -53,11 +53,12 @@ public class BasicExporterValidationTest extends Assert {
 
     @Test
     public void exportNotExportableList() {
-        List<DummyNoZeroConstructor> dummyNoZeroConstructors = new ArrayList<>();
-        dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
-        dummyNoZeroConstructors.add(new DummyNoZeroConstructor(1));
+        List<DummyNoZeroConstructor> dummyNoZeroConstructors = Arrays.asList(
+                new DummyNoZeroConstructor(null),
+                new DummyNoZeroConstructor(null));
+
         String s = exporter.convert(dummyNoZeroConstructors);
-        if (exporter.getClass().equals(XmlExporter.class) || exporter.getClass().equals(CsvExporter.class))
+        if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
         else
             assertFalse(s.isEmpty());

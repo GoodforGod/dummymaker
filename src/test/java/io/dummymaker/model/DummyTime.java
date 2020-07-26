@@ -18,7 +18,6 @@ import static java.util.regex.Pattern.compile;
  * @author GoodforGod
  * @since 07.03.2018
  */
-@GenExportName("TimeDummyClass")
 public class DummyTime {
 
     public static final String ISO_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";

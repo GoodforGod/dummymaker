@@ -25,6 +25,11 @@ public class JsonExportAsStringTest extends StringExportAssert {
         super(new JsonExporter(), new JsonValidator(), 1, 2);
     }
 
+    @Override
+    protected String getEmptyListResult() {
+        return "[]";
+    }
+
     @Test
     public void exportListOfDummiesInJsonWithNamingStrategy() {
         final Cases strategy = Cases.UPPER_SNAKE_CASE;

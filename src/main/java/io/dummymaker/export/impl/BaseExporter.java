@@ -90,7 +90,9 @@ public abstract class BaseExporter implements IExporter {
                 case STRING:
                     return convertString((String) value);
                 case DATE:
-                    return convertDate(value, (DateFieldContainer) container);
+                    return ((DateFieldContainer) container).isUnixTime()
+                            ? convertDateUnix(value)
+                            : convertDate(value, ((DateFieldContainer) container).getFormatter());
                 case ARRAY:
                     return convertArray(value);
                 case ARRAY_2D:
@@ -124,11 +126,7 @@ public abstract class BaseExporter implements IExporter {
         return String.valueOf(number);
     }
 
-    protected String convertDate(Object date, DateFieldContainer container) {
-        if (container.isUnixTime())
-            return convertDateUnix(date);
-
-        final String formatterPattern = container.getFormatter();
+    protected String convertDate(Object date, String formatterPattern) {
         final DateTimeFormatter formatter = getDateFormatter(date, formatterPattern);
         if (date instanceof Date) {
             return LocalDateTime.ofInstant(Instant.ofEpochMilli(((Date) date).getTime()), TimeZone.getDefault().toZoneId())

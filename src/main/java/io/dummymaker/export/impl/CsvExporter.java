@@ -64,7 +64,7 @@ public class CsvExporter extends BaseExporter {
 
         return containers.stream()
                 .map(c -> c.getExportName(naming))
-                .collect(Collectors.joining(separator));
+                .collect(Collectors.joining(separator, "", "\n"));
     }
 
     @Override

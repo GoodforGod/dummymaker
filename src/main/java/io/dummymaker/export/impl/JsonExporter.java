@@ -1,5 +1,6 @@
 package io.dummymaker.export.impl;
 
+import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
@@ -21,9 +22,23 @@ public class JsonExporter extends BaseExporter {
         return "json";
     }
 
+    private String wrap(String s) {
+        return StringUtils.isEmpty(s) ? "" : "\"" + s + "\"";
+    }
+
     @Override
     protected String convertString(String s) {
-        return "\"" + s + "\"";
+        return wrap(s);
+    }
+
+    @Override
+    protected String convertDate(Object date, String formatterPattern) {
+        return wrap(super.convertDate(date, formatterPattern));
+    }
+
+    @Override
+    protected String convertNull() {
+        return "null";
     }
 
     @Override
@@ -59,9 +74,7 @@ public class JsonExporter extends BaseExporter {
         return containers.stream()
                 .map(c -> {
                     final String value = getValue(t, c);
-                    return StringUtils.isEmpty(value)
-                            ? ""
-                            : convertString(c.getExportName(naming)) + ":" + value;
+                    return StringUtils.isEmpty(value) ? "" : wrap(c.getExportName(naming)) + ":" + value;
                 })
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(","));

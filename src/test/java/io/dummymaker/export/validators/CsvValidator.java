@@ -70,9 +70,9 @@ public class CsvValidator implements IValidator {
 
         // first line values check
         assertEquals(3, valueArray.length);
-        assertTrue(valueArray[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray[0].matches("[0-9]+"));
         assertTrue(valueArray[1].matches("[0-9]+"));
-        assertTrue(valueArray[2].matches("\'[a-zA-Z0-9]+\'"));
+        assertTrue(valueArray[2].matches("[a-zA-Z0-9]+"));
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
@@ -114,15 +114,15 @@ public class CsvValidator implements IValidator {
 
         // first line values check
         assertEquals(3, valueArray1.length);
-        assertTrue(valueArray1[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray1[0].matches("[0-9]+"));
         assertTrue(valueArray1[1].matches("[0-9]+"));
-        assertTrue(valueArray1[2].matches("\'[a-zA-Z0-9]+\'"));
+        assertTrue(valueArray1[2].matches("[a-zA-Z0-9]+"));
 
         // second line values check
         assertEquals(3, valueArray2.length);
-        assertTrue(valueArray2[0].matches("\'[0-9]+\'"));
+        assertTrue(valueArray2[0].matches("[0-9]+"));
         assertTrue(valueArray2[1].matches("[0-9]+"));
-        assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
+        assertTrue(valueArray2[2].matches("[a-zA-Z0-9]+"));
     }
 
     @Override

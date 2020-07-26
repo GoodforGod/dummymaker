@@ -61,9 +61,11 @@ public class XmlExporter extends BaseExporter {
     @Override
     protected @NotNull <T> String map(T t, Collection<FieldContainer> containers) {
         return containers.stream()
-                .map(c -> "\t" + openXmlTag(c.getExportName(naming))
-                        + getValue(t, c)
-                        + closeXmlTag(c.getExportName(naming)))
+                .map(c -> {
+                    final String value = getValue(t, c);
+                    final String tag = c.getExportName(naming);
+                    return StringUtils.isEmpty(value) ? "" : "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
+                })
                 .collect(Collectors.joining("\n"));
     }
 

@@ -12,8 +12,6 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 20.08.2017
  */
@@ -49,7 +47,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
-        assertEquals(2, csvArray.length);
+        assertEquals(3, csvArray.length);
 
         validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
     }

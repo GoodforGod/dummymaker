@@ -72,7 +72,7 @@ public class XmlValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-        assertTrue(dummy[0].matches("<TimeDummyClass>"));
+        assertTrue(dummy[0].matches("<DummyTime>"));
         assertTrue(dummy[1].matches("\\t<" + LOCAL_TIME.getName() + ">"
                 + Patterns.LOCAL_TIME.getPattern()
                 + "</" + LOCAL_TIME.getName() + ">"));
@@ -97,7 +97,7 @@ public class XmlValidator implements IValidator {
         assertTrue(dummy[8].matches("\\t<" + LOCAL_DATETIME_OBJECT.getName() + ">"
                 + Patterns.LOCAL_DATETIME.getPattern()
                 + "</" + LOCAL_DATETIME_OBJECT.getName() + ">"));
-        assertTrue(dummy[9].matches("</TimeDummyClass>"));
+        assertTrue(dummy[9].matches("</DummyTime>"));
     }
 
     @Override

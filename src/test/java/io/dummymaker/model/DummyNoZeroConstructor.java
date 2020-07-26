@@ -33,7 +33,7 @@ public class DummyNoZeroConstructor {
     @GenSet(fixed = 5, value = EmbeddedGenerator.class)
     private Set<DummyNoZeroConstructor> stringsFix;
 
-    public DummyNoZeroConstructor(int amount) {
+    public DummyNoZeroConstructor(Integer amount) {
         this.amount = amount;
     }
 }
