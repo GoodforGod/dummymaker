@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
  * Used by ClassContainer to contain field value, and final field name
  *
  * @author GoodforGod
- * @see ClassContainer
  * @since 03.09.2017
  */
 public class FieldContainer {

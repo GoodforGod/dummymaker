@@ -92,7 +92,7 @@ public class XmlExporter extends BaseExporter {
         return openXmlTag(naming.format(type + tagEnding))
                 + "\n"
                 + convert
-                +"\n"
+                + "\n"
                 + closeXmlTag(naming.format(type + tagEnding));
     }
 }

@@ -155,7 +155,7 @@ public class SqlExporter extends BaseExporter {
 
     private String getPrimaryField(Collection<FieldContainer> containers) {
         final Pattern pattern = Pattern.compile("id|[gu]?uid");
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return "";
 
         return containers.stream()
@@ -276,7 +276,7 @@ public class SqlExporter extends BaseExporter {
 
         final T t = collection.iterator().next();
         final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return false;
 
         final IWriter writer = getWriter(getCollectionName(t));
@@ -292,7 +292,7 @@ public class SqlExporter extends BaseExporter {
         while (iterator.hasNext()) {
             final T next = iterator.next();
             if (i == INSERT_QUERY_LIMIT)
-                builder.append("\n").append(buildInsertQuery(next, containers));
+                builder.append(buildInsertQuery(next, containers));
 
             builder.append(map(next, containers));
 
@@ -300,7 +300,7 @@ public class SqlExporter extends BaseExporter {
             final boolean hasNext = iterator.hasNext();
             if (i <= 0 || !hasNext) {
                 builder.append(";\n");
-                if (writer.append(builder.toString()))
+                if (!writer.append(builder.toString()))
                     return false;
 
                 builder = new StringBuilder();
@@ -321,7 +321,7 @@ public class SqlExporter extends BaseExporter {
 
         final T t = collection.iterator().next();
         final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return "";
 
         // Create Table Query
@@ -332,7 +332,7 @@ public class SqlExporter extends BaseExporter {
         while (iterator.hasNext()) {
             final T next = iterator.next();
             if (i == INSERT_QUERY_LIMIT)
-                builder.append("\n").append(buildInsertQuery(next, containers));
+                builder.append(buildInsertQuery(next, containers));
 
             builder.append(map(next, containers));
 

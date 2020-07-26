@@ -30,12 +30,13 @@ abstract class FileExportAssert extends ExportAssert {
     private final int singleListSplit;
     private final int listSplitLength;
 
-    public FileExportAssert(IExporter exporter, IValidator validator, Format format, int singleSplitLength, int singeListSplit, int listSplitLength) {
+    public FileExportAssert(IExporter exporter, IValidator validator, Format format, int singleSplitLength, int singleListSplit,
+                            int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.format = format;
         this.singleSplitLength = singleSplitLength;
-        this.singleListSplit = singeListSplit;
+        this.singleListSplit = singleListSplit;
         this.listSplitLength = listSplitLength;
     }
 

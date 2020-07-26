@@ -25,9 +25,9 @@ public class FileWriter implements IWriter {
      */
     public FileWriter(String fileName, String path, String extension, boolean cleanFile) {
         this.path = getPath(fileName, path, extension);
-        if(cleanFile) {
+        if (cleanFile) {
             final File file = new File(path);
-            if(file.exists())
+            if (file.exists())
                 file.delete();
         }
     }

@@ -4,7 +4,6 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
-import io.dummymaker.model.DummyTimeFormatter;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
@@ -20,20 +19,19 @@ public class JsonValidator implements IValidator {
 
     @Override
     public void isSingleDummyListValid(String[] dummy) {
-        assertTrue(dummy[0].matches("\\[\\{"));
-        assertTrue(dummy[1].matches("\\t\"" + GROUP.exportName() + "\":\"[0-9]+\","));
-        assertTrue(dummy[2].matches("\\t\"" + NUM.exportName() + "\":[0-9]+,"));
-        assertTrue(dummy[3].matches("\\t\"" + NAME.exportName() + "\":\"[a-zA-Z0-9]+\""));
-        assertTrue(dummy[4].matches("}]"));
+        assertTrue(dummy[0].matches("\\[\\{"
+                + "\"" + GROUP.exportName() + "\":\"[0-9]+\","
+                + "\"" + NUM.exportName() + "\":[0-9]+,"
+                + "\"" + NAME.exportName() + "\":\"[a-zA-Z0-9]+\""
+                + "}]"));
     }
 
     @Override
     public void isSingleDummyValid(String[] dummy) {
-        assertTrue(dummy[0].matches( "\\{\"" + GROUP.exportName() + "\":\"[0-9]+\","
+        assertTrue(dummy[0].matches("\\{\"" + GROUP.exportName() + "\":\"[0-9]+\","
                 + "\"" + NUM.exportName() + "\":[0-9]+,"
                 + "\"" + NAME.exportName() + "\":\"[a-zA-Z0-9]+\""
-                + "}"
-        ));
+                + "}"));
     }
 
     @Override
@@ -59,15 +57,13 @@ public class JsonValidator implements IValidator {
                 + "\\{\"" + expectedGroupField + "\":\"[0-9]+\","
                 + "\"" + expectedNumField + "\":[0-9]+,"
                 + "\"" + expectedNameField + "\":\"[a-zA-Z0-9]+\""
-                + "},"
-        ));
+                + "},"));
 
         assertTrue(dummies[1].matches(
                 "\\{\"" + expectedGroupField + "\":\"[0-9]+\","
-                + "\"" + expectedNumField + "\":[0-9]+,"
-                + "\"" + expectedNameField + "\":\"[a-zA-Z0-9]+\""
-                + "}" + "]"
-        ));
+                        + "\"" + expectedNumField + "\":[0-9]+,"
+                        + "\"" + expectedNameField + "\":\"[a-zA-Z0-9]+\""
+                        + "}" + "]"));
     }
 
     @Override

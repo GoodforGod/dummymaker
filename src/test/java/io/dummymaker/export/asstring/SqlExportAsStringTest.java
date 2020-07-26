@@ -24,7 +24,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
     private final SqlValidator validation = new SqlValidator();
 
     public SqlExportAsStringTest() {
-        super(new SqlExporter(), new SqlValidator(), 8, 10);
+        super(new SqlExporter(), new SqlValidator(), 8, 9);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
         assertNotNull(dummyAsString);
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(10, sqlArray.length);
+        assertEquals(9, sqlArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(sqlArray, strategy);
     }
@@ -55,7 +55,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
         assertNotNull(dummyAsString);
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(11, sqlArray.length);
+        assertEquals(10, sqlArray.length);
 
         validation.isTwoDummiesArrayValidWithNamingStrategy(sqlArray, strategy);
     }

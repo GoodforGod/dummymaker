@@ -185,21 +185,21 @@ public abstract class BaseExporter implements IExporter {
 
     protected String convertArray(Object array) {
         final Class<?> type = array.getClass().getComponentType();
-        if(type == byte.class)
+        if (type == byte.class)
             return Arrays.toString(((byte[]) array));
-        else if(type == short.class)
+        else if (type == short.class)
             return Arrays.toString(((short[]) array));
-        else if(type == int .class)
+        else if (type == int.class)
             return Arrays.toString(((int[]) array));
-       else if(type == long.class)
+        else if (type == long.class)
             return Arrays.toString(((long[]) array));
-        else if(type == float.class)
+        else if (type == float.class)
             return Arrays.toString(((float[]) array));
-        else if(type == double.class)
+        else if (type == double.class)
             return Arrays.toString(((double[]) array));
-        else if(type == boolean.class)
+        else if (type == boolean.class)
             return Arrays.toString(((boolean[]) array));
-        else if(type == char.class)
+        else if (type == char.class)
             return Arrays.toString(((char[]) array));
 
         return Arrays.stream(((Object[]) array))
@@ -262,7 +262,7 @@ public abstract class BaseExporter implements IExporter {
             return false;
 
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return false;
 
         final IWriter writer = getWriter(t.getClass().getSimpleName());
@@ -280,7 +280,7 @@ public abstract class BaseExporter implements IExporter {
 
         final T t = collection.iterator().next();
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return false;
 
         final IWriter writer = getWriter(t.getClass().getSimpleName());
@@ -297,7 +297,7 @@ public abstract class BaseExporter implements IExporter {
             return "";
 
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return "";
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
@@ -311,7 +311,7 @@ public abstract class BaseExporter implements IExporter {
 
         final T t = collection.iterator().next();
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
-        if(containers.isEmpty())
+        if (containers.isEmpty())
             return "";
 
         final String data = convertData(collection, containers);

@@ -1,7 +1,6 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.annotation.export.GenExportName;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;

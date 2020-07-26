@@ -3,8 +3,6 @@ package io.dummymaker.model.export;
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.special.GenSequence;
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
 import io.dummymaker.util.CastUtils;
 
 import java.lang.reflect.Field;

@@ -1,6 +1,5 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.export.ICase;
 import io.dummymaker.model.export.FieldContainer;
 import org.jetbrains.annotations.NotNull;
 

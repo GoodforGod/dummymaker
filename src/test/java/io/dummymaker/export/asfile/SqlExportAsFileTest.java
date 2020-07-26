@@ -28,7 +28,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.SQL;
 
     public SqlExportAsFileTest() {
-        super(new SqlExporter(), new SqlValidator(), Format.SQL, 9, 9, 10);
+        super(new SqlExporter(), new SqlValidator(), Format.SQL, 8, 8, 9);
     }
 
     // @Test
@@ -69,7 +69,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
 
-        final String filename = "TimeDummyClass" + format.getExtension();
+        final String filename = "DummyTime" + format.getExtension();
         setFilenameToBeRemoved(filename);
 
         final String dummyAsString = readDummyFromFile(filename);
@@ -77,7 +77,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertFalse(dummyAsString.isEmpty());
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(15, sqlArray.length);
+        assertEquals(14, sqlArray.length);
 
         validation.isDummyTimeValidWithNamingStrategy(sqlArray, strategy);
     }

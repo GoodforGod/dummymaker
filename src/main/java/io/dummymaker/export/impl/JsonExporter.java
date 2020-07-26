@@ -1,6 +1,5 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;

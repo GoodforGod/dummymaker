@@ -54,7 +54,9 @@ public class ResourceScannerTests extends Assert {
         final String absolute = "/" + currentRelativePath.toAbsolutePath().toString().replace('\\', '/');
         final String classpath = "/build/classes/java/main/";
         assertTrue(packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/impl")));
-        assertTrue(packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/" + IWriter.class.getSimpleName() + ".class")));
-        assertTrue(packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/impl/" + FileWriter.class.getSimpleName() + ".class")));
+        assertTrue(
+                packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/" + IWriter.class.getSimpleName() + ".class")));
+        assertTrue(packages.stream()
+                .anyMatch(s -> s.contains("io/dummymaker/writer/impl/" + FileWriter.class.getSimpleName() + ".class")));
     }
 }
