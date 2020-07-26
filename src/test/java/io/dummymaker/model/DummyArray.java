@@ -2,52 +2,70 @@ package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenArray;
 import io.dummymaker.annotation.complex.GenArray2D;
+import io.dummymaker.annotation.export.GenExportIgnore;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 15.09.2019
  */
 public class DummyArray {
 
+    @GenExportIgnore
     private byte[] byteSimple;
+    @GenExportIgnore
     private byte[][] byteDouble;
 
     @GenArray(fixed = 15)
     private short[] shortSimple;
+    @GenExportIgnore
     private short[][] shortDouble;
 
+    @GenExportIgnore
     private int[] intSimple;
+    @GenExportIgnore
     private int[][] intDouble;
 
     @GenArray(fixed = 15)
     private long[] longSimple;
+    @GenExportIgnore
     private long[][] longDouble;
 
+    @GenExportIgnore
     private float[] floatSimple;
+    @GenExportIgnore
     private float[][] floatDouble;
 
+    @GenExportIgnore
     private Byte[] ByteObjSimple;
+    @GenExportIgnore
     private Byte[][] ByteObjDouble;
 
+    @GenExportIgnore
     private Short[] ShortObjSimple;
+    @GenExportIgnore
     private Short[][] ShortObjDouble;
 
+    @GenExportIgnore
     private Integer[] IntegerObjSimple;
     @GenArray2D(fixedFirst = 15)
     private Integer[][] IntegerObjDouble;
 
+    @GenExportIgnore
     private Long[] LongObjSimple;
+    @GenExportIgnore
     private Long[][] LongObjDouble;
 
+    @GenExportIgnore
     private Float[] FloatObjSimple;
+    @GenExportIgnore
     private Float[][] FloatObjDouble;
 
+    @GenExportIgnore
     private Double[] DoubleObjSimple;
     @GenArray2D(fixedFirst = 15)
     private Double[][] DoubleObjDouble;
 
+    @GenExportIgnore
     private DummyEnum[] dummies;
 
     public DummyEnum[] getDummies() {

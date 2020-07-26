@@ -33,11 +33,9 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[4].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[5].matches("\\);"));
 
-        assertTrue(dummy[6].matches(""));
-
-        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
+        assertTrue(dummy[6].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
                 + NAME.exportName() + "\\) VALUES"));
-        assertTrue(dummy[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
+        assertTrue(dummy[7].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
     @Override

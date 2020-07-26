@@ -15,9 +15,5 @@ import java.util.Collection;
 public interface IExportScanner extends IScanner<FieldContainer, Class<?>> {
 
     @NotNull
-    @Override
     Collection<FieldContainer> scan(Class<?> target);
-
-    @NotNull
-    Collection<FieldContainer> scan(Class<?> target, ICase nameCase);
 }

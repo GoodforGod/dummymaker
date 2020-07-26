@@ -38,7 +38,7 @@ public class ClassContainer {
     public <T> ClassContainer(T t, ICase strategy, Format format, GenRules rules) {
         this.format = format;
 
-        this.fieldContainerMap = new ExportScanner().scan(t.getClass(), strategy)
+        this.fieldContainerMap = new ExportScanner().scan(t.getClass())
         .stream()
         .collect(Collectors.toMap(FieldContainer::getField, c -> c));
 

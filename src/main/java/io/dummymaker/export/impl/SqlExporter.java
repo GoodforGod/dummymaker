@@ -115,7 +115,7 @@ public class SqlExporter extends BaseExporter {
      * @return sql create table (name - type)
      */
     private String translateContainerToSqlType(FieldContainer container) {
-        final String exportName = container.getExportName(naming);
+        final String field = container.getExportName(naming);
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
@@ -123,14 +123,14 @@ public class SqlExporter extends BaseExporter {
                         ? "BIGINT"
                         : translateJavaTypeToSqlType(fieldType);
 
-                return exportName + "\t" + dateType;
+                return field + "\t" + dateType;
             case ARRAY:
             case COLLECTION:
-                return exportName + "\t" + translateJavaTypeToSqlType(fieldType) + "[]";
+                return field + "\t" + translateJavaTypeToSqlType(fieldType) + "[]";
             case ARRAY_2D:
-                return exportName + "\t" + translateJavaTypeToSqlType(fieldType) + "[][]";
+                return field + "\t" + translateJavaTypeToSqlType(fieldType) + "[][]";
             default:
-                return exportName + "\t" + translateJavaTypeToSqlType(fieldType);
+                return field + "\t" + translateJavaTypeToSqlType(fieldType);
         }
     }
 
@@ -144,7 +144,7 @@ public class SqlExporter extends BaseExporter {
                 .append(" (");
 
         final String names = containers.stream()
-                .map(FieldContainer::getExportName)
+                .map(c -> c.getExportName(naming))
                 .collect(Collectors.joining(", "));
 
         return builder.append(names)

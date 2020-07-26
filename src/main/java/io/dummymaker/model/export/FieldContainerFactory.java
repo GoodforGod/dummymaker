@@ -29,22 +29,18 @@ import static io.dummymaker.util.StringUtils.isEmpty;
 public class FieldContainerFactory {
 
     public FieldContainer build(Field field) {
-        return build(field, Cases.DEFAULT.value());
-    }
-
-    public FieldContainer build(Field field, ICase naming) {
         final FieldContainer.Type type = isSequential(field) ? FieldContainer.Type.SEQUENTIAL : getType(field.getType());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
                 .findFirst()
-                .orElseGet(() -> naming.format(field.getName()));
+                .orElse("");
 
         return build(field, type, exportName);
     }
 
-    private FieldContainer build(Field field, FieldContainer.Type type, String exportName) {
-        final String finalName = isEmpty(exportName) ? field.getName() : exportName;
+    private FieldContainer build(Field field, FieldContainer.Type type, String fieldExportName) {
+        final String finalName = isEmpty(fieldExportName) ? "" : fieldExportName;
 
         if (type.equals(FieldContainer.Type.DATE) && field != null) {
             final GenTime annotation = field.getAnnotation(GenTime.class);

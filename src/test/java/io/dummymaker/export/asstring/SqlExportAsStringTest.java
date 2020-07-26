@@ -24,7 +24,7 @@ public class SqlExportAsStringTest extends StringExportAssert {
     private final SqlValidator validation = new SqlValidator();
 
     public SqlExportAsStringTest() {
-        super(new SqlExporter(), new SqlValidator(), 9, 10);
+        super(new SqlExporter(), new SqlValidator(), 8, 10);
     }
 
     @Test
