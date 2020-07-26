@@ -279,7 +279,7 @@ public class SqlExporter extends BaseExporter {
         if (containers.isEmpty())
             return false;
 
-        final IWriter writer = getWriter(getCollectionName(t));
+        final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         // Create Table Query
         if (!writer.append(head(t, containers)))
