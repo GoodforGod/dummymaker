@@ -10,14 +10,14 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
- * Generates document, password as a string identifier
+ * Generates document, password identifiers as a string
  *
  * @author GoodforGod
  * @since 26.05.2017
  */
-public class DocGenerator implements IGenerator<String> {
+public class DocumentGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("pass(word)?|doc(ument)?|org", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("pass(word)?|doc(ument)?|org|project", CASE_INSENSITIVE);
 
     private final IGenerator<Character> prefixGenerator = new CharacterGenerator();
 

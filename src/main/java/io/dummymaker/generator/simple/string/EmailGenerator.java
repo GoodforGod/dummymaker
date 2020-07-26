@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.DomainExtensionBundle;
+import io.dummymaker.bundle.impl.DomainBundle;
 import io.dummymaker.bundle.impl.EmailServicesBundle;
 import io.dummymaker.bundle.impl.LoginBundle;
 import io.dummymaker.generator.IGenerator;
@@ -23,7 +23,7 @@ public class EmailGenerator implements IGenerator<String> {
 
     private final IBundle nickBundle = new LoginBundle();
     private final IBundle emailBundle = new EmailServicesBundle();
-    private final IBundle domainBundle = new DomainExtensionBundle();
+    private final IBundle domainBundle = new DomainBundle();
 
     @Override
     public @NotNull String generate() {

@@ -18,7 +18,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class LocalDateGenerator implements ITimeGenerator<LocalDate> {
 
-    private final Pattern pattern = Pattern.compile("birth(date)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("birth(date)?|date", CASE_INSENSITIVE);
 
     private final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 

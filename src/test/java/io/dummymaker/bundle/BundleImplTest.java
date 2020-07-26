@@ -38,7 +38,7 @@ public class BundleImplTest extends Assert {
                 { new MiddleNameBundle() },
                 { new CompanyBundle() },
                 { new CountryBundle() },
-                { new DomainExtensionBundle() },
+                { new DomainBundle() },
                 { new EmailServicesBundle() },
                 { new FemaleNameBundle() },
                 { new MaleNameBundle() },

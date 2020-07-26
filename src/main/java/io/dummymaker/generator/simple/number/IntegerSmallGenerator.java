@@ -16,7 +16,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class IntegerSmallGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("age|grade|group|amount", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Integer generate() {

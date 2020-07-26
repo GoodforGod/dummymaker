@@ -84,7 +84,7 @@ public class GeneratorPatternValidTest {
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
-                { new DocGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
+                { new DocumentGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
                 { new StringGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new VersionGenerator(), String.class, compile("[0-9]\\.[0-9]{1,2}\\.[0-9]{1,2}(-SNAPSHOT)?") },

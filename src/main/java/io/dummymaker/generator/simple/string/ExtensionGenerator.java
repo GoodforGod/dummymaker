@@ -1,9 +1,8 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.ProductBundle;
+import io.dummymaker.bundle.impl.ExtensionBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -11,15 +10,15 @@ import java.util.regex.Pattern;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
- * Generates product names
+ * Generates files extensions
  *
  * @author Anton Kurako (GoodforGod)
- * @since 21.7.2020
+ * @since 27.7.2020
  */
-public class ProductGenerator implements IGenerator<String> {
+public class ExtensionGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("product|good|supply|topic", CASE_INSENSITIVE);
-    private final IBundle bundle = new ProductBundle();
+    private final Pattern pattern = Pattern.compile("ext(ension)?", CASE_INSENSITIVE);
+    private final IBundle bundle = new ExtensionBundle();
 
     @Nullable
     @Override
@@ -28,7 +27,7 @@ public class ProductGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @Nullable Pattern getPattern() {
         return pattern;
     }
 }

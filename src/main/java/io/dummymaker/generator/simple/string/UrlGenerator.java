@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.bundle.IBundle;
-import io.dummymaker.bundle.impl.DomainExtensionBundle;
+import io.dummymaker.bundle.impl.DomainBundle;
 import io.dummymaker.bundle.impl.LoginBundle;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,10 +17,10 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class UrlGenerator extends UriGenerator {
 
-    private final Pattern pattern = Pattern.compile("url|server", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("url|server|link", CASE_INSENSITIVE);
 
     private final IBundle domains = new LoginBundle();
-    private final IBundle zones = new DomainExtensionBundle();
+    private final IBundle zones = new DomainBundle();
 
     @Override
     public @NotNull String generate() {
