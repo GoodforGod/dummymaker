@@ -61,7 +61,7 @@ abstract class FileExportAssert extends ExportAssert {
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
@@ -71,7 +71,7 @@ abstract class FileExportAssert extends ExportAssert {
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
@@ -82,9 +82,9 @@ abstract class FileExportAssert extends ExportAssert {
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -103,9 +103,9 @@ abstract class FileExportAssert extends ExportAssert {
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -124,9 +124,9 @@ abstract class FileExportAssert extends ExportAssert {
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

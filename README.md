@@ -10,15 +10,15 @@ Library can generate *Data Objects* filled *random data* for your tests,
 database setup, Big Data setups or other workloads. 
 Library is very flexible at tuning.
 
-It can even do little bit of export in *CSV/JSON/XML/SQL formats*.
+Library can even do simple export in *CSV/JSON/XML/SQL formats*.
 
-Documentation for **versions earlier than 2.0.0** in [this document](/README-VERSION-1.X.md).
+Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 
 ## Dependency :rocket:
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:2.2.0'
+    compile 'com.github.goodforgod:dummymaker:3.0.0'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>2.2.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 

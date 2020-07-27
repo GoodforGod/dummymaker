@@ -23,7 +23,6 @@ There are 4 available exporters with different formats:
 
 Constructor parameters available for all exporters.
 
-* *withPath* - set path for export file, default directory is app home.
 * *withCase* - naming case applied to all export fields (excluding *GenRenameExport*), default value is *DEFAULT*. All cases presets are in **Cases** enum and inherit **ICase** interface.
 
 	**Available cases:**
@@ -40,12 +39,8 @@ Constructor parameters available for all exporters.
 Or you can create your own case using *ICase* interface.
 
 ### **CsvExporter Specific Parameters**
-* *withWrap* - if true will wrap String values with commas like 'this', default *False*.
 * *withHeader* - if true will generate CSV header, default *False*.
 * *withSeparator* - set CSV format separator, default is '**,**' comma.
-
-### **XmlExporter Specific Parameters**
-* *withName* - class custom export name value. (class ending is not used in this case).
 
 ### **SqlExporter Specific Parameters**
 * *withTypes* - map with *key* as a class, and sql data type as string as map *value*.
@@ -53,7 +48,6 @@ Or you can create your own case using *ICase* interface.
 *DataTypeMap* is used to extend your data types to export in sql format.
 
 So you can match java class to SQL type. Like map Java Integer to SQL INT type. Using this parameter you can extend or change defaults mapped data types.
-
 
 ## **Exporters Examples**
 

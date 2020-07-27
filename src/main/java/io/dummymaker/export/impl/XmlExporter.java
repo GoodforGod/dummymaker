@@ -7,6 +7,7 @@ import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,14 @@ public class XmlExporter extends BaseExporter {
      * Is used with className for XML list tag
      */
     private final String tagEnding = "List";
+
+    public XmlExporter() {
+        super();
+    }
+
+    public XmlExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
+    }
 
     @Override
     protected @NotNull String getExtension() {
@@ -77,9 +86,9 @@ public class XmlExporter extends BaseExporter {
         final String type = collection.iterator().next().getClass().getSimpleName();
         final IWriter writer = getWriter(type);
 
-        return writer.append(openXmlTag(naming.format(type + tagEnding)) + "\n")
+        return writer.write(openXmlTag(naming.format(type + tagEnding)) + "\n")
                 && super.export(collection)
-                && writer.append("\n" + closeXmlTag(naming.format(type + tagEnding)));
+                && writer.write("\n" + closeXmlTag(naming.format(type + tagEnding)));
     }
 
     @Override

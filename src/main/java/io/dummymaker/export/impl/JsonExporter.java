@@ -7,6 +7,7 @@ import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,14 @@ import java.util.stream.Collectors;
  * @since 23.7.2020
  */
 public class JsonExporter extends BaseExporter {
+
+    public JsonExporter() {
+        super();
+    }
+
+    public JsonExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
+    }
 
     @Override
     protected @NotNull String getExtension() {
@@ -40,6 +49,7 @@ public class JsonExporter extends BaseExporter {
         return "null";
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     protected Predicate<FieldContainer> filter() {
         return c -> c.getType() == FieldContainer.Type.STRING
@@ -87,9 +97,9 @@ public class JsonExporter extends BaseExporter {
         final T t = collection.iterator().next();
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
-        return writer.append("[")
+        return writer.write("[")
                 && super.export(collection)
-                && writer.append("]");
+                && writer.write("]");
     }
 
     @Override

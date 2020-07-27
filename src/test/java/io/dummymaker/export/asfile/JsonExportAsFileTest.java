@@ -8,6 +8,8 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
+import io.dummymaker.writer.impl.FileWriter;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -27,8 +29,24 @@ public class JsonExportAsFileTest extends FileExportAssert {
         super(new JsonExporter(), new JsonValidator(), Format.JSON, 1, 1, 2);
     }
 
+    @Test
+    public void exportStreamingToFile() {
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final boolean exported = factory.export(Dummy::new, 11000, exporter);
+        assertTrue(exported);
+
+        final String filename = Dummy.class.getSimpleName() + format.getExtension();
+        final String dummyAsString = readFromFile(filename);
+
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] jsonArray = dummyAsString.split("\n");
+        assertEquals(11000, jsonArray.length);
+    }
+
     // @Test
-    public void exportListOfDummiesWithNamingStrategy() throws Exception {
+    public void exportListOfDummiesWithNamingStrategy() {
         final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
@@ -37,9 +55,9 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

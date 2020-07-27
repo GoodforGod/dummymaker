@@ -18,23 +18,28 @@ public class FileWriter implements IWriter {
 
     private final String path;
 
+    public FileWriter(String path, String filename) {
+        this(path, filename, true);
+    }
+
     /**
-     * @param fileName  file name
-     * @param path      path where to create file (NULL or UNKNOWN for home dir)
-     * @param extension file extension
+     * @param filename         file name
+     * @param path             path where to create file (NULL or UNKNOWN for home
+     *                         dir)
+     * @param cleanFileIfExist clean file when writer is created
      */
-    public FileWriter(String fileName, String path, String extension, boolean cleanFile) {
-        this.path = getPath(fileName, path, extension);
-        if (cleanFile) {
+    public FileWriter(String path, String filename, boolean cleanFileIfExist) {
+        this.path = getPath(path, filename);
+        if (cleanFileIfExist) {
             final File file = new File(path);
             if (file.exists())
                 file.delete();
         }
     }
 
-    private String getPath(String fileName, String path, String extension) {
+    private String getPath(String file, String path) {
         final String workPath = StringUtils.isBlank(path) ? "./" : path;
-        return workPath + fileName + "." + extension;
+        return workPath + file;
     }
 
     @Override
@@ -48,21 +53,8 @@ public class FileWriter implements IWriter {
         if (StringUtils.isEmpty(value))
             return true;
 
-        try (Writer writer = getWriter(false)) {
-            writer.write(value);
-            return true;
-        } catch (IOException e) {
-            throw new ExportException(e.getMessage(), e.getCause());
-        }
-    }
-
-    @Override
-    public boolean append(String value) {
-        if (StringUtils.isEmpty(value))
-            return true;
-
         try (Writer writer = getWriter(true)) {
-            writer.append(value);
+            writer.write(value);
             return true;
         } catch (IOException e) {
             throw new ExportException(e.getMessage(), e.getCause());

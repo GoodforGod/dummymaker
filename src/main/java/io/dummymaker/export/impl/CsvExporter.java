@@ -2,9 +2,11 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainer.Type;
+import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,14 @@ public class CsvExporter extends BaseExporter {
      * Generate header for CSV file
      */
     private boolean hasHeader = false;
+
+    public CsvExporter() {
+        super();
+    }
+
+    public CsvExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
+    }
 
     /**
      * @return exporter

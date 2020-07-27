@@ -21,6 +21,7 @@ import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,8 +36,20 @@ public abstract class BaseExporter implements IExporter {
 
     protected final IExportScanner scanner = new ExportScanner();
 
-    protected boolean cleanExportFile = true;
+    protected boolean cleanFileBeforeExport = true;
     protected ICase naming = Cases.DEFAULT.value();
+    protected final Function<String, IWriter> writerFunction;
+
+    public BaseExporter() {
+        this(fileName -> new FileWriter("./", fileName, true));
+    }
+
+    /**
+     * @param writerFunction that maps fileName -> {@link IWriter} implementation
+     */
+    public BaseExporter(@NotNull Function<String, IWriter> writerFunction) {
+        this.writerFunction = writerFunction;
+    }
 
     protected abstract @NotNull String getExtension();
 
@@ -54,7 +67,7 @@ public abstract class BaseExporter implements IExporter {
     }
 
     public @NotNull IExporter withAppend() {
-        this.cleanExportFile = false;
+        this.cleanFileBeforeExport = false;
         return this;
     }
 
@@ -252,8 +265,8 @@ public abstract class BaseExporter implements IExporter {
         return "";
     }
 
-    protected <T> @NotNull IWriter getWriter(String typeName) {
-        return new FileWriter(typeName, "./", getExtension(), cleanExportFile);
+    protected <T> @NotNull IWriter getWriter(String filename) {
+        return writerFunction.apply(filename + "." + getExtension());
     }
 
     @Override
@@ -268,9 +281,9 @@ public abstract class BaseExporter implements IExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
-        return writer.append(head(t, containers))
-                && writer.append(data)
-                && writer.append(tail(t, containers));
+        return writer.write(head(t, containers))
+                && writer.write(data)
+                && writer.write(tail(t, containers));
     }
 
     @Override
@@ -286,9 +299,9 @@ public abstract class BaseExporter implements IExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = convertData(collection, containers);
-        return writer.append(head(t, containers))
-                && writer.append(data)
-                && writer.append(tail(t, containers));
+        return writer.write(head(t, containers))
+                && writer.write(data)
+                && writer.write(tail(t, containers));
     }
 
     @Override

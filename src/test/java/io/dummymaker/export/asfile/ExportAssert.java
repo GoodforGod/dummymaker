@@ -5,10 +5,7 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.stream.Collectors;
@@ -38,14 +35,17 @@ abstract class ExportAssert extends Assert {
         }
     }
 
-    void setFilenameToBeRemoved(String filename) {
+    void markFileForRemoval(String filename) {
         this.fileToDelete = filename;
     }
 
-    String readDummyFromFile(String filename) throws Exception {
+    protected String readFromFile(String filename) {
+        markFileForRemoval(filename);
         try (final BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream("./" + filename), StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }

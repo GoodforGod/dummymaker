@@ -89,11 +89,9 @@ public class GenFactory implements IGenFactory {
 
     @Override
     public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
-        if (amount < 1 || instantiate(target) == null)
-            return Stream.empty();
-
-        final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> instantiate(target));
-        return fill(stream);
+        return (target == null)
+                ? Stream.empty()
+                : stream(() -> instantiate(target), amount);
     }
 
     @Override
@@ -101,21 +99,39 @@ public class GenFactory implements IGenFactory {
         if (supplier.get() == null)
             return Stream.empty();
 
-        final Stream<T> stream = IntStream.range(0, amount).mapToObj(i -> supplier.get());
+        final Stream<T> stream = streamInstances(supplier, amount);
         return fill(stream);
     }
 
     @Override
-    public <T> boolean export(@Nullable Class<T> target, int amount, @NotNull IExporter exporter) {
-        final int batchSize = 1000;
-        final int batches = amount / batchSize;
-        final int left = (amount > batchSize) ? amount % batchSize : amount;
+    public <T> boolean export(@Nullable Class<T> target, long amount, @NotNull IExporter exporter) {
+        return target != null && export(() -> instantiate(target), amount, exporter);
+    }
 
-        for (int i = 0; i < batches; i++)
-            if (!exporter.export(build(target, batchSize)))
+    @Override
+    public <T> boolean export(@NotNull Supplier<T> supplier, long amount, @NotNull IExporter exporter) {
+        final T t = supplier.get();
+        if (t == null)
+            return false;
+
+        final int batchSize = 10000;
+        final long batches = amount / batchSize;
+        final int left = (int) ((amount > batchSize) ? amount % batchSize : amount);
+
+        final GenStorage storage = new GenStorage(scanner, rules);
+        for (int i = 0; i < batches; i++) {
+            final Stream<T> stream = streamInstances(supplier, batchSize);
+            final List<T> data = fill(stream, storage).collect(Collectors.toList());
+            if (!exporter.export(data))
                 return false;
+        }
 
-        return left <= 0 || exporter.export(build(target, left));
+        if (left <= 0)
+            return true;
+
+        final Stream<T> leftStream = streamInstances(supplier, left - 1);
+        final List<T> leftData = fill(leftStream, storage).collect(Collectors.toList());
+        return exporter.export(leftData);
     }
 
     @Override
@@ -133,8 +149,7 @@ public class GenFactory implements IGenFactory {
             return Stream.empty();
 
         final GenStorage storage = new GenStorage(scanner, rules);
-        return stream.filter(Objects::nonNull)
-                .map(t -> fillEntity(t, storage, 1));
+        return fill(stream, storage);
     }
 
     @Override
@@ -142,6 +157,14 @@ public class GenFactory implements IGenFactory {
         return isEmpty(collection)
                 ? Collections.emptyList()
                 : fill(collection.stream()).collect(Collectors.toList());
+    }
+
+    private @NotNull <T> Stream<T> streamInstances(@NotNull Supplier<T> supplier, int amount) {
+        return IntStream.range(0, amount + 1).mapToObj(o -> supplier.get());
+    }
+
+    private @NotNull <T> Stream<T> fill(@NotNull Stream<T> stream, @NotNull GenStorage storage) {
+        return stream.filter(Objects::nonNull).map(t -> fillEntity(t, storage, 1));
     }
 
     /**

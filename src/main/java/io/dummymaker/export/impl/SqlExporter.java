@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,6 +40,14 @@ public class SqlExporter extends BaseExporter {
      * Map'String, String'
      */
     private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
+
+    public SqlExporter() {
+        super();
+    }
+
+    public SqlExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
+    }
 
     @Override
     protected @NotNull String getExtension() {
@@ -210,6 +219,7 @@ public class SqlExporter extends BaseExporter {
         }
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     protected Predicate<FieldContainer> filter() {
         return c -> c.getType() == FieldContainer.Type.STRING
@@ -282,7 +292,7 @@ public class SqlExporter extends BaseExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         // Create Table Query
-        if (!writer.append(head(t, containers)))
+        if (!writer.write(head(t, containers)))
             return false;
 
         int i = INSERT_QUERY_LIMIT;
@@ -300,7 +310,7 @@ public class SqlExporter extends BaseExporter {
             final boolean hasNext = iterator.hasNext();
             if (i <= 0 || !hasNext) {
                 builder.append(";\n");
-                if (!writer.append(builder.toString()))
+                if (!writer.write(builder.toString()))
                     return false;
 
                 builder = new StringBuilder();
@@ -311,7 +321,7 @@ public class SqlExporter extends BaseExporter {
             i = nextInsertValue(i);
         }
 
-        return writer.append(builder.toString());
+        return writer.write(builder.toString());
     }
 
     @Override

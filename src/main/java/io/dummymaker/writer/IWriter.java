@@ -18,12 +18,4 @@ public interface IWriter {
      * @return indicates operation success
      */
     boolean write(String value);
-
-    /**
-     * Appends string and add newline symbol to the end
-     *
-     * @param value string to write
-     * @return indicates operation success
-     */
-    boolean append(String value);
 }

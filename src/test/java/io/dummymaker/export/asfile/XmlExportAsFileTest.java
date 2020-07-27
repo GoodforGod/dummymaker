@@ -37,9 +37,9 @@ public class XmlExportAsFileTest extends FileExportAssert {
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
+        markFileForRemoval(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

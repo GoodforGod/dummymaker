@@ -83,11 +83,22 @@ public interface IGenFactory {
      *
      * @param target   class to build and fill with data
      * @param amount   of objects to produce
-     * @param exporter to feed data for export
+     * @param exporter that is capable to append data where it is feeding data
      * @param <T>      object type
      * @return generates class filled with data
      */
-    <T> boolean export(@Nullable Class<T> target, int amount, @NotNull IExporter exporter);
+    <T> boolean export(@Nullable Class<T> target, long amount, @NotNull IExporter exporter);
+
+    /**
+     * Instantiates classes and them streamline to file via exporter
+     *
+     * @param supplier of class to build
+     * @param amount   of objects to produce
+     * @param exporter that is capable to append data where it is feeding data
+     * @param <T>      object type
+     * @return generates class filled with data
+     */
+    <T> boolean export(@NotNull Supplier<T> supplier, long amount, @NotNull IExporter exporter);
 
     /**
      * Populates dummy object fields
