@@ -80,16 +80,22 @@ public class ExportAsFileTests extends ExportAssert {
     @Test
     public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+
+        setFilenameToBeRemoved(filename);
         assertFalse(exportResult);
     }
 
     @Test
     public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+
+        setFilenameToBeRemoved(filename);
         assertFalse(exportResult);
     }
 

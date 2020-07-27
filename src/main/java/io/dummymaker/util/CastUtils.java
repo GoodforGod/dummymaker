@@ -9,7 +9,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 
 /**
  * Utils for object casting
@@ -209,6 +212,17 @@ public class CastUtils {
         return (firstType.equals(CastType.UNKNOWN) || secondType.equals(CastType.UNKNOWN))
                 ? firstClass.equals(secondClass)
                 : firstType.equals(secondType);
+    }
+
+    public static boolean isUnknownComplex(Class<?> type) {
+        return !isKnownComplex(type);
+    }
+
+    public static boolean isKnownComplex(Class<?> type) {
+        return Date.class.isAssignableFrom(type)
+                || LocalTime.class.isAssignableFrom(type)
+                || LocalDate.class.isAssignableFrom(type)
+                || LocalDateTime.class.isAssignableFrom(type);
     }
 
     @SuppressWarnings("unchecked")
