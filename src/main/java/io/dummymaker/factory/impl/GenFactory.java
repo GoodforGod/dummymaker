@@ -120,7 +120,7 @@ public class GenFactory implements IGenFactory {
 
         final GenStorage storage = new GenStorage(scanner, rules);
         for (int i = 0; i < batches; i++) {
-            final Stream<T> stream = streamInstances(supplier, batchSize);
+            final Stream<T> stream = streamInstances(supplier, batchSize + 1);
             final List<T> data = fill(stream, storage).collect(Collectors.toList());
             if (!exporter.export(data))
                 return false;
@@ -129,7 +129,7 @@ public class GenFactory implements IGenFactory {
         if (left <= 0)
             return true;
 
-        final Stream<T> leftStream = streamInstances(supplier, left - 1);
+        final Stream<T> leftStream = streamInstances(supplier, left);
         final List<T> leftData = fill(leftStream, storage).collect(Collectors.toList());
         return exporter.export(leftData);
     }
@@ -160,7 +160,7 @@ public class GenFactory implements IGenFactory {
     }
 
     private @NotNull <T> Stream<T> streamInstances(@NotNull Supplier<T> supplier, int amount) {
-        return IntStream.range(0, amount + 1).mapToObj(o -> supplier.get());
+        return IntStream.range(0, amount).mapToObj(o -> supplier.get());
     }
 
     private @NotNull <T> Stream<T> fill(@NotNull Stream<T> stream, @NotNull GenStorage storage) {

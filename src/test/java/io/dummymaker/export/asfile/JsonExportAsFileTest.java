@@ -30,7 +30,23 @@ public class JsonExportAsFileTest extends FileExportAssert {
     }
 
     @Test
-    public void exportStreamingToFile() {
+    public void exportStreamingToFileMultiBatch() {
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final boolean exported = factory.export(Dummy::new, 31000, exporter);
+        assertTrue(exported);
+
+        final String filename = Dummy.class.getSimpleName() + format.getExtension();
+        final String dummyAsString = readFromFile(filename);
+
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] jsonArray = dummyAsString.split("\n");
+        assertEquals(31000, jsonArray.length);
+    }
+
+    @Test
+    public void exportStreamingToFileSingleBatch() {
         final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
         final boolean exported = factory.export(Dummy::new, 11000, exporter);
         assertTrue(exported);
@@ -43,6 +59,22 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
         final String[] jsonArray = dummyAsString.split("\n");
         assertEquals(11000, jsonArray.length);
+    }
+
+    @Test
+    public void exportStreamingToFileNoBatch() {
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final boolean exported = factory.export(Dummy::new, 1000, exporter);
+        assertTrue(exported);
+
+        final String filename = Dummy.class.getSimpleName() + format.getExtension();
+        final String dummyAsString = readFromFile(filename);
+
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] jsonArray = dummyAsString.split("\n");
+        assertEquals(1000, jsonArray.length);
     }
 
     // @Test

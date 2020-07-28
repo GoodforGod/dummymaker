@@ -76,7 +76,7 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
@@ -97,7 +97,7 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
@@ -118,7 +118,7 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
