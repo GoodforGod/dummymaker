@@ -28,7 +28,7 @@ public class XmlExportAsFileTest extends FileExportAssert {
     }
 
     // @Test
-    public void exportListOfDummiesWithNamingStrategy() throws Exception {
+    public void exportListOfDummiesWithNamingStrategy() {
         final ICase strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
@@ -37,7 +37,6 @@ public class XmlExportAsFileTest extends FileExportAssert {
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

@@ -41,7 +41,6 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -70,7 +69,6 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertTrue(exportResult);
 
         final String filename = "DummyTime" + format.getExtension();
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

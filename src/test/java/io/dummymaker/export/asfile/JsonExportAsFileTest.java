@@ -87,7 +87,6 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

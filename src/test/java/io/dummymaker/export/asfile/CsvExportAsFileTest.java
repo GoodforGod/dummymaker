@@ -37,7 +37,6 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -57,7 +56,6 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -79,7 +77,6 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

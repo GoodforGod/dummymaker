@@ -37,8 +37,6 @@ dependencies {
 }
 
 test {
-    failFast = true
-
     useJUnit()
     testLogging {
         events 'passed', 'skipped', 'failed'

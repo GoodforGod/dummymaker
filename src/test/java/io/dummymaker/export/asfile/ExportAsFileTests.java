@@ -100,13 +100,12 @@ public class ExportAsFileTests extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -121,13 +120,12 @@ public class ExportAsFileTests extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -142,13 +140,12 @@ public class ExportAsFileTests extends ExportAssert {
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        markFileForRemoval(filename);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

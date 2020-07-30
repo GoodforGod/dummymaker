@@ -12,6 +12,7 @@ import io.dummymaker.model.graph.Node;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -68,7 +69,7 @@ class GenStorage implements IGenStorage {
     }
 
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field, @NotNull Class<?> type) {
+    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field, @Nullable Class<?> type) {
         return supplier.getSuitable(field, type);
     }
 

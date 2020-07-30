@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 abstract class ExportAssert extends Assert {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(ExportAssert.class);
     private final Set<String> fileToDelete = new HashSet<>();
 
     @After
@@ -30,16 +30,16 @@ abstract class ExportAssert extends Assert {
             try {
                 final File file = new File(f);
                 Files.deleteIfExists(file.toPath());
-                fileToDelete.remove(f);
             } catch (Exception e) {
                 logger.warn(e.getMessage());
-                fileToDelete.remove(f);
             }
         });
+
+        fileToDelete.clear();
     }
 
     void markFileForRemoval(String filename) {
-        this.fileToDelete.add(filename);
+        fileToDelete.add(filename);
     }
 
     protected String readFromFile(String filename) {
