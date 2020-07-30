@@ -91,7 +91,7 @@ public class GeneratorPatternValidTest {
                 { new TagGenerator(), String.class, compile("#[0-9a-zA-Z]+") },
                 { new UuidGenerator(), UUID.class, compile(uuidPattern) },
                 { new CharacterGenerator(), Character.class, compile("[a-zA-Z]") },
-                { new CharGenerator(), Character.class, compile(".") },
+                { new CharGenerator(), Character.class, compile("..?") },
                 { new ObjectGenerator(), String.class, compile("object_[0-9]+") },
                 { new ListComplexGenerator(), ArrayList.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
                 { new SetComplexGenerator(), HashSet.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
