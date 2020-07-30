@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class FileWriter implements IWriter {
 
+    public static final String DEFAULT_PATH = "./";
+
     private final String path;
 
     public FileWriter(String path, String filename) {
@@ -24,7 +26,7 @@ public class FileWriter implements IWriter {
 
     /**
      * @param filename         file name
-     * @param path             path where to create file (NULL or UNKNOWN for home
+     * @param path             path where to create file (NULL or EMPTY for home
      *                         dir)
      * @param cleanFileIfExist clean file when writer is created
      */
@@ -38,14 +40,8 @@ public class FileWriter implements IWriter {
     }
 
     private String getPath(String file, String path) {
-        final String workPath = StringUtils.isBlank(path) ? "./" : path;
+        final String workPath = StringUtils.isBlank(path) ? DEFAULT_PATH : path;
         return workPath + file;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        final File file = new File(path);
-        return !file.exists() || file.length() == 0;
     }
 
     @Override
@@ -53,15 +49,15 @@ public class FileWriter implements IWriter {
         if (StringUtils.isEmpty(value))
             return true;
 
-        try (Writer writer = getWriter(true)) {
-            writer.write(value);
+        try (Writer writer = getWriter()) {
+            writer.append(value);
             return true;
         } catch (IOException e) {
             throw new ExportException(e.getMessage(), e.getCause());
         }
     }
 
-    private Writer getWriter(boolean append) throws FileNotFoundException {
-        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.path, append), StandardCharsets.UTF_8));
+    private Writer getWriter() throws IOException {
+        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.path, true), StandardCharsets.UTF_8));
     }
 }

@@ -31,7 +31,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportStreamingToFileMultiBatch() {
-        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("", name, false));
         final boolean exported = factory.export(Dummy::new, 31000, exporter);
         assertTrue(exported);
 
@@ -47,7 +47,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportStreamingToFileSingleBatch() {
-        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("", name, false));
         final boolean exported = factory.export(Dummy::new, 11000, exporter);
         assertTrue(exported);
 
@@ -63,7 +63,7 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportStreamingToFileNoBatch() {
-        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("./", name, false));
+        final JsonExporter exporter = new JsonExporter(name -> new FileWriter("", name, false));
         final boolean exported = factory.export(Dummy::new, 1000, exporter);
         assertTrue(exported);
 

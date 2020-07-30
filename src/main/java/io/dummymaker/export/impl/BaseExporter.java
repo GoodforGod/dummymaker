@@ -41,7 +41,7 @@ public abstract class BaseExporter implements IExporter {
     protected final Function<String, IWriter> writerFunction;
 
     public BaseExporter() {
-        this(fileName -> new FileWriter("./", fileName, true));
+        this(fileName -> new FileWriter(FileWriter.DEFAULT_PATH, fileName, true));
     }
 
     /**
