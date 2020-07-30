@@ -18,7 +18,7 @@ public interface IGenerator<T> {
     T generate();
 
     @Nullable
-    default Pattern getPattern() {
+    default Pattern pattern() {
         return null;
     }
 }

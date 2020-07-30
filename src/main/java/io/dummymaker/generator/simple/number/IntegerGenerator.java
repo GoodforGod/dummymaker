@@ -25,7 +25,7 @@ public class IntegerGenerator implements IGenerator<Integer> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

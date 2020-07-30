@@ -33,7 +33,7 @@ public class LocalDateGenerator implements ITimeGenerator<LocalDate> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

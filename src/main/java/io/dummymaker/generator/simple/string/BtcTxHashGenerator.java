@@ -22,7 +22,7 @@ public class BtcTxHashGenerator extends IdGenerator {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

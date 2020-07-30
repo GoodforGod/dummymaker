@@ -373,7 +373,7 @@ public class IntegerSmallGenerator implements IGenerator<Integer> {
     private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
 
     @Override
-    public Pattern getPattern() {
+    public Pattern pattern() {
         return pattern;
     }
 

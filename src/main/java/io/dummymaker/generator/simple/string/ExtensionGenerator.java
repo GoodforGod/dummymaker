@@ -27,7 +27,7 @@ public class ExtensionGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @Nullable Pattern pattern() {
         return pattern;
     }
 }

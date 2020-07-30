@@ -28,7 +28,7 @@ public class UrlGenerator extends UriGenerator {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

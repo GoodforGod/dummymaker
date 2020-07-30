@@ -48,7 +48,7 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

@@ -1,6 +1,5 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.generator.simple.SequenceGenerator;
@@ -22,8 +21,6 @@ public class UniqueGeneratorsTest {
     @Test
     public void enumerateGen() {
         IGenerator generator = new SequenceGenerator();
-
-        final Person build = new GenFactory().build(Person::new);
 
         Object generated = generator.generate();
 

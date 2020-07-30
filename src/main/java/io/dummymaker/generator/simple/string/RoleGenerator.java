@@ -28,7 +28,7 @@ public class RoleGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @Nullable Pattern pattern() {
         return pattern;
     }
 }

@@ -105,8 +105,8 @@ public class CollectionUtils {
     }
 
     /**
-     * @param min to get
-     * @param max to get
+     * @param min to get (inclusive)
+     * @param max to get (exclusive)
      * @return random from min (included) to max (excluded)
      */
     public static int random(int min, int max) {
@@ -118,8 +118,8 @@ public class CollectionUtils {
     }
 
     /**
-     * @param min to get
-     * @param max to get
+     * @param min to get (inclusive)
+     * @param max to get (exclusive)
      * @return random from min (included) to max (excluded)
      */
     public static long random(long min, long max) {

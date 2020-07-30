@@ -22,7 +22,7 @@ public class BtcAddressGenerator extends IdGenerator {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

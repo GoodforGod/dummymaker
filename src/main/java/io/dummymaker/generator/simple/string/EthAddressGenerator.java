@@ -17,7 +17,7 @@ public class EthAddressGenerator extends IdGenerator {
     private final Pattern pattern = Pattern.compile("eth(ereum)?|etc", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 

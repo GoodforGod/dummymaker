@@ -36,7 +36,7 @@ public class AddressGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

@@ -29,7 +29,7 @@ public class FileGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @Nullable Pattern getPattern() {
+    public @Nullable Pattern pattern() {
         return pattern;
     }
 }

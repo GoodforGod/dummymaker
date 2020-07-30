@@ -10,12 +10,14 @@ import io.dummymaker.model.Pair;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -118,7 +120,11 @@ public class GenSupplier implements IGenSupplier {
     private Optional<Class<? extends IGenerator>> getPatternSuitable(String fieldName, Class<?> type) {
         final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
                 .flatMap(List::stream)
-                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
+                .filter(g -> g.pattern() != null)
+                .sorted(Comparator.comparingInt((IGenerator g) -> {
+                    final Matcher matcher = g.pattern().matcher(fieldName);
+                    return matcher.find() ? FuzzySearch.ratio(fieldName, matcher.group()) : 0;
+                }).reversed())
                 .findFirst();
 
         if (!patternSuitable.isPresent())
@@ -129,7 +135,7 @@ public class GenSupplier implements IGenSupplier {
             return Optional.of(patternSuitable.get().getClass());
 
         return classifiers.get(type).stream()
-                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
+                .filter(g -> g.pattern() != null && g.pattern().matcher(fieldName).find())
                 .findFirst()
                 .map(g -> g.getClass());
     }

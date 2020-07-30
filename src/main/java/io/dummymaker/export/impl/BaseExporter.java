@@ -45,7 +45,7 @@ public abstract class BaseExporter implements IExporter {
     }
 
     /**
-     * @param writerFunction that maps fileName -> {@link IWriter} implementation
+     * @param writerFunction that maps fileName to {@link IWriter} implementation
      */
     public BaseExporter(@NotNull Function<String, IWriter> writerFunction) {
         this.writerFunction = writerFunction;
@@ -60,6 +60,7 @@ public abstract class BaseExporter implements IExporter {
      *
      * @param naming naming strategy for exporter
      * @see Cases
+     * @return self
      */
     public IExporter withCase(@NotNull ICase naming) {
         this.naming = naming;

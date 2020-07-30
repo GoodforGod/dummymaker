@@ -25,7 +25,7 @@ public class UnixTimeGenerator implements IGenerator<Long> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }
