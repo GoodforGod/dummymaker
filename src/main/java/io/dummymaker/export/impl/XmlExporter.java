@@ -1,7 +1,6 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
@@ -79,29 +78,14 @@ public class XmlExporter extends BaseExporter {
     }
 
     @Override
-    public <T> boolean export(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
-            return false;
-
-        final String type = collection.iterator().next().getClass().getSimpleName();
-        final IWriter writer = getWriter(type);
-
-        return writer.write(openXmlTag(naming.format(type + tagEnding)) + "\n")
-                && super.export(collection)
-                && writer.write("\n" + closeXmlTag(naming.format(type + tagEnding)));
+    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        final String type = t.getClass().getSimpleName();
+        return isCollection ? openXmlTag(naming.format(type + tagEnding)) + "\n" : "";
     }
 
     @Override
-    public @NotNull <T> String convert(@NotNull Collection<T> collection) {
-        final String convert = super.convert(collection);
-        if (StringUtils.isEmpty(convert))
-            return convert;
-
-        final String type = collection.iterator().next().getClass().getSimpleName();
-        return openXmlTag(naming.format(type + tagEnding))
-                + "\n"
-                + convert
-                + "\n"
-                + closeXmlTag(naming.format(type + tagEnding));
+    protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        final String type = t.getClass().getSimpleName();
+        return isCollection ? "\n" + closeXmlTag(naming.format(type + tagEnding)) : "";
     }
 }

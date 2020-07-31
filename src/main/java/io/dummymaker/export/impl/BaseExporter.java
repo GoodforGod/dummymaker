@@ -258,11 +258,25 @@ public abstract class BaseExporter implements IExporter {
         return "";
     }
 
-    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers) {
+    /**
+     * @param t            one of exported objects as example
+     * @param containers   scanned from object
+     * @param isCollection true if collection is exported or false otherwise
+     * @param <T>          type of exported object
+     * @return head for data
+     */
+    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         return "";
     }
 
-    protected <T> @NotNull String tail(T t, Collection<FieldContainer> containers) {
+    /**
+     * @param t            one of exported objects as example
+     * @param containers   scanned from object
+     * @param isCollection true if collection is exported or false otherwise
+     * @param <T>          type of exported object
+     * @return tail for data
+     */
+    protected <T> @NotNull String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
         return "";
     }
 
@@ -282,9 +296,9 @@ public abstract class BaseExporter implements IExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
-        return writer.write(head(t, containers))
-                && writer.write(data)
-                && writer.write(tail(t, containers));
+        final String head = head(t, containers, false);
+        final String tail = tail(t, containers, false);
+        return writer.write(head + data + tail);
     }
 
     @Override
@@ -300,9 +314,9 @@ public abstract class BaseExporter implements IExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         final String data = convertData(collection, containers);
-        return writer.write(head(t, containers))
-                && writer.write(data)
-                && writer.write(tail(t, containers));
+        final String head = head(t, containers, true);
+        final String tail = tail(t, containers, true);
+        return writer.write(head + data + tail);
     }
 
     @Override
@@ -315,7 +329,9 @@ public abstract class BaseExporter implements IExporter {
             return "";
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
-        return head(t, containers) + data + tail(t, containers);
+        final String head = head(t, containers, false);
+        final String tail = tail(t, containers, false);
+        return head + data + tail;
     }
 
     @Override
@@ -329,10 +345,12 @@ public abstract class BaseExporter implements IExporter {
             return "";
 
         final String data = convertData(collection, containers);
-        return head(t, containers) + data + tail(t, containers);
+        final String head = head(t, containers, true);
+        final String tail = tail(t, containers, true);
+        return head + data + tail;
     }
 
-    private <T> String convertData(Collection<T> collection, Collection<FieldContainer> containers) {
+    protected <T> String convertData(Collection<T> collection, Collection<FieldContainer> containers) {
         final T t = collection.iterator().next();
         return collection.stream()
                 .filter(Objects::nonNull)

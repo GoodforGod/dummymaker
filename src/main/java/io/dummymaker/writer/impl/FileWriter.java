@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class FileWriter implements IWriter {
 
-    public static final String DEFAULT_PATH = "./";
+    public static final String DEFAULT_PATH = "";
 
     private final String path;
 
@@ -33,7 +33,7 @@ public class FileWriter implements IWriter {
     public FileWriter(String path, String filename, boolean cleanFileIfExist) {
         this.path = getPath(path, filename);
         if (cleanFileIfExist) {
-            final File file = new File(path);
+            final File file = new File(this.path);
             if (file.exists())
                 file.delete();
         }

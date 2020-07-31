@@ -1,7 +1,6 @@
 package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
@@ -90,20 +89,12 @@ public class JsonExporter extends BaseExporter {
     }
 
     @Override
-    public <T> boolean export(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
-            return false;
-
-        final T t = collection.iterator().next();
-        final IWriter writer = getWriter(t.getClass().getSimpleName());
-
-        return writer.write("[")
-                && super.export(collection)
-                && writer.write("]");
+    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        return isCollection ? "[" : "";
     }
 
     @Override
-    public @NotNull <T> String convert(@NotNull Collection<T> collection) {
-        return "[" + super.convert(collection) + "]";
+    protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        return isCollection ? "]" : "";
     }
 }

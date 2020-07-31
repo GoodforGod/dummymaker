@@ -238,7 +238,7 @@ public class SqlExporter extends BaseExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String collectionName = getCollectionName(t);
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(collectionName)
@@ -292,7 +292,7 @@ public class SqlExporter extends BaseExporter {
         final IWriter writer = getWriter(t.getClass().getSimpleName());
 
         // Create Table Query
-        if (!writer.write(head(t, containers)))
+        if (!writer.write(head(t, containers, true)))
             return false;
 
         int i = INSERT_QUERY_LIMIT;
@@ -335,7 +335,7 @@ public class SqlExporter extends BaseExporter {
             return "";
 
         // Create Table Query
-        final StringBuilder builder = new StringBuilder(head(t, containers));
+        final StringBuilder builder = new StringBuilder(head(t, containers, true));
         final Iterator<T> iterator = collection.iterator();
         int i = INSERT_QUERY_LIMIT;
 

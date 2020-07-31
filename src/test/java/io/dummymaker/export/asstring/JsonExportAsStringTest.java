@@ -27,7 +27,7 @@ public class JsonExportAsStringTest extends StringExportAssert {
 
     @Override
     protected String getEmptyListResult() {
-        return "[]";
+        return "";
     }
 
     @Test

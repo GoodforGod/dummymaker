@@ -68,7 +68,7 @@ public class CsvExporter extends BaseExporter {
     }
 
     @Override
-    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         if (!hasHeader)
             return "";
 

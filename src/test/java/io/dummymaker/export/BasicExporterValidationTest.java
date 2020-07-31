@@ -58,7 +58,7 @@ public class BasicExporterValidationTest extends Assert {
                 new DummyNoZeroConstructor(null));
 
         String s = exporter.convert(dummyNoZeroConstructors);
-        if (exporter instanceof CsvExporter || exporter instanceof XmlExporter)
+        if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
         else
             assertFalse(s.isEmpty());
@@ -67,27 +67,18 @@ public class BasicExporterValidationTest extends Assert {
     @Test
     public void exportNullableDummyReturnEmpty() {
         String s = exporter.convert(null);
-        if (exporter instanceof JsonExporter)
-            assertFalse(s.isEmpty());
-        else
-            assertTrue(s.isEmpty());
+        assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportNullableDummiesReturnEmptyList() {
         String s = exporter.convert(null);
-        if (exporter instanceof JsonExporter)
-            assertFalse(s.isEmpty());
-        else
-            assertTrue(s.isEmpty());
+        assertTrue(s.isEmpty());
     }
 
     @Test
     public void exportEmptyDummiesReturnEmptyList() {
         String s = exporter.convert(new ArrayList<>());
-        if (exporter instanceof JsonExporter)
-            assertFalse(s.isEmpty());
-        else
-            assertTrue(s.isEmpty());
+        assertTrue(s.isEmpty());
     }
 }
