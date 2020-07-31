@@ -44,7 +44,7 @@ abstract class ExportAssert extends Assert {
 
     protected String readFromFile(String filename) {
         try (final BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream("./" + filename), StandardCharsets.UTF_8))) {
+                new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
             markFileForRemoval(filename);
             return reader.lines().collect(Collectors.joining("\n"));
         } catch (Exception e) {
