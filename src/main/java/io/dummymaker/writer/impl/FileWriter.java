@@ -20,19 +20,19 @@ public class FileWriter implements IWriter {
 
     private final String path;
 
-    public FileWriter(String path, String filename) {
-        this(path, filename, true);
+    public FileWriter(String filename, boolean appendToFileIfExist) {
+        this(DEFAULT_PATH, filename, appendToFileIfExist);
     }
 
     /**
-     * @param filename         file name
-     * @param path             path where to create file (NULL or EMPTY for home
-     *                         dir)
-     * @param cleanFileIfExist clean file when writer is created
+     * @param filename            file name
+     * @param path                path where to create file (NULL or EMPTY for home
+     *                            dir)
+     * @param appendToFileIfExist clean file when writer is created
      */
-    public FileWriter(String path, String filename, boolean cleanFileIfExist) {
+    public FileWriter(String path, String filename, boolean appendToFileIfExist) {
         this.path = getPath(path, filename);
-        if (cleanFileIfExist) {
+        if (!appendToFileIfExist) {
             final File file = new File(this.path);
             if (file.exists())
                 file.delete();
