@@ -90,8 +90,8 @@ public static List<User> getUsers() {
 
 ### Factory Methods
 
-Factory can not only instantiate classes but also provides other
-contracts to manipulate with objects like using provided supplier.
+Factory not only instantiate classes but also provides other
+contracts to manipulate with objects like using supplier.
 
 ```java
 final GenFactory factory = new GenFactory();
@@ -104,6 +104,18 @@ User filled = factory.fill(user);
 ```
 
 There are more other contracts available just check *GenFactory*.
+
+Also, factory can export huge amount of data in one attempt when data cannot be proceeded inmemory via *export* contract.
+
+In such case export that is provided *should* append file with each export execution. 
+Default *IWriter* doesn't do that by default, so such option should be activated.
+
+```java
+final GenFactory factory = new GenFactory();
+final JsonExporter exporter = new JsonExporter(fileName -> new FileWriter(fileName, true)); // tell writer to append file
+
+factory.export(User.class, 100_000_000_000L, exporter);
+```
 
 ### Gen Auto Annotation
 
