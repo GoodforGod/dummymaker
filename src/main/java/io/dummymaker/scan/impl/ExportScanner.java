@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -30,12 +29,10 @@ public class ExportScanner extends BasicScanner implements IExportScanner {
 
     @Override
     public @NotNull Collection<FieldContainer> scan(Class<?> target) {
-        final List<FieldContainer> collect = getValidFields(target).stream()
+        return getValidFields(target).stream()
                 .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
                         .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
                 .map(factory::build)
                 .collect(Collectors.toList());
-
-        return collect;
     }
 }

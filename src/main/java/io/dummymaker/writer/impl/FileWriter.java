@@ -35,7 +35,8 @@ public class FileWriter implements IWriter {
         if (!appendToFileIfExist) {
             final File file = new File(this.path);
             if (file.exists())
-                file.delete();
+                if (!file.delete())
+                    throw new ExportException("File '" + path + filename + "' can not be deleted!");
         }
     }
 

@@ -34,6 +34,8 @@ import java.util.stream.Stream;
  */
 public abstract class BaseExporter implements IExporter {
 
+    private static final String DEFAULT_EMPTY_VALUE = "";
+
     protected final IExportScanner scanner = new ExportScanner();
 
     protected boolean cleanFileBeforeExport = true;
@@ -86,7 +88,7 @@ public abstract class BaseExporter implements IExporter {
 
     protected <T> @NotNull String getValue(T t, FieldContainer container) {
         if (t == null)
-            return "";
+            return DEFAULT_EMPTY_VALUE;
 
         try {
             final Field field = container.getField();
@@ -125,7 +127,7 @@ public abstract class BaseExporter implements IExporter {
     }
 
     protected String convertNull() {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     protected String convertBoolean(Boolean bool) {
@@ -172,25 +174,17 @@ public abstract class BaseExporter implements IExporter {
     }
 
     protected DateTimeFormatter getDateFormatter(Object date, String formatter) {
-        if (date instanceof Time) {
+        if (date instanceof Time || date instanceof LocalTime) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_TIME
                     : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof Date) {
+        } else if (date instanceof Date || date instanceof LocalDateTime) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_DATE_TIME
                     : DateTimeFormatter.ofPattern(formatter);
         } else if (date instanceof LocalDate) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_DATE
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof LocalTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof LocalDateTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_DATE_TIME
                     : DateTimeFormatter.ofPattern(formatter);
         } else {
             return DateTimeFormatter.ofPattern(formatter);
@@ -243,19 +237,19 @@ public abstract class BaseExporter implements IExporter {
     }
 
     protected String convertComplex(Object object) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     protected <T> @NotNull String prefix(T t, Collection<FieldContainer> containers) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     protected <T> @NotNull String suffix(T t, Collection<FieldContainer> containers) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     protected <T> @NotNull String separator(T t, Collection<FieldContainer> containers) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     /**
@@ -266,7 +260,7 @@ public abstract class BaseExporter implements IExporter {
      * @return head for data
      */
     protected <T> @NotNull String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     /**
@@ -277,7 +271,7 @@ public abstract class BaseExporter implements IExporter {
      * @return tail for data
      */
     protected <T> @NotNull String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
-        return "";
+        return DEFAULT_EMPTY_VALUE;
     }
 
     protected <T> @NotNull IWriter getWriter(String filename) {
@@ -322,11 +316,11 @@ public abstract class BaseExporter implements IExporter {
     @Override
     public <T> @NotNull String convert(T t) {
         if (t == null)
-            return "";
+            return DEFAULT_EMPTY_VALUE;
 
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
-            return "";
+            return DEFAULT_EMPTY_VALUE;
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
         final String head = head(t, containers, false);
@@ -337,12 +331,12 @@ public abstract class BaseExporter implements IExporter {
     @Override
     public <T> @NotNull String convert(@NotNull Collection<T> collection) {
         if (CollectionUtils.isEmpty(collection))
-            return "";
+            return DEFAULT_EMPTY_VALUE;
 
         final T t = collection.iterator().next();
         final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
-            return "";
+            return DEFAULT_EMPTY_VALUE;
 
         final String data = convertData(collection, containers);
         final String head = head(t, containers, true);
@@ -356,7 +350,8 @@ public abstract class BaseExporter implements IExporter {
                 .filter(Objects::nonNull)
                 .map(v -> {
                     final String value = map(v, containers);
-                    return StringUtils.isEmpty(value) ? "" : prefix(v, containers) + value + suffix(v, containers);
+                    return StringUtils.isEmpty(value) ? DEFAULT_EMPTY_VALUE
+                            : prefix(v, containers) + value + suffix(v, containers);
                 })
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(separator(t, containers)));

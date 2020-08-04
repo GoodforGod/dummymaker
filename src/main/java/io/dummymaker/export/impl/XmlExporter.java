@@ -19,7 +19,7 @@ public class XmlExporter extends BaseExporter {
     /**
      * Is used with className for XML list tag
      */
-    private final String tagEnding = "List";
+    private static final String TAG_ENDING = "List";
 
     public XmlExporter() {
         super();
@@ -80,12 +80,12 @@ public class XmlExporter extends BaseExporter {
     @Override
     protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
-        return isCollection ? openXmlTag(naming.format(type + tagEnding)) + "\n" : "";
+        return isCollection ? openXmlTag(naming.format(type + TAG_ENDING)) + "\n" : "";
     }
 
     @Override
     protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
-        return isCollection ? "\n" + closeXmlTag(naming.format(type + tagEnding)) : "";
+        return isCollection ? "\n" + closeXmlTag(naming.format(type + TAG_ENDING)) : "";
     }
 }

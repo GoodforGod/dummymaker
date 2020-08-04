@@ -8,6 +8,10 @@ package io.dummymaker.error;
  */
 public class ExportException extends RuntimeException {
 
+    public ExportException(String message) {
+        super(message);
+    }
+
     public ExportException(Throwable t) {
         super(t.getMessage(), t);
     }
