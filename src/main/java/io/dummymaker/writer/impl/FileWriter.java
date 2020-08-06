@@ -6,6 +6,7 @@ import io.dummymaker.writer.IWriter;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 /**
  * Buffered writer implementation
@@ -20,23 +21,25 @@ public class FileWriter implements IWriter {
 
     private final String path;
 
-    public FileWriter(String filename, boolean appendToFileIfExist) {
-        this(DEFAULT_PATH, filename, appendToFileIfExist);
+    public FileWriter(String filename, boolean deleteFileBeforeWrite) {
+        this(DEFAULT_PATH, filename, deleteFileBeforeWrite);
     }
 
     /**
-     * @param filename            file name
-     * @param path                path where to create file (NULL or EMPTY for home
-     *                            dir)
-     * @param appendToFileIfExist clean file when writer is created
+     * @param filename              file name
+     * @param path                  path where to create file (NULL or EMPTY for
+     *                              home dir)
+     * @param deleteFileBeforeWrite clean file when writer is created
      */
-    public FileWriter(String path, String filename, boolean appendToFileIfExist) {
+    public FileWriter(String path, String filename, boolean deleteFileBeforeWrite) {
         this.path = getPath(path, filename);
-        if (!appendToFileIfExist) {
-            final File file = new File(this.path);
-            if (file.exists())
-                if (!file.delete())
-                    throw new ExportException("File '" + path + filename + "' can not be deleted!");
+        if (deleteFileBeforeWrite) {
+            try {
+                final File file = new File(this.path);
+                Files.deleteIfExists(file.toPath());
+            } catch (IOException e) {
+                throw new ExportException("File '" + path + filename + "' can not be deleted!");
+            }
         }
     }
 

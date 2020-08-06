@@ -23,7 +23,7 @@ public class XmlExportAsStringTest extends StringExportAssert {
     private final XmlValidator validation = new XmlValidator();
 
     public XmlExportAsStringTest() {
-        super(new XmlExporter(), new XmlValidator(), 5, 12);
+        super(new XmlExporter(), new XmlValidator(), 5, 7, 12);
     }
 
     @Test

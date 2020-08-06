@@ -43,7 +43,7 @@ public abstract class BaseExporter implements IExporter {
     protected final Function<String, IWriter> writerFunction;
 
     public BaseExporter() {
-        this(fileName -> new FileWriter(fileName, false));
+        this(fileName -> new FileWriter(fileName, true));
     }
 
     /**
@@ -274,7 +274,7 @@ public abstract class BaseExporter implements IExporter {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull IWriter getWriter(String filename) {
+    protected @NotNull IWriter getWriter(String filename) {
         return writerFunction.apply(filename + "." + getExtension());
     }
 

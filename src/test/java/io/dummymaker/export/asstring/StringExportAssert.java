@@ -7,7 +7,6 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -26,12 +25,19 @@ public abstract class StringExportAssert extends Assert {
     private final IValidator validator;
 
     private final int singleSplitLength;
+    private final int singleListSplit;
     private final int listSplitLength;
 
     public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+        this(exporter, validator, singleSplitLength, singleSplitLength, listSplitLength);
+    }
+
+    public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int singleListSplit,
+                              int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.singleSplitLength = singleSplitLength;
+        this.singleListSplit = singleListSplit;
         this.listSplitLength = listSplitLength;
     }
 
@@ -82,7 +88,6 @@ public abstract class StringExportAssert extends Assert {
         validator.isSingleDummyValid(csvArray);
     }
 
-    @Ignore
     @Test
     public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
@@ -94,9 +99,9 @@ public abstract class StringExportAssert extends Assert {
         final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
 
         final String[] split = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, split.length);
+        assertEquals(singleListSplit, split.length);
 
-        validator.isSingleDummyValid(split);
+        validator.isSingleDummyListValid(split);
     }
 
     @Test
