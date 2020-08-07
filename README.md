@@ -112,7 +112,7 @@ Default *IWriter* doesn't do that by default, so such option should be activated
 
 ```java
 final GenFactory factory = new GenFactory();
-final JsonExporter exporter = new JsonExporter(fileName -> new FileWriter(fileName, true)); // tell writer to append file
+final JsonExporter exporter = new JsonExporter(fileName -> new FileWriter(fileName, false)); // do not delete file before write
 
 factory.export(User.class, 100_000_000_000L, exporter);
 ```
