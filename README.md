@@ -462,7 +462,7 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## Version History
 
-**3.0.0** - Exporters redesigned, Factory export infinite amount of dummies contracts added, generators improved, matching for generators improved.
+**3.0.0** - Exporters redesigned, Factory export huge amount of dummies contracts added, generators improved, matching for generators improved.
 
 **2.2.0** - More generators, improved pattern matching, Javax CDI annotations added.
 
