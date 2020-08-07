@@ -47,7 +47,7 @@ public class GeneratorPatternValidTest {
         this.pattern = pattern;
     }
 
-    @Parameters(name = "{index}: Generator ({0}), Regex {2}")
+    @Parameters(name = "{index}: Data Type ({1}), Regex {2}")
     public static Collection<Object[]> data() {
         final String uuidPattern = "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}";
 
@@ -116,7 +116,8 @@ public class GeneratorPatternValidTest {
             assertEquals(generated.getClass(), genClass);
 
             final String v = String.valueOf(generated);
-            final String msg = generator.getClass().getSimpleName() + " : Pattern -" + pattern.pattern() + " : Value - " + v;
+            final String msg = generator.getClass().getSimpleName() + " : Pattern - '" + pattern.pattern() + "' : Value - '" + v
+                    + "'";
             assertTrue(msg, pattern.matcher(v).matches());
         }
     }
