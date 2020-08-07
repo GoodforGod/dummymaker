@@ -7,12 +7,6 @@ plugins {
     id 'com.diffplug.gradle.spotless' version '4.4.0'
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-}
-
 group = groupId
 version = artifactVersion
 
@@ -38,6 +32,7 @@ sonarqube {
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
