@@ -23,18 +23,17 @@ public class XmlExportAsStringTest extends StringExportAssert {
     private final XmlValidator validation = new XmlValidator();
 
     public XmlExportAsStringTest() {
-        super(new XmlExporter().withPath(null).withCase((ICase) null).withPath("             "),
-                new XmlValidator(), 5, 12);
+        super(new XmlExporter(), new XmlValidator(), 5, 7, 12);
     }
 
     @Test
-    public void exportListOfDummiesInXmlWithNamingStrategy() throws Exception {
+    public void exportListOfDummiesInXmlWithNamingStrategy() {
         final ICase strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new XmlExporter().withCase(strategy).withPath("    ");
+        final IExporter exporter = new XmlExporter().withCase(strategy);
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
 
         final String[] xmlArray = dummyAsString.split("\n");

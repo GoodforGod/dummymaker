@@ -19,15 +19,15 @@ public class JobGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("job|work|position", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new JobBundle();
+    private final IBundle bundle = new JobBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

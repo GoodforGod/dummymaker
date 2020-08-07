@@ -26,22 +26,19 @@ public class CsvExportAsFileTest extends FileExportAssert {
     private final Format format = Format.CSV;
 
     public CsvExportAsFileTest() {
-        super(new CsvExporter().withPath(null).withPath("             ").withCase(null),
-                new CsvValidator(), Format.CSV, 3, 2);
+        super(new CsvExporter(), new CsvValidator(), Format.CSV, 3, 3, 2);
     }
 
     // @Test
     public void exportSingleDummyWithStringWrapAndHeader() throws Exception {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withCase(null).withTextWrap()
-                .withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
+        final IExporter exporter = new CsvExporter().withHeader().withSeparator(CsvExporter.DEFAULT_SEPARATOR);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -55,13 +52,12 @@ public class CsvExportAsFileTest extends FileExportAssert {
     public void exportListDummyWithStringWrapAndHeader() throws Exception {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(null);
+        final IExporter exporter = new CsvExporter().withHeader();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -77,13 +73,12 @@ public class CsvExportAsFileTest extends FileExportAssert {
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new CsvExporter().withHeader().withTextWrap().withCase(strategy);
+        final IExporter exporter = new CsvExporter().withHeader().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

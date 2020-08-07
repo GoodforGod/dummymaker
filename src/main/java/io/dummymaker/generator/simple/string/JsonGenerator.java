@@ -21,7 +21,7 @@ public class JsonGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("jsonb?", CASE_INSENSITIVE);
 
     private final IGenerator<String> idGenerator = new IdGenerator();
-    private final IGenerator<String> nickGenerator = new NickGenerator();
+    private final IGenerator<String> nickGenerator = new LoginGenerator();
     private final IGenerator<String> fieldGenerator = new NounGenerator();
 
     @Override
@@ -85,7 +85,7 @@ public class JsonGenerator implements IGenerator<String> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

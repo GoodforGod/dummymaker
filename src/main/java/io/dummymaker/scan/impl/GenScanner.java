@@ -41,7 +41,7 @@ public class GenScanner extends BasicScanner implements IGenScanner {
     public @NotNull Map<Field, GenContainer> scan(final Class target) {
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
 
-        getAllFilteredFields(target).stream()
+        getValidFields(target).stream()
                 .filter(f -> !isIgnored(f))
                 .forEach(f -> getContainer(f).ifPresent(c -> containers.put(f, c)));
 

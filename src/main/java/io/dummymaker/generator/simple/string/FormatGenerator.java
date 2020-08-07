@@ -19,15 +19,15 @@ public class FormatGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("format", CASE_INSENSITIVE);
 
-    private final IBundle<String> formats = new FormatBundle();
+    private final IBundle formats = new FormatBundle();
 
     @Override
     public @NotNull String generate() {
-        return formats.getRandom();
+        return formats.random();
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

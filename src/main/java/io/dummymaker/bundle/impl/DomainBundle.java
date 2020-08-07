@@ -6,9 +6,9 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod
  * @since 31.05.2017
  */
-public class DomainExtensionBundle extends BasicBundle<String> {
+public class DomainBundle extends BasicBundle {
 
-    public DomainExtensionBundle() {
+    public DomainBundle() {
         super(
                 ".com",
                 ".co",

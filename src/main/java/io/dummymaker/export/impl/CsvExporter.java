@@ -1,93 +1,43 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.Format;
-import io.dummymaker.export.ICase;
-import io.dummymaker.model.GenRules;
-import io.dummymaker.model.export.ClassContainer;
-import io.dummymaker.model.export.ExportContainer;
 import io.dummymaker.model.export.FieldContainer;
+import io.dummymaker.model.export.FieldContainer.Type;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.lang.reflect.Field;
-import java.util.List;
+import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Export objects in CSV format
- *
- * @author GoodforGod
- * @since 25.02.2018
+ * @author Anton Kurako (GoodforGod)
+ * @since 22.7.2020
  */
-@Named("csv")
-@Singleton
-public class CsvExporter extends BasicExporter {
+public class CsvExporter extends BaseExporter {
 
     public static final char DEFAULT_SEPARATOR = ',';
 
     /**
      * CSV format separator for values: value1,value2,value3 ...
      */
-    private char separator = DEFAULT_SEPARATOR;
-    private final Predicate<String> isValueWrappable = s -> s.contains(String.valueOf(this.separator))
-            || s.contains("\"")
-            || s.contains("\n");
-    /**
-     * Flag to indicate wrap text (String) fields with quotes
-     */
-    private boolean areTextValuesWrapped = false;
+    private String separator = String.valueOf(DEFAULT_SEPARATOR);
+
     /**
      * Generate header for CSV file
      */
     private boolean hasHeader = false;
 
     public CsvExporter() {
-        this(null);
+        super();
     }
 
-    public CsvExporter(GenRules rules) {
-        super(Format.CSV, Cases.DEFAULT.value(), rules);
-    }
-
-    /**
-     * Build exporter with path value
-     *
-     * @param path path for export file
-     * @return exporter
-     */
-    public CsvExporter withPath(final String path) {
-        setPath(path);
-        return this;
-    }
-
-    /**
-     * Build exporter with naming strategy
-     *
-     * @param nameCase naming strategy for exporter
-     * @return exporter
-     * @see ICase
-     */
-    public CsvExporter withCase(final ICase nameCase) {
-        setCase(nameCase);
-        return this;
+    public CsvExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
     }
 
     /**
      * @return exporter
-     * @see #areTextValuesWrapped
-     */
-    public CsvExporter withTextWrap() {
-        this.areTextValuesWrapped = true;
-        return this;
-    }
-
-    /**
-     * @return exporter
-     * @see #hasHeader
      */
     public CsvExporter withHeader() {
         this.hasHeader = true;
@@ -97,144 +47,45 @@ public class CsvExporter extends BasicExporter {
     /**
      * @param separator char separator for CSV values
      * @return exporter
-     * @see #separator
      */
-    public CsvExporter withSeparator(final char separator) {
-        this.separator = separator;
+    public CsvExporter withSeparator(char separator) {
+        this.separator = String.valueOf(separator);
         return this;
     }
 
-    /**
-     * Wraps text values (String) with quotes like: value - 'value'
-     *
-     * @param value values to wrap
-     * @return wrapped values
-     */
-    private String wrapWithQuotes(final String value) {
-        return "'" + value + "'";
-    }
-
-    private <T> String format(final T t, final ClassContainer container) {
-        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
-
-        final String separatorAsStr = String.valueOf(separator);
-        return exportContainers.stream()
-                .map(c -> buildCsvValue(container.getField(c.getExportName()), c.getExportValue()))
-                .collect(Collectors.joining(separatorAsStr));
-    }
-
-    /**
-     * Build correct final export field value in CSV format Check for wrap option
-     * for field value
-     *
-     * @param field      export field
-     * @param fieldValue export field value
-     * @return final export field value
-     */
-    private String buildCsvValue(final Field field,
-                                 final String fieldValue) {
-
-        return (areTextValuesWrapped && field.getType().equals(String.class)
-                || isValueWrappable.test(fieldValue))
-                        ? wrapWithQuotes(fieldValue)
-                        : fieldValue;
-    }
-
-    /**
-     * Generates header for CSV file
-     *
-     * @return csv header
-     */
-    private String generateCsvHeader(final ClassContainer container) {
-        final String separatorAsStr = String.valueOf(separator);
-        return container.getFormatSupported(Format.CSV).values().stream()
-                .map(FieldContainer::getExportName)
-                .collect(Collectors.joining(separatorAsStr));
+    @Override
+    protected @NotNull String getExtension() {
+        return "csv";
     }
 
     @Override
-    public <T> boolean export(final T t) {
-        if (isExportEntityInvalid(t))
-            return false;
-
-        final ClassContainer container = buildClassContainer(t);
-        if (!container.isExportable())
-            return false;
-
-        final IWriter writer = buildWriter(container);
-        if (writer == null)
-            return false;
-
-        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
-            return false;
-
-        return writer.write(format(t, container))
-                && writer.flush();
+    protected Predicate<FieldContainer> filter() {
+        return c -> c.getType() == Type.STRING
+                || c.getType() == Type.BOOLEAN
+                || c.getType() == Type.NUMBER
+                || c.getType() == Type.DATE
+                || c.getType() == Type.SEQUENTIAL;
     }
 
     @Override
-    public <T> boolean export(final List<T> list) {
-        if (isExportEntityInvalid(list))
-            return false;
+    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        if (!hasHeader)
+            return "";
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
-
-        final ClassContainer container = buildClassContainer(list.get(0));
-        if (!container.isExportable())
-            return false;
-
-        final IWriter writer = buildWriter(container);
-        if (writer == null)
-            return false;
-
-        if (hasHeader && !writer.write(generateCsvHeader(container) + "\n"))
-            return false;
-
-        final boolean writerHadError = list.stream()
-                .anyMatch(t -> !writer.write(format(t, container) + "\n"));
-
-        return !writerHadError && writer.flush();
+        return containers.stream()
+                .map(c -> c.getExportName(naming))
+                .collect(Collectors.joining(separator, "", "\n"));
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final T t) {
-        if (isExportEntityInvalid(t))
-            return "";
-
-        final ClassContainer container = buildClassContainer(t);
-        if (!container.isExportable())
-            return "";
-
-        final StringBuilder builder = new StringBuilder("");
-        if (hasHeader) {
-            builder.append(generateCsvHeader(container)).append("\n");
-        }
-
-        return builder.append(format(t, container)).toString();
+    protected <T> @NotNull String map(T t, Collection<FieldContainer> containers) {
+        return containers.stream()
+                .map(c -> getValue(t, c))
+                .collect(Collectors.joining(separator));
     }
 
     @Override
-    public <T> @NotNull String exportAsString(final List<T> list) {
-        if (isExportEntityInvalid(list))
-            return "";
-
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
-
-        final ClassContainer container = buildClassContainer(list.get(0));
-        if (!container.isExportable())
-            return "";
-
-        final StringBuilder builder = new StringBuilder("");
-        if (hasHeader) {
-            builder.append(generateCsvHeader(container)).append("\n");
-        }
-
-        final String result = list.stream()
-                .map(t -> format(t, container))
-                .collect(Collectors.joining("\n"));
-
-        return builder.append(result).toString();
+    protected @NotNull <T> String separator(T t, Collection<FieldContainer> containers) {
+        return "\n";
     }
 }

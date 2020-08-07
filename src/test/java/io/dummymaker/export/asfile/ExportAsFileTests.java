@@ -52,25 +52,13 @@ public class ExportAsFileTests extends ExportAssert {
     @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new JsonExporter().withPretty(), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withPath(null), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withPath("    "), new JsonValidator(), Format.JSON, 5, 14 },
-                { new JsonExporter().withPretty().withCase(null), new JsonValidator(), Format.JSON, 5, 14 },
+                { new JsonExporter(), new JsonValidator(), Format.JSON, 5, 14 },
 
                 { new CsvExporter(), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withPath(null), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withPath("    "), new CsvValidator(), Format.CSV, 3, 2 },
-                { new CsvExporter().withCase(null), new CsvValidator(), Format.CSV, 3, 2 },
 
                 { new SqlExporter(), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withPath(null), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withPath("    "), new SqlValidator(), Format.SQL, 9, 10 },
-                { new SqlExporter().withCase(null), new SqlValidator(), Format.SQL, 9, 10 },
 
                 { new XmlExporter(), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withPath(null), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withPath("     "), new XmlValidator(), Format.XML, 5, 12 },
-                { new XmlExporter().withCase(null), new XmlValidator(), Format.XML, 5, 12 }
         });
     }
 
@@ -92,29 +80,34 @@ public class ExportAsFileTests extends ExportAssert {
     @Test
     public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
     @Test
     public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -127,15 +120,14 @@ public class ExportAsFileTests extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -148,15 +140,14 @@ public class ExportAsFileTests extends ExportAssert {
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

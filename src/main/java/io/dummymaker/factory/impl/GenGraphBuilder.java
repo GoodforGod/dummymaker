@@ -11,6 +11,8 @@ import io.dummymaker.scan.impl.GenAutoScanner;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import static io.dummymaker.util.CastUtils.isUnknownComplex;
+
 /**
  * Builds embedded gen auto depth graph for storage
  *
@@ -55,6 +57,7 @@ class GenGraphBuilder {
 
         scanner.scan(parentType, true).entrySet().stream()
                 .filter(e -> e.getValue().isEmbedded() || e.getValue().isComplex())
+                .filter(e -> isUnknownComplex(e.getValue().getField().getType()))
                 .map(e -> buildPayload(e.getKey().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
                 .map(this::scanRecursively)

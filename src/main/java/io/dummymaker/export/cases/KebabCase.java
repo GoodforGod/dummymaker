@@ -18,9 +18,8 @@ public class KebabCase implements ICase {
         final StringBuilder builder = new StringBuilder();
 
         for (final char letter : value.toCharArray()) {
-            if (Character.isUpperCase(letter) && builder.length() != 0) {
+            if (Character.isUpperCase(letter) && builder.length() != 0)
                 builder.append("-");
-            }
 
             builder.append(Character.toLowerCase(letter));
         }

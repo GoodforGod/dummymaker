@@ -10,15 +10,15 @@ Library can generate *Data Objects* filled *random data* for your tests,
 database setup, Big Data setups or other workloads. 
 Library is very flexible at tuning.
 
-It can even do little bit of export in *CSV/JSON/XML/SQL formats*.
+Library can even do simple export in *CSV/JSON/XML/SQL formats*.
 
-Documentation for **versions earlier than 2.0.0** in [this document](/README-VERSION-1.X.md).
+Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 
 ## Dependency :rocket:
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:2.2.0'
+    compile 'com.github.goodforgod:dummymaker:3.0.0'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>2.2.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -90,8 +90,8 @@ public static List<User> getUsers() {
 
 ### Factory Methods
 
-Factory can not only instantiate classes but also provides other
-contracts to manipulate with objects like using provided supplier.
+Factory not only instantiate classes but also provides other
+contracts to manipulate with objects like using supplier.
 
 ```java
 final GenFactory factory = new GenFactory();
@@ -104,6 +104,18 @@ User filled = factory.fill(user);
 ```
 
 There are more other contracts available just check *GenFactory*.
+
+Also, factory can export huge amount of data in one attempt when data cannot be proceeded inmemory via *export* contract.
+
+In such case export that is provided *should* append file with each export execution. 
+Default *IWriter* doesn't do that by default, so such option should be activated.
+
+```java
+final GenFactory factory = new GenFactory();
+final JsonExporter exporter = new JsonExporter(fileName -> new FileWriter(fileName, true)); // tell writer to append file
+
+factory.export(User.class, 100_000_000_000L, exporter);
+```
 
 ### Gen Auto Annotation
 
@@ -373,7 +385,7 @@ public class IntegerSmallGenerator implements IGenerator<Integer> {
     private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
 
     @Override
-    public Pattern getPattern() {
+    public Pattern pattern() {
         return pattern;
     }
 
@@ -450,7 +462,9 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## Version History
 
-**2.2.0** - More generators, improve pattern matching, Javax CDI annotations added.
+**3.0.0** - Exporters redesigned, Factory export huge amount of dummies contracts added, generators improved, matching for generators improved.
+
+**2.2.0** - More generators, improved pattern matching, Javax CDI annotations added.
 
 **2.1.0** - Lambda generator *GenRule* configuration added, some default generators added, minor improvements.
 

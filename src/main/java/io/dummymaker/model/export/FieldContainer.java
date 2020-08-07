@@ -1,22 +1,26 @@
 package io.dummymaker.model.export;
 
-import io.dummymaker.generator.complex.*;
-import io.dummymaker.generator.simple.time.*;
+import io.dummymaker.export.Cases;
+import io.dummymaker.export.ICase;
+import io.dummymaker.util.StringUtils;
+
+import java.lang.reflect.Field;
 
 /**
  * Used by ClassContainer to contain field value, and final field name
  *
  * @author GoodforGod
- * @see ClassContainer
  * @since 03.09.2017
  */
 public class FieldContainer {
 
     public enum Type {
-        SIMPLE,
-        DATETIME,
+        STRING,
+        NUMBER,
+        BOOLEAN,
+        DATE,
         SEQUENTIAL,
-        EMBEDDED,
+        COMPLEX,
         COLLECTION,
         MAP,
         ARRAY,
@@ -27,15 +31,17 @@ public class FieldContainer {
      * Final field name (renamed or converted by naming strategy)
      */
     private final String exportName;
-
-    /**
-     * Is field enumerable or not
-     */
     private final Type type;
+    private final Field field;
 
-    public FieldContainer(Type type, String exportName) {
+    public FieldContainer(Field field, Type type, String exportName) {
+        this.field = field;
         this.exportName = exportName;
         this.type = type;
+    }
+
+    public Field getField() {
+        return field;
     }
 
     public Type getType() {
@@ -43,15 +49,15 @@ public class FieldContainer {
     }
 
     public boolean isSimple() {
-        return type.equals(Type.SIMPLE);
+        return type.equals(Type.STRING) || type.equals(Type.NUMBER) || type.equals(Type.BOOLEAN);
     }
 
     public boolean isDatetime() {
-        return type.equals(Type.DATETIME);
+        return type.equals(Type.DATE);
     }
 
     public boolean isEmbedded() {
-        return type.equals(Type.EMBEDDED);
+        return type.equals(Type.COMPLEX);
     }
 
     public boolean isCollection() {
@@ -71,6 +77,12 @@ public class FieldContainer {
     }
 
     public String getExportName() {
-        return exportName;
+        return getExportName(Cases.DEFAULT.value());
+    }
+
+    public String getExportName(ICase naming) {
+        return StringUtils.isEmpty(exportName)
+                ? naming.format(field.getName())
+                : exportName;
     }
 }

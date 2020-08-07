@@ -28,7 +28,7 @@ public class HexDataGenerator extends IdBigGenerator {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

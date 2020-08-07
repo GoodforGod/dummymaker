@@ -2,6 +2,7 @@ package io.dummymaker.bundle.impl;
 
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Prime bundle implementation
@@ -10,38 +11,42 @@ import io.dummymaker.util.CollectionUtils;
  * @see IBundle
  * @since 31.05.2017
  */
-public abstract class BasicBundle<T> implements IBundle<T> {
+public abstract class BasicBundle implements IBundle {
 
     /**
      * Bundle data
      */
-    private final T[] preset;
+    private final String[] data;
 
-    @SuppressWarnings("unchecked")
     @SafeVarargs
-    public BasicBundle(T... values) {
-        this.preset = CollectionUtils.isEmpty(values) ? (T[]) new Object[0] : values;
+    public BasicBundle(String... data) {
+        if (CollectionUtils.isEmpty(data))
+            throw new IllegalArgumentException("Bundle data can not be empty!");
+
+        this.data = data;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public @NotNull String get(int index) {
+        return (index > -1 && index < data.length - 1)
+                ? data[index]
+                : CollectionUtils.random(data);
     }
 
     @Override
-    public T get(int index) {
-        return (index > -1 && index < preset.length - 1)
-                ? preset[index]
-                : CollectionUtils.random(preset);
+    public @NotNull String[] all() {
+        return data;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public T[] getAll() {
-        return preset;
-    }
-
-    @Override
-    public T getRandom() {
-        return CollectionUtils.random(preset);
+    public @NotNull String random() {
+        return CollectionUtils.random(data);
     }
 
     @Override
     public int size() {
-        return preset.length;
+        return data.length;
     }
 }

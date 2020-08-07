@@ -27,7 +27,7 @@ public class CharacterGenerator implements IGenerator<Character> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

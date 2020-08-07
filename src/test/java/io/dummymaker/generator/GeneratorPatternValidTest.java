@@ -56,8 +56,8 @@ public class GeneratorPatternValidTest {
                 { new ByteGenerator(), Byte.class, compile("-?[0-9]+") },
                 { new ShortGenerator(), Short.class, compile("[0-9]+") },
                 { new IntegerGenerator(), Integer.class, compile("[0-9]+") },
-                { new FloatGenerator(), Float.class, compile("1|0\\.[0-9]+") },
-                { new FloatBigGenerator(), Float.class, compile("[0-9]+\\.[0-9]+") },
+                { new FloatGenerator(), Float.class, compile("1|0\\.[0-9]+(E-[0-9])?") },
+                { new FloatBigGenerator(), Float.class, compile("[0-9]+\\.[0-9]+(E-[0-9])?") },
                 { new DoubleGenerator(), Double.class, compile("1|0\\.[0-9]+") },
                 { new DoubleBigGenerator(), Double.class, compile("[0-9]+\\.[0-9]+") },
                 { new BigIntegerGenerator(), BigInteger.class, compile("-?[0-9]+") },
@@ -82,11 +82,10 @@ public class GeneratorPatternValidTest {
                 { new GenderGenerator(), String.class, compile("male|female") },
                 { new NameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
-                { new NickGenerator(), String.class, compile("[0-9a-zA-Z\\-.]+") },
+                { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
-                { new DocGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
+                { new DocumentGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
-                { new PhraseGenerator(), String.class, compile(".+(\\t.+)?") },
                 { new StringGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new VersionGenerator(), String.class, compile("[0-9]\\.[0-9]{1,2}\\.[0-9]{1,2}(-SNAPSHOT)?") },
                 { new TagGenerator(), String.class, compile("#[0-9a-zA-Z]+") },
@@ -108,12 +107,17 @@ public class GeneratorPatternValidTest {
     }
 
     @Test
-    public void genValueRegexCheck() {
-        final Object generated = generator.generate();
-        assertNotNull(generated);
-        assertEquals(generated.getClass(), genClass);
+    public void valueRegexMatching() {
+        // Due to bundles for some generators, need more than 1 iteration
+        // for more confidence that value is matching
+        for (int i = 0; i < 5; i++) {
+            final Object generated = generator.generate();
+            assertNotNull(generated);
+            assertEquals(generated.getClass(), genClass);
 
-        final String generatedAsString = String.valueOf(generated);
-        assertTrue(pattern.pattern() + " : " + generatedAsString, pattern.matcher(generatedAsString).matches());
+            final String v = String.valueOf(generated);
+            final String msg = generator.getClass().getSimpleName() + " : Pattern -" + pattern.pattern() + " : Value - " + v;
+            assertTrue(msg, pattern.matcher(v).matches());
+        }
     }
 }

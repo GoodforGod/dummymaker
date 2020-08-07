@@ -111,9 +111,9 @@ public class DummyArrayTests extends Assert {
         final GenFactory factory = new GenFactory(rules);
         final DummyArray dummyArray = factory.build(DummyArray.class);
 
-        final Pattern patternSingleArray = Pattern.compile("\"floatSimple\":\\[-?[0-9]+\\.[0-9]+");
-        final Pattern patternDoubleArray = Pattern.compile("\"byteDouble\":\\[\\[[\\-0-9.]");
-        final String json = new JsonExporter(rules).exportAsString(dummyArray);
+        final Pattern patternSingleArray = Pattern.compile("\"shortSimple\":\\[[0-9]+");
+        final Pattern patternDoubleArray = Pattern.compile("\"DoubleObjDouble\":\\[\\[-?[0-9]+\\.[0-9]+");
+        final String json = new JsonExporter().convert(dummyArray);
 
         assertTrue(patternSingleArray.matcher(json).find());
         assertTrue(patternDoubleArray.matcher(json).find());

@@ -27,24 +27,27 @@ abstract class FileExportAssert extends ExportAssert {
     private final Format format;
 
     private final int singleSplitLength;
+    private final int singleListSplit;
     private final int listSplitLength;
 
-    public FileExportAssert(IExporter exporter, IValidator validator, Format format, int singleSplitLength, int listSplitLength) {
+    public FileExportAssert(IExporter exporter, IValidator validator, Format format, int singleSplitLength, int singleListSplit,
+                            int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.format = format;
         this.singleSplitLength = singleSplitLength;
+        this.singleListSplit = singleListSplit;
         this.listSplitLength = listSplitLength;
     }
 
     @Test
-    public void exportSingleDummyInvalidExportEntity() throws Exception {
+    public void exportSingleDummyInvalidExportEntity() {
         final boolean exportResult = exporter.export((DummyNoExportFields) null);
         assertFalse(exportResult);
     }
 
     @Test
-    public void exportDummyListInvalidExportEntity() throws Exception {
+    public void exportDummyListInvalidExportEntity() {
         final boolean exportResult = exporter.export(null);
         assertFalse(exportResult);
 
@@ -53,35 +56,38 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyEmptyContainer() throws Exception {
+    public void exportSingleDummyEmptyContainer() {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
     @Test
-    public void exportDummyListEmptyContainer() throws Exception {
+    public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
+        final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
+        markFileForRemoval(filename);
         assertFalse(exportResult);
     }
 
     @Test
-    public void exportSingleDummy() throws Exception {
+    public void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
 
         final String[] csvArray = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, csvArray.length);
@@ -90,36 +96,34 @@ abstract class FileExportAssert extends ExportAssert {
     }
 
     @Test
-    public void exportSingleDummyList() throws Exception {
+    public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
 
         final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        assertEquals(singleListSplit, csvArray.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyListValid(csvArray);
     }
 
     @Test
-    public void exportListOfDummies() throws Exception {
+    public void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

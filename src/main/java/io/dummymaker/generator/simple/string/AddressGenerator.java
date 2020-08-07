@@ -23,20 +23,20 @@ public class AddressGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("addr(ess)?", CASE_INSENSITIVE);
 
-    private final IBundle<String> streetBundle = new StreetBundle();
-    private final IBundle<String> districtBundle = new DistrictBundle();
-    private final IBundle<String> cityBundle = new CityBundle();
+    private final IBundle streetBundle = new StreetBundle();
+    private final IBundle districtBundle = new DistrictBundle();
+    private final IBundle cityBundle = new CityBundle();
 
     @Override
     public @NotNull String generate() {
-        return cityBundle.getRandom()
-                + ", " + districtBundle.getRandom()
-                + ", " + streetBundle.getRandom()
+        return cityBundle.random()
+                + ", " + districtBundle.random()
+                + ", " + streetBundle.random()
                 + " " + CollectionUtils.random(20);
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

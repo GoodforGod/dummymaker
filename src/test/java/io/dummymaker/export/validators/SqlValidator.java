@@ -20,6 +20,11 @@ import static org.junit.Assert.assertTrue;
 public class SqlValidator implements IValidator {
 
     @Override
+    public void isSingleDummyListValid(String[] dummy) {
+        isSingleDummyValid(dummy);
+    }
+
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummy[1].matches("\\t" + GROUP.exportName() + "\\tVARCHAR,"));
@@ -28,11 +33,9 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[4].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[5].matches("\\);"));
 
-        assertTrue(dummy[6].matches(""));
-
-        assertTrue(dummy[7].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
+        assertTrue(dummy[6].matches("INSERT INTO dummy \\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
                 + NAME.exportName() + "\\) VALUES"));
-        assertTrue(dummy[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
+        assertTrue(dummy[7].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
     @Override
@@ -67,12 +70,10 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[4].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummies[5].matches("\\);"));
 
-        assertTrue(dummies[6].matches(""));
-
-        assertTrue(dummies[7].matches("INSERT INTO dummy \\(" + expectedGroupField + ", " + expectedNumField + ", "
+        assertTrue(dummies[6].matches("INSERT INTO dummy \\(" + expectedGroupField + ", " + expectedNumField + ", "
                 + expectedNameField + "\\) VALUES"));
-        assertTrue(dummies[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\),"));
-        assertTrue(dummies[9].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
+        assertTrue(dummies[7].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\),"));
+        assertTrue(dummies[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
     public void isTwoDummiesArrayValidWithNamingStrategy(String[] dummies, ICase strategy) {
@@ -90,9 +91,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[5].matches("\\tPRIMARY KEY \\([a-zA-Z_]+\\)"));
         assertTrue(dummies[6].matches("\\);"));
 
-        assertTrue(dummies[7].matches(""));
-
-        assertTrue(dummies[8].matches("INSERT INTO " + className + " \\(" + shortSimple + ", " + longSimple + ", "
+        assertTrue(dummies[7].matches("INSERT INTO " + className + " \\(" + shortSimple + ", " + longSimple + ", "
                 + IntegerObjDouble + ", " + DoubleObjDouble + "\\) VALUES"));
     }
 
@@ -106,7 +105,7 @@ public class SqlValidator implements IValidator {
         final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
         final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
 
-        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("TimeDummyClass") + "\\("));
+        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("DummyTime") + "\\("));
         assertTrue(dummies[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummies[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummies[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -118,9 +117,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummies[10].matches("\\);"));
 
-        assertTrue(dummies[11].matches(""));
-
-        assertTrue(dummies[12].matches("INSERT INTO " + strategy.format("TimeDummyClass")
+        assertTrue(dummies[11].matches("INSERT INTO " + strategy.format("DummyTime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -132,7 +129,7 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummies[13].matches("\\('"
+        assertTrue(dummies[12].matches("\\('"
                 + ISO_TIME_PATTERN + "', '"
                 + ISO_DATE_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "', '"
@@ -142,7 +139,7 @@ public class SqlValidator implements IValidator {
                 + ISO_DATE_TIME_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "'\\),"));
 
-        assertTrue(dummies[14].matches("\\('"
+        assertTrue(dummies[13].matches("\\('"
                 + ISO_TIME_PATTERN + "', '"
                 + ISO_DATE_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "', '"
@@ -170,7 +167,7 @@ public class SqlValidator implements IValidator {
         final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
         final String timestampPattern = datePattern + "T" + timePattern;
 
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("timedummyclass") + "\\("));
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummytime") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummy[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -182,9 +179,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("timedummyclass")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummytime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -196,7 +191,7 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
+        assertTrue(dummy[12].matches("\\('"
                 + ISO_TIME_PATTERN + "', '"
                 + ISO_DATE_PATTERN + "', '"
                 + ISO_DATE_TIME_PATTERN + "', '"
@@ -228,13 +223,11 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[5].matches("\\t" + dateOldField + "\\tBIGINT,"));
         assertTrue(dummy[6].matches("\\t" + dateOldCoverageField + "\\tBIGINT,"));
         assertTrue(dummy[7].matches("\\t" + dateTimeStringField + "\\tVARCHAR,"));
-        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tBIGINT,"));
+        assertTrue(dummy[8].matches("\\t" + dateTimeObjectField + "\\tVARCHAR,"));
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummyunixtime")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummyunixtime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -246,13 +239,13 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
-                + "[0-9]+" + "', '"
+        assertTrue(dummy[12].matches("\\("
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", "
+                + "[0-9]+" + ", '"
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"
                 + Patterns.LOCAL_DATETIME.getPattern().pattern() + "'\\);"));
     }
@@ -282,9 +275,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[9].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[10].matches("\\);"));
 
-        assertTrue(dummy[11].matches(""));
-
-        assertTrue(dummy[12].matches("INSERT INTO " + strategy.format("dummytimeformatter")
+        assertTrue(dummy[11].matches("INSERT INTO " + strategy.format("dummytimeformatter")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -296,7 +287,7 @@ public class SqlValidator implements IValidator {
                 + dateTimeObjectField
                 + "\\) VALUES"));
 
-        assertTrue(dummy[13].matches("\\('"
+        assertTrue(dummy[12].matches("\\('"
                 + DummyTimeFormatter.Patterns.TIME.getPattern().pattern() + "', '"
                 + DummyTimeFormatter.Patterns.LOCAL_DATE.getPattern().pattern() + "', '"
                 + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern() + "', '"

@@ -18,5 +18,5 @@ public interface ICase {
      * @return formatted value
      */
     @NotNull
-    String format(@NotNull final String value);
+    String format(@NotNull String value);
 }

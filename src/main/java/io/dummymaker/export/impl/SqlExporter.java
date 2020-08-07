@@ -1,19 +1,11 @@
 package io.dummymaker.export.impl;
 
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.Format;
-import io.dummymaker.export.ICase;
-import io.dummymaker.model.GenRules;
-import io.dummymaker.model.export.ClassContainer;
-import io.dummymaker.model.export.DatetimeFieldContainer;
-import io.dummymaker.model.export.ExportContainer;
+import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Date;
@@ -22,22 +14,19 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Export objects as SQL insert query.
+ * Description in progress
  *
- * @author GoodforGod
- * @see Format
- * @since 25.02.2018
+ * @author Anton Kurako (GoodforGod)
+ * @since 24.7.2020
  */
-@Named("sql")
-@Singleton
-public class SqlExporter extends BasicExporter {
+public class SqlExporter extends BaseExporter {
 
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in
@@ -50,49 +39,19 @@ public class SqlExporter extends BasicExporter {
      * Sql Data Type You can add your specific values here by using constructor with
      * Map'String, String'
      */
-    private final Map<Class, String> dataTypes = buildDefaultDataTypeMap();
+    private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
 
     public SqlExporter() {
-        this(null);
+        super();
     }
 
-    public SqlExporter(GenRules rules) {
-        super(Format.SQL, Cases.DEFAULT.value(), rules);
+    public SqlExporter(@NotNull Function<String, IWriter> writerFunction) {
+        super(writerFunction);
     }
 
-    /**
-     * @param dataTypes map with user custom types for 'dataTypeMap'
-     * @return exporter
-     */
-    public SqlExporter withTypes(Map<Class, String> dataTypes) {
-        if (CollectionUtils.isNotEmpty(dataTypes))
-            this.dataTypes.putAll(dataTypes);
-
-        return this;
-    }
-
-    /**
-     * Build exporter with path value
-     *
-     * @param path path for export file
-     * @return exporter
-     */
-    public SqlExporter withPath(String path) {
-        setPath(path);
-        return this;
-    }
-
-    /**
-     * Build exporter with naming strategy
-     *
-     * @param nameCase naming strategy for exporter
-     * @return exporter
-     * @see ICase
-     * @see Cases
-     */
-    public SqlExporter withCase(ICase nameCase) {
-        setCase(nameCase);
-        return this;
+    @Override
+    protected @NotNull String getExtension() {
+        return "sql";
     }
 
     /**
@@ -100,8 +59,8 @@ public class SqlExporter extends BasicExporter {
      *
      * @see #dataTypes
      */
-    private Map<Class, String> buildDefaultDataTypeMap() {
-        final Map<Class, String> typeMap = new HashMap<>(25);
+    private Map<Class<?>, String> buildDefaultDataTypeMap() {
+        final Map<Class<?>, String> typeMap = new HashMap<>(25);
         typeMap.put(boolean.class, "BOOLEAN");
         typeMap.put(Boolean.class, "BOOLEAN");
         typeMap.put(byte.class, "BYTE");
@@ -130,8 +89,23 @@ public class SqlExporter extends BasicExporter {
         return typeMap;
     }
 
-    private String wrapWithComma(String value) {
+    /**
+     * @param dataTypes map with user custom types for 'dataTypeMap'
+     * @return exporter
+     */
+    public SqlExporter withTypes(Map<Class<?>, String> dataTypes) {
+        if (CollectionUtils.isNotEmpty(dataTypes))
+            this.dataTypes.putAll(dataTypes);
+
+        return this;
+    }
+
+    private String wrap(String value) {
         return "'" + value + "'";
+    }
+
+    private <T> String getCollectionName(T t) {
+        return naming.format(t.getClass().getSimpleName()).toLowerCase();
     }
 
     /**
@@ -145,69 +119,41 @@ public class SqlExporter extends BasicExporter {
     }
 
     /**
-     * Create String of Create Table Query
-     */
-    private String buildCreateTableQuery(ClassContainer container, String primaryKeyField) {
-        final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(container.getExportClassName().toLowerCase())
-                .append("(\n");
-
-        final String resultValues = container.getFormatSupported(Format.SQL).values().stream()
-                .map(fieldContainer -> "\t" + buildInsertNameTypeQuery(fieldContainer.getExportName(), container))
-                .collect(Collectors.joining(",\n"));
-
-        builder.append(resultValues);
-
-        // Write primary key constraint
-        return builder.append(",\n")
-                .append("\tPRIMARY KEY (")
-                .append(primaryKeyField)
-                .append(")\n);\n")
-                .toString();
-    }
-
-    /**
-     * Creates String of Create Table Insert Quert
+     * Creates String of Create Table Insert Query
      *
-     * @param finalFieldName final field name
      * @return sql create table (name - type)
      */
-    private String buildInsertNameTypeQuery(String finalFieldName, ClassContainer container) {
-        final Class<?> exportFieldType = container.getField(finalFieldName).getType();
-        final FieldContainer fieldContainer = container.getContainer(finalFieldName);
-        switch (fieldContainer.getType()) {
-            case DATETIME:
-                final String dateType = (fieldContainer instanceof DatetimeFieldContainer
-                        && ((DatetimeFieldContainer) fieldContainer).isUnixTime())
-                                ? "BIGINT"
-                                : translateJavaTypeToSqlType(exportFieldType);
+    private String translateContainerToSqlType(FieldContainer container) {
+        final String field = container.getExportName(naming);
+        final Class<?> fieldType = extractType(container.getType(), container.getField());
+        switch (container.getType()) {
+            case DATE:
+                final String dateType = (container instanceof DateFieldContainer && ((DateFieldContainer) container).isUnixTime())
+                        ? "BIGINT"
+                        : translateJavaTypeToSqlType(fieldType);
 
-                if (String.class.equals(container.getField(finalFieldName).getType()))
-                    return finalFieldName + "\t" + "VARCHAR";
-                return finalFieldName + "\t" + dateType;
+                return field + "\t" + dateType;
             case ARRAY:
             case COLLECTION:
-                final Class<?> type = exportFieldType.getComponentType();
-                return finalFieldName + "\t" + translateJavaTypeToSqlType(type) + "[]";
+                return field + "\t" + translateJavaTypeToSqlType(fieldType) + "[]";
             case ARRAY_2D:
-                final Class<?> type2D = exportFieldType.getComponentType().getComponentType();
-                return finalFieldName + "\t" + translateJavaTypeToSqlType(type2D) + "[][]";
+                return field + "\t" + translateJavaTypeToSqlType(fieldType) + "[][]";
             default:
-                return finalFieldName + "\t" + translateJavaTypeToSqlType(exportFieldType);
+                return field + "\t" + translateJavaTypeToSqlType(fieldType);
         }
     }
 
     /**
      * Build insert query part with values
      */
-    private <T> String buildInsertQuery(T t, ClassContainer container) {
-        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+    private <T> String buildInsertQuery(T t, Collection<FieldContainer> containers) {
+        final String collectionName = getCollectionName(t);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
-                .append(container.getExportClassName().toLowerCase())
+                .append(collectionName)
                 .append(" (");
 
-        final String names = exportContainers.stream()
-                .map(ExportContainer::getExportName)
+        final String names = containers.stream()
+                .map(c -> c.getExportName(naming))
                 .collect(Collectors.joining(", "));
 
         return builder.append(names)
@@ -216,72 +162,48 @@ public class SqlExporter extends BasicExporter {
                 .toString();
     }
 
-    /**
-     * Creates insert query field name
-     */
-    private <T> String format(T t, ClassContainer container) {
-        final List<ExportContainer> exportContainers = extractExportContainers(t, container);
+    private String getPrimaryField(Collection<FieldContainer> containers) {
+        final Pattern pattern = Pattern.compile("id|[gu]?uid");
+        if (containers.isEmpty())
+            return "";
 
-        final String resultValues = exportContainers.stream()
-                .map(c -> convertFieldValue(container.getField(c.getExportName()), c))
-                .collect(Collectors.joining(", "));
-
-        return "(" + resultValues + ")";
+        return containers.stream()
+                .filter(FieldContainer::isSequential)
+                .map(FieldContainer::getExportName)
+                .findFirst()
+                .orElseGet(() -> containers.stream()
+                        .filter(c -> pattern.matcher(c.getExportName()).matches())
+                        .map(FieldContainer::getExportName)
+                        .findFirst()
+                        .orElseGet(() -> containers.iterator().next().getExportName()));
     }
 
-    /**
-     * Search for primary key entity candidate field and retrieve its export field
-     * name
-     * <p>
-     * Primary key is field that (in that order): - Have ID or UID name (case
-     * ignored) - Is marked with enumerate gen annotation - Randomly selected
-     */
-    private String buildPrimaryKey(ClassContainer container) {
-        final Map<Field, FieldContainer> containerMap = container.getFormatSupported(Format.SQL);
+    @Override
+    protected String convertArray(Object array) {
+        final Class<?> type = array.getClass().getComponentType();
+        final String sqlType = translateJavaTypeToSqlType(type);
 
-        for (Map.Entry<Field, FieldContainer> entry : containerMap.entrySet()) {
-            if (entry.getValue().isSequential()
-                    || entry.getKey().getName().equalsIgnoreCase("id")
-                    || entry.getKey().getName().equalsIgnoreCase("uid")) {
-                return entry.getValue().getExportName();
-            }
-        }
+        final String value = super.convertArray(array);
+        final String result = (sqlType.equals("VARCHAR") || sqlType.equals("CHAR"))
+                ? value.replace("[", "{\"").replace("]", "\"}").replace(",", "\",\"").replace(" ", "")
+                : value.replace("[", "{").replace("]", "}");
 
-        return containerMap.entrySet().iterator().next().getValue().getExportName();
+        return wrap(result);
     }
 
-    /**
-     * Check data types for field class compatibility with Timestamp class
-     */
-    private boolean isTypeTimestampConvertible(Field field) {
-        final String sqlType = translateJavaTypeToSqlType(field.getType());
-        return ("TIMESTAMP".equals(sqlType)
-                || "DATETIME".equals(sqlType)
-                || "DATE".equals(sqlType)
-                || "TIME".equals(sqlType));
+    @Override
+    protected String convertCollection(Collection<?> collection) {
+        return convertArray(collection.toArray());
     }
 
-    /**
-     * Convert container value to Sql specific value type
-     */
-    private String convertFieldValue(Field field, ExportContainer container) {
-        if (container.getType() == FieldContainer.Type.ARRAY
-                || container.getType() == FieldContainer.Type.ARRAY_2D
-                || container.getType() == FieldContainer.Type.COLLECTION) {
+    @Override
+    protected String convertDate(Object date, String formatterPattern) {
+        return wrap(super.convertDate(date, formatterPattern));
+    }
 
-            final Class<?> componentType = extractType(container.getType(), field);
-            final String sqlType = translateJavaTypeToSqlType(componentType);
-            final String result = (sqlType.equals("VARCHAR") || sqlType.equals("CHAR"))
-                    ? container.getExportValue().replace("[", "{\"").replace("]", "\"}").replace(",", "\",\"").replace(" ", "")
-                    : container.getExportValue().replace("[", "{").replace("]", "}");
-            return wrapWithComma(result);
-        } else if (isTypeTimestampConvertible(field)) {
-            return wrapWithComma(container.getExportValue());
-        } else if (String.class.equals(field.getType()) || "VARCHAR".equals(translateJavaTypeToSqlType(field.getType()))) {
-            return wrapWithComma(container.getExportValue());
-        }
-
-        return container.getExportValue();
+    @Override
+    protected String convertString(String s) {
+        return wrap(super.convertString(s));
     }
 
     private Class<?> extractType(FieldContainer.Type type, Field field) {
@@ -293,66 +215,105 @@ public class SqlExporter extends BasicExporter {
             case COLLECTION:
                 return (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
             default:
-                return String.class;
+                return field.getType();
         }
     }
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
-    public <T> boolean export(T t) {
-        if (isExportEntityInvalid(t))
-            return false;
-
-        final ClassContainer container = buildClassContainer(t);
-        if (!container.isExportable())
-            return false;
-
-        final IWriter writer = buildWriter(container);
-        final String primaryKey = buildPrimaryKey(container);
-        return writer != null
-                && writer.write(buildCreateTableQuery(container, primaryKey) + "\n")
-                && writer.write(buildInsertQuery(t, container))
-                && writer.write(format(t, container) + ";")
-                && writer.flush();
+    protected Predicate<FieldContainer> filter() {
+        return c -> c.getType() == FieldContainer.Type.STRING
+                || c.getType() == FieldContainer.Type.BOOLEAN
+                || c.getType() == FieldContainer.Type.NUMBER
+                || c.getType() == FieldContainer.Type.DATE
+                || c.getType() == FieldContainer.Type.SEQUENTIAL
+                || c.getType() == FieldContainer.Type.ARRAY
+                || c.getType() == FieldContainer.Type.ARRAY_2D
+                || c.getType() == FieldContainer.Type.COLLECTION;
     }
 
     @Override
-    public <T> boolean export(List<T> list) {
-        if (isExportEntityInvalid(list))
+    protected String convertNull() {
+        return "NULL";
+    }
+
+    @Override
+    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+        final String collectionName = getCollectionName(t);
+        final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
+                .append(collectionName)
+                .append("(\n");
+
+        final String resultValues = containers.stream()
+                .map(c -> "\t" + translateContainerToSqlType(c))
+                .collect(Collectors.joining(",\n"));
+
+        builder.append(resultValues);
+
+        final String primaryKeyField = getPrimaryField(containers);
+
+        // Write primary key constraint
+        return builder.append(",\n")
+                .append("\tPRIMARY KEY (")
+                .append(naming.format(primaryKeyField))
+                .append(")\n);\n")
+                .toString();
+    }
+
+    @Override
+    protected @NotNull <T> String prefix(T t, Collection<FieldContainer> containers) {
+        return buildInsertQuery(t, containers);
+    }
+
+    @Override
+    protected @NotNull <T> String suffix(T t, Collection<FieldContainer> containers) {
+        return ";";
+    }
+
+    @Override
+    protected @NotNull <T> String map(T t, Collection<FieldContainer> containers) {
+        final String resultValues = containers.stream()
+                .map(c -> getValue(t, c))
+                .collect(Collectors.joining(", "));
+
+        return "(" + resultValues + ")";
+    }
+
+    @Override
+    public <T> boolean export(Collection<T> collection) {
+        if (CollectionUtils.isEmpty(collection))
             return false;
 
-        if (isExportEntitySingleList(list))
-            return export(list.get(0));
-
-        final ClassContainer container = buildClassContainer(list);
-        if (!container.isExportable())
+        final T t = collection.iterator().next();
+        final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if (containers.isEmpty())
             return false;
 
-        final IWriter writer = buildWriter(container);
-        if (writer == null)
+        final IWriter writer = getWriter(t.getClass().getSimpleName());
+
+        // Create Table Query
+        if (!writer.write(head(t, containers, true)))
             return false;
 
         int i = INSERT_QUERY_LIMIT;
+        StringBuilder builder = new StringBuilder();
 
-        final Iterator<T> iterator = list.iterator();
-        final String primaryKey = buildPrimaryKey(container);
-
-        // Create Table Query
-        if (!writer.write(buildCreateTableQuery(container, primaryKey)))
-            return false;
-
-        final StringBuilder builder = new StringBuilder();
+        final Iterator<T> iterator = collection.iterator();
         while (iterator.hasNext()) {
-            final T t = iterator.next();
-            if (i == INSERT_QUERY_LIMIT) {
-                builder.append("\n").append(buildInsertQuery(t, container));
-            }
+            final T next = iterator.next();
+            if (i == INSERT_QUERY_LIMIT)
+                builder.append(buildInsertQuery(next, containers));
 
-            builder.append(format(t, container));
+            builder.append(map(next, containers));
 
             // End insert Query if no elements left or need to organize next batch
             final boolean hasNext = iterator.hasNext();
             if (i <= 0 || !hasNext) {
                 builder.append(";\n");
+                if (!writer.write(builder.toString()))
+                    return false;
+
+                builder = new StringBuilder();
             } else {
                 builder.append(",\n");
             }
@@ -360,56 +321,34 @@ public class SqlExporter extends BasicExporter {
             i = nextInsertValue(i);
         }
 
-        return writer.write(builder.toString()) && writer.flush();
+        return writer.write(builder.toString());
     }
 
     @Override
-    public <T> @NotNull String exportAsString(T t) {
-        if (isExportEntityInvalid(t))
+    public @NotNull <T> String convert(@NotNull Collection<T> collection) {
+        if (CollectionUtils.isEmpty(collection))
             return "";
 
-        final ClassContainer container = buildClassContainer(t);
-        if (!container.isExportable())
-            return "";
-
-        final String primaryKey = buildPrimaryKey(container);
-        return buildCreateTableQuery(container, primaryKey) + "\n"
-                + buildInsertQuery(t, container)
-                + format(t, container) + ";";
-    }
-
-    @Override
-    public <T> @NotNull String exportAsString(List<T> list) {
-        if (isExportEntityInvalid(list))
-            return "";
-
-        if (isExportEntitySingleList(list))
-            return exportAsString(list.get(0));
-
-        final ClassContainer container = buildClassContainer(list);
-        if (!container.isExportable())
+        final T t = collection.iterator().next();
+        final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        if (containers.isEmpty())
             return "";
 
         // Create Table Query
-        final String primaryKey = buildPrimaryKey(container);
-        final StringBuilder builder = new StringBuilder(buildCreateTableQuery(container, primaryKey));
-        final Iterator<T> iterator = list.iterator();
+        final StringBuilder builder = new StringBuilder(head(t, containers, true));
+        final Iterator<T> iterator = collection.iterator();
         int i = INSERT_QUERY_LIMIT;
 
         while (iterator.hasNext()) {
-            final T t = iterator.next();
-            if (i == INSERT_QUERY_LIMIT) {
-                builder.append("\n").append(buildInsertQuery(t, container));
-            }
+            final T next = iterator.next();
+            if (i == INSERT_QUERY_LIMIT)
+                builder.append(buildInsertQuery(next, containers));
 
-            builder.append(format(t, container));
+            builder.append(map(next, containers));
 
             // End insert Query if no elements left or need to organize next batch
-            if (i <= 0 || !iterator.hasNext()) {
-                builder.append(";\n");
-            } else {
-                builder.append(",\n");
-            }
+            final String suffix = (i <= 0 || !iterator.hasNext()) ? ";\n" : ",\n";
+            builder.append(suffix);
 
             i = nextInsertValue(i);
         }
@@ -418,8 +357,6 @@ public class SqlExporter extends BasicExporter {
     }
 
     private int nextInsertValue(int current) {
-        return (current <= 0)
-                ? INSERT_QUERY_LIMIT
-                : current - 1;
+        return (current <= 0) ? INSERT_QUERY_LIMIT : current - 1;
     }
 }

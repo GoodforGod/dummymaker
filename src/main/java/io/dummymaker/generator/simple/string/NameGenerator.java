@@ -19,20 +19,20 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class NameGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("name", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("name|assignee|employe|worker", CASE_INSENSITIVE);
 
-    private final IBundle<String> maleBundle = new MaleNameBundle();
-    private final IBundle<String> femaleBundle = new FemaleNameBundle();
+    private final IBundle maleBundle = new MaleNameBundle();
+    private final IBundle femaleBundle = new FemaleNameBundle();
 
     @Override
     public @NotNull String generate() {
         return ThreadLocalRandom.current().nextBoolean()
-                ? maleBundle.getRandom()
-                : femaleBundle.getRandom();
+                ? maleBundle.random()
+                : femaleBundle.random();
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+import io.dummymaker.export.IExporter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,6 +77,28 @@ public interface IGenFactory {
      * @return generates class filled with data
      */
     <T> @NotNull Stream<T> stream(@NotNull Supplier<T> supplier, int amount);
+
+    /**
+     * Instantiates classes and them streamline to file via exporter
+     *
+     * @param target   class to build and fill with data
+     * @param amount   of objects to produce
+     * @param exporter that is capable to append data where it is feeding data
+     * @param <T>      object type
+     * @return generates class filled with data
+     */
+    <T> boolean export(@Nullable Class<T> target, long amount, @NotNull IExporter exporter);
+
+    /**
+     * Instantiates classes and them streamline to file via exporter
+     *
+     * @param supplier of class to build
+     * @param amount   of objects to produce
+     * @param exporter that is capable to append data where it is feeding data
+     * @param <T>      object type
+     * @return generates class filled with data
+     */
+    <T> boolean export(@NotNull Supplier<T> supplier, long amount, @NotNull IExporter exporter);
 
     /**
      * Populates dummy object fields

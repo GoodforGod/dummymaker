@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @see GenSequence
  * @since 07.06.2017
  */
-public class SequenceGenerator implements IGenerator<Object> {
+public class SequenceGenerator implements IGenerator<Long> {
 
     private long counter;
 
@@ -25,7 +25,7 @@ public class SequenceGenerator implements IGenerator<Object> {
     }
 
     @Override
-    public @NotNull Object generate() {
+    public @NotNull Long generate() {
         return counter++;
     }
 }

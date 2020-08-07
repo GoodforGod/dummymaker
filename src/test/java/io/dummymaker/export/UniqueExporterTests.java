@@ -5,7 +5,6 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.model.DummyEmbedded.DummyEmbeddedIntoSimple;
 import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,7 +30,7 @@ public class UniqueExporterTests extends Assert {
         final GenFactory factory = new GenFactory(rule);
         final DummyEmbeddedIntoSimple dummy = factory.build(DummyEmbeddedIntoSimple.class);
 
-        final String json = new JsonExporter(GenRules.of(rule)).exportAsString(dummy);
+        final String json = new JsonExporter().convert(dummy);
         assertTrue(json.contains("\"number\":1") || json.contains("\"number\":2"));
     }
 }

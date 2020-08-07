@@ -3,6 +3,7 @@ package io.dummymaker.factory;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Used to extend complex generator functionality by providing Generators
@@ -36,7 +37,8 @@ public interface IGenStorage extends IGenSupplier {
      * @return object with random data
      * @see IGenFactory#fill(Object)
      */
-    <T> T fillByDepth(T t, int depth);
+    @Nullable
+    <T> T fillByDepth(@Nullable T t, int depth);
 
     /**
      * Returns instance of generator class
@@ -45,5 +47,5 @@ public interface IGenStorage extends IGenSupplier {
      * @return instance of generator
      */
     @NotNull
-    IGenerator getGenerator(Class<? extends IGenerator> generatorClass);
+    IGenerator<?> getGenerator(Class<? extends IGenerator> generatorClass);
 }

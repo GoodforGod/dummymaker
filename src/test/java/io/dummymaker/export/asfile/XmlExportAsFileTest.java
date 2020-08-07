@@ -24,23 +24,21 @@ public class XmlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.XML;
 
     public XmlExportAsFileTest() {
-        super(new XmlExporter().withPath(null).withCase(null).withPath("             "),
-                new XmlValidator(), Format.XML, 5, 12);
+        super(new XmlExporter(), new XmlValidator(), Format.XML, 5, 7, 12);
     }
 
     // @Test
-    public void exportListOfDummiesWithNamingStrategy() throws Exception {
+    public void exportListOfDummiesWithNamingStrategy() {
         final ICase strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withCase(strategy).withPath("    ");
+        final IExporter exporter = new XmlExporter().withCase(strategy);
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

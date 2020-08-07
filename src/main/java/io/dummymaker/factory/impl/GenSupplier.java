@@ -10,12 +10,15 @@ import io.dummymaker.model.Pair;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,7 +55,7 @@ public class GenSupplier implements IGenSupplier {
     }
 
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(Field field) {
+    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field) {
         return getSuitable(field, field.getType());
     }
 
@@ -76,7 +79,7 @@ public class GenSupplier implements IGenSupplier {
      * @return suitable generator class
      */
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(Field field, Class<?> type) {
+    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field, @Nullable Class<?> type) {
         if (type == null)
             return getDefault();
 
@@ -92,31 +95,31 @@ public class GenSupplier implements IGenSupplier {
         if (isEmpty(generators))
             return getDefault();
 
-        return getPatternSuitable(field, type).orElseGet(() -> {
-            // Json generator is not great example of random generator to choose
-            final List<? extends IGenerator> nonJsonGenerators = generators.stream()
-                    .filter(g -> !(g instanceof JsonGenerator))
-                    .collect(Collectors.toList());
+        return getSuitableGeneratorClass(fieldName, type).orElseGet(() -> {
+            final Optional<Class<? extends IGenerator>> pluralSuitable = fieldName.endsWith("s")
+                    ? getSuitableGeneratorClass(fieldName.substring(0, fieldName.length() - 1), type)
+                    : Optional.empty();
 
-            return getIndexWithSalt(nonJsonGenerators, fieldName + type.getName(), SALT).getClass();
+            return pluralSuitable.orElseGet(() -> {
+                final List<? extends IGenerator> nonJsonGenerators = generators.stream()
+                        .filter(g -> !(g instanceof JsonGenerator))
+                        .collect(Collectors.toList());
+
+                return getIndexWithSalt(nonJsonGenerators, fieldName + type.getName(), SALT).getClass();
+            });
         });
     }
 
     /**
      * Search for pattern suitable generator class
      *
-     * @param field target
-     * @param type  desired target type
+     * @param fieldName to check for pattern mathing with generator
+     * @param type      desired target type
      * @return suitable pattern generator
      */
-    private Optional<Class<? extends IGenerator>> getPatternSuitable(Field field, Class<?> type) {
-        final String fieldName = field.getName();
-
-        final Optional<? extends IGenerator> patternSuitable = classifiers.values().stream()
-                .flatMap(List::stream)
-                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
-                .findFirst();
-
+    private Optional<Class<? extends IGenerator>> getSuitableGeneratorClass(String fieldName, Class<?> type) {
+        final Stream<IGenerator> allGeneratorStream = classifiers.values().stream().flatMap(List::stream);
+        final Optional<? extends IGenerator> patternSuitable = getSuitableGenerator(fieldName, allGeneratorStream);
         if (!patternSuitable.isPresent())
             return Optional.empty();
 
@@ -124,10 +127,20 @@ public class GenSupplier implements IGenSupplier {
         if (casted != null)
             return Optional.of(patternSuitable.get().getClass());
 
-        return classifiers.get(type).stream()
-                .filter(g -> g.getPattern() != null && g.getPattern().matcher(fieldName).find())
-                .findFirst()
+        final Stream<IGenerator> typedGeneratorStream = classifiers.get(type).stream();
+        return getSuitableGenerator(fieldName, typedGeneratorStream)
                 .map(g -> g.getClass());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private Optional<IGenerator> getSuitableGenerator(String fieldName, Stream<IGenerator> stream) {
+        return stream.filter(g -> g.pattern() != null)
+                .map(g -> Pair.of(g, g.pattern().matcher(fieldName)))
+                .filter(p -> p.right().find())
+                .sorted(Comparator.comparingInt((Pair<IGenerator, Matcher> p) -> FuzzySearch.ratio(fieldName, p.right().group()))
+                        .reversed())
+                .map(Pair::left)
+                .findFirst();
     }
 
     @SuppressWarnings("unchecked")

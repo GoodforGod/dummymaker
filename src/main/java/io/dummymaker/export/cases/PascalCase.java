@@ -16,6 +16,6 @@ public class PascalCase implements ICase {
     public @NotNull String format(@NotNull String value) {
         return (value.length() == 1)
                 ? value.toUpperCase()
-                : value.substring(0, 1).toUpperCase() + value.substring(1, value.length());
+                : value.substring(0, 1).toUpperCase() + value.substring(1);
     }
 }

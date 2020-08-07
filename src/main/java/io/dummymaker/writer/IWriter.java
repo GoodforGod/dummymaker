@@ -16,11 +16,4 @@ public interface IWriter {
      * @return indicates operation success
      */
     boolean write(String value);
-
-    /**
-     * Closes write stream
-     *
-     * @return indicates operation success
-     */
-    boolean flush();
 }

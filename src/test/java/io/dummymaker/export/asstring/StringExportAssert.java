@@ -25,56 +25,58 @@ public abstract class StringExportAssert extends Assert {
     private final IValidator validator;
 
     private final int singleSplitLength;
+    private final int singleListSplit;
     private final int listSplitLength;
 
     public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+        this(exporter, validator, singleSplitLength, singleSplitLength, listSplitLength);
+    }
+
+    public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int singleListSplit,
+                              int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.singleSplitLength = singleSplitLength;
+        this.singleListSplit = singleListSplit;
         this.listSplitLength = listSplitLength;
+    }
+
+    protected String getEmptyListResult() {
+        return "";
     }
 
     @Test
     public void exportSingleDummyInvalidExportEntity() {
-        final String exportResult = exporter.exportAsString((DummyNoExportFields) null);
+        final String exportResult = exporter.convert((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
 
     @Test
     public void exportDummyListInvalidExportEntity() {
-        final String exportResult = exporter.exportAsString(null);
+        final String exportResult = exporter.convert(null);
         assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
 
-        final String exportEmptyResult = exporter.exportAsString(Collections.emptyList());
+        final String exportEmptyResult = exporter.convert(Collections.emptyList());
         assertNotNull(exportEmptyResult);
-        assertTrue(exportEmptyResult.isEmpty());
-    }
-
-    @Test
-    public void exportSingleDummyEmptyContainer() {
-        final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
-
-        final String exportResult = exporter.exportAsString(dummy);
-        assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
     }
 
     @Test
     public void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
-        final String exportResult = exporter.exportAsString(dummy);
+        final String exportResult = exporter.convert(dummy);
         assertNotNull(exportResult);
-        assertTrue(exportResult.isEmpty());
+        assertEquals(getEmptyListResult(), exportResult);
     }
 
     @Test
     public void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
 
-        final String dummyAsString = exporter.exportAsString(dummy);
+        final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -90,23 +92,23 @@ public abstract class StringExportAssert extends Assert {
     public void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
         final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
 
-        final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        final String[] split = dummyAsString.split(splitter);
+        assertEquals(singleListSplit, split.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyListValid(split);
     }
 
     @Test
     public void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
-        final String dummyAsString = exporter.exportAsString(dummies);
+        final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

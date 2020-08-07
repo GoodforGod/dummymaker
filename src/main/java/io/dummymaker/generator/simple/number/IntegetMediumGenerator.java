@@ -24,7 +24,7 @@ public class IntegetMediumGenerator implements IGenerator<Integer> {
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

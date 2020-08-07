@@ -2,7 +2,7 @@ package io.dummymaker.scan;
 
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.writer.IWriter;
-import io.dummymaker.writer.impl.BufferedFileWriter;
+import io.dummymaker.writer.impl.FileWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,6 +24,6 @@ public class ClassScannerTests extends Assert {
         assertNotNull(scanner);
         assertEquals(2, classes.size());
         assertTrue(classes.contains(IWriter.class));
-        assertTrue(classes.contains(BufferedFileWriter.class));
+        assertTrue(classes.contains(FileWriter.class));
     }
 }

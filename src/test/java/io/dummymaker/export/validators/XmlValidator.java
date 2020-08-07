@@ -18,6 +18,17 @@ import static org.junit.Assert.assertTrue;
 public class XmlValidator implements IValidator {
 
     @Override
+    public void isSingleDummyListValid(String[] dummy) {
+        assertTrue(dummy[0].matches("<[a-zA-Z]+>"));
+        assertTrue(dummy[1].matches("<[a-zA-Z]+>"));
+        assertTrue(dummy[2].matches("\\t<" + GROUP.exportName() + ">" + "[0-9]+" + "</" + GROUP.exportName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + NUM.exportName() + ">" + "[0-9]+" + "</" + NUM.exportName() + ">"));
+        assertTrue(dummy[4].matches("\\t<" + NAME.exportName() + ">" + "[a-zA-Z]+" + "</" + NAME.exportName() + ">"));
+        assertTrue(dummy[5].matches("</[a-zA-Z]+>"));
+        assertTrue(dummy[6].matches("</[a-zA-Z]+>"));
+    }
+
+    @Override
     public void isSingleDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("<[a-zA-Z]+>"));
         assertTrue(dummy[1].matches("\\t<" + GROUP.exportName() + ">" + "[0-9]+" + "</" + GROUP.exportName() + ">"));
@@ -46,22 +57,22 @@ public class XmlValidator implements IValidator {
         final String expectedNumField = strategy.format(NUM.exportName());
 
         assertTrue(dummies[0].matches("<[a-zA-Z]+List>"));
-        assertTrue(dummies[1].matches("\\t<[a-zA-Z]+>"));
-        assertTrue(dummies[2].matches("\\t{2}<" + expectedGroupField + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
-        assertTrue(dummies[3].matches("\\t{2}<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
-        assertTrue(dummies[4].matches("\\t{2}<" + expectedNameField + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
-        assertTrue(dummies[5].matches("\\t</[a-zA-Z]+>"));
-        assertTrue(dummies[6].matches("\\t<[a-zA-Z]+>"));
-        assertTrue(dummies[7].matches("\\t{2}<" + expectedGroupField + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
-        assertTrue(dummies[8].matches("\\t{2}<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
-        assertTrue(dummies[9].matches("\\t{2}<" + expectedNameField + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
-        assertTrue(dummies[10].matches("\\t</[a-zA-Z]+>"));
+        assertTrue(dummies[1].matches("<[a-zA-Z]+>"));
+        assertTrue(dummies[2].matches("\\t<" + expectedGroupField + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
+        assertTrue(dummies[3].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[4].matches("\\t<" + expectedNameField + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
+        assertTrue(dummies[5].matches("</[a-zA-Z]+>"));
+        assertTrue(dummies[6].matches("<[a-zA-Z]+>"));
+        assertTrue(dummies[7].matches("\\t<" + expectedGroupField + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
+        assertTrue(dummies[8].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[9].matches("\\t<" + expectedNameField + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
+        assertTrue(dummies[10].matches("</[a-zA-Z]+>"));
         assertTrue(dummies[11].matches("</[a-zA-Z]+List>"));
     }
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-        assertTrue(dummy[0].matches("<TimeDummyClass>"));
+        assertTrue(dummy[0].matches("<DummyTime>"));
         assertTrue(dummy[1].matches("\\t<" + LOCAL_TIME.getName() + ">"
                 + Patterns.LOCAL_TIME.getPattern()
                 + "</" + LOCAL_TIME.getName() + ">"));
@@ -86,7 +97,7 @@ public class XmlValidator implements IValidator {
         assertTrue(dummy[8].matches("\\t<" + LOCAL_DATETIME_OBJECT.getName() + ">"
                 + Patterns.LOCAL_DATETIME.getPattern()
                 + "</" + LOCAL_DATETIME_OBJECT.getName() + ">"));
-        assertTrue(dummy[9].matches("</TimeDummyClass>"));
+        assertTrue(dummy[9].matches("</DummyTime>"));
     }
 
     @Override

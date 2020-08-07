@@ -19,15 +19,15 @@ public class CountryGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("country", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new CountryBundle();
+    private final IBundle bundle = new CountryBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }

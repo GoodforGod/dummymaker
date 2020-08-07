@@ -28,8 +28,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
     private final Format format = Format.SQL;
 
     public SqlExportAsFileTest() {
-        super(new SqlExporter().withPath(null).withCase(null).withPath("            "),
-                new SqlValidator(), Format.SQL, 9, 10);
+        super(new SqlExporter(), new SqlValidator(), Format.SQL, 8, 8, 9);
     }
 
     // @Test
@@ -38,13 +37,12 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new SqlExporter().withCase(strategy).withPath("    ");
+        final IExporter exporter = new SqlExporter().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
-        setFilenameToBeRemoved(filename);
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -59,7 +57,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
         final ICase strategy = Cases.LOW_CASE.value();
         final GenFactory factory = new GenFactory();
 
-        final Map<Class, String> dataTypes = new HashMap<>();
+        final Map<Class<?>, String> dataTypes = new HashMap<>();
         dataTypes.put(Object.class, "TIMESTAMP");
 
         final List<DummyTime> dummies = factory.build(DummyTime.class, 2);
@@ -70,15 +68,14 @@ public class SqlExportAsFileTest extends FileExportAssert {
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
 
-        final String filename = "TimeDummyClass" + format.getExtension();
-        setFilenameToBeRemoved(filename);
+        final String filename = "DummyTime" + format.getExtension();
 
-        final String dummyAsString = readDummyFromFile(filename);
+        final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(15, sqlArray.length);
+        assertEquals(14, sqlArray.length);
 
         validation.isDummyTimeValidWithNamingStrategy(sqlArray, strategy);
     }

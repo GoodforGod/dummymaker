@@ -6,7 +6,7 @@ package io.dummymaker.bundle.impl;
  * @author GoodforGod
  * @since 21.02.2018
  */
-public class NounBundle extends BasicBundle<String> {
+public class NounBundle extends BasicBundle {
 
     public NounBundle() {
         super(

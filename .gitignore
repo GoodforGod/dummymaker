@@ -3,5 +3,4 @@
 out
 .gradle
 target
-gradle.properties
 build/

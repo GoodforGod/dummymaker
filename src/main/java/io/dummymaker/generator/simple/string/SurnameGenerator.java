@@ -19,15 +19,15 @@ public class SurnameGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("surname", CASE_INSENSITIVE);
 
-    private final IBundle<String> bundle = new SurnameBundle();
+    private final IBundle bundle = new SurnameBundle();
 
     @Override
     public @NotNull String generate() {
-        return bundle.getRandom();
+        return bundle.random();
     }
 
     @Override
-    public @NotNull Pattern getPattern() {
+    public @NotNull Pattern pattern() {
         return pattern;
     }
 }
