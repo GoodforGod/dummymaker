@@ -27,29 +27,33 @@ public class CastUtils {
     private CastUtils() {}
 
     public static Object castToNumber(final Object value, final Class<?> fieldType) {
-        switch (CastType.of(fieldType)) {
-            case BYTE:
-                return Byte.valueOf(String.valueOf(value));
-            case CHAR:
-                return String.valueOf(value).charAt(0);
-            case SHORT:
-                return Short.valueOf(String.valueOf(value));
-            case BOOLEAN:
-                return Boolean.valueOf(String.valueOf(value));
-            case INT:
-                return Integer.valueOf(String.valueOf(value));
-            case LONG:
-                return Long.valueOf(String.valueOf(value));
-            case FLOAT:
-                return Float.valueOf(String.valueOf(value));
-            case DOUBLE:
-                return Double.valueOf(String.valueOf(value));
-            case BIG_INT:
-                return BigInteger.valueOf(Long.parseLong(String.valueOf(value)));
-            case BIG_DECIMAL:
-                return BigDecimal.valueOf(Long.parseLong(String.valueOf(value)));
-            default:
-                return value;
+        try {
+            switch (CastType.of(fieldType)) {
+                case BYTE:
+                    return Byte.valueOf(String.valueOf(value));
+                case CHAR:
+                    return String.valueOf(value).charAt(0);
+                case SHORT:
+                    return Short.valueOf(String.valueOf(value));
+                case BOOLEAN:
+                    return Boolean.valueOf(String.valueOf(value));
+                case INT:
+                    return Integer.valueOf(String.valueOf(value));
+                case LONG:
+                    return Long.valueOf(String.valueOf(value));
+                case FLOAT:
+                    return Float.valueOf(String.valueOf(value));
+                case DOUBLE:
+                    return Double.valueOf(String.valueOf(value));
+                case BIG_INT:
+                    return BigInteger.valueOf(Long.parseLong(String.valueOf(value)));
+                case BIG_DECIMAL:
+                    return BigDecimal.valueOf(Long.parseLong(String.valueOf(value)));
+                default:
+                    return value;
+            }
+        } catch (NumberFormatException e) {
+            return value;
         }
     }
 

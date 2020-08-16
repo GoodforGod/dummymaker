@@ -18,7 +18,7 @@ Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:3.0.0'
+    compile 'com.github.goodforgod:dummymaker:3.0.1'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 
@@ -461,6 +461,8 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 
 ## Version History
+
+**3.0.1** - Minor bug fixes.
 
 **3.0.0** - Exporters redesigned, Factory export huge amount of dummies contracts added, generators improved, matching for generators improved.
 

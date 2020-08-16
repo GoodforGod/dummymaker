@@ -17,7 +17,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class DistrictGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("state|district|locale?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("state|region|district|locale?", CASE_INSENSITIVE);
 
     private final IBundle bundle = new DistrictBundle();
 
