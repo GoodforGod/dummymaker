@@ -124,7 +124,7 @@ public class ResourceScanner implements IScanner<String, String> {
     private List<URL> getSystemResources(String packageOrPath) {
         try {
             final String path = PackageUtils.toRelativePath(packageOrPath);
-            final Enumeration<URL> resourceUrls = this.getClass().getClassLoader().getResources(path);
+            final Enumeration<URL> resourceUrls = getClass().getClassLoader().getResources(path);
             if (!resourceUrls.hasMoreElements())
                 return Collections.emptyList();
 
