@@ -492,4 +492,4 @@ just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## License
 
-This project is licensed under the MIT - see the [LICENSE](LICENSE) file for details.
+This project licensed under the MIT - see the [LICENSE](LICENSE) file for details.
