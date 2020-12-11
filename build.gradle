@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'me.xdrop:fuzzywuzzy:1.3.1'
     implementation 'javax.inject:javax.inject:1'
@@ -53,26 +53,19 @@ test {
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+    options.encoding = 'UTF-8'
     options.incremental = true
     options.fork = true
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = 'sources'
+tasks.withType(Test) {
+    reports.html.enabled = false
+    reports.junitXml.enabled = false
 }
 
-task javadocJar(type: Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
-}
-
-javadoc {
-    options.encoding = "UTF-8"
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
-    }
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
@@ -123,15 +116,10 @@ publishing {
     }
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
+check.dependsOn jacocoTestReport
 jacocoTestReport {
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.enabled true
         html.destination file("${buildDir}/jacocoHtml")
     }
 }
@@ -140,5 +128,12 @@ if (project.hasProperty("signing.keyId")) {
     apply plugin: 'signing'
     signing {
         sign publishing.publications.mavenJava
+    }
+}
+
+javadoc {
+    options.encoding = "UTF-8"
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }

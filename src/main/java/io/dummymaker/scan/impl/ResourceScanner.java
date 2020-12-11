@@ -79,8 +79,7 @@ public class ResourceScanner implements IScanner<String, String> {
         final Collection<String> classes = new ArrayList<>();
         final String jarPath = resource.getPath()
                 .replaceFirst("[.]jar[!].*", ".jar")
-                .replaceFirst("file:", "")
-                .replace(" ", "\\ ");
+                .replaceFirst("file:", "");
 
         try (final JarFile jar = new JarFile(jarPath)) {
             final Enumeration<JarEntry> files = jar.entries();
