@@ -49,6 +49,7 @@ test {
     testLogging {
         events 'passed', 'skipped', 'failed'
         exceptionFormat 'full'
+        showStandardStreams = false
     }
 }
 
