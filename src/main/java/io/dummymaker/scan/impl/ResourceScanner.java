@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -36,7 +38,7 @@ public class ResourceScanner implements IScanner<String, String> {
 
         final String path = PackageUtils.toRelativePath(packageOrPath);
         return getSystemResources(packageOrPath).stream()
-                .map(r -> r.toString().contains("jar:")
+                .map(r -> r.toString().startsWith("jar")
                         ? loadFromJar(r)
                         : loadFromDirectory(new File(r.getPath()), path))
                 .flatMap(Collection::stream)
@@ -81,15 +83,22 @@ public class ResourceScanner implements IScanner<String, String> {
                 .replaceFirst("[.]jar[!].*", ".jar")
                 .replaceFirst("file:", "");
 
-        try (final JarFile jar = new JarFile(jarPath)) {
-            final Enumeration<JarEntry> files = jar.entries();
-            while (files.hasMoreElements()) {
-                final JarEntry file = files.nextElement();
-                classes.add(file.getName());
+        final String canonical = jarPath.startsWith("/")
+                ? jarPath.substring(1)
+                : jarPath;
+
+        try {
+            final Path path = Paths.get(canonical);
+            try (final JarFile jar = new JarFile(path.toFile())) {
+                final Enumeration<JarEntry> files = jar.entries();
+                while (files.hasMoreElements()) {
+                    final JarEntry file = files.nextElement();
+                    classes.add(file.getName());
+                }
             }
         } catch (Exception e) {
             throw new IllegalArgumentException(
-                    "Exception while reading JAR File '" + jarPath + "' with error message: " + e.getMessage());
+                    "Can not open JAR '" + resource + "', failed with: " + e.getMessage());
         }
 
         return classes;
