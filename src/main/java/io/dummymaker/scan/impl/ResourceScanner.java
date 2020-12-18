@@ -1,6 +1,5 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.error.GenException;
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
@@ -10,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -24,6 +25,26 @@ import java.util.stream.Collectors;
 public class ResourceScanner implements IScanner<String, String> {
 
     /**
+     * Scans for all resources under specified package and its subdirectories
+     *
+     * @param packageOrPath package or path to start scan from
+     * @return list of resources under target package or path
+     */
+    @Override
+    public @NotNull Collection<String> scan(String packageOrPath) {
+        if (StringUtils.isBlank(packageOrPath))
+            return Collections.emptyList();
+
+        final String path = PackageUtils.toRelativePath(packageOrPath);
+        return getSystemResources(packageOrPath).stream()
+                .map(r -> r.toString().startsWith("jar")
+                        ? loadFromJar(r)
+                        : loadFromDirectory(new File(r.getPath()), path))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Given a package name and a directory returns all classes within that
      * directory
      *
@@ -31,12 +52,12 @@ public class ResourceScanner implements IScanner<String, String> {
      * @param packageName to process
      * @return Classes within Directory with package name
      */
-    private static Set<String> loadFromDirectory(File directory, String packageName) {
+    private static Collection<String> loadFromDirectory(File directory, String packageName) {
         final String[] files = directory.list();
         if (CollectionUtils.isEmpty(files))
             return Collections.emptySet();
 
-        final Set<String> classes = new HashSet<>();
+        final Collection<String> classes = new ArrayList<>();
         for (String file : files) {
             classes.add(packageName + "/" + file);
 
@@ -55,44 +76,27 @@ public class ResourceScanner implements IScanner<String, String> {
      *
      * @param resource as jar to process
      */
-    private static Set<String> loadFromJar(URL resource) {
-        final Set<String> classes = new HashSet<>();
+    private static Collection<String> loadFromJar(URL resource) {
         final String jarPath = resource.getPath()
                 .replaceFirst("[.]jar[!].*", ".jar")
-                .replaceFirst("file:", "")
-                .replace(" ", "\\ ");
+                .replaceFirst("file:", "");
 
-        try (final JarFile jar = new JarFile(jarPath)) {
-            final Enumeration<JarEntry> files = jar.entries();
-            while (files.hasMoreElements()) {
-                final JarEntry file = files.nextElement();
-                classes.add(file.getName());
+        try {
+            final String path = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name());
+            try (final JarFile jar = new JarFile(path)) {
+                final List<String> classes = new ArrayList<>();
+                final Enumeration<JarEntry> files = jar.entries();
+                while (files.hasMoreElements()) {
+                    final JarEntry file = files.nextElement();
+                    classes.add(file.getName());
+                }
+
+                return classes;
             }
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Unexpected IOException reading JAR File '" + jarPath + "'", e);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Can not open JAR '" + resource + "', failed with: " + e.getMessage());
         }
-
-        return classes;
-    }
-
-    /**
-     * Scans for all resources under specified package and its subdirectories
-     *
-     * @param packageOrPath package or path to start scan from
-     * @return list of resources under target package or path
-     */
-    @Override
-    public @NotNull Collection<String> scan(String packageOrPath) {
-        if (StringUtils.isBlank(packageOrPath))
-            return Collections.emptyList();
-
-        final String path = PackageUtils.toRelativePath(packageOrPath);
-        return getSystemResources(packageOrPath).stream()
-                .map(r -> r.toString().contains("jar:")
-                        ? loadFromJar(r)
-                        : loadFromDirectory(new File(r.getPath()), path))
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
     }
 
     /**
@@ -124,7 +128,7 @@ public class ResourceScanner implements IScanner<String, String> {
     private List<URL> getSystemResources(String packageOrPath) {
         try {
             final String path = PackageUtils.toRelativePath(packageOrPath);
-            final Enumeration<URL> resourceUrls = this.getClass().getClassLoader().getResources(path);
+            final Enumeration<URL> resourceUrls = getClass().getClassLoader().getResources(path);
             if (!resourceUrls.hasMoreElements())
                 return Collections.emptyList();
 
@@ -134,7 +138,7 @@ public class ResourceScanner implements IScanner<String, String> {
 
             return resources;
         } catch (IOException e) {
-            throw new GenException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }
