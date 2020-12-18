@@ -1,6 +1,5 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.error.GenException;
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
@@ -78,7 +77,6 @@ public class ResourceScanner implements IScanner<String, String> {
      * @param resource as jar to process
      */
     private static Collection<String> loadFromJar(URL resource) {
-        final Collection<String> classes = new ArrayList<>();
         final String jarPath = resource.getPath()
                 .replaceFirst("[.]jar[!].*", ".jar")
                 .replaceFirst("file:", "");
@@ -86,18 +84,19 @@ public class ResourceScanner implements IScanner<String, String> {
         try {
             final String path = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name());
             try (final JarFile jar = new JarFile(path)) {
+                final List<String> classes = new ArrayList<>();
                 final Enumeration<JarEntry> files = jar.entries();
                 while (files.hasMoreElements()) {
                     final JarEntry file = files.nextElement();
                     classes.add(file.getName());
                 }
+
+                return classes;
             }
         } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Can not open JAR '" + resource + "', failed with: " + e.getMessage());
         }
-
-        return classes;
     }
 
     /**
@@ -139,7 +138,7 @@ public class ResourceScanner implements IScanner<String, String> {
 
             return resources;
         } catch (IOException e) {
-            throw new GenException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }
