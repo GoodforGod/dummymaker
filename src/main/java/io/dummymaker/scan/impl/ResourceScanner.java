@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -83,13 +83,9 @@ public class ResourceScanner implements IScanner<String, String> {
                 .replaceFirst("[.]jar[!].*", ".jar")
                 .replaceFirst("file:", "");
 
-        final String canonical = jarPath.startsWith("/")
-                ? jarPath.substring(1)
-                : jarPath;
-
         try {
-            final Path path = Paths.get(canonical);
-            try (final JarFile jar = new JarFile(path.toFile())) {
+            final String path = URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name());
+            try (final JarFile jar = new JarFile(path)) {
                 final Enumeration<JarEntry> files = jar.entries();
                 while (files.hasMoreElements()) {
                     final JarEntry file = files.nextElement();
