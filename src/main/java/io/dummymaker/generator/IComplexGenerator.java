@@ -35,5 +35,4 @@ public interface IComplexGenerator extends IGenerator<Object> {
                     @NotNull IGenStorage storage,
                     @Nullable Annotation annotation,
                     int depth);
-
 }

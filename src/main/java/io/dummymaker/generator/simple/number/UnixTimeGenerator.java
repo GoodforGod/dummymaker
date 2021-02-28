@@ -17,7 +17,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class UnixTimeGenerator implements IGenerator<Long> {
 
-    private final Pattern pattern = Pattern.compile("modif(y|ied)?|unix(time)?|epoch", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("modif(y|ied)?|unix(time)?|epoch|issued|till|since|from", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Long generate() {
