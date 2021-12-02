@@ -1,9 +1,6 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.IGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -12,7 +9,10 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utils for object casting
@@ -194,8 +194,8 @@ public class CastUtils {
     }
 
     /**
-     * Try to box downcast or box object if it is boxed primitive type And field is
-     * also boxed primitive (can't cast one to another explicitly)
+     * Try to box downcast or box object if it is boxed primitive type And field is also boxed primitive
+     * (can't cast one to another explicitly)
      */
     private static <T> Object boxObject(final Object castObject, final Class<T> fieldType) {
         final CastType firstType = CastType.of(castObject.getClass());

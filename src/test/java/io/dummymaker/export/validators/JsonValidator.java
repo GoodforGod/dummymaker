@@ -1,13 +1,13 @@
 package io.dummymaker.export.validators;
 
+import static io.dummymaker.model.Dummy.DummyFields.*;
+import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
+import static org.junit.Assert.assertTrue;
+
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
-
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
-import static org.junit.Assert.assertTrue;
 
 /**
  * "Default Description"

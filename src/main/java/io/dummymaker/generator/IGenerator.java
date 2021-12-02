@@ -1,9 +1,8 @@
 package io.dummymaker.generator;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generator used by PrimeGen to populate field

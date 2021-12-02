@@ -1,5 +1,8 @@
 package io.dummymaker.factory.impl;
 
+import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+import static io.dummymaker.util.CollectionUtils.isEmpty;
+
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.*;
@@ -10,10 +13,6 @@ import io.dummymaker.model.Pair;
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.GenUtils;
-import me.xdrop.fuzzywuzzy.FuzzySearch;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -21,13 +20,13 @@ import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
-import static io.dummymaker.util.CollectionUtils.isEmpty;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Default gen config implementation for generators discovery With all library
- * generators and their patterns availability
+ * Default gen config implementation for generators discovery With all library generators and their
+ * patterns availability
  *
  * @author GoodforGod
  * @see IGenSupplier
@@ -69,8 +68,7 @@ public class GenSupplier implements IGenSupplier {
     }
 
     /**
-     * Try to find most suitable generator class for target field Using field value
-     * class and field name
+     * Try to find most suitable generator class for target field Using field value class and field name
      * <p>
      * In case field can not be found then treat field as embedded object
      *

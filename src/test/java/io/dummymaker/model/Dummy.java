@@ -7,7 +7,6 @@ import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.annotation.special.GenSequence;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;

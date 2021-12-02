@@ -1,11 +1,10 @@
 package io.dummymaker.generator.simple.string;
 
-import org.jetbrains.annotations.NotNull;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates URI as string

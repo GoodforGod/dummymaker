@@ -1,19 +1,17 @@
 package io.dummymaker.generator.simple.time;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Generates LocalDateTime from 1970 to 3000 (exclusive) year with seconds
- * precision
+ * Generates LocalDateTime from 1970 to 3000 (exclusive) year with seconds precision
  *
  * @author GoodforGod
  * @see LocalDateTime

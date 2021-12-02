@@ -1,5 +1,7 @@
 package io.dummymaker.generator.complex;
 
+import static io.dummymaker.util.CastUtils.getGenericType;
+
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.factory.IGenStorage;
@@ -7,17 +9,14 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import static io.dummymaker.util.CastUtils.getGenericType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates List for GenList annotation

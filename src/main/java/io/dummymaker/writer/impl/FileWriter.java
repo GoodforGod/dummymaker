@@ -3,7 +3,6 @@ package io.dummymaker.writer.impl;
 import io.dummymaker.error.ExportException;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,8 +26,7 @@ public class FileWriter implements IWriter {
 
     /**
      * @param filename              file name
-     * @param path                  path where to create file (NULL or EMPTY for
-     *                              home dir)
+     * @param path                  path where to create file (NULL or EMPTY for home dir)
      * @param deleteFileBeforeWrite clean file when writer is created
      */
     public FileWriter(String path, String filename, boolean deleteFileBeforeWrite) {

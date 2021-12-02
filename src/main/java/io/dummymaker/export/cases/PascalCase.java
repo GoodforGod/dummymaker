@@ -4,8 +4,7 @@ import io.dummymaker.export.ICase;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy -
- * TonNy
+ * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy - TonNy
  *
  * @author GoodforGod
  * @since 21.04.2018

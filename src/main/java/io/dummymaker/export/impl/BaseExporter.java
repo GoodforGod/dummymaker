@@ -13,8 +13,6 @@ import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.FileWriter;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.time.*;
@@ -25,6 +23,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Core exporter class with mapping and converting functionality

@@ -3,13 +3,12 @@ package io.dummymaker.generator.complex;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
+import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-
 /**
- * Basic collection complex generator implementation Can be used by other
- * collection complex generators
+ * Basic collection complex generator implementation Can be used by other collection complex
+ * generators
  *
  * @author GoodforGod
  * @see IComplexGenerator

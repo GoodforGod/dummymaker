@@ -5,10 +5,9 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.model.DummyEmbedded.DummyEmbeddedIntoSimple;
 import io.dummymaker.model.GenRule;
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Description in progress

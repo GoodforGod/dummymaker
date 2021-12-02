@@ -3,12 +3,11 @@ package io.dummymaker.export.impl;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainer.Type;
 import io.dummymaker.writer.IWriter;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)

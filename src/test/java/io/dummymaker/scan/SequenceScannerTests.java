@@ -1,17 +1,16 @@
 package io.dummymaker.scan;
 
+import static org.junit.Assert.*;
+
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.DummySimple;
 import io.dummymaker.scan.impl.SequenceScanner;
-import org.junit.Test;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * ! NO DESCRIPTION !

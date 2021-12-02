@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.simple.number.CharacterGenerator;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.regex.Pattern;
-
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
+import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.simple.number.CharacterGenerator;
+import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates document, password identifiers as a string

@@ -2,11 +2,10 @@ package io.dummymaker.model;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Rule for settings generator type for specific field name or field type
@@ -47,8 +46,8 @@ public class GenRule {
     }
 
     /**
-     * Gen auto class rule with default 1 depth All fields will be auto generated
-     * for such class if not ignored otherwise
+     * Gen auto class rule with default 1 depth All fields will be auto generated for such class if not
+     * ignored otherwise
      *
      * @param target for rule
      * @return gen auto class rule
@@ -62,8 +61,8 @@ public class GenRule {
     }
 
     /**
-     * Gen auto class rule with specified depth All fields will be auto generated
-     * for such class if not ignored otherwise
+     * Gen auto class rule with specified depth All fields will be auto generated for such class if not
+     * ignored otherwise
      *
      * @param target for rule
      * @param depth  to set
@@ -130,8 +129,7 @@ public class GenRule {
      * Retries desired generator for field
      *
      * @param field targeted
-     * @return generator for named field or optional generator for specific type
-     *         from rules
+     * @return generator for named field or optional generator for specific type from rules
      */
     public @NotNull Optional<IGenerator<?>> getDesiredExample(Field field) {
         if (field == null || isIgnored(field))
@@ -156,8 +154,7 @@ public class GenRule {
      * Retries desired generator for field
      *
      * @param field targeted
-     * @return generator for named field or optional generator for specific type
-     *         from rules
+     * @return generator for named field or optional generator for specific type from rules
      */
     public @NotNull Optional<Class<? extends IGenerator>> getDesired(Field field) {
         if (field == null || isIgnored(field))

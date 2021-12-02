@@ -6,16 +6,14 @@ import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IGenScanner;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Scanner used by populate factory Scan for prime gen annotation and its child
- * annotation
+ * Scanner used by populate factory Scan for prime gen annotation and its child annotation
  *
  * @author GoodforGod
  * @see PrimeGen
@@ -32,8 +30,8 @@ public class GenScanner extends BasicScanner implements IGenScanner {
     /**
      * Scan for prime/complex gen annotation and its child annotation
      *
-     * @param target class to scan KEY is field that has populate annotations VALUE
-     *               is Gen container with generate params for that field
+     * @param target class to scan KEY is field that has populate annotations VALUE is Gen container
+     *               with generate params for that field
      * @return populate field map, where
      * @see GenContainer
      */

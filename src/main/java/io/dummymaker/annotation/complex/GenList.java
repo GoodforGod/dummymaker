@@ -3,7 +3,6 @@ package io.dummymaker.annotation.complex;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.ListComplexGenerator;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

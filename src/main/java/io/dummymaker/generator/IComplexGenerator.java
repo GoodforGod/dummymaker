@@ -2,15 +2,14 @@ package io.dummymaker.generator;
 
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.factory.IGenStorage;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 /**
- * Complex Generator used by ComplexGen annotation to populate fields When
- * annotation have attributes or value generates for multiple field types
+ * Complex Generator used by ComplexGen annotation to populate fields When annotation have
+ * attributes or value generates for multiple field types
  *
  * @author GoodforGod
  * @see ComplexGen
@@ -23,8 +22,7 @@ public interface IComplexGenerator extends IGenerator<Object> {
      *
      * @param annotation field was marked by
      * @param field      for which value is generated
-     * @param storage    factory storage with generators and embedded entity
-     *                   production
+     * @param storage    factory storage with generators and embedded entity production
      * @param depth      current depth of the generated field
      * @param parent     parent object class
      * @return generated object

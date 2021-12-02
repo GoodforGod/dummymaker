@@ -4,9 +4,8 @@ import io.dummymaker.export.ICase;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Each upper letter separated with underscore symbol, and transform to upper
- * case EXCLUDING FIRST LETTER, first letter to low case Example: ( DummyList -
- * DUMMY_LIST )
+ * Each upper letter separated with underscore symbol, and transform to upper case EXCLUDING FIRST
+ * LETTER, first letter to low case Example: ( DummyList - DUMMY_LIST )
  *
  * @author GoodforGod
  * @since 21.02.2018

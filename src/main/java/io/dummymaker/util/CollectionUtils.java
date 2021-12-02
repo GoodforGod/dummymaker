@@ -1,12 +1,11 @@
 package io.dummymaker.util;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Basic util methods for collections
@@ -76,9 +75,9 @@ public class CollectionUtils {
     }
 
     /**
-     * Consider that accessing random element for {@link java.util.LinkedList} or
-     * {@link java.util.Set} is O(N) where N is index of random element, this is due
-     * to this collections does not have random access.
+     * Consider that accessing random element for {@link java.util.LinkedList} or {@link java.util.Set}
+     * is O(N) where N is index of random element, this is due to this collections does not have random
+     * access.
      *
      * @param collection to get random element from
      * @param <T>        type of element

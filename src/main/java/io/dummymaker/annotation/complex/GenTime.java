@@ -2,7 +2,6 @@ package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.generator.complex.TimeComplexGenerator;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -36,10 +35,8 @@ public @interface GenTime {
      * ISO 8601 datetime format for DateTime and timestamps
      * 
      * @see java.time.format.DateTimeFormatter#ISO_DATE_TIME default for datetimes
-     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only
-     *      formats
-     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only
-     *      formats
+     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only formats
+     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only formats
      */
     String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
