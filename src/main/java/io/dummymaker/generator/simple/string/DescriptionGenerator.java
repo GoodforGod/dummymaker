@@ -30,4 +30,9 @@ public class DescriptionGenerator implements IGenerator<String> {
     public @NotNull Pattern pattern() {
         return pattern;
     }
+
+    @Override
+    public int order() {
+        return -10;
+    }
 }

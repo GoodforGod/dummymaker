@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IdGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("[ug]?u?id|[Ii]d");
+    private final Pattern pattern = Pattern.compile("[UuGg]?[Uu]?[Ii]d$|^[UuGg]?[Uu]?[Ii]d");
 
     @Override
     public @NotNull String generate() {

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IntegerSmallGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("age|grade|group|amount|inn|snils", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("rank|age|grade|group|amount|inn|snils", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Integer generate() {

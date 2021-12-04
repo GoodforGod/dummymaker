@@ -32,4 +32,9 @@ public class FileGenerator implements IGenerator<String> {
     public @Nullable Pattern pattern() {
         return pattern;
     }
+
+    @Override
+    public int order() {
+        return -10;
+    }
 }

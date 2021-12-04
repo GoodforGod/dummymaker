@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 public class NounGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile(
-            "commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class", CASE_INSENSITIVE);
+            "record|commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class",
+            CASE_INSENSITIVE);
 
     private static final IBundle bundle = new NounBundle();
 
@@ -29,5 +30,10 @@ public class NounGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -10;
     }
 }

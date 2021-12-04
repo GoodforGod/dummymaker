@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CountryGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("country", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("country|citizen", CASE_INSENSITIVE);
 
     private static final IBundle bundle = new CountryBundle();
 

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CompanyGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("organization|company|corp(oration)?|fund|business|shop|store",
+    private final Pattern pattern = Pattern.compile("org(anization)?|company|corp(oration)?|fund|business|shop|store",
             CASE_INSENSITIVE);
 
     private static final IBundle bundle = new CompanyBundle();
@@ -29,5 +29,10 @@ public class CompanyGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -5;
     }
 }

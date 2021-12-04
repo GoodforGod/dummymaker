@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JobGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("job|work|position", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("qualification|job|work|position", CASE_INSENSITIVE);
 
     private static final IBundle bundle = new JobBundle();
 

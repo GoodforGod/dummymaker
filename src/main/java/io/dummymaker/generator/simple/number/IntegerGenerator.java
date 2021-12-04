@@ -27,4 +27,9 @@ public class IntegerGenerator implements IGenerator<Integer> {
     public @NotNull Pattern pattern() {
         return pattern;
     }
+
+    @Override
+    public int order() {
+        return -60;
+    }
 }

@@ -31,4 +31,9 @@ public class PhoneGenerator implements IGenerator<String> {
     public @NotNull Pattern pattern() {
         return pattern;
     }
+
+    @Override
+    public int order() {
+        return -65;
+    }
 }
