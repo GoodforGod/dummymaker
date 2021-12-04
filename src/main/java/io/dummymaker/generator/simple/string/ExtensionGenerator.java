@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ExtensionGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("ext(ension)?", CASE_INSENSITIVE);
-    private final IBundle bundle = new ExtensionBundle();
+    private static final IBundle bundle = new ExtensionBundle();
 
     @Nullable
     @Override

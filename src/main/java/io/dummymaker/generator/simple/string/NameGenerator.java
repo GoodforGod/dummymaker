@@ -20,8 +20,8 @@ public class NameGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
 
-    private final IBundle maleBundle = new MaleNameBundle();
-    private final IBundle femaleBundle = new FemaleNameBundle();
+    private static final IBundle maleBundle = new MaleNameBundle();
+    private static final IBundle femaleBundle = new FemaleNameBundle();
 
     @Override
     public @NotNull String generate() {
@@ -33,5 +33,10 @@ public class NameGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -10;
     }
 }

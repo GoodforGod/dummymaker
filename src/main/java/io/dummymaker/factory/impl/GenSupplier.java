@@ -49,7 +49,7 @@ public class GenSupplier implements IGenSupplier {
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream()
                         .map(CastUtils::instantiate)
                         .filter(Objects::nonNull)
-                        .sorted(Comparator.comparing(g -> g.getClass().getSimpleName()))
+                        .sorted(IGenerator::compareTo)
                         .collect(Collectors.toList())));
     }
 
@@ -127,7 +127,7 @@ public class GenSupplier implements IGenSupplier {
 
         final Stream<IGenerator> typedGeneratorStream = classifiers.get(type).stream();
         return getSuitableGenerator(fieldName, typedGeneratorStream)
-                .map(g -> g.getClass());
+                .map(IGenerator::getClass);
     }
 
     @SuppressWarnings("ConstantConditions")

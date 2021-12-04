@@ -20,7 +20,7 @@ public class AddressFullGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("addr(ess)?full|place|residence|home|location", CASE_INSENSITIVE);
 
     private final IGenerator<String> generator = new AddressGenerator();
-    private final IBundle countryBundle = new CountryBundle();
+    private static final IBundle countryBundle = new CountryBundle();
 
     @Override
     public @NotNull String generate() {

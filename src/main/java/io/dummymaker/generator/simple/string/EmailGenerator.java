@@ -20,9 +20,9 @@ public class EmailGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("e?mail", CASE_INSENSITIVE);
 
-    private final IBundle nickBundle = new LoginBundle();
-    private final IBundle emailBundle = new EmailServicesBundle();
-    private final IBundle domainBundle = new DomainBundle();
+    private static final IBundle nickBundle = new LoginBundle();
+    private static final IBundle emailBundle = new EmailServicesBundle();
+    private static final IBundle domainBundle = new DomainBundle();
 
     @Override
     public @NotNull String generate() {

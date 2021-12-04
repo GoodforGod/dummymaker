@@ -18,8 +18,8 @@ public class UrlGenerator extends UriGenerator {
 
     private final Pattern pattern = Pattern.compile("site|website|url|server|link", CASE_INSENSITIVE);
 
-    private final IBundle domains = new LoginBundle();
-    private final IBundle zones = new DomainBundle();
+    private static final IBundle domains = new LoginBundle();
+    private static final IBundle zones = new DomainBundle();
 
     @Override
     public @NotNull String generate() {

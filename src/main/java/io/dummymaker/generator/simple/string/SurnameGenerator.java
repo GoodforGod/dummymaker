@@ -18,7 +18,7 @@ public class SurnameGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("surname", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new SurnameBundle();
+    private static final IBundle bundle = new SurnameBundle();
 
     @Override
     public @NotNull String generate() {
@@ -28,5 +28,10 @@ public class SurnameGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -10;
     }
 }

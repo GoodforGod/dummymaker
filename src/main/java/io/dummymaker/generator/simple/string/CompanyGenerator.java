@@ -19,7 +19,7 @@ public class CompanyGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("organization|company|corp(oration)?|fund|business|shop|store",
             CASE_INSENSITIVE);
 
-    private final IBundle bundle = new CompanyBundle();
+    private static final IBundle bundle = new CompanyBundle();
 
     @Override
     public @NotNull String generate() {

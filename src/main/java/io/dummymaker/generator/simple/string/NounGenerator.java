@@ -19,7 +19,7 @@ public class NounGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile(
             "commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new NounBundle();
+    private static final IBundle bundle = new NounBundle();
 
     @Override
     public @NotNull String generate() {

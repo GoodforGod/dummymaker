@@ -18,7 +18,7 @@ public class CountryGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("country", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new CountryBundle();
+    private static final IBundle bundle = new CountryBundle();
 
     @Override
     public @NotNull String generate() {

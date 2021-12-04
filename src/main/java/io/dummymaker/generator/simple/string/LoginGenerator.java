@@ -19,7 +19,7 @@ public class LoginGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("nick(name)?|login", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new LoginBundle();
+    private static final IBundle bundle = new LoginBundle();
 
     @Override
     public @NotNull String generate() {

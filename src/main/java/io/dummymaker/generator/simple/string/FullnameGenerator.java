@@ -29,4 +29,9 @@ public class FullnameGenerator implements IGenerator<String> {
     public @NotNull Pattern pattern() {
         return pattern;
     }
+
+    @Override
+    public int order() {
+        return -10;
+    }
 }

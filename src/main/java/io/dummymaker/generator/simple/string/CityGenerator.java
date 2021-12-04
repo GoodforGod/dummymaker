@@ -18,7 +18,7 @@ public class CityGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("city|town|village|settlement", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new CityBundle();
+    private static final IBundle bundle = new CityBundle();
 
     @Override
     public @NotNull String generate() {

@@ -19,7 +19,7 @@ public class DescriptionGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("diploma|info|desc(ription)?|phrase|comment|sentence|reason",
             CASE_INSENSITIVE);
 
-    private final IBundle bundle = new PhraseBundle();
+    private static final IBundle bundle = new PhraseBundle();
 
     @Override
     public @NotNull String generate() {

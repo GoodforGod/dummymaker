@@ -18,7 +18,7 @@ public class StreetGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("street", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new StreetBundle();
+    private static final IBundle bundle = new StreetBundle();
 
     @Override
     public @NotNull String generate() {

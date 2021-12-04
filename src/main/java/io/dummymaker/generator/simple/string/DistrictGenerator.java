@@ -18,7 +18,7 @@ public class DistrictGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("state|region|district|locale?", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new DistrictBundle();
+    private static final IBundle bundle = new DistrictBundle();
 
     @Override
     public @NotNull String generate() {

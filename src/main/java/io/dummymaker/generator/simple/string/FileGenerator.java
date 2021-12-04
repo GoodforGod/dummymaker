@@ -19,8 +19,8 @@ public class FileGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("file|doc(ument)?", CASE_INSENSITIVE);
 
-    private final IBundle extensions = new ExtensionBundle();
-    private final IBundle names = new NounBundle();
+    private static final IBundle extensions = new ExtensionBundle();
+    private static final IBundle names = new NounBundle();
 
     @Nullable
     @Override

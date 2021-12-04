@@ -18,7 +18,7 @@ public class FormatGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("protocol|format", CASE_INSENSITIVE);
 
-    private final IBundle formats = new FormatBundle();
+    private static final IBundle formats = new FormatBundle();
 
     @Override
     public @NotNull String generate() {

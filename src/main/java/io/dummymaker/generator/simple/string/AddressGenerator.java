@@ -22,9 +22,9 @@ public class AddressGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("addr(ess)?", CASE_INSENSITIVE);
 
-    private final IBundle streetBundle = new StreetBundle();
-    private final IBundle districtBundle = new DistrictBundle();
-    private final IBundle cityBundle = new CityBundle();
+    private static final IBundle streetBundle = new StreetBundle();
+    private static final IBundle districtBundle = new DistrictBundle();
+    private static final IBundle cityBundle = new CityBundle();
 
     @Override
     public @NotNull String generate() {

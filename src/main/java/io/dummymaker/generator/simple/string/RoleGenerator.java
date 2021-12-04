@@ -18,7 +18,7 @@ public class RoleGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("role", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new JobBundle();
+    private static final IBundle bundle = new JobBundle();
 
     @Nullable
     @Override
