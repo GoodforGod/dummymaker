@@ -4,9 +4,7 @@ import static java.util.regex.Pattern.compile;
 
 import io.dummymaker.annotation.complex.GenTime;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -82,6 +80,12 @@ public class DummyTimeFormatter {
     @GenTime(formatter = "yyyy-MM HH:mm")
     private LocalDateTime dateTime;
 
+    @GenTime
+    private OffsetTime offsetTime;
+
+    @GenTime
+    private OffsetDateTime offsetDateTime;
+
     @GenTime(formatter = "yyyy-MM HH:mm")
     private Timestamp timestamp;
 
@@ -123,5 +127,9 @@ public class DummyTimeFormatter {
 
     public Object getDateTimeObject() {
         return dateTimeObject;
+    }
+
+    public Date getDateOldCoverage() {
+        return dateOldCoverage;
     }
 }

@@ -19,7 +19,7 @@ public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
 
     private final Pattern pattern = Pattern.compile("time", CASE_INSENSITIVE);
 
-    private final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
+    private static final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 
     @Override
     public @NotNull LocalTime generate() {
@@ -34,5 +34,10 @@ public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -60;
     }
 }

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
-    private final Pattern pattern = Pattern.compile("stamp|timestamp|expired?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("datetime|stamp|timestamp|expired?", CASE_INSENSITIVE);
 
     @Override
     public @NotNull LocalDateTime generate() {
@@ -48,5 +48,10 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -60;
     }
 }

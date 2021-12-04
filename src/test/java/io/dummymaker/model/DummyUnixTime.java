@@ -2,9 +2,7 @@ package io.dummymaker.model;
 
 import io.dummymaker.annotation.complex.GenTime;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -47,6 +45,12 @@ public class DummyUnixTime {
     private LocalDateTime dateTime;
 
     @GenTime(exportAsUnixTime = true)
+    private OffsetTime offsetTime;
+
+    @GenTime(exportAsUnixTime = true)
+    private OffsetDateTime offsetDateTime;
+
+    @GenTime(exportAsUnixTime = true)
     private Timestamp timestamp;
 
     @GenTime(exportAsUnixTime = true)
@@ -87,5 +91,9 @@ public class DummyUnixTime {
 
     public Object getDateTimeObject() {
         return dateTimeObject;
+    }
+
+    public Date getDateOldCoverage() {
+        return dateOldCoverage;
     }
 }

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DateSqlGenerator implements ITimeGenerator<Date> {
 
-    private final LocalDateGenerator generator = new LocalDateGenerator();
+    private static final LocalDateGenerator generator = new LocalDateGenerator();
 
     @Override
     public @NotNull Date generate() {

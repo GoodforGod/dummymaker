@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TimestampGenerator implements ITimeGenerator<Timestamp> {
 
-    private final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
+    private static final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 
     @Override
     public @NotNull Timestamp generate() {

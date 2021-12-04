@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TimeGenerator implements ITimeGenerator<Time> {
 
-    private final LocalTimeGenerator generator = new LocalTimeGenerator();
+    private static final LocalTimeGenerator generator = new LocalTimeGenerator();
 
     @Override
     public @NotNull Time generate() {
