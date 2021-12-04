@@ -14,9 +14,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +64,10 @@ public class TimeComplexGenerator implements IComplexGenerator {
             return castObject(genTime(storage, LocalDateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
             return castObject(genTime(storage, LocalTimeGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(OffsetDateTime.class)) {
+            return castObject(genTime(storage, OffsetDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(OffsetTime.class)) {
+            return castObject(genTime(storage, OffsetTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
             return castObject(genTime(storage, DateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {

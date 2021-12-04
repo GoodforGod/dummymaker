@@ -6,9 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -226,7 +224,9 @@ public class CastUtils {
         return Date.class.isAssignableFrom(type)
                 || LocalTime.class.isAssignableFrom(type)
                 || LocalDate.class.isAssignableFrom(type)
-                || LocalDateTime.class.isAssignableFrom(type);
+                || LocalDateTime.class.isAssignableFrom(type)
+                || OffsetDateTime.class.isAssignableFrom(type)
+                || OffsetTime.class.isAssignableFrom(type);
     }
 
     @SuppressWarnings("unchecked")

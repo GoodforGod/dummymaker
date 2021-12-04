@@ -10,9 +10,7 @@ import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -72,6 +70,8 @@ public class FieldContainerFactory {
         else if (type.equals(LocalDate.class)
                 || type.equals(LocalTime.class)
                 || type.equals(LocalDateTime.class)
+                || type.equals(OffsetDateTime.class)
+                || type.equals(OffsetTime.class)
                 || type.equals(Date.class)
                 || type.equals(java.sql.Date.class)
                 || type.equals(Timestamp.class)
