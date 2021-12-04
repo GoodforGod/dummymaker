@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
 abstract class BasicComplexGenerator implements IComplexGenerator {
 
     static final int MIN_DEFAULT = 1;
-    static final int MAX_DEFAULT = 5;
+    static final int MAX_DEFAULT = 2;
 
     static int getDesiredSize(int min, int max, int fixed) {
         return (fixed > -1) ? fixed : CollectionUtils.random(min, max);

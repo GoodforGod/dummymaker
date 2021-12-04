@@ -34,7 +34,7 @@ public @interface GenList {
      *
      * @return max amount
      */
-    int max() default 5;
+    int max() default 2;
 
     /**
      * Fixed number entities to generate Turned off by default

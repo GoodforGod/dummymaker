@@ -34,7 +34,7 @@ public @interface GenArray {
      *
      * @return max amount
      */
-    int max() default 10;
+    int max() default 2;
 
     /**
      * Fixed number entities to generate Turned off by default
