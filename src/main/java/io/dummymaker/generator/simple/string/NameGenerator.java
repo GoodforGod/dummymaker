@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NameGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("name|assignee|employe|worker", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
 
     private final IBundle maleBundle = new MaleNameBundle();
     private final IBundle femaleBundle = new FemaleNameBundle();

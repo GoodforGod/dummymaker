@@ -16,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DescriptionGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("info|desc(ription)?|phrase|comment|sentence", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("diploma|info|desc(ription)?|phrase|comment|sentence|reason",
+            CASE_INSENSITIVE);
 
     private final IBundle bundle = new PhraseBundle();
 

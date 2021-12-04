@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IntegerGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("num(ber)?|counter", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("num(ber)?|counter|series", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Integer generate() {

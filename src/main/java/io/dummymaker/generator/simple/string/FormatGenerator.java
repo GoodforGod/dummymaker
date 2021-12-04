@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FormatGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("format", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("protocol|format", CASE_INSENSITIVE);
 
     private final IBundle formats = new FormatBundle();
 

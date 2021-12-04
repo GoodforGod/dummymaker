@@ -17,7 +17,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ProductGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("product|good|supply|topic", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern
+            .compile("association|administrative|academy|university|org(anization)?|product|good|supply|topic", CASE_INSENSITIVE);
     private final IBundle bundle = new ProductBundle();
 
     @Nullable

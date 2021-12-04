@@ -16,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NounGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("word|noun|field|data(base)?|schema|collection|class", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile(
+            "commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class", CASE_INSENSITIVE);
 
     private final IBundle bundle = new NounBundle();
 

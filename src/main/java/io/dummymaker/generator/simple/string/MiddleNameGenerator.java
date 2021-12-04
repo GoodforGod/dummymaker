@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MiddleNameGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("middle(name)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("middle(name)?|patronymic", CASE_INSENSITIVE);
 
     private final IBundle bundle = new MiddleNameBundle();
 

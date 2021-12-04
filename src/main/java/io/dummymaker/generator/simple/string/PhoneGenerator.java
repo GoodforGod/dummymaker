@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PhoneGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("phone|mobile(phone)?|dial", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("telefax|phone|mobile(phone)?|dial", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String generate() {

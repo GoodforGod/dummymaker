@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DocumentGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("pass(word)?|doc(ument)?|org|project", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("pass(word)?|org|project", CASE_INSENSITIVE);
 
     private final IGenerator<Character> prefixGenerator = new CharacterGenerator();
 
