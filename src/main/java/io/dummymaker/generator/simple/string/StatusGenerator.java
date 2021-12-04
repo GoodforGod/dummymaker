@@ -10,17 +10,16 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Generates type as one of adjectives ladders level of 'Good, Bad'
+ * Generates status from one of lists
  *
  * @author Anton Kurako (GoodforGod)
- * @since 12.4.2020
+ * @since 04.12.2021
  */
-public class TypeGenerator implements IGenerator<String> {
+public class StatusGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("adjective|intense|difficult|level|lvl", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("status|type", CASE_INSENSITIVE);
 
-    private static final List<String> types = Arrays.asList("terrible", "bad", "poor", "limited",
-            "neutral", "average", "decent", "fine", "superior");
+    private static final List<String> types = Arrays.asList("success", "failed", "rejected", "invalid");
 
     @SuppressWarnings("ConstantConditions")
     @Override
