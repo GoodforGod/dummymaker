@@ -5,10 +5,9 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
+import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.regex.Pattern;
 
 /**
  * Dummy array tests

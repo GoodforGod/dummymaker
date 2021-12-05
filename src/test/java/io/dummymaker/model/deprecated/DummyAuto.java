@@ -4,7 +4,6 @@ import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.special.GenAuto;
-
 import java.util.List;
 import java.util.Map;
 

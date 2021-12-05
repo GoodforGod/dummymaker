@@ -1,14 +1,13 @@
 package io.dummymaker.factory;
 
+import static org.junit.Assert.*;
+
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.*;
 import io.dummymaker.model.deprecated.DummyAuto;
-import org.junit.Test;
-
 import java.util.List;
 import java.util.regex.Pattern;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Default Comment

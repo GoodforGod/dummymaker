@@ -1,15 +1,12 @@
 package io.dummymaker.model;
 
-import io.dummymaker.annotation.complex.GenTime;
+import static java.util.regex.Pattern.compile;
 
+import io.dummymaker.annotation.complex.GenTime;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.compile;
 
 /**
  * "default comment"
@@ -23,12 +20,18 @@ public class DummyTime {
     public static final String ISO_DATE_PATTERN = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
     public static final String ISO_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_TIME_PATTERN;
 
+    public static final String ISO_OFFSET_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?(([+-][0-9]{2}:[0-9]{2})|Z)";
+    public static final String ISO_OFFSET_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_OFFSET_TIME_PATTERN;
+
     public enum Patterns {
 
         LOCAL_TIME(compile(ISO_TIME_PATTERN), compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?")),
         LOCAL_DATE(compile(ISO_DATE_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2}")),
         LOCAL_DATETIME(compile(ISO_DATE_TIME_PATTERN),
                 compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
+        OFFSET_TIME(compile(ISO_OFFSET_TIME_PATTERN), compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?[+-]\\d\\d:\\d\\d")),
+        OFFSET_DATETIME(compile(ISO_OFFSET_DATE_TIME_PATTERN),
+                compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?[+-]\\d\\d:\\d\\d")),
         DATE(compile(ISO_DATE_TIME_PATTERN),
                 compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3,5} \\d{4}")),
         TIMESTAMP(compile(ISO_DATE_TIME_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),
@@ -57,6 +60,8 @@ public class DummyTime {
         LOCAL_TIME("time"),
         LOCAL_DATE("date"),
         LOCAL_DATETIME("dateTime"),
+        OFFSET_TIME("offsetTime"),
+        OFFSET_DATETIME("offsetDateTime"),
         TIMESTAMP("timestamp"),
         DATE("dateOld"),
         DATE_COVERAGE("dateOldCoverage"),
@@ -82,6 +87,12 @@ public class DummyTime {
 
     @GenTime(minUnix = -100)
     private LocalDateTime dateTime;
+
+    @GenTime
+    private OffsetTime offsetTime;
+
+    @GenTime
+    private OffsetDateTime offsetDateTime;
 
     @GenTime(minUnix = 1)
     private Timestamp timestamp;

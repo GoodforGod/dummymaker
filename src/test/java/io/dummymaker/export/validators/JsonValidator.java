@@ -1,13 +1,15 @@
 package io.dummymaker.export.validators;
 
+import static io.dummymaker.model.Dummy.DummyFields.*;
+import static io.dummymaker.model.DummyTime.Patterns.OFFSET_DATETIME;
+import static io.dummymaker.model.DummyTime.Patterns.OFFSET_TIME;
+import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
+import static org.junit.Assert.assertTrue;
+
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
-
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
-import static org.junit.Assert.assertTrue;
 
 /**
  * "Default Description"
@@ -72,6 +74,8 @@ public class JsonValidator implements IValidator {
                 + "\"" + Fields.LOCAL_TIME.getName() + "\":\"" + Patterns.LOCAL_TIME.getPattern() + "\","
                 + "\"" + Fields.LOCAL_DATE.getName() + "\":\"" + Patterns.LOCAL_DATE.getPattern() + "\","
                 + "\"" + Fields.LOCAL_DATETIME.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","
+                + "\"" + Fields.OFFSET_TIME.getName() + "\":\"" + OFFSET_TIME.getPattern() + "\","
+                + "\"" + Fields.OFFSET_DATETIME.getName() + "\":\"" + Patterns.OFFSET_DATETIME.getPattern() + "\","
                 + "\"" + Fields.TIMESTAMP.getName() + "\":\"" + Patterns.TIMESTAMP.getPattern() + "\","
                 + "\"" + Fields.DATE.getName() + "\":\"" + Patterns.DATE_SQL.getPattern() + "\","
                 + "\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + Patterns.DATE.getPattern() + "\","
@@ -86,6 +90,8 @@ public class JsonValidator implements IValidator {
                 + "\"" + Fields.LOCAL_TIME.getName() + "\":[0-9]+,"
                 + "\"" + Fields.LOCAL_DATE.getName() + "\":[0-9]+,"
                 + "\"" + Fields.LOCAL_DATETIME.getName() + "\":[0-9]+,"
+                + "\"" + Fields.OFFSET_TIME.getName() + "\":[0-9]+,"
+                + "\"" + Fields.OFFSET_DATETIME.getName() + "\":[0-9]+,"
                 + "\"" + Fields.TIMESTAMP.getName() + "\":[0-9]+,"
                 + "\"" + Fields.DATE.getName() + "\":[0-9]+,"
                 + "\"" + Fields.DATE_COVERAGE.getName() + "\":[0-9]+,"
@@ -100,6 +106,8 @@ public class JsonValidator implements IValidator {
                 + "\"" + Fields.LOCAL_TIME.getName() + "\":\"" + LOCAL_TIME.getPattern() + "\","
                 + "\"" + Fields.LOCAL_DATE.getName() + "\":\"" + LOCAL_DATE.getPattern() + "\","
                 + "\"" + Fields.LOCAL_DATETIME.getName() + "\":\"" + LOCAL_DATETIME.getPattern() + "\","
+                + "\"" + Fields.OFFSET_TIME.getName() + "\":\"" + OFFSET_TIME.getPattern() + "\","
+                + "\"" + Fields.OFFSET_DATETIME.getName() + "\":\"" + OFFSET_DATETIME.getPattern() + "\","
                 + "\"" + Fields.TIMESTAMP.getName() + "\":\"" + TIMESTAMP.getPattern() + "\","
                 + "\"" + Fields.DATE.getName() + "\":\"" + DATE_SQL.getPattern() + "\","
                 + "\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + DATE.getPattern() + "\","

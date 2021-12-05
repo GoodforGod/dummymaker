@@ -1,5 +1,8 @@
 package io.dummymaker.scan;
 
+import static io.dummymaker.model.Dummy.DummyFields.*;
+import static org.junit.Assert.*;
+
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
@@ -10,13 +13,9 @@ import io.dummymaker.model.DummyCollection;
 import io.dummymaker.model.DummyNoFillFields;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.impl.GenScanner;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 import java.util.Map;
-
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * ! NO DESCRIPTION !

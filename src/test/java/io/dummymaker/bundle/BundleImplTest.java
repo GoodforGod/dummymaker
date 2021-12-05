@@ -1,16 +1,15 @@
 package io.dummymaker.bundle;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.runners.Parameterized.Parameters;
+
 import io.dummymaker.bundle.impl.*;
+import java.util.Arrays;
+import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.runners.Parameterized.Parameters;
 
 /**
  * "Default Description"

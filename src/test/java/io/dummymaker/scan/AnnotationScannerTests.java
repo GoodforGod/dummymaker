@@ -1,16 +1,15 @@
 package io.dummymaker.scan;
 
+import static io.dummymaker.model.Dummy.DummyFields.*;
+import static org.junit.Assert.*;
+
 import io.dummymaker.model.Dummy;
 import io.dummymaker.scan.impl.AnnotationScanner;
-import org.junit.Test;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * ! NO DESCRIPTION !

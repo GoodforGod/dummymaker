@@ -5,12 +5,11 @@ import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.scan.IGenAutoScanner;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Implementation of scanner that suits gen auto annotations where needed

@@ -1,14 +1,13 @@
 package io.dummymaker.factory;
 
+import static org.junit.Assert.*;
+
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoFillFields;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * ! NO DESCRIPTION !

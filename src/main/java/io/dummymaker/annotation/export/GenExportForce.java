@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Force object field to export, despite it been annotated with generate
- * annotations
+ * Force object field to export, despite it been annotated with generate annotations
  *
  * @author GoodforGod
  * @see io.dummymaker.export.IExporter

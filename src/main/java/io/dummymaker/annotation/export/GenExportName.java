@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allow to rename fields and class names when export To rename class you should
- * annotate its constructor
+ * Allow to rename fields and class names when export To rename class you should annotate its
+ * constructor
  *
  * @author GoodforGod
  * @since 06.07.2017

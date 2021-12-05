@@ -9,13 +9,12 @@ import io.dummymaker.generator.simple.string.NounGenerator;
 import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Global Gen rules tests

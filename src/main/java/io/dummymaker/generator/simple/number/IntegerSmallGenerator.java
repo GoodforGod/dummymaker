@@ -1,12 +1,11 @@
 package io.dummymaker.generator.simple.number;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates small integer numbers from 1 up to 100
@@ -16,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class IntegerSmallGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("age|grade|group|amount", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("rank|age|grade|group|amount|inn|snils", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Integer generate() {
@@ -26,5 +25,10 @@ public class IntegerSmallGenerator implements IGenerator<Integer> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -50;
     }
 }

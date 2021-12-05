@@ -6,12 +6,11 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.number.FloatGenerator;
 import io.dummymaker.generator.simple.number.ShortGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Custom annotation dummy tester

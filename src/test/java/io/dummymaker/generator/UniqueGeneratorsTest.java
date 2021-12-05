@@ -1,14 +1,13 @@
 package io.dummymaker.generator;
 
+import static org.junit.Assert.*;
+
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
-import org.junit.Test;
-
 import java.time.LocalDateTime;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * "Default Description"

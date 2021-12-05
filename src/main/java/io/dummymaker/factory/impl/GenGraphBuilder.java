@@ -1,5 +1,7 @@
 package io.dummymaker.factory.impl;
 
+import static io.dummymaker.util.CastUtils.isUnknownComplex;
+
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -7,11 +9,8 @@ import io.dummymaker.model.graph.Node;
 import io.dummymaker.model.graph.Payload;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.GenAutoScanner;
-
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import static io.dummymaker.util.CastUtils.isUnknownComplex;
 
 /**
  * Builds embedded gen auto depth graph for storage
@@ -98,8 +97,8 @@ class GenGraphBuilder {
     /**
      * Checks by predicate whenever node is safe to add
      * <p>
-     * Node is safe to add as child if such link is not presented as for parent ->
-     * child -> parent This is done to avoid recursive
+     * Node is safe to add as child if such link is not presented as for parent -> child -> parent This
+     * is done to avoid recursive
      *
      * @param node   as graph starting point
      * @param filter check against

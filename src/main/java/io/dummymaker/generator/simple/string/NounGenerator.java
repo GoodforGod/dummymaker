@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.NounBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates single noun word
@@ -17,9 +16,11 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class NounGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("word|noun|field|data(base)?|schema|collection|class", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile(
+            "record|commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class",
+            CASE_INSENSITIVE);
 
-    private final IBundle bundle = new NounBundle();
+    private static final IBundle bundle = new NounBundle();
 
     @Override
     public @NotNull String generate() {
@@ -29,5 +30,10 @@ public class NounGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -10;
     }
 }

@@ -1,9 +1,8 @@
 package io.dummymaker.export;
 
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * Allow to export objects in desired format

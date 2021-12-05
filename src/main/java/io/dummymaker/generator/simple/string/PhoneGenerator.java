@@ -1,12 +1,11 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates simple mobile phone as a string
@@ -16,7 +15,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class PhoneGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("phone|mobile(phone)?|dial", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("telefax|phone|mobile(phone)?|dial", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String generate() {
@@ -31,5 +30,10 @@ public class PhoneGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -65;
     }
 }

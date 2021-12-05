@@ -1,5 +1,7 @@
 package io.dummymaker.generator.complex;
 
+import static io.dummymaker.util.CastUtils.getGenericType;
+
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.factory.IGenStorage;
@@ -7,16 +9,13 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-
-import static io.dummymaker.util.CastUtils.getGenericType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * "default comment"

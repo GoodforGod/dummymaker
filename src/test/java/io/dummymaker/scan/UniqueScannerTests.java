@@ -5,14 +5,13 @@ import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.simple.number.GenShort;
 import io.dummymaker.model.DummyCast;
 import io.dummymaker.scan.impl.UniqueScanner;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Unique field annotation scanner tests

@@ -3,7 +3,6 @@ package io.dummymaker.annotation.complex;
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.Array2DComplexGenerator;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,7 +34,7 @@ public @interface GenArray2D {
      *
      * @return max amount for 1 dimension
      */
-    int maxFirst() default 10;
+    int maxFirst() default 2;
 
     /**
      * Second dimension minimum entities to generate
@@ -49,7 +48,7 @@ public @interface GenArray2D {
      *
      * @return max amount for 2 dimension
      */
-    int maxSecond() default 10;
+    int maxSecond() default 2;
 
     /**
      * First dimension fixed amount entities to generate Turned off by default

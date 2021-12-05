@@ -4,10 +4,9 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyAutoNamed;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
+import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.UUID;
 
 /**
  * ! NO DESCRIPTION !
