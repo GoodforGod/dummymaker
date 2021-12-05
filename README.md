@@ -18,7 +18,7 @@ Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 **Gradle**
 ```groovy
 dependencies {
-    compile 'com.github.goodforgod:dummymaker:3.0.2'
+    implementation 'com.github.goodforgod:dummymaker:3.1.0'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
 </dependency>
 ```
 
@@ -458,39 +458,6 @@ public @interface GenInteger {
 
 In case you want custom annotation for simple generator you can do it as well, 
 just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
-
-
-## Version History
-
-**3.0.2** - OSX ResourceScanner path fixed, dependencies updated.
-
-**3.0.1** - Minor bug fixes.
-
-**3.0.0** - Exporters redesigned, Factory export huge amount of dummies contracts added, generators improved, matching for generators improved.
-
-**2.2.0** - More generators, improved pattern matching, Javax CDI annotations added.
-
-**2.1.0** - Lambda generator *GenRule* configuration added, some default generators added, minor improvements.
-
-**2.0.2** - @GenTime export formatter added and export as unix time, SqlExporter fixed issue with INSERT queries.
-
-**2.0.0** - Redesign factory and contracts, improved complex and other generators, GenRules added for configuration without annotations, @Ignore annotation, @GenEnum enum generation, minor improvements and more.
-
-**1.1.3** - Embedded objects in arrays, collections full support, collections\arrays embedded depth support, Json & SQL exporters arrays & collections support.
-
-**1.1.2** - Full primitive support, single or two dimension array support, jsonExporter collection, map, array support.
-
-**1.1.1** - Factory performance improvements (about 40%), *GenAuto* annotation, *IComplexGenerator* the successor of *IGenerateFactory*, primitive support, Embedded multi level depth support, bug fixes.
-
-**1.1.0** - Performance and architecture improvements, *IGenerateFactory* introduced, collection *Gen* annotations, time *Gen* annotations, Embedded *Gen* support, architecture improvements in custom user extension support.
-
-**1.0.3** - Lots of tests for all functionality, Added *DataTypeMap* parameter for users in SqlExporter (expandable data type for sql), *NamingStrategy* for exporters, bug fixes.
-
-**1.0.2** - Added special *GenRenameExport* annotation, export as single string, export values order fix, minor fixes and improvements.
-
-**1.0.1** - Added new generator and annotations, special *GenEnumerate* annotation, other minor fixes (Like SQL export).
-
-**1.0.0** - Initial project with core functions.
 
 ## License
 
