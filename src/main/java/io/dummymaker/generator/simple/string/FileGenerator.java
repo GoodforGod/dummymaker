@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FileGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("file|doc(ument)?", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("file|docum(ent)?", CASE_INSENSITIVE);
 
     private static final IBundle extensions = new ExtensionBundle();
     private static final IBundle names = new NounBundle();
