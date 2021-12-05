@@ -1,10 +1,11 @@
 package io.dummymaker.generator.simple.string;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.CharacterGenerator;
+import io.dummymaker.util.CollectionUtils;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,8 +23,8 @@ public class DocumentGenerator implements IGenerator<String> {
 
     @Override
     public @NotNull String generate() {
-        final int id = current().nextInt(10_000_000, 999_999_999);
-        return current().nextBoolean()
+        final int id = CollectionUtils.random(10_000_000, 999_999_999);
+        return ThreadLocalRandom.current().nextBoolean()
                 ? prefixGenerator.generate() + String.valueOf(id)
                 : String.valueOf(id);
     }

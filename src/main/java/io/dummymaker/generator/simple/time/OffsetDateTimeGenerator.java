@@ -2,9 +2,9 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.util.CollectionUtils;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,7 +25,7 @@ public class OffsetDateTimeGenerator implements ITimeGenerator<OffsetDateTime> {
 
     @Override
     public @NotNull OffsetDateTime generate(final long minUnix, final long maxUnix) {
-        final ZoneOffset zoneOffset = ZoneOffset.ofHours(ThreadLocalRandom.current().nextInt(-18, 18));
+        final ZoneOffset zoneOffset = ZoneOffset.ofHours(CollectionUtils.random(-18, 18));
         return OffsetDateTime.of(generator.generate(), zoneOffset);
     }
 }
