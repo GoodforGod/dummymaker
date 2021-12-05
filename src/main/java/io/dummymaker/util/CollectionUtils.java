@@ -99,21 +99,38 @@ public class CollectionUtils {
         }
     }
 
+    /**
+     * @param max to get (excluded)
+     * @return random from 0 to max (excluded)
+     */
     public static int random(int max) {
-        return random(0, max);
+        return (int) generateRandom(0, max);
     }
 
     /**
-     * @param min to get (inclusive)
-     * @param max to get (exclusive)
-     * @return random from min (included) to max (excluded)
+     * @param max to get (excluded)
+     * @return random from 0 to max (excluded)
      */
-    public static int random(int min, int max) {
-        return ((int) random(min, ((long) max)));
-    }
-
     public static long random(long max) {
-        return random(0, max);
+        return generateRandom(0, max);
+    }
+
+    /**
+     * @param from to get (inclusive)
+     * @param to   to get (inclusive)
+     * @return random from min (included) to max (excluded)
+     */
+    public static int random(int from, int to) {
+        return (int) generateRandom(from, ((long) to) + 1);
+    }
+
+    /**
+     * @param from to get (inclusive)
+     * @param to   to get (inclusive)
+     * @return random from min (included) to max (excluded)
+     */
+    public static long random(long from, long to) {
+        return generateRandom(from, to + 1);
     }
 
     /**
@@ -121,10 +138,12 @@ public class CollectionUtils {
      * @param max to get (exclusive)
      * @return random from min (included) to max (excluded)
      */
-    public static long random(long min, long max) {
+    private static long generateRandom(long min, long max) {
         final long usedMin = (min < 1) ? 0 : min;
-        final long usedMax = (max < 1) ? 0 : max;
+        final long usedMax = (max < 1) ? 1 : max;
 
-        return (usedMin >= usedMax) ? usedMin : ThreadLocalRandom.current().nextLong(usedMin, usedMax);
+        return (usedMin >= usedMax)
+                ? usedMin
+                : ThreadLocalRandom.current().nextLong(usedMin, usedMax);
     }
 }
