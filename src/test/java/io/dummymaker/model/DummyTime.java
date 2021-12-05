@@ -20,7 +20,7 @@ public class DummyTime {
     public static final String ISO_DATE_PATTERN = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
     public static final String ISO_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_TIME_PATTERN;
 
-    public static final String ISO_OFFSET_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?[+-]\\d\\d:\\d\\d";
+    public static final String ISO_OFFSET_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?(([+-][0-9]{2}:[0-9]{2})|Z)";
     public static final String ISO_OFFSET_DATE_TIME_PATTERN = ISO_DATE_PATTERN + "T" + ISO_OFFSET_TIME_PATTERN;
 
     public enum Patterns {
