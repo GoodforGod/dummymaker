@@ -1,8 +1,10 @@
 package io.dummymaker.generator.simple.string;
 
+
 import io.dummymaker.generator.IGenerator;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates random string 36 character length

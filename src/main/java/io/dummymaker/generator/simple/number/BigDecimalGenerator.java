@@ -1,11 +1,13 @@
 package io.dummymaker.generator.simple.number;
 
+
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.math.BigDecimal;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates big decimal numbers

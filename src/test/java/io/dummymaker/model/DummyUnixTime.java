@@ -1,9 +1,11 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.complex.GenTime;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.Date;
+
 
 /**
  * "default comment"

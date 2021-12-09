@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+
 import io.dummymaker.scan.IAnnotationScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Scan for field and its unique annotations (without duplicates) And return fields in correct order

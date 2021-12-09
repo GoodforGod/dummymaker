@@ -1,5 +1,6 @@
 package io.dummymaker.export.impl;
 
+
 import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
@@ -18,6 +19,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Description in progress
@@ -344,7 +346,9 @@ public class SqlExporter extends BaseExporter {
             builder.append(map(next, containers));
 
             // End insert Query if no elements left or need to organize next batch
-            final String suffix = (i <= 0 || !iterator.hasNext()) ? ";\n" : ",\n";
+            final String suffix = (i <= 0 || !iterator.hasNext())
+                    ? ";\n"
+                    : ",\n";
             builder.append(suffix);
 
             i = nextInsertValue(i);
@@ -354,6 +358,8 @@ public class SqlExporter extends BaseExporter {
     }
 
     private int nextInsertValue(int current) {
-        return (current <= 0) ? INSERT_QUERY_LIMIT : current - 1;
+        return (current <= 0)
+                ? INSERT_QUERY_LIMIT
+                : current - 1;
     }
 }

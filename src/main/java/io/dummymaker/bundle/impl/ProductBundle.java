@@ -1,5 +1,6 @@
 package io.dummymaker.bundle.impl;
 
+
 /**
  * Product names bundle
  *

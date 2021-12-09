@@ -1,5 +1,6 @@
 package io.dummymaker.factory.impl;
 
+
 import static io.dummymaker.util.CastUtils.isUnknownComplex;
 
 import io.dummymaker.annotation.special.GenAuto;
@@ -11,6 +12,7 @@ import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.GenAutoScanner;
 import java.util.Optional;
 import java.util.function.Predicate;
+
 
 /**
  * Builds embedded gen auto depth graph for storage
@@ -90,7 +92,9 @@ class GenGraphBuilder {
 
         final Optional<Integer> optionalDepth = Optional.ofNullable(autoDepth);
 
-        final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null ? 1 : parentPayload.getDepth());
+        final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null
+                ? 1
+                : parentPayload.getDepth());
         return new Payload(target, markedOrDefault, optionalDepth.isPresent());
     }
 

@@ -1,5 +1,6 @@
 package io.dummymaker.export;
 
+
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
@@ -16,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
 
 /**
  * "default comment"
@@ -53,7 +55,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 
@@ -67,7 +71,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 
@@ -81,7 +87,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 

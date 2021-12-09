@@ -1,7 +1,9 @@
 package io.dummymaker.generator.simple.number;
 
+
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates big double from 10 to 1000000 value

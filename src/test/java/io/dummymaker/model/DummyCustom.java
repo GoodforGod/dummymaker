@@ -1,5 +1,6 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
@@ -11,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Custom annotation dummy tester
@@ -46,8 +48,11 @@ public class DummyCustom {
         private final FloatGenerator generator = new FloatGenerator();
 
         @Override
-        public Object generate(@NotNull Class<?> parent, @NotNull Field field, @NotNull IGenStorage storage,
-                               Annotation annotation, int depth) {
+        public Object generate(@NotNull Class<?> parent,
+                               @NotNull Field field,
+                               @NotNull IGenStorage storage,
+                               Annotation annotation,
+                               int depth) {
             return generate();
         }
 

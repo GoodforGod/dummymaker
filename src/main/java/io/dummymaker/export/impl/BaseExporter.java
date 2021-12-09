@@ -1,5 +1,6 @@
 package io.dummymaker.export.impl;
 
+
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.error.ExportException;
 import io.dummymaker.export.Cases;
@@ -24,6 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Core exporter class with mapping and converting functionality
@@ -227,7 +229,9 @@ public abstract class BaseExporter implements IExporter {
             return Arrays.toString(((char[]) array));
 
         return Arrays.stream(((Object[]) array))
-                .map(v -> v instanceof String ? convertString((String) v) : v.toString())
+                .map(v -> v instanceof String
+                        ? convertString((String) v)
+                        : v.toString())
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -237,15 +241,20 @@ public abstract class BaseExporter implements IExporter {
 
     protected String convertCollection(Collection<?> collection) {
         return collection.stream()
-                .map(v -> v instanceof String ? convertString((String) v) : v.toString())
+                .map(v -> v instanceof String
+                        ? convertString((String) v)
+                        : v.toString())
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
     protected String convertMap(Map<?, ?> map) {
         return map.entrySet().stream()
                 .map(e -> {
-                    final String key = e.getKey() instanceof String ? convertString((String) e.getKey()) : e.getKey().toString();
-                    final String value = e.getValue() instanceof String ? convertString((String) e.getValue())
+                    final String key = e.getKey() instanceof String
+                            ? convertString((String) e.getKey())
+                            : e.getKey().toString();
+                    final String value = e.getValue() instanceof String
+                            ? convertString((String) e.getValue())
                             : e.getValue().toString();
                     return key + ":" + value;
                 })
@@ -366,7 +375,8 @@ public abstract class BaseExporter implements IExporter {
                 .filter(Objects::nonNull)
                 .map(v -> {
                     final String value = map(v, containers);
-                    return StringUtils.isEmpty(value) ? DEFAULT_EMPTY_VALUE
+                    return StringUtils.isEmpty(value)
+                            ? DEFAULT_EMPTY_VALUE
                             : prefix(v, containers) + value + suffix(v, containers);
                 })
                 .filter(StringUtils::isNotEmpty)

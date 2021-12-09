@@ -1,11 +1,13 @@
 package io.dummymaker.writer.impl;
 
+
 import io.dummymaker.error.ExportException;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+
 
 /**
  * Buffered writer implementation
@@ -42,7 +44,9 @@ public class FileWriter implements IWriter {
     }
 
     private String getPath(String file, String path) {
-        final String workPath = StringUtils.isBlank(path) ? DEFAULT_PATH : path;
+        final String workPath = StringUtils.isBlank(path)
+                ? DEFAULT_PATH
+                : path;
         return workPath + file;
     }
 

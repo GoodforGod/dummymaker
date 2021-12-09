@@ -1,5 +1,6 @@
 package io.dummymaker.model.export;
 
+
 import static io.dummymaker.util.StringUtils.isEmpty;
 
 import io.dummymaker.annotation.complex.GenTime;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
+
 /**
  * Description in progress
  *
@@ -24,7 +26,9 @@ import java.util.Map;
 public class FieldContainerFactory {
 
     public FieldContainer build(Field field) {
-        final FieldContainer.Type type = isSequential(field) ? FieldContainer.Type.SEQUENTIAL : getType(field.getType());
+        final FieldContainer.Type type = isSequential(field)
+                ? FieldContainer.Type.SEQUENTIAL
+                : getType(field.getType());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
@@ -35,7 +39,9 @@ public class FieldContainerFactory {
     }
 
     private FieldContainer build(Field field, FieldContainer.Type type, String fieldExportName) {
-        final String finalName = isEmpty(fieldExportName) ? "" : fieldExportName;
+        final String finalName = isEmpty(fieldExportName)
+                ? ""
+                : fieldExportName;
 
         if (type.equals(FieldContainer.Type.DATE) && field != null) {
             final GenTime annotation = field.getAnnotation(GenTime.class);

@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+
 import io.dummymaker.generator.IGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Utils for object casting
@@ -177,7 +179,9 @@ public class CastUtils {
 
         final boolean isTypeString = fieldType.equals(String.class);
         if (castObject == null)
-            return isTypeString ? ((T) "null") : null;
+            return isTypeString
+                    ? ((T) "null")
+                    : null;
 
         final Class<?> castType = castObject.getClass();
         final boolean isTypeAssignable = fieldType.isAssignableFrom(castType);

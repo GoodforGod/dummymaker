@@ -1,5 +1,6 @@
 package io.dummymaker.bundle.impl;
 
+
 /**
  * Contains male names as string
  *

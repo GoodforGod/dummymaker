@@ -1,5 +1,6 @@
 package io.dummymaker.rules;
 
+
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
@@ -10,6 +11,7 @@ import io.dummymaker.model.GenRules;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 /**
  * @author GoodforGod

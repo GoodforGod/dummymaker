@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+
 import io.dummymaker.scan.IAnnotationScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Scan field for all annotations Core scanner implementation

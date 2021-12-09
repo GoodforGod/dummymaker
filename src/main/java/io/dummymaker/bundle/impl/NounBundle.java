@@ -1,5 +1,6 @@
 package io.dummymaker.bundle.impl;
 
+
 /**
  * Bundle with noun words string values
  *

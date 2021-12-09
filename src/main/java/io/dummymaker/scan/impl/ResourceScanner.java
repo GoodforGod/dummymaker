@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
@@ -14,6 +15,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Scan for resources at runtime by package

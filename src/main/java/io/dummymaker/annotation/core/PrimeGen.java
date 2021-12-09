@@ -1,5 +1,6 @@
 package io.dummymaker.annotation.core;
 
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
@@ -8,6 +9,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 
 /**
  * Prime annotations, used to create new annotations of specific generator provided type Used as a

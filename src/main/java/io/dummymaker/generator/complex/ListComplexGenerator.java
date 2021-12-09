@@ -1,5 +1,6 @@
 package io.dummymaker.generator.complex;
 
+
 import static io.dummymaker.util.CastUtils.getGenericType;
 
 import io.dummymaker.annotation.complex.GenList;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Generates List for GenList annotation

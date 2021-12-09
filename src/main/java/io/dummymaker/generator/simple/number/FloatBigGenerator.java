@@ -1,7 +1,9 @@
 package io.dummymaker.generator.simple.number;
 
+
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates float number from 0 to 10000

@@ -1,8 +1,10 @@
 package io.dummymaker.generator.simple;
 
+
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.IGenerator;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Used as a marker generator for embedded annotation

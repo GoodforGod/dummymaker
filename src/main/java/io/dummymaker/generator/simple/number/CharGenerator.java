@@ -1,8 +1,10 @@
 package io.dummymaker.generator.simple.number;
 
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates random UTF-8 character in range of 33-254

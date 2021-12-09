@@ -1,9 +1,11 @@
 package io.dummymaker.factory;
 
+
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyEmbedded;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 /**
  * @author GoodforGod

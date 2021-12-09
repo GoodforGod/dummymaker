@@ -1,9 +1,11 @@
 package io.dummymaker.generator.simple.time;
 
+
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import java.sql.Time;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates Sql Time from 1970 to 3000 Year

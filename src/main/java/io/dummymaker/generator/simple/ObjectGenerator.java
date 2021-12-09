@@ -1,8 +1,10 @@
 package io.dummymaker.generator.simple;
 
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates object as string like: object_1245155

@@ -1,5 +1,6 @@
 package io.dummymaker.scan;
 
+
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
@@ -16,6 +17,7 @@ import io.dummymaker.scan.impl.GenScanner;
 import java.lang.reflect.Field;
 import java.util.Map;
 import org.junit.Test;
+
 
 /**
  * ! NO DESCRIPTION !

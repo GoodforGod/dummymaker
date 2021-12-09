@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Contains basic date util methods and functions
@@ -39,15 +41,21 @@ public class DateUtils {
     }
 
     public static Timestamp convertToTimestamp(final LocalDate localDate) {
-        return (localDate == null) ? null : Timestamp.valueOf(localDate.atStartOfDay());
+        return (localDate == null)
+                ? null
+                : Timestamp.valueOf(localDate.atStartOfDay());
     }
 
     public static Timestamp convertToTimestamp(final LocalTime localTime) {
-        return (localTime == null) ? null : Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
+        return (localTime == null)
+                ? null
+                : Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
     }
 
     public static Timestamp convertToTimestamp(final LocalDateTime localDateTime) {
-        return (localDateTime == null) ? null : Timestamp.valueOf(localDateTime);
+        return (localDateTime == null)
+                ? null
+                : Timestamp.valueOf(localDateTime);
     }
 
     public static Date parseSimpleDateLong(final String date) {

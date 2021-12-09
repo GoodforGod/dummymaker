@@ -1,8 +1,10 @@
 package io.dummymaker.scan;
 
+
 import io.dummymaker.model.export.FieldContainer;
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Scanner for special export annotations

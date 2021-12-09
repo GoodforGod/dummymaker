@@ -1,5 +1,6 @@
 package io.dummymaker.export.asstring;
 
+
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
 
 /**
  * "default comment"
@@ -105,7 +107,9 @@ public class ExportAsStringTests extends Assert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] strings = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, strings.length);
@@ -121,7 +125,9 @@ public class ExportAsStringTests extends Assert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] strings = dummyAsString.split(splitter);
         assertEquals(singleSplitLength - 1, strings.length);
@@ -137,7 +143,9 @@ public class ExportAsStringTests extends Assert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] strings = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, strings.length);

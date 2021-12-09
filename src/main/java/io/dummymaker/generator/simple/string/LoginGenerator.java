@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.string;
 
+
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
@@ -8,6 +9,7 @@ import io.dummymaker.bundle.impl.LoginBundle;
 import io.dummymaker.generator.IGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates nicknames as a string
@@ -31,7 +33,9 @@ public class LoginGenerator implements IGenerator<String> {
         final String second = bundle.random();
         final boolean revert = current().nextBoolean();
 
-        final String separator = current().nextBoolean() ? "_" : "";
+        final String separator = current().nextBoolean()
+                ? "_"
+                : "";
         return (revert)
                 ? second + separator + first
                 : first + separator + second;

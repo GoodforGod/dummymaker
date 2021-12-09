@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.number;
 
+
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.IGenerator;
@@ -7,6 +8,7 @@ import io.dummymaker.util.CollectionUtils;
 import java.time.Instant;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates Unix Time as long

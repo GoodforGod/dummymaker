@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyArray;
@@ -8,6 +9,7 @@ import io.dummymaker.model.GenRules;
 import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 /**
  * Dummy array tests

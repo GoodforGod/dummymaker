@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+
 import static org.junit.Assert.*;
 
 import io.dummymaker.factory.impl.GenFactory;
@@ -8,6 +9,7 @@ import io.dummymaker.model.DummyNoFillFields;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
+
 
 /**
  * ! NO DESCRIPTION !

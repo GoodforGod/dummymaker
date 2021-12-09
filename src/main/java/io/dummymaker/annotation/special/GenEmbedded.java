@@ -1,11 +1,13 @@
 package io.dummymaker.annotation.special;
 
+
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 
 /**
  * Generate object with fields type and populate its fields marked by gen annotations

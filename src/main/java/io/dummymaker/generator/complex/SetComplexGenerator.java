@@ -1,5 +1,6 @@
 package io.dummymaker.generator.complex;
 
+
 import static io.dummymaker.util.CastUtils.getGenericType;
 
 import io.dummymaker.annotation.complex.GenSet;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Generates Set or GenSet annotation

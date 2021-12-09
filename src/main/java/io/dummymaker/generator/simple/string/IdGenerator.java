@@ -1,9 +1,11 @@
 package io.dummymaker.generator.simple.string;
 
+
 import io.dummymaker.generator.IGenerator;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Generates id based on UUID

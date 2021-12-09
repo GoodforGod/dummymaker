@@ -1,8 +1,10 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
+
 
 /**
  * Dummy Object used as data to proceed in tests This object HAS NO FIELDS TO POPULATE

@@ -1,5 +1,6 @@
 package io.dummymaker.factory;
 
+
 import static org.junit.Assert.*;
 
 import io.dummymaker.factory.impl.GenFactory;
@@ -8,6 +9,7 @@ import io.dummymaker.model.deprecated.DummyAuto;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.junit.Test;
+
 
 /**
  * Default Comment

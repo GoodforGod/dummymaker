@@ -1,6 +1,8 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.complex.GenEnum;
+
 
 /**
  * ! NO DESCRIPTION !

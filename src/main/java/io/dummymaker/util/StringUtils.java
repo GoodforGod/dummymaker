@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+
 /**
  * Contains basic string util methods
  *

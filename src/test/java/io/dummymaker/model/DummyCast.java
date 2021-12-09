@@ -1,8 +1,10 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.simple.number.GenInt;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.simple.number.GenShort;
+
 
 /**
  * ! NO DESCRIPTION !

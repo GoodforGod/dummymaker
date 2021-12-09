@@ -1,5 +1,6 @@
 package io.dummymaker.scan;
 
+
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
@@ -8,6 +9,7 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.scan.impl.ExportScanner;
 import java.util.Collection;
 import org.junit.Test;
+
 
 /**
  * @author GoodforGod

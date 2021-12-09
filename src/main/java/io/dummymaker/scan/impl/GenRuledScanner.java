@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
@@ -9,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Scanner that sets gen rules where needed
@@ -34,7 +36,9 @@ public class GenRuledScanner extends GenAutoScanner {
 
     @Override
     public @NotNull Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
-        final Optional<GenRule> targeted = (rules == null) ? Optional.empty() : rules.targeted(target);
+        final Optional<GenRule> targeted = (rules == null)
+                ? Optional.empty()
+                : rules.targeted(target);
         final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
 
         final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);

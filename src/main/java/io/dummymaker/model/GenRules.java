@@ -1,9 +1,11 @@
 package io.dummymaker.model;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Rules for field type and field name generators overrides Allows to override gen auto generator

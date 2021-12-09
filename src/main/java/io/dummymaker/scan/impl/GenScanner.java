@@ -1,5 +1,6 @@
 package io.dummymaker.scan.impl;
 
+
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenCustom;
@@ -11,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Scanner used by populate factory Scan for prime gen annotation and its child annotation

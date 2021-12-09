@@ -1,5 +1,6 @@
 package io.dummymaker.generator.complex;
 
+
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.StringUtils.isNotBlank;
 
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * Generate time object for GenTime annotation
  *
@@ -40,8 +42,12 @@ public class TimeComplexGenerator implements IComplexGenerator {
                                      final @NotNull IGenStorage storage,
                                      final Annotation annotation,
                                      final int depth) {
-        final long minUnix = (annotation == null) ? GenTime.MIN_UNIX : getMin(((GenTime) annotation));
-        final long maxUnix = (annotation == null) ? GenTime.MAX_UNIX : getMax(((GenTime) annotation));
+        final long minUnix = (annotation == null)
+                ? GenTime.MIN_UNIX
+                : getMin(((GenTime) annotation));
+        final long maxUnix = (annotation == null)
+                ? GenTime.MAX_UNIX
+                : getMax(((GenTime) annotation));
 
         final Class<?> fieldClass = field.getType();
 

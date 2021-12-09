@@ -1,11 +1,13 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Rule for settings generator type for specific field name or field type

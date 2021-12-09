@@ -1,5 +1,6 @@
 package io.dummymaker.util;
 
+
 /**
  * Utility methods to help scan for classes at runtime
  *

@@ -1,5 +1,6 @@
 package io.dummymaker.factory.impl;
 
+
 import static io.dummymaker.generator.simple.EmbeddedGenerator.toDepth;
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.CastUtils.instantiate;
@@ -31,6 +32,7 @@ import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+
 /**
  * Produce data object objects and fill their fields with data Successor of initial PopulateFactory
  *
@@ -57,7 +59,9 @@ public class GenFactory implements IGenFactory {
     }
 
     public GenFactory(@NotNull Collection<GenRule> rules) {
-        this(isEmpty(rules) ? null : GenRules.of(rules));
+        this(isEmpty(rules)
+                ? null
+                : GenRules.of(rules));
     }
 
     public GenFactory(@Nullable GenRules rules) {
@@ -114,7 +118,9 @@ public class GenFactory implements IGenFactory {
 
         final int batchSize = 10000;
         final long batches = amount / batchSize;
-        final int left = (int) ((amount > batchSize) ? amount % batchSize : amount);
+        final int left = (int) ((amount > batchSize)
+                ? amount % batchSize
+                : amount);
 
         final GenStorage storage = new GenStorage(scanner, rules);
         for (int i = 0; i < batches; i++) {

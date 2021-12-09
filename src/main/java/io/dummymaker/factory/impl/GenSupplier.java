@@ -1,5 +1,6 @@
 package io.dummymaker.factory.impl;
 
+
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
 import io.dummymaker.factory.IGenSupplier;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Default gen config implementation for generators discovery With all library generators and their
@@ -159,7 +161,8 @@ public class GenSupplier implements IGenSupplier {
         return setPrimitiveClassifiers(scannedClasses);
     }
 
-    protected static Map<Class, List<Class<? extends IGenerator>>> setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
+    protected static Map<Class, List<Class<? extends IGenerator>>>
+            setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
         classifiers.put(boolean.class, classifiers.get(Boolean.class));
         classifiers.put(byte.class, classifiers.get(Byte.class));
         classifiers.put(short.class, classifiers.get(Short.class));

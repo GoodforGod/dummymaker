@@ -1,5 +1,6 @@
 package io.dummymaker.model;
 
+
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * ! NO DESCRIPTION !
