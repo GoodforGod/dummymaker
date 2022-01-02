@@ -1,6 +1,5 @@
 package io.dummymaker.export.impl;
 
-
 import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
@@ -20,10 +19,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
-
 /**
- * Description in progress
- *
  * @author Anton Kurako (GoodforGod)
  * @since 24.7.2020
  */
@@ -59,7 +55,7 @@ public class SqlExporter extends BaseExporter {
      * @see #dataTypes
      */
     private Map<Class<?>, String> buildDefaultDataTypeMap() {
-        final Map<Class<?>, String> typeMap = new HashMap<>(25);
+        final Map<Class<?>, String> typeMap = new HashMap<>(35);
         typeMap.put(boolean.class, "BOOLEAN");
         typeMap.put(Boolean.class, "BOOLEAN");
         typeMap.put(byte.class, "BYTE");
@@ -77,6 +73,7 @@ public class SqlExporter extends BaseExporter {
         typeMap.put(char.class, "CHAR");
         typeMap.put(Character.class, "CHAR");
         typeMap.put(String.class, "VARCHAR");
+        typeMap.put(UUID.class, "UUID");
         typeMap.put(Object.class, "VARCHAR");
         typeMap.put(Time.class, "TIME");
         typeMap.put(LocalTime.class, "TIME");

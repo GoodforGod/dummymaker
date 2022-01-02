@@ -1,6 +1,5 @@
 package io.dummymaker.export.impl;
 
-
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.error.ExportException;
 import io.dummymaker.export.Cases;
@@ -25,7 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Core exporter class with mapping and converting functionality
@@ -105,7 +103,7 @@ public abstract class BaseExporter implements IExporter {
                 case SEQUENTIAL:
                     return convertNumber(value);
                 case STRING:
-                    return convertString((String) value);
+                    return convertString(String.valueOf(value));
                 case DATE:
                     return ((DateFieldContainer) container).isUnixTime()
                             ? convertDateUnix(value)
