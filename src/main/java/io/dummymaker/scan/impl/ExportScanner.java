@@ -6,15 +6,13 @@ import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainerFactory;
 import io.dummymaker.scan.IExportScanner;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Scanner for special export annotations and produces export containers Which
- * are used in exporters
+ * Scanner for special export annotations and produces export containers Which are used in exporters
  *
  * @author GoodforGod
  * @see io.dummymaker.export.IExporter

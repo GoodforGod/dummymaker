@@ -6,7 +6,6 @@ import io.dummymaker.annotation.complex.GenSet;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.string.HexDataGenerator;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

@@ -3,12 +3,11 @@ package io.dummymaker.scan;
 import io.dummymaker.scan.impl.ResourceScanner;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.FileWriter;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Resource scanner tests

@@ -13,8 +13,6 @@ import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.FileWriter;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.time.*;
@@ -25,6 +23,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Core exporter class with mapping and converting functionality
@@ -153,6 +152,10 @@ public abstract class BaseExporter implements IExporter {
             return ((LocalTime) date).format(formatter);
         } else if (date instanceof LocalDateTime) {
             return ((LocalDateTime) date).format(formatter);
+        } else if (date instanceof OffsetDateTime) {
+            return ((OffsetDateTime) date).format(formatter);
+        } else if (date instanceof OffsetTime) {
+            return ((OffsetTime) date).format(formatter);
         } else {
             return String.valueOf(date);
         }
@@ -168,6 +171,11 @@ public abstract class BaseExporter implements IExporter {
                     ((LocalTime) date)).toEpochSecond(ZoneOffset.UTC));
         } else if (date instanceof LocalDateTime) {
             return String.valueOf(((LocalDateTime) date).toEpochSecond(ZoneOffset.UTC));
+        } else if (date instanceof OffsetDateTime) {
+            return String.valueOf(((OffsetDateTime) date).toEpochSecond());
+        } else if (date instanceof OffsetTime) {
+            return String.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1),
+                    ((OffsetTime) date).toLocalTime()).toEpochSecond(ZoneOffset.UTC));
         } else {
             return String.valueOf(date);
         }
@@ -185,6 +193,14 @@ public abstract class BaseExporter implements IExporter {
         } else if (date instanceof LocalDate) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_DATE
+                    : DateTimeFormatter.ofPattern(formatter);
+        } else if (date instanceof OffsetTime) {
+            return GenTime.DEFAULT_FORMAT.equals(formatter)
+                    ? DateTimeFormatter.ISO_OFFSET_TIME
+                    : DateTimeFormatter.ofPattern(formatter);
+        } else if (date instanceof OffsetDateTime) {
+            return GenTime.DEFAULT_FORMAT.equals(formatter)
+                    ? DateTimeFormatter.ISO_OFFSET_DATE_TIME
                     : DateTimeFormatter.ofPattern(formatter);
         } else {
             return DateTimeFormatter.ofPattern(formatter);

@@ -1,14 +1,13 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.LoginBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates nicknames as a string
@@ -20,7 +19,7 @@ public class LoginGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("nick(name)?|login", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new LoginBundle();
+    private static final IBundle bundle = new LoginBundle();
 
     @Override
     public @NotNull String generate() {

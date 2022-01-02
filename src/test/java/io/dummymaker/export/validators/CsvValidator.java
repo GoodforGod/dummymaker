@@ -1,14 +1,14 @@
 package io.dummymaker.export.validators;
 
+import static io.dummymaker.model.Dummy.DummyFields.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
-
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * "Default Description"
@@ -130,11 +130,13 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[0].matches(Patterns.LOCAL_TIME.getPattern().pattern()));
         assertTrue(dummy[1].matches(Patterns.LOCAL_DATE.getPattern().pattern()));
         assertTrue(dummy[2].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[3].matches(Patterns.TIMESTAMP.getPattern().pattern()));
-        assertTrue(dummy[4].matches(Patterns.DATE.getPattern().pattern()));
-        assertTrue(dummy[5].matches(Patterns.DATE_SQL.getPattern().pattern()));
-        assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[3].matches(Patterns.OFFSET_TIME.getPattern().pattern()));
+        assertTrue(dummy[4].matches(Patterns.OFFSET_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[5].matches(Patterns.TIMESTAMP.getPattern().pattern()));
+        assertTrue(dummy[6].matches(Patterns.DATE.getPattern().pattern()));
+        assertTrue(dummy[7].matches(Patterns.DATE_SQL.getPattern().pattern()));
+        assertTrue(dummy[8].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[9].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
 
     @Override
@@ -145,8 +147,10 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[3].matches("[0-9]+"));
         assertTrue(dummy[4].matches("[0-9]+"));
         assertTrue(dummy[5].matches("[0-9]+"));
-        assertTrue(dummy[6].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[7].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[6].matches("[0-9]+"));
+        assertTrue(dummy[7].matches("[0-9]+"));
+        assertTrue(dummy[8].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[9].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
 
     @Override
@@ -154,10 +158,12 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[0].matches(DummyTimeFormatter.Patterns.LOCAL_TIME.getPattern().pattern()));
         assertTrue(dummy[1].matches(DummyTimeFormatter.Patterns.LOCAL_DATE.getPattern().pattern()));
         assertTrue(dummy[2].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[3].matches(DummyTimeFormatter.Patterns.TIMESTAMP.getPattern().pattern()));
-        assertTrue(dummy[4].matches(DummyTimeFormatter.Patterns.DATE.getPattern().pattern()));
-        assertTrue(dummy[5].matches(DummyTimeFormatter.Patterns.DATE_SQL.getPattern().pattern()));
-        assertTrue(dummy[6].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[7].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[3].matches(Patterns.OFFSET_TIME.getPattern().pattern()));
+        assertTrue(dummy[4].matches(Patterns.OFFSET_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[5].matches(DummyTimeFormatter.Patterns.TIMESTAMP.getPattern().pattern()));
+        assertTrue(dummy[6].matches(DummyTimeFormatter.Patterns.DATE.getPattern().pattern()));
+        assertTrue(dummy[7].matches(DummyTimeFormatter.Patterns.DATE_SQL.getPattern().pattern()));
+        assertTrue(dummy[8].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[9].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
     }
 }

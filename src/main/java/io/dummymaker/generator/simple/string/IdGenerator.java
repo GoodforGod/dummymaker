@@ -1,10 +1,9 @@
 package io.dummymaker.generator.simple.string;
 
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates id based on UUID
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class IdGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("[ug]?u?id|[Ii]d");
+    private final Pattern pattern = Pattern.compile("[UuGg]?[Uu]?[Ii]d$|^[UuGg]?[Uu]?[Ii]d");
 
     @Override
     public @NotNull String generate() {
@@ -24,5 +23,10 @@ public class IdGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -100;
     }
 }

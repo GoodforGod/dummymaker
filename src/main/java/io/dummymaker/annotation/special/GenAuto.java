@@ -1,15 +1,13 @@
 package io.dummymaker.annotation.special;
 
 import io.dummymaker.annotation.core.PrimeGen;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotations is used on classes And uses default suitable generators to fill
- * class fields
+ * Annotations is used on classes And uses default suitable generators to fill class fields
  *
  * @author GoodforGod
  * @see io.dummymaker.factory.IGenSupplier

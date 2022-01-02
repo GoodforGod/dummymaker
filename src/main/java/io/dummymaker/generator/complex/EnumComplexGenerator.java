@@ -3,8 +3,6 @@ package io.dummymaker.generator.complex;
 import io.dummymaker.annotation.complex.GenEnum;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -13,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates enum values

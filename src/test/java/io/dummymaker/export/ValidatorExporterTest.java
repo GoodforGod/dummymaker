@@ -9,14 +9,13 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTimeFormatter;
 import io.dummymaker.model.DummyUnixTime;
+import java.util.Arrays;
+import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * "default comment"

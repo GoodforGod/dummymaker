@@ -1,14 +1,13 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.ProductBundle;
 import io.dummymaker.generator.IGenerator;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 /**
  * Generates product names
@@ -18,8 +17,11 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class ProductGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("product|good|supply|topic", CASE_INSENSITIVE);
-    private final IBundle bundle = new ProductBundle();
+    private final Pattern pattern = Pattern
+            .compile("association|administrative|academy?|university|org(anization)?|product|good|supply|topic",
+                    CASE_INSENSITIVE);
+
+    private static final IBundle bundle = new ProductBundle();
 
     @Nullable
     @Override

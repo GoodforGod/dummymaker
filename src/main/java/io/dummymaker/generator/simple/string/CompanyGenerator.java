@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CompanyBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates company name as a string
@@ -17,10 +16,10 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class CompanyGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("organization|company|corp(oration)?|fund|business|shop|store",
+    private final Pattern pattern = Pattern.compile("org(anization)?|company|corp(oration)?|fund|business|shop|store",
             CASE_INSENSITIVE);
 
-    private final IBundle bundle = new CompanyBundle();
+    private static final IBundle bundle = new CompanyBundle();
 
     @Override
     public @NotNull String generate() {
@@ -30,5 +29,10 @@ public class CompanyGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -5;
     }
 }

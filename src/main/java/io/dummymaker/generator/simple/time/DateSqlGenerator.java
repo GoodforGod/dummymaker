@@ -2,9 +2,8 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.sql.Date;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates Sql Time from 1970 to 3000 Year
@@ -15,7 +14,7 @@ import java.sql.Date;
  */
 public class DateSqlGenerator implements ITimeGenerator<Date> {
 
-    private final LocalDateGenerator generator = new LocalDateGenerator();
+    private static final LocalDateGenerator generator = new LocalDateGenerator();
 
     @Override
     public @NotNull Date generate() {

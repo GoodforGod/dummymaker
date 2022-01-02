@@ -1,7 +1,6 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.special.GenAuto;
-
 import java.util.List;
 
 /**

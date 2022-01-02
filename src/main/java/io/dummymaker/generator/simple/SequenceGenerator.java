@@ -5,8 +5,7 @@ import io.dummymaker.generator.IGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Used to generate enumerated sequence for dummies Used by populate factory and
- * genEnumerate
+ * Used to generate enumerated sequence for dummies Used by populate factory and genEnumerate
  *
  * @author GoodforGod
  * @see GenSequence

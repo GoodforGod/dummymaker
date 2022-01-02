@@ -1,5 +1,7 @@
 package io.dummymaker.factory.impl;
 
+import static io.dummymaker.util.CastUtils.instantiate;
+
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.factory.IGenSupplier;
@@ -11,20 +13,16 @@ import io.dummymaker.model.GenRules;
 import io.dummymaker.model.graph.Node;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.SequenceScanner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static io.dummymaker.util.CastUtils.instantiate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Storage that facilitates generator storage, scanners, field mapping and
- * nullable fields To improve factory performance and extend complex generators
- * abilities
+ * Storage that facilitates generator storage, scanners, field mapping and nullable fields To
+ * improve factory performance and extend complex generators abilities
  *
  * @author GoodforGod
  * @since 17.07.2019

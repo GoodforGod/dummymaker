@@ -1,16 +1,15 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CityBundle;
 import io.dummymaker.bundle.impl.DistrictBundle;
 import io.dummymaker.bundle.impl.StreetBundle;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Full address with street, city, district and house number
@@ -23,9 +22,9 @@ public class AddressGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("addr(ess)?", CASE_INSENSITIVE);
 
-    private final IBundle streetBundle = new StreetBundle();
-    private final IBundle districtBundle = new DistrictBundle();
-    private final IBundle cityBundle = new CityBundle();
+    private static final IBundle streetBundle = new StreetBundle();
+    private static final IBundle districtBundle = new DistrictBundle();
+    private static final IBundle cityBundle = new CityBundle();
 
     @Override
     public @NotNull String generate() {

@@ -1,13 +1,12 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.export.IExporter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Factory that generates data objects Core that handles all top level logic
@@ -47,8 +46,8 @@ public interface IGenFactory {
     <T> @NotNull List<T> build(@Nullable Class<T> target, int amount);
 
     /**
-     * Instantiates class instance and populate its fields Use in case class have no
-     * empty constructor of have complex initialization logic
+     * Instantiates class instance and populate its fields Use in case class have no empty constructor
+     * of have complex initialization logic
      *
      * @param supplier of class to build
      * @param amount   of objects to produce
@@ -68,8 +67,8 @@ public interface IGenFactory {
     <T> @NotNull Stream<T> stream(@Nullable Class<T> target, int amount);
 
     /**
-     * Instantiates class instance and populate its fields Use in case class have no
-     * empty constructor of have complex initialization logic
+     * Instantiates class instance and populate its fields Use in case class have no empty constructor
+     * of have complex initialization logic
      *
      * @param supplier of class to build
      * @param amount   of objects to produce

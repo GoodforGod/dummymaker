@@ -1,9 +1,8 @@
 package io.dummymaker.generator.simple;
 
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates UUIDs

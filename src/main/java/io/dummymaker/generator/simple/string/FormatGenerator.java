@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.FormatBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates programming format name
@@ -17,9 +16,9 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class FormatGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("format", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("protocol|format", CASE_INSENSITIVE);
 
-    private final IBundle formats = new FormatBundle();
+    private static final IBundle formats = new FormatBundle();
 
     @Override
     public @NotNull String generate() {
@@ -29,5 +28,10 @@ public class FormatGenerator implements IGenerator<String> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -60;
     }
 }

@@ -1,10 +1,9 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.simple.NullGenerator;
+import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.time.LocalDate;
 
 /**
  * "default comment"

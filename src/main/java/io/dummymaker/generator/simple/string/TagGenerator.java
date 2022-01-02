@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.TagsBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates tag as a string like #tag
@@ -19,7 +18,7 @@ public class TagGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("(hash)?tag", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new TagsBundle();
+    private static final IBundle bundle = new TagsBundle();
 
     @Override
     public @NotNull String generate() {

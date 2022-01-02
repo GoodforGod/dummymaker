@@ -1,12 +1,11 @@
 package io.dummymaker.generator.simple.number;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates int from 0 to Integer.MAX_VALUE
@@ -17,7 +16,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class IntegerGenerator implements IGenerator<Integer> {
 
-    private final Pattern pattern = Pattern.compile("num(ber)?|counter", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("num(ber)?|counter|series", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Integer generate() {
@@ -27,5 +26,10 @@ public class IntegerGenerator implements IGenerator<Integer> {
     @Override
     public @NotNull Pattern pattern() {
         return pattern;
+    }
+
+    @Override
+    public int order() {
+        return -60;
     }
 }

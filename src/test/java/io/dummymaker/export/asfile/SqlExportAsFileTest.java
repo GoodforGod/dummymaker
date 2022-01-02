@@ -9,11 +9,10 @@ import io.dummymaker.export.validators.SqlValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyTime;
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Test;
 
 /**
  * "Default Description"
@@ -75,7 +74,7 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertFalse(dummyAsString.isEmpty());
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(14, sqlArray.length);
+        assertEquals(16, sqlArray.length);
 
         validation.isDummyTimeValidWithNamingStrategy(sqlArray, strategy);
     }

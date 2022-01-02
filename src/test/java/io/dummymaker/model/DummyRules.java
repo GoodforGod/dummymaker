@@ -3,7 +3,6 @@ package io.dummymaker.model;
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-
 import java.util.List;
 
 /**

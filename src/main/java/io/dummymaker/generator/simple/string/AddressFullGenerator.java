@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.CountryBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Country with address
@@ -21,7 +20,7 @@ public class AddressFullGenerator implements IGenerator<String> {
     private final Pattern pattern = Pattern.compile("addr(ess)?full|place|residence|home|location", CASE_INSENSITIVE);
 
     private final IGenerator<String> generator = new AddressGenerator();
-    private final IBundle countryBundle = new CountryBundle();
+    private static final IBundle countryBundle = new CountryBundle();
 
     @Override
     public @NotNull String generate() {

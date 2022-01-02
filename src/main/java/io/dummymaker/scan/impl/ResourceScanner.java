@@ -4,8 +4,6 @@ import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
 import io.dummymaker.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +13,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Scan for resources at runtime by package
@@ -45,8 +44,7 @@ public class ResourceScanner implements IScanner<String, String> {
     }
 
     /**
-     * Given a package name and a directory returns all classes within that
-     * directory
+     * Given a package name and a directory returns all classes within that directory
      *
      * @param directory   to process
      * @param packageName to process
@@ -71,8 +69,7 @@ public class ResourceScanner implements IScanner<String, String> {
     }
 
     /**
-     * Given a jar file's URL and a package name returns all classes within jar
-     * file.
+     * Given a jar file's URL and a package name returns all classes within jar file.
      *
      * @param resource as jar to process
      */

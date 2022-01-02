@@ -7,13 +7,12 @@ import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * Container with core annotation and its child marker annotation Used by
- * populate scanners and factories
+ * Container with core annotation and its child marker annotation Used by populate scanners and
+ * factories
  *
  * @author GoodforGod
  * @see PrimeGen

@@ -1,5 +1,9 @@
 package io.dummymaker.generator;
 
+import static java.util.regex.Pattern.compile;
+import static org.junit.Assert.*;
+import static org.junit.runners.Parameterized.Parameters;
+
 import io.dummymaker.generator.complex.ListComplexGenerator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
 import io.dummymaker.generator.complex.SetComplexGenerator;
@@ -10,10 +14,6 @@ import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.model.DummyTime.Patterns;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
@@ -23,10 +23,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.compile;
-import static org.junit.Assert.*;
-import static org.junit.runners.Parameterized.Parameters;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 /**
  * Generators Tests

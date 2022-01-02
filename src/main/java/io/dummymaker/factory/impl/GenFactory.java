@@ -1,8 +1,14 @@
 package io.dummymaker.factory.impl;
 
+import static io.dummymaker.generator.simple.EmbeddedGenerator.toDepth;
+import static io.dummymaker.util.CastUtils.castObject;
+import static io.dummymaker.util.CastUtils.instantiate;
+import static io.dummymaker.util.CollectionUtils.isEmpty;
+
 import io.dummymaker.annotation.complex.*;
 import io.dummymaker.annotation.special.GenCustom;
 import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.error.GenException;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.factory.IGenFactory;
 import io.dummymaker.generator.IComplexGenerator;
@@ -11,14 +17,9 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.error.GenException;
 import io.dummymaker.scan.IGenAutoScanner;
 import io.dummymaker.scan.impl.GenRuledScanner;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -26,15 +27,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static io.dummymaker.generator.simple.EmbeddedGenerator.toDepth;
-import static io.dummymaker.util.CastUtils.castObject;
-import static io.dummymaker.util.CastUtils.instantiate;
-import static io.dummymaker.util.CollectionUtils.isEmpty;
+import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Produce data object objects and fill their fields with data Successor of
- * initial PopulateFactory
+ * Produce data object objects and fill their fields with data Successor of initial PopulateFactory
  *
  * @author GoodforGod
  * @see IGenerator

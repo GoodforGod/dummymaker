@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.JobBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates roles
@@ -19,7 +18,7 @@ public class RoleGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("role", CASE_INSENSITIVE);
 
-    private final IBundle bundle = new JobBundle();
+    private static final IBundle bundle = new JobBundle();
 
     @Nullable
     @Override

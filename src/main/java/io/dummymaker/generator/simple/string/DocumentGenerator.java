@@ -1,13 +1,13 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.number.CharacterGenerator;
-import org.jetbrains.annotations.NotNull;
-
+import io.dummymaker.util.CollectionUtils;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates document, password identifiers as a string
@@ -17,14 +17,14 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class DocumentGenerator implements IGenerator<String> {
 
-    private final Pattern pattern = Pattern.compile("pass(word)?|doc(ument)?|org|project", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("pass(word)?|project", CASE_INSENSITIVE);
 
     private final IGenerator<Character> prefixGenerator = new CharacterGenerator();
 
     @Override
     public @NotNull String generate() {
-        final int id = current().nextInt(10_000_000, 999_999_999);
-        return current().nextBoolean()
+        final int id = CollectionUtils.random(10_000_000, 999_999_999);
+        return ThreadLocalRandom.current().nextBoolean()
                 ? prefixGenerator.generate() + String.valueOf(id)
                 : String.valueOf(id);
     }

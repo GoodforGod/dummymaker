@@ -8,9 +8,8 @@ import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.CsvValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 /**
  * "Default Description"

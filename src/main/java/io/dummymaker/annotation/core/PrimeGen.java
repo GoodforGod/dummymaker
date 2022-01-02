@@ -4,15 +4,14 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.scan.IAnnotationScanner;
 import io.dummymaker.scan.IMapScanner;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Prime annotations, used to create new annotations of specific generator
- * provided type Used as a marker annotation for other annotations
+ * Prime annotations, used to create new annotations of specific generator provided type Used as a
+ * marker annotation for other annotations
  * <p>
  * Is used by scanners and populate/produce factories
  * <p>

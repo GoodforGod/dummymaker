@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.ExtensionBundle;
 import io.dummymaker.generator.IGenerator;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates files extensions
@@ -18,7 +17,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 public class ExtensionGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("ext(ension)?", CASE_INSENSITIVE);
-    private final IBundle bundle = new ExtensionBundle();
+    private static final IBundle bundle = new ExtensionBundle();
 
     @Nullable
     @Override

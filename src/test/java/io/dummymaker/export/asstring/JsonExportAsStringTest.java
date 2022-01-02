@@ -6,9 +6,8 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.validators.JsonValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 /**
  * "Default Description"

@@ -4,8 +4,6 @@ import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.writer.IWriter;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Date;
@@ -19,6 +17,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Description in progress
@@ -29,15 +28,13 @@ import java.util.stream.Collectors;
 public class SqlExporter extends BaseExporter {
 
     /**
-     * Insert values limit per single insert query (due to 1000 row insert limit in
-     * SQL)
+     * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
      */
     private static final Integer INSERT_QUERY_LIMIT = 999;
 
     /**
-     * Java & Sql Type Representation Map is used to convert Java Field Data Type to
-     * Sql Data Type You can add your specific values here by using constructor with
-     * Map'String, String'
+     * Java & Sql Type Representation Map is used to convert Java Field Data Type to Sql Data Type You
+     * can add your specific values here by using constructor with Map'String, String'
      */
     private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
 

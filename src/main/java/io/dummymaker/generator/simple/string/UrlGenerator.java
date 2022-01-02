@@ -1,13 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.IBundle;
 import io.dummymaker.bundle.impl.DomainBundle;
 import io.dummymaker.bundle.impl.LoginBundle;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates URL as string
@@ -17,10 +16,10 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  */
 public class UrlGenerator extends UriGenerator {
 
-    private final Pattern pattern = Pattern.compile("url|server|link", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("site|website|url|server|link", CASE_INSENSITIVE);
 
-    private final IBundle domains = new LoginBundle();
-    private final IBundle zones = new DomainBundle();
+    private static final IBundle domains = new LoginBundle();
+    private static final IBundle zones = new DomainBundle();
 
     @Override
     public @NotNull String generate() {
