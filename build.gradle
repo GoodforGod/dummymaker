@@ -18,7 +18,7 @@ spotless {
         encoding("UTF-8")
         importOrder()
         removeUnusedImports()
-        eclipse("4.21.0").configFile("${projectDir}/codestyle.xml")
+        eclipse("4.21.0").configFile("${projectDir}/config/codestyle.xml")
     }
 }
 
@@ -40,7 +40,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:1.7.32"
     implementation "javax.inject:javax.inject:1"
 
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.7"
+    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.10"
     testImplementation "junit:junit:4.13.2"
 }
 

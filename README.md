@@ -18,7 +18,7 @@ Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 **Gradle**
 ```groovy
 dependencies {
-    implementation 'com.github.goodforgod:dummymaker:3.1.0'
+    implementation 'com.github.goodforgod:dummymaker:3.1.1'
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
 </dependency>
 ```
 
