@@ -1,13 +1,11 @@
 package io.dummymaker.scan;
 
-
 import io.dummymaker.scan.impl.ClassScanner;
 import io.dummymaker.writer.IWriter;
 import io.dummymaker.writer.impl.FileWriter;
 import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * Tests that recursion class scanner works

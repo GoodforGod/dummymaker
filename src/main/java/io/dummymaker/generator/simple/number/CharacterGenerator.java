@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.number;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.IGenerator;
@@ -8,7 +7,6 @@ import io.dummymaker.util.CollectionUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates random UTF-8 character in range of (97-122)

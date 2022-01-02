@@ -1,13 +1,11 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Rule for settings generator type for specific field name or field type
@@ -111,9 +109,7 @@ public class GenRule {
         equalFields.stream()
                 .filter(GenFieldRule::isTyped)
                 .findFirst()
-                .ifPresent(r -> {
-                    throw new IllegalArgumentException("Equal typed field is present for type " + r.getType());
-                });
+                .ifPresent(r -> { throw new IllegalArgumentException("Equal typed field is present for type " + r.getType()); });
 
         this.rules.addAll(rule.rules);
         return this;
@@ -173,7 +169,6 @@ public class GenRule {
                         .filter(r -> field.getType().equals(r.getType()))
                         .findAny()
                         .map(GenFieldRule::getGenerator);
-
     }
 
     /**

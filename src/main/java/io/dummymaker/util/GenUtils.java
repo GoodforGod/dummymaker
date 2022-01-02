@@ -1,6 +1,5 @@
 package io.dummymaker.util;
 
-
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.ITimeGenerator;
 import java.lang.reflect.ParameterizedType;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Utils for auto gen mapping

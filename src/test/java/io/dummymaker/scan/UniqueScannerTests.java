@@ -1,6 +1,5 @@
 package io.dummymaker.scan;
 
-
 import io.dummymaker.annotation.simple.number.GenInt;
 import io.dummymaker.annotation.simple.number.GenLong;
 import io.dummymaker.annotation.simple.number.GenShort;
@@ -13,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * Unique field annotation scanner tests

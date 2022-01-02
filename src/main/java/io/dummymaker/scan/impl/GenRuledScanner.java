@@ -1,6 +1,5 @@
 package io.dummymaker.scan.impl;
 
-
 import io.dummymaker.factory.IGenSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
@@ -10,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Scanner that sets gen rules where needed

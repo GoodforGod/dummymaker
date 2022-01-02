@@ -1,6 +1,5 @@
 package io.dummymaker.factory;
 
-
 import io.dummymaker.export.IExporter;
 import java.util.Collection;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Factory that generates data objects Core that handles all top level logic

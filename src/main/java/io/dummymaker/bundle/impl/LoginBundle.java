@@ -1,6 +1,5 @@
 package io.dummymaker.bundle.impl;
 
-
 /**
  * Contains nicknames as string
  *

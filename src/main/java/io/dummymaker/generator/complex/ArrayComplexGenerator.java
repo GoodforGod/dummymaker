@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import io.dummymaker.annotation.complex.GenArray;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.factory.IGenStorage;
@@ -13,7 +12,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Generates arrays based on field type
@@ -64,7 +62,6 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
                     final IGenStorage storage,
                     final int depth,
                     final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate list if not
         // necessary
         final Object initial = generateValue(valueGenerator, valueClass, storage, depth, maxDepth);

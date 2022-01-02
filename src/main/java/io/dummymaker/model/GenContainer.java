@@ -1,6 +1,5 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.annotation.core.PrimeGen;
 import io.dummymaker.annotation.special.GenCustom;
@@ -10,7 +9,6 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-
 
 /**
  * Container with core annotation and its child marker annotation Used by populate scanners and

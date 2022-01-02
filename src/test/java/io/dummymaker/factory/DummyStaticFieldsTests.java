@@ -1,13 +1,11 @@
 package io.dummymaker.factory;
 
-
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * ! NO DESCRIPTION !

@@ -1,6 +1,5 @@
 package io.dummymaker.export.asfile;
 
-
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.Format;
 import io.dummymaker.export.ICase;
@@ -10,7 +9,6 @@ import io.dummymaker.export.validators.XmlValidator;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
-
 
 /**
  * "Default Description"

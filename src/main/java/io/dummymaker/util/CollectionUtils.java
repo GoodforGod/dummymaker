@@ -1,13 +1,11 @@
 package io.dummymaker.util;
 
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Basic util methods for collections

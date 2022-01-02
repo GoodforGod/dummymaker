@@ -1,6 +1,5 @@
 package io.dummymaker.generator;
 
-
 import static org.junit.Assert.*;
 
 import io.dummymaker.generator.simple.EmbeddedGenerator;
@@ -9,7 +8,6 @@ import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
 import java.time.LocalDateTime;
 import org.junit.Test;
-
 
 /**
  * "Default Description"

@@ -1,9 +1,7 @@
 package io.dummymaker.scan;
 
-
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * List based scanner contract

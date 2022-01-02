@@ -1,6 +1,5 @@
 package io.dummymaker.scan;
 
-
 import static org.junit.Assert.*;
 
 import io.dummymaker.annotation.special.GenSequence;
@@ -12,7 +11,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import org.junit.Test;
-
 
 /**
  * ! NO DESCRIPTION !

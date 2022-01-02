@@ -1,6 +1,5 @@
 package io.dummymaker.factory.impl;
 
-
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
 import io.dummymaker.factory.IGenSupplier;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Default gen config implementation for generators discovery With all library generators and their

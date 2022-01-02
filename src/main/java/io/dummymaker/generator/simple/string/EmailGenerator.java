@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.string;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.IBundle;
@@ -10,7 +9,6 @@ import io.dummymaker.bundle.impl.LoginBundle;
 import io.dummymaker.generator.IGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates email as a string

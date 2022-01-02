@@ -1,6 +1,5 @@
 package io.dummymaker.factory;
 
-
 import io.dummymaker.bundle.impl.FemaleNameBundle;
 import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.bundle.impl.NounBundle;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * Global Gen rules tests

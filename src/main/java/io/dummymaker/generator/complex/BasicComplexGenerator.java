@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import static io.dummymaker.util.CastUtils.generateObject;
 import static io.dummymaker.util.CastUtils.instantiate;
 
@@ -14,7 +13,6 @@ import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
-
 
 /**
  * Basic complex generator implementation Can be used by other Complex generators Providing basic

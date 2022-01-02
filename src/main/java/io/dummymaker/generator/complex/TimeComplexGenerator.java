@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.StringUtils.isNotBlank;
 
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Generate time object for GenTime annotation

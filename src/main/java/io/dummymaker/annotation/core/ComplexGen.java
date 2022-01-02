@@ -1,6 +1,5 @@
 package io.dummymaker.annotation.core;
 
-
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
@@ -10,7 +9,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 
 /**
  * Complex Gen annotation used to create new annotations of specific complex generator provided type

@@ -1,6 +1,5 @@
 package io.dummymaker.bundle.impl;
 
-
 /**
  * Bundle with programming file formats liek JSON, YAML, etc
  *

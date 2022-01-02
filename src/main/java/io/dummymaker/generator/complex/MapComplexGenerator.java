@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import static io.dummymaker.util.CastUtils.getGenericType;
 
 import io.dummymaker.annotation.complex.GenMap;
@@ -17,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * "default comment"
@@ -80,7 +78,6 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                                      final IGenStorage storage,
                                      final int depth,
                                      final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate map if not
         // necessary
         final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);

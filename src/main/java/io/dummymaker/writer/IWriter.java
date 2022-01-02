@@ -1,6 +1,5 @@
 package io.dummymaker.writer;
 
-
 /**
  * Writer interface used by exporters to write values as files
  *

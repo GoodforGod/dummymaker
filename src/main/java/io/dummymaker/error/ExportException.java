@@ -1,6 +1,5 @@
 package io.dummymaker.error;
 
-
 /**
  * Exception occurred during export
  *

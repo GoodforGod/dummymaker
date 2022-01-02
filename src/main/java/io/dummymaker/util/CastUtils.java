@@ -1,6 +1,5 @@
 package io.dummymaker.util;
 
-
 import io.dummymaker.generator.IGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Utils for object casting

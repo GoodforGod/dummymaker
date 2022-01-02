@@ -1,12 +1,10 @@
 package io.dummymaker.factory;
 
-
 import static org.junit.Assert.*;
 
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.DummyCollection;
 import org.junit.Test;
-
 
 /**
  * Dummy collection tests

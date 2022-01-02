@@ -1,12 +1,10 @@
 package io.dummymaker.generator.complex;
 
-
 import io.dummymaker.factory.IGenStorage;
 import io.dummymaker.generator.IComplexGenerator;
 import io.dummymaker.generator.IGenerator;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Basic collection complex generator implementation Can be used by other collection complex
@@ -27,7 +25,6 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
                              final IGenStorage storage,
                              final int depth,
                              final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate list if not
         // necessary
         final Object initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);

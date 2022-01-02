@@ -1,8 +1,6 @@
 package io.dummymaker.export.validators;
 
-
 import io.dummymaker.export.ICase;
-
 
 /**
  * "default comment"

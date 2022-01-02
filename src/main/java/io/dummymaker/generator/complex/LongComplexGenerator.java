@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import static io.dummymaker.util.CastUtils.castObject;
 
 import io.dummymaker.annotation.simple.number.GenInt;
@@ -12,7 +11,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Generates integer/long values in specified range

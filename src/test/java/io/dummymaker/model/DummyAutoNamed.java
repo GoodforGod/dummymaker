@@ -1,8 +1,6 @@
 package io.dummymaker.model;
 
-
 import java.util.List;
-
 
 /**
  * ! NO DESCRIPTION !

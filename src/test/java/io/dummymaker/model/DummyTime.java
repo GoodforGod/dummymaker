@@ -1,6 +1,5 @@
 package io.dummymaker.model;
 
-
 import static java.util.regex.Pattern.compile;
 
 import io.dummymaker.annotation.complex.GenTime;
@@ -8,7 +7,6 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.Date;
 import java.util.regex.Pattern;
-
 
 /**
  * "default comment"

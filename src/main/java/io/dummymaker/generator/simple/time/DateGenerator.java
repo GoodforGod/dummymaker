@@ -1,12 +1,10 @@
 package io.dummymaker.generator.simple.time;
 
-
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates old java date type This date is exported in long milliseconds format So date is the

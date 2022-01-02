@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.string;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.IBundle;
@@ -11,7 +10,6 @@ import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Full address with street, city, district and house number

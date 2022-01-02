@@ -1,12 +1,10 @@
 package io.dummymaker.generator.simple.string;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.util.CollectionUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates URI as string

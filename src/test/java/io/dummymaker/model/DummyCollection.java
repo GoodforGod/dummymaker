@@ -1,6 +1,5 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.complex.GenSet;
@@ -10,7 +9,6 @@ import io.dummymaker.generator.simple.string.HexDataGenerator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 /**
  * "Default Description"

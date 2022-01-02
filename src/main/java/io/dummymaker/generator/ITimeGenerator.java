@@ -1,8 +1,6 @@
 package io.dummymaker.generator;
 
-
 import io.dummymaker.annotation.complex.GenTime;
-
 
 /**
  * Generates time/datetime/timestamp in range if necessary

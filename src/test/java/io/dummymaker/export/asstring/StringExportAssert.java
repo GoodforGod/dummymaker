@@ -1,6 +1,5 @@
 package io.dummymaker.export.asstring;
 
-
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
@@ -11,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * "default comment"

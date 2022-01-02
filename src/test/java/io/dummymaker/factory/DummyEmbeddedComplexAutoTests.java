@@ -1,6 +1,5 @@
 package io.dummymaker.factory;
 
-
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyEmbedded;
@@ -9,7 +8,6 @@ import io.dummymaker.model.GenRules;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * ! NO DESCRIPTION !

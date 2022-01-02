@@ -1,10 +1,8 @@
 package io.dummymaker.model.graph;
 
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
 
 /**
  * "default comment"

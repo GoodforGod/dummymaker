@@ -1,11 +1,9 @@
 package io.dummymaker.generator.simple.time;
 
-
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.ITimeGenerator;
 import java.sql.Timestamp;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates Sql Timestamp from 1970 to 3000 Year with nanoseconds precision

@@ -1,10 +1,8 @@
 package io.dummymaker.generator.simple;
 
-
 import io.dummymaker.annotation.special.GenSequence;
 import io.dummymaker.generator.IGenerator;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Used to generate enumerated sequence for dummies Used by populate factory and genEnumerate

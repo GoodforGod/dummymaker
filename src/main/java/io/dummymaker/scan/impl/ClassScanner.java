@@ -1,12 +1,10 @@
 package io.dummymaker.scan.impl;
 
-
 import io.dummymaker.scan.IScanner;
 import io.dummymaker.util.PackageUtils;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Scan for classes at runtime by packages

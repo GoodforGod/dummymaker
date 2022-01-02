@@ -1,9 +1,7 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.annotation.special.GenAuto;
 import java.util.List;
-
 
 /**
  * "default comment"
@@ -70,7 +68,6 @@ public class DummyEmbedded {
         public DummyEmbedded getEmbedded() {
             return embedded;
         }
-
     }
 
     private String id;

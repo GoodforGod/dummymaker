@@ -1,13 +1,11 @@
 package io.dummymaker.writer.impl;
 
-
 import io.dummymaker.error.ExportException;
 import io.dummymaker.util.StringUtils;
 import io.dummymaker.writer.IWriter;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
 
 /**
  * Buffered writer implementation

@@ -1,6 +1,5 @@
 package io.dummymaker.export;
 
-
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.generator.IGenerator;
@@ -9,7 +8,6 @@ import io.dummymaker.model.GenRule;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * Description in progress

@@ -1,6 +1,5 @@
 package io.dummymaker.export.asfile;
 
-
 import io.dummymaker.export.Format;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
@@ -11,7 +10,6 @@ import io.dummymaker.model.DummyNoExportFields;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-
 
 /**
  * "default comment"

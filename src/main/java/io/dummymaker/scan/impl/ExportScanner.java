@@ -1,6 +1,5 @@
 package io.dummymaker.scan.impl;
 
-
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
@@ -11,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Scanner for special export annotations and produces export containers Which are used in exporters

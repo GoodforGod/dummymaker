@@ -1,6 +1,5 @@
 package io.dummymaker.generator.complex;
 
-
 import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.factory.IGenStorage;
@@ -13,7 +12,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Generates two dimension arrays based on field type

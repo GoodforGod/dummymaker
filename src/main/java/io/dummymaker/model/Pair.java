@@ -1,11 +1,9 @@
 package io.dummymaker.model;
 
-
 import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Class for storing pairs

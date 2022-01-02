@@ -1,9 +1,7 @@
 package io.dummymaker.export.cases;
 
-
 import io.dummymaker.export.ICase;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Each upper letter separated with underscore symbol, and transform to upper case EXCLUDING FIRST

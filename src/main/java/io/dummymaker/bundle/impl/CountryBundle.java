@@ -1,6 +1,5 @@
 package io.dummymaker.bundle.impl;
 
-
 /**
  * Bundle with country names string values
  *

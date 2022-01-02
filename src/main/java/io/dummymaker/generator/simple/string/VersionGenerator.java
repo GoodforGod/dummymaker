@@ -1,6 +1,5 @@
 package io.dummymaker.generator.simple.string;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.IGenerator;
@@ -8,7 +7,6 @@ import io.dummymaker.util.CollectionUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates version as string (like 1.1.0-SNAPSHOT) or without SNAPSHOT suffix

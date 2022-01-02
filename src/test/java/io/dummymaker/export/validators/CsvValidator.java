@@ -1,6 +1,5 @@
 package io.dummymaker.export.validators;
 
-
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,7 +9,6 @@ import io.dummymaker.export.ICase;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
-
 
 /**
  * "Default Description"

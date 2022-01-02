@@ -1,10 +1,8 @@
 package io.dummymaker.util;
 
-
 import io.dummymaker.model.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * Description in progress

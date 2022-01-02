@@ -1,10 +1,8 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.annotation.complex.GenArray;
 import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.export.GenExportIgnore;
-
 
 /**
  * @author GoodforGod

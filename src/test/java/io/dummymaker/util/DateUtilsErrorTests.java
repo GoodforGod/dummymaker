@@ -1,6 +1,5 @@
 package io.dummymaker.util;
 
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,7 +7,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * "default comment"
@@ -50,7 +48,6 @@ public class DateUtilsErrorTests extends Assert {
     public void parseDateNull() {
         final LocalDateTime result = DateUtils.parseDateTime(null);
         assertNull(result);
-
     }
 
     @Test

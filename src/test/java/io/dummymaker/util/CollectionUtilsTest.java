@@ -1,10 +1,8 @@
 package io.dummymaker.util;
 
-
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * "default comment"

@@ -1,13 +1,11 @@
 package io.dummymaker.generator;
 
-
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.factory.IGenStorage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Complex Generator used by ComplexGen annotation to populate fields When annotation have
@@ -35,5 +33,4 @@ public interface IComplexGenerator extends IGenerator<Object> {
                     @NotNull IGenStorage storage,
                     @Nullable Annotation annotation,
                     int depth);
-
 }

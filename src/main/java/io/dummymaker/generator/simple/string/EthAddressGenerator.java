@@ -1,11 +1,9 @@
 package io.dummymaker.generator.simple.string;
 
-
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates ethereum address

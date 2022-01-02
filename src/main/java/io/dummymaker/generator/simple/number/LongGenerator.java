@@ -1,10 +1,8 @@
 package io.dummymaker.generator.simple.number;
 
-
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Long positive number generator

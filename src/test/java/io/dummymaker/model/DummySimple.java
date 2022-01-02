@@ -1,8 +1,6 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.annotation.special.GenSequence;
-
 
 /**
  * ! NO DESCRIPTION !

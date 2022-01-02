@@ -1,6 +1,5 @@
 package io.dummymaker.annotation.complex;
 
-
 import io.dummymaker.annotation.core.ComplexGen;
 import io.dummymaker.generator.IGenerator;
 import io.dummymaker.generator.complex.Array2DComplexGenerator;
@@ -8,7 +7,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 
 /**
  * Generates 2 dimension array

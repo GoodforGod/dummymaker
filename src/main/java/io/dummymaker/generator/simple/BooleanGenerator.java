@@ -1,10 +1,8 @@
 package io.dummymaker.generator.simple;
 
-
 import io.dummymaker.generator.IGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Generates boolean values

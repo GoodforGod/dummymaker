@@ -1,9 +1,7 @@
 package io.dummymaker.model;
 
-
 import io.dummymaker.generator.IGenerator;
 import java.util.*;
-
 
 /**
  * Gen rules for specific field

@@ -1,6 +1,5 @@
 package io.dummymaker.export.asstring;
 
-
 import io.dummymaker.export.Cases;
 import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
@@ -9,7 +8,6 @@ import io.dummymaker.factory.impl.GenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
 import org.junit.Test;
-
 
 /**
  * "Default Description"

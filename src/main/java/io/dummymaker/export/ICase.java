@@ -1,8 +1,6 @@
 package io.dummymaker.export;
 
-
 import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Allow to apply naming strategy for field names or class name during export

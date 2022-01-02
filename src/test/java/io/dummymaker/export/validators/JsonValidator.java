@@ -1,6 +1,5 @@
 package io.dummymaker.export.validators;
 
-
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTime.Patterns.OFFSET_DATETIME;
 import static io.dummymaker.model.DummyTime.Patterns.OFFSET_TIME;
@@ -11,7 +10,6 @@ import io.dummymaker.export.Cases;
 import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
-
 
 /**
  * "Default Description"

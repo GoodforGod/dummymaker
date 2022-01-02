@@ -1,6 +1,5 @@
 package io.dummymaker.factory.impl;
 
-
 import static io.dummymaker.generator.simple.EmbeddedGenerator.toDepth;
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.CastUtils.instantiate;
@@ -31,7 +30,6 @@ import java.util.stream.Stream;
 import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Produce data object objects and fill their fields with data Successor of initial PopulateFactory
@@ -198,7 +196,6 @@ public class GenFactory implements IGenFactory {
                 final Object generated = generateObject(t.getClass(), field, container, storage, depth);
                 if (generated != null)
                     field.set(t, generated);
-
             } catch (Exception ex) {
                 throw new GenException(ex);
             }

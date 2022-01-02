@@ -1,6 +1,5 @@
 package io.dummymaker.factory;
 
-
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -10,7 +9,6 @@ import io.dummymaker.model.DummyNoZeroConstructor;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-
 
 /**
  * ! NO DESCRIPTION !

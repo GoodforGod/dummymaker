@@ -1,6 +1,5 @@
 package io.dummymaker.model.export;
 
-
 import static io.dummymaker.util.StringUtils.isEmpty;
 
 import io.dummymaker.annotation.complex.GenTime;
@@ -15,7 +14,7 @@ import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-
+import java.util.UUID;
 
 /**
  * Description in progress
@@ -59,9 +58,11 @@ public class FieldContainerFactory {
         if (type == null)
             return FieldContainer.Type.STRING;
 
-        if (type.equals(Boolean.class))
+        if (type.equals(UUID.class)) {
+            return FieldContainer.Type.STRING;
+        } else if (type.equals(Boolean.class)) {
             return FieldContainer.Type.BOOLEAN;
-        else if (type.equals(Short.class)
+        } else if (type.equals(Short.class)
                 || type.equals(Integer.class)
                 || type.equals(Long.class)
                 || type.equals(Float.class)
@@ -71,9 +72,9 @@ public class FieldContainerFactory {
                 || type.equals(int.class)
                 || type.equals(long.class)
                 || type.equals(float.class)
-                || type.equals(double.class))
+                || type.equals(double.class)) {
             return FieldContainer.Type.NUMBER;
-        else if (type.equals(LocalDate.class)
+        } else if (type.equals(LocalDate.class)
                 || type.equals(LocalTime.class)
                 || type.equals(LocalDateTime.class)
                 || type.equals(OffsetDateTime.class)
@@ -81,20 +82,22 @@ public class FieldContainerFactory {
                 || type.equals(Date.class)
                 || type.equals(java.sql.Date.class)
                 || type.equals(Timestamp.class)
-                || type.equals(Time.class))
+                || type.equals(Time.class)) {
             return FieldContainer.Type.DATE;
-        else if (Iterable.class.isAssignableFrom(type))
+        } else if (Iterable.class.isAssignableFrom(type)) {
             return FieldContainer.Type.COLLECTION;
-        else if (Map.class.isAssignableFrom(type))
+        } else if (Map.class.isAssignableFrom(type)) {
             return FieldContainer.Type.MAP;
-        else if (type.getSimpleName().contains("[][]"))
+        } else if (type.getSimpleName().contains("[][]")) {
             return FieldContainer.Type.ARRAY_2D;
-        else if (type.getSimpleName().contains("[]"))
+        } else if (type.getSimpleName().contains("[]")) {
             return FieldContainer.Type.ARRAY;
+        }
 
         final CastUtils.CastType castedType = CastUtils.CastType.of(type);
-        if (CastUtils.CastType.UNKNOWN.equals(castedType))
+        if (CastUtils.CastType.UNKNOWN.equals(castedType)) {
             return FieldContainer.Type.COMPLEX;
+        }
 
         return FieldContainer.Type.STRING;
     }

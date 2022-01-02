@@ -1,6 +1,5 @@
 package io.dummymaker.factory.impl;
 
-
 import static io.dummymaker.util.CastUtils.instantiate;
 
 import io.dummymaker.annotation.special.GenSequence;
@@ -20,7 +19,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Storage that facilitates generator storage, scanners, field mapping and nullable fields To
@@ -199,6 +197,5 @@ class GenStorage implements IGenStorage {
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))));
-
     }
 }

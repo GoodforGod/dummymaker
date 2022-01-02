@@ -1,6 +1,5 @@
 package io.dummymaker.generator;
 
-
 import static java.util.regex.Pattern.compile;
 import static org.junit.Assert.*;
 import static org.junit.runners.Parameterized.Parameters;
@@ -27,7 +26,6 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
 
 /**
  * Generators Tests
