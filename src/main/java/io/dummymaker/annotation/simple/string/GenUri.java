@@ -15,5 +15,4 @@ import java.lang.annotation.Target;
 @PrimeGen(UriGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenUri {
-}
+public @interface GenUri {}

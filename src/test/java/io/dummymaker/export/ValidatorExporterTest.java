@@ -53,7 +53,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 
@@ -67,7 +69,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 
@@ -81,7 +85,9 @@ public class ValidatorExporterTest extends Assert {
 
         final String exported = exporter.convert(dummy);
 
-        final String splitter = (exporter instanceof CsvExporter) ? "," : "\n";
+        final String splitter = (exporter instanceof CsvExporter)
+                ? ","
+                : "\n";
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 

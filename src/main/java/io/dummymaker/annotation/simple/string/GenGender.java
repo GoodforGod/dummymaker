@@ -15,5 +15,4 @@ import java.lang.annotation.Target;
 @PrimeGen(GenderGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenGender {
-}
+public @interface GenGender {}

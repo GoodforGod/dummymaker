@@ -14,6 +14,7 @@ import java.time.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Description in progress
@@ -24,7 +25,9 @@ import java.util.Map;
 public class FieldContainerFactory {
 
     public FieldContainer build(Field field) {
-        final FieldContainer.Type type = isSequential(field) ? FieldContainer.Type.SEQUENTIAL : getType(field.getType());
+        final FieldContainer.Type type = isSequential(field)
+                ? FieldContainer.Type.SEQUENTIAL
+                : getType(field.getType());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
@@ -35,7 +38,9 @@ public class FieldContainerFactory {
     }
 
     private FieldContainer build(Field field, FieldContainer.Type type, String fieldExportName) {
-        final String finalName = isEmpty(fieldExportName) ? "" : fieldExportName;
+        final String finalName = isEmpty(fieldExportName)
+                ? ""
+                : fieldExportName;
 
         if (type.equals(FieldContainer.Type.DATE) && field != null) {
             final GenTime annotation = field.getAnnotation(GenTime.class);
@@ -53,9 +58,11 @@ public class FieldContainerFactory {
         if (type == null)
             return FieldContainer.Type.STRING;
 
-        if (type.equals(Boolean.class))
+        if (type.equals(UUID.class)) {
+            return FieldContainer.Type.STRING;
+        } else if (type.equals(Boolean.class)) {
             return FieldContainer.Type.BOOLEAN;
-        else if (type.equals(Short.class)
+        } else if (type.equals(Short.class)
                 || type.equals(Integer.class)
                 || type.equals(Long.class)
                 || type.equals(Float.class)
@@ -65,9 +72,9 @@ public class FieldContainerFactory {
                 || type.equals(int.class)
                 || type.equals(long.class)
                 || type.equals(float.class)
-                || type.equals(double.class))
+                || type.equals(double.class)) {
             return FieldContainer.Type.NUMBER;
-        else if (type.equals(LocalDate.class)
+        } else if (type.equals(LocalDate.class)
                 || type.equals(LocalTime.class)
                 || type.equals(LocalDateTime.class)
                 || type.equals(OffsetDateTime.class)
@@ -75,20 +82,22 @@ public class FieldContainerFactory {
                 || type.equals(Date.class)
                 || type.equals(java.sql.Date.class)
                 || type.equals(Timestamp.class)
-                || type.equals(Time.class))
+                || type.equals(Time.class)) {
             return FieldContainer.Type.DATE;
-        else if (Iterable.class.isAssignableFrom(type))
+        } else if (Iterable.class.isAssignableFrom(type)) {
             return FieldContainer.Type.COLLECTION;
-        else if (Map.class.isAssignableFrom(type))
+        } else if (Map.class.isAssignableFrom(type)) {
             return FieldContainer.Type.MAP;
-        else if (type.getSimpleName().contains("[][]"))
+        } else if (type.getSimpleName().contains("[][]")) {
             return FieldContainer.Type.ARRAY_2D;
-        else if (type.getSimpleName().contains("[]"))
+        } else if (type.getSimpleName().contains("[]")) {
             return FieldContainer.Type.ARRAY;
+        }
 
         final CastUtils.CastType castedType = CastUtils.CastType.of(type);
-        if (CastUtils.CastType.UNKNOWN.equals(castedType))
+        if (CastUtils.CastType.UNKNOWN.equals(castedType)) {
             return FieldContainer.Type.COMPLEX;
+        }
 
         return FieldContainer.Type.STRING;
     }

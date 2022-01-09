@@ -109,9 +109,7 @@ public class GenRule {
         equalFields.stream()
                 .filter(GenFieldRule::isTyped)
                 .findFirst()
-                .ifPresent(r -> {
-                    throw new IllegalArgumentException("Equal typed field is present for type " + r.getType());
-                });
+                .ifPresent(r -> { throw new IllegalArgumentException("Equal typed field is present for type " + r.getType()); });
 
         this.rules.addAll(rule.rules);
         return this;
@@ -171,7 +169,6 @@ public class GenRule {
                         .filter(r -> field.getType().equals(r.getType()))
                         .findAny()
                         .map(GenFieldRule::getGenerator);
-
     }
 
     /**

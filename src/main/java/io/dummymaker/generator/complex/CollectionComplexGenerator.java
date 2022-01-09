@@ -25,7 +25,6 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
                              final IGenStorage storage,
                              final int depth,
                              final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate list if not
         // necessary
         final Object initial = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);
@@ -40,7 +39,9 @@ abstract class CollectionComplexGenerator extends BasicComplexGenerator {
             return Collections.emptyList();
         }
 
-        final Collection list = (collection == null) ? new ArrayList<>(size) : collection;
+        final Collection list = (collection == null)
+                ? new ArrayList<>(size)
+                : collection;
         list.add(initial);
         for (int i = 1; i < size; i++) {
             final Object t = generateValue(valueGenerator, fieldClass, storage, depth, maxDepth);

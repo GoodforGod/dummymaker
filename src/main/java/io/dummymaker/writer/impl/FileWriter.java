@@ -42,7 +42,9 @@ public class FileWriter implements IWriter {
     }
 
     private String getPath(String file, String path) {
-        final String workPath = StringUtils.isBlank(path) ? DEFAULT_PATH : path;
+        final String workPath = StringUtils.isBlank(path)
+                ? DEFAULT_PATH
+                : path;
         return workPath + file;
     }
 

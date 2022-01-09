@@ -25,7 +25,9 @@ public class VersionGenerator implements IGenerator<String> {
                 + CollectionUtils.random(1, 99)
                 + "."
                 + CollectionUtils.random(1, 99)
-                + (ThreadLocalRandom.current().nextBoolean() ? "-SNAPSHOT" : "");
+                + (ThreadLocalRandom.current().nextBoolean()
+                        ? "-SNAPSHOT"
+                        : "");
     }
 
     @Override

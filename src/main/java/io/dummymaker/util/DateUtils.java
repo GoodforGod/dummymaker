@@ -39,15 +39,21 @@ public class DateUtils {
     }
 
     public static Timestamp convertToTimestamp(final LocalDate localDate) {
-        return (localDate == null) ? null : Timestamp.valueOf(localDate.atStartOfDay());
+        return (localDate == null)
+                ? null
+                : Timestamp.valueOf(localDate.atStartOfDay());
     }
 
     public static Timestamp convertToTimestamp(final LocalTime localTime) {
-        return (localTime == null) ? null : Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
+        return (localTime == null)
+                ? null
+                : Timestamp.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1), localTime));
     }
 
     public static Timestamp convertToTimestamp(final LocalDateTime localDateTime) {
-        return (localDateTime == null) ? null : Timestamp.valueOf(localDateTime);
+        return (localDateTime == null)
+                ? null
+                : Timestamp.valueOf(localDateTime);
     }
 
     public static Date parseSimpleDateLong(final String date) {

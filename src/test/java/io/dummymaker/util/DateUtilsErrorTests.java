@@ -48,7 +48,6 @@ public class DateUtilsErrorTests extends Assert {
     public void parseDateNull() {
         final LocalDateTime result = DateUtils.parseDateTime(null);
         assertNull(result);
-
     }
 
     @Test

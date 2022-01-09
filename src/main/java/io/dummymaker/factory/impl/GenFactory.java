@@ -57,7 +57,9 @@ public class GenFactory implements IGenFactory {
     }
 
     public GenFactory(@NotNull Collection<GenRule> rules) {
-        this(isEmpty(rules) ? null : GenRules.of(rules));
+        this(isEmpty(rules)
+                ? null
+                : GenRules.of(rules));
     }
 
     public GenFactory(@Nullable GenRules rules) {
@@ -114,7 +116,9 @@ public class GenFactory implements IGenFactory {
 
         final int batchSize = 10000;
         final long batches = amount / batchSize;
-        final int left = (int) ((amount > batchSize) ? amount % batchSize : amount);
+        final int left = (int) ((amount > batchSize)
+                ? amount % batchSize
+                : amount);
 
         final GenStorage storage = new GenStorage(scanner, rules);
         for (int i = 0; i < batches; i++) {
@@ -192,7 +196,6 @@ public class GenFactory implements IGenFactory {
                 final Object generated = generateObject(t.getClass(), field, container, storage, depth);
                 if (generated != null)
                     field.set(t, generated);
-
             } catch (Exception ex) {
                 throw new GenException(ex);
             }

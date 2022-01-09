@@ -17,7 +17,9 @@ public class DateFieldContainer extends FieldContainer {
     public DateFieldContainer(Field field, Type type, String exportName, GenTime annotation) {
         super(field, type, exportName);
         this.isUnixTime = (annotation != null) && annotation.exportAsUnixTime();
-        this.formatter = (annotation == null) ? GenTime.DEFAULT_FORMAT : annotation.formatter();
+        this.formatter = (annotation == null)
+                ? GenTime.DEFAULT_FORMAT
+                : annotation.formatter();
     }
 
     public String getFormatter() {

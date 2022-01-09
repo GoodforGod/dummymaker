@@ -68,7 +68,6 @@ public class DummyEmbedded {
         public DummyEmbedded getEmbedded() {
             return embedded;
         }
-
     }
 
     private String id;

@@ -71,7 +71,9 @@ public class XmlExporter extends BaseExporter {
                 .map(c -> {
                     final String value = getValue(t, c);
                     final String tag = c.getExportName(naming);
-                    return StringUtils.isEmpty(value) ? "" : "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
+                    return StringUtils.isEmpty(value)
+                            ? ""
+                            : "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
                 })
                 .collect(Collectors.joining("\n"));
     }
@@ -79,12 +81,16 @@ public class XmlExporter extends BaseExporter {
     @Override
     protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
-        return isCollection ? openXmlTag(naming.format(type + TAG_ENDING)) + "\n" : "";
+        return isCollection
+                ? openXmlTag(naming.format(type + TAG_ENDING)) + "\n"
+                : "";
     }
 
     @Override
     protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
-        return isCollection ? "\n" + closeXmlTag(naming.format(type + TAG_ENDING)) : "";
+        return isCollection
+                ? "\n" + closeXmlTag(naming.format(type + TAG_ENDING))
+                : "";
     }
 }

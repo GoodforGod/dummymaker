@@ -64,7 +64,9 @@ public class GenContainer {
             if (core == null) {
                 this.generator = NullGenerator.class;
             } else {
-                this.generator = (isComplex) ? ((ComplexGen) core).value() : ((PrimeGen) core).value();
+                this.generator = (isComplex)
+                        ? ((ComplexGen) core).value()
+                        : ((PrimeGen) core).value();
             }
         }
     }

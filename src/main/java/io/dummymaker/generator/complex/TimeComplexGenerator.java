@@ -40,8 +40,12 @@ public class TimeComplexGenerator implements IComplexGenerator {
                                      final @NotNull IGenStorage storage,
                                      final Annotation annotation,
                                      final int depth) {
-        final long minUnix = (annotation == null) ? GenTime.MIN_UNIX : getMin(((GenTime) annotation));
-        final long maxUnix = (annotation == null) ? GenTime.MAX_UNIX : getMax(((GenTime) annotation));
+        final long minUnix = (annotation == null)
+                ? GenTime.MIN_UNIX
+                : getMin(((GenTime) annotation));
+        final long maxUnix = (annotation == null)
+                ? GenTime.MAX_UNIX
+                : getMax(((GenTime) annotation));
 
         final Class<?> fieldClass = field.getType();
 

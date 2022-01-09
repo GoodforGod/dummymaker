@@ -46,8 +46,11 @@ public class DummyCustom {
         private final FloatGenerator generator = new FloatGenerator();
 
         @Override
-        public Object generate(@NotNull Class<?> parent, @NotNull Field field, @NotNull IGenStorage storage,
-                               Annotation annotation, int depth) {
+        public Object generate(@NotNull Class<?> parent,
+                               @NotNull Field field,
+                               @NotNull IGenStorage storage,
+                               Annotation annotation,
+                               int depth) {
             return generate();
         }
 

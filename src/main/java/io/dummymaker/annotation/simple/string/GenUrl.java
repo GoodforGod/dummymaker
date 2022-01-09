@@ -15,5 +15,4 @@ import java.lang.annotation.Target;
 @PrimeGen(UrlGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenUrl {
-}
+public @interface GenUrl {}

@@ -4,7 +4,7 @@ plugins {
     id "java-library"
 
     id "org.sonarqube" version "3.3"
-    id "com.diffplug.spotless" version "5.14.3"
+    id "com.diffplug.spotless" version "6.1.0"
 }
 
 group = groupId
@@ -18,7 +18,7 @@ spotless {
         encoding("UTF-8")
         importOrder()
         removeUnusedImports()
-        eclipse().configFile("${projectDir}/config/codestyle.xml")
+        eclipse("4.21.0").configFile("${projectDir}/config/codestyle.xml")
     }
 }
 
@@ -40,7 +40,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:1.7.32"
     implementation "javax.inject:javax.inject:1"
 
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.7"
+    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.10"
     testImplementation "junit:junit:4.13.2"
 }
 

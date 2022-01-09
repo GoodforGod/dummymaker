@@ -34,7 +34,9 @@ public class GenRuledScanner extends GenAutoScanner {
 
     @Override
     public @NotNull Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
-        final Optional<GenRule> targeted = (rules == null) ? Optional.empty() : rules.targeted(target);
+        final Optional<GenRule> targeted = (rules == null)
+                ? Optional.empty()
+                : rules.targeted(target);
         final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
 
         final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);

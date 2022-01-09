@@ -29,7 +29,9 @@ public class JsonExporter extends BaseExporter {
     }
 
     private String wrap(String s) {
-        return StringUtils.isEmpty(s) ? "" : "\"" + s + "\"";
+        return StringUtils.isEmpty(s)
+                ? ""
+                : "\"" + s + "\"";
     }
 
     @Override
@@ -81,7 +83,9 @@ public class JsonExporter extends BaseExporter {
         return containers.stream()
                 .map(c -> {
                     final String value = getValue(t, c);
-                    return StringUtils.isEmpty(value) ? "" : wrap(c.getExportName(naming)) + ":" + value;
+                    return StringUtils.isEmpty(value)
+                            ? ""
+                            : wrap(c.getExportName(naming)) + ":" + value;
                 })
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(","));
@@ -89,11 +93,15 @@ public class JsonExporter extends BaseExporter {
 
     @Override
     protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
-        return isCollection ? "[" : "";
+        return isCollection
+                ? "["
+                : "";
     }
 
     @Override
     protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
-        return isCollection ? "]" : "";
+        return isCollection
+                ? "]"
+                : "";
     }
 }

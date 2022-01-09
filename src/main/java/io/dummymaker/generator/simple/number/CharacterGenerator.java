@@ -22,7 +22,9 @@ public class CharacterGenerator implements IGenerator<Character> {
     public @NotNull Character generate() {
         boolean b = ThreadLocalRandom.current().nextBoolean();
         char c = (char) CollectionUtils.random(97, 122);
-        return (b) ? Character.toUpperCase(c) : c;
+        return (b)
+                ? Character.toUpperCase(c)
+                : c;
     }
 
     @Override

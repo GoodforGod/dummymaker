@@ -197,6 +197,5 @@ class GenStorage implements IGenStorage {
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))));
-
     }
 }

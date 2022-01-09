@@ -103,7 +103,7 @@ public abstract class BaseExporter implements IExporter {
                 case SEQUENTIAL:
                     return convertNumber(value);
                 case STRING:
-                    return convertString((String) value);
+                    return convertString(String.valueOf(value));
                 case DATE:
                     return ((DateFieldContainer) container).isUnixTime()
                             ? convertDateUnix(value)
@@ -227,7 +227,7 @@ public abstract class BaseExporter implements IExporter {
             return Arrays.toString(((char[]) array));
 
         return Arrays.stream(((Object[]) array))
-                .map(v -> v instanceof String ? convertString((String) v) : v.toString())
+                .map(v -> convertString(String.valueOf(v)))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -237,16 +237,15 @@ public abstract class BaseExporter implements IExporter {
 
     protected String convertCollection(Collection<?> collection) {
         return collection.stream()
-                .map(v -> v instanceof String ? convertString((String) v) : v.toString())
+                .map(v -> convertString(String.valueOf(v)))
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
     protected String convertMap(Map<?, ?> map) {
         return map.entrySet().stream()
                 .map(e -> {
-                    final String key = e.getKey() instanceof String ? convertString((String) e.getKey()) : e.getKey().toString();
-                    final String value = e.getValue() instanceof String ? convertString((String) e.getValue())
-                            : e.getValue().toString();
+                    final String key = convertString(String.valueOf(e.getKey()));
+                    final String value = convertString(String.valueOf(e.getValue()));
                     return key + ":" + value;
                 })
                 .collect(Collectors.joining(",", "{", "}"));
@@ -366,7 +365,8 @@ public abstract class BaseExporter implements IExporter {
                 .filter(Objects::nonNull)
                 .map(v -> {
                     final String value = map(v, containers);
-                    return StringUtils.isEmpty(value) ? DEFAULT_EMPTY_VALUE
+                    return StringUtils.isEmpty(value)
+                            ? DEFAULT_EMPTY_VALUE
                             : prefix(v, containers) + value + suffix(v, containers);
                 })
                 .filter(StringUtils::isNotEmpty)

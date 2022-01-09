@@ -39,7 +39,10 @@ public class ExportAsFileTests extends ExportAssert {
     private final int singleSplitLength;
     private final int listSplitLength;
 
-    public ExportAsFileTests(IExporter exporter, IValidator validator, Format format, int singleSplitLength,
+    public ExportAsFileTests(IExporter exporter,
+                             IValidator validator,
+                             Format format,
+                             int singleSplitLength,
                              int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
@@ -110,7 +113,9 @@ public class ExportAsFileTests extends ExportAssert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] csvArray = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, csvArray.length);
@@ -130,7 +135,9 @@ public class ExportAsFileTests extends ExportAssert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] csvArray = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, csvArray.length);

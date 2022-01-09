@@ -28,7 +28,9 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     static final int MAX_DEFAULT = 2;
 
     static int getDesiredSize(int min, int max, int fixed) {
-        return (fixed > -1) ? fixed : CollectionUtils.random(min, max);
+        return (fixed > -1)
+                ? fixed
+                : CollectionUtils.random(min, max);
     }
 
     boolean isGenDefault(Class<? extends IGenerator> generatorClass) {
@@ -55,6 +57,8 @@ abstract class BasicComplexGenerator implements IComplexGenerator {
     }
 
     protected Class<? extends IGenerator> suitable(IGenSupplier config, Field field, Class<?> fieldType) {
-        return (config == null) ? IdGenerator.class : config.getSuitable(field, fieldType);
+        return (config == null)
+                ? IdGenerator.class
+                : config.getSuitable(field, fieldType);
     }
 }

@@ -90,7 +90,9 @@ class GenGraphBuilder {
 
         final Optional<Integer> optionalDepth = Optional.ofNullable(autoDepth);
 
-        final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null ? 1 : parentPayload.getDepth());
+        final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null
+                ? 1
+                : parentPayload.getDepth());
         return new Payload(target, markedOrDefault, optionalDepth.isPresent());
     }
 

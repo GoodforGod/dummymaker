@@ -78,7 +78,6 @@ public class MapComplexGenerator extends BasicComplexGenerator {
                                      final IGenStorage storage,
                                      final int depth,
                                      final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate map if not
         // necessary
         final Object initialKey = generateValue(keyGenerator, keyFieldType, storage, depth, maxDepth);

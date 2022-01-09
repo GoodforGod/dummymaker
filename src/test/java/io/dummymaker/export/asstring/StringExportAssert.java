@@ -31,7 +31,10 @@ public abstract class StringExportAssert extends Assert {
         this(exporter, validator, singleSplitLength, singleSplitLength, listSplitLength);
     }
 
-    public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int singleListSplit,
+    public StringExportAssert(IExporter exporter,
+                              IValidator validator,
+                              int singleSplitLength,
+                              int singleListSplit,
                               int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
@@ -79,7 +82,9 @@ public abstract class StringExportAssert extends Assert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] csvArray = dummyAsString.split(splitter);
         assertEquals(singleSplitLength, csvArray.length);
@@ -95,7 +100,9 @@ public abstract class StringExportAssert extends Assert {
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
-        final String splitter = (exporter.getClass().equals(CsvExporter.class)) ? "," : "\n";
+        final String splitter = (exporter.getClass().equals(CsvExporter.class))
+                ? ","
+                : "\n";
 
         final String[] split = dummyAsString.split(splitter);
         assertEquals(singleListSplit, split.length);

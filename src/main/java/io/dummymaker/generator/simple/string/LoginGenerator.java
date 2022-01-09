@@ -31,7 +31,9 @@ public class LoginGenerator implements IGenerator<String> {
         final String second = bundle.random();
         final boolean revert = current().nextBoolean();
 
-        final String separator = current().nextBoolean() ? "_" : "";
+        final String separator = current().nextBoolean()
+                ? "_"
+                : "";
         return (revert)
                 ? second + separator + first
                 : first + separator + second;

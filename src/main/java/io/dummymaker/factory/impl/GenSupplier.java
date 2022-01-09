@@ -159,7 +159,8 @@ public class GenSupplier implements IGenSupplier {
         return setPrimitiveClassifiers(scannedClasses);
     }
 
-    protected static Map<Class, List<Class<? extends IGenerator>>> setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
+    protected static Map<Class, List<Class<? extends IGenerator>>>
+            setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
         classifiers.put(boolean.class, classifiers.get(Boolean.class));
         classifiers.put(byte.class, classifiers.get(Byte.class));
         classifiers.put(short.class, classifiers.get(Short.class));

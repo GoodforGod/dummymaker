@@ -62,7 +62,6 @@ public class ArrayComplexGenerator extends CollectionComplexGenerator {
                     final IGenStorage storage,
                     final int depth,
                     final int maxDepth) {
-
         // Firstly try to generate initial object, so we won't allocate list if not
         // necessary
         final Object initial = generateValue(valueGenerator, valueClass, storage, depth, maxDepth);
