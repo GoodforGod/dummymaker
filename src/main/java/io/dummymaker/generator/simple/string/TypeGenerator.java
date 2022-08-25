@@ -19,8 +19,8 @@ public class TypeGenerator implements IGenerator<String> {
 
     private final Pattern pattern = Pattern.compile("adjective|intense|difficult|level|lvl", CASE_INSENSITIVE);
 
-    private static final List<String> types = Arrays.asList("terrible", "bad", "poor", "limited",
-            "neutral", "average", "decent", "fine", "superior");
+    private static final List<String> types = Arrays.asList("TERRIBLE", "BAD", "POOR", "LIMITED",
+            "NEUTRAL", "AVERAGE", "DECENT", "FINE", "SUPERIOR");
 
     @SuppressWarnings("ConstantConditions")
     @Override

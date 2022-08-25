@@ -37,6 +37,6 @@ public class NameGenerator implements IGenerator<String> {
 
     @Override
     public int order() {
-        return -10;
+        return -60;
     }
 }

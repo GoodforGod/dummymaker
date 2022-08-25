@@ -36,11 +36,11 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains:annotations:22.0.0"
-    implementation "org.slf4j:slf4j-api:1.7.32"
+    implementation "org.jetbrains:annotations:23.0.0"
+    implementation "org.slf4j:slf4j-api:1.7.36"
     implementation "javax.inject:javax.inject:1"
 
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.10"
+    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.11"
     testImplementation "junit:junit:4.13.2"
 }
 
