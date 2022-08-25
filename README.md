@@ -1,4 +1,4 @@
-# DummyMaker  :hotsprings:
+# DummyMaker :hotsprings:
 
 [![GitHub Action](https://github.com/goodforgod/dummymaker/workflows/Java%20CI/badge.svg)](https://github.com/GoodforGod/dummymaker/actions?query=workflow%3A%22Java+CI%22)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=alert_status)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
@@ -18,7 +18,7 @@ Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 **Gradle**
 ```groovy
 dependencies {
-    implementation 'com.github.goodforgod:dummymaker:3.1.1'
+    implementation "com.github.goodforgod:dummymaker:3.2.0"
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
     <groupId>com.github.goodforgod</groupId>
     <artifactId>dummymaker</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
 </dependency>
 ```
 
