@@ -19,7 +19,7 @@ public class StringGenerator implements IGenerator<String> {
 
     @Override
     public @NotNull String generate() {
-        final String s = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+        final String s = UUID.randomUUID().toString() + UUID.randomUUID();
         return s.replace("-", "");
     }
 

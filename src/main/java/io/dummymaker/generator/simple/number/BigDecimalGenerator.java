@@ -17,7 +17,7 @@ public class BigDecimalGenerator implements IGenerator<BigDecimal> {
 
     @Override
     public @NotNull BigDecimal generate() {
-        final BigDecimal decimal = BigDecimal.valueOf(CollectionUtils.random(Long.MIN_VALUE, Long.MAX_VALUE));
+        final BigDecimal decimal = BigDecimal.valueOf(CollectionUtils.random(0, Long.MAX_VALUE));
         return decimal.add(BigDecimal.valueOf(current().nextDouble(0.0001, 0.9999)));
     }
 }
