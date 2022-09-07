@@ -15,7 +15,7 @@ public class MerchantGenerator implements IGenerator<String> {
 
     private static final IBundle BUNDLE = new MerchantBundle();
 
-    private final Pattern pattern = Pattern.compile("frequency", CASE_INSENSITIVE);
+    private final Pattern pattern = Pattern.compile("merchant|broker|dealer|seller|retailer|trader|shipper|vendor", CASE_INSENSITIVE);
 
     @Override
     public String generate() {
