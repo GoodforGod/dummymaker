@@ -62,16 +62,28 @@ public class TimeComplexGenerator implements IComplexGenerator {
             } catch (Exception e) {
                 return castObject(dateTime, fieldClass);
             }
+        } else if (fieldClass.isAssignableFrom(MonthDay.class)) {
+            return castObject(genTime(storage, MonthDayGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(Month.class)) {
+            return castObject(genTime(storage, MonthGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(YearMonth.class)) {
+            return castObject(genTime(storage, YearMonthGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(Year.class)) {
+            return castObject(genTime(storage, YearGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(InstantGenerator.class)) {
+            return castObject(genTime(storage, InstantGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(ZonedDateTime.class)) {
+            return castObject(genTime(storage, ZonedDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(OffsetDateTime.class)) {
+            return castObject(genTime(storage, OffsetDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
+        } else if (fieldClass.isAssignableFrom(OffsetTime.class)) {
+            return castObject(genTime(storage, OffsetTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDateTime.class)) {
             return castObject(genTime(storage, LocalDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
             return castObject(genTime(storage, LocalDateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
             return castObject(genTime(storage, LocalTimeGenerator.class, minUnix, maxUnix), fieldClass);
-        } else if (fieldClass.isAssignableFrom(OffsetDateTime.class)) {
-            return castObject(genTime(storage, OffsetDateTimeGenerator.class, minUnix, maxUnix), fieldClass);
-        } else if (fieldClass.isAssignableFrom(OffsetTime.class)) {
-            return castObject(genTime(storage, OffsetTimeGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Date.class)) {
             return castObject(genTime(storage, DateGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
@@ -81,6 +93,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
         } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
             return castObject(genTime(storage, DateSqlGenerator.class, minUnix, maxUnix), fieldClass);
         }
+
         return null;
     }
 
