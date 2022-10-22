@@ -11,6 +11,7 @@ import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.generator.simple.UuidGenerator;
 import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.model.DummyTime.Patterns;
@@ -82,10 +83,10 @@ public class GeneratorPatternValidTest {
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
+                { new MccGenerator(), Integer.class, compile("[0-9]+") },
                 { new CategoryGenerator(), String.class, compile("[0-9a-zA-Z &]+") },
                 { new CurrencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
                 { new FrequencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
-                { new MerchantGenerator(), String.class, compile("[0-9a-zA-Z &\\-:]+") },
                 { new DocumentGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
                 { new StringGenerator(), String.class, compile("[0-9a-zA-Z]+") },

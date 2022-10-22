@@ -321,8 +321,6 @@ public class MccBundle extends BasicBundle {
                 "9751",
                 "9752",
                 "9754",
-                "9950",
-                "0763",
-                "0780");
+                "9950");
     }
 }
