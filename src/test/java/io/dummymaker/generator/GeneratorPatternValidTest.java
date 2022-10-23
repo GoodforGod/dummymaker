@@ -103,6 +103,7 @@ public class GeneratorPatternValidTest {
                 { new YearGenerator(), Year.class, compile("[0-9]+") },
                 { new MonthDayGenerator(), MonthDay.class, compile("--[0-9]+-[0-9]+") },
                 { new MonthGenerator(), Month.class, compile("[A-Z]+") },
+                { new InstantGenerator(), Instant.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
                 { new ZonedDateTimeGenerator(), ZonedDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
                 { new OffsetDateTimeGenerator(), OffsetDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
                 { new LocalDateTimeGenerator(), LocalDateTime.class, Patterns.LOCAL_DATETIME.getToStringPattern() },
