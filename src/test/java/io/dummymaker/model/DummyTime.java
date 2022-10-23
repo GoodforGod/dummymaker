@@ -31,7 +31,7 @@ public class DummyTime {
                 compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?")),
         OFFSET_TIME(compile(ISO_OFFSET_TIME_PATTERN), compile("\\d{1,2}:\\d{1,2}(:\\d{1,2})?(\\.\\d{1,10})?[+-]\\d\\d:\\d\\d")),
         OFFSET_DATETIME(compile(ISO_OFFSET_DATE_TIME_PATTERN),
-                compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?[+-]\\d\\d:\\d\\d")),
+                compile("\\d{4}-\\d{1,2}-\\d{1,2}[A-Z]\\d{1,2}:\\d{1,2}(:\\d{1,2}(\\.\\d+)?)?(([+-][0-9]{2}:[0-9]{2})|Z)")),
         DATE(compile(ISO_DATE_TIME_PATTERN),
                 compile("[A-Za-z]{3} [A-Za-z]{3} \\d{2} \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3,5} \\d{4}")),
         TIMESTAMP(compile(ISO_DATE_TIME_PATTERN), compile("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}(\\.\\d{1,10})?")),

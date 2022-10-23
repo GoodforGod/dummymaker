@@ -11,6 +11,7 @@ import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.generator.simple.UuidGenerator;
 import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.model.DummyTime.Patterns;
@@ -18,9 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import org.junit.Test;
@@ -84,10 +83,10 @@ public class GeneratorPatternValidTest {
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
+                { new MccGenerator(), Integer.class, compile("[0-9]+") },
                 { new CategoryGenerator(), String.class, compile("[0-9a-zA-Z &]+") },
                 { new CurrencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
                 { new FrequencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
-                { new MerchantGenerator(), String.class, compile("[0-9a-zA-Z &-]+") },
                 { new DocumentGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
                 { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
                 { new StringGenerator(), String.class, compile("[0-9a-zA-Z]+") },
@@ -100,6 +99,13 @@ public class GeneratorPatternValidTest {
                 { new ListComplexGenerator(), ArrayList.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
                 { new SetComplexGenerator(), HashSet.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
                 { new MapComplexGenerator(), HashMap.class, compile("\\{(" + uuidPattern + "=" + uuidPattern + "(, )?)+}") },
+                { new YearMonthGenerator(), YearMonth.class, compile("[0-9]+-[0-9]+") },
+                { new YearGenerator(), Year.class, compile("[0-9]+") },
+                { new MonthDayGenerator(), MonthDay.class, compile("--[0-9]+-[0-9]+") },
+                { new MonthGenerator(), Month.class, compile("[A-Z]+") },
+                { new InstantGenerator(), Instant.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
+                { new ZonedDateTimeGenerator(), ZonedDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
+                { new OffsetDateTimeGenerator(), OffsetDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
                 { new LocalDateTimeGenerator(), LocalDateTime.class, Patterns.LOCAL_DATETIME.getToStringPattern() },
                 { new LocalDateGenerator(), LocalDate.class, Patterns.LOCAL_DATE.getToStringPattern() },
                 { new LocalTimeGenerator(), LocalTime.class, Patterns.LOCAL_TIME.getToStringPattern() },
