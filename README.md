@@ -17,9 +17,7 @@ Documentation for **versions 1.X.X** in [this document](/README-VERSION-1.X.md).
 ## Dependency :rocket:
 **Gradle**
 ```groovy
-dependencies {
-    implementation "com.github.goodforgod:dummymaker:3.3.0"
-}
+implementation "com.github.goodforgod:dummymaker:3.3.0"
 ```
 
 **Maven**
