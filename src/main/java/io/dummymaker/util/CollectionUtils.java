@@ -121,7 +121,7 @@ public class CollectionUtils {
      * @return random from min (included) to max (excluded)
      */
     public static int random(int from, int to) {
-        return (int) generateRandom(from, ((long) to) + 1);
+        return (int) generateRandom(from, to);
     }
 
     /**
@@ -130,7 +130,7 @@ public class CollectionUtils {
      * @return random from min (included) to max (excluded)
      */
     public static long random(long from, long to) {
-        return generateRandom(from, to + 1);
+        return generateRandom(from, to);
     }
 
     /**

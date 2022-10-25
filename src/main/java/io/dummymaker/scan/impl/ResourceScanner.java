@@ -35,7 +35,8 @@ public class ResourceScanner implements IScanner<String, String> {
             return Collections.emptyList();
 
         final String path = PackageUtils.toRelativePath(packageOrPath);
-        return getSystemResources(packageOrPath).stream()
+        final List<URL> systemResources = getSystemResources(packageOrPath);
+        return systemResources.stream()
                 .map(r -> r.toString().startsWith("jar")
                         ? loadFromJar(r)
                         : loadFromDirectory(new File(r.getPath()), path))

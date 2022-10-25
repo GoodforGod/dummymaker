@@ -6,6 +6,7 @@ import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -37,25 +38,30 @@ public class GenRuledScanner extends GenAutoScanner {
         final Optional<GenRule> targeted = (rules == null)
                 ? Optional.empty()
                 : rules.targeted(target);
-        final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
 
+        final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
         final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);
-        if (!targeted.isPresent())
+        if (!targeted.isPresent()) {
             return scanned;
+        }
 
         final Map<Field, GenContainer> containers = new LinkedHashMap<>();
-        targeted.ifPresent(r -> getValidFields(target).stream()
-                .filter(f -> !isIgnored(f))
-                .forEach(f -> {
-                    final GenContainer container = r.getDesiredExample(f)
-                            .map(g -> GenContainer.asExample(f, g, isComplex(f)))
-                            .orElseGet(() -> r.getDesired(f)
-                                    .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
-                                    .orElse(scanned.get(f)));
+        targeted.ifPresent(r -> {
+            final List<Field> validFields = getValidFields(target);
+            validFields.stream()
+                    .filter(f -> !isIgnored(f))
+                    .forEach(f -> {
+                        final GenContainer container = r.getDesiredExample(f)
+                                .map(g -> GenContainer.asExample(f, g, isComplex(f)))
+                                .orElseGet(() -> r.getDesired(f)
+                                        .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
+                                        .orElse(scanned.get(f)));
 
-                    if (container != null && !r.isIgnored(f))
-                        containers.put(f, container);
-                }));
+                        if (container != null && !r.isIgnored(f)) {
+                            containers.put(f, container);
+                        }
+                    });
+        });
 
         return containers;
     }

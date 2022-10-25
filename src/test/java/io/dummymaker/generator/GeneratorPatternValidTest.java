@@ -79,6 +79,7 @@ public class GeneratorPatternValidTest {
                 { new UrlGenerator(), String.class, compile("https://[a-zA-Z0-9\\-]+\\.[a-zA-Z]+(/[a-zA-Z]+)+") },
                 { new FormatGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new GenderGenerator(), String.class, compile("male|female") },
+                { new FullnameGenerator(), String.class, compile("[a-zA-Z ]+") },
                 { new NameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },

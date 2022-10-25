@@ -22,7 +22,7 @@ public class FullnameGenerator implements IGenerator<String> {
 
     @Override
     public @NotNull String generate() {
-        return nameGenerator + " " + middleNameGenerator + " " + surnameGenerator;
+        return nameGenerator.generate() + " " + middleNameGenerator.generate() + " " + surnameGenerator.generate();
     }
 
     @Override
