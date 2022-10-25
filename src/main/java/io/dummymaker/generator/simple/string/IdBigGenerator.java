@@ -14,6 +14,6 @@ public class IdBigGenerator implements IGenerator<String> {
 
     @Override
     public @NotNull String generate() {
-        return UUID.randomUUID().toString() + "-" + UUID.randomUUID().toString();
+        return UUID.randomUUID() + "-" + UUID.randomUUID();
     }
 }
