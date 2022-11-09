@@ -27,12 +27,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Produce data object objects and fill their fields with data Successor of initial PopulateFactory
+ * Produce Java Classes and fill their fields with data
  *
  * @author GoodforGod
  * @see IGenerator
@@ -42,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
  * @see IGenFactory
  * @since 21.07.2019
  */
-@Singleton
 public class GenFactory implements IGenFactory {
 
     private final GenRules rules;
