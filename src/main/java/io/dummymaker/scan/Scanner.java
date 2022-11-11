@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * List based scanner contract
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 25.07.2019
  */
-public interface IScanner<V, T> {
+public interface Scanner<V, T> {
 
     /**
      * Simple scanner contract

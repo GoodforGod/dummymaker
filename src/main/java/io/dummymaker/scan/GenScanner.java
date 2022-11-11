@@ -1,5 +1,6 @@
 package io.dummymaker.scan;
 
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.GenContainer;
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -8,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scanners used by populate factory primarily
  *
- * @author GoodforGod
- * @see io.dummymaker.factory.impl.GenFactory
+ * @author Anton Kurako (GoodforGod)
+ * @see MainGenFactory
  * @see GenContainer
  * @since 10.03.2018
  */
-public interface IGenScanner extends IMapScanner<Field, GenContainer, Class> {
+public interface GenScanner extends MapScanner<Field, GenContainer, Class> {
 
     /**
      * Scan for annotated target fields

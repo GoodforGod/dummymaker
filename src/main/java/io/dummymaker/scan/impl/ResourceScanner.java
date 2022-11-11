@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.IScanner;
+import io.dummymaker.scan.Scanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
 import io.dummymaker.util.StringUtils;
@@ -18,10 +18,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scan for resources at runtime by package
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 25.07.2019
  */
-public class ResourceScanner implements IScanner<String, String> {
+public class ResourceScanner implements Scanner<String, String> {
 
     /**
      * Scans for all resources under specified package and its subdirectories

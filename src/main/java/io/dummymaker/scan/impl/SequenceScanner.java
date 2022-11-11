@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scanner to filter fields for enumerate annotation fields
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenSequence
- * @see AnnotationScanner
+ * @see MainAnnotationScanner
  * @since 07.06.2017
  */
 public class SequenceScanner extends UniqueScanner {

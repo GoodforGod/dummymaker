@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.factory.IGenSupplier;
+import io.dummymaker.factory.GenSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scanner that sets gen rules where needed
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenAutoScanner
  * @see GenRules
  * @since 18.08.2019
@@ -23,7 +23,7 @@ public class GenRuledScanner extends GenAutoScanner {
 
     private final GenRules rules;
 
-    public GenRuledScanner(IGenSupplier supplier, GenRules rules) {
+    public GenRuledScanner(GenSupplier supplier, GenRules rules) {
         super(supplier);
         this.rules = rules;
     }

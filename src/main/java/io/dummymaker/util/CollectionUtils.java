@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Basic util methods for collections
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 08.03.2018
  */
-public class CollectionUtils {
+public final class CollectionUtils {
 
     private CollectionUtils() {}
 
@@ -59,10 +59,6 @@ public class CollectionUtils {
         return Math.abs(shift % size);
     }
 
-    public static int random() {
-        return ThreadLocalRandom.current().nextInt();
-    }
-
     /**
      * @param array to get element
      * @param <T>   type of element
@@ -71,7 +67,7 @@ public class CollectionUtils {
     public static <T> T random(@NotNull T[] array) {
         return (array.length == 0)
                 ? null
-                : array[random(array.length)];
+                : array[RandomUtils.random(array.length)];
     }
 
     /**
@@ -87,7 +83,7 @@ public class CollectionUtils {
         if (collection.isEmpty())
             return null;
 
-        final int random = random(collection.size());
+        final int random = RandomUtils.random(collection.size());
         if (collection instanceof List) {
             return ((List<T>) collection).get(random);
         } else {
@@ -97,57 +93,5 @@ public class CollectionUtils {
 
             return iterator.next();
         }
-    }
-
-    /**
-     * @param max to get (excluded)
-     * @return random from 0 to max (excluded)
-     */
-    public static int random(int max) {
-        return (int) generateRandom(0, max);
-    }
-
-    /**
-     * @param max to get (excluded)
-     * @return random from 0 to max (excluded)
-     */
-    public static long random(long max) {
-        return generateRandom(0, max);
-    }
-
-    /**
-     * @param from to get (inclusive)
-     * @param to   to get (inclusive)
-     * @return random from min (included) to max (excluded)
-     */
-    public static int random(int from, int to) {
-        return (int) generateRandom(from, to);
-    }
-
-    /**
-     * @param from to get (inclusive)
-     * @param to   to get (inclusive)
-     * @return random from min (included) to max (excluded)
-     */
-    public static long random(long from, long to) {
-        return generateRandom(from, to);
-    }
-
-    /**
-     * @param min to get (inclusive)
-     * @param max to get (exclusive)
-     * @return random from min (included) to max (excluded)
-     */
-    private static long generateRandom(long min, long max) {
-        final long usedMin = (min < 1)
-                ? 0
-                : min;
-        final long usedMax = (max < 1)
-                ? 1
-                : max;
-
-        return (usedMin >= usedMax)
-                ? usedMin
-                : ThreadLocalRandom.current().nextLong(usedMin, usedMax);
     }
 }

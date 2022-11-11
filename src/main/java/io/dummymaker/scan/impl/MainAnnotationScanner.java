@@ -1,6 +1,5 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.IAnnotationScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -15,11 +14,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Scan field for all annotations Core scanner implementation
  *
- * @author GoodforGod
- * @see IAnnotationScanner
+ * @author Anton Kurako (GoodforGod)
+ * @see io.dummymaker.scan.AnnotationScanner
  * @since 30.05.2017
  */
-public class AnnotationScanner extends BasicScanner implements IAnnotationScanner {
+public class MainAnnotationScanner extends AbstractScanner implements io.dummymaker.scan.AnnotationScanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

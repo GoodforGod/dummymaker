@@ -1,13 +1,15 @@
 package io.dummymaker.writer;
 
+import io.dummymaker.export.Exporter;
+
 /**
  * Writer interface used by exporters to write values as files
  *
- * @author GoodforGod
- * @see io.dummymaker.export.IExporter
+ * @author Anton Kurako (GoodforGod)
+ * @see Exporter
  * @since 31.05.2017
  */
-public interface IWriter {
+public interface Writer {
 
     /**
      * Writes string and add newline symbol to the end

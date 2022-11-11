@@ -1,7 +1,7 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.UnixTimeGenerator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Utils for auto gen mapping
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 26.04.2018
  */
-public class GenUtils {
+public final class GenUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
@@ -34,8 +34,8 @@ public class GenUtils {
 
     public static boolean isGenerator(Type type) {
         try {
-            return ((ParameterizedType) type).getRawType().equals(IGenerator.class)
-                    || ((ParameterizedType) type).getRawType().equals(ITimeGenerator.class);
+            return ((ParameterizedType) type).getRawType().equals(Generator.class)
+                    || ((ParameterizedType) type).getRawType().equals(UnixTimeGenerator.class);
         } catch (Exception e) {
             return false;
         }

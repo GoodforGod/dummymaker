@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.IAnnotationScanner;
+import io.dummymaker.scan.AnnotationScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * Scan for field and its unique annotations (without duplicates) And return fields in correct order
  * Core scanner implementation
  *
- * @author GoodforGod
- * @see IAnnotationScanner
+ * @author Anton Kurako (GoodforGod)
  * @see AnnotationScanner
+ * @see MainAnnotationScanner
  * @since 08.03.2018
  */
-public class UniqueScanner extends AnnotationScanner {
+public class UniqueScanner extends MainAnnotationScanner {
 
     @Override
     public @NotNull Map<Field, List<Annotation>> scan(final Class target) {

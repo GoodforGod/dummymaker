@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scanners used by populate factory primarily
  *
- * @author GoodforGod
- * @see IGenScanner
+ * @author Anton Kurako (GoodforGod)
+ * @see GenScanner
  * @since 18.08.2019
  */
-public interface IGenAutoScanner extends IGenScanner {
+public interface GenAutoScanner extends GenScanner {
 
     /**
      * Same as default scan but also scan for suitable gen auto generators

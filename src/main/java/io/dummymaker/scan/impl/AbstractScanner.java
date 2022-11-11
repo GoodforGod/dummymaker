@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Basic scanner utility class
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 17.07.2019
  */
-abstract class BasicScanner {
+abstract class AbstractScanner {
 
     /**
      * Retrieve declared annotations from parent one and build set of them all

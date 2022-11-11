@@ -1,6 +1,6 @@
 package io.dummymaker.util;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Utils for object casting
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 06.03.2018
  */
-public class CastUtils {
+public final class CastUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
 
@@ -126,11 +126,11 @@ public class CastUtils {
      * @param <T>       generic type
      * @return generated and casted object
      */
-    public static <T> T generateObject(final IGenerator generator, final Class<T> fieldType) {
+    public static <T> T generateObject(final Generator generator, final Class<T> fieldType) {
         if (generator == null)
             return null;
 
-        final Object object = generator.generate();
+        final Object object = generator.get();
         return castObject(object, fieldType);
     }
 

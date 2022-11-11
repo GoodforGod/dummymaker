@@ -1,10 +1,9 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.special.GenAuto;
-import io.dummymaker.factory.IGenSupplier;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.factory.GenSupplier;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.model.GenContainer;
-import io.dummymaker.scan.IGenAutoScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -14,18 +13,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Implementation of scanner that suits gen auto annotations where needed
  *
- * @author GoodforGod
- * @see GenScanner
+ * @author Anton Kurako (GoodforGod)
+ * @see MainGenScanner
  * @see GenAuto
  * @since 18.08.2019
  */
-public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
+public class GenAutoScanner extends MainGenScanner implements io.dummymaker.scan.GenAutoScanner {
 
     private static final Predicate<Annotation> IS_AUTO = a -> GenAuto.class.equals(a.annotationType());
 
-    private final IGenSupplier supplier;
+    private final GenSupplier supplier;
 
-    public GenAutoScanner(IGenSupplier supplier) {
+    public GenAutoScanner(GenSupplier supplier) {
         this.supplier = supplier;
     }
 
@@ -85,7 +84,7 @@ public class GenAutoScanner extends GenScanner implements IGenAutoScanner {
      */
     private GenContainer getAutoContainer(Field field) {
         final boolean isComplex = isComplex(field);
-        final Class<? extends IGenerator> suitable = supplier.getSuitable(field);
+        final Class<? extends Generator> suitable = supplier.getSuitable(field);
         return GenContainer.asAuto(field, suitable, isComplex);
     }
 }

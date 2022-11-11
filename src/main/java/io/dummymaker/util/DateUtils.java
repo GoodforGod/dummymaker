@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Contains basic date util methods and functions
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 25.02.2018
  */
-public class DateUtils {
+public final class DateUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 

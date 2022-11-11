@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scanner for special export annotations
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 27.04.2018
  */
-public interface IExportScanner extends IScanner<FieldContainer, Class<?>> {
+public interface ExportScanner extends Scanner<FieldContainer, Class<?>> {
 
     @NotNull
     Collection<FieldContainer> scan(Class<?> target);

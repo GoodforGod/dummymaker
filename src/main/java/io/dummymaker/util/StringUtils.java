@@ -3,10 +3,10 @@ package io.dummymaker.util;
 /**
  * Contains basic string util methods
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 25.02.2018
  */
-public class StringUtils {
+public final class StringUtils {
 
     private StringUtils() {}
 

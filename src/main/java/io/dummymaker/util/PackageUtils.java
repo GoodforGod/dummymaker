@@ -3,10 +3,10 @@ package io.dummymaker.util;
 /**
  * Utility methods to help scan for classes at runtime
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 24.07.2019
  */
-public class PackageUtils {
+public final class PackageUtils {
 
     private PackageUtils() {}
 

@@ -2,7 +2,7 @@ package io.dummymaker.writer.impl;
 
 import io.dummymaker.error.ExportException;
 import io.dummymaker.util.StringUtils;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,11 +10,11 @@ import java.nio.file.Files;
 /**
  * Buffered writer implementation
  *
- * @author GoodforGod
- * @see IWriter
+ * @author Anton Kurako (GoodforGod)
+ * @see Writer
  * @since 31.05.2017
  */
-public class FileWriter implements IWriter {
+public class FileWriter implements Writer {
 
     public static final String DEFAULT_PATH = "";
 
@@ -53,7 +53,7 @@ public class FileWriter implements IWriter {
         if (StringUtils.isEmpty(value))
             return true;
 
-        try (Writer writer = getWriter()) {
+        try (java.io.Writer writer = getWriter()) {
             writer.append(value);
             return true;
         } catch (IOException e) {
@@ -61,7 +61,7 @@ public class FileWriter implements IWriter {
         }
     }
 
-    private Writer getWriter() throws IOException {
+    private java.io.Writer getWriter() throws IOException {
         return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.path, true), StandardCharsets.UTF_8));
     }
 }
