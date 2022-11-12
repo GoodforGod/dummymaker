@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * ! NO DESCRIPTION !
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 06.03.2019
  */
 @PrimeGen(SurnameGenerator.class)

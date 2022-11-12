@@ -6,8 +6,8 @@ import static io.dummymaker.model.DummyTime.Patterns.OFFSET_TIME;
 import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
 import static org.junit.Assert.assertTrue;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
 
@@ -50,10 +50,10 @@ public class JsonValidator implements IValidator {
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.exportName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName());
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.format(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName());
 
         assertTrue(dummies[0].matches("\\["
                 + "\\{\"" + expectedGroupField + "\":\"[0-9]+\","

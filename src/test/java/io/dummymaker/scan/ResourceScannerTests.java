@@ -1,7 +1,7 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.scan.impl.ResourceScanner;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import io.dummymaker.writer.impl.FileWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,7 +37,7 @@ public class ResourceScannerTests extends Assert {
         assertFalse(packages.isEmpty());
 
         assertTrue(packages.contains("io/dummymaker/writer/impl"));
-        assertTrue(packages.contains("io/dummymaker/writer/" + IWriter.class.getSimpleName() + ".class"));
+        assertTrue(packages.contains("io/dummymaker/writer/" + Writer.class.getSimpleName() + ".class"));
         assertTrue(packages.contains("io/dummymaker/writer/impl/" + FileWriter.class.getSimpleName() + ".class"));
     }
 
@@ -54,7 +54,7 @@ public class ResourceScannerTests extends Assert {
         final String classpath = "/build/classes/java/main/";
         assertTrue(packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/impl")));
         assertTrue(
-                packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/" + IWriter.class.getSimpleName() + ".class")));
+                packages.stream().anyMatch(s -> s.contains("io/dummymaker/writer/" + Writer.class.getSimpleName() + ".class")));
         assertTrue(packages.stream()
                 .anyMatch(s -> s.contains("io/dummymaker/writer/impl/" + FileWriter.class.getSimpleName() + ".class")));
     }

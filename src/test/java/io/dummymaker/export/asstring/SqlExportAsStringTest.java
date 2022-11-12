@@ -1,11 +1,11 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.validators.SqlValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyArray;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class SqlExportAsStringTest extends StringExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final SqlValidator validation = new SqlValidator();
 
     public SqlExportAsStringTest() {
@@ -28,10 +28,10 @@ public class SqlExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListOfDummiesInSqlWithNamingStrategy() {
-        final ICase strategy = Cases.SNAKE_CASE.value();
+        final Case strategy = Cases.SNAKE_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new SqlExporter().withCase(strategy);
+        final Exporter exporter = new SqlExporter().withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
@@ -44,10 +44,10 @@ public class SqlExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportDummiesWithArrays() {
-        final ICase strategy = Cases.SNAKE_CASE.value();
+        final Case strategy = Cases.SNAKE_CASE.value();
 
         final List<DummyArray> dummies = factory.build(DummyArray.class, 2);
-        final IExporter exporter = new SqlExporter()
+        final Exporter exporter = new SqlExporter()
                 .withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);

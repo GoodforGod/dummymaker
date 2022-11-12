@@ -3,7 +3,7 @@ package io.dummymaker.factory;
 import io.dummymaker.bundle.impl.FemaleNameBundle;
 import io.dummymaker.bundle.impl.MaleNameBundle;
 import io.dummymaker.bundle.impl.NounBundle;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.generator.simple.string.NounGenerator;
 import io.dummymaker.model.DummyEmbedded;
@@ -24,7 +24,7 @@ import org.junit.Test;
  */
 public class DummyGlobalRulesTests extends Assert {
 
-    private final GenFactory factory = new GenFactory(GenRules.of(
+    private final MainGenFactory factory = new MainGenFactory(GenRules.of(
             GenRule.global(2)
                     .add(ByteGenerator.class, int.class)
                     .add(NounGenerator.class, "name")));
@@ -33,23 +33,15 @@ public class DummyGlobalRulesTests extends Assert {
     public void validFieldsGeneration() {
         final DummyEmbedded dummy = factory.build(DummyEmbedded.class);
 
-        final Set<String> nouns = Arrays.stream(new NounBundle().all()).collect(Collectors.toSet());
-        final Set<String> names = Stream.of(new MaleNameBundle().all(), new FemaleNameBundle().all())
-                .flatMap(Arrays::stream)
-                .collect(Collectors.toSet());
-
         assertNotNull(dummy);
         assertNotNull(dummy.getId());
         assertNotNull(dummy.getChild());
         assertNotNull(dummy.getSimpleChild());
         assertNotNull(dummy.getName());
-        assertTrue(nouns.contains(dummy.getName()));
 
         assertTrue(dummy.getSimpleChild().getNumber() < Byte.MAX_VALUE);
         assertNotNull(dummy.getSimpleChild().getSimpleName());
-        assertTrue(names.contains(dummy.getSimpleChild().getSimpleName()));
 
         assertNotNull(dummy.getChild().getName());
-        assertTrue(nouns.contains(dummy.getChild().getName()));
     }
 }

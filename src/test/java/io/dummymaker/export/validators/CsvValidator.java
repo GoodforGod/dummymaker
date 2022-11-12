@@ -4,8 +4,8 @@ import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
@@ -80,7 +80,7 @@ public class CsvValidator implements IValidator {
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
         String[] valueArray1 = dummies[0].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
         String[] valueArray2 = dummies[1].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
 
@@ -97,10 +97,10 @@ public class CsvValidator implements IValidator {
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
-    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.exportName());
+    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, Case strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName());
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.format(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName());
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));

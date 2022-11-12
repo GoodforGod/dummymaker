@@ -45,7 +45,7 @@ public class CaseParameterizedTest extends Assert {
 
     @Test
     public void checkCase() {
-        final String result = caseUsed.value().format(initial);
+        final String result = caseUsed.value().apply(initial);
         assertEquals(expected, result);
     }
 }

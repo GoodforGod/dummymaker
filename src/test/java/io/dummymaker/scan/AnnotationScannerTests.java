@@ -4,7 +4,7 @@ import static io.dummymaker.model.Dummy.DummyFields.*;
 import static org.junit.Assert.*;
 
 import io.dummymaker.model.Dummy;
-import io.dummymaker.scan.impl.AnnotationScanner;
+import io.dummymaker.scan.impl.MainAnnotationScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -21,7 +21,7 @@ public class AnnotationScannerTests {
 
     @Test
     public void verifyThatFieldsScanned() throws NoSuchFieldException {
-        final IAnnotationScanner scanner = new AnnotationScanner();
+        final AnnotationScanner scanner = new MainAnnotationScanner();
         final Map<Field, List<Annotation>> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map

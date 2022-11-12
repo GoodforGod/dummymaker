@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.scan.impl.ExportScanner;
+import io.dummymaker.scan.impl.MainExportScanner;
 import java.util.Collection;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class ExportScannerTests {
 
     @Test
     public void verifyThatExportFieldsContains() {
-        final IExportScanner scanner = new ExportScanner();
+        final ExportScanner scanner = new MainExportScanner();
         final Collection<FieldContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map

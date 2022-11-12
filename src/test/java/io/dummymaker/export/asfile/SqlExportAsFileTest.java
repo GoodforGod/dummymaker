@@ -1,12 +1,12 @@
 package io.dummymaker.export.asfile;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.validators.SqlValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyTime;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import org.junit.Test;
  */
 public class SqlExportAsFileTest extends FileExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final SqlValidator validation = new SqlValidator();
     private final Format format = Format.SQL;
 
@@ -32,11 +32,11 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
     // @Test
     public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final ICase strategy = Cases.SNAKE_CASE.value();
+        final Case strategy = Cases.SNAKE_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new SqlExporter().withCase(strategy);
+        final Exporter exporter = new SqlExporter().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
@@ -53,14 +53,14 @@ public class SqlExportAsFileTest extends FileExportAssert {
 
     @Test
     public void exportSqlWithTimestampWithNamingStrategy() throws Exception {
-        final ICase strategy = Cases.LOW_CASE.value();
-        final GenFactory factory = new GenFactory();
+        final Case strategy = Cases.LOW_CASE.value();
+        final MainGenFactory factory = new MainGenFactory();
 
         final Map<Class<?>, String> dataTypes = new HashMap<>();
         dataTypes.put(Object.class, "TIMESTAMP");
 
         final List<DummyTime> dummies = factory.build(DummyTime.class, 2);
-        final IExporter exporter = new SqlExporter()
+        final Exporter exporter = new SqlExporter()
                 .withTypes(dataTypes)
                 .withCase(strategy);
 

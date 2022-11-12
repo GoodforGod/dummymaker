@@ -1,9 +1,9 @@
 package io.dummymaker.annotation.core;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.NullGenerator;
-import io.dummymaker.scan.IAnnotationScanner;
-import io.dummymaker.scan.IMapScanner;
+import io.dummymaker.scan.AnnotationScanner;
+import io.dummymaker.scan.MapScanner;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,10 +17,10 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation is a core one to support population factory
  *
- * @author GoodforGod
- * @see IGenerator
- * @see IMapScanner
- * @see IAnnotationScanner
+ * @author Anton Kurako (GoodforGod)
+ * @see Generator
+ * @see MapScanner
+ * @see AnnotationScanner
  * @since 28.05.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -32,5 +32,5 @@ public @interface PrimeGen {
      *
      * @return generator
      */
-    Class<? extends IGenerator> value() default NullGenerator.class;
+    Class<? extends Generator> value() default NullGenerator.class;
 }

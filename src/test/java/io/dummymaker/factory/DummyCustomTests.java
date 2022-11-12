@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyCustom;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class DummyCustomTests extends Assert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
     @Test
     public void allCustomFieldsCorrect() throws InterruptedException {

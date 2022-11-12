@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * Generates random enum values
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see EnumComplexGenerator
  * @since 01.03.2019
  */

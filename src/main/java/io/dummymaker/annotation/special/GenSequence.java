@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Generates numeric sequence from given number (default 0) to all produced/populated Dummies Works
  * only when populate/produce list of dummies, not a single dummy
  *
- * @author GoodforGod (Anton Kurako)
+ * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
 @PrimeGen(SequenceGenerator.class)

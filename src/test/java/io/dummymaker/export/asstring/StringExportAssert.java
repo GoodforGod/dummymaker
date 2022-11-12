@@ -1,9 +1,9 @@
 package io.dummymaker.export.asstring;
 
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import java.util.Collections;
@@ -19,19 +19,19 @@ import org.junit.Test;
  */
 public abstract class StringExportAssert extends Assert {
 
-    private final GenFactory factory = new GenFactory();
-    private final IExporter exporter;
+    private final MainGenFactory factory = new MainGenFactory();
+    private final Exporter exporter;
     private final IValidator validator;
 
     private final int singleSplitLength;
     private final int singleListSplit;
     private final int listSplitLength;
 
-    public StringExportAssert(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+    public StringExportAssert(Exporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
         this(exporter, validator, singleSplitLength, singleSplitLength, listSplitLength);
     }
 
-    public StringExportAssert(IExporter exporter,
+    public StringExportAssert(Exporter exporter,
                               IValidator validator,
                               int singleSplitLength,
                               int singleListSplit,

@@ -12,7 +12,7 @@ import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyCollection;
 import io.dummymaker.model.DummyNoFillFields;
 import io.dummymaker.model.GenContainer;
-import io.dummymaker.scan.impl.GenScanner;
+import io.dummymaker.scan.impl.MainGenScanner;
 import java.lang.reflect.Field;
 import java.util.Map;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class GenScannerTests {
 
     @Test
     public void verifyThatFieldsFound() {
-        final IGenScanner scanner = new GenScanner();
+        final GenScanner scanner = new MainGenScanner();
         final Map<Field, GenContainer> fields = scanner.scan(DummyCollection.class);
 
         // Check for correct fields number in map
@@ -38,7 +38,7 @@ public class GenScannerTests {
 
     @Test
     public void verifyScannedFields() throws NoSuchFieldException {
-        final IGenScanner scanner = new GenScanner();
+        final GenScanner scanner = new MainGenScanner();
         final Map<Field, GenContainer> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
@@ -79,7 +79,7 @@ public class GenScannerTests {
 
     @Test
     public void noFieldsScanned() {
-        final IGenScanner scanner = new GenScanner();
+        final GenScanner scanner = new MainGenScanner();
         final Map<Field, GenContainer> fields = scanner.scan(DummyNoFillFields.class);
 
         // Check for correct fields number in map

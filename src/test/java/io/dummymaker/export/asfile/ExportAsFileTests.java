@@ -1,13 +1,13 @@
 package io.dummymaker.export.asfile;
 
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import java.util.Arrays;
@@ -30,16 +30,16 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ExportAsFileTests extends ExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
-    private final IExporter exporter;
+    private final Exporter exporter;
     private final IValidator validator;
     private final Format format;
 
     private final int singleSplitLength;
     private final int listSplitLength;
 
-    public ExportAsFileTests(IExporter exporter,
+    public ExportAsFileTests(Exporter exporter,
                              IValidator validator,
                              Format format,
                              int singleSplitLength,

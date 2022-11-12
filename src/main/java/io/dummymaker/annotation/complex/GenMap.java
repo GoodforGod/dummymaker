@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 /**
  * Generate map with KEY and VALUE from generators
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see MapComplexGenerator
  * @since 06.03.2018
  */
@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenMap {
 
-    Class<? extends IGenerator> key() default IGenerator.class;
+    Class<? extends Generator> key() default Generator.class;
 
-    Class<? extends IGenerator> value() default IGenerator.class;
+    Class<? extends Generator> value() default Generator.class;
 
     /**
      * Minimum entities to generate

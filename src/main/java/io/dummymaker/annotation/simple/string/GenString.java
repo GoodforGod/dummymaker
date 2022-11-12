@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * "default comment"
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
 @PrimeGen(StringGenerator.class)

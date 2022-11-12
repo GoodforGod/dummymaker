@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -15,10 +15,10 @@ import org.junit.Test;
  */
 public class DummyIgnoredRulesTests extends Assert {
 
-    private final GenFactory factory = new GenFactory(GenRules.of(
+    private final MainGenFactory factory = new MainGenFactory(GenRules.of(
             GenRule.auto(Dummy.class).ignore("city")));
 
-    private final GenFactory factoryGlobal = new GenFactory(GenRules.of(
+    private final MainGenFactory factoryGlobal = new MainGenFactory(GenRules.of(
             GenRule.global(1).ignore("city")));
 
     @Test

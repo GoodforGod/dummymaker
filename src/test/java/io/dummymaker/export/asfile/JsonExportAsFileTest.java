@@ -1,12 +1,12 @@
 package io.dummymaker.export.asfile;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.validators.JsonValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.writer.impl.FileWriter;
 import java.util.List;
@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class JsonExportAsFileTest extends FileExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final JsonValidator validation = new JsonValidator();
     private final Format format = Format.JSON;
 
@@ -78,11 +78,11 @@ public class JsonExportAsFileTest extends FileExportAssert {
 
     // @Test
     public void exportListOfDummiesWithNamingStrategy() {
-        final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
+        final Case strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new JsonExporter().withCase(strategy);
+        final Exporter exporter = new JsonExporter().withCase(strategy);
 
         final boolean exportResult = exporter.export(dummy);
         assertTrue(exportResult);

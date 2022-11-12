@@ -1,8 +1,8 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.special.GenCustom;
-import io.dummymaker.factory.IGenStorage;
-import io.dummymaker.generator.IComplexGenerator;
+import io.dummymaker.factory.GenStorage;
+import io.dummymaker.generator.ComplexGenerator;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.number.FloatGenerator;
 import io.dummymaker.generator.simple.number.ShortGenerator;
@@ -41,26 +41,26 @@ public class DummyCustom {
         return queue;
     }
 
-    public class QueueGenerator implements IComplexGenerator {
+    public class QueueGenerator implements ComplexGenerator {
 
         private final FloatGenerator generator = new FloatGenerator();
 
         @Override
         public Object generate(@NotNull Class<?> parent,
                                @NotNull Field field,
-                               @NotNull IGenStorage storage,
+                               @NotNull GenStorage storage,
                                Annotation annotation,
                                int depth) {
-            return generate();
+            return get();
         }
 
         @Override
-        public Object generate() {
+        public Object get() {
             final BlockingQueue<String> queue = new ArrayBlockingQueue<>(4);
-            queue.add(String.valueOf(generator.generate()));
-            queue.add(String.valueOf(generator.generate()));
-            queue.add(String.valueOf(generator.generate()));
-            queue.add(String.valueOf(generator.generate()));
+            queue.add(String.valueOf(generator.get()));
+            queue.add(String.valueOf(generator.get()));
+            queue.add(String.valueOf(generator.get()));
+            queue.add(String.valueOf(generator.get()));
             return queue;
         }
     }

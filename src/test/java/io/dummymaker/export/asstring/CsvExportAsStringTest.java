@@ -1,11 +1,11 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.CsvValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class CsvExportAsStringTest extends StringExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final CsvValidator validation = new CsvValidator();
 
     public CsvExportAsStringTest() {
@@ -26,7 +26,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
     @Test
     public void exportSingleDummyWithStringWrapAndHeader() {
         final Dummy dummy = factory.build(Dummy.class);
-        final IExporter exporter = new CsvExporter().withHeader();
+        final Exporter exporter = new CsvExporter().withHeader();
 
         final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);
@@ -40,7 +40,7 @@ public class CsvExportAsStringTest extends StringExportAssert {
     @Test
     public void exportListDummyWithStringWrapAndHeader() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new CsvExporter().withHeader();
+        final Exporter exporter = new CsvExporter().withHeader();
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);
@@ -53,10 +53,10 @@ public class CsvExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
-        final ICase strategy = Cases.UPPER_SNAKE_CASE.value();
+        final Case strategy = Cases.UPPER_SNAKE_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new CsvExporter().withHeader().withCase(strategy);
+        final Exporter exporter = new CsvExporter().withHeader().withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);

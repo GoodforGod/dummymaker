@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenRule;
@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class DummyEmbeddedComplexAutoTests extends Assert {
 
-    private final GenFactory factory = new GenFactory(GenRules.of(GenRule.auto(Dummy.class)));
+    private final MainGenFactory factory = new MainGenFactory(GenRules.of(GenRule.auto(Dummy.class)));
 
     @Test
     public void listComplexAutoValid() {

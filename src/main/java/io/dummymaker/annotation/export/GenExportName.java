@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Allow to rename fields and class names when export To rename class you should annotate its
  * constructor
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 06.07.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)

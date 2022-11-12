@@ -2,7 +2,7 @@ package io.dummymaker.factory;
 
 import static org.junit.Assert.*;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.*;
 import io.dummymaker.model.deprecated.DummyAuto;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class GenFactoryBuildTests {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
     @Test
     public void produceLessThanZeroAmount() {

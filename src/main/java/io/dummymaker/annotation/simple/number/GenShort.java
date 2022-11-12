@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see ShortGenerator
  * @since 04.11.2018
  */

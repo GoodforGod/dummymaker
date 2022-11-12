@@ -5,8 +5,8 @@ import static io.dummymaker.model.DummyTime.*;
 import static io.dummymaker.model.DummyTime.Fields.*;
 import static org.junit.Assert.assertTrue;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
 import io.dummymaker.export.cases.DefaultCase;
 import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.DummyTimeFormatter;
@@ -58,10 +58,10 @@ public class SqlValidator implements IValidator {
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.exportName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName());
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.format(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName());
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummies[1].matches("\\t" + expectedGroupField + "\\tVARCHAR,"));
@@ -76,12 +76,12 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
-    public void isTwoDummiesArrayValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String className = strategy.format(DummyArray.class.getSimpleName());
-        final String shortSimple = strategy.format("shortSimple");
-        final String longSimple = strategy.format("longSimple");
-        final String IntegerObjDouble = strategy.format("IntegerObjDouble");
-        final String DoubleObjDouble = strategy.format("DoubleObjDouble");
+    public void isTwoDummiesArrayValidWithNamingStrategy(String[] dummies, Case strategy) {
+        final String className = strategy.apply(DummyArray.class.getSimpleName());
+        final String shortSimple = strategy.apply("shortSimple");
+        final String longSimple = strategy.apply("longSimple");
+        final String IntegerObjDouble = strategy.apply("IntegerObjDouble");
+        final String DoubleObjDouble = strategy.apply("DoubleObjDouble");
 
         assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + className + "\\("));
         assertTrue(dummies[1].matches("\\t" + shortSimple + "\\tSMALLINT\\[],"));
@@ -95,19 +95,19 @@ public class SqlValidator implements IValidator {
                 + IntegerObjDouble + ", " + DoubleObjDouble + "\\) VALUES"));
     }
 
-    public void isDummyTimeValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String timeField = strategy.format(LOCAL_TIME.getName());
-        final String dateField = strategy.format(LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
-        final String offsetTimeField = strategy.format(OFFSET_TIME.getName());
-        final String offsetDateTimeField = strategy.format(OFFSET_DATETIME.getName());
-        final String timestampField = strategy.format(TIMESTAMP.getName());
-        final String dateOldField = strategy.format(DATE.getName());
-        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
+    public void isDummyTimeValidWithNamingStrategy(String[] dummies, Case strategy) {
+        final String timeField = strategy.apply(LOCAL_TIME.getName());
+        final String dateField = strategy.apply(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.apply(LOCAL_DATETIME.getName());
+        final String offsetTimeField = strategy.apply(OFFSET_TIME.getName());
+        final String offsetDateTimeField = strategy.apply(OFFSET_DATETIME.getName());
+        final String timestampField = strategy.apply(TIMESTAMP.getName());
+        final String dateOldField = strategy.apply(DATE.getName());
+        final String dateOldCoverageField = strategy.apply(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.apply(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.apply(LOCAL_DATETIME_OBJECT.getName());
 
-        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("DummyTime") + "\\("));
+        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.apply("DummyTime") + "\\("));
         assertTrue(dummies[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummies[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummies[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -121,7 +121,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummies[11].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummies[12].matches("\\);"));
 
-        assertTrue(dummies[13].matches("INSERT INTO " + strategy.format("DummyTime")
+        assertTrue(dummies[13].matches("INSERT INTO " + strategy.apply("DummyTime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -162,24 +162,24 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isDummyTimeValid(String[] dummy) {
-        final ICase strategy = new DefaultCase();
+        final Case strategy = new DefaultCase();
 
-        final String timeField = strategy.format(LOCAL_TIME.getName());
-        final String dateField = strategy.format(LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
-        final String offsetTimeField = strategy.format(OFFSET_TIME.getName());
-        final String offsetDateTimeField = strategy.format(OFFSET_DATETIME.getName());
-        final String timestampField = strategy.format(TIMESTAMP.getName());
-        final String dateOldField = strategy.format(DATE.getName());
-        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
+        final String timeField = strategy.apply(LOCAL_TIME.getName());
+        final String dateField = strategy.apply(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.apply(LOCAL_DATETIME.getName());
+        final String offsetTimeField = strategy.apply(OFFSET_TIME.getName());
+        final String offsetDateTimeField = strategy.apply(OFFSET_DATETIME.getName());
+        final String timestampField = strategy.apply(TIMESTAMP.getName());
+        final String dateOldField = strategy.apply(DATE.getName());
+        final String dateOldCoverageField = strategy.apply(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.apply(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.apply(LOCAL_DATETIME_OBJECT.getName());
 
         final String timePattern = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";
         final String datePattern = "[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}";
         final String timestampPattern = datePattern + "T" + timePattern;
 
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummytime") + "\\("));
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.apply("dummytime") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummy[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -193,7 +193,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[11].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[12].matches("\\);"));
 
-        assertTrue(dummy[13].matches("INSERT INTO " + strategy.format("dummytime")
+        assertTrue(dummy[13].matches("INSERT INTO " + strategy.apply("dummytime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -222,20 +222,20 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isDummyUnixTimeValid(String[] dummy) {
-        final ICase strategy = new DefaultCase();
+        final Case strategy = new DefaultCase();
 
-        final String timeField = strategy.format(LOCAL_TIME.getName());
-        final String dateField = strategy.format(LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
-        final String offsetTimeField = strategy.format(OFFSET_TIME.getName());
-        final String offsetDateTimeField = strategy.format(OFFSET_DATETIME.getName());
-        final String timestampField = strategy.format(TIMESTAMP.getName());
-        final String dateOldField = strategy.format(DATE.getName());
-        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
+        final String timeField = strategy.apply(LOCAL_TIME.getName());
+        final String dateField = strategy.apply(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.apply(LOCAL_DATETIME.getName());
+        final String offsetTimeField = strategy.apply(OFFSET_TIME.getName());
+        final String offsetDateTimeField = strategy.apply(OFFSET_DATETIME.getName());
+        final String timestampField = strategy.apply(TIMESTAMP.getName());
+        final String dateOldField = strategy.apply(DATE.getName());
+        final String dateOldCoverageField = strategy.apply(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.apply(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.apply(LOCAL_DATETIME_OBJECT.getName());
 
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummyunixtime") + "\\("));
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.apply("dummyunixtime") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tBIGINT,"));
         assertTrue(dummy[2].matches("\\t" + dateField + "\\tBIGINT,"));
         assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tBIGINT,"));
@@ -249,7 +249,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[11].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[12].matches("\\);"));
 
-        assertTrue(dummy[13].matches("INSERT INTO " + strategy.format("dummyunixtime")
+        assertTrue(dummy[13].matches("INSERT INTO " + strategy.apply("dummyunixtime")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "
@@ -278,20 +278,20 @@ public class SqlValidator implements IValidator {
 
     @Override
     public void isDummyTimeFormatterValid(String[] dummy) {
-        final ICase strategy = new DefaultCase();
+        final Case strategy = new DefaultCase();
 
-        final String timeField = strategy.format(LOCAL_TIME.getName());
-        final String dateField = strategy.format(LOCAL_DATE.getName());
-        final String dateTimeField = strategy.format(LOCAL_DATETIME.getName());
-        final String offsetTimeField = strategy.format(OFFSET_TIME.getName());
-        final String offsetDateTimeField = strategy.format(OFFSET_DATETIME.getName());
-        final String timestampField = strategy.format(TIMESTAMP.getName());
-        final String dateOldField = strategy.format(DATE.getName());
-        final String dateOldCoverageField = strategy.format(DATE_COVERAGE.getName());
-        final String dateTimeStringField = strategy.format(LOCAL_DATETIME_STRING.getName());
-        final String dateTimeObjectField = strategy.format(LOCAL_DATETIME_OBJECT.getName());
+        final String timeField = strategy.apply(LOCAL_TIME.getName());
+        final String dateField = strategy.apply(LOCAL_DATE.getName());
+        final String dateTimeField = strategy.apply(LOCAL_DATETIME.getName());
+        final String offsetTimeField = strategy.apply(OFFSET_TIME.getName());
+        final String offsetDateTimeField = strategy.apply(OFFSET_DATETIME.getName());
+        final String timestampField = strategy.apply(TIMESTAMP.getName());
+        final String dateOldField = strategy.apply(DATE.getName());
+        final String dateOldCoverageField = strategy.apply(DATE_COVERAGE.getName());
+        final String dateTimeStringField = strategy.apply(LOCAL_DATETIME_STRING.getName());
+        final String dateTimeObjectField = strategy.apply(LOCAL_DATETIME_OBJECT.getName());
 
-        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.format("dummytimeformatter") + "\\("));
+        assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS " + strategy.apply("dummytimeformatter") + "\\("));
         assertTrue(dummy[1].matches("\\t" + timeField + "\\tTIME,"));
         assertTrue(dummy[2].matches("\\t" + dateField + "\\tDATE,"));
         assertTrue(dummy[3].matches("\\t" + dateTimeField + "\\tTIMESTAMP,"));
@@ -305,7 +305,7 @@ public class SqlValidator implements IValidator {
         assertTrue(dummy[11].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[12].matches("\\);"));
 
-        assertTrue(dummy[13].matches("INSERT INTO " + strategy.format("dummytimeformatter")
+        assertTrue(dummy[13].matches("INSERT INTO " + strategy.apply("dummytimeformatter")
                 + " \\("
                 + timeField + ", "
                 + dateField + ", "

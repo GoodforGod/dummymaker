@@ -22,7 +22,7 @@ public class SequenceScannerTests {
 
     @Test
     public void sequenceIsEmpty() {
-        final IAnnotationScanner scanner = new SequenceScanner();
+        final AnnotationScanner scanner = new SequenceScanner();
         final Map<Field, List<Annotation>> fields = scanner.scan(DummyArray.class);
 
         // Check for correct fields number in map
@@ -32,7 +32,7 @@ public class SequenceScannerTests {
 
     @Test
     public void sequenceIsPresent() throws NoSuchFieldException {
-        final IAnnotationScanner scanner = new SequenceScanner();
+        final AnnotationScanner scanner = new SequenceScanner();
         final Map<Field, List<Annotation>> fields = scanner.scan(DummySimple.class);
 
         assertNotNull(fields);

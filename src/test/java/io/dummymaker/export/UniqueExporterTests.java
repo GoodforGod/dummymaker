@@ -1,8 +1,8 @@
 package io.dummymaker.export;
 
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.factory.impl.GenFactory;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.model.DummyEmbedded.DummyEmbeddedIntoSimple;
 import io.dummymaker.model.GenRule;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,14 +19,14 @@ public class UniqueExporterTests extends Assert {
 
     @Test
     public void checkThatLambdaGeneratorTypeWorks() {
-        final IGenerator<Integer> generator = () -> ThreadLocalRandom.current().nextBoolean()
+        final Generator<Integer> generator = () -> ThreadLocalRandom.current().nextBoolean()
                 ? 1
                 : 2;
 
-        final GenRule rule = GenRule.of(DummyEmbeddedIntoSimple.class)
+        final GenRule rule = GenRule.manual(DummyEmbeddedIntoSimple.class)
                 .add(generator, "number");
 
-        final GenFactory factory = new GenFactory(rule);
+        final MainGenFactory factory = new MainGenFactory(rule);
         final DummyEmbeddedIntoSimple dummy = factory.build(DummyEmbeddedIntoSimple.class);
 
         final String json = new JsonExporter().convert(dummy);

@@ -7,9 +7,7 @@ import static org.junit.runners.Parameterized.Parameters;
 import io.dummymaker.generator.complex.ListComplexGenerator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
 import io.dummymaker.generator.complex.SetComplexGenerator;
-import io.dummymaker.generator.simple.BooleanGenerator;
-import io.dummymaker.generator.simple.ObjectGenerator;
-import io.dummymaker.generator.simple.UuidGenerator;
+import io.dummymaker.generator.simple.*;
 import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
@@ -17,6 +15,8 @@ import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.model.DummyTime.Patterns;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
@@ -35,11 +35,11 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class GeneratorPatternValidTest {
 
-    private IGenerator generator;
+    private Generator generator;
     private Class genClass;
     private Pattern pattern;
 
-    public GeneratorPatternValidTest(IGenerator generator, Class genClass, Pattern pattern) {
+    public GeneratorPatternValidTest(Generator generator, Class genClass, Pattern pattern) {
         this.generator = generator;
         this.genClass = genClass;
         this.pattern = pattern;
@@ -62,7 +62,7 @@ public class GeneratorPatternValidTest {
                 { new BigIntegerGenerator(), BigInteger.class, compile("-?[0-9]+") },
                 { new BigDecimalGenerator(), BigDecimal.class, compile("-?[0-9]+\\.[0-9]+") },
                 { new IdBigGenerator(), String.class, compile("[0-9a-zA-Z\\-]+") },
-                { new UnixTimeGenerator(), Long.class, compile("[0-9]+") },
+                { new io.dummymaker.generator.simple.number.UnixTimeGenerator(), Long.class, compile("[0-9]+") },
                 { new BtcAddressGenerator(), String.class, compile("[a-zA-Z0-9]{34}") },
                 { new BtcTxHashGenerator(), String.class, compile("[a-zA-Z0-9]{64}") },
                 { new CityGenerator(), String.class, compile("[a-zA-Z\\-]+") },
@@ -75,8 +75,8 @@ public class GeneratorPatternValidTest {
                 { new HexNumberGenerator(), String.class, compile("[0-9a-zA-Z]+") },
                 { new IdGenerator(), String.class, compile(uuidPattern) },
                 { new JsonGenerator(), String.class, compile("\\{.*:.*}") },
-                { new UriGenerator(), String.class, compile("(/[a-zA-Z]+)+") },
-                { new UrlGenerator(), String.class, compile("https://[a-zA-Z0-9\\-]+\\.[a-zA-Z]+(/[a-zA-Z]+)+") },
+                { new UriGenerator(), URI.class, compile("(/[a-zA-Z]+)+") },
+                { new UrlGenerator(), URL.class, compile("https://[a-zA-Z0-9\\-]+\\.[a-zA-Z]+(/[a-zA-Z]+)+") },
                 { new FormatGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new GenderGenerator(), String.class, compile("male|female") },
                 { new FullnameGenerator(), String.class, compile("[a-zA-Z ]+") },
@@ -122,7 +122,7 @@ public class GeneratorPatternValidTest {
         // Due to bundles for some generators, need more than 1 iteration
         // for more confidence that value is matching
         for (int i = 0; i < 5; i++) {
-            final Object generated = generator.generate();
+            final Object generated = generator.get();
             assertNotNull(generated);
             assertEquals(generated.getClass(), genClass);
 

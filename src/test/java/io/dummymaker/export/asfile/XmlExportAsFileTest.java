@@ -1,12 +1,12 @@
 package io.dummymaker.export.asfile;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.XmlValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class XmlExportAsFileTest extends FileExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final XmlValidator validation = new XmlValidator();
     private final Format format = Format.XML;
 
@@ -28,11 +28,11 @@ public class XmlExportAsFileTest extends FileExportAssert {
 
     // @Test
     public void exportListOfDummiesWithNamingStrategy() {
-        final ICase strategy = Cases.CAMEL_CASE.value();
+        final Case strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final IExporter exporter = new XmlExporter().withCase(strategy);
+        final Exporter exporter = new XmlExporter().withCase(strategy);
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);

@@ -1,10 +1,10 @@
 package io.dummymaker.export.asstring;
 
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.validators.JsonValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class JsonExportAsStringTest extends StringExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final JsonValidator validation = new JsonValidator();
 
     public JsonExportAsStringTest() {
@@ -34,7 +34,7 @@ public class JsonExportAsStringTest extends StringExportAssert {
         final Cases strategy = Cases.UPPER_SNAKE_CASE;
 
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
-        final IExporter exporter = new JsonExporter().withCase(strategy.value());
+        final Exporter exporter = new JsonExporter().withCase(strategy.value());
 
         final String dummyAsString = exporter.convert(dummy);
         assertNotNull(dummyAsString);

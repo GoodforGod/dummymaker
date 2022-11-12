@@ -1,7 +1,7 @@
 package io.dummymaker.rules;
 
-import io.dummymaker.factory.impl.GenFactory;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.model.DummyEmbedded;
 import io.dummymaker.model.GenFieldRule;
@@ -21,12 +21,12 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genLambdaGeneratorRuleForNamedField() {
-        final IGenerator<String> generator = () -> "BILL";
+        final Generator<String> generator = () -> "BILL";
 
-        final GenRule rule = GenRule.of(DummyEmbedded.class)
+        final GenRule rule = GenRule.manual(DummyEmbedded.class)
                 .add(generator, "name");
 
-        final GenFactory factory = new GenFactory(rule);
+        final MainGenFactory factory = new MainGenFactory(rule);
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
 
         assertNotNull(dummy);
@@ -36,12 +36,12 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genLambdaGeneratorRuleForType() {
-        final IGenerator<String> generator = () -> "BILL";
+        final Generator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.auto(DummyEmbedded.class)
                 .add(generator, String.class);
 
-        final GenFactory factory = new GenFactory(rule);
+        final MainGenFactory factory = new MainGenFactory(rule);
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
 
         assertNotNull(dummy);
@@ -52,11 +52,11 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genFieldRuleNotEqualsForTypeTargets() {
-        final GenFieldRule rule1 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule1 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, int.class)
                 .getRules().get(0);
 
-        final GenFieldRule rule2 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule2 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, byte.class)
                 .getRules().get(0);
 
@@ -65,11 +65,11 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genFieldRuleNotEqualsForNamedTargets() {
-        final GenFieldRule rule1 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule1 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, "a")
                 .getRules().get(0);
 
-        final GenFieldRule rule2 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule2 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, "a1")
                 .getRules().get(0);
 
@@ -78,11 +78,11 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genFieldRuleAreEqualsForTypeTargets() {
-        final GenFieldRule rule1 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule1 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, int.class)
                 .getRules().get(0);
 
-        final GenFieldRule rule2 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule2 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, int.class)
                 .getRules().get(0);
 
@@ -91,11 +91,11 @@ public class GenRulesTests extends Assert {
 
     @Test
     public void genFieldRuleAreEqualsForNamedTargets() {
-        final GenFieldRule rule1 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule1 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, "a")
                 .getRules().get(0);
 
-        final GenFieldRule rule2 = GenRule.of(DummyEmbedded.class)
+        final GenFieldRule rule2 = GenRule.manual(DummyEmbedded.class)
                 .add(ByteGenerator.class, "a")
                 .getRules().get(0);
 
@@ -104,14 +104,14 @@ public class GenRulesTests extends Assert {
 
     @Test(expected = IllegalArgumentException.class)
     public void genRuleOfTargetInvalidForNull() {
-        GenRule.of(null)
+        GenRule.manual(null)
                 .add(ByteGenerator.class, "a")
                 .getRules();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void genRuleOfTargetInvalidForObject() {
-        GenRule.of(Object.class)
+        GenRule.manual(Object.class)
                 .add(ByteGenerator.class, "a")
                 .getRules();
     }

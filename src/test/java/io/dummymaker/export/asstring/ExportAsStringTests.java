@@ -1,12 +1,12 @@
 package io.dummymaker.export.asstring;
 
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import io.dummymaker.model.deprecated.DummyAuto;
@@ -31,14 +31,14 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ExportAsStringTests extends Assert {
 
-    private final GenFactory factory = new GenFactory();
-    private final IExporter exporter;
+    private final MainGenFactory factory = new MainGenFactory();
+    private final Exporter exporter;
     private final IValidator validator;
 
     private final int singleSplitLength;
     private final int listSplitLength;
 
-    public ExportAsStringTests(IExporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+    public ExportAsStringTests(Exporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
         this.exporter = exporter;
         this.validator = validator;
         this.singleSplitLength = singleSplitLength;

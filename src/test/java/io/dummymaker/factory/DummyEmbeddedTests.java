@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyEmbedded;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.junit.Test;
  */
 public class DummyEmbeddedTests extends Assert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
     @Test
     public void embeddedFieldsFilled() {

@@ -1,8 +1,8 @@
 package io.dummymaker.annotation.special;
 
 import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.ComplexGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.NullGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,9 +14,9 @@ import java.lang.annotation.Target;
  * <p>
  * Works with simple and complex generators
  *
- * @author GoodforGod
- * @see IComplexGenerator
- * @see IGenerator
+ * @author Anton Kurako (GoodforGod)
+ * @see ComplexGenerator
+ * @see Generator
  * @see PrimeGen
  * @since 20.07.2019
  */
@@ -30,7 +30,7 @@ public @interface GenCustom {
      *
      * @return generator
      */
-    Class<? extends IGenerator> value() default NullGenerator.class;
+    Class<? extends Generator> value() default NullGenerator.class;
 
     /**
      * @return allowed depth level

@@ -1,10 +1,10 @@
 package io.dummymaker.export.asfile;
 
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.Format;
-import io.dummymaker.export.IExporter;
 import io.dummymaker.export.impl.CsvExporter;
 import io.dummymaker.export.validators.IValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import java.util.Collections;
@@ -19,9 +19,9 @@ import org.junit.Test;
  */
 abstract class FileExportAssert extends ExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
-    private final IExporter exporter;
+    private final Exporter exporter;
     private final IValidator validator;
     private final Format format;
 
@@ -29,7 +29,7 @@ abstract class FileExportAssert extends ExportAssert {
     private final int singleListSplit;
     private final int listSplitLength;
 
-    public FileExportAssert(IExporter exporter,
+    public FileExportAssert(Exporter exporter,
                             IValidator validator,
                             Format format,
                             int singleSplitLength,

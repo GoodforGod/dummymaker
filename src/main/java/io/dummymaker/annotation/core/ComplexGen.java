@@ -1,10 +1,10 @@
 package io.dummymaker.annotation.core;
 
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.ComplexGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.NullGenerator;
-import io.dummymaker.scan.IAnnotationScanner;
-import io.dummymaker.scan.IMapScanner;
+import io.dummymaker.scan.AnnotationScanner;
+import io.dummymaker.scan.MapScanner;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,11 +18,11 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation is a also core one (as prime one) to support population factory
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see PrimeGen
- * @see IGenerator
- * @see IMapScanner
- * @see IAnnotationScanner
+ * @see Generator
+ * @see MapScanner
+ * @see AnnotationScanner
  * @since 21.04.2018
  */
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -34,5 +34,5 @@ public @interface ComplexGen {
      *
      * @return generator
      */
-    Class<? extends IComplexGenerator> value() default NullGenerator.class;
+    Class<? extends ComplexGenerator> value() default NullGenerator.class;
 }

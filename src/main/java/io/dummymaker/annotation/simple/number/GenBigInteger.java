@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see BigIntegerGenerator
  * @since 21.07.2019
  */

@@ -1,11 +1,11 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.XmlValidator;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import org.junit.Test;
  */
 public class XmlExportAsStringTest extends StringExportAssert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
     private final XmlValidator validation = new XmlValidator();
 
     public XmlExportAsStringTest() {
@@ -27,10 +27,10 @@ public class XmlExportAsStringTest extends StringExportAssert {
 
     @Test
     public void exportListOfDummiesInXmlWithNamingStrategy() {
-        final ICase strategy = Cases.CAMEL_CASE.value();
+        final Case strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
-        final IExporter exporter = new XmlExporter().withCase(strategy);
+        final Exporter exporter = new XmlExporter().withCase(strategy);
 
         final String dummyAsString = exporter.convert(dummies);
         assertNotNull(dummyAsString);

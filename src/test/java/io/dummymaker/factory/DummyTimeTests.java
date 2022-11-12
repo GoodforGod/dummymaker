@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class DummyTimeTests extends Assert {
 
     @Test
     public void validFieldsFilled() {
-        final GenFactory factory = new GenFactory();
+        final MainGenFactory factory = new MainGenFactory();
         final DummyTime build = factory.build(DummyTime.class);
 
         assertNotNull(build.getDate());

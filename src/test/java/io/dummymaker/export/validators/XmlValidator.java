@@ -4,8 +4,8 @@ import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTime.Fields.*;
 import static org.junit.Assert.assertTrue;
 
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
@@ -52,10 +52,10 @@ public class XmlValidator implements IValidator {
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, ICase strategy) {
-        final String expectedNameField = strategy.format(NAME.exportName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName());
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.format(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName());
 
         assertTrue(dummies[0].matches("<[a-zA-Z]+List>"));
         assertTrue(dummies[1].matches("<[a-zA-Z]+>"));

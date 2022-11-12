@@ -24,9 +24,9 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class BasicExporterValidationTest extends Assert {
 
-    private IExporter exporter;
+    private Exporter exporter;
 
-    public BasicExporterValidationTest(IExporter exporter) {
+    public BasicExporterValidationTest(Exporter exporter) {
         this.exporter = exporter;
     }
 

@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyAutoNamed;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class DummyAutoNamedTests extends Assert {
 
-    private final GenFactory factory = new GenFactory(GenRules.of().add(GenRule.auto(DummyAutoNamed.class)));
+    private final MainGenFactory factory = new MainGenFactory(GenRules.of().add(GenRule.auto(DummyAutoNamed.class)));
 
     @Test
     public void allNamedFieldsCorrect() {

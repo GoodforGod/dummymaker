@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * Generate object with fields type and populate its fields marked by gen annotations
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 09.03.2018
  */
 @PrimeGen(EmbeddedGenerator.class)

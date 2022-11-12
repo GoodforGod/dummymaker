@@ -3,7 +3,7 @@ package io.dummymaker.factory;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoZeroConstructor;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import org.junit.Test;
  */
 public class FactoryTests {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
     @Test
     public void isEmptyForEmptyList() {

@@ -5,7 +5,7 @@ import io.dummymaker.export.impl.JsonExporter;
 import io.dummymaker.export.impl.SqlExporter;
 import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTimeFormatter;
 import io.dummymaker.model.DummyUnixTime;
@@ -26,12 +26,12 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ValidatorExporterTest extends Assert {
 
-    private final GenFactory factory = new GenFactory();
+    private final MainGenFactory factory = new MainGenFactory();
 
-    private IExporter exporter;
+    private Exporter exporter;
     private IValidator validator;
 
-    public ValidatorExporterTest(IExporter exporter, IValidator validator) {
+    public ValidatorExporterTest(Exporter exporter, IValidator validator) {
         this.exporter = exporter;
         this.validator = validator;
     }

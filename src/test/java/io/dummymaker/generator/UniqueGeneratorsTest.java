@@ -19,18 +19,18 @@ public class UniqueGeneratorsTest {
 
     @Test
     public void enumerateGen() {
-        IGenerator generator = new SequenceGenerator();
+        Generator generator = new SequenceGenerator();
 
-        Object generated = generator.generate();
+        Object generated = generator.get();
 
         assertNotNull(generated);
     }
 
     @Test
     public void localDateTimeGen() {
-        IGenerator generator = new LocalDateTimeGenerator();
+        Generator generator = new LocalDateTimeGenerator();
 
-        Object generated = generator.generate();
+        Object generated = generator.get();
 
         assertNotNull(generated);
         assertTrue(generated.getClass().equals(LocalDateTime.class));
@@ -38,18 +38,18 @@ public class UniqueGeneratorsTest {
 
     @Test
     public void embeddedGen() {
-        IGenerator generator = new EmbeddedGenerator();
+        Generator generator = new EmbeddedGenerator();
 
-        Object generated = generator.generate();
+        Object generated = generator.get();
 
         assertNull(generated);
     }
 
     @Test
     public void nullGen() {
-        IGenerator generator = new NullGenerator();
+        Generator generator = new NullGenerator();
 
-        Object generated = generator.generate();
+        Object generated = generator.get();
 
         assertNull(generated);
     }

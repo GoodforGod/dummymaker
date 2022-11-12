@@ -1,7 +1,7 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.factory.impl.GenFactory;
+import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyArray;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -19,7 +19,7 @@ public class DummyArrayTests extends Assert {
 
     @Test
     public void arrayFieldsFilled() {
-        final GenFactory factory = new GenFactory();
+        final MainGenFactory factory = new MainGenFactory();
         final DummyArray build = factory.build(DummyArray.class);
 
         assertNull(build.getByteSimple());
@@ -60,7 +60,7 @@ public class DummyArrayTests extends Assert {
 
     @Test
     public void arrayFieldsFilledWhenAuto() {
-        final GenFactory factory = new GenFactory(GenRules.of(GenRule.auto(DummyArray.class)));
+        final MainGenFactory factory = new MainGenFactory(GenRules.of(GenRule.auto(DummyArray.class)));
         final DummyArray build = factory.build(DummyArray.class);
 
         assertNotEquals(0, build.getByteSimple().length);
@@ -107,7 +107,7 @@ public class DummyArrayTests extends Assert {
     @Test
     public void arrayDummyToJson() {
         final GenRules rules = GenRules.of(GenRule.auto(DummyArray.class));
-        final GenFactory factory = new GenFactory(rules);
+        final MainGenFactory factory = new MainGenFactory(rules);
         final DummyArray dummyArray = factory.build(DummyArray.class);
 
         final Pattern patternSingleArray = Pattern.compile("\"shortSimple\":\\[[0-9]+");

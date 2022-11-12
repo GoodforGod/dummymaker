@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.ListComplexGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 /**
  * Generate list collection
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see ListComplexGenerator
  * @since 05.03.2018
  */
@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenList {
 
-    Class<? extends IGenerator> value() default IGenerator.class;
+    Class<? extends Generator> value() default Generator.class;
 
     /**
      * Minimum entities to generate
