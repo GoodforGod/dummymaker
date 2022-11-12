@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Product names bundle
  *
  * @author Anton Kurako (GoodforGod)
  * @since 21.7.2020
  */
-public class ProductBundle extends BasicBundle {
+public final class ProductBundle extends AbstractBundle {
 
-    public ProductBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Minerals",
                 "Refined petroleum",
                 "Automobiles",
@@ -50,5 +52,8 @@ public class ProductBundle extends BasicBundle {
                 "Raw sugar",
                 "Soybean meal",
                 "House Linens");
+
+    public ProductBundle() {
+        super(BUNDLE);
     }
 }

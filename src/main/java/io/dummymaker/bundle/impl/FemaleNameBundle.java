@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Contains Female Names As String
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 31.05.2017
  */
-public class FemaleNameBundle extends BasicBundle {
+public final class FemaleNameBundle extends AbstractBundle {
 
-    public FemaleNameBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Mary",
                 "Patricia",
                 "Linda",
@@ -222,5 +224,8 @@ public class FemaleNameBundle extends BasicBundle {
                 "Arlene",
                 "Maureen",
                 "Colleen");
+
+    public FemaleNameBundle() {
+        super(BUNDLE);
     }
 }

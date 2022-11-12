@@ -1,15 +1,15 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * ! NO DESCRIPTION !
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 16.07.2019
  */
-public class StreetBundle extends BasicBundle {
+public final class StreetBundle extends AbstractBundle {
 
-    public StreetBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Coniston Avenue",
                 "St Mary's Road",
                 "Burton Road",
@@ -110,5 +110,8 @@ public class StreetBundle extends BasicBundle {
                 "Stoney Lane",
                 "Westfield Road",
                 "Chester Street");
+
+    public StreetBundle() {
+        super(BUNDLE);
     }
 }

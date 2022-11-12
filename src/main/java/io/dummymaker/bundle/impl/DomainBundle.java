@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Contains various domain extensions as string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 31.05.2017
  */
-public class DomainBundle extends BasicBundle {
+public final class DomainBundle extends AbstractBundle {
 
-    public DomainBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 ".com",
                 ".co",
                 ".net",
@@ -53,5 +55,8 @@ public class DomainBundle extends BasicBundle {
                 ".life",
                 ".pl",
                 ".sg");
+
+    public DomainBundle() {
+        super(BUNDLE);
     }
 }

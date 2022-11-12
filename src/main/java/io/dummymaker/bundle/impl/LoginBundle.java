@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Contains nicknames as string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 03.06.2017
  */
-public class LoginBundle extends BasicBundle {
+public final class LoginBundle extends AbstractBundle {
 
-    public LoginBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "3DWaffle",
                 "Hightower",
                 "PapaSmurf",
@@ -191,5 +193,8 @@ public class LoginBundle extends BasicBundle {
                 "Overrun",
                 "ZestyDragon",
                 "Zod");
+
+    public LoginBundle() {
+        super(BUNDLE);
     }
 }

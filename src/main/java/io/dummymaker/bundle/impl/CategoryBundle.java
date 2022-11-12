@@ -1,13 +1,16 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class CategoryBundle extends BasicBundle {
+public final class CategoryBundle extends AbstractBundle {
 
-    public CategoryBundle() {
-        super("Appliances",
+    private static final List<String> BUNDLE = Arrays.asList(
+                "Appliances",
                 "Apps",
                 "Games",
                 "Arts",
@@ -54,5 +57,8 @@ public class CategoryBundle extends BasicBundle {
                 "Home Improvement",
                 "Toys",
                 "Video Games");
+
+    public CategoryBundle() {
+        super(BUNDLE);
     }
 }

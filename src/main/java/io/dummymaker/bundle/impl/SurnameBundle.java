@@ -1,16 +1,16 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Surname bundle
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 06.03.2019
  */
-public class SurnameBundle extends BasicBundle {
+public final class SurnameBundle extends AbstractBundle {
 
-    public SurnameBundle() {
-        super(
-                "Smith",
+    private static final List<String> BUNDLE = Arrays.asList(
+            "Smith",
                 "Johnson",
                 "Williams",
                 "Jones",
@@ -110,5 +110,8 @@ public class SurnameBundle extends BasicBundle {
                 "Griffin",
                 "Diaz",
                 "Hayes");
+
+    public SurnameBundle() {
+        super(BUNDLE);
     }
 }

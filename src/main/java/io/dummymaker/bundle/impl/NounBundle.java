@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Bundle with noun words string values
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public class NounBundle extends BasicBundle {
+public final class NounBundle extends AbstractBundle {
 
-    public NounBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "time",
                 "year",
                 "people",
@@ -110,5 +112,8 @@ public class NounBundle extends BasicBundle {
                 "teacher",
                 "force",
                 "education");
+
+    public NounBundle() {
+        super(BUNDLE);
     }
 }

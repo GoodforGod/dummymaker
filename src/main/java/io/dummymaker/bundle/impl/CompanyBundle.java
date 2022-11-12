@@ -1,15 +1,18 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Bundle with company names string values
  *
- * @author GoodforGod (Anton Kurako
+ * @author Anton Kurako (GoodforGod) (Anton Kurako
  * @since 07.06.2017
  */
-public class CompanyBundle extends BasicBundle {
+public final class CompanyBundle extends AbstractBundle {
 
-    public CompanyBundle() {
-        super("Walmart",
+    private static final List<String> BUNDLE = Arrays.asList(
+                "Walmart",
                 "Amazon",
                 "Apple",
                 "CVS Health",
@@ -108,5 +111,8 @@ public class CompanyBundle extends BasicBundle {
                 "Northwestern Mutual",
                 "Nucor",
                 "Exelon");
+
+    public CompanyBundle() {
+        super(BUNDLE);
     }
 }

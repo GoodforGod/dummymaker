@@ -1,15 +1,15 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * ! NO DESCRIPTION !
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 16.07.2019
  */
-public class JobBundle extends BasicBundle {
+public final class JobBundle extends AbstractBundle {
 
-    public JobBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Academic librarian",
                 "Accountant",
                 "Accounting technician",
@@ -359,5 +359,8 @@ public class JobBundle extends BasicBundle {
                 "Welfare rights adviser",
                 "Writer",
                 "Youth worker");
+
+    public JobBundle() {
+        super(BUNDLE);
     }
 }

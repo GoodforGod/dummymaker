@@ -1,13 +1,16 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class MerchantBundle extends BasicBundle {
+public final class MerchantBundle extends AbstractBundle {
 
-    public MerchantBundle() {
-        super("Contractors–Residential and Commercial",
+    private static final List<String> BUNDLE = Arrays.asList(
+                "Contractors–Residential and Commercial",
                 "Air Conditioning",
                 "Heating and Plumbing Contractors",
                 "Electrical Contractors",
@@ -465,5 +468,8 @@ public class MerchantBundle extends BasicBundle {
                 "Veterinary Services",
                 "Agricultural Cooperatives",
                 "Horticultural and Landscaping Services");
+
+    public MerchantBundle() {
+        super(BUNDLE);
     }
 }

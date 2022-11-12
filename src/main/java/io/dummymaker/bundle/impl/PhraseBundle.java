@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Bundle with simple phrase string values
  *
- * @author GoodforGod (Anton Kurako)
+ * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
-public class PhraseBundle extends BasicBundle {
+public final class PhraseBundle extends AbstractBundle {
 
-    public PhraseBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "A bird in the hand is worth two in the bush",
                 "A bunch of fives",
                 "A chain is only as strong as its weakest link",
@@ -290,5 +292,8 @@ public class PhraseBundle extends BasicBundle {
                 "Beyond the pale",
                 "Biblical phrases",
                 "Big Apple");
+
+    public PhraseBundle() {
+        super(BUNDLE);
     }
 }

@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Bundle with country names string values
  *
- * @author GoodforGod (Anton Kurako)
+ * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
-public class CountryBundle extends BasicBundle {
+public final class CountryBundle extends AbstractBundle {
 
-    public CountryBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Afghanistan",
                 "Albania",
                 "Algeria",
@@ -203,5 +205,8 @@ public class CountryBundle extends BasicBundle {
                 "Yemen",
                 "Zambia",
                 "Zimbabwe");
+
+    public CountryBundle() {
+        super(BUNDLE);
     }
 }

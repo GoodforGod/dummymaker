@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * File extensions bundle
  *
  * @author Anton Kurako (GoodforGod)
  * @since 26.7.2020
  */
-public class ExtensionBundle extends BasicBundle {
+public final class ExtensionBundle extends AbstractBundle {
 
-    public ExtensionBundle(String... data) {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "aif",
                 "json",
                 "cda",
@@ -154,5 +156,8 @@ public class ExtensionBundle extends BasicBundle {
                 "tex",
                 "txt",
                 "wpd");
+
+    public ExtensionBundle() {
+        super(BUNDLE);
     }
 }

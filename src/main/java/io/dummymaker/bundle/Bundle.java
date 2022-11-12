@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Provides default bundles of values for generators
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 31.05.2017
  */
-public interface IBundle {
+public interface Bundle {
 
     /**
      * Get bundle values by index
@@ -17,14 +17,6 @@ public interface IBundle {
      * @return bundle value
      */
     String get(int index);
-
-    /**
-     * Get all bundle values
-     *
-     * @return all bundle values
-     */
-    @NotNull
-    String[] all();
 
     /**
      * Get random bundle value

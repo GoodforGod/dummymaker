@@ -1,15 +1,15 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * ! NO DESCRIPTION !
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 16.07.2019
  */
-public class MiddleNameBundle extends BasicBundle {
+public final class MiddleNameBundle extends AbstractBundle {
 
-    public MiddleNameBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "James",
                 "William",
                 "John",
@@ -33,5 +33,8 @@ public class MiddleNameBundle extends BasicBundle {
                 "Frederick",
                 "Nicholas",
                 "Robert");
+
+    public MiddleNameBundle() {
+        super(BUNDLE);
     }
 }

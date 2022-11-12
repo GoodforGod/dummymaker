@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Contains EMAIL service provides as string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 30.05.2017
  */
-public class EmailServicesBundle extends BasicBundle {
+public final class EmailServicesBundle extends AbstractBundle {
 
-    public EmailServicesBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "zoho",
                 "yandex",
                 "mail",
@@ -24,5 +26,8 @@ public class EmailServicesBundle extends BasicBundle {
                 "gmx",
                 "hotmail",
                 "inbox");
+
+    public EmailServicesBundle() {
+        super(BUNDLE);
     }
 }

@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Contains male names as string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 30.05.2017
  */
-public class MaleNameBundle extends BasicBundle {
+public final class MaleNameBundle extends AbstractBundle {
 
-    public MaleNameBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "James",
                 "John",
                 "Robert",
@@ -257,5 +259,8 @@ public class MaleNameBundle extends BasicBundle {
                 "Mose",
                 "Hong",
                 "Leigh");
+
+    public MaleNameBundle() {
+        super(BUNDLE);
     }
 }

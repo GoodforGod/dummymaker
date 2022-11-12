@@ -1,13 +1,16 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class CurrencyBundle extends BasicBundle {
+public final class CurrencyBundle extends AbstractBundle {
 
-    public CurrencyBundle() {
-        super("ALL",
+    private static final List<String> BUNDLE = Arrays.asList(
+                "ALL",
                 "AFN",
                 "ARS",
                 "AWG",
@@ -116,5 +119,8 @@ public class CurrencyBundle extends BasicBundle {
                 "VND",
                 "YER",
                 "ZWD");
+
+    public CurrencyBundle() {
+        super(BUNDLE);
     }
 }

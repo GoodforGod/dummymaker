@@ -1,15 +1,17 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Bundle with city names string values
  *
- * @author GoodforGod Anton Kurako
+ * @author Anton Kurako (GoodforGod) Anton Kurako
  * @since 07.06.2017
  */
-public class CityBundle extends BasicBundle {
+public final class CityBundle extends AbstractBundle {
 
-    public CityBundle() {
-        super(
+    private static final List<String> BUNDLE = Arrays.asList(
                 "Kabul",
                 "Tirana",
                 "Algiers",
@@ -195,5 +197,8 @@ public class CityBundle extends BasicBundle {
                 "Sanaa",
                 "Lusaka",
                 "Harare");
+
+    public CityBundle() {
+        super(BUNDLE);
     }
 }

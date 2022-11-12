@@ -1,13 +1,16 @@
 package io.dummymaker.bundle.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class MccBundle extends BasicBundle {
+public final class MccBundle extends AbstractBundle {
 
-    public MccBundle() {
-        super("1711",
+    private static final List<String> BUNDLE = Arrays.asList(
+                "1711",
                 "1731",
                 "1740",
                 "1750",
@@ -322,5 +325,8 @@ public class MccBundle extends BasicBundle {
                 "9752",
                 "9754",
                 "9950");
+
+    public MccBundle() {
+        super(BUNDLE);
     }
 }
