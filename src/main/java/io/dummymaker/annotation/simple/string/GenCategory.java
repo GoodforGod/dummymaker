@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.string;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.string.CategoryGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @see CategoryGenerator
  * @since 26.08.2022
  */
-@PrimeGen(CategoryGenerator.class)
+@GenCustom(CategoryGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenCategory {

@@ -1,7 +1,6 @@
 package io.dummymaker.annotation.simple.time;
 
-import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.generator.simple.time.InstantGenerator;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.time.LocalDateGenerator;
 import io.dummymaker.generator.simple.time.OffsetTimeGenerator;
 
@@ -15,7 +14,7 @@ import java.lang.annotation.Target;
  * @see LocalDateGenerator
  * @since 12.11.2022
  */
-@PrimeGen(OffsetTimeGenerator.class)
+@GenCustom(OffsetTimeGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenOffsetTime {

@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.string;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.string.NounGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @see NounGenerator
  * @since 21.02.2018
  */
-@PrimeGen(NounGenerator.class)
+@GenCustom(NounGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenNoun {

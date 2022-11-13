@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.number;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.number.BigDecimalGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @see BigDecimalGenerator
  * @since 21.07.2019
  */
-@PrimeGen(BigDecimalGenerator.class)
+@GenCustom(BigDecimalGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenBigDecimal {

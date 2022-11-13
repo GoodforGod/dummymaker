@@ -1,6 +1,7 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.Array2DComplexGenerator;
 import java.lang.annotation.ElementType;
@@ -15,7 +16,7 @@ import java.lang.annotation.Target;
  * @see Array2DComplexGenerator
  * @since 04.11.2018
  */
-@ComplexGen(Array2DComplexGenerator.class)
+@GenCustom(Array2DComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenArray2D {
@@ -23,50 +24,38 @@ public @interface GenArray2D {
     Class<? extends Generator> value() default Generator.class;
 
     /**
-     * First dimension minimum entities to generate
-     *
-     * @return minimum amount for 1 dimension
+     * @return minimum amount elements to generate for row (inclusive)
      */
     int minFirst() default 1;
 
     /**
-     * First dimension max entities to generate
-     *
-     * @return max amount for 1 dimension
+     * @return maximum amount elements to generate for row (inclusive)
      */
     int maxFirst() default 2;
 
     /**
-     * Second dimension minimum entities to generate
-     *
-     * @return minimum amount for 2 dimension
+     * @return minimum amount elements to generate for column (inclusive)
      */
     int minSecond() default 1;
 
     /**
-     * Second dimension max entities to generate
-     *
-     * @return max amount for 2 dimension
+     * @return maximum amount elements to generate for column (inclusive)
      */
     int maxSecond() default 2;
 
     /**
-     * First dimension fixed amount entities to generate Turned off by default
-     *
-     * @return fixed amount
+     * @return fixed amount elements to generate for row (override min & max)
      */
     int fixedFirst() default -1;
 
     /**
-     * Second dimension fixed amount entities to generate Turned off by default
-     *
-     * @return fixed amount
+     * @return fixed amount elements to generate for column (override min & max)
      */
     int fixedSecond() default -1;
 
     /**
-     * @return desired embedded depth
-     * @see io.dummymaker.annotation.special.GenEmbedded#MAX
+     * @see GenAuto#depth()
+     * @return allowed depth for inner elements to apply
      */
     int depth() default 1;
 }

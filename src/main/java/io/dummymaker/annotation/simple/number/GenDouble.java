@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.number;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.number.DoubleGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @see DoubleGenerator
  * @since 30.05.2017
  */
-@PrimeGen(DoubleGenerator.class)
+@GenCustom(DoubleGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenDouble {

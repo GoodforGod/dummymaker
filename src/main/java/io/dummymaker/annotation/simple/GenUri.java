@@ -1,6 +1,6 @@
-package io.dummymaker.annotation.simple.string;
+package io.dummymaker.annotation.simple;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.UriGenerator;
 
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @see UriGenerator
  * @since 4.5.2020
  */
-@PrimeGen(UriGenerator.class)
+@GenCustom(UriGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenUri {}

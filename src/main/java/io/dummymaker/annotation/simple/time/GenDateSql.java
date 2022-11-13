@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.time;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.time.DateSqlGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @see java.sql.Date
  * @since 10.03.2019
  */
-@PrimeGen(DateSqlGenerator.class)
+@GenCustom(DateSqlGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenDateSql {

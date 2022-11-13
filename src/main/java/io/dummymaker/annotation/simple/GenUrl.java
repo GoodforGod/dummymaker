@@ -1,6 +1,6 @@
-package io.dummymaker.annotation.simple.string;
+package io.dummymaker.annotation.simple;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.UrlGenerator;
 
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @see UrlGenerator
  * @since 4.5.2020
  */
-@PrimeGen(UrlGenerator.class)
+@GenCustom(UrlGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenUrl {}

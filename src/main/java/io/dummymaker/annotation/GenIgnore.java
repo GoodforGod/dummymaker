@@ -1,10 +1,8 @@
-package io.dummymaker.annotation.special;
+package io.dummymaker.annotation;
 
 import io.dummymaker.export.Exporter;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+
+import java.lang.annotation.*;
 
 /**
  * Ignores object production
@@ -13,6 +11,7 @@ import java.lang.annotation.Target;
  * @see Exporter
  * @since 01.03.2019
  */
+@Documented
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.FIELD)
 public @interface GenIgnore {

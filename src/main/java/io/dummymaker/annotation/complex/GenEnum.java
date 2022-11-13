@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.core.ComplexGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.complex.EnumComplexGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @see EnumComplexGenerator
  * @since 01.03.2019
  */
-@ComplexGen(EnumComplexGenerator.class)
+@GenCustom(EnumComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenEnum {

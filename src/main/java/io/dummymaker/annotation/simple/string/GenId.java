@@ -1,6 +1,6 @@
 package io.dummymaker.annotation.simple.string;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.string.IdBigGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @see IdBigGenerator
  * @since 30.05.2017
  */
-@PrimeGen(IdGenerator.class)
+@GenCustom(IdGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenId {

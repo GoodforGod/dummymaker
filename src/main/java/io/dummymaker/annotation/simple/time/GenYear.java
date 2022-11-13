@@ -1,8 +1,7 @@
 package io.dummymaker.annotation.simple.time;
 
-import io.dummymaker.annotation.core.PrimeGen;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.time.YearGenerator;
-import io.dummymaker.generator.simple.time.ZonedDateTimeGenerator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +13,7 @@ import java.lang.annotation.Target;
  * @see YearGenerator
  * @since 12.11.2022
  */
-@PrimeGen(YearGenerator.class)
+@GenCustom(YearGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenYear {
