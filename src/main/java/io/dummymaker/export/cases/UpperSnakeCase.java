@@ -1,19 +1,19 @@
 package io.dummymaker.export.cases;
 
-import io.dummymaker.export.ICase;
+import io.dummymaker.export.Case;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Each upper letter separated with underscore symbol, and transform to upper case EXCLUDING FIRST
  * LETTER, first letter to low case Example: ( DummyList - DUMMY_LIST )
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public class UpperSnakeCase implements ICase {
+public final class UpperSnakeCase implements Case {
 
     @Override
-    public @NotNull String format(@NotNull String value) {
+    public @NotNull String apply(@NotNull String value) {
         final StringBuilder builder = new StringBuilder();
 
         for (final char letter : value.toCharArray()) {
