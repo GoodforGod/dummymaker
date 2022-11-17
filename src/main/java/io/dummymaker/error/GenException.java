@@ -1,18 +1,16 @@
 package io.dummymaker.error;
 
 /**
- * Base runtime exception
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 17.08.2019
  */
 public class GenException extends RuntimeException {
 
-    public GenException() {
-        super("Unexpected exception occurred");
+    public GenException(String message) {
+        super(message);
     }
 
     public GenException(Throwable throwable) {
-        super(throwable.getMessage());
+        super(throwable);
     }
 }

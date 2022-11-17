@@ -6,17 +6,13 @@ package io.dummymaker.error;
  * @author Anton Kurako (GoodforGod)
  * @since 22.7.2020
  */
-public class ExportException extends RuntimeException {
+public final class ExportException extends GenException {
 
     public ExportException(String message) {
         super(message);
     }
 
     public ExportException(Throwable t) {
-        super(t.getMessage(), t);
-    }
-
-    public ExportException(String message, Throwable cause) {
-        super(message, cause);
+        super(t);
     }
 }
