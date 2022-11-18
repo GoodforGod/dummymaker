@@ -2,6 +2,8 @@ package io.dummymaker.annotation;
 
 import io.dummymaker.factory.GenSupplier;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.lang.annotation.*;
 
@@ -32,5 +34,6 @@ public @interface GenAuto {
      *
      * @return desired embedded depth
      */
-    int depth() default 1;
+    @Range(from = 1, to = GenAuto.DEPTH_MAX)
+    int depth() default 10;
 }

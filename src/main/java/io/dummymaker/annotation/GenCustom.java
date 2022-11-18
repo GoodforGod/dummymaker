@@ -4,6 +4,7 @@ import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.scan.AnnotationScanner;
 import io.dummymaker.scan.MapScanner;
+import org.jetbrains.annotations.Range;
 
 import java.lang.annotation.*;
 
@@ -27,13 +28,14 @@ import java.lang.annotation.*;
 public @interface GenCustom {
 
     /**
-     * @return generator class to be called to generate values on factory
+     * @return generator class to be called to generate values on factory (generator is expected to be initialized with Zero Argument Constructor)
      */
-    Class<? extends Generator> value() default NullGenerator.class;
+    Class<? extends Generator<?>> value();
 
     /**
      * @return allowed depth level
      * @see GenAuto#depth()
      */
-    int depth() default 1;
+    @Range(from = 1, to = GenAuto.DEPTH_MAX)
+    int depth() default 10;
 }

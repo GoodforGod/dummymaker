@@ -2,6 +2,8 @@ package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.complex.TimeComplexGenerator;
+import org.jetbrains.annotations.Range;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -45,6 +47,7 @@ public @interface GenTime {
      *
      * @return min datetime where to start generate timestamps.
      */
+    @Range(from = MIN_UNIX, to = MAX_UNIX)
     long minUnix() default MIN_UNIX;
 
     /**
@@ -52,6 +55,7 @@ public @interface GenTime {
      *
      * @return max datetime where to stop generate timestamps.
      */
+    @Range(from = MIN_UNIX, to = MAX_UNIX)
     long maxUnix() default MAX_UNIX;
 
     /**

@@ -1,6 +1,7 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.generator.simple.SequenceGenerator;
+import org.jetbrains.annotations.Range;
 
 import java.lang.annotation.*;
 
@@ -17,5 +18,6 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 public @interface GenSequence {
 
+    @Range(from = 1, to = Long.MAX_VALUE)
     long from() default 0L;
 }
