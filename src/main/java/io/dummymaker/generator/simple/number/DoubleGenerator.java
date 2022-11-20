@@ -2,7 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -10,21 +10,21 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates double from 0 to 1
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public class DoubleGenerator implements IGenerator<Double> {
+public final class DoubleGenerator implements Generator<Double> {
 
-    private final Pattern pattern = Pattern.compile("probability|chance|odds|expectation|possibility", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("probability|chance|odds|expectation|possibility", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull Double generate() {
+    public @NotNull Double get() {
         return ThreadLocalRandom.current().nextDouble();
     }
 
     @Override
     public Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override

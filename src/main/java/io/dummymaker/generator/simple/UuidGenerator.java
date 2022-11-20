@@ -1,19 +1,19 @@
 package io.dummymaker.generator.simple;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates UUIDs
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public class UuidGenerator implements IGenerator<UUID> {
+public final class UuidGenerator implements Generator<UUID> {
 
     @Override
-    public @NotNull UUID generate() {
+    public @NotNull UUID get() {
         return UUID.randomUUID();
     }
 }

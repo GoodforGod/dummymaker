@@ -2,7 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.LongGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -10,20 +10,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates number represented as hex string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class HexNumberGenerator implements IGenerator<String> {
+public final class HexNumberGenerator implements Generator<String> {
 
-    private final Pattern pattern = Pattern.compile("hex(num(ber)?)?", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("hex(num(ber)?)?", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
-        return Long.toHexString(new LongGenerator().generate());
+    public @NotNull String get() {
+        return Long.toHexString(new LongGenerator().get());
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

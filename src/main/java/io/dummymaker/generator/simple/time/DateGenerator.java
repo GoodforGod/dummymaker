@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.generator.UnixTimeGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
@@ -10,14 +10,14 @@ import org.jetbrains.annotations.NotNull;
  * Generates old java date type This date is exported in long milliseconds format So date is the
  * milliseconds since January 1, 1970, 00:00:00 GMT
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see Date
  * @since 21.02.2018
  */
-public class DateGenerator implements ITimeGenerator<Date> {
+public final class DateGenerator implements UnixTimeGenerator<Date> {
 
     @Override
-    public @NotNull Date generate() {
+    public @NotNull Date get() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
@@ -32,7 +32,7 @@ public class DateGenerator implements ITimeGenerator<Date> {
 
         final long amount = (usedTo < usedFrom)
                 ? usedFrom
-                : CollectionUtils.random(usedFrom, usedTo);
+                : RandomUtils.random(usedFrom, usedTo);
 
         return new Date(amount);
     }

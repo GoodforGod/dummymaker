@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates ethereum address
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class EthAddressGenerator extends IdGenerator {
+public final class EthAddressGenerator extends IdGenerator {
 
-    private final Pattern pattern = Pattern.compile("eth(ereum)?|etc", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("eth(ereum)?|etc", CASE_INSENSITIVE);
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override
-    public @NotNull String generate() {
-        return "0x" + super.generate().replace("-", "") + super.generate().substring(0, 8).replace("-", "");
+    public @NotNull String get() {
+        return "0x" + super.get().replace("-", "") + super.get().substring(0, 8).replace("-", "");
     }
 }

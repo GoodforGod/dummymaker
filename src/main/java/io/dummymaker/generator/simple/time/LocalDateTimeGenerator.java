@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.time;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.generator.UnixTimeGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -13,16 +13,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates LocalDateTime from 1970 to 3000 (exclusive) year with seconds precision
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see LocalDateTime
  * @since 26.05.2017
  */
-public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
+public final class LocalDateTimeGenerator implements UnixTimeGenerator<LocalDateTime> {
 
-    private final Pattern pattern = Pattern.compile("datetime|stamp|timestamp|expired?", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("datetime|stamp|timestamp|expired?", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull LocalDateTime generate() {
+    public @NotNull LocalDateTime get() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
@@ -37,7 +37,7 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
         final long amount = (usedTo < usedFrom)
                 ? usedFrom
-                : CollectionUtils.random(usedFrom, usedTo);
+                : RandomUtils.random(usedFrom, usedTo);
 
         return LocalDateTime.ofEpochSecond(
                 amount,
@@ -47,7 +47,7 @@ public class LocalDateTimeGenerator implements ITimeGenerator<LocalDateTime> {
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override

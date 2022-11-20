@@ -2,10 +2,10 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.bundle.IBundle;
+import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.impl.ExtensionBundle;
 import io.dummymaker.bundle.impl.NounBundle;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,22 +15,20 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 27.7.2020
  */
-public class FileGenerator implements IGenerator<String> {
+public final class FileGenerator implements Generator<String> {
 
-    private final Pattern pattern = Pattern.compile("file|docum(ent)?", CASE_INSENSITIVE);
+    private static final Bundle EXTENSION_BUNDLE = new ExtensionBundle();
+    private static final Bundle NOUN_BUNDLE = new NounBundle();
+    private static final Pattern PATTERN = Pattern.compile("file|docum(ent)?", CASE_INSENSITIVE);
 
-    private static final IBundle extensions = new ExtensionBundle();
-    private static final IBundle names = new NounBundle();
-
-    @Nullable
     @Override
-    public String generate() {
-        return names.random() + "." + extensions.random();
+    public String get() {
+        return NOUN_BUNDLE.random() + "." + EXTENSION_BUNDLE.random();
     }
 
     @Override
-    public @Nullable Pattern pattern() {
-        return pattern;
+    public Pattern pattern() {
+        return PATTERN;
     }
 
     @Override

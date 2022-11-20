@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates float number from 0 to 10000
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class FloatBigGenerator extends FloatGenerator {
+public final class FloatBigGenerator extends FloatGenerator {
 
     @Override
-    public @NotNull Float generate() {
-        return super.generate() * CollectionUtils.random(10, 10000);
+    public @NotNull Float get() {
+        return super.get() * RandomUtils.random(10, 10000);
     }
 }

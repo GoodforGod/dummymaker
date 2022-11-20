@@ -5,10 +5,10 @@ import io.dummymaker.annotation.complex.GenTime;
 /**
  * Generates time/datetime/timestamp in range if necessary
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 06.03.2018
  */
-public interface ITimeGenerator<T> extends IGenerator<T> {
+public interface UnixTimeGenerator<T> extends Generator<T> {
 
     /**
      * @param minUnix minimum 0 represents 1970.1.1

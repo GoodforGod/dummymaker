@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates bitcoin address
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class BtcAddressGenerator extends IdGenerator {
+public final class BtcAddressGenerator extends IdGenerator {
 
-    private final Pattern pattern = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
-        return super.generate().replace("-", "") + super.generate().substring(0, 2).replace("-", "");
+    public @NotNull String get() {
+        return super.get().replace("-", "") + super.get().substring(0, 2).replace("-", "");
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

@@ -2,7 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -10,24 +10,24 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Cadastral number generator
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 12.10.2019
  */
-public class CadastralGenerator implements IGenerator<String> {
+public final class CadastralGenerator implements Generator<String> {
 
-    private final Pattern pattern = Pattern.compile("cadastral|cad(num)?", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("cadastral|cad(num)?", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
+    public @NotNull String get() {
         return String.format("%s:%s:%s:%s",
-                CollectionUtils.random(10, 99),
-                CollectionUtils.random(10, 99),
-                CollectionUtils.random(100000, 9999999),
-                CollectionUtils.random(10, 99));
+                RandomUtils.random(10, 99),
+                RandomUtils.random(10, 99),
+                RandomUtils.random(100000, 9999999),
+                RandomUtils.random(10, 99));
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

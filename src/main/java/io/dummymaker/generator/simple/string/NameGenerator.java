@@ -2,10 +2,10 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.bundle.IBundle;
+import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.impl.FemaleNameBundle;
 import io.dummymaker.bundle.impl.MaleNameBundle;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -13,26 +13,26 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates names male and female as a string
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public class NameGenerator implements IGenerator<String> {
+public final class NameGenerator implements Generator<String> {
 
-    private final Pattern pattern = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
 
-    private static final IBundle maleBundle = new MaleNameBundle();
-    private static final IBundle femaleBundle = new FemaleNameBundle();
+    private static final Bundle MALE_BUNDLE = new MaleNameBundle();
+    private static final Bundle FEMALE_BUNDLE = new FemaleNameBundle();
 
     @Override
-    public @NotNull String generate() {
+    public @NotNull String get() {
         return ThreadLocalRandom.current().nextBoolean()
-                ? maleBundle.random()
-                : femaleBundle.random();
+                ? MALE_BUNDLE.random()
+                : FEMALE_BUNDLE.random();
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override

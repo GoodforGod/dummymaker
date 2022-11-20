@@ -5,29 +5,34 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import io.dummymaker.util.CollectionUtils;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates hex data
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class HexDataGenerator extends IdBigGenerator {
+public final class HexDataGenerator extends IdBigGenerator {
 
-    private final Pattern pattern = Pattern.compile("hex", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("hex", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
+    public @NotNull String get() {
+        final int total = RandomUtils.random(1, 5);
+
         final StringBuilder builder = new StringBuilder();
-        final int total = CollectionUtils.random(1, 5);
-        for (int i = 0; i < total; i++)
+        for (int i = 0; i < total; i++) {
             builder.append(UUID.randomUUID());
+        }
+
         return builder.toString().replace("-", "");
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

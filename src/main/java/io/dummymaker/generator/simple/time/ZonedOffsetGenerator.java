@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
 import java.time.ZoneOffset;
 import org.jetbrains.annotations.NotNull;
@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates LocalDateTime from 1970 to 3000 (exclusive) year with seconds precision
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see ZoneOffset
  * @since 21.10.2022
  */
-public class ZonedOffsetGenerator implements IGenerator<ZoneOffset> {
+public final class ZonedOffsetGenerator implements Generator<ZoneOffset> {
 
     @Override
-    public @NotNull ZoneOffset generate() {
-        return ZoneOffset.ofHours(CollectionUtils.random(-18, 18));
+    public @NotNull ZoneOffset get() {
+        return ZoneOffset.ofHours(RandomUtils.random(-18, 18));
     }
 }

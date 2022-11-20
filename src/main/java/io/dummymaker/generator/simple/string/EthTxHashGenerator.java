@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates ethereum txhash
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class EthTxHashGenerator extends IdGenerator {
+public final class EthTxHashGenerator extends IdGenerator {
 
-    private final Pattern pattern = Pattern.compile("eth(ereum)?tx(hash)?", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("eth(ereum)?tx(hash)?", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
-        return "0x" + super.generate().replace("-", "") + super.generate().replace("-", "");
+    public @NotNull String get() {
+        return "0x" + super.get().replace("-", "") + super.get().replace("-", "");
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

@@ -1,19 +1,19 @@
 package io.dummymaker.generator.simple.string;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates random string 36 character length
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public class IdBigGenerator implements IGenerator<String> {
+public final class IdBigGenerator implements Generator<String> {
 
     @Override
-    public @NotNull String generate() {
+    public @NotNull String get() {
         return UUID.randomUUID() + "-" + UUID.randomUUID();
     }
 }

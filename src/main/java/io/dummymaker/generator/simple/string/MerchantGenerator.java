@@ -2,30 +2,29 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.bundle.IBundle;
+import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.impl.MerchantBundle;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class MerchantGenerator implements IGenerator<String> {
+public final class MerchantGenerator implements Generator<String> {
 
-    private static final IBundle BUNDLE = new MerchantBundle();
-
-    private final Pattern pattern = Pattern.compile("merchant|broker|dealer|seller|retailer|trader|shipper|vendor",
+    private static final Bundle BUNDLE = new MerchantBundle();
+    private static final Pattern PATTERN = Pattern.compile("merchant|broker|dealer|seller|retailer|trader|shipper|vendor",
             CASE_INSENSITIVE);
 
     @Override
-    public String generate() {
+    public String get() {
         return BUNDLE.random();
     }
 
     @Override
     public Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override

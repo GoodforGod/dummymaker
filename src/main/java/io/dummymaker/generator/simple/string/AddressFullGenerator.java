@@ -2,33 +2,33 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.bundle.IBundle;
+import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.impl.CountryBundle;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Country with address
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see AddressGenerator
  * @since 16.07.2019
  */
-public class AddressFullGenerator implements IGenerator<String> {
+public final class AddressFullGenerator implements Generator<String> {
 
-    private final Pattern pattern = Pattern.compile("addr(ess)?full|place|residence|home|location", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("addr(ess)?full|place|residence|home|location", CASE_INSENSITIVE);
 
-    private final IGenerator<String> generator = new AddressGenerator();
-    private static final IBundle countryBundle = new CountryBundle();
+    private static final Generator<String> GENERATOR = new AddressGenerator();
+    private static final Bundle COUNTRY_BUNDLE = new CountryBundle();
 
     @Override
-    public @NotNull String generate() {
-        return countryBundle.random() + ", " + generator.generate();
+    public @NotNull String get() {
+        return COUNTRY_BUNDLE.random() + ", " + GENERATOR.get();
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

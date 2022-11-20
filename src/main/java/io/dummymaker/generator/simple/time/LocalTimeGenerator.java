@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.time;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.generator.UnixTimeGenerator;
 import java.time.LocalTime;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -11,18 +11,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates localTime object with range from 00:00:00 to 24:00:00
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see LocalTime
  * @since 21.02.2018
  */
-public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
+public final class LocalTimeGenerator implements UnixTimeGenerator<LocalTime> {
 
-    private final Pattern pattern = Pattern.compile("time", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("time", CASE_INSENSITIVE);
 
     private static final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
 
     @Override
-    public @NotNull LocalTime generate() {
+    public @NotNull LocalTime get() {
         return generate(0, GenTime.MAX_UNIX);
     }
 
@@ -33,7 +33,7 @@ public class LocalTimeGenerator implements ITimeGenerator<LocalTime> {
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override

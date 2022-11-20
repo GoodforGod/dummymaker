@@ -8,20 +8,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates bitcoin txhash or block hash
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public class BtcTxHashGenerator extends IdGenerator {
+public final class BtcTxHashGenerator extends IdGenerator {
 
-    private final Pattern pattern = Pattern.compile("tx|btctx|bitcointx|btchash|bictoinhash", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("tx|btctx|bitcointx|btchash|bictoinhash", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String generate() {
-        return super.generate().replace("-", "") + super.generate().replace("-", "");
+    public @NotNull String get() {
+        return super.get().replace("-", "") + super.get().replace("-", "");
     }
 
     @Override
     public @NotNull Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 }

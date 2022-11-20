@@ -2,8 +2,10 @@ package io.dummymaker.generator.simple.number;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.util.RandomUtils;
+
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
@@ -11,20 +13,20 @@ import java.util.regex.Pattern;
  * @author Anton Kurako (GoodforGod)
  * @since 25.08.2022
  */
-public class PriceGenerator implements IGenerator<BigDecimal> {
+public final class PriceGenerator implements Generator<BigDecimal> {
 
-    private final Pattern pattern = Pattern.compile("price|money|cash|bucks|bills", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("price|money|cash|bucks|bills", CASE_INSENSITIVE);
 
     @Override
-    public BigDecimal generate() {
-        final int preDot = CollectionUtils.random(1, 999999);
-        final int afterDot = CollectionUtils.random(1, 99);
+    public BigDecimal get() {
+        final int preDot = RandomUtils.random(1, 999999);
+        final int afterDot = RandomUtils.random(1, 99);
         return new BigDecimal(preDot + "." + afterDot);
     }
 
     @Override
     public Pattern pattern() {
-        return pattern;
+        return PATTERN;
     }
 
     @Override
