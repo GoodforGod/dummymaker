@@ -31,11 +31,4 @@ public @interface GenCustom {
      * @return generator class to be called to generate values on factory (generator is expected to be initialized with Zero Argument Constructor)
      */
     Class<? extends Generator<?>> value();
-
-    /**
-     * @return allowed depth level
-     * @see GenAuto#depth()
-     */
-    @Range(from = 1, to = GenAuto.DEPTH_MAX)
-    int depth() default 10;
 }

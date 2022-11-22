@@ -42,11 +42,4 @@ public @interface GenSet {
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
     int fixed() default -1;
-
-    /**
-     * @see GenAuto#depth()
-     * @return allowed depth for inner elements to apply
-     */
-    @Range(from = 1, to = GenAuto.DEPTH_MAX)
-    int depth() default 1;
 }
