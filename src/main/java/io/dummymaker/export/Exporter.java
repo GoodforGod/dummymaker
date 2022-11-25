@@ -7,14 +7,14 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Allow to export objects in desired format
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see Format
  * @since 26.05.2017
  */
-public interface IExporter {
+public interface Exporter {
 
     /**
-     * Allow to export single object
+     * Allow exporting single object
      *
      * @param t   object to export
      * @param <T> object type
@@ -23,7 +23,7 @@ public interface IExporter {
     <T> boolean export(@Nullable T t);
 
     /**
-     * Allow to export collection of objects
+     * Allow exporting collection of objects
      *
      * @param collection objects to export
      * @param <T>        object type
@@ -32,7 +32,7 @@ public interface IExporter {
     <T> boolean export(@Nullable Collection<T> collection);
 
     /**
-     * Allow to export single object as a single string value
+     * Allow exporting single object as a single string value
      *
      * @param t   object to export
      * @param <T> object type
@@ -42,7 +42,7 @@ public interface IExporter {
     <T> String convert(@Nullable T t);
 
     /**
-     * Allow to export list of objects as single a string value
+     * Allow exporting list of objects as single a string value
      *
      * @param <T>        object type
      * @param collection objects to export

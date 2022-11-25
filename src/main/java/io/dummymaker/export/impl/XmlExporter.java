@@ -2,7 +2,7 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.StringUtils;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 23.7.2020
  */
-public class XmlExporter extends BaseExporter {
+public class XmlExporter extends AbstractExporter {
 
     /**
      * Is used with className for XML list tag
@@ -24,7 +24,7 @@ public class XmlExporter extends BaseExporter {
         super();
     }
 
-    public XmlExporter(@NotNull Function<String, IWriter> writerFunction) {
+    public XmlExporter(@NotNull Function<String, Writer> writerFunction) {
         super(writerFunction);
     }
 
@@ -52,12 +52,12 @@ public class XmlExporter extends BaseExporter {
 
     @Override
     protected @NotNull <T> String prefix(T t, Collection<FieldContainer> containers) {
-        return openXmlTag(naming.format(t.getClass().getSimpleName())) + "\n";
+        return openXmlTag(naming.apply(t.getClass().getSimpleName())) + "\n";
     }
 
     @Override
     protected @NotNull <T> String suffix(T t, Collection<FieldContainer> containers) {
-        return "\n" + closeXmlTag(naming.format(t.getClass().getSimpleName()));
+        return "\n" + closeXmlTag(naming.apply(t.getClass().getSimpleName()));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class XmlExporter extends BaseExporter {
     protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? openXmlTag(naming.format(type + TAG_ENDING)) + "\n"
+                ? openXmlTag(naming.apply(type + TAG_ENDING)) + "\n"
                 : "";
     }
 
@@ -90,7 +90,7 @@ public class XmlExporter extends BaseExporter {
     protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? "\n" + closeXmlTag(naming.format(type + TAG_ENDING))
+                ? "\n" + closeXmlTag(naming.apply(type + TAG_ENDING))
                 : "";
     }
 }

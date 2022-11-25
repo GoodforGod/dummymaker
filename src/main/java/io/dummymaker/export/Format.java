@@ -8,8 +8,8 @@ import java.util.Set;
 /**
  * All available export types for exporters
  *
- * @author GoodforGod
- * @see IExporter
+ * @author Anton Kurako (GoodforGod)
+ * @see Exporter
  * @since 25.02.2018
  */
 public enum Format {

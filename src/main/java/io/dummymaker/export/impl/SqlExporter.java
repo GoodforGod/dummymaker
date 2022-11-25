@@ -3,7 +3,7 @@ package io.dummymaker.export.impl;
 import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Date;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 24.7.2020
  */
-public class SqlExporter extends BaseExporter {
+public class SqlExporter extends AbstractExporter {
 
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
@@ -40,7 +40,7 @@ public class SqlExporter extends BaseExporter {
         super();
     }
 
-    public SqlExporter(@NotNull Function<String, IWriter> writerFunction) {
+    public SqlExporter(@NotNull Function<String, Writer> writerFunction) {
         super(writerFunction);
     }
 
@@ -101,7 +101,7 @@ public class SqlExporter extends BaseExporter {
     }
 
     private <T> String getCollectionName(T t) {
-        return naming.format(t.getClass().getSimpleName()).toLowerCase();
+        return naming.apply(t.getClass().getSimpleName()).toLowerCase();
     }
 
     /**
@@ -251,7 +251,7 @@ public class SqlExporter extends BaseExporter {
         // Write primary key constraint
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
-                .append(naming.format(primaryKeyField))
+                .append(naming.apply(primaryKeyField))
                 .append(")\n);\n")
                 .toString();
     }
@@ -285,7 +285,7 @@ public class SqlExporter extends BaseExporter {
         if (containers.isEmpty())
             return false;
 
-        final IWriter writer = getWriter(t.getClass().getSimpleName());
+        final Writer writer = getWriter(t.getClass().getSimpleName());
 
         // Create Table Query
         if (!writer.write(head(t, containers, true)))

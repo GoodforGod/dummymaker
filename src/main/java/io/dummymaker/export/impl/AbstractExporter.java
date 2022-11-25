@@ -2,16 +2,16 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.error.ExportException;
+import io.dummymaker.export.Case;
 import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
-import io.dummymaker.export.IExporter;
+import io.dummymaker.export.Exporter;
 import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.scan.IExportScanner;
-import io.dummymaker.scan.impl.ExportScanner;
+import io.dummymaker.scan.ExportScanner;
+import io.dummymaker.scan.impl.MainExportScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import io.dummymaker.writer.impl.FileWriter;
 import java.lang.reflect.Field;
 import java.sql.Time;
@@ -31,24 +31,24 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 22.7.2020
  */
-public abstract class BaseExporter implements IExporter {
+abstract class AbstractExporter implements Exporter {
 
     private static final String DEFAULT_EMPTY_VALUE = "";
 
-    protected final IExportScanner scanner = new ExportScanner();
+    protected final ExportScanner scanner = new MainExportScanner();
 
     protected boolean cleanFileBeforeExport = true;
-    protected ICase naming = Cases.DEFAULT.value();
-    protected final Function<String, IWriter> writerFunction;
+    protected Case naming = Cases.DEFAULT.value();
+    protected final Function<String, Writer> writerFunction;
 
-    public BaseExporter() {
+    AbstractExporter() {
         this(fileName -> new FileWriter(fileName, true));
     }
 
     /**
-     * @param writerFunction that maps fileName to {@link IWriter} implementation
+     * @param writerFunction that maps fileName to {@link Writer} implementation
      */
-    public BaseExporter(@NotNull Function<String, IWriter> writerFunction) {
+    AbstractExporter(@NotNull Function<String, Writer> writerFunction) {
         this.writerFunction = writerFunction;
     }
 
@@ -63,12 +63,12 @@ public abstract class BaseExporter implements IExporter {
      * @see Cases
      * @return self
      */
-    public IExporter withCase(@NotNull ICase naming) {
+    public Exporter withCase(@NotNull Case naming) {
         this.naming = naming;
         return this;
     }
 
-    public @NotNull IExporter withAppend() {
+    public @NotNull Exporter withAppend() {
         this.cleanFileBeforeExport = false;
         return this;
     }
@@ -289,7 +289,7 @@ public abstract class BaseExporter implements IExporter {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected @NotNull IWriter getWriter(String filename) {
+    protected @NotNull Writer getWriter(String filename) {
         return writerFunction.apply(filename + "." + getExtension());
     }
 
@@ -302,7 +302,7 @@ public abstract class BaseExporter implements IExporter {
         if (containers.isEmpty())
             return false;
 
-        final IWriter writer = getWriter(t.getClass().getSimpleName());
+        final Writer writer = getWriter(t.getClass().getSimpleName());
 
         final String data = prefix(t, containers) + map(t, containers) + suffix(t, containers);
         final String head = head(t, containers, false);
@@ -320,7 +320,7 @@ public abstract class BaseExporter implements IExporter {
         if (containers.isEmpty())
             return false;
 
-        final IWriter writer = getWriter(t.getClass().getSimpleName());
+        final Writer writer = getWriter(t.getClass().getSimpleName());
 
         final String data = convertData(collection, containers);
         final String head = head(t, containers, true);

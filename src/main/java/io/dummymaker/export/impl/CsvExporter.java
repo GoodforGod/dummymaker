@@ -2,7 +2,7 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainer.Type;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 22.7.2020
  */
-public class CsvExporter extends BaseExporter {
+public class CsvExporter extends AbstractExporter {
 
     public static final char DEFAULT_SEPARATOR = ',';
 
@@ -31,7 +31,7 @@ public class CsvExporter extends BaseExporter {
         super();
     }
 
-    public CsvExporter(@NotNull Function<String, IWriter> writerFunction) {
+    public CsvExporter(@NotNull Function<String, Writer> writerFunction) {
         super(writerFunction);
     }
 

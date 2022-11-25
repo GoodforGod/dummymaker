@@ -2,7 +2,7 @@ package io.dummymaker.export.impl;
 
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.StringUtils;
-import io.dummymaker.writer.IWriter;
+import io.dummymaker.writer.Writer;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 23.7.2020
  */
-public class JsonExporter extends BaseExporter {
+public class JsonExporter extends AbstractExporter {
 
     public JsonExporter() {
         super();
     }
 
-    public JsonExporter(@NotNull Function<String, IWriter> writerFunction) {
+    public JsonExporter(@NotNull Function<String, Writer> writerFunction) {
         super(writerFunction);
     }
 
