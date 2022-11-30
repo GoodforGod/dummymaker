@@ -1,4 +1,4 @@
-package io.dummymaker.bundle.impl;
+package io.dummymaker.bundle;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.util.CollectionUtils;

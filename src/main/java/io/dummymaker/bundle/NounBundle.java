@@ -1,4 +1,4 @@
-package io.dummymaker.bundle.impl;
+package io.dummymaker.bundle;
 
 import java.util.Arrays;
 import java.util.List;
