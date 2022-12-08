@@ -12,12 +12,12 @@ import java.lang.annotation.Target;
 /**
  * @author Anton Kurako (GoodforGod)
  * @see TimeComplexGenerator
- * @since 06.03.2018
+ * @since 02.12.2022
  */
 @GenCustom(TimeComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenTime {
+public @interface GenUnixTime {
 
     /**
      * Unix Timestamp for 1-1-1970.
@@ -28,15 +28,6 @@ public @interface GenTime {
      * Unix Timestamp for 12-31-2099.
      */
     long MAX_UNIX = 4102358400L;
-
-    /**
-     * ISO 8601 datetime format for DateTime and timestamps
-     *
-     * @see java.time.format.DateTimeFormatter#ISO_DATE_TIME default for datetimes
-     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only formats
-     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only formats
-     */
-    String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
     /**
      * Minimum generated time from 01-01-1970 as unix timestamp.
@@ -53,11 +44,4 @@ public @interface GenTime {
      */
     @Range(from = MIN_UNIX, to = MAX_UNIX)
     long toUnixTime() default MAX_UNIX;
-
-    /**
-     * Format in which export date is converted to string.
-     *
-     * @return export format (default is ISO 8601)
-     */
-    String formatter() default DEFAULT_FORMAT;
 }

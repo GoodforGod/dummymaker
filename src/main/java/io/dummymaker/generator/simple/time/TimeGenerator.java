@@ -23,7 +23,7 @@ public final class TimeGenerator implements UnixTimeGenerator<Time> {
     }
 
     @Override
-    public @NotNull Time generate(final long minUnix, final long maxUnix) {
-        return Time.valueOf(generator.generate(minUnix, maxUnix));
+    public @NotNull Time generate(final long fromUnixTime, final long toUnixTime) {
+        return Time.valueOf(generator.generate(fromUnixTime, toUnixTime));
     }
 }

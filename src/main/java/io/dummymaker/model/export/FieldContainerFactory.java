@@ -4,7 +4,7 @@ import static io.dummymaker.util.StringUtils.isEmpty;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.annotation.export.GenExportName;
-import io.dummymaker.annotation.special.GenSequence;
+import io.dummymaker.annotation.GenSequence;
 import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Field;
 import java.math.BigInteger;

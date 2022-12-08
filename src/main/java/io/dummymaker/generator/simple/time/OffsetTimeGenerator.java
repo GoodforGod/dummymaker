@@ -24,8 +24,8 @@ public final class OffsetTimeGenerator implements UnixTimeGenerator<OffsetTime> 
     }
 
     @Override
-    public @NotNull OffsetTime generate(final long minUnix, final long maxUnix) {
+    public @NotNull OffsetTime generate(final long fromUnixTime, final long toUnixTime) {
         final ZoneOffset zoneOffset = ZoneOffset.ofHours(RandomUtils.random(-18, 18));
-        return OffsetTime.of(generator.generate(minUnix, maxUnix), zoneOffset);
+        return OffsetTime.of(generator.generate(fromUnixTime, toUnixTime), zoneOffset);
     }
 }

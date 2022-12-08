@@ -1,6 +1,8 @@
-package io.dummymaker.export;
+package io.dummymaker.cases;
 
 import java.util.function.Function;
+
+import io.dummymaker.export.Exporter;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -3,11 +3,10 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.ExtensionBundle;
-import io.dummymaker.bundle.impl.NounBundle;
+import io.dummymaker.bundle.ExtensionBundle;
+import io.dummymaker.bundle.NounBundle;
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates file names with extensions

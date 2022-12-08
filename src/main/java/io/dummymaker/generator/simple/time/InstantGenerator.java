@@ -24,8 +24,8 @@ public final class InstantGenerator implements UnixTimeGenerator<Instant> {
     }
 
     @Override
-    public @NotNull Instant generate(final long minUnix, final long maxUnix) {
+    public @NotNull Instant generate(final long fromUnixTime, final long toUnixTime) {
         final ZoneOffset zoneOffset = ZoneOffset.ofHours(RandomUtils.random(-18, 18));
-        return generator.generate(minUnix, maxUnix).toInstant(zoneOffset);
+        return generator.generate(fromUnixTime, toUnixTime).toInstant(zoneOffset);
     }
 }

@@ -1,14 +1,12 @@
-package io.dummymaker.model.graph;
+package io.dummymaker.model;
 
 import java.util.Objects;
 
 /**
- * "default comment"
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 05.08.2019
  */
-public class Payload {
+public final class Payload {
 
     private final Class<?> type;
     private final int depth;

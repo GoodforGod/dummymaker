@@ -22,7 +22,7 @@ public final class YearGenerator implements UnixTimeGenerator<Year> {
     }
 
     @Override
-    public @NotNull Year generate(final long minUnix, final long maxUnix) {
-        return Year.of(generator.generate(minUnix, maxUnix).getYear());
+    public @NotNull Year generate(final long fromUnixTime, final long toUnixTime) {
+        return Year.of(generator.generate(fromUnixTime, toUnixTime).getYear());
     }
 }

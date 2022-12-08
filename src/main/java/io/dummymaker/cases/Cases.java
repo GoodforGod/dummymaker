@@ -1,7 +1,6 @@
-package io.dummymaker.export;
+package io.dummymaker.cases;
 
-import io.dummymaker.export.cases.*;
-import org.jetbrains.annotations.NotNull;
+import io.dummymaker.export.Exporter;
 
 /**
  * Naming strategy for class and field names

@@ -3,8 +3,8 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.FemaleNameBundle;
-import io.dummymaker.bundle.impl.MaleNameBundle;
+import io.dummymaker.bundle.FemaleNameBundle;
+import io.dummymaker.bundle.MaleNameBundle;
 import io.dummymaker.generator.Generator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;

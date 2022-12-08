@@ -8,7 +8,10 @@ import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainerFactory;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import io.dummymaker.scan.ExportScanner;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,15 +24,14 @@ import org.jetbrains.annotations.NotNull;
  * @see GenExportName
  * @since 03.06.2017
  */
-public class MainExportScanner extends AbstractScanner implements io.dummymaker.scan.ExportScanner {
+public class MainExportScanner extends AbstractScanner implements ExportScanner {
 
     private final FieldContainerFactory factory = new FieldContainerFactory();
 
     @Override
-    public @NotNull Collection<FieldContainer> scan(Class<?> target) {
+    public @NotNull List<FieldContainer> scan(Class<?> target) {
         return getValidFields(target).stream()
-                .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
-                        .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
+                .filter(f -> Arrays.stream(f.getDeclaredAnnotations()).noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
                 .map(factory::build)
                 .collect(Collectors.toList());
     }

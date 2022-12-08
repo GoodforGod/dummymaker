@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @see io.dummymaker.scan.impl.UniqueScanner
  * @since 30.05.2017
  */
-public interface AnnotationScanner extends MapScanner<Field, List<Annotation>, Class> {
+public interface AnnotationScanner extends MapScanner<Field, List<Annotation>, Class<?>> {
 
     /**
      * Scan class for field annotations
@@ -26,5 +26,5 @@ public interface AnnotationScanner extends MapScanner<Field, List<Annotation>, C
      */
     @Override
     @NotNull
-    Map<Field, List<Annotation>> scan(Class target);
+    Map<Field, List<Annotation>> scan(Class<?> target);
 }

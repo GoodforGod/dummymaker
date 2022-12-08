@@ -1,8 +1,9 @@
 package io.dummymaker.scan;
 
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.factory.MainGenFactory;
 import io.dummymaker.model.GenContainer;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @see GenContainer
  * @since 10.03.2018
  */
-public interface GenScanner extends MapScanner<Field, GenContainer, Class> {
+public interface GenScanner extends ListScanner<GenContainer, Class<?>> {
 
     /**
      * Scan for annotated target fields
@@ -23,5 +24,5 @@ public interface GenScanner extends MapScanner<Field, GenContainer, Class> {
      * @return map of fields and its gen containers
      */
     @NotNull
-    Map<Field, GenContainer> scan(Class target);
+    List<GenContainer> scan(Class<?> target);
 }

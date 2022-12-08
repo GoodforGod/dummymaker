@@ -1,5 +1,7 @@
 package io.dummymaker.model;
 
+import io.dummymaker.factory.GenFactory;
+import io.dummymaker.factory.GenSupplier;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -9,12 +11,12 @@ import org.jetbrains.annotations.Nullable;
  * Rules for field type and field name generators overrides Allows to override gen auto generator
  * setup without annotations Just by passing this config to factory
  *
- * @author GoodforGod
- * @see io.dummymaker.factory.IGenFactory
- * @see io.dummymaker.factory.IGenSupplier
+ * @author Anton Kurako (GoodforGod)
+ * @see GenFactory
+ * @see GenSupplier
  * @since 01.08.2019
  */
-public class GenRules {
+public final class GenRules {
 
     private final List<GenRule> rules;
 

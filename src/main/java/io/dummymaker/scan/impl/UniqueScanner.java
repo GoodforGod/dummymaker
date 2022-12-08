@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class UniqueScanner extends MainAnnotationScanner {
 
     @Override
-    public @NotNull Map<Field, List<Annotation>> scan(final Class target) {
+    public @NotNull Map<Field, List<Annotation>> scan(Class<?> target) {
         final Map<Field, List<Annotation>> scanned = new LinkedHashMap<>();
 
         super.scan(target).forEach((k, v) -> {

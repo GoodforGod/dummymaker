@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 5.5.2020
  */
-public class Pair<K, V> {
+public final class Pair<K, V> {
 
     private static final Pair<?, ?> EMPTY = new Pair<>(null, null);
 

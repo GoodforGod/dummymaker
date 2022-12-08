@@ -1,6 +1,7 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.factory.GenSupplier;
+import io.dummymaker.factory.refactored.GeneratorSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
@@ -15,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
  * Scanner that sets gen rules where needed
  *
  * @author Anton Kurako (GoodforGod)
- * @see GenAutoScanner
+ * @see MainGenAutoScanner
  * @see GenRules
  * @since 18.08.2019
  */
-public class GenRuledScanner extends GenAutoScanner {
+public class GenRuledScanner extends MainGenAutoScanner {
 
     private final GenRules rules;
 
@@ -29,18 +30,18 @@ public class GenRuledScanner extends GenAutoScanner {
     }
 
     @Override
-    public @NotNull Map<Field, GenContainer> scan(Class target) {
+    public @NotNull List<GenContainer> scan(Class<?> target) {
         return scan(target, false);
     }
 
     @Override
-    public @NotNull Map<Field, GenContainer> scan(Class target, boolean isDefaultAuto) {
+    public @NotNull List<GenContainer> scan(Class<?> target, boolean isDefaultAuto) {
         final Optional<GenRule> targeted = (rules == null)
                 ? Optional.empty()
                 : rules.targeted(target);
 
         final boolean isAutoRuled = targeted.map(GenRule::isAuto).orElse(isDefaultAuto);
-        final Map<Field, GenContainer> scanned = super.scan(target, isAutoRuled);
+        final List<GenContainer> scanned = super.scan(target, isAutoRuled);
         if (!targeted.isPresent()) {
             return scanned;
         }
@@ -54,7 +55,7 @@ public class GenRuledScanner extends GenAutoScanner {
                         final GenContainer container = r.getDesiredExample(f)
                                 .map(g -> GenContainer.asExample(f, g, isComplex(f)))
                                 .orElseGet(() -> r.getDesired(f)
-                                        .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
+                                        .map(g -> GenContainer.ofAuto(f, g, isComplex(f)))
                                         .orElse(scanned.get(f)));
 
                         if (container != null && !r.isIgnored(f)) {

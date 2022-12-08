@@ -3,11 +3,10 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.ProductBundle;
+import io.dummymaker.bundle.ProductBundle;
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates product names

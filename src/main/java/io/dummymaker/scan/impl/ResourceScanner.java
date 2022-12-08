@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.Scanner;
+import io.dummymaker.scan.ListScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.PackageUtils;
 import io.dummymaker.util.StringUtils;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 25.07.2019
  */
-public class ResourceScanner implements Scanner<String, String> {
+public class ResourceScanner implements ListScanner<String, String> {
 
     /**
      * Scans for all resources under specified package and its subdirectories
@@ -30,7 +30,7 @@ public class ResourceScanner implements Scanner<String, String> {
      * @return list of resources under target package or path
      */
     @Override
-    public @NotNull Collection<String> scan(String packageOrPath) {
+    public @NotNull List<String> scan(String packageOrPath) {
         if (StringUtils.isBlank(packageOrPath))
             return Collections.emptyList();
 
@@ -53,8 +53,9 @@ public class ResourceScanner implements Scanner<String, String> {
      */
     private static Collection<String> loadFromDirectory(File directory, String packageName) {
         final String[] files = directory.list();
-        if (CollectionUtils.isEmpty(files))
+        if (CollectionUtils.isEmpty(files)) {
             return Collections.emptySet();
+        }
 
         final Collection<String> classes = new ArrayList<>();
         for (String file : files) {
@@ -62,8 +63,9 @@ public class ResourceScanner implements Scanner<String, String> {
 
             // If is directory recursively load all classes
             final File subdir = new File(directory, file);
-            if (subdir.isDirectory())
+            if (subdir.isDirectory()) {
                 classes.addAll(loadFromDirectory(subdir, packageName + "/" + file));
+            }
         }
 
         return classes;
@@ -105,8 +107,9 @@ public class ResourceScanner implements Scanner<String, String> {
      */
     public Collection<String> scanAbsolute(String packageOrPath) {
         final Collection<String> scanned = scan(packageOrPath);
-        if (scanned.isEmpty())
+        if (scanned.isEmpty()) {
             return Collections.emptySet();
+        }
 
         final String path = PackageUtils.toRelativePath(packageOrPath);
         return getSystemResources(packageOrPath).stream()
@@ -127,12 +130,14 @@ public class ResourceScanner implements Scanner<String, String> {
         try {
             final String path = PackageUtils.toRelativePath(packageOrPath);
             final Enumeration<URL> resourceUrls = getClass().getClassLoader().getResources(path);
-            if (!resourceUrls.hasMoreElements())
+            if (!resourceUrls.hasMoreElements()) {
                 return Collections.emptyList();
+            }
 
             final List<URL> resources = new ArrayList<>();
-            while (resourceUrls.hasMoreElements())
+            while (resourceUrls.hasMoreElements()) {
                 resources.add(resourceUrls.nextElement());
+            }
 
             return resources;
         } catch (IOException e) {

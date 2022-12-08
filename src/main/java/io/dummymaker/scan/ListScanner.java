@@ -1,6 +1,8 @@
 package io.dummymaker.scan;
 
 import java.util.Collection;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 25.07.2019
  */
-public interface Scanner<V, T> {
+public interface ListScanner<V, T> {
 
     /**
      * Simple scanner contract
@@ -18,5 +20,5 @@ public interface Scanner<V, T> {
      * @return list with values
      */
     @NotNull
-    Collection<V> scan(T target);
+    List<V> scan(T target);
 }

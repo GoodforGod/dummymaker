@@ -1,7 +1,6 @@
 package io.dummymaker.generator;
 
-import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.factory.IGenStorage;
+import io.dummymaker.factory.GenStorage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +10,10 @@ import org.jetbrains.annotations.Nullable;
  * Complex Generator used by ComplexGen annotation to populate fields When annotation have
  * attributes or value generates for multiple field types
  *
- * @author GoodforGod
- * @see ComplexGen
+ * @author Anton Kurako (GoodforGod)
  * @since 21.04.2018
  */
-public interface IComplexGenerator extends IGenerator<Object> {
+public interface ComplexGenerator extends Generator<Object> {
 
     /**
      * Generates object for field marked by complex annotation
@@ -30,7 +28,7 @@ public interface IComplexGenerator extends IGenerator<Object> {
     @Nullable
     Object generate(@NotNull Class<?> parent,
                     @NotNull Field field,
-                    @NotNull IGenStorage storage,
+                    @NotNull GenStorage storage,
                     @Nullable Annotation annotation,
                     int depth);
 }

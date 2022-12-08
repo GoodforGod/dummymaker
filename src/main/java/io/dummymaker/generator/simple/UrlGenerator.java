@@ -1,12 +1,11 @@
 package io.dummymaker.generator.simple;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.DomainBundle;
-import io.dummymaker.bundle.impl.LoginBundle;
+import io.dummymaker.bundle.DomainBundle;
+import io.dummymaker.bundle.LoginBundle;
 import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.regex.Pattern;

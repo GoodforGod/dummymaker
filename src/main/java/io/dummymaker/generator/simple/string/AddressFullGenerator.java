@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.CountryBundle;
+import io.dummymaker.bundle.CountryBundle;
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;

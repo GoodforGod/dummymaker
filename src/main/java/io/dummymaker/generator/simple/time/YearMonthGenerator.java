@@ -23,8 +23,8 @@ public final class YearMonthGenerator implements UnixTimeGenerator<YearMonth> {
     }
 
     @Override
-    public @NotNull YearMonth generate(final long minUnix, final long maxUnix) {
-        final LocalDateTime localDateTime = generator.generate(minUnix, maxUnix);
+    public @NotNull YearMonth generate(final long fromUnixTime, final long toUnixTime) {
+        final LocalDateTime localDateTime = generator.generate(fromUnixTime, toUnixTime);
         return YearMonth.of(localDateTime.getYear(), localDateTime.getMonth());
     }
 }

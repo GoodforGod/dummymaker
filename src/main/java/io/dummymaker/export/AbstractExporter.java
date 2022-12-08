@@ -1,9 +1,9 @@
-package io.dummymaker.export.impl;
+package io.dummymaker.export;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.error.ExportException;
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.export.Exporter;
 import io.dummymaker.model.export.DateFieldContainer;
 import io.dummymaker.model.export.FieldContainer;

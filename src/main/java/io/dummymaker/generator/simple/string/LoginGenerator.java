@@ -4,7 +4,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.LoginBundle;
+import io.dummymaker.bundle.LoginBundle;
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;

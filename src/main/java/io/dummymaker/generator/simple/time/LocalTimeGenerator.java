@@ -27,8 +27,8 @@ public final class LocalTimeGenerator implements UnixTimeGenerator<LocalTime> {
     }
 
     @Override
-    public @NotNull LocalTime generate(final long minUnix, final long maxUnix) {
-        return generator.generate(minUnix, maxUnix).toLocalTime();
+    public @NotNull LocalTime generate(final long fromUnixTime, final long toUnixTime) {
+        return generator.generate(fromUnixTime, toUnixTime).toLocalTime();
     }
 
     @Override

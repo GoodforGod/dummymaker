@@ -27,8 +27,8 @@ public final class LocalDateGenerator implements UnixTimeGenerator<LocalDate> {
     }
 
     @Override
-    public @NotNull LocalDate generate(final long minUnix, final long maxUnix) {
-        return generator.generate(minUnix, maxUnix).toLocalDate();
+    public @NotNull LocalDate generate(final long fromUnixTime, final long toUnixTime) {
+        return generator.generate(fromUnixTime, toUnixTime).toLocalDate();
     }
 
     @Override

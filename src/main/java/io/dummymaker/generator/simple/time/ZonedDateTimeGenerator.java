@@ -24,8 +24,8 @@ public final class ZonedDateTimeGenerator implements UnixTimeGenerator<ZonedDate
     }
 
     @Override
-    public @NotNull ZonedDateTime generate(final long minUnix, final long maxUnix) {
+    public @NotNull ZonedDateTime generate(final long fromUnixTime, final long toUnixTime) {
         final ZoneOffset zoneOffset = ZoneOffset.ofHours(RandomUtils.random(-18, 18));
-        return ZonedDateTime.of(generator.generate(minUnix, maxUnix), zoneOffset);
+        return ZonedDateTime.of(generator.generate(fromUnixTime, toUnixTime), zoneOffset);
     }
 }

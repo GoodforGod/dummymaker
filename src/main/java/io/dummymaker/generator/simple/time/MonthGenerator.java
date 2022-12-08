@@ -22,7 +22,7 @@ public final class MonthGenerator implements UnixTimeGenerator<Month> {
     }
 
     @Override
-    public @NotNull Month generate(final long minUnix, final long maxUnix) {
-        return generator.generate(minUnix, maxUnix).getMonth();
+    public @NotNull Month generate(final long fromUnixTime, final long toUnixTime) {
+        return generator.generate(fromUnixTime, toUnixTime).getMonth();
     }
 }

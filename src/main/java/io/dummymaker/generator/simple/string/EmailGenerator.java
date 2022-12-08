@@ -3,9 +3,9 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
-import io.dummymaker.bundle.impl.DomainBundle;
-import io.dummymaker.bundle.impl.EmailServicesBundle;
-import io.dummymaker.bundle.impl.LoginBundle;
+import io.dummymaker.bundle.DomainBundle;
+import io.dummymaker.bundle.EmailServicesBundle;
+import io.dummymaker.bundle.LoginBundle;
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;

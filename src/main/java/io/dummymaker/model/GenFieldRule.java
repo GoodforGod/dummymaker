@@ -1,12 +1,12 @@
 package io.dummymaker.model;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import java.util.*;
 
 /**
  * Gen rules for specific field
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenRules
  * @since 01.08.2019
  */
@@ -14,31 +14,31 @@ public class GenFieldRule {
 
     private final Class<?> fieldType;
     private final Set<String> fieldNames;
-    private final Class<? extends IGenerator> generator;
-    private final IGenerator<?> generatorExample;
+    private final Class<? extends Generator> generator;
+    private final Generator<?> generatorExample;
 
-    GenFieldRule(Class<? extends IGenerator> generator, String... fieldNames) {
+    GenFieldRule(Class<? extends Generator> generator, String... fieldNames) {
         this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
         this.fieldType = null;
         this.generator = generator;
         this.generatorExample = null;
     }
 
-    GenFieldRule(Class<? extends IGenerator> generator, Class<?> fieldType) {
+    GenFieldRule(Class<? extends Generator> generator, Class<?> fieldType) {
         this.fieldNames = Collections.emptySet();
         this.fieldType = fieldType;
         this.generator = generator;
         this.generatorExample = null;
     }
 
-    GenFieldRule(IGenerator<?> generator, String... fieldNames) {
+    GenFieldRule(Generator<?> generator, String... fieldNames) {
         this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
         this.fieldType = null;
         this.generator = null;
         this.generatorExample = generator;
     }
 
-    GenFieldRule(IGenerator<?> generator, Class<?> fieldType) {
+    GenFieldRule(Generator<?> generator, Class<?> fieldType) {
         this.fieldNames = Collections.emptySet();
         this.fieldType = fieldType;
         this.generator = null;
@@ -61,11 +61,11 @@ public class GenFieldRule {
         return fieldNames;
     }
 
-    public Class<? extends IGenerator> getGenerator() {
+    public Class<? extends Generator> getGenerator() {
         return generator;
     }
 
-    public IGenerator<?> getGeneratorExample() {
+    public Generator<?> getGeneratorExample() {
         return generatorExample;
     }
 

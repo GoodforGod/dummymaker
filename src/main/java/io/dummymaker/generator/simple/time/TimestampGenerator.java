@@ -22,7 +22,7 @@ public final class TimestampGenerator implements UnixTimeGenerator<Timestamp> {
     }
 
     @Override
-    public @NotNull Timestamp generate(final long minUnix, final long maxUnix) {
-        return Timestamp.valueOf(generator.generate(minUnix, maxUnix));
+    public @NotNull Timestamp generate(final long fromUnixTime, final long toUnixTime) {
+        return Timestamp.valueOf(generator.generate(fromUnixTime, toUnixTime));
     }
 }

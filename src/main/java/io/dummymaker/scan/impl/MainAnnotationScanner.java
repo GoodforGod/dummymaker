@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import io.dummymaker.scan.AnnotationScanner;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +17,15 @@ import org.slf4j.LoggerFactory;
  * Scan field for all annotations Core scanner implementation
  *
  * @author Anton Kurako (GoodforGod)
- * @see io.dummymaker.scan.AnnotationScanner
+ * @see AnnotationScanner
  * @since 30.05.2017
  */
-public class MainAnnotationScanner extends AbstractScanner implements io.dummymaker.scan.AnnotationScanner {
+public class MainAnnotationScanner extends AbstractScanner implements AnnotationScanner {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public @NotNull Map<Field, List<Annotation>> scan(final Class target) {
+    public @NotNull Map<Field, List<Annotation>> scan(final Class<?> target) {
         final Map<Field, List<Annotation>> fieldAnnotationsMap = new LinkedHashMap<>();
 
         final List<Field> validFields = getValidFields(target);

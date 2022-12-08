@@ -1,30 +1,28 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.core.ComplexGen;
-import io.dummymaker.annotation.core.PrimeGen;
-import io.dummymaker.annotation.special.GenCustom;
-import io.dummymaker.annotation.special.GenIgnore;
+import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenIgnore;
 import io.dummymaker.model.GenContainer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
+
+import io.dummymaker.scan.ListScanner;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Scanner used by populate factory Scan for prime gen annotation and its child annotation
  *
  * @author Anton Kurako (GoodforGod)
- * @see PrimeGen
- * @see ComplexGen
+ * @see GenCustom
  * @since 29.05.2017
  */
-public class MainGenScanner extends AbstractScanner implements io.dummymaker.scan.GenScanner {
+public class MainGenScanner extends AbstractScanner implements ListScanner<GenContainer, Class<?>> {
 
     private final Predicate<Annotation> isGenCustom = a -> GenCustom.class.equals(a.annotationType());
     private final Predicate<Annotation> isIgnored = a -> GenIgnore.class.equals(a.annotationType());
-    private final Predicate<Annotation> isGen = a -> PrimeGen.class.equals(a.annotationType())
-            || ComplexGen.class.equals(a.annotationType());
+    private final Predicate<Annotation> isGen = a -> GenCustom.class.equals(a.annotationType());
 
     /**
      * Scan for prime/complex gen annotation and its child annotation
@@ -35,13 +33,13 @@ public class MainGenScanner extends AbstractScanner implements io.dummymaker.sca
      * @see GenContainer
      */
     @Override
-    public @NotNull Map<Field, GenContainer> scan(final Class target) {
-        final Map<Field, GenContainer> containers = new LinkedHashMap<>();
+    public @NotNull List<GenContainer> scan(Class<?> target) {
+        final List<GenContainer> containers = new ArrayList<>();
 
         final List<Field> validFields = getValidFields(target);
         validFields.stream()
                 .filter(f -> !isIgnored(f))
-                .forEach(f -> getContainer(f).ifPresent(c -> containers.put(f, c)));
+                .forEach(f -> getContainer(f).ifPresent(containers::add));
 
         return containers;
     }
@@ -52,7 +50,7 @@ public class MainGenScanner extends AbstractScanner implements io.dummymaker.sca
      * @param field to check against
      * @return true if field is complex
      */
-    protected boolean isComplex(final Field field) {
+    protected boolean isComplex(Field field) {
         final Class<?> declaringClass = field.getType();
         return (List.class.isAssignableFrom(declaringClass)
                 || Set.class.isAssignableFrom(declaringClass)
@@ -73,12 +71,12 @@ public class MainGenScanner extends AbstractScanner implements io.dummymaker.sca
     private Optional<GenContainer> getContainer(Field field) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {
             if (isGenCustom.test(annotation)) {
-                return Optional.of(GenContainer.asCustom(field, annotation));
+                return Optional.of(GenContainer.ofMarker(field, annotation));
             }
 
             for (Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                 if (isGen.test(inline)) {
-                    return Optional.of(GenContainer.asGen(field, inline, annotation));
+                    return Optional.of(GenContainer.ofRule(field, inline, annotation));
                 }
             }
         }
@@ -92,7 +90,7 @@ public class MainGenScanner extends AbstractScanner implements io.dummymaker.sca
      * @param field to validate
      * @return true if fields is ignored
      */
-    protected boolean isIgnored(final Field field) {
+    protected boolean isIgnored(Field field) {
         return Arrays.stream(field.getDeclaredAnnotations()).anyMatch(isIgnored);
     }
 }

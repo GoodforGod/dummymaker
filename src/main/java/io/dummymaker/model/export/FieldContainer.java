@@ -1,14 +1,14 @@
 package io.dummymaker.model.export;
 
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.ICase;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.util.StringUtils;
 import java.lang.reflect.Field;
 
 /**
  * Used by ClassContainer to contain field value, and final field name
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 03.09.2017
  */
 public class FieldContainer {
@@ -79,9 +79,9 @@ public class FieldContainer {
         return getExportName(Cases.DEFAULT.value());
     }
 
-    public String getExportName(ICase naming) {
+    public String getExportName(Case naming) {
         return StringUtils.isEmpty(exportName)
-                ? naming.format(field.getName())
+                ? naming.apply(field.getName())
                 : exportName;
     }
 }

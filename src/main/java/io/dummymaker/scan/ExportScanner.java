@@ -2,6 +2,8 @@ package io.dummymaker.scan;
 
 import io.dummymaker.model.export.FieldContainer;
 import java.util.Collection;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 27.04.2018
  */
-public interface ExportScanner extends Scanner<FieldContainer, Class<?>> {
+public interface ExportScanner extends ListScanner<FieldContainer, Class<?>> {
 
     @NotNull
-    Collection<FieldContainer> scan(Class<?> target);
+    List<FieldContainer> scan(Class<?> target);
 }

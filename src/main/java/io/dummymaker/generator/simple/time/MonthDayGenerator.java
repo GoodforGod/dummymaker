@@ -23,8 +23,8 @@ public final class MonthDayGenerator implements UnixTimeGenerator<MonthDay> {
     }
 
     @Override
-    public @NotNull MonthDay generate(final long minUnix, final long maxUnix) {
-        final LocalDateTime localDateTime = generator.generate(minUnix, maxUnix);
+    public @NotNull MonthDay generate(final long fromUnixTime, final long toUnixTime) {
+        final LocalDateTime localDateTime = generator.generate(fromUnixTime, toUnixTime);
         return MonthDay.of(localDateTime.getMonth(), localDateTime.getDayOfMonth());
     }
 }

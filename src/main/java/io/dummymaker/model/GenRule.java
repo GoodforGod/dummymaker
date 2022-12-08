@@ -1,6 +1,7 @@
 package io.dummymaker.model;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -10,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Rule for settings generator type for specific field name or field type
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenRules
  * @since 01.08.2019
  */
-public class GenRule {
+public final class GenRule {
 
     private static final Class<?> GLOBAL_MARKER = Object.class;
 
@@ -38,7 +39,7 @@ public class GenRule {
      * @param target for rule
      * @return targeted class rule
      */
-    public static @NotNull GenRule of(Class<?> target) {
+    public static @NotNull GenRule manual(Class<?> target) {
         if (target == null || GLOBAL_MARKER.equals(target))
             throw new IllegalArgumentException("Invalid target class");
 
@@ -51,7 +52,7 @@ public class GenRule {
      *
      * @param target for rule
      * @return gen auto class rule
-     * @see io.dummymaker.annotation.special.GenAuto
+     * @see GenAuto
      */
     public static @NotNull GenRule auto(Class<?> target) {
         if (target == null || GLOBAL_MARKER.equals(target))
@@ -67,7 +68,7 @@ public class GenRule {
      * @param target for rule
      * @param depth  to set
      * @return gen auto class rule
-     * @see io.dummymaker.annotation.special.GenAuto
+     * @see GenAuto
      */
     public static @NotNull GenRule auto(Class<?> target, int depth) {
         if (target == null || GLOBAL_MARKER.equals(target))
@@ -129,11 +130,11 @@ public class GenRule {
      * @param field targeted
      * @return generator for named field or optional generator for specific type from rules
      */
-    public @NotNull Optional<IGenerator<?>> getDesiredExample(Field field) {
+    public @NotNull Optional<Generator<?>> getDesiredExample(Field field) {
         if (field == null || isIgnored(field))
             return Optional.empty();
 
-        final Optional<IGenerator<?>> namedGenerator = this.rules.stream()
+        final Optional<Generator<?>> namedGenerator = this.rules.stream()
                 .filter(GenFieldRule::haveExample)
                 .filter(r -> r.getNames().contains(field.getName()))
                 .findAny()
@@ -154,11 +155,11 @@ public class GenRule {
      * @param field targeted
      * @return generator for named field or optional generator for specific type from rules
      */
-    public @NotNull Optional<Class<? extends IGenerator>> getDesired(Field field) {
+    public @NotNull Optional<Class<? extends Generator>> getDesired(Field field) {
         if (field == null || isIgnored(field))
             return Optional.empty();
 
-        final Optional<Class<? extends IGenerator>> namedGenerator = this.rules.stream()
+        final Optional<Class<? extends Generator>> namedGenerator = this.rules.stream()
                 .filter(r -> r.getNames().contains(field.getName()))
                 .findAny()
                 .map(GenFieldRule::getGenerator);
@@ -178,7 +179,7 @@ public class GenRule {
      * @param fieldNames fields with names to affect
      * @return same rule
      */
-    public @NotNull GenRule add(IGenerator<?> generator, String... fieldNames) {
+    public @NotNull GenRule add(Generator<?> generator, String... fieldNames) {
         if (CollectionUtils.isEmpty(fieldNames) || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
@@ -194,7 +195,7 @@ public class GenRule {
      * @param fieldType field type to affect
      * @return same rule
      */
-    public @NotNull GenRule add(IGenerator<?> generator, Class<?> fieldType) {
+    public @NotNull GenRule add(Generator<?> generator, Class<?> fieldType) {
         if (fieldType == null || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
@@ -210,7 +211,7 @@ public class GenRule {
      * @param fieldNames fields with names to affect
      * @return same rule
      */
-    public @NotNull GenRule add(Class<? extends IGenerator> generator, String... fieldNames) {
+    public @NotNull GenRule add(Class<? extends Generator> generator, String... fieldNames) {
         if (CollectionUtils.isEmpty(fieldNames) || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 
@@ -226,7 +227,7 @@ public class GenRule {
      * @param fieldType field type to affect
      * @return same rule
      */
-    public @NotNull GenRule add(Class<? extends IGenerator> generator, Class<?> fieldType) {
+    public @NotNull GenRule add(Class<? extends Generator> generator, Class<?> fieldType) {
         if (fieldType == null || generator == null)
             throw new IllegalArgumentException("Arguments can not be null or empty");
 

@@ -1,8 +1,9 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.scan.Scanner;
+import io.dummymaker.scan.ListScanner;
 import io.dummymaker.util.PackageUtils;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 24.07.2019
  */
-public class ClassScanner implements Scanner<Class, String> {
+public class ClassScanner implements ListScanner<Class<?>, String> {
 
     private final ResourceScanner resourceScanner = new ResourceScanner();
 
     @Override
-    public @NotNull Collection<Class> scan(String packageName) {
+    public @NotNull List<Class<?>> scan(String packageName) {
         final Collection<String> resources = resourceScanner.scan(packageName);
 
         return resources.stream()

@@ -1,6 +1,5 @@
-package io.dummymaker.export.cases;
+package io.dummymaker.cases;
 
-import io.dummymaker.export.Case;
 import org.jetbrains.annotations.NotNull;
 
 /**

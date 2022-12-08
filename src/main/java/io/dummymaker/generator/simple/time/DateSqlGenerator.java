@@ -22,7 +22,7 @@ public final class DateSqlGenerator implements UnixTimeGenerator<Date> {
     }
 
     @Override
-    public @NotNull Date generate(long minUnix, long maxUnix) {
-        return Date.valueOf(generator.generate(minUnix, maxUnix));
+    public @NotNull Date generate(long fromUnixTime, long toUnixTime) {
+        return Date.valueOf(generator.generate(fromUnixTime, toUnixTime));
     }
 }

@@ -1,4 +1,4 @@
-package io.dummymaker.export.impl;
+package io.dummymaker.export;
 
 import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.model.export.FieldContainer.Type;

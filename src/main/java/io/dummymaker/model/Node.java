@@ -1,21 +1,19 @@
-package io.dummymaker.model.graph;
+package io.dummymaker.model;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * "default comment"
- *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @since 05.08.2019
  */
-public class Node {
+public final class Node {
 
-    private Payload value;
-
-    private Node parent;
-    private Set<Node> nodes = new HashSet<>();
+    //TODO payload -> meta
+    private final Payload value;
+    private final Node parent;
+    private final Set<Node> nodes = new HashSet<>();
 
     private Node(Payload value, Node parent) {
         this.value = value;
@@ -39,12 +37,18 @@ public class Node {
         return value;
     }
 
-    public Node getParent() {
+    public Node parent() {
         return parent;
     }
 
-    public Set<Node> getNodes() {
+    public Set<Node> nodes() {
         return nodes;
+    }
+
+    public Node root() {
+        return (parent() == null)
+                ? this
+                : parent.root();
     }
 
     @Override
