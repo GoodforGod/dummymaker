@@ -57,7 +57,7 @@ public class FileWriter implements Writer {
             writer.append(value);
             return true;
         } catch (IOException e) {
-            throw new ExportException(e.getMessage(), e.getCause());
+            throw new ExportException(e);
         }
     }
 

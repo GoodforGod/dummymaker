@@ -20,11 +20,11 @@ import org.slf4j.LoggerFactory;
  */
 public final class CastUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
-
     private CastUtils() {}
 
-    public static Object castToNumber(final Object value, final Class<?> fieldType) {
+    private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
+
+    public static Object castToNumber(Object value, Class<?> fieldType) {
         try {
             switch (CastType.of(fieldType)) {
                 case BYTE:
@@ -44,9 +44,9 @@ public final class CastUtils {
                 case DOUBLE:
                     return Double.valueOf(String.valueOf(value));
                 case BIG_INT:
-                    return BigInteger.valueOf(Long.parseLong(String.valueOf(value)));
+                    return new BigInteger(String.valueOf(value));
                 case BIG_DECIMAL:
-                    return BigDecimal.valueOf(Long.parseLong(String.valueOf(value)));
+                    return new BigDecimal(String.valueOf(value));
                 default:
                     return value;
             }
