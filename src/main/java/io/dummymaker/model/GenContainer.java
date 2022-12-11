@@ -21,9 +21,11 @@ public class GenContainer {
     /**
      * Core annotation one of those two:
      *
-     * @see GenCustom
+     * @see PrimeGen
+     * @see ComplexGen
      */
     private final Annotation core;
+
     private final Field field;
 
     /**
@@ -39,13 +41,13 @@ public class GenContainer {
     private final Class<? extends Generator> generator;
     private final Generator<?> generatorExample;
 
-    private GenContainer(Field field,
-                         Annotation core,
-                         Annotation marker,
-                         boolean isComplex,
-                         boolean isAuto,
-                         Class<? extends Generator> generator,
-                         Generator<?> generatorExample) {
+    private GenContainer(final Field field,
+                         final Annotation core,
+                         final Annotation marker,
+                         final boolean isComplex,
+                         final boolean isAuto,
+                         final Class<? extends Generator> generator,
+                         final Generator<?> generatorExample) {
         this.field = field;
         this.marker = marker;
         this.core = core;
@@ -64,20 +66,23 @@ public class GenContainer {
         }
     }
 
-    public static GenContainer ofMarker(Field field, Annotation marker) {
+    public static GenContainer asCustom(Field field, Annotation marker) {
         final Class<? extends Generator> generator = ((GenCustom) marker).value();
         final boolean isComplex = generator.isAssignableFrom(ComplexGenerator.class);
         return new GenContainer(field, null, marker, isComplex, false, generator, null);
     }
 
-    public static GenContainer ofRule(Field field, Annotation core, Annotation marker) {
-        final Class<? extends Generator> generator = ((GenCustom) marker).value();
-        final boolean isComplex = generator.isAssignableFrom(ComplexGenerator.class);
+    public static GenContainer asGen(Field field, Annotation core, Annotation marker) {
+        final boolean isComplex = GenCustom.class.equals(core.annotationType());
         return new GenContainer(field, core, marker, isComplex, false, null, null);
     }
 
-    public static GenContainer ofAuto(Field field, Generator<?> generator, boolean isComplex) {
-        return new GenContainer(field, null, null, isComplex, true, generator.getClass(), generator);
+    public static GenContainer asAuto(Field field, Class<? extends Generator> generator, boolean isComplex) {
+        return new GenContainer(field, null, null, isComplex, true, generator, null);
+    }
+
+    public static GenContainer asExample(Field field, Generator<?> generator, boolean isComplex) {
+        return new GenContainer(field, null, null, isComplex, true, null, generator);
     }
 
     public boolean isEmbedded() {
@@ -90,6 +95,10 @@ public class GenContainer {
 
     public Generator<?> getGeneratorExample() {
         return generatorExample;
+    }
+
+    public boolean haveGeneratorExample() {
+        return generatorExample != null;
     }
 
     public boolean isComplex() {
