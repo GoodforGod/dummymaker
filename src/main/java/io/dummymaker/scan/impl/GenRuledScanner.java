@@ -1,15 +1,12 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.factory.GenSupplier;
-import io.dummymaker.factory.refactored.GeneratorSupplier;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,8 +52,10 @@ public class GenRuledScanner extends MainGenAutoScanner {
                         final GenContainer container = r.getDesiredExample(f)
                                 .map(g -> GenContainer.asExample(f, g, isComplex(f)))
                                 .orElseGet(() -> r.getDesired(f)
-                                        .map(g -> GenContainer.ofAuto(f, g, isComplex(f)))
-                                        .orElse(scanned.get(f)));
+                                        .map(g -> GenContainer.asAuto(f, g, isComplex(f)))
+                                        .orElseGet(() -> scanned.stream()
+                                                .filter(c -> c.getField().equals(f))
+                                                .findFirst().orElse(null)));
 
                         if (container != null && !r.isIgnored(f)) {
                             containers.put(f, container);
@@ -64,6 +63,6 @@ public class GenRuledScanner extends MainGenAutoScanner {
                     });
         });
 
-        return containers;
+        return new ArrayList<>(containers.values());
     }
 }

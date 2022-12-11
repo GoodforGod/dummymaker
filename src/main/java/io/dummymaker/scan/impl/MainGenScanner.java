@@ -71,12 +71,12 @@ public class MainGenScanner extends AbstractScanner implements ListScanner<GenCo
     private Optional<GenContainer> getContainer(Field field) {
         for (Annotation annotation : field.getDeclaredAnnotations()) {
             if (isGenCustom.test(annotation)) {
-                return Optional.of(GenContainer.ofMarker(field, annotation));
+                return Optional.of(GenContainer.asCustom(field, annotation));
             }
 
             for (Annotation inline : annotation.annotationType().getDeclaredAnnotations()) {
                 if (isGen.test(inline)) {
-                    return Optional.of(GenContainer.ofRule(field, inline, annotation));
+                    return Optional.of(GenContainer.asGen(field, inline, annotation));
                 }
             }
         }

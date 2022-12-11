@@ -2,7 +2,6 @@ package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.factory.GenSupplier;
-import io.dummymaker.factory.refactored.GeneratorSupplier;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.model.GenContainer;
 import java.lang.annotation.Annotation;
@@ -91,7 +90,6 @@ public class MainGenAutoScanner extends MainGenScanner implements GenAutoScanner
      */
     private GenContainer getAutoContainer(Field field) {
         final boolean isComplex = isComplex(field);
-        final Generator<?> suitable = supplier.getSuitable(field);
-        return GenContainer.ofAuto(field, suitable, isComplex);
+        return GenContainer.asAuto(field, supplier.getSuitable(field), isComplex);
     }
 }
