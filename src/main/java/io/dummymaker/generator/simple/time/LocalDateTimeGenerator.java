@@ -3,11 +3,13 @@ package io.dummymaker.generator.simple.time;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.UnixTimeGenerator;
-import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.generator.TimeGenerator;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.regex.Pattern;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,17 +19,17 @@ import org.jetbrains.annotations.NotNull;
  * @see LocalDateTime
  * @since 26.05.2017
  */
-public final class LocalDateTimeGenerator implements UnixTimeGenerator<LocalDateTime> {
+public final class LocalDateTimeGenerator implements TimeGenerator<LocalDateTime> {
 
     private static final Pattern PATTERN = Pattern.compile("datetime|stamp|timestamp|expired?", CASE_INSENSITIVE);
 
     @Override
     public @NotNull LocalDateTime get() {
-        return generate(0, GenTime.MAX_UNIX);
+        return get(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public @NotNull LocalDateTime generate(final long fromUnixTime, final long toUnixTime) {
+    public @NotNull LocalDateTime get(long fromUnixTime, long toUnixTime) {
         long usedFrom = fromUnixTime;
         long usedTo = toUnixTime;
         if (usedFrom < 0)

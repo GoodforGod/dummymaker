@@ -1,7 +1,7 @@
 package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.UnixTimeGenerator;
+import io.dummymaker.generator.TimeGenerator;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import org.jetbrains.annotations.NotNull;
@@ -13,18 +13,18 @@ import org.jetbrains.annotations.NotNull;
  * @see YearMonth
  * @since 21.10.2022
  */
-public final class YearMonthGenerator implements UnixTimeGenerator<YearMonth> {
+public final class YearMonthGenerator implements TimeGenerator<YearMonth> {
 
-    private static final LocalDateTimeGenerator generator = new LocalDateTimeGenerator();
+    private static final LocalDateTimeGenerator GENERATOR = new LocalDateTimeGenerator();
 
     @Override
     public @NotNull YearMonth get() {
-        return generate(0, GenTime.MAX_UNIX);
+        return get(0, GenTime.MAX_UNIX);
     }
 
     @Override
-    public @NotNull YearMonth generate(final long fromUnixTime, final long toUnixTime) {
-        final LocalDateTime localDateTime = generator.generate(fromUnixTime, toUnixTime);
+    public @NotNull YearMonth get(long fromUnixTime, long toUnixTime) {
+        final LocalDateTime localDateTime = GENERATOR.get(fromUnixTime, toUnixTime);
         return YearMonth.of(localDateTime.getYear(), localDateTime.getMonth());
     }
 }

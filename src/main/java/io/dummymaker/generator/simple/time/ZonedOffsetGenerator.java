@@ -3,6 +3,8 @@ package io.dummymaker.generator.simple.time;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
 import java.time.ZoneOffset;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

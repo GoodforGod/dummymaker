@@ -35,7 +35,7 @@ public @interface GenArray2D {
      * @return maximum amount elements to generate for row (inclusive)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
-    int maxFirst() default 2;
+    int maxFirst() default 3;
 
     /**
      * @return minimum amount elements to generate for column (inclusive)
@@ -47,7 +47,7 @@ public @interface GenArray2D {
      * @return maximum amount elements to generate for column (inclusive)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
-    int maxSecond() default 2;
+    int maxSecond() default 3;
 
     /**
      * @return fixed amount elements to generate for row (override min & max)

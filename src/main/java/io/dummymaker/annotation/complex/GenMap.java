@@ -37,7 +37,7 @@ public @interface GenMap {
      * @return maximum amount elements to generate (inclusive)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
-    int max() default 2;
+    int max() default 3;
 
     /**
      * @return fixed amount elements to generate (override min & max)
