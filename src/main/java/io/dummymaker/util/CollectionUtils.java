@@ -41,22 +41,17 @@ public final class CollectionUtils {
         return !isEmpty(map);
     }
 
-    public static <T> T getIndexWithSalt(List<T> list, String name, int salt) {
-        int counter = 0;
-        for (char c : name.toCharArray())
-            counter += c;
-
-        final int shift = counter + salt;
-        return list.get(Math.abs(shift % list.size()));
+    public static <T> T getIndexWithSalt(List<T> list, String name, long salt) {
+        return list.get(getIndexWithSalt(list.size(), name, salt));
     }
 
-    public static int getIndexWithSalt(int size, String name, int salt) {
+    public static int getIndexWithSalt(int size, String name, long salt) {
         int counter = 0;
         for (char c : name.toCharArray())
             counter += c;
 
-        final int shift = counter + salt;
-        return Math.abs(shift % size);
+        final long shift = counter + salt;
+        return ((Long) Math.abs(shift % size)).intValue();
     }
 
     /**

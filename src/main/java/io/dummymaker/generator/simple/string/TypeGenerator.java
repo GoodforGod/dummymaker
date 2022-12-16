@@ -25,7 +25,7 @@ public final class TypeGenerator implements Generator<String> {
     @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull String get() {
-        return RandomUtils.random(TYPES);
+        return CollectionUtils.random(TYPES);
     }
 
     @Override

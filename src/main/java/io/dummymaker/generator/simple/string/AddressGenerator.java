@@ -9,6 +9,8 @@ import io.dummymaker.bundle.StreetBundle;
 import io.dummymaker.generator.Generator;
 
 import java.util.regex.Pattern;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

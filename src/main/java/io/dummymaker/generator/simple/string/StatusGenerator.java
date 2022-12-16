@@ -7,6 +7,8 @@ import io.dummymaker.util.CollectionUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +26,7 @@ public final class StatusGenerator implements Generator<String> {
     @SuppressWarnings("ConstantConditions")
     @Override
     public @NotNull String get() {
-        return RandomUtils.random(TYPES);
+        return CollectionUtils.random(TYPES);
     }
 
     @Override

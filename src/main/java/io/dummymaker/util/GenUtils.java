@@ -1,7 +1,7 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.UnixTimeGenerator;
+import io.dummymaker.generator.TimeGenerator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public final class GenUtils {
     public static boolean isGenerator(Type type) {
         try {
             return ((ParameterizedType) type).getRawType().equals(Generator.class)
-                    || ((ParameterizedType) type).getRawType().equals(UnixTimeGenerator.class);
+                    || ((ParameterizedType) type).getRawType().equals(TimeGenerator.class);
         } catch (Exception e) {
             return false;
         }

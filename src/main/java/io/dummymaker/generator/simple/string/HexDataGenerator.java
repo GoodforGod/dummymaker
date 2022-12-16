@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public final class HexDataGenerator extends IdBigGenerator {
+public final class HexDataGenerator implements Generator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("hex", CASE_INSENSITIVE);
 

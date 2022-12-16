@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class GenderGenerator implements Generator<String> {
 
-    private static static final Pattern PATTERN = Pattern.compile("sex|gender", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("sex|gender", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String get() {

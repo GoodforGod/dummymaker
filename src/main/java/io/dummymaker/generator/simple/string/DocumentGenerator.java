@@ -7,6 +7,8 @@ import io.dummymaker.generator.simple.number.CharacterGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
+
+import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

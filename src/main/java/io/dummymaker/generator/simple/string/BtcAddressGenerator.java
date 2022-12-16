@@ -2,7 +2,10 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import java.util.UUID;
 import java.util.regex.Pattern;
+
+import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,13 +14,13 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public final class BtcAddressGenerator extends IdGenerator {
+public final class BtcAddressGenerator implements Generator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("btc|bitcoin", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String get() {
-        return super.get().replace("-", "") + super.get().substring(0, 2).replace("-", "");
+        return UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().substring(0, 2).replace("-", "");
     }
 
     @Override
