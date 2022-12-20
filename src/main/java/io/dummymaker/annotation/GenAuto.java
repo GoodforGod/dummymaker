@@ -1,9 +1,7 @@
 package io.dummymaker.annotation;
 
-import io.dummymaker.factory.GenSupplier;
+import io.dummymaker.factory.old.GenSupplier;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 
 import java.lang.annotation.*;
 

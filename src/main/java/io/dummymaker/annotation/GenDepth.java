@@ -1,7 +1,6 @@
 package io.dummymaker.annotation;
 
-import io.dummymaker.factory.GenSupplier;
-import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.factory.old.GenSupplier;
 import org.jetbrains.annotations.Range;
 
 import java.lang.annotation.*;
@@ -38,5 +37,5 @@ public @interface GenDepth {
      * @return desired embedded depth
      */
     @Range(from = 1, to = GenDepth.MAX)
-    int depth() default DEFAULT;
+    int value() default DEFAULT;
 }
