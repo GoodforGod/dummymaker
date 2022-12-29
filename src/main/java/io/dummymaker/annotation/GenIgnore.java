@@ -1,7 +1,6 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.export.Exporter;
-
 import java.lang.annotation.*;
 
 /**

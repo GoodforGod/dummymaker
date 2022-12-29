@@ -1,11 +1,8 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.scan.AnnotationScanner;
 import io.dummymaker.scan.MapScanner;
-import org.jetbrains.annotations.Range;
-
 import java.lang.annotation.*;
 
 /**
@@ -24,11 +21,12 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = {ElementType.ANNOTATION_TYPE, ElementType.FIELD})
+@Target(value = { ElementType.ANNOTATION_TYPE, ElementType.FIELD })
 public @interface GenCustom {
 
     /**
-     * @return generator class to be called to generate values on factory (generator is expected to be initialized with Zero Argument Constructor)
+     * @return generator class to be called to generate values on factory (generator is expected to be
+     *             initialized with Zero Argument Constructor)
      */
     Class<? extends Generator<?>> value();
 }

@@ -1,9 +1,8 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.factory.old.GenSupplier;
-import org.jetbrains.annotations.Range;
-
 import java.lang.annotation.*;
+import org.jetbrains.annotations.Range;
 
 /**
  * Annotation is used on classes and uses default suitable generators to fill class fields
@@ -14,11 +13,12 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = {ElementType.TYPE, ElementType.FIELD})
+@Target(value = { ElementType.TYPE, ElementType.FIELD })
 public @interface GenDepth {
 
     /**
-     * Maximum depth available, means that type can't be nested more than {@link GenDepth#MAX} times from initial type
+     * Maximum depth available, means that type can't be nested more than {@link GenDepth#MAX} times
+     * from initial type
      */
     int MAX = 50;
 

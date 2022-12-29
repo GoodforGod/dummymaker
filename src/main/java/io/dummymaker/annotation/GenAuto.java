@@ -2,7 +2,6 @@ package io.dummymaker.annotation;
 
 import io.dummymaker.factory.old.GenSupplier;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-
 import java.lang.annotation.*;
 
 /**
@@ -15,5 +14,5 @@ import java.lang.annotation.*;
 @Documented
 @GenCustom(EmbeddedGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = {ElementType.TYPE, ElementType.FIELD})
-public @interface GenAuto { }
+@Target(value = { ElementType.TYPE, ElementType.FIELD })
+public @interface GenAuto {}
