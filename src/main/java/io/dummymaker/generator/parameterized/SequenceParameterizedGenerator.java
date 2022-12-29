@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple;
 
-import io.dummymaker.annotation.GenSequence;
+import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,9 +1,8 @@
-package io.dummymaker.factory.impl;
+package io.dummymaker.factory.old;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
-import io.dummymaker.factory.IGenSupplier;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
@@ -17,7 +16,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
@@ -27,33 +25,33 @@ import org.jetbrains.annotations.Nullable;
  * Default gen config implementation for generators discovery With all library generators and their
  * patterns availability
  *
- * @author GoodforGod
- * @see IGenSupplier
+ * @author Anton Kurako (GoodforGod)
+ * @see GenSupplier
  * @since 27.07.2019
  */
-public class GenSupplier implements IGenSupplier {
+public final class MainGenSupplier implements GenSupplier {
 
     private static final String DUMMY_GENERATOR_PACKAGE = "io.dummymaker.generator";
 
     /**
      * Salt used to select always the same generator for specific field
      */
-    protected static final int SALT = ((Long) System.currentTimeMillis()).hashCode();
+    private static final int SALT = ((Long) System.currentTimeMillis()).hashCode();
 
     /**
      * Map of classified generators and their target classes
      */
-    private static final Map<Class, List<Class<? extends IGenerator>>> classifiersClasses = getClassifiedGenerators();
+    private static final Map<Class, List<Class<? extends Generator>>> classifiersClasses = getClassifiedGenerators();
 
-    private final Map<Class, List<IGenerator>> classifiers = classifiersClasses.entrySet().stream()
+    private final Map<Class, List<Generator>> classifiers = classifiersClasses.entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream()
                     .map(CastUtils::instantiate)
                     .filter(Objects::nonNull)
-                    .sorted(IGenerator::compareTo)
+                    .sorted(Generator::compareTo)
                     .collect(Collectors.toList())));
 
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field) {
+    public @NotNull Class<? extends Generator> getSuitable(@NotNull Field field) {
         return getSuitable(field, field.getType());
     }
 
@@ -62,7 +60,8 @@ public class GenSupplier implements IGenSupplier {
      *
      * @return generator class
      */
-    protected @NotNull Class<? extends IGenerator> getDefault() {
+    @NotNull
+    private Class<? extends Generator> getDefault() {
         return EmbeddedGenerator.class;
     }
 
@@ -76,11 +75,11 @@ public class GenSupplier implements IGenSupplier {
      * @return suitable generator class
      */
     @Override
-    public @NotNull Class<? extends IGenerator> getSuitable(@NotNull Field field, @Nullable Class<?> type) {
+    public @NotNull Class<? extends Generator> getSuitable(@NotNull Field field, @Nullable Class<?> type) {
         if (type == null)
             return getDefault();
 
-        final List<? extends IGenerator> generators = classifiers.get(type);
+        final List<? extends Generator> generators = classifiers.get(type);
         final String fieldName = field.getName();
 
         if (type.getTypeName().endsWith("[][]"))
@@ -94,7 +93,7 @@ public class GenSupplier implements IGenSupplier {
 
         return getSuitableGeneratorClass(fieldName, type)
                 .orElseGet(() -> {
-                    final List<? extends IGenerator> nonJsonGenerators = generators.stream()
+                    final List<? extends Generator> nonJsonGenerators = generators.stream()
                             .filter(g -> !(g instanceof JsonGenerator))
                             .collect(Collectors.toList());
 
@@ -109,46 +108,42 @@ public class GenSupplier implements IGenSupplier {
      * @param type      desired target type
      * @return suitable pattern generator
      */
-    private Optional<Class<? extends IGenerator>> getSuitableGeneratorClass(String fieldName, Class<?> type) {
-        final Collection<IGenerator> allGenerators = classifiers.values().stream()
+    private Optional<Class<? extends Generator>> getSuitableGeneratorClass(String fieldName, Class<?> type) {
+        final Collection<Generator> allGenerators = classifiers.values().stream()
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        final Optional<? extends IGenerator> patternSuitable = getSuitableGenerator(fieldName, allGenerators);
+        final Optional<? extends Generator> patternSuitable = getSuitableGenerator(fieldName, allGenerators);
         if (!patternSuitable.isPresent()) {
             return Optional.empty();
         }
 
-        final Object casted = CastUtils.castObject(patternSuitable.get().generate(), type);
+        final Object casted = CastUtils.castObject(patternSuitable.get().get(), type);
         if (casted != null) {
             return Optional.of(patternSuitable.get().getClass());
         }
 
-        final Collection<IGenerator> typedGeneratorStream = classifiers.get(type);
+        final Collection<Generator> typedGeneratorStream = classifiers.get(type);
         return getSuitableGenerator(fieldName, typedGeneratorStream)
-                .map(IGenerator::getClass);
+                .map(Generator::getClass);
     }
 
     @SuppressWarnings("ConstantConditions")
-    private Optional<IGenerator> getSuitableGenerator(String fieldName, Collection<IGenerator> generators) {
+    private Optional<Generator> getSuitableGenerator(String fieldName, Collection<Generator> generators) {
         return generators.stream()
-                .filter(g -> g.pattern() != null)
-                .filter(g -> {
-                    final Matcher matcher = g.pattern().matcher(fieldName);
-                    return matcher.find();
-                })
-                .min(IGenerator::compareTo);
+                .filter(g -> g.pattern() != null && g.pattern().matcher(fieldName).find())
+                .min(Generator::compareTo);
     }
 
     @SuppressWarnings("unchecked")
-    protected static Map<Class, List<Class<? extends IGenerator>>> getClassifiedGenerators() {
+    private static Map<Class, List<Class<? extends Generator>>> getClassifiedGenerators() {
         final ClassScanner scanner = new ClassScanner();
-        final Map<Class, List<Class<? extends IGenerator>>> scannedClasses = scanner.scan(DUMMY_GENERATOR_PACKAGE).stream()
-                .filter(IGenerator.class::isAssignableFrom)
+        final Map<Class, List<Class<? extends Generator>>> scannedClasses = scanner.scan(DUMMY_GENERATOR_PACKAGE).stream()
+                .filter(Generator.class::isAssignableFrom)
                 .filter(c -> !c.isInterface())
                 .filter(c -> !c.isAnonymousClass())
                 .filter(c -> !c.isSynthetic())
-                .map(c -> ((Class<? extends IGenerator>) c))
+                .map(c -> ((Class<? extends Generator>) c))
                 .flatMap(c -> getGeneratorType(c).stream()
                         .map(t -> Pair.of(t, c)))
                 .collect(Collectors.toMap(
@@ -159,8 +154,8 @@ public class GenSupplier implements IGenSupplier {
         return setPrimitiveClassifiers(scannedClasses);
     }
 
-    protected static Map<Class, List<Class<? extends IGenerator>>>
-            setPrimitiveClassifiers(Map<Class, List<Class<? extends IGenerator>>> classifiers) {
+    private static Map<Class, List<Class<? extends Generator>>>
+            setPrimitiveClassifiers(Map<Class, List<Class<? extends Generator>>> classifiers) {
         classifiers.put(boolean.class, classifiers.get(Boolean.class));
         classifiers.put(byte.class, classifiers.get(Byte.class));
         classifiers.put(short.class, classifiers.get(Short.class));
@@ -175,7 +170,7 @@ public class GenSupplier implements IGenSupplier {
     }
 
     private static List<Class> getGeneratorType(Class<?> generator) {
-        if (Object.class.equals(generator) || !IGenerator.class.isAssignableFrom(generator))
+        if (Object.class.equals(generator) || !Generator.class.isAssignableFrom(generator))
             return Collections.emptyList();
 
         final List<Class> special = getSpecialGeneratorTypes(generator);
@@ -190,7 +185,7 @@ public class GenSupplier implements IGenSupplier {
                 .orElseGet(() -> Arrays.asList(Object.class));
     }
 
-    protected static List<Class> getSpecialGeneratorTypes(Class<?> generator) {
+    private static List<Class> getSpecialGeneratorTypes(Class<?> generator) {
         if (generator.equals(ListComplexGenerator.class)) {
             return Arrays.asList(List.class, LinkedList.class, ArrayList.class, CopyOnWriteArrayList.class);
         } else if (generator.equals(SetComplexGenerator.class)) {

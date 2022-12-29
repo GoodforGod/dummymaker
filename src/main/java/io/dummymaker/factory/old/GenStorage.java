@@ -1,7 +1,7 @@
-package io.dummymaker.factory;
+package io.dummymaker.factory.old;
 
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.ComplexGenerator;
+import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,13 +9,12 @@ import org.jetbrains.annotations.Nullable;
  * Used to extend complex generator functionality by providing Generators storage for performance
  * improvement and Embedded object generation
  *
- * @author GoodforGod
- * @see io.dummymaker.annotation.special.GenEmbedded
- * @see IGenFactory
- * @see IComplexGenerator
+ * @author Anton Kurako (GoodforGod)
+ * @see GenFactory
+ * @see ComplexGenerator
  * @since 21.07.2019
  */
-public interface IGenStorage extends IGenSupplier {
+public interface GenStorage extends GenSupplier {
 
     /**
      * Gets depth for target based on its parent
@@ -35,7 +34,7 @@ public interface IGenStorage extends IGenSupplier {
      * @param depth from which to start filling object
      * @param <T>   object type
      * @return object with random data
-     * @see IGenFactory#fill(Object)
+     * @see GenFactory#fill(Object)
      */
     @Nullable
     <T> T fillByDepth(@Nullable T t, int depth);
@@ -47,5 +46,5 @@ public interface IGenStorage extends IGenSupplier {
      * @return instance of generator
      */
     @NotNull
-    IGenerator<?> getGenerator(Class<? extends IGenerator> generatorClass);
+    Generator<?> getGenerator(Class<? extends Generator> generatorClass);
 }

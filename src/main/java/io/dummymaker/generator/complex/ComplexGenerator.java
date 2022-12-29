@@ -1,8 +1,10 @@
-package io.dummymaker.generator;
+package io.dummymaker.generator.complex;
 
-import io.dummymaker.factory.GenStorage;
+import io.dummymaker.factory.old.GenStorage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

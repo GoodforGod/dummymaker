@@ -1,6 +1,7 @@
-package io.dummymaker.factory;
+package io.dummymaker.factory.old;
 
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.generator.Generator;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,11 +10,11 @@ import org.jetbrains.annotations.Nullable;
  * Config that providers contract for generators discovery Based on fields and classes for auto
  * generation
  *
- * @author GoodforGod
- * @see io.dummymaker.annotation.special.GenAuto
+ * @author Anton Kurako (GoodforGod)
+ * @see GenAuto
  * @since 27.07.2019
  */
-public interface IGenSupplier {
+public interface GenSupplier {
 
     /**
      * Finds suitable generator for field from all available generators
@@ -22,7 +23,7 @@ public interface IGenSupplier {
      * @return suitable generator
      */
     @NotNull
-    Class<? extends IGenerator> getSuitable(@NotNull Field field);
+    Class<? extends Generator> getSuitable(@NotNull Field field);
 
     /**
      * Finds suitable generator for field from all available generators
@@ -33,5 +34,5 @@ public interface IGenSupplier {
      * @return suitable generator
      */
     @NotNull
-    Class<? extends IGenerator> getSuitable(@NotNull Field field, @Nullable Class<?> type);
+    Class<? extends Generator> getSuitable(@NotNull Field field, @Nullable Class<?> type);
 }

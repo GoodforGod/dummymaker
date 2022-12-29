@@ -1,30 +1,28 @@
-package io.dummymaker.factory.impl;
+package io.dummymaker.factory.old;
 
 import static io.dummymaker.util.CastUtils.isUnknownComplex;
 
-import io.dummymaker.annotation.special.GenAuto;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.model.graph.Node;
-import io.dummymaker.model.graph.Payload;
-import io.dummymaker.scan.IGenAutoScanner;
-import io.dummymaker.scan.impl.GenAutoScanner;
+import io.dummymaker.model.Node;
+import io.dummymaker.model.Payload;
+import io.dummymaker.scan.GenAutoScanner;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * Builds embedded gen auto depth graph for storage
  *
- * @author GoodforGod
- * @see GenStorage
+ * @author Anton Kurako (GoodforGod)
+ * @see MainGenStorage
  * @since 12.08.2019
  */
-class GenGraphBuilder {
+final class GenGraphBuilder {
 
     private final GenRules rules;
-    private final IGenAutoScanner scanner;
+    private final GenAutoScanner scanner;
 
-    GenGraphBuilder(IGenAutoScanner scanner, GenRules rules) {
+    GenGraphBuilder(GenAutoScanner scanner, GenRules rules) {
         this.scanner = scanner;
         this.rules = rules;
     }
@@ -54,10 +52,10 @@ class GenGraphBuilder {
         if (!isSafe(parent, buildFilter(parent)))
             return parent;
 
-        scanner.scan(parentType, true).entrySet().stream()
-                .filter(e -> e.getValue().isEmbedded() || e.getValue().isComplex())
-                .filter(e -> isUnknownComplex(e.getValue().getField().getType()))
-                .map(e -> buildPayload(e.getKey().getType(), parentPayload))
+        scanner.scan(parentType, true).stream()
+                .filter(e -> e.isEmbedded() || e.isComplex())
+                .filter(e -> isUnknownComplex(e.getField().getType()))
+                .map(e -> buildPayload(e.getField().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
                 .map(this::scanRecursively)
                 .forEach(parent::add);
@@ -66,7 +64,7 @@ class GenGraphBuilder {
     }
 
     private Predicate<Node> buildFilter(Node child) {
-        return n -> n.getParent().value().equals(child.value());
+        return n -> n.parent().value().equals(child.value());
     }
 
     /**
@@ -79,20 +77,18 @@ class GenGraphBuilder {
     private Payload buildPayload(Class<?> target, Payload parentPayload) {
         // First check rules for auto depth then check annotation if present
         final Integer autoDepth = Optional.ofNullable(rules)
-                .map(r -> r.targeted(target)
+                .map(rule -> rule.targeted(target)
                         .filter(GenRule::isAuto)
                         .map(GenRule::getDepth)
                         .orElse(-1))
                 .filter(d -> d != -1)
-                .orElse(GenAutoScanner.getAutoAnnotation(target)
-                        .map(a -> ((GenAuto) a).depth())
-                        .orElse(null));
+                .orElse(null);
 
         final Optional<Integer> optionalDepth = Optional.ofNullable(autoDepth);
-
         final Integer markedOrDefault = optionalDepth.orElseGet(() -> parentPayload == null
                 ? 1
                 : parentPayload.getDepth());
+
         return new Payload(target, markedOrDefault, optionalDepth.isPresent());
     }
 
@@ -120,7 +116,7 @@ class GenGraphBuilder {
      */
     Optional<Node> find(Node node, Predicate<Node> filter) {
         Node result;
-        for (Node n : node.getNodes()) {
+        for (Node n : node.nodes()) {
             if (filter.test(n)) {
                 return Optional.of(n);
             } else {
@@ -140,8 +136,8 @@ class GenGraphBuilder {
      * @return graph root
      */
     private Node findRoot(Node node) {
-        return (node.getParent() == null)
+        return (node.parent() == null)
                 ? node
-                : findRoot(node.getParent());
+                : findRoot(node.parent());
     }
 }

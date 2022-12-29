@@ -2,7 +2,8 @@ package io.dummymaker.factory;
 
 import static org.junit.Assert.*;
 
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.factory.old.MainGenFactory;
+import io.dummymaker.factory.refactored.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoFillFields;
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ import org.junit.Test;
  * @author GoodforGod
  * @since 05.10.2019
  */
-public class DummyTests {
-
-    private final MainGenFactory factory = new MainGenFactory();
+public class DummySupplierTests {
 
     @Test
     public void populateListOfTwo() {
+        final GenFactory factory = GenFactory.build();
+
         final String group1 = "300";
         final String group2 = "400";
 
@@ -30,7 +31,7 @@ public class DummyTests {
         dummies.add(new Dummy());
         dummies.get(1).setGroup(group2);
 
-        final List<Dummy> filled = factory.fill(dummies);
+        final List<Dummy> filled = factory.build(() -> dummies);
 
         assertNotNull(filled);
         assertFalse(filled.isEmpty());
@@ -52,11 +53,13 @@ public class DummyTests {
 
     @Test
     public void populateSingleDummy() {
+        final GenFactory factory = GenFactory.build();
+
         final String group = "300";
         final Dummy dummy = new Dummy();
         dummy.setGroup(group);
 
-        final Dummy filled = factory.fill(dummy);
+        final Dummy filled = factory.build(() -> dummy);
 
         assertNotNull(filled);
         assertNotNull(filled.getCity());
@@ -72,11 +75,13 @@ public class DummyTests {
 
     @Test
     public void populateWithNoPopulateFields() {
+        final GenFactory factory = GenFactory.build();
+
         final String group = "300";
         final DummyNoFillFields dummy = new DummyNoFillFields();
         dummy.setGroup(group);
 
-        final DummyNoFillFields filled = factory.fill(dummy);
+        final DummyNoFillFields filled = factory.build(() -> dummy);
 
         assertNotNull(filled);
         assertNull(filled.getCity());

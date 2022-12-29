@@ -1,23 +1,18 @@
-package io.dummymaker.factory.impl;
+package io.dummymaker.factory.old;
 
-import static io.dummymaker.generator.simple.EmbeddedGenerator.toDepth;
 import static io.dummymaker.util.CastUtils.castObject;
 import static io.dummymaker.util.CastUtils.instantiate;
 import static io.dummymaker.util.CollectionUtils.isEmpty;
 
-import io.dummymaker.annotation.complex.*;
-import io.dummymaker.annotation.special.GenCustom;
-import io.dummymaker.annotation.special.GenEmbedded;
+import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.error.GenException;
-import io.dummymaker.export.IExporter;
-import io.dummymaker.factory.IGenFactory;
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.generator.complex.ComplexGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
-import io.dummymaker.scan.IGenAutoScanner;
+import io.dummymaker.scan.GenAutoScanner;
 import io.dummymaker.scan.impl.GenRuledScanner;
 import io.dummymaker.util.CastUtils;
 import java.lang.annotation.Annotation;
@@ -33,36 +28,35 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Produce Java Classes and fill their fields with data
  *
- * @author GoodforGod
- * @see IGenerator
- * @see IComplexGenerator
- * @see io.dummymaker.annotation.core.PrimeGen
- * @see io.dummymaker.annotation.core.ComplexGen
- * @see IGenFactory
+ * @author Anton Kurako (GoodforGod)
+ * @see Generator
+ * @see ComplexGenerator
+ * @see GenCustom
+ * @see GenFactory
  * @since 21.07.2019
  */
-public class GenFactory implements IGenFactory {
+public final class MainGenFactory implements GenFactory {
 
     private final GenRules rules;
-    private final IGenAutoScanner scanner;
+    private final GenAutoScanner scanner;
 
-    public GenFactory() {
+    public MainGenFactory() {
         this(Collections.emptyList());
     }
 
-    public GenFactory(@Nullable GenRule... rules) {
+    public MainGenFactory(@Nullable GenRule... rules) {
         this(Arrays.asList(rules));
     }
 
-    public GenFactory(@NotNull Collection<GenRule> rules) {
+    public MainGenFactory(@NotNull Collection<GenRule> rules) {
         this(isEmpty(rules)
                 ? null
                 : GenRules.of(rules));
     }
 
-    public GenFactory(@Nullable GenRules rules) {
+    public MainGenFactory(@Nullable GenRules rules) {
         this.rules = rules;
-        this.scanner = new GenRuledScanner(new GenSupplier(), rules);
+        this.scanner = new GenRuledScanner(new MainGenSupplier(), rules);
     }
 
     @Override
@@ -86,73 +80,37 @@ public class GenFactory implements IGenFactory {
     }
 
     @Override
-    public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, int amount) {
+    public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, long amount) {
         return (target == null)
                 ? Stream.empty()
                 : stream(() -> instantiate(target), amount);
     }
 
     @Override
-    public @NotNull <T> Stream<T> stream(@NotNull Supplier<T> supplier, int amount) {
+    public @NotNull <T> Stream<T> stream(@NotNull Supplier<T> supplier, long amount) {
         if (supplier.get() == null)
             return Stream.empty();
 
-        final Stream<T> stream = streamInstances(supplier, amount);
+        final Stream<T> stream = streamInstances(supplier, Math.toIntExact(amount));
         return fill(stream);
     }
 
-    @Override
-    public <T> boolean export(@Nullable Class<T> target, long amount, @NotNull IExporter exporter) {
-        return target != null && export(() -> instantiate(target), amount, exporter);
-    }
-
-    @Override
-    public <T> boolean export(@NotNull Supplier<T> supplier, long amount, @NotNull IExporter exporter) {
-        final T t = supplier.get();
-        if (t == null)
-            return false;
-
-        final int batchSize = 10000;
-        final long batches = amount / batchSize;
-        final int left = (int) ((amount > batchSize)
-                ? amount % batchSize
-                : amount);
-
-        final GenStorage storage = new GenStorage(scanner, rules);
-        for (int i = 0; i < batches; i++) {
-            final Stream<T> stream = streamInstances(supplier, batchSize + 1);
-            final List<T> data = fill(stream, storage).collect(Collectors.toList());
-            if (!exporter.export(data))
-                return false;
-        }
-
-        if (left <= 0)
-            return true;
-
-        final Stream<T> leftStream = streamInstances(supplier, left);
-        final List<T> leftData = fill(leftStream, storage).collect(Collectors.toList());
-        return exporter.export(leftData);
-    }
-
-    @Override
     public @Nullable <T> T fill(@Nullable T t) {
         if (t == null)
             return null;
 
-        final GenStorage storage = new GenStorage(scanner, rules);
+        final MainGenStorage storage = new MainGenStorage(scanner, rules);
         return fillEntity(t, storage, 1);
     }
 
-    @Override
     public @NotNull <T> Stream<T> fill(@Nullable Stream<T> stream) {
         if (stream == null)
             return Stream.empty();
 
-        final GenStorage storage = new GenStorage(scanner, rules);
+        final MainGenStorage storage = new MainGenStorage(scanner, rules);
         return fill(stream, storage);
     }
 
-    @Override
     public @NotNull <T> List<T> fill(@Nullable Collection<T> collection) {
         return isEmpty(collection)
                 ? Collections.emptyList()
@@ -163,7 +121,7 @@ public class GenFactory implements IGenFactory {
         return IntStream.range(0, amount).mapToObj(o -> supplier.get());
     }
 
-    private @NotNull <T> Stream<T> fill(@NotNull Stream<T> stream, @NotNull GenStorage storage) {
+    private @NotNull <T> Stream<T> fill(@NotNull Stream<T> stream, @NotNull MainGenStorage storage) {
         return stream.filter(Objects::nonNull).map(t -> fillEntity(t, storage, 1));
     }
 
@@ -176,24 +134,24 @@ public class GenFactory implements IGenFactory {
      * @return populated entity
      */
     @Nullable
-    <T> T fillEntity(@Nullable T t, @NotNull GenStorage storage, int depth) {
-        if (t == null)
+    <T> T fillEntity(@Nullable T t, @NotNull MainGenStorage storage, int depth) {
+        if (t == null) {
             return null;
+        }
 
-        final Map<Field, GenContainer> containers = storage.getContainers(t);
-
-        final List<Map.Entry<Field, GenContainer>> unmarked = containers.entrySet().stream()
-                .filter(e -> storage.isUnmarked(e.getKey()))
+        final List<GenContainer> containers = storage.getContainers(t);
+        final List<GenContainer> unmarked = containers.stream()
+                .filter(e -> storage.isUnmarked(e.getField()))
                 .collect(Collectors.toList());
 
-        for (Map.Entry<Field, GenContainer> e : unmarked) {
-            final GenContainer container = e.getValue();
-            final Field field = e.getKey();
+        for (GenContainer container : unmarked) {
+            final Field field = container.getField();
             try {
                 field.setAccessible(true);
                 final Object generated = generateObject(t.getClass(), field, container, storage, depth);
-                if (generated != null)
+                if (generated != null) {
                     field.set(t, generated);
+                }
             } catch (Exception ex) {
                 throw new GenException(ex);
             }
@@ -213,9 +171,9 @@ public class GenFactory implements IGenFactory {
     private Object generateObject(final Class<?> target,
                                   final Field field,
                                   final GenContainer container,
-                                  final GenStorage storage,
+                                  final MainGenStorage storage,
                                   final int depth) {
-        final IGenerator<?> generator = container.haveGeneratorExample()
+        final Generator<?> generator = container.getGeneratorExample() != null
                 ? container.getGeneratorExample()
                 : storage.getGenerator(container.getGenerator());
 
@@ -228,13 +186,12 @@ public class GenFactory implements IGenFactory {
             generated = generateEmbeddedObject(target, field, container, storage, depth);
         } else if (storage.isSequential(target, field)) {
             generated = generateSequenceObject(field, storage.getSequential(target, field));
-        } else if (container.isComplex() && generator instanceof IComplexGenerator) {
+        } else if (container.isComplex() && generator instanceof ComplexGenerator) {
             // If complexGen can generate embedded objects
-            // And not handling it like BasicComplexGenerator, you are probably
-            // StackOverFlowed
-            generated = ((IComplexGenerator) generator).generate(target, field, storage, annotation, depth);
+            // And not handling it like AbstractComplexGenerator, you are probably StackOverFlowed
+            generated = ((ComplexGenerator) generator).generate(target, field, storage, annotation, depth);
         } else {
-            generated = generator.generate();
+            generated = generator.get();
         }
 
         final Object casted = castObject(generated, field.getType());
@@ -253,12 +210,13 @@ public class GenFactory implements IGenFactory {
     private Object generateEmbeddedObject(final Class<?> parent,
                                           final Field field,
                                           final GenContainer container,
-                                          final GenStorage storage,
+                                          final MainGenStorage storage,
                                           final int depth) {
         final Class<?> type = field.getType();
         final int fieldDepth = getDepth(parent, type, container.getMarker(), storage);
-        if (fieldDepth <= depth)
+        if (fieldDepth <= depth) {
             return null;
+        }
 
         final Object embedded = instantiate(type);
         final Object entity = fillEntity(embedded, storage, depth + 1);
@@ -273,8 +231,8 @@ public class GenFactory implements IGenFactory {
     /**
      * Generate sequence number fields next value
      */
-    private Object generateSequenceObject(Field field, IGenerator<?> generator) {
-        return CastUtils.castToNumber(generator.generate(), field.getType());
+    private Object generateSequenceObject(Field field, Generator<?> generator) {
+        return CastUtils.castToNumber(generator.get(), field.getType());
     }
 
     /**
@@ -282,30 +240,11 @@ public class GenFactory implements IGenFactory {
      *
      * @param annotation target
      * @return allowed depth level
-     * @see GenEmbedded
      */
     private int getDepth(final Class<?> parent,
                          final Class<?> target,
                          final Annotation annotation,
-                         final GenStorage storage) {
-        if (annotation != null) {
-            if (annotation.annotationType().equals(GenEmbedded.class)) {
-                return toDepth(((GenEmbedded) annotation).depth());
-            } else if (annotation.annotationType().equals(GenCustom.class)) {
-                return toDepth(((GenCustom) annotation).depth());
-            } else if (annotation.annotationType().equals(GenList.class)) {
-                return toDepth(((GenList) annotation).depth());
-            } else if (annotation.annotationType().equals(GenSet.class)) {
-                return toDepth(((GenSet) annotation).depth());
-            } else if (annotation.annotationType().equals(GenMap.class)) {
-                return toDepth(((GenMap) annotation).depth());
-            } else if (annotation.annotationType().equals(GenArray.class)) {
-                return toDepth(((GenArray) annotation).depth());
-            } else if (annotation.annotationType().equals(GenArray2D.class)) {
-                return toDepth(((GenArray2D) annotation).depth());
-            }
-        }
-
-        return toDepth(storage.getDepth(parent, target));
+                         final MainGenStorage storage) {
+        return EmbeddedGenerator.toDepth(storage.getDepth(parent, target));
     }
 }
