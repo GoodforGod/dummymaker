@@ -1,23 +1,24 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.ListComplexGenerator;
-import org.jetbrains.annotations.Range;
-
+import io.dummymaker.generator.parameterized.factory.ListParameterizedGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.Range;
 
 /**
  * Generate list collection
  *
  * @author Anton Kurako (GoodforGod)
- * @see ListComplexGenerator
+ * @see io.dummymaker.generator.parameterized.ListParameterizedGenerator
  * @since 05.03.2018
  */
+@GenCustomFactory(ListParameterizedGeneratorFactory.class)
 @GenCustom(ListComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

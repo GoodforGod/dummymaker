@@ -1,23 +1,24 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.MapComplexGenerator;
-import org.jetbrains.annotations.Range;
-
+import io.dummymaker.generator.parameterized.factory.MapParameterizedGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.Range;
 
 /**
  * Generate map with KEY and VALUE from generators
  *
  * @author Anton Kurako (GoodforGod)
- * @see MapComplexGenerator
+ * @see io.dummymaker.generator.parameterized.MapParameterizedGenerator
  * @since 06.03.2018
  */
+@GenCustomFactory(MapParameterizedGeneratorFactory.class)
 @GenCustom(MapComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

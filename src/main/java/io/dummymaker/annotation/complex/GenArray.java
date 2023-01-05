@@ -1,23 +1,24 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.ArrayComplexGenerator;
-import org.jetbrains.annotations.Range;
-
+import io.dummymaker.generator.parameterized.factory.ArrayParameterizedGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.Range;
 
 /**
  * Generate array
  *
  * @author Anton Kurako (GoodforGod)
- * @see ArrayComplexGenerator
+ * @see io.dummymaker.generator.parameterized.ArrayParameterizedGenerator
  * @since 04.11.2018
  */
+@GenCustomFactory(ArrayParameterizedGeneratorFactory.class)
 @GenCustom(ArrayComplexGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

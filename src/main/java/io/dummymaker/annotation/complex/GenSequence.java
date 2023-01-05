@@ -1,9 +1,11 @@
-package io.dummymaker.annotation;
+package io.dummymaker.annotation.complex;
 
-import io.dummymaker.generator.simple.SequenceGenerator;
-import org.jetbrains.annotations.Range;
-
+import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenCustomFactory;
+import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
+import io.dummymaker.generator.parameterized.factory.SequenceParameterizedGeneratorFactory;
 import java.lang.annotation.*;
+import org.jetbrains.annotations.Range;
 
 /**
  * Generates numeric sequence from given number (default 0) to all produced/populated Dummies Works
@@ -12,12 +14,13 @@ import java.lang.annotation.*;
  * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
+@GenCustomFactory(SequenceParameterizedGeneratorFactory.class)
+@GenCustom(SequenceParameterizedGenerator.class)
 @Documented
-@GenCustom(SequenceGenerator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenSequence {
 
-    @Range(from = 1, to = Long.MAX_VALUE)
+    @Range(from = 0, to = Long.MAX_VALUE)
     long from() default 0L;
 }
