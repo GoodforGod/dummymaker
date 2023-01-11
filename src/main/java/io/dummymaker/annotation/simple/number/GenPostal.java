@@ -1,9 +1,7 @@
 package io.dummymaker.annotation.simple.number;
 
 import io.dummymaker.annotation.GenCustom;
-import io.dummymaker.generator.complex.LongComplexGenerator;
 import io.dummymaker.generator.simple.number.PostalGenerator;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

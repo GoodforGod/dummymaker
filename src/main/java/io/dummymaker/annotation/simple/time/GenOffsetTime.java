@@ -3,7 +3,6 @@ package io.dummymaker.annotation.simple.time;
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.simple.time.LocalDateGenerator;
 import io.dummymaker.generator.simple.time.OffsetTimeGenerator;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
