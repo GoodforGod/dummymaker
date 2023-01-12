@@ -11,7 +11,6 @@ import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.generator.simple.string.IdGenerator;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.RandomUtils;
-
 import java.lang.reflect.Field;
 
 /**

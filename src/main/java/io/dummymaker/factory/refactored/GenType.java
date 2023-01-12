@@ -1,8 +1,7 @@
 package io.dummymaker.factory.refactored;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -11,7 +10,13 @@ import java.util.List;
 public interface GenType {
 
     @NotNull
-    Class<?> value();
+    Class<?> plain();
+
+    @NotNull
+    List<GenType> flatten();
+
+    @NotNull
+    Class<?> raw();
 
     @NotNull
     List<GenType> generics();

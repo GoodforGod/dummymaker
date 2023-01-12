@@ -1,7 +1,5 @@
 package io.dummymaker.factory.old;
 
-import static io.dummymaker.util.CastUtils.isUnknownComplex;
-
 import io.dummymaker.model.GenRule;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.Node;
@@ -54,7 +52,6 @@ final class GenGraphBuilder {
 
         scanner.scan(parentType, true).stream()
                 .filter(e -> e.isEmbedded() || e.isComplex())
-                .filter(e -> isUnknownComplex(e.getField().getType()))
                 .map(e -> buildPayload(e.getField().getType(), parentPayload))
                 .map(p -> Node.of(p, parent))
                 .map(this::scanRecursively)

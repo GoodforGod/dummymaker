@@ -1,15 +1,12 @@
 package io.dummymaker.generator.simple.string;
 
-import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.simple.number.CharacterGenerator;
-import io.dummymaker.util.CollectionUtils;
-import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.generator.Generator;
+import io.dummymaker.util.RandomUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates document, password identifiers as a string
@@ -27,11 +24,11 @@ public final class PasswordGenerator implements Generator<String> {
         final StringBuilder builder = new StringBuilder();
         for (int i = 0; i < length; i++) {
             final boolean isNumber = ThreadLocalRandom.current().nextBoolean();
-            if(isNumber) {
+            if (isNumber) {
                 builder.append(ThreadLocalRandom.current().nextInt(0, 10));
             } else {
                 final int character = ThreadLocalRandom.current().nextInt(65, 123);
-                if(character > 90 && character < 97){
+                if (character > 90 && character < 97) {
                     builder.append(((char) character + 6));
                 } else {
                     builder.append(((char) character));

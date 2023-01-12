@@ -1,16 +1,14 @@
 package io.dummymaker.scan.impl;
 
 import io.dummymaker.annotation.GenAuto;
-import io.dummymaker.factory.GenSupplier;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.factory.old.GenSupplier;
 import io.dummymaker.model.GenContainer;
+import io.dummymaker.scan.GenAutoScanner;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import io.dummymaker.scan.GenAutoScanner;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -71,7 +69,7 @@ public class MainGenAutoScanner extends MainGenScanner implements GenAutoScanner
         }
 
         final Map<Field, GenContainer> scannedMap = scanned.stream()
-                .collect(Collectors.toMap(GenContainer::getField, c -> c, (c1,c2) -> c2, LinkedHashMap::new));
+                .collect(Collectors.toMap(GenContainer::getField, c -> c, (c1, c2) -> c2, LinkedHashMap::new));
 
         final List<Field> fields = getValidFields(target);
         final Map<Field, GenContainer> containers = new LinkedHashMap<>(fields.size());

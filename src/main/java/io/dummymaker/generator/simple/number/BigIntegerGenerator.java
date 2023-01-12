@@ -1,10 +1,8 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.util.CollectionUtils;
-import java.math.BigInteger;
-
 import io.dummymaker.util.RandomUtils;
+import java.math.BigInteger;
 import org.jetbrains.annotations.NotNull;
 
 /**

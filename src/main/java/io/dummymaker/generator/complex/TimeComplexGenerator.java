@@ -1,13 +1,11 @@
 package io.dummymaker.generator.complex;
 
 import static io.dummymaker.util.CastUtils.castObject;
-import static io.dummymaker.util.StringUtils.isNotBlank;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.factory.IGenStorage;
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
-import io.dummymaker.generator.ITimeGenerator;
+import io.dummymaker.factory.old.GenStorage;
+import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.TimeGenerator;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
 import java.lang.annotation.Annotation;
@@ -19,30 +17,27 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Generate time object for GenTime annotation
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenTime
- * @see IComplexGenerator
+ * @see ComplexGenerator
  * @since 21.04.2018
  */
-public class TimeComplexGenerator implements IComplexGenerator {
-
-    private static final Logger logger = LoggerFactory.getLogger(TimeComplexGenerator.class);
+public class TimeComplexGenerator implements ComplexGenerator {
 
     @Override
     public @Nullable Object generate(final @NotNull Class<?> parent,
                                      final @NotNull Field field,
-                                     final @NotNull IGenStorage storage,
+                                     final @NotNull GenStorage storage,
                                      final Annotation annotation,
                                      final int depth) {
         final long minUnix = (annotation == null)
                 ? GenTime.MIN_UNIX
                 : getMin(((GenTime) annotation));
+
         final long maxUnix = (annotation == null)
                 ? GenTime.MAX_UNIX
                 : getMax(((GenTime) annotation));
@@ -89,7 +84,7 @@ public class TimeComplexGenerator implements IComplexGenerator {
         } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
             return castObject(genTime(storage, TimestampGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(Time.class)) {
-            return castObject(genTime(storage, TimeGenerator.class, minUnix, maxUnix), fieldClass);
+            return castObject(genTime(storage, TimeSqlGenerator.class, minUnix, maxUnix), fieldClass);
         } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
             return castObject(genTime(storage, DateSqlGenerator.class, minUnix, maxUnix), fieldClass);
         }
@@ -97,40 +92,24 @@ public class TimeComplexGenerator implements IComplexGenerator {
         return null;
     }
 
-    private @NotNull Object genTime(IGenStorage storage, Class<? extends ITimeGenerator> gClass, long from, long to) {
-        final IGenerator<?> generator = (storage == null)
+    private @NotNull Object genTime(GenStorage storage, Class<? extends TimeGenerator> gClass, long from, long to) {
+        final Generator<?> generator = (storage == null)
                 ? CastUtils.instantiate(gClass)
                 : storage.getGenerator(gClass);
 
-        return ((ITimeGenerator) generator).generate(from, to);
+        return ((TimeGenerator) generator).get(from, to);
     }
 
     private long getMin(GenTime annotation) {
-        try {
-            final String min = annotation.min();
-            if (isNotBlank(min) && !GenTime.MIN_DATE_TIME.equals(min))
-                return LocalDate.parse(min).toEpochDay();
-        } catch (Exception e) {
-            logger.warn(e.getMessage());
-        }
-
-        return annotation.minUnix();
+        return annotation.from();
     }
 
     private long getMax(GenTime annotation) {
-        try {
-            final String max = annotation.max();
-            if (isNotBlank(max) && !GenTime.MAX_DATE_TIME.equals(max))
-                return LocalDate.parse(max).toEpochDay();
-        } catch (Exception e) {
-            logger.warn(e.getMessage());
-        }
-
-        return annotation.maxUnix();
+        return annotation.to();
     }
 
     @Override
-    public Object generate() {
-        return new LocalDateTimeGenerator().generate();
+    public Object get() {
+        return new LocalDateTimeGenerator().get();
     }
 }

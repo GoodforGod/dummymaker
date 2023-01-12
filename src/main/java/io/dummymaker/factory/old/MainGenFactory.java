@@ -6,8 +6,8 @@ import static io.dummymaker.util.CollectionUtils.isEmpty;
 
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.error.GenException;
-import io.dummymaker.generator.complex.ComplexGenerator;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.complex.ComplexGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRule;

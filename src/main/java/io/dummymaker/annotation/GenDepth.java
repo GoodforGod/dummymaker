@@ -18,14 +18,14 @@ public @interface GenDepth {
 
     /**
      * Maximum depth available, means that type can't be nested more than {@link GenDepth#MAX} times
-     * from initial type
+     * from entry point
      */
     int MAX = 50;
 
     /**
      * Default depth
      */
-    int DEFAULT = 10;
+    int DEFAULT = 7;
 
     /**
      * If annotation is present, then it will be 1 level depth used by factory And MAX level is limit

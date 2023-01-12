@@ -3,13 +3,10 @@ package io.dummymaker.factory.refactored;
 import io.dummymaker.annotation.GenDepth;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static io.dummymaker.util.CastUtils.isUnknownComplex;
+import java.util.stream.Stream;
 
 /**
  * Builds embedded gen auto depth graph for storage
@@ -21,10 +18,12 @@ final class GenGraphBuilder {
 
     private final GenRules rules;
     private final GenScanner scanner;
+    private final int depthByDefault;
 
-    GenGraphBuilder(GenScanner scanner, GenRules rules) {
+    GenGraphBuilder(GenScanner scanner, GenRules rules, int depthByDefault) {
         this.scanner = scanner;
         this.rules = rules;
+        this.depthByDefault = depthByDefault;
     }
 
     /**
@@ -36,8 +35,8 @@ final class GenGraphBuilder {
     GenNode build(Class<?> target) {
         final GenType type = SimpleGenType.ofClass(target);
         final GenPayload payload = buildPayload(type, null);
-        final GenNode node = GenNode.of(payload, null);
-        return scanRecursively(node);
+        final GenNode root = GenNode.ofRoot(payload);
+        return scanRecursively(root);
     }
 
     /**
@@ -47,31 +46,37 @@ final class GenGraphBuilder {
      * @return parent node with all children
      */
     private GenNode scanRecursively(GenNode parent) {
-        final GenPayload parentPayload = parent.value();
-        final GenType parentType = parentPayload.getType();
+        final List<GenType> flatten = parent.value().type().flatten();
+        for (GenType type : flatten) {
+            final List<GenNode> nodes = scanner.scan(type).stream()
+                    .filter(container -> container.isEmbedded() || container.isComplex())
+                    .flatMap(container -> {
+                        final List<GenType> flattenTypes = container.type().flatten();
+                        return Stream.concat(flattenTypes.stream(), Stream.of(container.type()));
+                    })
+                    .distinct()
+                    .map(flatType -> buildPayload(flatType, parent.value()))
+                    .map(payload -> GenNode.of(payload, parent))
+                    .collect(Collectors.toList());
 
-        if (!isSafe(parent, buildFilter(parent))) {
-            return parent;
-        }
+            final Set<GenNode> nodesToScan = new HashSet<>();
+            for (GenNode node : nodes) {
+                final Optional<GenNode> alreadyInGraph = find(parent, buildFilter(node.value().type()));
+                if (alreadyInGraph.isPresent()) {
+                    parent.add(alreadyInGraph.get());
+                } else {
+                    parent.add(node);
+                    nodesToScan.add(node);
+                }
+            }
 
-        final List<GenNode> nodes = scanner.scan(parentType).stream()
-                .filter(container -> container.isEmbedded() || container.isComplex())
-                .filter(container -> isUnknownComplex(container.getField().getType()))
-                .map(container -> buildPayload(container.getType(), parentPayload))
-                .map(payload -> GenNode.of(payload, parent))
-                .collect(Collectors.toList());
-
-        for (GenNode node : nodes) {
-            parent.add(node);
-            GenNode genNode = scanRecursively(node);
-            parent.add(genNode);
+            for (GenNode node : nodesToScan) {
+                final GenNode genNode = scanRecursively(node);
+                parent.add(genNode);
+            }
         }
 
         return parent;
-    }
-
-    private Predicate<GenNode> buildFilter(GenNode child) {
-        return n -> n.parent().value().equals(child.value());
     }
 
     /**
@@ -83,55 +88,55 @@ final class GenGraphBuilder {
      */
     private GenPayload buildPayload(GenType target, @Nullable GenPayload parentPayload) {
         // First check rules for auto depth then check annotation if present
-        final Class<?> targetType = target.value();
+        final Class<?> targetType = target.plain();
         final Optional<GenRule> rule = rules.find(targetType);
-        final Integer autoDepth = rule.flatMap(GenRule::getDepth)
-                .orElse(Arrays.stream(targetType.getDeclaredAnnotations())
+        final int depth = rule.flatMap(GenRule::getDepth)
+                .orElseGet(() -> Arrays.stream(targetType.getDeclaredAnnotations())
                         .filter(a -> a instanceof GenDepth)
                         .map(a -> ((GenDepth) a).value())
                         .findAny()
-                        .orElse(null));
+                        .orElseGet(() -> parentPayload == null
+                                ? depthByDefault
+                                : parentPayload.depth()));
 
-        final boolean isAuto = autoDepth == null;
-        final int depthMarkedOrDefault = isAuto || parentPayload == null
-                ? 1
-                : parentPayload.getDepth();
-
-        final List<GenContainer> containers = scanner.scan(target);
-        return new GenPayload(target, depthMarkedOrDefault, containers);
+        final List<GenContainer> containers = scanner.scan(SimpleGenType.ofClass(target.plain()));
+        return new GenPayload(target, depth, containers);
     }
 
-    /**
-     * Checks by predicate whenever node is safe to add
-     * <p>
-     * Node is safe to add as child if such link is not presented as for parent -> child -> parent This
-     * is done to avoid recursive
-     *
-     * @param node   as graph starting point
-     * @param filter check against
-     * @return whenever it is safe to add node as child
-     */
-    private boolean isSafe(GenNode node, Predicate<GenNode> filter) {
-        final GenNode root = findRoot(node);
-        return !find(root, filter).isPresent();
+    private Optional<GenNode> find(GenNode node, Predicate<GenNode> filter) {
+        final GenNode root = node.root();
+
+        final Set<GenNode> visited = new HashSet<>();
+        if (node != root) {
+            visited.add(root);
+            if (filter.test(root)) {
+                return Optional.of(root);
+            }
+        }
+
+        return find(root, filter, visited);
     }
 
     /**
      * Checks recursively all graph for predicate match
      *
-     * @param rootNode   graph start point
-     * @param filter to check against
+     * @param rootNode graph start point
+     * @param filter   to check against
+     * @param visited  nodes to avoid recursion
      * @return whenever such linkage exists
      */
-    private Optional<GenNode> find(GenNode rootNode, Predicate<GenNode> filter) {
+    private Optional<GenNode> find(GenNode rootNode, Predicate<GenNode> filter, Set<GenNode> visited) {
         GenNode result;
+
         for (GenNode node : rootNode.nodes()) {
-            if (filter.test(node)) {
-                return Optional.of(node);
-            } else {
-                result = find(node, filter).orElse(null);
-                if (result != null) {
-                    return Optional.of(result);
+            if (visited.add(node)) {
+                if (filter.test(node)) {
+                    return Optional.of(node);
+                } else {
+                    result = find(node, filter, visited).orElse(null);
+                    if (result != null) {
+                        return Optional.of(result);
+                    }
                 }
             }
         }
@@ -139,15 +144,7 @@ final class GenGraphBuilder {
         return Optional.empty();
     }
 
-    /**
-     * Finds graph root
-     *
-     * @param node graph starting point
-     * @return graph root
-     */
-    private GenNode findRoot(GenNode node) {
-        return (node.parent() == null)
-                ? node
-                : findRoot(node.parent());
+    private Predicate<GenNode> buildFilter(GenType childType) {
+        return node -> node.value().type().equals(childType);
     }
 }

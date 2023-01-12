@@ -10,7 +10,6 @@ import java.util.Set;
  */
 public final class Node {
 
-    //TODO payload -> meta
     private final Payload value;
     private final Node parent;
     private final Set<Node> nodes = new HashSet<>();
@@ -65,5 +64,14 @@ public final class Node {
     @Override
     public int hashCode() {
         return Objects.hash(value, parent);
+    }
+
+    @Override
+    public String toString() {
+        if (parent == null) {
+            return "[value: " + value + "]";
+        } else {
+            return "[parent: " + parent.value + ", value: " + value + "]";
+        }
     }
 }

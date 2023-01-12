@@ -2,9 +2,7 @@ package io.dummymaker.scan;
 
 import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.model.GenContainer;
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -3,12 +3,13 @@ package io.dummymaker.generator.parameterized;
 import io.dummymaker.factory.refactored.GenType;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -22,23 +23,30 @@ public final class ArrayParameterizedGenerator implements ParameterizedGenerator
     private final int max;
     private final int fixed;
 
+    @Nullable
+    private final Generator<?> generator;
+
     public ArrayParameterizedGenerator(int min, int max) {
-        this(min, max, -1);
+        this(min, max, -1, null);
     }
 
-    public ArrayParameterizedGenerator(int min, int max, int fixed) {
+    public ArrayParameterizedGenerator(int min, int max, int fixed, @Nullable Generator<?> generator) {
         this.min = min;
         this.max = max;
         this.fixed = fixed;
+        this.generator = generator;
     }
 
     @Override
     public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
-        if (fieldType.generics().isEmpty()) {
-            return get();
+        if (!fieldType.raw().getTypeName().endsWith("[]")) {
+            return null;
         }
 
-        return getCollector(fieldType.value(), () -> typeBuilder.build(fieldType.generics().get(0).value()));
+        final Class<?> componentType = fieldType.raw().getComponentType();
+        return getCollector(componentType, () -> (generator != null)
+                ? generator.get()
+                : typeBuilder.build(componentType));
     }
 
     @Override

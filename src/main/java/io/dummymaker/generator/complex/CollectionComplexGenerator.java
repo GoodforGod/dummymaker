@@ -1,8 +1,7 @@
 package io.dummymaker.generator.complex;
 
-import io.dummymaker.factory.IGenStorage;
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.factory.old.GenStorage;
+import io.dummymaker.generator.Generator;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,19 +9,19 @@ import org.jetbrains.annotations.NotNull;
  * Basic collection complex generator implementation Can be used by other collection complex
  * generators
  *
- * @author GoodforGod
- * @see IComplexGenerator
+ * @author Anton Kurako (GoodforGod)
+ * @see ComplexGenerator
  * @since 22.04.2018
  */
-abstract class CollectionComplexGenerator extends BasicComplexGenerator {
+abstract class CollectionComplexGenerator extends AbstractComplexGenerator {
 
     @SuppressWarnings("unchecked")
     @NotNull
     Collection genCollection(final int size,
                              final Collection<?> collection,
-                             final Class<? extends IGenerator> valueGenerator,
+                             final Class<? extends Generator> valueGenerator,
                              final Class<?> fieldClass,
-                             final IGenStorage storage,
+                             final GenStorage storage,
                              final int depth,
                              final int maxDepth) {
         // Firstly try to generate initial object, so we won't allocate list if not

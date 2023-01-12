@@ -1,22 +1,30 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenList;
-import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.ParameterizedGeneratorFactory;
-import io.dummymaker.generator.parameterized.ListParameterizedGenerator;
-import io.dummymaker.generator.parameterized.SetParameterizedGenerator;
+import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.parameterized.MapParameterizedGenerator;
+import io.dummymaker.util.CastUtils;
 
 /**
- * @see GenList
- * @see ListParameterizedGenerator
+ * @see GenMap
+ * @see MapParameterizedGenerator
  * @author Anton Kurako (GoodforGod)
  * @since 26.12.2022
  */
-public final class ListParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenList> {
+public final class MapParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenMap> {
 
     @Override
-    public ParameterizedGenerator<?> get(GenList annotation) {
-        return new ListParameterizedGenerator(annotation.min(), annotation.max(), annotation.fixed());
+    public ParameterizedGenerator<?> get(GenMap annotation) {
+        final Generator<?> keyGenerator = annotation.key().equals(Generator.class)
+                ? null
+                : CastUtils.instantiate(annotation.key());
+
+        final Generator<?> valueGenerator = annotation.value().equals(Generator.class)
+                ? null
+                : CastUtils.instantiate(annotation.value());
+
+        return new MapParameterizedGenerator(annotation.min(), annotation.max(), annotation.fixed(), keyGenerator, valueGenerator);
     }
 }

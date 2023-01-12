@@ -22,8 +22,6 @@ public final class CastUtils {
 
     private CastUtils() {}
 
-    private static final Logger logger = LoggerFactory.getLogger(CastUtils.class);
-
     public static Object castToNumber(Object value, Class<?> fieldType) {
         try {
             switch (CastType.of(fieldType)) {
@@ -63,8 +61,7 @@ public final class CastUtils {
      * @param <T>           class instance
      * @return class instance
      */
-    public static <T> T instantiate(final Class<T> tClass,
-                                    final T defaultEntity) {
+    public static <T> T instantiate(Class<T> tClass, T defaultEntity) {
         final T t = instantiate(tClass);
         return (t == null)
                 ? defaultEntity
@@ -79,9 +76,10 @@ public final class CastUtils {
      * @return class instance
      */
     @SuppressWarnings("unchecked")
-    public static <T> T instantiate(final Class<T> target) {
-        if (target == null)
+    public static <T> T instantiate(Class<T> target) {
+        if (target == null) {
             return null;
+        }
 
         final Constructor<?> constructor = Arrays.stream(target.getDeclaredConstructors())
                 .filter(c -> c.getParameterCount() == 0) // search for zero arg constructor
@@ -92,16 +90,14 @@ public final class CastUtils {
 
         try {
             if (constructor == null) {
-                logger.warn("Can not instantiate '{}', zero argument constructor not found", target);
-                return null;
+                throw new IllegalStateException("Can not instantiate '" +  target.getCanonicalName() +"', zero argument constructor not found");
             }
 
             constructor.setAccessible(true);
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
                 if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
-                    logger.warn("Can not instantiate '{}', zero argument constructor not found", target);
-                    return null;
+                    throw new IllegalStateException("Can not instantiate '" +  target.getCanonicalName() +"', zero argument constructor not found");
                 }
 
                 final Object parent = instantiate(parentType);
@@ -113,8 +109,7 @@ public final class CastUtils {
                 return ((T) constructor.newInstance());
             }
         } catch (Exception e) {
-            logger.warn(e.getMessage());
-            return null;
+            throw new IllegalStateException(e);
         }
     }
 
@@ -126,7 +121,7 @@ public final class CastUtils {
      * @param <T>       generic type
      * @return generated and casted object
      */
-    public static <T> T generateObject(final Generator generator, final Class<T> fieldType) {
+    public static <T> T generateObject(Generator generator, Class<T> fieldType) {
         if (generator == null)
             return null;
 
@@ -140,7 +135,7 @@ public final class CastUtils {
      * @param type to extract from
      * @return actual type or object if length is not presented
      */
-    public static Type getGenericType(final Type type) {
+    public static Type getGenericType(Type type) {
         return getGenericType(type, 0);
     }
 
@@ -151,7 +146,7 @@ public final class CastUtils {
      * @param paramNumber actual param number in parameterized type array
      * @return actual type or object if length is not presented
      */
-    public static Type getGenericType(final Type type, final int paramNumber) {
+    public static Type getGenericType(Type type, int paramNumber) {
         try {
             final ParameterizedType parameterizedType = ((ParameterizedType) type);
             return (parameterizedType.getActualTypeArguments().length < paramNumber + 1)
@@ -171,7 +166,7 @@ public final class CastUtils {
      * @return generated and casted object
      */
     @SuppressWarnings("unchecked")
-    public static <T> T castObject(final Object castObject, final Class<T> fieldType) {
+    public static <T> T castObject(Object castObject, Class<T> fieldType) {
         if (fieldType == null)
             return null;
 
@@ -197,7 +192,7 @@ public final class CastUtils {
      * Try to box downcast or box object if it is boxed primitive type And field is also boxed primitive
      * (can't cast one to another explicitly)
      */
-    private static <T> Object boxObject(final Object castObject, final Class<T> fieldType) {
+    private static <T> Object boxObject(Object castObject, Class<T> fieldType) {
         final CastType firstType = CastType.of(castObject.getClass());
         final CastType secondType = CastType.of(fieldType);
 
@@ -209,7 +204,7 @@ public final class CastUtils {
     /**
      * Check if objects have equals types, even if they are primitive
      */
-    private static boolean areEquals(final Class<?> firstClass, final Class<?> secondClass) {
+    private static boolean areEquals(Class<?> firstClass, Class<?> secondClass) {
         final CastType firstType = CastType.of(firstClass);
         final CastType secondType = CastType.of(secondClass);
 
@@ -218,26 +213,13 @@ public final class CastUtils {
                 : firstType.equals(secondType);
     }
 
-    public static boolean isUnknownComplex(Class<?> type) {
-        return !isKnownComplex(type);
-    }
-
-    public static boolean isKnownComplex(Class<?> type) {
-        return Date.class.isAssignableFrom(type)
-                || LocalTime.class.isAssignableFrom(type)
-                || LocalDate.class.isAssignableFrom(type)
-                || LocalDateTime.class.isAssignableFrom(type)
-                || OffsetDateTime.class.isAssignableFrom(type)
-                || OffsetTime.class.isAssignableFrom(type);
-    }
-
     @SuppressWarnings("unchecked")
-    private static <T> T castObject(final Object castObject,
-                                    final Class<T> fieldType,
-                                    final boolean isTypeAssignable,
-                                    final boolean isTypeEquals,
-                                    final boolean isTypeObject,
-                                    final boolean isTypeString) {
+    private static <T> T castObject(Object castObject,
+                                    Class<T> fieldType,
+                                    boolean isTypeAssignable,
+                                    boolean isTypeEquals,
+                                    boolean isTypeObject,
+                                    boolean isTypeString) {
         if (isTypeEquals || isTypeObject)
             return ((T) castObject);
         else if (isTypeString)
@@ -268,7 +250,7 @@ public final class CastUtils {
         BIG_INT,
         BIG_DECIMAL;
 
-        public static CastType of(final Class<?> type) {
+        public static CastType of(Class<?> type) {
             if (type.isAssignableFrom(String.class)) {
                 return STRING;
             } else if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(boolean.class)) {

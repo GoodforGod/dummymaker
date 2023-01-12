@@ -11,22 +11,34 @@ import org.jetbrains.annotations.NotNull;
 final class SimpleGenContext implements GenContext {
 
     private final int depthMax;
-    private final int depth;
+    private final int depthCurrent;
     private final GenNode graph;
 
-    private SimpleGenContext(int depthMax, int depth, GenNode graph) {
+    private SimpleGenContext(int depthMax, int depthCurrent, GenNode graph) {
         this.depthMax = depthMax;
-        this.depth = depth;
+        this.depthCurrent = depthCurrent;
         this.graph = graph;
     }
 
     static GenContext ofChild(GenContext context, Class<?> target) {
         final GenNode node = context.graph().nodes().stream()
-                .filter(n -> n.value().getType().value().equals(target))
+                .filter(n -> n.value().type().raw().equals(target))
+                .findFirst()
+                .orElseGet(() -> context.graph().nodes().stream()
+                        .filter(n -> n.value().type().flatten().stream().anyMatch(type -> type.plain().equals(target)))
+                        .findFirst()
+                        .orElse(null));
+
+        return new SimpleGenContext(context.depthMax(), context.depthCurrent() + 1, node);
+    }
+
+    static GenContext ofParameterized(GenContext context, GenType target) {
+        final GenNode node = context.graph().nodes().stream()
+                .filter(n -> n.value().type().equals(target))
                 .findFirst()
                 .orElse(null);
 
-        return new SimpleGenContext(context.depthMax(), context.depth() + 1, node);
+        return new SimpleGenContext(context.depthMax(), context.depthCurrent(), node);
     }
 
     static GenContext ofNew(int depthMax, GenNode root) {
@@ -39,8 +51,8 @@ final class SimpleGenContext implements GenContext {
     }
 
     @Override
-    public int depth() {
-        return depth;
+    public int depthCurrent() {
+        return depthCurrent;
     }
 
     @Override

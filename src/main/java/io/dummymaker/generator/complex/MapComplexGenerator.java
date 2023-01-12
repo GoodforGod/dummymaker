@@ -2,13 +2,12 @@ package io.dummymaker.generator.complex;
 
 import static io.dummymaker.util.CastUtils.getGenericType;
 
+import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.annotation.special.GenEmbedded;
-import io.dummymaker.factory.IGenStorage;
-import io.dummymaker.generator.IComplexGenerator;
-import io.dummymaker.generator.IGenerator;
+import io.dummymaker.factory.old.GenStorage;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.string.IdGenerator;
-import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.util.RandomUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -20,19 +19,19 @@ import org.jetbrains.annotations.Nullable;
 /**
  * "default comment"
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenMap
- * @see IComplexGenerator
+ * @see ComplexGenerator
  * @see CollectionComplexGenerator
  * @since 22.04.2018
  */
-public class MapComplexGenerator extends BasicComplexGenerator {
+public class MapComplexGenerator extends AbstractComplexGenerator {
 
     @SuppressWarnings("Duplicates")
     @Override
     public @Nullable Object generate(final @NotNull Class<?> parent,
                                      final @NotNull Field field,
-                                     final @NotNull IGenStorage storage,
+                                     final @NotNull GenStorage storage,
                                      final Annotation annotation,
                                      final int depth) {
         if (!field.getType().isAssignableFrom(Map.class))
@@ -41,41 +40,41 @@ public class MapComplexGenerator extends BasicComplexGenerator {
         final Class<?> keyType = (Class<?>) getGenericType(field.getGenericType(), 0);
         final Class<?> valueType = (Class<?>) getGenericType(field.getGenericType(), 1);
         if (annotation == null) {
-            final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
-            final Class<? extends IGenerator> keySuitable = suitable(storage, field, keyType);
-            final Class<? extends IGenerator> valueSuitable = suitable(storage, field, valueType);
+            final int size = RandomUtils.random(MIN_DEFAULT, MAX_DEFAULT);
+            final Class<? extends Generator> keySuitable = suitable(storage, field, keyType);
+            final Class<? extends Generator> valueSuitable = suitable(storage, field, valueType);
             final int maxDepth = storage.getDepth(parent, field.getType());
             return generateMap(size, field, keySuitable, valueSuitable, keyType, valueType, storage, depth, maxDepth);
         }
 
         final GenMap a = ((GenMap) annotation);
-        final Class<? extends IGenerator> keyGenerator = isGenDefault(a.key())
+        final Class<? extends Generator> keyGenerator = isGenDefault(a.key())
                 ? suitable(storage, field, keyType)
                 : a.key();
 
-        final Class<? extends IGenerator> valueGenerator = isGenDefault(a.value())
+        final Class<? extends Generator> valueGenerator = isGenDefault(a.value())
                 ? suitable(storage, field, keyType)
                 : a.value();
 
         final int size = getDesiredSize(a.min(), a.max(), a.fixed());
-        return generateMap(size, field, keyGenerator, valueGenerator, keyType, valueType, storage, depth, a.depth());
+        return generateMap(size, field, keyGenerator, valueGenerator, keyType, valueType, storage, depth, depth);
     }
 
     @Override
-    public @NotNull Object generate() {
-        final int size = CollectionUtils.random(MIN_DEFAULT, MAX_DEFAULT);
-        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenEmbedded.MAX,
+    public @NotNull Object get() {
+        final int size = RandomUtils.random(MIN_DEFAULT, MAX_DEFAULT);
+        return generateMap(size, null, IdGenerator.class, IdGenerator.class, Object.class, Object.class, null, GenDepth.MAX,
                 1);
     }
 
     @SuppressWarnings("unchecked")
     private @NotNull Map generateMap(final int size,
                                      final Field field,
-                                     final Class<? extends IGenerator> keyGenerator,
-                                     final Class<? extends IGenerator> valueGenerator,
+                                     final Class<? extends Generator> keyGenerator,
+                                     final Class<? extends Generator> valueGenerator,
                                      final Class<?> keyFieldType,
                                      final Class<?> valueFieldType,
-                                     final IGenStorage storage,
+                                     final GenStorage storage,
                                      final int depth,
                                      final int maxDepth) {
         // Firstly try to generate initial object, so we won't allocate map if not

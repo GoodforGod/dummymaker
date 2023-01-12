@@ -12,16 +12,16 @@ import java.util.List;
 public final class FormatBundle extends AbstractBundle {
 
     private static final List<String> BUNDLE = Arrays.asList(
-                "json",
-                "avro",
-                "text",
-                "xml",
-                "protobuf",
-                "binary",
-                "yaml",
-                "csv",
-                "html",
-                "css");
+            "json",
+            "avro",
+            "text",
+            "xml",
+            "protobuf",
+            "binary",
+            "yaml",
+            "csv",
+            "html",
+            "css");
 
     public FormatBundle() {
         super(BUNDLE);

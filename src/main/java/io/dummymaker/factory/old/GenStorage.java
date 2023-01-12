@@ -1,7 +1,7 @@
 package io.dummymaker.factory.old;
 
-import io.dummymaker.generator.complex.ComplexGenerator;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.complex.ComplexGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

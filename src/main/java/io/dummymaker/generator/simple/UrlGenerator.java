@@ -1,16 +1,15 @@
 package io.dummymaker.generator.simple;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.DomainBundle;
 import io.dummymaker.bundle.LoginBundle;
 import io.dummymaker.generator.Generator;
-import org.jetbrains.annotations.NotNull;
-
 import java.net.URI;
 import java.net.URL;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates URL as string
@@ -30,7 +29,8 @@ public final class UrlGenerator implements Generator<URL> {
     @Override
     public @NotNull URL get() {
         try {
-            return URI.create("https://" + LOGIN_BUNDLE.random().replace(".", "") + DOMAIN_BUNDLE.random() + GENERATOR.get()).toURL();
+            return URI.create("https://" + LOGIN_BUNDLE.random().replace(".", "") + DOMAIN_BUNDLE.random() + GENERATOR.get())
+                    .toURL();
         } catch (Exception e) {
             try {
                 return URI.create("https://example.com").toURL();

@@ -3,9 +3,11 @@ package io.dummymaker.generator.parameterized;
 import io.dummymaker.factory.refactored.GenType;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,19 +25,26 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
     private final int max;
     private final int fixed;
 
+    @Nullable
+    private final Generator<?> keyGenerator;
+    @Nullable
+    private final Generator<?> valueGenerator;
+
     public MapParameterizedGenerator(int min, int max) {
-        this(min, max, -1);
+        this(min, max, -1, null, null);
     }
 
-    public MapParameterizedGenerator(int min, int max, int fixed) {
+    public MapParameterizedGenerator(int min, int max, int fixed, @Nullable Generator<?> keyGenerator, @Nullable Generator<?> valueGenerator) {
         this.min = min;
         this.max = max;
         this.fixed = fixed;
+        this.keyGenerator = keyGenerator;
+        this.valueGenerator = valueGenerator;
     }
 
     @Override
     public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
-        if(fieldType.generics().size() != 2) {
+        if (fieldType.generics().size() != 2) {
             return get();
         }
 
@@ -48,10 +57,16 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
 
         Map<Object, Object> collector = Collections.emptyMap();
         for (int i = 0; i < size; i++) {
-            final Object key = typeBuilder.build(keyType.value());
-            final Object value = typeBuilder.build(valueType.value());
-            if(key != null) {
-                if(collector.isEmpty()) {
+            final Object key = (keyGenerator != null)
+                    ? keyGenerator.get()
+                    : typeBuilder.build(keyType.raw());
+
+            final Object value = (valueGenerator != null)
+                    ? valueGenerator.get()
+                    : typeBuilder.build(valueType.raw());
+
+            if (key != null) {
+                if (collector.isEmpty()) {
                     collector = buildCollector(fieldType, size);
                 }
 
@@ -70,24 +85,32 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
 
         final Map<Object, Object> collector = new HashMap<>(size);
         for (int i = 0; i < size; i++) {
-            collector.put(DEFAULT_GENERATOR.get(), DEFAULT_GENERATOR.get());
+            final Object key = (keyGenerator != null)
+                    ? keyGenerator.get()
+                    : DEFAULT_GENERATOR.get();
+
+            final Object value = (valueGenerator != null)
+                    ? valueGenerator.get()
+                    : DEFAULT_GENERATOR.get();
+
+            collector.put(key, value);
         }
 
         return collector;
     }
 
     private <K, V> Map<K, V> buildCollector(@NotNull GenType fieldType, int size) {
-        if (IdentityHashMap.class.equals(fieldType.value())) {
+        if (IdentityHashMap.class.equals(fieldType.raw())) {
             return new IdentityHashMap<>(size);
-        } else if (LinkedHashMap.class.equals(fieldType.value())) {
+        } else if (LinkedHashMap.class.equals(fieldType.raw())) {
             return new LinkedHashMap<>(size);
-        } else if (WeakHashMap.class.equals(fieldType.value())) {
+        } else if (WeakHashMap.class.equals(fieldType.raw())) {
             return new WeakHashMap<>(size);
-        } else if (ConcurrentHashMap.class.equals(fieldType.value())) {
+        } else if (ConcurrentHashMap.class.equals(fieldType.raw())) {
             return new ConcurrentHashMap<>(size);
-        } else if (TreeMap.class.equals(fieldType.value())) {
+        } else if (TreeMap.class.equals(fieldType.raw())) {
             return new TreeMap<>();
-        } else if (ConcurrentSkipListMap.class.equals(fieldType.value())) {
+        } else if (ConcurrentSkipListMap.class.equals(fieldType.raw())) {
             return new ConcurrentSkipListMap<>();
         }
 

@@ -1,16 +1,17 @@
 package io.dummymaker.factory.refactored;
 
+import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+
 import io.dummymaker.factory.old.GenSupplier;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.*;
+import io.dummymaker.generator.parameterized.*;
 import io.dummymaker.generator.simple.*;
-import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,8 +22,7 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Default gen config implementation for generators discovery With all library generators and their
@@ -32,7 +32,12 @@ import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
  * @see GenSupplier
  * @since 24.11.2022
  */
-final class GenGeneratorSupplier {
+final class DefaultGeneratorSupplier implements GeneratorSupplier {
+
+    private static final Generator<?> DEFAULT_GENERATOR = new EmbeddedGenerator();
+    private static final Generator<?> ARRAY2D_GENERATOR = new Array2DParameterizedGenerator(1, 3, 1, 3);
+    private static final Generator<?> ARRAY_GENERATOR = new ArrayParameterizedGenerator(1, 3);
+    private static final Generator<?> ENUM_GENERATOR = new EnumParameterizedGenerator(new String[] {}, new String[] {});
 
     /**
      * Map of classified generators and their target classes
@@ -41,13 +46,18 @@ final class GenGeneratorSupplier {
 
     static {
         TYPE_TO_GENERATORS.put(String.class, Arrays.asList(new AddressFullGenerator(), new AddressGenerator(),
-                new BtcAddressGenerator(), new BtcTxHashGenerator(), new CadastralGenerator(), new CategoryGenerator(), new CityGenerator(),
-                new CompanyGenerator(), new CountryGenerator(), new CurrencyGenerator(), new DescriptionGenerator(), new DistrictGenerator(),
-                new DocumentGenerator(), new EmailGenerator(), new EthAddressGenerator(), new EthTxHashGenerator(), new ExtensionGenerator(),
-                new FileGenerator(), new FormatGenerator(), new FrequencyGenerator(), new FullnameGenerator(), new GenderGenerator(),
+                new BtcAddressGenerator(), new BtcTxHashGenerator(), new CadastralGenerator(), new CategoryGenerator(),
+                new CityGenerator(),
+                new CompanyGenerator(), new CountryGenerator(), new CurrencyGenerator(), new DescriptionGenerator(),
+                new DistrictGenerator(),
+                new DocumentGenerator(), new EmailGenerator(), new EthAddressGenerator(), new EthTxHashGenerator(),
+                new ExtensionGenerator(),
+                new FileGenerator(), new FormatGenerator(), new FrequencyGenerator(), new FullnameGenerator(),
+                new GenderGenerator(),
                 new HexDataGenerator(), new HexNumberGenerator(), new HouseGenerator(), new IdBigGenerator(), new IdGenerator(),
                 new JobGenerator(), new LevelGenerator(), new LoginGenerator(), new MccGenerator(), new MerchantGenerator(),
-                new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(), new PhoneGenerator(),
+                new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
+                new PhoneGenerator(),
                 new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(), new StatusGenerator(), new StreetGenerator(),
                 new StringGenerator(), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(), new VersionGenerator()));
 
@@ -56,8 +66,10 @@ final class GenGeneratorSupplier {
         TYPE_TO_GENERATORS.put(Byte.class, Collections.singletonList(new ByteGenerator()));
         TYPE_TO_GENERATORS.put(Character.class, Arrays.asList(new CharacterGenerator(), new CharGenerator()));
         TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator()));
-        TYPE_TO_GENERATORS.put(Integer.class, Arrays.asList(new IntegerGenerator(), new IntegerSmallGenerator(), new PostalGenerator(), new MccGenerator()));
-        TYPE_TO_GENERATORS.put(Long.class, Arrays.asList(new LongGenerator(), new LongComplexGenerator(), new UnixTimeGenerator()));
+        TYPE_TO_GENERATORS.put(Integer.class,
+                Arrays.asList(new IntegerGenerator(), new IntegerSmallGenerator(), new PostalGenerator(), new MccGenerator()));
+        TYPE_TO_GENERATORS.put(Long.class,
+                Arrays.asList(new LongGenerator(), new LongComplexGenerator(), new UnixTimeGenerator()));
         TYPE_TO_GENERATORS.put(Float.class, Arrays.asList(new FloatGenerator(), new FloatBigGenerator()));
         TYPE_TO_GENERATORS.put(Double.class, Collections.singletonList(new DoubleGenerator()));
         TYPE_TO_GENERATORS.put(BigInteger.class, Collections.singletonList(new BigIntegerGenerator()));
@@ -95,23 +107,23 @@ final class GenGeneratorSupplier {
         TYPE_TO_GENERATORS.put(URL.class, Collections.singletonList(new UrlGenerator()));
         TYPE_TO_GENERATORS.put(UUID.class, Collections.singletonList(new UuidGenerator()));
 
-        final ListComplexGenerator listComplexGenerator = new ListComplexGenerator();
-        final List<Generator<?>> listComplexGenerators = Collections.singletonList(listComplexGenerator);
+        final ListParameterizedGenerator listGenerator = new ListParameterizedGenerator(1, 3);
+        final List<Generator<?>> listComplexGenerators = Collections.singletonList(listGenerator);
         TYPE_TO_GENERATORS.put(Collection.class, listComplexGenerators);
         TYPE_TO_GENERATORS.put(List.class, listComplexGenerators);
         TYPE_TO_GENERATORS.put(ArrayList.class, listComplexGenerators);
         TYPE_TO_GENERATORS.put(LinkedList.class, listComplexGenerators);
         TYPE_TO_GENERATORS.put(CopyOnWriteArrayList.class, listComplexGenerators);
 
-        final SetComplexGenerator setComplexGenerator = new SetComplexGenerator();
-        final List<Generator<?>> setComplexGenerators = Collections.singletonList(setComplexGenerator);
+        final SetParameterizedGenerator setGenerator = new SetParameterizedGenerator(1, 3);
+        final List<Generator<?>> setComplexGenerators = Collections.singletonList(setGenerator);
         TYPE_TO_GENERATORS.put(Set.class, setComplexGenerators);
         TYPE_TO_GENERATORS.put(HashSet.class, setComplexGenerators);
         TYPE_TO_GENERATORS.put(ConcurrentSkipListSet.class, setComplexGenerators);
         TYPE_TO_GENERATORS.put(CopyOnWriteArraySet.class, setComplexGenerators);
 
-        final MapComplexGenerator mapComplexGenerator = new MapComplexGenerator();
-        final List<Generator<?>> mapComplexGenerators = Collections.singletonList(mapComplexGenerator);
+        final MapParameterizedGenerator mapGenerator = new MapParameterizedGenerator(1, 3);
+        final List<Generator<?>> mapComplexGenerators = Collections.singletonList(mapGenerator);
         TYPE_TO_GENERATORS.put(Map.class, mapComplexGenerators);
         TYPE_TO_GENERATORS.put(TreeMap.class, mapComplexGenerators);
         TYPE_TO_GENERATORS.put(HashMap.class, mapComplexGenerators);
@@ -120,27 +132,26 @@ final class GenGeneratorSupplier {
         TYPE_TO_GENERATORS.put(ConcurrentHashMap.class, mapComplexGenerators);
         TYPE_TO_GENERATORS.put(ConcurrentSkipListMap.class, mapComplexGenerators);
 
-        TYPE_TO_GENERATORS.put(Enumeration.class, Collections.singletonList(new EnumComplexGenerator()));
+        TYPE_TO_GENERATORS.put(Enumeration.class, Collections.singletonList(ENUM_GENERATOR));
     }
-
-    private static final Generator<?> DEFAULT_GENERATOR = new EmbeddedGenerator();
 
     /**
      * Salt used to select always the same generator for specific field
      */
     private final long salt;
 
-    GenGeneratorSupplier(long salt) {
+    DefaultGeneratorSupplier(long salt) {
         this.salt = salt;
     }
 
-    @NotNull Generator<?> get(@NotNull Class<?> type) {
+    @Override
+    public @NotNull Generator<?> get(@NotNull Class<?> type) {
         if (type.getTypeName().endsWith("[][]")) {
-            return new Array2DComplexGenerator();
+            return ARRAY2D_GENERATOR;
         } else if (type.getTypeName().endsWith("[]")) {
-            return new ArrayComplexGenerator();
+            return ARRAY_GENERATOR;
         } else if (type.isEnum()) {
-            return new EnumComplexGenerator();
+            return ENUM_GENERATOR;
         }
 
         final List<? extends Generator<?>> generators = TYPE_TO_GENERATORS.get(type);
@@ -151,16 +162,17 @@ final class GenGeneratorSupplier {
         return getIndexWithSalt(generators, "null", salt);
     }
 
-    @NotNull Generator<?> get(@NotNull Field field) {
+    @Override
+    public @NotNull Generator<?> get(@NotNull Field field) {
         final Class<?> type = field.getType();
         final String fieldName = field.getName();
 
         if (type.getTypeName().endsWith("[][]")) {
-            return new Array2DComplexGenerator();
+            return ARRAY2D_GENERATOR;
         } else if (type.getTypeName().endsWith("[]")) {
-            return new ArrayComplexGenerator();
+            return ARRAY_GENERATOR;
         } else if (type.isEnum()) {
-            return new EnumComplexGenerator();
+            return ENUM_GENERATOR;
         }
 
         return TYPE_TO_GENERATORS.values().stream()

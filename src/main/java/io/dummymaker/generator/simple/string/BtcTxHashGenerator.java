@@ -2,10 +2,9 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.generator.Generator;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
-import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
 /**

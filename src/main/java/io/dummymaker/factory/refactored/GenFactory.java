@@ -1,12 +1,10 @@
 package io.dummymaker.factory.refactored;
 
-import io.dummymaker.annotation.GenDepth;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Factory that generates data objects Core that handles all top level logic
@@ -73,6 +71,9 @@ public interface GenFactory {
 
         @NotNull
         Builder depthByDefault(int depthMax);
+
+        @NotNull
+        Builder ignoreExceptions(boolean ignoreExceptions);
 
         @NotNull
         GenFactory build();

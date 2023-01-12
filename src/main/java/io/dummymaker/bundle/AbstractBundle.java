@@ -1,10 +1,8 @@
 package io.dummymaker.bundle;
 
-import io.dummymaker.bundle.Bundle;
 import io.dummymaker.util.CollectionUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Prime bundle implementation

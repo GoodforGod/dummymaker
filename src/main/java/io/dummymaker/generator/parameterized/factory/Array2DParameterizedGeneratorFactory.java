@@ -1,22 +1,27 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenArray;
-import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.ParameterizedGeneratorFactory;
-import io.dummymaker.generator.parameterized.ArrayParameterizedGenerator;
-import io.dummymaker.generator.parameterized.ListParameterizedGenerator;
+import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.parameterized.Array2DParameterizedGenerator;
+import io.dummymaker.util.CastUtils;
 
 /**
- * @see GenArray
- * @see ListParameterizedGenerator
+ * @see GenArray2D
+ * @see Array2DParameterizedGenerator
  * @author Anton Kurako (GoodforGod)
  * @since 26.12.2022
  */
-public final class ArrayParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenArray> {
+public final class Array2DParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenArray2D> {
 
     @Override
-    public ParameterizedGenerator<?> get(GenArray annotation) {
-        return new ArrayParameterizedGenerator(annotation.min(), annotation.max(), annotation.fixed());
+    public ParameterizedGenerator<?> get(GenArray2D annotation) {
+        final Generator<?> generator = annotation.value().equals(Generator.class)
+                ? null
+                : CastUtils.instantiate(annotation.value());
+
+        return new Array2DParameterizedGenerator(annotation.minFirst(), annotation.maxFirst(), annotation.fixedFirst(),
+                annotation.minSecond(), annotation.maxSecond(), annotation.fixedSecond(), generator);
     }
 }

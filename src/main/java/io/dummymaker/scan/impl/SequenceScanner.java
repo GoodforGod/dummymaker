@@ -1,6 +1,6 @@
 package io.dummymaker.scan.impl;
 
-import io.dummymaker.annotation.GenSequence;
+import io.dummymaker.annotation.complex.GenSequence;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collections;

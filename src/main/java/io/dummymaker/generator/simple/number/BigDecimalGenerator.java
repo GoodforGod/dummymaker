@@ -3,10 +3,8 @@ package io.dummymaker.generator.simple.number;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.util.CollectionUtils;
-import java.math.BigDecimal;
-
 import io.dummymaker.util.RandomUtils;
+import java.math.BigDecimal;
 import org.jetbrains.annotations.NotNull;
 
 /**

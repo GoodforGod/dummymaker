@@ -1,9 +1,8 @@
 package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
-import java.sql.Time;
-
 import io.dummymaker.generator.TimeGenerator;
+import java.sql.Time;
 import org.jetbrains.annotations.NotNull;
 
 /**

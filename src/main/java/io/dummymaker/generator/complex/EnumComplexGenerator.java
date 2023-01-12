@@ -1,8 +1,8 @@
 package io.dummymaker.generator.complex;
 
 import io.dummymaker.annotation.complex.GenEnum;
-import io.dummymaker.factory.IGenStorage;
-import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.factory.old.GenStorage;
+import io.dummymaker.util.RandomUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -16,17 +16,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Generates enum values
  *
- * @author GoodforGod
+ * @author Anton Kurako (GoodforGod)
  * @see GenEnum
  * @since 01.03.2019
  */
-public class EnumComplexGenerator extends BasicComplexGenerator {
+public class EnumComplexGenerator extends AbstractComplexGenerator {
 
     @SuppressWarnings("unchecked")
     @Override
     public Object generate(final @NotNull Class<?> parent,
                            final @NotNull Field field,
-                           final @NotNull IGenStorage storage,
+                           final @NotNull GenStorage storage,
                            final Annotation annotation,
                            final int depth) {
         final Set<String> exclude = getExcluded(annotation);
@@ -44,12 +44,12 @@ public class EnumComplexGenerator extends BasicComplexGenerator {
                 .filter(f -> excludePredicate.test(f.getName()))
                 .collect(Collectors.toList());
 
-        final int i = CollectionUtils.random(candidates.size());
+        final int i = RandomUtils.random(candidates.size());
         return Enum.valueOf((Class<? extends Enum>) field.getType(), field.getType().getFields()[i].getName());
     }
 
     @Override
-    public Object generate() {
+    public Object get() {
         return null;
     }
 

@@ -1,12 +1,11 @@
 package io.dummymaker.factory.refactored;
 
-import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.generator.Generator;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Rule for settings generator type for specific field name or field type
@@ -58,24 +57,24 @@ public final class GenRule {
 
     @NotNull
     public static GenRule global() {
-        return new GenRule(Object.class, true, GenDepth.DEFAULT);
+        return new GenRule(GLOBAL_MARKER, true, GenDepth.DEFAULT);
     }
 
     @NotNull
     public static GenRule global(int depth) {
-        return new GenRule(Object.class, true, depth);
+        return new GenRule(GLOBAL_MARKER, true, depth);
     }
 
     @NotNull
-    public GenRule named(@NotNull Generator<?> generator, @NotNull String... fieldNames) {
-        final GenRuleField rule = new GenRuleField(generator, fieldNames);
+    public GenRule named(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
+        final GenRuleField rule = new GenRuleField(generatorSupplier, fieldNames);
         this.fieldRules.add(rule);
         return this;
     }
 
     @NotNull
-    public GenRule typed(@NotNull Generator<?> generator, @NotNull Class<?> fieldType) {
-        final GenRuleField rule = new GenRuleField(generator, fieldType);
+    public GenRule typed(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
+        final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
         this.fieldRules.add(rule);
         return this;
     }
@@ -94,14 +93,35 @@ public final class GenRule {
         final Optional<Generator<?>> namedGenerator = fieldRules.stream()
                 .filter(r -> r.getNames().contains(field.getName()))
                 .findAny()
-                .map(GenRuleField::getGenerator);
+                .map(rule -> rule.getGeneratorSupplier().get());
 
-        return (namedGenerator.isPresent())
-                ? namedGenerator
-                : fieldRules.stream()
-                .filter(r -> field.getType().equals(r.getType()))
+        if (namedGenerator.isPresent()) {
+            return namedGenerator;
+        }
+
+        return find(field.getType());
+    }
+
+    @NotNull
+    Optional<Generator<?>> find(Class<?> type) {
+        if (type == null)
+            return Optional.empty();
+
+        final Optional<? extends Generator<?>> equalType = fieldRules.stream()
+                .filter(GenRuleField::isTyped)
+                .filter(rule -> type.equals(rule.getType()))
                 .findAny()
-                .map(GenRuleField::getGenerator);
+                .map(r -> r.getGeneratorSupplier().get());
+
+        if(equalType.isPresent()) {
+            return Optional.of(equalType.get());
+        }
+
+        return fieldRules.stream()
+                .filter(GenRuleField::isTyped)
+                .filter(rule -> type.isAssignableFrom(rule.getType()))
+                .findAny()
+                .map(r -> r.getGeneratorSupplier().get());
     }
 
     @NotNull
@@ -112,7 +132,7 @@ public final class GenRule {
 
         for (GenRuleField fieldRule : rule.fieldRules) {
             for (GenRuleField innerFieldRule : fieldRules) {
-                if(fieldRule.equals(innerFieldRule) && fieldRule.isTyped()) {
+                if (fieldRule.equals(innerFieldRule) && fieldRule.isTyped()) {
                     throw new IllegalArgumentException("Multiple Rules describe same type: " + fieldRule.getType());
                 }
             }
@@ -132,7 +152,7 @@ public final class GenRule {
     }
 
     Optional<Integer> getDepth() {
-        return Optional.ofNullable(depth);
+        return Optional.of(depth);
     }
 
     boolean isAuto() {

@@ -2,10 +2,10 @@ package io.dummymaker.factory.old;
 
 import static io.dummymaker.util.CastUtils.instantiate;
 
-import io.dummymaker.annotation.GenSequence;
+import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
-import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.model.GenContainer;
 import io.dummymaker.model.GenRules;
 import io.dummymaker.model.Node;
@@ -160,7 +160,7 @@ final class MainGenStorage implements GenStorage {
     Generator getSequential(Class<?> target, Field field) {
         return sequentialGenerators.computeIfAbsent(target, k -> {
             final Map<Field, Generator> map = new HashMap<>(1);
-            map.put(field, new SequenceGenerator());
+            map.put(field, new SequenceParameterizedGenerator(0));
             return map;
         }).get(field);
     }
@@ -194,6 +194,6 @@ final class MainGenStorage implements GenStorage {
                 .entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> new SequenceGenerator(((GenSequence) e.getValue().get(0)).from()))));
+                        e -> new SequenceParameterizedGenerator(((GenSequence) e.getValue().get(0)).from()))));
     }
 }

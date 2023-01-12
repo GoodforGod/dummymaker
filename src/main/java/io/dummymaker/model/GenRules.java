@@ -1,7 +1,7 @@
 package io.dummymaker.model;
 
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.factory.GenSupplier;
+import io.dummymaker.factory.old.GenFactory;
+import io.dummymaker.factory.old.GenSupplier;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,6 @@
 package io.dummymaker.scan;
 
-import java.util.Collection;
 import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

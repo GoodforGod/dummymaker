@@ -1,12 +1,11 @@
 package io.dummymaker.factory.refactored;
 
 import io.dummymaker.error.ClassConstructorException;
-import org.jetbrains.annotations.NotNull;
-
+import io.dummymaker.generator.Generator;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -14,9 +13,11 @@ import java.util.function.Supplier;
  */
 final class FullArgClassConstructor implements ClassConstructor {
 
-    private final GenGeneratorSupplier supplier;
+    private final GenRules rules;
+    private final GeneratorSupplier supplier;
 
-    FullArgClassConstructor(GenGeneratorSupplier supplier) {
+    FullArgClassConstructor(GenRules rules, GeneratorSupplier supplier) {
+        this.rules = rules;
         this.supplier = supplier;
     }
 
@@ -34,7 +35,7 @@ final class FullArgClassConstructor implements ClassConstructor {
 
             final Object[] typeParameters = Arrays.stream(constructor.getParameterTypes())
                     .map(supplier::get)
-                    .map(Supplier::get)
+                    .map(Generator::get)
                     .toArray(Object[]::new);
 
             return ((T) constructor.newInstance(typeParameters));

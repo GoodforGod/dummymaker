@@ -2,11 +2,10 @@ package io.dummymaker.factory.refactored;
 
 import io.dummymaker.factory.old.GenFactory;
 import io.dummymaker.factory.old.GenSupplier;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Rules for field type and field name generators overrides Allows to override gen auto generator
@@ -40,12 +39,13 @@ final class GenRules {
         return new GenRules(genRules);
     }
 
-    public @NotNull Optional<GenRule> find(@Nullable Class<?> target) {
-        if (target == null)
+    @NotNull Optional<GenRule> find(@Nullable Class<?> target) {
+        if (target == null) {
             return Optional.empty();
+        }
 
         return Optional.ofNullable(rules.stream()
-                .filter(r -> r.getTarget().equals(target))
+                .filter(r -> target.isAssignableFrom(r.getTarget()))
                 .findFirst()
                 .orElseGet(() -> rules.stream()
                         .filter(GenRule::isGlobal)
@@ -53,7 +53,7 @@ final class GenRules {
                         .orElse(null)));
     }
 
-    public List<GenRule> getRules() {
+    List<GenRule> rules() {
         return rules;
     }
 }

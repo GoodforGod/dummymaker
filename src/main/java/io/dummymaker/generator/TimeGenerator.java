@@ -13,7 +13,7 @@ public interface TimeGenerator<T> extends Generator<T> {
 
     /**
      * @param fromUnixTime minimum 0 represents {@link GenTime#MIN_UNIX}
-     * @param toUnixTime as a maximum of {@link GenTime#MAX_UNIX}
+     * @param toUnixTime   as a maximum of {@link GenTime#MAX_UNIX}
      * @return generated time object
      */
     T get(@Range(from = GenTime.MIN_UNIX, to = GenTime.MAX_UNIX) long fromUnixTime,

@@ -2,10 +2,9 @@ package io.dummymaker.factory.refactored;
 
 import io.dummymaker.error.ClassConstructorException;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -21,7 +20,8 @@ final class ZeroArgClassConstructor implements ClassConstructor {
                 .orElse(Arrays.stream(target.getDeclaredConstructors())
                         .filter(c -> c.getParameterCount() == 1) // search for potential inner class constructor
                         .findFirst()
-                        .orElseThrow(() -> new ClassConstructorException("Can't instantiate, zero argument constructor not found for: " + target)));
+                        .orElseThrow(() -> new ClassConstructorException(
+                                "Can't instantiate, zero argument constructor not found for: " + target)));
 
         try {
             constructor.setAccessible(true);

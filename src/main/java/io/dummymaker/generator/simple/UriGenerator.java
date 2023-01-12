@@ -1,14 +1,13 @@
 package io.dummymaker.generator.simple;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.string.NounGenerator;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.net.URI;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates URI as string

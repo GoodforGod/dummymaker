@@ -1,9 +1,7 @@
 package io.dummymaker.scan;
 
 import io.dummymaker.model.export.FieldContainer;
-import java.util.Collection;
 import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

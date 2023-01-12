@@ -7,10 +7,8 @@ import io.dummymaker.bundle.CityBundle;
 import io.dummymaker.bundle.DistrictBundle;
 import io.dummymaker.bundle.StreetBundle;
 import io.dummymaker.generator.Generator;
-
-import java.util.regex.Pattern;
-
 import io.dummymaker.util.RandomUtils;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**

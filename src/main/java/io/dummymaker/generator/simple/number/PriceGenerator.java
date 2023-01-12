@@ -3,9 +3,7 @@ package io.dummymaker.generator.simple.number;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.RandomUtils;
-
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 

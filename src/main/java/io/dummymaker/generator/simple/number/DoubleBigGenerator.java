@@ -1,11 +1,9 @@
 package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.concurrent.ThreadLocalRandom;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates big double from 10 to 1000000 value

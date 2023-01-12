@@ -2,8 +2,8 @@ package io.dummymaker.factory.refactored;
 
 import io.dummymaker.generator.Generator;
 import io.dummymaker.model.GenRules;
-
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Gen rules for specific field
@@ -16,22 +16,18 @@ final class GenRuleField {
 
     private final Class<?> fieldType;
     private final Set<String> fieldNames;
-    private final Generator<?> generator;
+    private final Supplier<Generator<?>> generatorSupplier;
 
-    GenRuleField(Generator<?> generator, String... fieldNames) {
+    GenRuleField(Supplier<Generator<?>> generatorSupplier, String... fieldNames) {
         this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
         this.fieldType = null;
-        this.generator = generator;
+        this.generatorSupplier = generatorSupplier;
     }
 
-    GenRuleField(Generator<?> generator, Class<?> fieldType) {
+    GenRuleField(Supplier<Generator<?>> generatorSupplier, Class<?> fieldType) {
         this.fieldNames = Collections.emptySet();
         this.fieldType = fieldType;
-        this.generator = generator;
-    }
-
-    boolean haveExample() {
-        return generator != null;
+        this.generatorSupplier = generatorSupplier;
     }
 
     boolean isTyped() {
@@ -46,8 +42,8 @@ final class GenRuleField {
         return fieldNames;
     }
 
-    Generator<?> getGenerator() {
-        return generator;
+    Supplier<Generator<?>> getGeneratorSupplier() {
+        return generatorSupplier;
     }
 
     @Override

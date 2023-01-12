@@ -2,10 +2,9 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.generator.Generator;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
-import io.dummymaker.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,6 +24,7 @@ public final class EthAddressGenerator implements Generator<String> {
 
     @Override
     public @NotNull String get() {
-        return "0x" + UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().substring(0, 8).replace("-", "");
+        return "0x" + UUID.randomUUID().toString().replace("-", "")
+                + UUID.randomUUID().toString().substring(0, 8).replace("-", "");
     }
 }

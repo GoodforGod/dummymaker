@@ -3,12 +3,13 @@ package io.dummymaker.generator.parameterized;
 import io.dummymaker.factory.refactored.GenType;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -26,27 +27,39 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
     private final int maxSecond;
     private final int fixedSecond;
 
+    @Nullable
+    private final Generator<?> generator;
+
     public Array2DParameterizedGenerator(int minFirst, int maxFirst, int minSecond, int maxSecond) {
-        this(minFirst, maxFirst, -1, minSecond, maxSecond, -1);
+        this(minFirst, maxFirst, -1, minSecond, maxSecond, -1, null);
     }
 
-    public Array2DParameterizedGenerator(int minFirst, int maxFirst, int fixedFirst,
-                                         int minSecond, int maxSecond, int fixedSecond) {
+    public Array2DParameterizedGenerator(int minFirst,
+                                         int maxFirst,
+                                         int fixedFirst,
+                                         int minSecond,
+                                         int maxSecond,
+                                         int fixedSecond,
+                                         @Nullable Generator<?> generator) {
         this.minFirst = minFirst;
         this.maxFirst = maxFirst;
         this.fixedFirst = fixedFirst;
         this.minSecond = minSecond;
         this.maxSecond = maxSecond;
         this.fixedSecond = fixedSecond;
+        this.generator = generator;
     }
 
     @Override
     public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
-        if (fieldType.generics().isEmpty()) {
-            return get();
+        if (!fieldType.raw().getTypeName().endsWith("[][]")) {
+            return null;
         }
 
-        return getCollector(fieldType.value(), () -> typeBuilder.build(fieldType.generics().get(0).value()));
+        final Class<?> componentType = fieldType.raw().getComponentType().getComponentType();
+        return getCollector(componentType, () -> (generator != null)
+                ? generator.get()
+                : typeBuilder.build(componentType));
     }
 
     @Override

@@ -1,8 +1,8 @@
 package io.dummymaker.model;
 
 import io.dummymaker.annotation.GenCustom;
-import io.dummymaker.generator.ComplexGenerator;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.complex.ComplexGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import java.lang.annotation.Annotation;

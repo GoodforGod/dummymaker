@@ -12,20 +12,20 @@ import java.util.List;
 public final class EmailServicesBundle extends AbstractBundle {
 
     private static final List<String> BUNDLE = Arrays.asList(
-                "zoho",
-                "yandex",
-                "mail",
-                "gmail",
-                "outlook",
-                "proton",
-                "aim",
-                "icloud",
-                "yahoo",
-                "custom",
-                "aol",
-                "gmx",
-                "hotmail",
-                "inbox");
+            "zoho",
+            "yandex",
+            "mail",
+            "gmail",
+            "outlook",
+            "proton",
+            "aim",
+            "icloud",
+            "yahoo",
+            "custom",
+            "aol",
+            "gmx",
+            "hotmail",
+            "inbox");
 
     public EmailServicesBundle() {
         super(BUNDLE);

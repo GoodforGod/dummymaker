@@ -4,14 +4,12 @@ import io.dummymaker.factory.refactored.GenType;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.TypeBuilder;
 import io.dummymaker.generator.simple.time.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -50,45 +48,45 @@ public final class TimeParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public @Nullable Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
-        final Class<?> fieldClass = fieldType.value();
-        if (fieldClass.isAssignableFrom(ZoneOffset.class)) {
+    public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+        final Class<?> fieldClass = fieldType.raw();
+        if (ZoneOffset.class.isAssignableFrom(fieldClass)) {
             return ZONED_OFFSET_GENERATOR.get();
-        } else if (fieldClass.isAssignableFrom(DayOfWeek.class)) {
+        } else if (DayOfWeek.class.isAssignableFrom(fieldClass)) {
             return DAY_OF_WEEK_GENERATOR.get();
-        } else if (fieldClass.isAssignableFrom(Month.class)) {
+        } else if (Month.class.isAssignableFrom(fieldClass)) {
             return MONTH_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(MonthDay.class)) {
+        } else if (MonthDay.class.isAssignableFrom(fieldClass)) {
             return MONTH_DAY_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(Year.class)) {
+        } else if (Year.class.isAssignableFrom(fieldClass)) {
             return YEAR_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(YearMonth.class)) {
+        } else if (YearMonth.class.isAssignableFrom(fieldClass)) {
             return YEAR_MONTH_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(InstantGenerator.class)) {
+        } else if (Instant.class.isAssignableFrom(fieldClass)) {
             return INSTANT_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(ZonedDateTime.class)) {
+        } else if (ZonedDateTime.class.isAssignableFrom(fieldClass)) {
             return ZONED_DATE_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(OffsetDateTime.class)) {
+        } else if (OffsetDateTime.class.isAssignableFrom(fieldClass)) {
             return OFFSET_DATE_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(OffsetTime.class)) {
+        } else if (OffsetTime.class.isAssignableFrom(fieldClass)) {
             return OFFSET_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(LocalDateTime.class)) {
+        } else if (LocalDateTime.class.isAssignableFrom(fieldClass)) {
             return LOCAL_DATE_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(LocalDate.class)) {
+        } else if (LocalDate.class.isAssignableFrom(fieldClass)) {
             return LOCAL_DATE_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(LocalTime.class)) {
+        } else if (LocalTime.class.isAssignableFrom(fieldClass)) {
             return LOCAL_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(Date.class)) {
-            return DATE_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(Timestamp.class)) {
+        } else if (Timestamp.class.isAssignableFrom(fieldClass)) {
             return TIMESTAMP_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(Time.class)) {
+        } else if (Date.class.isAssignableFrom(fieldClass)) {
+            return DATE_GENERATOR.get(fromUnixTime, toUnixTime);
+        } else if (Time.class.isAssignableFrom(fieldClass)) {
             return TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        } else if (fieldClass.isAssignableFrom(java.sql.Date.class)) {
+        } else if (java.sql.Date.class.isAssignableFrom(fieldClass)) {
             return DATE_SQL_GENERATOR.get(fromUnixTime, toUnixTime);
         }
 
-        final LocalDateTime dateTime = LOCAL_DATE_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
+        final OffsetDateTime dateTime = OFFSET_DATE_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
         return dateTime.format(formatter);
     }
 

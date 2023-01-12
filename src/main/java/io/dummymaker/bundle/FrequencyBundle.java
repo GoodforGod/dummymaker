@@ -10,13 +10,13 @@ import java.util.List;
 public final class FrequencyBundle extends AbstractBundle {
 
     private static final List<String> BUNDLE = Arrays.asList(
-                "SECONDLY",
-                "MINUTELY",
-                "HOURLY",
-                "DAILY",
-                "WEEKLY",
-                "MONTHLY",
-                "YEARLY");
+            "SECONDLY",
+            "MINUTELY",
+            "HOURLY",
+            "DAILY",
+            "WEEKLY",
+            "MONTHLY",
+            "YEARLY");
 
     public FrequencyBundle() {
         super(BUNDLE);

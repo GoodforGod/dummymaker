@@ -2,11 +2,9 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.TimeGenerator;
-
+import io.dummymaker.util.RandomUtils;
 import java.time.Instant;
 import java.time.ZoneOffset;
-
-import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

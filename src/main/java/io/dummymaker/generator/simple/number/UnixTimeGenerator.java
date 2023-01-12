@@ -3,11 +3,9 @@ package io.dummymaker.generator.simple.number;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.annotation.complex.GenTime;
-
-import java.util.regex.Pattern;
-
 import io.dummymaker.generator.TimeGenerator;
 import io.dummymaker.util.RandomUtils;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,20 +1,15 @@
 package io.dummymaker.factory.refactored;
 
-import io.dummymaker.annotation.GenAuto;
-import io.dummymaker.annotation.GenCustom;
-import io.dummymaker.annotation.GenDepth;
-import io.dummymaker.annotation.GenIgnore;
+import io.dummymaker.annotation.*;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Please Add Description Here.
@@ -26,13 +21,14 @@ final class GenScanner {
 
     private static final Predicate<Annotation> IS_AUTO = a -> GenAuto.class.equals(a.annotationType());
     private static final Predicate<Annotation> IS_GEN = a -> GenCustom.class.equals(a.annotationType());
+    private static final Predicate<Annotation> IS_FACTORY = a -> GenCustomFactory.class.equals(a.annotationType());
 
-    private final GenGeneratorSupplier generatorSupplier;
+    private final GeneratorSupplier generatorSupplier;
     private final GenRules rules;
     private final boolean isAutoByDefault;
     private final int depthByDefault;
 
-    GenScanner(GenGeneratorSupplier generatorSupplier, GenRules rules, boolean isAutoByDefault, int depthByDefault) {
+    GenScanner(GeneratorSupplier generatorSupplier, GenRules rules, boolean isAutoByDefault, int depthByDefault) {
         this.generatorSupplier = generatorSupplier;
         this.rules = rules;
         this.isAutoByDefault = isAutoByDefault;
@@ -40,8 +36,8 @@ final class GenScanner {
     }
 
     public @NotNull List<GenContainer> scan(GenType target) {
-        //TODO scan generic type parameters for target
-        final Class<?> targetType = target.value();
+        // TODO scan generic type parameters for target
+        final Class<?> targetType = target.raw();
         final List<Field> validFields = getValidFields(targetType);
         final Set<String> ignored = rules.find(targetType)
                 .map(GenRule::getIgnored)
@@ -59,44 +55,60 @@ final class GenScanner {
     }
 
     private Optional<GenContainer> getContainer(Class<?> target, Field field) {
-        final GenDepth annotation = field.getAnnotation(GenDepth.class);
-        final int depth = (annotation == null)
-                ? depthByDefault
-                : annotation.value();
-
         final Optional<GenRule> rule = rules.find(target);
+        final int depth = rule.flatMap(GenRule::getDepth)
+                .orElseGet(() -> {
+                    final GenDepth annotation = field.getAnnotation(GenDepth.class);
+                    if(annotation != null) {
+                        return annotation.value();
+                    }
+
+                    return Arrays.stream(target.getDeclaredAnnotations())
+                            .filter(a -> a instanceof GenDepth)
+                            .map(a -> ((GenDepth) a).value())
+                            .findAny()
+                            .orElse(depthByDefault);
+                });
+
         final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field));
-        if(ruleGenerator.isPresent()) {
-            final boolean isComplex = isComplex(field) || ruleGenerator.get() instanceof EmbeddedGenerator;
-            final int ruleDepth = rule.get().getDepth().orElse(depth);
-            return Optional.of(GenContainer.ofRule(field, ruleGenerator.get(), ruleDepth, isComplex));
+        if (ruleGenerator.isPresent()) {
+            final boolean isComplex = isComplex(field);
+            return Optional.of(GenContainer.ofRule(field, ruleGenerator.get(), depth, isComplex));
         }
 
         for (Annotation marker : field.getDeclaredAnnotations()) {
-            if(IS_AUTO.test(marker)) {
+            if (IS_AUTO.test(marker)) {
                 final Generator<?> generator = generatorSupplier.get(field);
-                final boolean isComplex = isComplex(field) || generator instanceof EmbeddedGenerator;
+                final boolean isComplex = isComplex(field);
                 return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, marker));
             }
 
             if (IS_GEN.test(marker)) {
                 final Generator<?> generator = CastUtils.instantiate(((GenCustom) marker).value());
-                final boolean isComplex = isComplex(field) || generator instanceof EmbeddedGenerator;
+                final boolean isComplex = isComplex(field);
                 return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
             }
 
             for (Annotation custom : marker.annotationType().getDeclaredAnnotations()) {
+                if (IS_FACTORY.test(custom)) {
+                    final ParameterizedGeneratorFactory generatorFactory = CastUtils
+                            .instantiate(((GenCustomFactory) custom).value());
+                    final ParameterizedGenerator<?> generator = generatorFactory.get(marker);
+                    final boolean isComplex = isComplex(field);
+                    return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
+                }
+
                 if (IS_GEN.test(custom)) {
                     final Generator<?> generator = CastUtils.instantiate(((GenCustom) custom).value());
-                    final boolean isComplex = isComplex(field) || generator instanceof EmbeddedGenerator;
+                    final boolean isComplex = isComplex(field);
                     return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
                 }
             }
         }
 
-        if(isAutoByDefault) {
+        if (isAutoByDefault) {
             final Generator<?> generator = generatorSupplier.get(field);
-            final boolean isComplex = isComplex(field) || generator instanceof EmbeddedGenerator;
+            final boolean isComplex = isComplex(field);
             return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, null));
         }
 

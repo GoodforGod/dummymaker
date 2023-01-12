@@ -1,20 +1,20 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenUnixTime;
+import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.ParameterizedGeneratorFactory;
-import io.dummymaker.generator.parameterized.UnixTimeParameterizedGenerator;
+import io.dummymaker.generator.parameterized.TimeParameterizedGenerator;
 
 /**
- * @see GenUnixTime
- * @see io.dummymaker.generator.parameterized.UnixTimeParameterizedGenerator
+ * @see GenTime
+ * @see TimeParameterizedGenerator
  * @author Anton Kurako (GoodforGod)
  * @since 26.12.2022
  */
-public final class UnixTimeParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenUnixTime> {
+public final class TimeParameterizedGeneratorFactory implements ParameterizedGeneratorFactory<GenTime> {
 
     @Override
-    public ParameterizedGenerator<?> get(GenUnixTime annotation) {
-        return new UnixTimeParameterizedGenerator(annotation.from(), annotation.to());
+    public ParameterizedGenerator<?> get(GenTime annotation) {
+        return new TimeParameterizedGenerator(annotation.from(), annotation.to(), annotation.formatter());
     }
 }

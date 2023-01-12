@@ -1,10 +1,9 @@
 package io.dummymaker.factory.refactored;
 
 import io.dummymaker.annotation.GenDepth;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -13,9 +12,10 @@ import java.util.List;
 final class DefaultGenFactoryBuilder implements GenFactory.Builder {
 
     private final List<GenRule> rules = new ArrayList<>();
-    private long salt = System.currentTimeMillis();
+    private long salt = System.nanoTime();
     private boolean autoByDefault = true;
     private int depthByDefault = GenDepth.DEFAULT;
+    private boolean ignoreErrors = false;
 
     @NotNull
     @Override
@@ -46,7 +46,13 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
     }
 
     @Override
+    public GenFactory.@NotNull Builder ignoreExceptions(boolean ignoreExceptions) {
+        this.ignoreErrors = ignoreExceptions;
+        return this;
+    }
+
+    @Override
     public @NotNull GenFactory build() {
-        return new DefaultGenFactory(salt, GenRules.of(rules), autoByDefault, depthByDefault);
+        return new DefaultGenFactory(salt, GenRules.of(rules), autoByDefault, depthByDefault, ignoreErrors);
     }
 }

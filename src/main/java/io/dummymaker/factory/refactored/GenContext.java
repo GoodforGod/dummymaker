@@ -8,7 +8,7 @@ public interface GenContext {
 
     int depthMax();
 
-    int depth();
+    int depthCurrent();
 
     GenNode graph();
 }

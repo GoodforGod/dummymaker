@@ -4,8 +4,6 @@ import io.dummymaker.factory.refactored.GenType;
 import io.dummymaker.factory.refactored.ParameterizedGenerator;
 import io.dummymaker.factory.refactored.TypeBuilder;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -30,22 +29,26 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
 
     @Override
     public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
-        final Predicate<String> excludePredicate = (exclude.isEmpty())
-                ? s -> true
-                : s -> !exclude.contains(s);
+        final Predicate<String> predicate;
+        if(!only.isEmpty()) {
+            predicate = only::contains;
+        } else if(!exclude.isEmpty()) {
+            predicate = s -> !exclude.contains(s);
+        } else {
+            predicate = s -> true;
+        }
 
-        final Predicate<String> onlyPredicate = (exclude.isEmpty())
-                ? s -> true
-                : only::contains;
-
-        final Field[] fields = fieldType.value().getFields();
+        final Field[] fields = fieldType.raw().getFields();
         final List<Field> candidates = Arrays.stream(fields)
-                .filter(f -> onlyPredicate.test(f.getName()))
-                .filter(f -> excludePredicate.test(f.getName()))
+                .filter(f -> predicate.test(f.getName()))
                 .collect(Collectors.toList());
 
+        if(candidates.isEmpty()) {
+            return null;
+        }
+
         final int index = RandomUtils.random(candidates.size());
-        return Enum.valueOf((Class<? extends Enum>) fieldType.value(), candidates.get(index).getName());
+        return Enum.valueOf((Class<? extends Enum>) fieldType.raw(), candidates.get(index).getName());
     }
 
     @Override

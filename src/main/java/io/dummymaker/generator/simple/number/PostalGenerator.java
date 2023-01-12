@@ -3,10 +3,8 @@ package io.dummymaker.generator.simple.number;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.util.CollectionUtils;
-import java.util.regex.Pattern;
-
 import io.dummymaker.util.RandomUtils;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**

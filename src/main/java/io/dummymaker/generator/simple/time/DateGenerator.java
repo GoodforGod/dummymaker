@@ -2,11 +2,8 @@ package io.dummymaker.generator.simple.time;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.TimeGenerator;
-
-import java.util.Date;
-
 import io.dummymaker.generator.simple.number.UnixTimeGenerator;
-import io.dummymaker.util.RandomUtils;
+import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 
 /**

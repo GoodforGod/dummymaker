@@ -1,10 +1,8 @@
 package io.dummymaker.generator;
 
 import io.dummymaker.annotation.GenCustom;
-
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-
 import org.jetbrains.annotations.Nullable;
 
 /**

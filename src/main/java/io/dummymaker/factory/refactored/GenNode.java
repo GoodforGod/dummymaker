@@ -8,23 +8,25 @@ import java.util.Set;
  * @author Anton Kurako (GoodforGod)
  * @since 24.11.2022
  */
-public final class GenNode {
+final class GenNode {
 
     private final GenNode parent;
     private final Set<GenNode> nodes = new HashSet<>();
     private final GenPayload value;
+    private final boolean isRoot;
 
-    private GenNode(GenPayload value, GenNode parent) {
+    private GenNode(GenPayload value, GenNode parent, boolean isRoot) {
         this.value = value;
         this.parent = parent;
+        this.isRoot = isRoot;
+    }
+
+    public static GenNode ofRoot(GenPayload value) {
+        return new GenNode(value, null, true);
     }
 
     public static GenNode of(GenPayload value, GenNode parent) {
-        final GenNode node = new GenNode(value, parent);
-        if (parent != null)
-            parent.add(node);
-
-        return node;
+        return new GenNode(value, parent, false);
     }
 
     public GenNode add(GenNode child) {
@@ -45,33 +47,30 @@ public final class GenNode {
     }
 
     public GenNode root() {
-        return (parent() == null)
+        return (isRoot)
                 ? this
                 : parent.root();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof GenNode))
-            return false;
-        GenNode node = (GenNode) o;
-        return Objects.equals(value, node.value) &&
-                Objects.equals(parent, node.parent);
+        if (this == o) return true;
+        if (!(o instanceof GenNode)) return false;
+        GenNode genNode = (GenNode) o;
+        return Objects.equals(value, genNode.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, parent);
+        return Objects.hash(value);
     }
 
     @Override
     public String toString() {
         if (parent == null) {
-            return "[value: " + value.getType() + "]";
+            return "Root Value: " + value.type();
         } else {
-            return "[parent: " + parent.value.getType() + ", value: " + value.getType() + "]";
+            return "Value: " + value.type();
         }
     }
 }

@@ -4,12 +4,10 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.generator.TimeGenerator;
-
+import io.dummymaker.util.RandomUtils;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.regex.Pattern;
-
-import io.dummymaker.util.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
