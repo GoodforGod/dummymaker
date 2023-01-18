@@ -1,9 +1,9 @@
 package io.dummymaker.generator.parameterized;
 
 import io.dummymaker.annotation.complex.GenSequence;
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.ParameterizedGenerator;
 import java.util.concurrent.atomic.AtomicLong;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public final class SequenceParameterizedGenerator implements ParameterizedGenera
     }
 
     @Override
-    public Long get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public Long get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         return get();
     }
 

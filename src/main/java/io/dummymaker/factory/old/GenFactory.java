@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 21.07.2019
  */
+@Deprecated
 public interface GenFactory {
 
     /**

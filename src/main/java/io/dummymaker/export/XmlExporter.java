@@ -1,8 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.StringUtils;
-import io.dummymaker.writer.Writer;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 23.7.2020
  */
-public class XmlExporter extends AbstractExporter {
+public final class XmlExporter extends AbstractExporter {
 
     /**
      * Is used with className for XML list tag

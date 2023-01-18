@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.model.export.FieldContainer.Type;
+import io.dummymaker.export.FieldContainer.Type;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.Set;
  * @see Exporter
  * @since 25.02.2018
  */
-public enum Format {
+enum Format {
 
     CSV(".csv", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL),
     JSON(".json", Type.STRING, Type.BOOLEAN, Type.NUMBER, Type.DATE, Type.SEQUENTIAL, Type.ARRAY, Type.ARRAY_2D, Type.COLLECTION,

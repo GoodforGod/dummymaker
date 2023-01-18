@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @see GenAuto
  * @since 27.07.2019
  */
+@Deprecated
 public interface GenSupplier {
 
     /**

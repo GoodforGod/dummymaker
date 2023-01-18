@@ -1,0 +1,37 @@
+package io.dummymaker.scan.old.impl;
+
+import io.dummymaker.annotation.export.GenExportForce;
+import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.export.GenExportName;
+import io.dummymaker.export.Exporter;
+import io.dummymaker.export.FieldContainer;
+import io.dummymaker.export.FieldContainerFactory;
+import io.dummymaker.scan.old.ExportScanner;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Scanner for special export annotations and produces export containers Which are used in exporters
+ *
+ * @author Anton Kurako (GoodforGod)
+ * @see Exporter
+ * @see GenExportIgnore
+ * @see GenExportForce
+ * @see GenExportName
+ * @since 03.06.2017
+ */
+public class MainExportScanner extends AbstractScanner implements ExportScanner {
+
+    private final FieldContainerFactory factory = new FieldContainerFactory();
+
+    @Override
+    public @NotNull List<FieldContainer> scan(Class<?> target) {
+        return getValidFields(target).stream()
+                .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
+                        .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
+                .map(factory::build)
+                .collect(Collectors.toList());
+    }
+}

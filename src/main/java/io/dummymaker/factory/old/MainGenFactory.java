@@ -9,11 +9,11 @@ import io.dummymaker.error.GenException;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.complex.ComplexGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-import io.dummymaker.model.GenContainer;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
-import io.dummymaker.scan.GenAutoScanner;
-import io.dummymaker.scan.impl.GenRuledScanner;
+import io.dummymaker.model.old.GenContainer;
+import io.dummymaker.model.old.GenRule;
+import io.dummymaker.model.old.GenRules;
+import io.dummymaker.scan.old.GenAutoScanner;
+import io.dummymaker.scan.old.impl.GenRuledScanner;
 import io.dummymaker.util.CastUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * @see GenFactory
  * @since 21.07.2019
  */
+@Deprecated
 public final class MainGenFactory implements GenFactory {
 
     private final GenRules rules;

@@ -1,19 +1,18 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -42,7 +41,7 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         if (fieldType.generics().isEmpty()) {
             return get();
         }

@@ -1,8 +1,8 @@
 package io.dummymaker.generator.parameterized.factory;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.ParameterizedGeneratorFactory;
+import io.dummymaker.generator.ParameterizedGenerator;
+import io.dummymaker.generator.ParameterizedGeneratorFactory;
 import io.dummymaker.generator.parameterized.TimeParameterizedGenerator;
 
 /**

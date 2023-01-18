@@ -1,9 +1,9 @@
 package io.dummymaker.generator.parameterized.factory;
 
 import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.ParameterizedGeneratorFactory;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.ParameterizedGenerator;
+import io.dummymaker.generator.ParameterizedGeneratorFactory;
 import io.dummymaker.generator.parameterized.MapParameterizedGenerator;
 import io.dummymaker.util.CastUtils;
 
@@ -25,6 +25,7 @@ public final class MapParameterizedGeneratorFactory implements ParameterizedGene
                 ? null
                 : CastUtils.instantiate(annotation.value());
 
-        return new MapParameterizedGenerator(annotation.min(), annotation.max(), annotation.fixed(), keyGenerator, valueGenerator);
+        return new MapParameterizedGenerator(annotation.min(), annotation.max(), annotation.fixed(), keyGenerator,
+                valueGenerator);
     }
 }

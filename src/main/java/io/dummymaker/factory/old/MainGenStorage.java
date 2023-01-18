@@ -6,11 +6,11 @@ import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
-import io.dummymaker.model.GenContainer;
-import io.dummymaker.model.GenRules;
-import io.dummymaker.model.Node;
-import io.dummymaker.scan.GenAutoScanner;
-import io.dummymaker.scan.impl.SequenceScanner;
+import io.dummymaker.model.old.GenContainer;
+import io.dummymaker.model.old.GenRules;
+import io.dummymaker.model.old.Node;
+import io.dummymaker.scan.old.GenAutoScanner;
+import io.dummymaker.scan.old.impl.SequenceScanner;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 17.07.2019
  */
+@Deprecated
 final class MainGenStorage implements GenStorage {
 
     private final GenSupplier supplier;

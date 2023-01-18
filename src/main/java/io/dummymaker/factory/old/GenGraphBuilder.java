@@ -1,10 +1,10 @@
 package io.dummymaker.factory.old;
 
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
-import io.dummymaker.model.Node;
-import io.dummymaker.model.Payload;
-import io.dummymaker.scan.GenAutoScanner;
+import io.dummymaker.model.old.GenRule;
+import io.dummymaker.model.old.GenRules;
+import io.dummymaker.model.old.Node;
+import io.dummymaker.model.old.Payload;
+import io.dummymaker.scan.old.GenAutoScanner;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -15,6 +15,7 @@ import java.util.function.Predicate;
  * @see MainGenStorage
  * @since 12.08.2019
  */
+@Deprecated
 final class GenGraphBuilder {
 
     private final GenRules rules;

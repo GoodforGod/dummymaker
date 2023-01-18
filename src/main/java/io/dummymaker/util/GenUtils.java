@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utils for auto gen mapping
@@ -19,8 +17,6 @@ import org.slf4j.LoggerFactory;
  * @since 26.04.2018
  */
 public final class GenUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
     private GenUtils() {}
 
@@ -52,7 +48,6 @@ public final class GenUtils {
 
             return types;
         } catch (Exception e) {
-            logger.warn(e.getMessage());
             return Collections.emptyList();
         }
     }

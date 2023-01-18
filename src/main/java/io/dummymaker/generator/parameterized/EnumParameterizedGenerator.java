@@ -1,8 +1,8 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -28,11 +28,11 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         final Predicate<String> predicate;
-        if(!only.isEmpty()) {
+        if (!only.isEmpty()) {
             predicate = only::contains;
-        } else if(!exclude.isEmpty()) {
+        } else if (!exclude.isEmpty()) {
             predicate = s -> !exclude.contains(s);
         } else {
             predicate = s -> true;
@@ -43,7 +43,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
                 .filter(f -> predicate.test(f.getName()))
                 .collect(Collectors.toList());
 
-        if(candidates.isEmpty()) {
+        if (candidates.isEmpty()) {
             return null;
         }
 

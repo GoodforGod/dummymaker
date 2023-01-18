@@ -7,8 +7,8 @@ import io.dummymaker.generator.complex.*;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.generator.simple.string.JsonGenerator;
-import io.dummymaker.model.Pair;
-import io.dummymaker.scan.impl.ClassScanner;
+import io.dummymaker.model.old.Pair;
+import io.dummymaker.scan.old.impl.ClassScanner;
 import io.dummymaker.util.CastUtils;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.GenUtils;
@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
  * @see GenSupplier
  * @since 27.07.2019
  */
+@Deprecated
 public final class MainGenSupplier implements GenSupplier {
 
     private static final String DUMMY_GENERATOR_PACKAGE = "io.dummymaker.generator";

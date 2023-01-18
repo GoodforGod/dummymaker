@@ -1,8 +1,8 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.scan.AnnotationScanner;
-import io.dummymaker.scan.MapScanner;
+import io.dummymaker.scan.old.AnnotationScanner;
+import io.dummymaker.scan.old.MapScanner;
 import java.lang.annotation.*;
 
 /**

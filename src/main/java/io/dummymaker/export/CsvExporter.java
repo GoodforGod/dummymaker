@@ -1,8 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.model.export.FieldContainer.Type;
-import io.dummymaker.writer.Writer;
+import io.dummymaker.export.FieldContainer.Type;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 22.7.2020
  */
-public class CsvExporter extends AbstractExporter {
+public final class CsvExporter extends AbstractExporter {
 
     public static final char DEFAULT_SEPARATOR = ',';
 

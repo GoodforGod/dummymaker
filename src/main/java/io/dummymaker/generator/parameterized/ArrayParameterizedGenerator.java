@@ -1,9 +1,9 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.lang.reflect.Array;
@@ -38,7 +38,7 @@ public final class ArrayParameterizedGenerator implements ParameterizedGenerator
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         if (!fieldType.raw().getTypeName().endsWith("[]")) {
             return null;
         }

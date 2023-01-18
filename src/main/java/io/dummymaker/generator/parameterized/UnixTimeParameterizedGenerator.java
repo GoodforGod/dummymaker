@@ -2,9 +2,9 @@ package io.dummymaker.generator.parameterized;
 
 import static io.dummymaker.util.CastUtils.castToNumber;
 
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.number.UnixTimeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,14 +26,10 @@ public final class UnixTimeParameterizedGenerator implements ParameterizedGenera
     }
 
     @Override
-    public @Nullable Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public @Nullable Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         final Class<?> fieldClass = fieldType.raw();
         final long unixTime = UNIX_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        if (Number.class.isAssignableFrom(fieldClass)) {
-            return castToNumber(unixTime, fieldClass);
-        }
-
-        return unixTime;
+        return castToNumber(unixTime, fieldClass);
     }
 
     @Override

@@ -6,11 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.*;
 import java.util.Arrays;
-import java.util.Date;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utils for object casting
@@ -27,14 +23,24 @@ public final class CastUtils {
             switch (CastType.of(fieldType)) {
                 case BYTE:
                     return Byte.valueOf(String.valueOf(value));
-                case CHAR:
-                    return String.valueOf(value).charAt(0);
                 case SHORT:
-                    return Short.valueOf(String.valueOf(value));
-                case BOOLEAN:
-                    return Boolean.valueOf(String.valueOf(value));
+                    final long shortTemp = Long.parseLong(String.valueOf(value));
+                    if (shortTemp > Short.MAX_VALUE) {
+                        return Short.MAX_VALUE;
+                    } else if (shortTemp < Short.MIN_VALUE) {
+                        return Short.MIN_VALUE;
+                    } else {
+                        return (short) shortTemp;
+                    }
                 case INT:
-                    return Integer.valueOf(String.valueOf(value));
+                    final long intTemp = Long.parseLong(String.valueOf(value));
+                    if (intTemp > Integer.MAX_VALUE) {
+                        return Integer.MAX_VALUE;
+                    } else if (intTemp < Integer.MIN_VALUE) {
+                        return Integer.MIN_VALUE;
+                    } else {
+                        return (int) intTemp;
+                    }
                 case LONG:
                     return Long.valueOf(String.valueOf(value));
                 case FLOAT:
@@ -45,6 +51,21 @@ public final class CastUtils {
                     return new BigInteger(String.valueOf(value));
                 case BIG_DECIMAL:
                     return new BigDecimal(String.valueOf(value));
+                case CHAR:
+                    try {
+                        return Character.forDigit(Integer.parseInt(String.valueOf(value)), 10);
+                    } catch (Exception e) {
+                        return String.valueOf(value).charAt(0);
+                    }
+                case BOOLEAN:
+                    final String b = String.valueOf(value);
+                    if ("1".equals(b)) {
+                        return true;
+                    } else if ("0".equals(b)) {
+                        return false;
+                    } else {
+                        return Boolean.valueOf(String.valueOf(value));
+                    }
                 default:
                     return value;
             }
@@ -90,14 +111,16 @@ public final class CastUtils {
 
         try {
             if (constructor == null) {
-                throw new IllegalStateException("Can not instantiate '" +  target.getCanonicalName() +"', zero argument constructor not found");
+                throw new IllegalStateException(
+                        "Can not instantiate '" + target.getCanonicalName() + "', zero argument constructor not found");
             }
 
             constructor.setAccessible(true);
             if (constructor.getParameterTypes().length > 0) {
                 final Class<?> parentType = constructor.getParameterTypes()[0];
                 if (!CastType.of(parentType).equals(CastType.UNKNOWN)) {
-                    throw new IllegalStateException("Can not instantiate '" +  target.getCanonicalName() +"', zero argument constructor not found");
+                    throw new IllegalStateException(
+                            "Can not instantiate '" + target.getCanonicalName() + "', zero argument constructor not found");
                 }
 
                 final Object parent = instantiate(parentType);

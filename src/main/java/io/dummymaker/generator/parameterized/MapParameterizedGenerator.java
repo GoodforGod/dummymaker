@@ -1,17 +1,16 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.refactored.GenType;
-import io.dummymaker.factory.refactored.ParameterizedGenerator;
-import io.dummymaker.factory.refactored.TypeBuilder;
+import io.dummymaker.factory.GenType;
+import io.dummymaker.factory.GenTypeBuilder;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -34,7 +33,11 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
         this(min, max, -1, null, null);
     }
 
-    public MapParameterizedGenerator(int min, int max, int fixed, @Nullable Generator<?> keyGenerator, @Nullable Generator<?> valueGenerator) {
+    public MapParameterizedGenerator(int min,
+                                     int max,
+                                     int fixed,
+                                     @Nullable Generator<?> keyGenerator,
+                                     @Nullable Generator<?> valueGenerator) {
         this.min = min;
         this.max = max;
         this.fixed = fixed;
@@ -43,7 +46,7 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull TypeBuilder typeBuilder) {
+    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         if (fieldType.generics().size() != 2) {
             return get();
         }

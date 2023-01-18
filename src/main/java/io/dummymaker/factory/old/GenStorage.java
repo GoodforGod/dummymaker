@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @see ComplexGenerator
  * @since 21.07.2019
  */
+@Deprecated
 public interface GenStorage extends GenSupplier {
 
     /**

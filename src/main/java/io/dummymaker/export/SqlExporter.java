@@ -1,11 +1,10 @@
 package io.dummymaker.export;
 
-import io.dummymaker.model.export.DateFieldContainer;
-import io.dummymaker.model.export.FieldContainer;
 import io.dummymaker.util.CollectionUtils;
-import io.dummymaker.writer.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -23,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 24.7.2020
  */
-public class SqlExporter extends AbstractExporter {
+public final class SqlExporter extends AbstractExporter {
 
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
@@ -70,6 +69,8 @@ public class SqlExporter extends AbstractExporter {
         typeMap.put(Float.class, "DOUBLE PRECISION");
         typeMap.put(double.class, "DOUBLE PRECISION");
         typeMap.put(Double.class, "DOUBLE PRECISION");
+        typeMap.put(BigInteger.class, "BIGINT");
+        typeMap.put(BigDecimal.class, "NUMERIC");
         typeMap.put(char.class, "CHAR");
         typeMap.put(Character.class, "CHAR");
         typeMap.put(String.class, "VARCHAR");

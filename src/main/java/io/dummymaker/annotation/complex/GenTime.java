@@ -32,11 +32,9 @@ public @interface GenTime {
     long MAX_UNIX = 4102358400L;
 
     /**
-     * ISO 8601 datetime format for DateTime and timestamps
+     * ISO 8601 datetime format used when mapping to String
      *
-     * @see java.time.format.DateTimeFormatter#ISO_DATE_TIME default for datetimes
-     * @see java.time.format.DateTimeFormatter#ISO_DATE default for date only formats
-     * @see java.time.format.DateTimeFormatter#ISO_TIME default for time only formats
+     * @see java.time.OffsetDateTime is used when mapping to String
      */
     String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
