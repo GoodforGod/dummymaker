@@ -1,7 +1,7 @@
 package io.dummymaker.annotation;
 
+import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.ParameterizedGenerator;
-import io.dummymaker.generator.ParameterizedGeneratorFactory;
 import java.lang.annotation.*;
 
 /**
@@ -19,5 +19,5 @@ public @interface GenCustomFactory {
      * @return generator factory class to be called to generate values on factory (generator factory is
      *             expected to be initialized with Zero Argument Constructor)
      */
-    Class<? extends ParameterizedGeneratorFactory<?>> value();
+    Class<? extends AnnotationGeneratorFactory<?>> value();
 }

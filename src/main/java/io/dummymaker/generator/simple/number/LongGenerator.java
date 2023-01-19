@@ -13,8 +13,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class LongGenerator implements Generator<Long> {
 
+    private final long from;
+    private final long to;
+
+    public LongGenerator(long from, long to) {
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public @NotNull Long get() {
-        return RandomUtils.random(Long.MAX_VALUE);
+        return RandomUtils.random(from, to);
     }
 }

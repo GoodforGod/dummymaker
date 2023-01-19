@@ -1,10 +1,8 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.complex.SetComplexGenerator;
-import io.dummymaker.generator.parameterized.factory.SetParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.SetAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,8 +16,7 @@ import org.jetbrains.annotations.Range;
  * @see io.dummymaker.generator.parameterized.SetParameterizedGenerator
  * @since 06.03.2018
  */
-@GenCustomFactory(SetParameterizedGeneratorFactory.class)
-@GenCustom(SetComplexGenerator.class)
+@GenCustomFactory(SetAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenSet {

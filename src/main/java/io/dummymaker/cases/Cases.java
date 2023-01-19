@@ -14,12 +14,12 @@ import io.dummymaker.export.Exporter;
 public enum Cases {
 
     DEFAULT(new DefaultCase()),
-    LOW_CASE(new LowCase()),
+    LOWER_CASE(new LowerCase()),
     UPPER_CASE(new UpperCase()),
-    SNAKE_CASE(new SnakeCase()),
-    UPPER_SNAKE_CASE(new UpperSnakeCase()),
-    KEBAB_CASE(new KebabCase()),
-    UPPER_KEBAB_CASE(new UpperKebabCase()),
+    SNAKE_LOWER_CASE(new SnakeLowerCase()),
+    SNAKE_UPPER_CASE(new SnakeUpperCase()),
+    KEBAB_LOWER_CASE(new KebabLowerCase()),
+    KEBAB_UPPER_CASE(new KebabUpperCase()),
     CAMEL_CASE(new CamelCase()),
     PASCAL_CASE(new PascalCase());
 

@@ -12,7 +12,7 @@ public final class ExportException extends GenException {
         super(message);
     }
 
-    public ExportException(Throwable t) {
-        super(t);
+    public ExportException(Throwable throwable) {
+        super(throwable);
     }
 }

@@ -1,9 +1,8 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.annotation.*;
+import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.ParameterizedGenerator;
-import io.dummymaker.generator.ParameterizedGeneratorFactory;
 import io.dummymaker.util.CastUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -91,9 +90,9 @@ final class GenScanner {
 
             for (Annotation custom : marker.annotationType().getDeclaredAnnotations()) {
                 if (IS_FACTORY.test(custom)) {
-                    final ParameterizedGeneratorFactory generatorFactory = CastUtils
+                    final AnnotationGeneratorFactory generatorFactory = CastUtils
                             .instantiate(((GenCustomFactory) custom).value());
-                    final ParameterizedGenerator<?> generator = generatorFactory.get(marker);
+                    final Generator<?> generator = generatorFactory.get(marker);
                     final boolean isComplex = isComplex(field);
                     return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
                 }

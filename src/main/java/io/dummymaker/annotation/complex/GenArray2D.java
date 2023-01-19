@@ -1,10 +1,8 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.complex.Array2DComplexGenerator;
-import io.dummymaker.generator.parameterized.factory.Array2DParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.Array2DAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,8 +16,7 @@ import org.jetbrains.annotations.Range;
  * @see io.dummymaker.generator.parameterized.Array2DParameterizedGenerator
  * @since 04.11.2018
  */
-@GenCustomFactory(Array2DParameterizedGeneratorFactory.class)
-@GenCustom(Array2DComplexGenerator.class)
+@GenCustomFactory(Array2DAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenArray2D {

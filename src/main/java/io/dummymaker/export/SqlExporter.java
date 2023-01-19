@@ -1,5 +1,7 @@
 package io.dummymaker.export;
 
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -27,63 +29,126 @@ public final class SqlExporter extends AbstractExporter {
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
      */
-    private static final Integer INSERT_QUERY_LIMIT = 999;
+    private final int batchSize;
 
     /**
      * Java & Sql Type Representation Map is used to convert Java Field Data Type to Sql Data Type You
      * can add your specific values here by using constructor with Map'String, String'
      */
-    private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
+    private final Map<Class<?>, String> dataTypes;
 
-    public SqlExporter() {
-        super();
+    private SqlExporter(boolean appendFile,
+                        Case fieldCase,
+                        @NotNull Function<String, Writer> writerFunction,
+                        int batchSize,
+                        Map<Class<?>, String> dataTypes) {
+        super(appendFile, fieldCase, writerFunction);
+        this.batchSize = batchSize;
+        this.dataTypes = dataTypes;
     }
 
-    public SqlExporter(@NotNull Function<String, Writer> writerFunction) {
-        super(writerFunction);
+    public static final class Builder {
+
+        private boolean appendFile = false;
+        private Case fieldCase = Cases.DEFAULT.value();
+        private Function<String, Writer> writerFunction;
+        private int batchSize = 999;
+        private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
+
+        private Builder() {}
+
+        @NotNull
+        public Builder appendFile(boolean appendFile) {
+            this.appendFile = appendFile;
+            return this;
+        }
+
+        @NotNull
+        public Builder withCase(@NotNull Case fieldCase) {
+            this.fieldCase = fieldCase;
+            return this;
+        }
+
+        @NotNull
+        public Builder withWriter(@NotNull Function<String, Writer> writerFunction) {
+            this.writerFunction = writerFunction;
+            return this;
+        }
+
+        @NotNull
+        public Builder withBatchSize(int batchSize) {
+            this.batchSize = batchSize;
+            return this;
+        }
+
+        @NotNull
+        public Builder withDataType(@NotNull Class<?> fieldDateType, @NotNull String sqlDataType) {
+            this.dataTypes.put(fieldDateType, sqlDataType);
+            return this;
+        }
+
+        @NotNull
+        public Builder withDataTypes(@NotNull Map<Class<?>, String> dataTypes) {
+            this.dataTypes.putAll(dataTypes);
+            return this;
+        }
+
+        @NotNull
+        public SqlExporter build() {
+            final Function<String, Writer> writer = (writerFunction == null)
+                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    : writerFunction;
+
+            return new SqlExporter(appendFile, fieldCase, writer, batchSize, dataTypes);
+        }
+
+        private static Map<Class<?>, String> buildDefaultDataTypeMap() {
+            final Map<Class<?>, String> typeMap = new HashMap<>(35);
+            typeMap.put(boolean.class, "BOOLEAN");
+            typeMap.put(Boolean.class, "BOOLEAN");
+            typeMap.put(byte.class, "BYTE");
+            typeMap.put(Byte.class, "BYTE");
+            typeMap.put(short.class, "SMALLINT");
+            typeMap.put(Short.class, "SMALLINT");
+            typeMap.put(int.class, "INT");
+            typeMap.put(Integer.class, "INT");
+            typeMap.put(long.class, "BIGINT");
+            typeMap.put(Long.class, "BIGINT");
+            typeMap.put(float.class, "DOUBLE PRECISION");
+            typeMap.put(Float.class, "DOUBLE PRECISION");
+            typeMap.put(double.class, "DOUBLE PRECISION");
+            typeMap.put(Double.class, "DOUBLE PRECISION");
+            typeMap.put(BigInteger.class, "BIGINT");
+            typeMap.put(BigDecimal.class, "NUMERIC");
+            typeMap.put(char.class, "CHAR");
+            typeMap.put(Character.class, "CHAR");
+            typeMap.put(String.class, "VARCHAR");
+            typeMap.put(UUID.class, "UUID");
+            typeMap.put(Object.class, "VARCHAR");
+            typeMap.put(Time.class, "TIME");
+            typeMap.put(LocalTime.class, "TIME");
+            typeMap.put(LocalDate.class, "DATE");
+            typeMap.put(Date.class, "DATETIME");
+            typeMap.put(java.util.Date.class, "DATETIME");
+            typeMap.put(Timestamp.class, "TIMESTAMP");
+            typeMap.put(LocalDateTime.class, "TIMESTAMP");
+            return typeMap;
+        }
+    }
+
+    @NotNull
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @NotNull
+    public static SqlExporter build() {
+        return new Builder().build();
     }
 
     @Override
     protected @NotNull String getExtension() {
         return "sql";
-    }
-
-    /**
-     * Build default data types
-     *
-     * @see #dataTypes
-     */
-    private Map<Class<?>, String> buildDefaultDataTypeMap() {
-        final Map<Class<?>, String> typeMap = new HashMap<>(35);
-        typeMap.put(boolean.class, "BOOLEAN");
-        typeMap.put(Boolean.class, "BOOLEAN");
-        typeMap.put(byte.class, "BYTE");
-        typeMap.put(Byte.class, "BYTE");
-        typeMap.put(short.class, "SMALLINT");
-        typeMap.put(Short.class, "SMALLINT");
-        typeMap.put(int.class, "INT");
-        typeMap.put(Integer.class, "INT");
-        typeMap.put(long.class, "BIGINT");
-        typeMap.put(Long.class, "BIGINT");
-        typeMap.put(float.class, "DOUBLE PRECISION");
-        typeMap.put(Float.class, "DOUBLE PRECISION");
-        typeMap.put(double.class, "DOUBLE PRECISION");
-        typeMap.put(Double.class, "DOUBLE PRECISION");
-        typeMap.put(BigInteger.class, "BIGINT");
-        typeMap.put(BigDecimal.class, "NUMERIC");
-        typeMap.put(char.class, "CHAR");
-        typeMap.put(Character.class, "CHAR");
-        typeMap.put(String.class, "VARCHAR");
-        typeMap.put(UUID.class, "UUID");
-        typeMap.put(Object.class, "VARCHAR");
-        typeMap.put(Time.class, "TIME");
-        typeMap.put(LocalTime.class, "TIME");
-        typeMap.put(LocalDate.class, "DATE");
-        typeMap.put(Date.class, "DATETIME");
-        typeMap.put(java.util.Date.class, "DATETIME");
-        typeMap.put(Timestamp.class, "TIMESTAMP");
-        typeMap.put(LocalDateTime.class, "TIMESTAMP");
-        return typeMap;
     }
 
     /**
@@ -102,7 +167,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     private <T> String getCollectionName(T t) {
-        return naming.apply(t.getClass().getSimpleName()).toLowerCase();
+        return fieldCase.apply(t.getClass().getSimpleName()).toLowerCase();
     }
 
     /**
@@ -120,12 +185,12 @@ public final class SqlExporter extends AbstractExporter {
      *
      * @return sql create table (name - type)
      */
-    private String translateContainerToSqlType(FieldContainer container) {
-        final String field = container.getExportName(naming);
+    private String translateContainerToSqlType(ExportField container) {
+        final String field = container.getName(fieldCase);
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
-                final String dateType = (container instanceof DateFieldContainer && ((DateFieldContainer) container).isUnixTime())
+                final String dateType = (container instanceof TimeExportField && ((TimeExportField) container).isUnixTime())
                         ? "BIGINT"
                         : translateJavaTypeToSqlType(fieldType);
 
@@ -143,14 +208,14 @@ public final class SqlExporter extends AbstractExporter {
     /**
      * Build insert query part with values
      */
-    private <T> String buildInsertQuery(T t, Collection<FieldContainer> containers) {
+    private <T> String buildInsertQuery(T t, Collection<ExportField> containers) {
         final String collectionName = getCollectionName(t);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
                 .append(collectionName)
                 .append(" (");
 
         final String names = containers.stream()
-                .map(c -> c.getExportName(naming))
+                .map(c -> c.getName(fieldCase))
                 .collect(Collectors.joining(", "));
 
         return builder.append(names)
@@ -159,20 +224,20 @@ public final class SqlExporter extends AbstractExporter {
                 .toString();
     }
 
-    private String getPrimaryField(Collection<FieldContainer> containers) {
+    private String getPrimaryField(Collection<ExportField> containers) {
         final Pattern pattern = Pattern.compile("id|[gu]?uid");
         if (containers.isEmpty())
             return "";
 
         return containers.stream()
-                .filter(FieldContainer::isSequential)
-                .map(FieldContainer::getExportName)
+                .filter(ExportField::isSequential)
+                .map(ExportField::getName)
                 .findFirst()
                 .orElseGet(() -> containers.stream()
-                        .filter(c -> pattern.matcher(c.getExportName()).matches())
-                        .map(FieldContainer::getExportName)
+                        .filter(c -> pattern.matcher(c.getName()).matches())
+                        .map(ExportField::getName)
                         .findFirst()
-                        .orElseGet(() -> containers.iterator().next().getExportName()));
+                        .orElseGet(() -> containers.iterator().next().getName()));
     }
 
     @Override
@@ -203,7 +268,7 @@ public final class SqlExporter extends AbstractExporter {
         return wrap(super.convertString(s));
     }
 
-    private Class<?> extractType(FieldContainer.Type type, Field field) {
+    private Class<?> extractType(ExportField.Type type, Field field) {
         switch (type) {
             case ARRAY:
                 return field.getType().getComponentType();
@@ -218,15 +283,15 @@ public final class SqlExporter extends AbstractExporter {
 
     @SuppressWarnings("DuplicatedCode")
     @Override
-    protected Predicate<FieldContainer> filter() {
-        return c -> c.getType() == FieldContainer.Type.STRING
-                || c.getType() == FieldContainer.Type.BOOLEAN
-                || c.getType() == FieldContainer.Type.NUMBER
-                || c.getType() == FieldContainer.Type.DATE
-                || c.getType() == FieldContainer.Type.SEQUENTIAL
-                || c.getType() == FieldContainer.Type.ARRAY
-                || c.getType() == FieldContainer.Type.ARRAY_2D
-                || c.getType() == FieldContainer.Type.COLLECTION;
+    protected Predicate<ExportField> filter() {
+        return c -> c.getType() == ExportField.Type.STRING
+                || c.getType() == ExportField.Type.BOOLEAN
+                || c.getType() == ExportField.Type.NUMBER
+                || c.getType() == ExportField.Type.DATE
+                || c.getType() == ExportField.Type.SEQUENTIAL
+                || c.getType() == ExportField.Type.ARRAY
+                || c.getType() == ExportField.Type.ARRAY_2D
+                || c.getType() == ExportField.Type.COLLECTION;
     }
 
     @Override
@@ -235,7 +300,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+    protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
         final String collectionName = getCollectionName(t);
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(collectionName)
@@ -252,23 +317,23 @@ public final class SqlExporter extends AbstractExporter {
         // Write primary key constraint
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
-                .append(naming.apply(primaryKeyField))
+                .append(fieldCase.apply(primaryKeyField))
                 .append(")\n);\n")
                 .toString();
     }
 
     @Override
-    protected @NotNull <T> String prefix(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
         return buildInsertQuery(t, containers);
     }
 
     @Override
-    protected @NotNull <T> String suffix(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
         return ";";
     }
 
     @Override
-    protected @NotNull <T> String map(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String map(T t, Collection<ExportField> containers) {
         final String resultValues = containers.stream()
                 .map(c -> getValue(t, c))
                 .collect(Collectors.joining(", "));
@@ -282,7 +347,7 @@ public final class SqlExporter extends AbstractExporter {
             return false;
 
         final T t = collection.iterator().next();
-        final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return false;
 
@@ -292,13 +357,13 @@ public final class SqlExporter extends AbstractExporter {
         if (!writer.write(head(t, containers, true)))
             return false;
 
-        int i = INSERT_QUERY_LIMIT;
+        int i = batchSize;
         StringBuilder builder = new StringBuilder();
 
         final Iterator<T> iterator = collection.iterator();
         while (iterator.hasNext()) {
             final T next = iterator.next();
-            if (i == INSERT_QUERY_LIMIT)
+            if (i == batchSize)
                 builder.append(buildInsertQuery(next, containers));
 
             builder.append(map(next, containers));
@@ -327,18 +392,18 @@ public final class SqlExporter extends AbstractExporter {
             return "";
 
         final T t = collection.iterator().next();
-        final List<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return "";
 
         // Create Table Query
         final StringBuilder builder = new StringBuilder(head(t, containers, true));
         final Iterator<T> iterator = collection.iterator();
-        int i = INSERT_QUERY_LIMIT;
+        int i = batchSize;
 
         while (iterator.hasNext()) {
             final T next = iterator.next();
-            if (i == INSERT_QUERY_LIMIT)
+            if (i == batchSize)
                 builder.append(buildInsertQuery(next, containers));
 
             builder.append(map(next, containers));
@@ -357,7 +422,7 @@ public final class SqlExporter extends AbstractExporter {
 
     private int nextInsertValue(int current) {
         return (current <= 0)
-                ? INSERT_QUERY_LIMIT
+                ? batchSize
                 : current - 1;
     }
 }

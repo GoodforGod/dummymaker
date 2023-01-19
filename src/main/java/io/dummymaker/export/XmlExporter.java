@@ -1,5 +1,7 @@
 package io.dummymaker.export;
 
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.util.StringUtils;
 import java.util.Collection;
 import java.util.function.Function;
@@ -18,12 +20,54 @@ public final class XmlExporter extends AbstractExporter {
      */
     private static final String TAG_ENDING = "List";
 
-    public XmlExporter() {
-        super();
+    private XmlExporter(boolean appendFile, Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
+        super(appendFile, fieldCase, writerFunction);
     }
 
-    public XmlExporter(@NotNull Function<String, Writer> writerFunction) {
-        super(writerFunction);
+    public static final class Builder {
+
+        private boolean appendFile = false;
+        private Case fieldCase = Cases.DEFAULT.value();
+        private Function<String, Writer> writerFunction;
+
+        private Builder() {}
+
+        @NotNull
+        public Builder appendFile(boolean appendFile) {
+            this.appendFile = appendFile;
+            return this;
+        }
+
+        @NotNull
+        public Builder withCase(@NotNull Case fieldCase) {
+            this.fieldCase = fieldCase;
+            return this;
+        }
+
+        @NotNull
+        public Builder withWriter(@NotNull Function<String, Writer> writerFunction) {
+            this.writerFunction = writerFunction;
+            return this;
+        }
+
+        @NotNull
+        public XmlExporter build() {
+            final Function<String, Writer> writer = (writerFunction == null)
+                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    : writerFunction;
+
+            return new XmlExporter(appendFile, fieldCase, writer);
+        }
+    }
+
+    @NotNull
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @NotNull
+    public static XmlExporter build() {
+        return new Builder().build();
     }
 
     @Override
@@ -40,35 +84,35 @@ public final class XmlExporter extends AbstractExporter {
     }
 
     @Override
-    protected Predicate<FieldContainer> filter() {
-        return c -> c.getType() == FieldContainer.Type.STRING
-                || c.getType() == FieldContainer.Type.BOOLEAN
-                || c.getType() == FieldContainer.Type.NUMBER
-                || c.getType() == FieldContainer.Type.DATE
-                || c.getType() == FieldContainer.Type.SEQUENTIAL;
+    protected Predicate<ExportField> filter() {
+        return c -> c.getType() == ExportField.Type.STRING
+                || c.getType() == ExportField.Type.BOOLEAN
+                || c.getType() == ExportField.Type.NUMBER
+                || c.getType() == ExportField.Type.DATE
+                || c.getType() == ExportField.Type.SEQUENTIAL;
     }
 
     @Override
-    protected @NotNull <T> String prefix(T t, Collection<FieldContainer> containers) {
-        return openXmlTag(naming.apply(t.getClass().getSimpleName())) + "\n";
+    protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
+        return openXmlTag(fieldCase.apply(t.getClass().getSimpleName())) + "\n";
     }
 
     @Override
-    protected @NotNull <T> String suffix(T t, Collection<FieldContainer> containers) {
-        return "\n" + closeXmlTag(naming.apply(t.getClass().getSimpleName()));
+    protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
+        return "\n" + closeXmlTag(fieldCase.apply(t.getClass().getSimpleName()));
     }
 
     @Override
-    protected @NotNull <T> String separator(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String separator(T t, Collection<ExportField> containers) {
         return "\n";
     }
 
     @Override
-    protected @NotNull <T> String map(T t, Collection<FieldContainer> containers) {
+    protected @NotNull <T> String map(T t, Collection<ExportField> containers) {
         return containers.stream()
                 .map(c -> {
                     final String value = getValue(t, c);
-                    final String tag = c.getExportName(naming);
+                    final String tag = c.getName(fieldCase);
                     return StringUtils.isEmpty(value)
                             ? ""
                             : "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
@@ -77,18 +121,18 @@ public final class XmlExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+    protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? openXmlTag(naming.apply(type + TAG_ENDING)) + "\n"
+                ? openXmlTag(fieldCase.apply(type + TAG_ENDING)) + "\n"
                 : "";
     }
 
     @Override
-    protected @NotNull <T> String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
+    protected @NotNull <T> String tail(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? "\n" + closeXmlTag(naming.apply(type + TAG_ENDING))
+                ? "\n" + closeXmlTag(fieldCase.apply(type + TAG_ENDING))
                 : "";
     }
 }

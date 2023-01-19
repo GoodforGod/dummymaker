@@ -1,10 +1,8 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.complex.ListComplexGenerator;
-import io.dummymaker.generator.parameterized.factory.ListParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.ListAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,8 +16,7 @@ import org.jetbrains.annotations.Range;
  * @see io.dummymaker.generator.parameterized.ListParameterizedGenerator
  * @since 05.03.2018
  */
-@GenCustomFactory(ListParameterizedGeneratorFactory.class)
-@GenCustom(ListComplexGenerator.class)
+@GenCustomFactory(ListAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenList {

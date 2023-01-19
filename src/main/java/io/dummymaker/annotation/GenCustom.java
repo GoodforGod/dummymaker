@@ -1,8 +1,6 @@
 package io.dummymaker.annotation;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.scan.old.AnnotationScanner;
-import io.dummymaker.scan.old.MapScanner;
 import java.lang.annotation.*;
 
 /**
@@ -15,8 +13,6 @@ import java.lang.annotation.*;
  *
  * @author Anton Kurako (GoodforGod)
  * @see Generator
- * @see MapScanner
- * @see AnnotationScanner
  * @since 28.05.2017
  */
 @Documented

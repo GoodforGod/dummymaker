@@ -2,10 +2,7 @@ package io.dummymaker.export;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
 import io.dummymaker.error.ExportException;
-import io.dummymaker.scan.old.ExportScanner;
-import io.dummymaker.scan.old.impl.MainExportScanner;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import java.lang.reflect.Field;
@@ -30,57 +27,35 @@ abstract class AbstractExporter implements Exporter {
 
     private static final String DEFAULT_EMPTY_VALUE = "";
 
-    protected final ExportScanner scanner = new MainExportScanner();
+    protected final ExportScanner scanner = new ExportScanner();
 
-    protected boolean cleanFileBeforeExport = true;
-    protected Case naming = Cases.DEFAULT.value();
+    protected final boolean appendFile;
+    protected final Case fieldCase;
     protected final Function<String, Writer> writerFunction;
 
-    AbstractExporter() {
-        this(fileName -> new FileWriter(fileName, true));
-    }
-
-    /**
-     * @param writerFunction that maps fileName to {@link Writer} implementation
-     */
-    AbstractExporter(@NotNull Function<String, Writer> writerFunction) {
+    AbstractExporter(boolean appendFile, Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
+        this.appendFile = appendFile;
+        this.fieldCase = fieldCase;
         this.writerFunction = writerFunction;
     }
 
     protected abstract @NotNull String getExtension();
 
-    protected abstract <T> @NotNull String map(T t, Collection<FieldContainer> containers);
+    protected abstract <T> @NotNull String map(T t, Collection<ExportField> containers);
 
-    /**
-     * Build exporter with naming strategy
-     *
-     * @param naming naming strategy for exporter
-     * @see Cases
-     * @return self
-     */
-    public Exporter withCase(@NotNull Case naming) {
-        this.naming = naming;
-        return this;
-    }
-
-    public @NotNull Exporter withAppend() {
-        this.cleanFileBeforeExport = false;
-        return this;
-    }
-
-    protected Predicate<FieldContainer> filter() {
+    protected Predicate<ExportField> filter() {
         return c -> true;
     }
 
-    protected Stream<FieldContainer> scan(Class<?> type) {
+    protected Stream<ExportField> scan(Class<?> type) {
         return scan(type, filter());
     }
 
-    protected Stream<FieldContainer> scan(Class<?> type, Predicate<FieldContainer> filter) {
+    protected Stream<ExportField> scan(Class<?> type, Predicate<ExportField> filter) {
         return scanner.scan(type).stream().filter(filter);
     }
 
-    protected <T> @NotNull String getValue(T t, FieldContainer container) {
+    protected <T> @NotNull String getValue(T t, ExportField container) {
         if (t == null)
             return DEFAULT_EMPTY_VALUE;
 
@@ -100,9 +75,9 @@ abstract class AbstractExporter implements Exporter {
                 case STRING:
                     return convertString(String.valueOf(value));
                 case DATE:
-                    return ((DateFieldContainer) container).isUnixTime()
+                    return ((TimeExportField) container).isUnixTime()
                             ? convertDateUnix(value)
-                            : convertDate(value, ((DateFieldContainer) container).getFormatter());
+                            : convertDate(value, ((TimeExportField) container).getFormatter());
                 case ARRAY:
                     return convertArray(value);
                 case ARRAY_2D:
@@ -147,10 +122,12 @@ abstract class AbstractExporter implements Exporter {
             return ((LocalTime) date).format(formatter);
         } else if (date instanceof LocalDateTime) {
             return ((LocalDateTime) date).format(formatter);
-        } else if (date instanceof OffsetDateTime) {
-            return ((OffsetDateTime) date).format(formatter);
         } else if (date instanceof OffsetTime) {
             return ((OffsetTime) date).format(formatter);
+        } else if (date instanceof OffsetDateTime) {
+            return ((OffsetDateTime) date).format(formatter);
+        } else if (date instanceof ZonedDateTime) {
+            return ((ZonedDateTime) date).format(formatter);
         } else {
             return String.valueOf(date);
         }
@@ -166,11 +143,13 @@ abstract class AbstractExporter implements Exporter {
                     ((LocalTime) date)).toEpochSecond(ZoneOffset.UTC));
         } else if (date instanceof LocalDateTime) {
             return String.valueOf(((LocalDateTime) date).toEpochSecond(ZoneOffset.UTC));
-        } else if (date instanceof OffsetDateTime) {
-            return String.valueOf(((OffsetDateTime) date).toEpochSecond());
         } else if (date instanceof OffsetTime) {
             return String.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1),
                     ((OffsetTime) date).toLocalTime()).toEpochSecond(ZoneOffset.UTC));
+        } else if (date instanceof OffsetDateTime) {
+            return String.valueOf(((OffsetDateTime) date).toEpochSecond());
+        } else if (date instanceof ZonedDateTime) {
+            return String.valueOf(((ZonedDateTime) date).toEpochSecond());
         } else {
             return String.valueOf(date);
         }
@@ -181,13 +160,13 @@ abstract class AbstractExporter implements Exporter {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_TIME
                     : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof Date || date instanceof LocalDateTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_DATE_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
         } else if (date instanceof LocalDate) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_DATE
+                    : DateTimeFormatter.ofPattern(formatter);
+        } else if (date instanceof Date || date instanceof LocalDateTime) {
+            return GenTime.DEFAULT_FORMAT.equals(formatter)
+                    ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
                     : DateTimeFormatter.ofPattern(formatter);
         } else if (date instanceof OffsetTime) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
@@ -196,6 +175,10 @@ abstract class AbstractExporter implements Exporter {
         } else if (date instanceof OffsetDateTime) {
             return GenTime.DEFAULT_FORMAT.equals(formatter)
                     ? DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                    : DateTimeFormatter.ofPattern(formatter);
+        } else if (date instanceof ZonedDateTime) {
+            return GenTime.DEFAULT_FORMAT.equals(formatter)
+                    ? DateTimeFormatter.ISO_ZONED_DATE_TIME
                     : DateTimeFormatter.ofPattern(formatter);
         } else {
             return DateTimeFormatter.ofPattern(formatter);
@@ -250,15 +233,15 @@ abstract class AbstractExporter implements Exporter {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String prefix(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String prefix(T t, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String suffix(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String suffix(T t, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String separator(T t, Collection<FieldContainer> containers) {
+    protected <T> @NotNull String separator(T t, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
@@ -269,7 +252,7 @@ abstract class AbstractExporter implements Exporter {
      * @param <T>          type of exported object
      * @return head for data
      */
-    protected <T> @NotNull String head(T t, Collection<FieldContainer> containers, boolean isCollection) {
+    protected <T> @NotNull String head(T t, Collection<ExportField> containers, boolean isCollection) {
         return DEFAULT_EMPTY_VALUE;
     }
 
@@ -280,7 +263,7 @@ abstract class AbstractExporter implements Exporter {
      * @param <T>          type of exported object
      * @return tail for data
      */
-    protected <T> @NotNull String tail(T t, Collection<FieldContainer> containers, boolean isCollection) {
+    protected <T> @NotNull String tail(T t, Collection<ExportField> containers, boolean isCollection) {
         return DEFAULT_EMPTY_VALUE;
     }
 
@@ -293,7 +276,7 @@ abstract class AbstractExporter implements Exporter {
         if (t == null)
             return false;
 
-        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return false;
 
@@ -311,7 +294,7 @@ abstract class AbstractExporter implements Exporter {
             return false;
 
         final T t = collection.iterator().next();
-        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return false;
 
@@ -328,7 +311,7 @@ abstract class AbstractExporter implements Exporter {
         if (t == null)
             return DEFAULT_EMPTY_VALUE;
 
-        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return DEFAULT_EMPTY_VALUE;
 
@@ -344,7 +327,7 @@ abstract class AbstractExporter implements Exporter {
             return DEFAULT_EMPTY_VALUE;
 
         final T t = collection.iterator().next();
-        final Collection<FieldContainer> containers = scan(t.getClass()).collect(Collectors.toList());
+        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
         if (containers.isEmpty())
             return DEFAULT_EMPTY_VALUE;
 
@@ -354,7 +337,7 @@ abstract class AbstractExporter implements Exporter {
         return head + data + tail;
     }
 
-    protected <T> String convertData(Collection<T> collection, Collection<FieldContainer> containers) {
+    protected <T> String convertData(Collection<T> collection, Collection<ExportField> containers) {
         final T t = collection.iterator().next();
         return collection.stream()
                 .filter(Objects::nonNull)

@@ -1,7 +1,6 @@
 package io.dummymaker.util;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.TimeGenerator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -30,16 +29,16 @@ public final class GenUtils {
 
     public static boolean isGenerator(Type type) {
         try {
-            return ((ParameterizedType) type).getRawType().equals(Generator.class)
-                    || ((ParameterizedType) type).getRawType().equals(TimeGenerator.class);
+            return ((ParameterizedType) type).getRawType().equals(Generator.class);
         } catch (Exception e) {
             return false;
         }
     }
 
     public static List<Type> getTypes(Class<?> target) {
-        if (Object.class.equals(target))
+        if (Object.class.equals(target)) {
             return new ArrayList<>();
+        }
 
         try {
             final List<Type> types = getTypesFromClass(target);
@@ -53,8 +52,9 @@ public final class GenUtils {
     }
 
     private static List<Type> getTypesFromInterfaces(Type targetType) {
-        if (isGenerator(targetType) || ParameterizedType.class.equals(targetType))
+        if (isGenerator(targetType) || ParameterizedType.class.equals(targetType)) {
             return new ArrayList<>();
+        }
 
         final Class targetClass = (Class) targetType;
         return getTypesFromClass(targetClass);
@@ -69,7 +69,6 @@ public final class GenUtils {
                 .collect(Collectors.toList());
 
         types.addAll(collect);
-
         return types;
     }
 }

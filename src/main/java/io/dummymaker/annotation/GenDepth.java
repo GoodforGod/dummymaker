@@ -1,6 +1,5 @@
 package io.dummymaker.annotation;
 
-import io.dummymaker.factory.old.GenSupplier;
 import java.lang.annotation.*;
 import org.jetbrains.annotations.Range;
 
@@ -8,7 +7,6 @@ import org.jetbrains.annotations.Range;
  * Annotation is used on classes and uses default suitable generators to fill class fields
  *
  * @author Anton Kurako (GoodforGod)
- * @see GenSupplier
  * @since 21.11.2022
  */
 @Documented

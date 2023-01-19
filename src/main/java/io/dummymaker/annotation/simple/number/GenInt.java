@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.simple.number;
 
-import io.dummymaker.annotation.GenCustom;
-import io.dummymaker.generator.complex.LongComplexGenerator;
+import io.dummymaker.annotation.GenCustomFactory;
+import io.dummymaker.generator.simple.number.factory.IntegerAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Anton Kurako (GoodforGod)
- * @see LongComplexGenerator
+ * @see io.dummymaker.generator.simple.number.IntegerGenerator
  * @since 30.05.2017
  */
-@GenCustom(LongComplexGenerator.class)
+@GenCustomFactory(IntegerAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenInt {

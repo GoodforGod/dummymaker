@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import java.sql.Date;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +11,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Date
  * @since 10.03.2019
  */
-public final class DateSqlGenerator implements TimeGenerator<Date> {
+public final class DateSqlGenerator implements Generator<Date> {
 
-    private static final LocalDateGenerator GENERATOR = new LocalDateGenerator();
+    private final LocalDateGenerator localDateGenerator;
 
-    @Override
-    public @NotNull Date get() {
-        return get(0, GenTime.MAX_UNIX);
+    public DateSqlGenerator(long from, long to) {
+        this.localDateGenerator = new LocalDateGenerator(from, to);
     }
 
     @Override
-    public @NotNull Date get(long fromUnixTime, long toUnixTime) {
-        return Date.valueOf(GENERATOR.get(fromUnixTime, toUnixTime));
+    public @NotNull Date get() {
+        return Date.valueOf(localDateGenerator.get());
     }
 }

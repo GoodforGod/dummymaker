@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.util.RandomUtils;
 import java.time.OffsetTime;
 import java.time.ZoneOffset;
@@ -14,18 +13,17 @@ import org.jetbrains.annotations.NotNull;
  * @see OffsetTime
  * @since 05.12.2021
  */
-public final class OffsetTimeGenerator implements TimeGenerator<OffsetTime> {
+public final class OffsetTimeGenerator implements Generator<OffsetTime> {
 
-    private static final LocalTimeGenerator GENERATOR = new LocalTimeGenerator();
+    private final LocalTimeGenerator localTimeGenerator;
 
-    @Override
-    public @NotNull OffsetTime get() {
-        return get(0, GenTime.MAX_UNIX);
+    public OffsetTimeGenerator(long from, long to) {
+        this.localTimeGenerator = new LocalTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull OffsetTime get(long fromUnixTime, long toUnixTime) {
+    public @NotNull OffsetTime get() {
         final ZoneOffset zoneOffset = ZoneOffset.ofHours(RandomUtils.random(-18, 18));
-        return OffsetTime.of(GENERATOR.get(fromUnixTime, toUnixTime), zoneOffset);
+        return OffsetTime.of(localTimeGenerator.get(), zoneOffset);
     }
 }

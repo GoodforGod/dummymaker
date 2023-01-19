@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import java.time.Year;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +11,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Year
  * @since 21.10.2022
  */
-public final class YearGenerator implements TimeGenerator<Year> {
+public final class YearGenerator implements Generator<Year> {
 
-    private static final LocalDateTimeGenerator GENERATOR = new LocalDateTimeGenerator();
+    private final LocalDateTimeGenerator localDateTimeGenerator;
 
-    @Override
-    public @NotNull Year get() {
-        return get(0, GenTime.MAX_UNIX);
+    public YearGenerator(long from, long to) {
+        this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull Year get(long fromUnixTime, long toUnixTime) {
-        return Year.of(GENERATOR.get(fromUnixTime, toUnixTime).getYear());
+    public @NotNull Year get() {
+        return Year.of(localDateTimeGenerator.get().getYear());
     }
 }

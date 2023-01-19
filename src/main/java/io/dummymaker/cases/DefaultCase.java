@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class DefaultCase implements Case {
 
+    DefaultCase() {}
+
     @Override
     public @NotNull String apply(@NotNull String value) {
         return value;

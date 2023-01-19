@@ -36,8 +36,9 @@ public final class GenRule {
 
     @NotNull
     public static GenRule manual(@NotNull Class<?> target, int depth) {
-        if (GLOBAL_MARKER.equals(target))
+        if (GLOBAL_MARKER.equals(target)) {
             throw new IllegalArgumentException("Void can't be Rule type");
+        }
 
         return new GenRule(target, false, depth);
     }
@@ -165,5 +166,25 @@ public final class GenRule {
 
     Set<String> getIgnored() {
         return ignored;
+    }
+
+    Set<GenRuleField> getFieldRules() {
+        return fieldRules;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof GenRule))
+            return false;
+        GenRule genRule = (GenRule) o;
+        return depth == genRule.depth && isAuto == genRule.isAuto && Objects.equals(target, genRule.target)
+                && Objects.equals(ignored, genRule.ignored) && Objects.equals(fieldRules, genRule.fieldRules);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(depth, isAuto, target, ignored, fieldRules);
     }
 }

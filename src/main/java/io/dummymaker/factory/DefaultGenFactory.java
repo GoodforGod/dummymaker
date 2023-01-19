@@ -33,7 +33,7 @@ final class DefaultGenFactory implements GenFactory {
     DefaultGenFactory(long salt, GenRules rules, boolean isAutoByDefault, int depthByDefault, boolean ignoreErrors) {
         this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(salt));
         this.zeroArgConstructor = new ZeroArgClassConstructor();
-        this.fullArgConstructor = new FullArgClassConstructor(rules, generatorSupplier);
+        this.fullArgConstructor = new FullArgClassConstructor(generatorSupplier);
         final GenScanner scanner = new GenScanner(generatorSupplier, rules, isAutoByDefault, depthByDefault);
         this.graphBuilder = new GenGraphBuilder(scanner, rules, depthByDefault);
         this.ignoreErrors = ignoreErrors;

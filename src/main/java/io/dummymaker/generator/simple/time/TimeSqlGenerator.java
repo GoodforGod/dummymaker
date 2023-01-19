@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import java.sql.Time;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +11,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Time
  * @since 10.03.2019
  */
-public final class TimeSqlGenerator implements TimeGenerator<Time> {
+public final class TimeSqlGenerator implements Generator<Time> {
 
-    private static final LocalTimeGenerator GENERATOR = new LocalTimeGenerator();
+    private final LocalTimeGenerator localTimeGenerator;
 
-    @Override
-    public @NotNull Time get() {
-        return get(0, GenTime.MAX_UNIX);
+    public TimeSqlGenerator(long from, long to) {
+        this.localTimeGenerator = new LocalTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull Time get(long fromUnixTime, long toUnixTime) {
-        return Time.valueOf(GENERATOR.get(fromUnixTime, toUnixTime));
+    public @NotNull Time get() {
+        return Time.valueOf(localTimeGenerator.get());
     }
 }

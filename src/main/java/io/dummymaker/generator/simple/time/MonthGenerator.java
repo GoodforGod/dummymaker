@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import java.time.Month;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +11,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Month
  * @since 21.10.2022
  */
-public final class MonthGenerator implements TimeGenerator<Month> {
+public final class MonthGenerator implements Generator<Month> {
 
-    private static final LocalDateTimeGenerator GENERATOR = new LocalDateTimeGenerator();
+    private final LocalDateTimeGenerator localDateTimeGenerator;
 
-    @Override
-    public @NotNull Month get() {
-        return get(0, GenTime.MAX_UNIX);
+    public MonthGenerator(long from, long to) {
+        this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull Month get(long fromUnixTime, long toUnixTime) {
-        return GENERATOR.get(fromUnixTime, toUnixTime).getMonth();
+    public @NotNull Month get() {
+        return localDateTimeGenerator.get().getMonth();
     }
 }

@@ -18,9 +18,17 @@ public final class IntegerGenerator implements Generator<Integer> {
 
     private static final Pattern PATTERN = Pattern.compile("num(ber)?|counter|series", CASE_INSENSITIVE);
 
+    private final int from;
+    private final int to;
+
+    public IntegerGenerator(int from, int to) {
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public @NotNull Integer get() {
-        return RandomUtils.random(Integer.MAX_VALUE);
+        return RandomUtils.random(from, to);
     }
 
     @Override

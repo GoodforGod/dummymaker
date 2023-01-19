@@ -1,10 +1,8 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.complex.MapComplexGenerator;
-import io.dummymaker.generator.parameterized.factory.MapParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.MapAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,8 +16,7 @@ import org.jetbrains.annotations.Range;
  * @see io.dummymaker.generator.parameterized.MapParameterizedGenerator
  * @since 06.03.2018
  */
-@GenCustomFactory(MapParameterizedGeneratorFactory.class)
-@GenCustom(MapComplexGenerator.class)
+@GenCustomFactory(MapAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenMap {

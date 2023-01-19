@@ -1,7 +1,5 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.old.GenFactory;
-import io.dummymaker.factory.old.GenSupplier;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Anton Kurako (GoodforGod)
  * @see GenFactory
- * @see GenSupplier
  * @since 01.08.2019
  */
 final class GenRules {

@@ -1,9 +1,7 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
-import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
-import io.dummymaker.generator.parameterized.factory.SequenceParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.SequenceAnnotationGeneratorFactory;
 import java.lang.annotation.*;
 import org.jetbrains.annotations.Range;
 
@@ -14,8 +12,7 @@ import org.jetbrains.annotations.Range;
  * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
-@GenCustomFactory(SequenceParameterizedGeneratorFactory.class)
-@GenCustom(SequenceParameterizedGenerator.class)
+@GenCustomFactory(SequenceAnnotationGeneratorFactory.class)
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PascalCase implements Case {
 
+    PascalCase() {}
+
     @Override
     public @NotNull String apply(@NotNull String value) {
         return (value.length() == 1)

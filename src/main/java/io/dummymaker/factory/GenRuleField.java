@@ -1,7 +1,6 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.model.old.GenRules;
 import java.util.*;
 import java.util.function.Supplier;
 

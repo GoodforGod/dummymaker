@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CamelCase implements Case {
 
+    CamelCase() {}
+
     @Override
     public @NotNull String apply(@NotNull String value) {
         return (value.length() == 1)

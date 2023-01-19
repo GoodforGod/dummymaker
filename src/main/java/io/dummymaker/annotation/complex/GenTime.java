@@ -1,9 +1,7 @@
 package io.dummymaker.annotation.complex;
 
-import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.annotation.GenCustomFactory;
-import io.dummymaker.generator.complex.TimeComplexGenerator;
-import io.dummymaker.generator.parameterized.factory.TimeParameterizedGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.TimeAnnotationGeneratorFactory;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,8 +13,7 @@ import org.jetbrains.annotations.Range;
  * @see io.dummymaker.generator.parameterized.TimeParameterizedGenerator
  * @since 06.03.2018
  */
-@GenCustomFactory(TimeParameterizedGeneratorFactory.class)
-@GenCustom(TimeComplexGenerator.class)
+@GenCustomFactory(TimeAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenTime {
@@ -24,12 +21,12 @@ public @interface GenTime {
     /**
      * Unix Timestamp for 1-1-1970.
      */
-    long MIN_UNIX = 0L;
+    long MIN = 0L;
 
     /**
      * Unix Timestamp for 12-31-2099.
      */
-    long MAX_UNIX = 4102358400L;
+    long MAX = 4102358400L;
 
     /**
      * ISO 8601 datetime format used when mapping to String
@@ -43,16 +40,16 @@ public @interface GenTime {
      *
      * @return min datetime where to start generate timestamps.
      */
-    @Range(from = MIN_UNIX, to = MAX_UNIX)
-    long from() default MIN_UNIX;
+    @Range(from = MIN, to = MAX)
+    long from() default MIN;
 
     /**
      * Maximum generated time as unix timestamp.
      *
      * @return max datetime where to stop generate timestamps.
      */
-    @Range(from = MIN_UNIX, to = MAX_UNIX)
-    long to() default MAX_UNIX;
+    @Range(from = MIN, to = MAX)
+    long to() default MAX;
 
     /**
      * Format in which export date is converted to string.

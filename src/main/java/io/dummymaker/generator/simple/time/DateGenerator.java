@@ -1,7 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.UnixTimeGenerator;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
@@ -14,18 +13,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Date
  * @since 21.02.2018
  */
-public final class DateGenerator implements TimeGenerator<Date> {
+public final class DateGenerator implements Generator<Date> {
 
-    private static final UnixTimeGenerator UNIX_TIME_GENERATOR = new UnixTimeGenerator();
+    private final UnixTimeGenerator unixTimeGenerator;
 
-    @Override
-    public @NotNull Date get() {
-        return get(0, GenTime.MAX_UNIX);
+    public DateGenerator(long from, long to) {
+        this.unixTimeGenerator = new UnixTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull Date get(long fromUnixTime, long toUnixTime) {
-        final long unixTime = UNIX_TIME_GENERATOR.get(fromUnixTime, toUnixTime);
-        return new Date(unixTime);
+    public @NotNull Date get() {
+        return new Date(unixTimeGenerator.get());
     }
 }

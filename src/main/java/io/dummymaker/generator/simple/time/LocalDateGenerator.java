@@ -2,8 +2,7 @@ package io.dummymaker.generator.simple.time;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.generator.TimeGenerator;
+import io.dummymaker.generator.Generator;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -15,20 +14,19 @@ import org.jetbrains.annotations.NotNull;
  * @see LocalDate
  * @since 21.02.2018
  */
-public final class LocalDateGenerator implements TimeGenerator<LocalDate> {
+public final class LocalDateGenerator implements Generator<LocalDate> {
 
     private static final Pattern PATTERN = Pattern.compile("birth(date)?|date", CASE_INSENSITIVE);
 
-    private static final LocalDateTimeGenerator GENERATOR = new LocalDateTimeGenerator();
+    private final LocalDateTimeGenerator localDateTimeGenerator;
 
-    @Override
-    public @NotNull LocalDate get() {
-        return get(0, GenTime.MAX_UNIX);
+    public LocalDateGenerator(long from, long to) {
+        this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);
     }
 
     @Override
-    public @NotNull LocalDate get(long fromUnixTime, long toUnixTime) {
-        return GENERATOR.get(fromUnixTime, toUnixTime).toLocalDate();
+    public @NotNull LocalDate get() {
+        return localDateTimeGenerator.get().toLocalDate();
     }
 
     @Override

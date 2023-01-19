@@ -13,11 +13,9 @@ import org.jetbrains.annotations.NotNull;
  */
 final class FullArgClassConstructor implements ClassConstructor {
 
-    private final GenRules rules;
     private final GeneratorSupplier supplier;
 
-    FullArgClassConstructor(GenRules rules, GeneratorSupplier supplier) {
-        this.rules = rules;
+    FullArgClassConstructor(GeneratorSupplier supplier) {
         this.supplier = supplier;
     }
 

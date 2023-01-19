@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class UpperCase implements Case {
 
+    UpperCase() {}
+
     @Override
     public @NotNull String apply(@NotNull String value) {
         return value.toUpperCase();

@@ -3,7 +3,7 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.simple.number.LongGenerator;
+import io.dummymaker.util.RandomUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ public final class HexNumberGenerator implements Generator<String> {
 
     @Override
     public @NotNull String get() {
-        return Long.toHexString(new LongGenerator().get());
+        return Long.toHexString(RandomUtils.random(Long.MAX_VALUE));
     }
 
     @Override
