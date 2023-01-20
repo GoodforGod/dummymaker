@@ -1,38 +1,36 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.export.CsvExporter;
 import io.dummymaker.export.Exporter;
-import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.validators.IValidator;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.export.validators.ValidatorChecker;
+import io.dummymaker.factory.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 03.03.2018
  */
-public abstract class StringExportAssert extends Assert {
+public abstract class StringExportAssert extends Assertions {
 
-    private final MainGenFactory factory = new MainGenFactory();
+    private final GenFactory factory = GenFactory.build();
     private final Exporter exporter;
-    private final IValidator validator;
+    private final ValidatorChecker validator;
 
     private final int singleSplitLength;
     private final int singleListSplit;
     private final int listSplitLength;
 
-    public StringExportAssert(Exporter exporter, IValidator validator, int singleSplitLength, int listSplitLength) {
+    public StringExportAssert(Exporter exporter, ValidatorChecker validator, int singleSplitLength, int listSplitLength) {
         this(exporter, validator, singleSplitLength, singleSplitLength, listSplitLength);
     }
 
     public StringExportAssert(Exporter exporter,
-                              IValidator validator,
+                              ValidatorChecker validator,
                               int singleSplitLength,
                               int singleListSplit,
                               int listSplitLength) {
@@ -48,14 +46,14 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportSingleDummyInvalidExportEntity() {
+    void exportSingleDummyInvalidExportEntity() {
         final String exportResult = exporter.convert((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
 
     @Test
-    public void exportDummyListInvalidExportEntity() {
+    void exportDummyListInvalidExportEntity() {
         final String exportResult = exporter.convert(null);
         assertNotNull(exportResult);
         assertEquals(getEmptyListResult(), exportResult);
@@ -66,7 +64,7 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportDummyListEmptyContainer() {
+    void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
         final String exportResult = exporter.convert(dummy);
@@ -75,7 +73,7 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportSingleDummy() {
+    void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
 
         final String dummyAsString = exporter.convert(dummy);
@@ -93,7 +91,7 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportSingleDummyList() {
+    void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
         final String dummyAsString = exporter.convert(dummies);
@@ -111,7 +109,7 @@ public abstract class StringExportAssert extends Assert {
     }
 
     @Test
-    public void exportListOfDummies() {
+    void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         final String dummyAsString = exporter.convert(dummies);

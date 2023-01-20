@@ -1,47 +1,32 @@
 package io.dummymaker.export;
 
-import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.model.DummyNoZeroConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 27.02.2018
  */
-@RunWith(Parameterized.class)
-public class BasicExporterValidationTest extends Assert {
+public class BasicExporterValidationTests extends Assertions {
 
-    private Exporter exporter;
-
-    public BasicExporterValidationTest(Exporter exporter) {
-        this.exporter = exporter;
-    }
-
-    @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new CsvExporter() },
-                { new JsonExporter() },
-                { new XmlExporter() },
-                { new SqlExporter() }
+                { CsvExporter.build() },
+                { JsonExporter.build() },
+                { XmlExporter.build() },
+                { SqlExporter.build() }
         });
     }
 
-    @Test
-    public void exportNotExportable() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportNotExportable(Exporter exporter) {
         DummyNoZeroConstructor d = new DummyNoZeroConstructor(null);
         String s = exporter.convert(d);
         if (exporter instanceof CsvExporter)
@@ -50,8 +35,9 @@ public class BasicExporterValidationTest extends Assert {
             assertFalse(s.isEmpty());
     }
 
-    @Test
-    public void exportNotExportableList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportNotExportableList(Exporter exporter) {
         List<DummyNoZeroConstructor> dummyNoZeroConstructors = Arrays.asList(
                 new DummyNoZeroConstructor(null),
                 new DummyNoZeroConstructor(null));
@@ -63,20 +49,23 @@ public class BasicExporterValidationTest extends Assert {
             assertFalse(s.isEmpty());
     }
 
-    @Test
-    public void exportNullableDummyReturnEmpty() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportNullableDummyReturnEmpty(Exporter exporter) {
         String s = exporter.convert(null);
         assertTrue(s.isEmpty());
     }
 
-    @Test
-    public void exportNullableDummiesReturnEmptyList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportNullableDummiesReturnEmptyList(Exporter exporter) {
         String s = exporter.convert(null);
         assertTrue(s.isEmpty());
     }
 
-    @Test
-    public void exportEmptyDummiesReturnEmptyList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportEmptyDummiesReturnEmptyList(Exporter exporter) {
         String s = exporter.convert(new ArrayList<>());
         assertTrue(s.isEmpty());
     }

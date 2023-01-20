@@ -1,25 +1,22 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.export.JsonExporter;
 import io.dummymaker.model.DummyArray;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
 import java.util.regex.Pattern;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * Dummy array tests
- *
  * @author GoodforGod
  * @since 18.10.2019
  */
-public class DummyArrayTests extends Assert {
+class DummyArrayTests extends Assertions {
 
     @Test
-    public void arrayFieldsFilled() {
-        final MainGenFactory factory = new MainGenFactory();
+    void arrayFieldsFilled() {
+        final GenFactory factory = GenFactory.builder()
+                .autoByDefault(false)
+                .build();
         final DummyArray build = factory.build(DummyArray.class);
 
         assertNull(build.getByteSimple());
@@ -59,8 +56,10 @@ public class DummyArrayTests extends Assert {
     }
 
     @Test
-    public void arrayFieldsFilledWhenAuto() {
-        final MainGenFactory factory = new MainGenFactory(GenRules.of(GenRule.auto(DummyArray.class)));
+    void arrayFieldsFilledWhenAuto() {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.auto(DummyArray.class))
+                .build();
         final DummyArray build = factory.build(DummyArray.class);
 
         assertNotEquals(0, build.getByteSimple().length);
@@ -105,14 +104,13 @@ public class DummyArrayTests extends Assert {
     }
 
     @Test
-    public void arrayDummyToJson() {
-        final GenRules rules = GenRules.of(GenRule.auto(DummyArray.class));
-        final MainGenFactory factory = new MainGenFactory(rules);
+    void arrayDummyToJson() {
+        final GenFactory factory = GenFactory.builder().rule(GenRule.auto(DummyArray.class)).build();
         final DummyArray dummyArray = factory.build(DummyArray.class);
 
         final Pattern patternSingleArray = Pattern.compile("\"shortSimple\":\\[[0-9]+");
         final Pattern patternDoubleArray = Pattern.compile("\"DoubleObjDouble\":\\[\\[-?[0-9]+\\.[0-9]+");
-        final String json = new JsonExporter().convert(dummyArray);
+        final String json = JsonExporter.build().convert(dummyArray);
 
         assertTrue(patternSingleArray.matcher(json).find());
         assertTrue(patternDoubleArray.matcher(json).find());

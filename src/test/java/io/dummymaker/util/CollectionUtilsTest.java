@@ -1,53 +1,51 @@
 package io.dummymaker.util;
 
 import java.util.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 11.03.2018
  */
-public class CollectionUtilsTest extends Assert {
+class CollectionUtilsTest extends Assertions {
 
     @Test
-    public void isEmptyCollectionEmpty() {
+    void isEmptyCollectionEmpty() {
         Collection<Object> collection = new ArrayList<>();
         assertTrue(CollectionUtils.isEmpty(collection));
     }
 
     @Test
-    public void isEmptyCollectionNull() {
+    void isEmptyCollectionNull() {
         assertTrue(CollectionUtils.isEmpty((Collection<?>) null));
     }
 
     @Test
-    public void isNotEmptyNotCollection() {
+    void isNotEmptyNotCollection() {
         Collection<Object> collection = new ArrayList<>();
         collection.add(new Object());
         assertTrue(CollectionUtils.isNotEmpty(collection));
     }
 
     @Test
-    public void isNotEmptyNotForEmptyCollection() {
+    void isNotEmptyNotForEmptyCollection() {
         assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
     }
 
     @Test
-    public void isEmptyMapEmpty() {
+    void isEmptyMapEmpty() {
         Map<?, ?> map = new HashMap<>();
         assertTrue(CollectionUtils.isEmpty(map));
     }
 
     @Test
-    public void isEmptyMapNull() {
+    void isEmptyMapNull() {
         assertTrue(CollectionUtils.isEmpty((Map<?, ?>) null));
     }
 
     @Test
-    public void isNotEmptyNotMap() {
+    void isNotEmptyNotMap() {
         Map<String, String> map = new HashMap<>();
         map.put("s", "s");
         assertTrue(CollectionUtils.isNotEmpty(map));
@@ -55,43 +53,43 @@ public class CollectionUtilsTest extends Assert {
     }
 
     @Test
-    public void isNotEmptyNotForEmptyMap() {
+    void isNotEmptyNotForEmptyMap() {
         assertFalse(CollectionUtils.isNotEmpty((Map<?, ?>) null));
     }
 
     @Test
-    public void isEmptyArray() {
+    void isEmptyArray() {
         String[] arr = new String[0];
         assertTrue(CollectionUtils.isEmpty(arr));
     }
 
     @Test
-    public void isEmptyArrayWhenNull() {
+    void isEmptyArrayWhenNull() {
         assertTrue(CollectionUtils.isEmpty((Object[]) null));
     }
 
     @Test
-    public void isNonEmptyArray() {
+    void isNonEmptyArray() {
         String[] arr = new String[] { "my" };
         assertFalse(CollectionUtils.isEmpty(arr));
     }
 
     @Test
-    public void getRandomFromArray() {
+    void getRandomFromArray() {
         String[] arr = new String[] { "my" };
         String random = CollectionUtils.random(arr);
         assertEquals("my", random);
     }
 
     @Test
-    public void getRandomFromCollection() {
+    void getRandomFromCollection() {
         List<String> list = Arrays.asList("my");
         String random = CollectionUtils.random(list);
         assertEquals("my", random);
     }
 
     @Test
-    public void getRandomFromCollectionOfTwo() {
+    void getRandomFromCollectionOfTwo() {
         List<String> list = Arrays.asList("my", "his");
         String random = CollectionUtils.random(list);
         assertTrue("my".equals(random) || "his".equals(random));

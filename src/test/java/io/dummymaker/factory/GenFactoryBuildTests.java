@@ -1,44 +1,47 @@
 package io.dummymaker.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.*;
 import io.dummymaker.model.deprecated.DummyAuto;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
- * Default Comment
- *
  * @author GoodforGod
  * @since 31.07.2017
  */
-public class GenFactoryBuildTests {
-
-    private final MainGenFactory factory = new MainGenFactory();
+class GenFactoryBuildTests {
 
     @Test
-    public void produceLessThanZeroAmount() {
+    void produceLessThanZeroAmount() {
+        final GenFactory factory = GenFactory.build();
+
         final List<Dummy> dummies = factory.build(Dummy.class, -20);
         assertTrue(dummies.isEmpty());
     }
 
     @Test
-    public void noZeroConstructorErrorList() {
+    void noZeroConstructorErrorList() {
+        final GenFactory factory = GenFactory.build();
+
         final List<DummyNoZeroConstructor> dummies = factory.build(DummyNoZeroConstructor.class, 20);
-        assertTrue(dummies.isEmpty());
+        assertFalse(dummies.isEmpty());
     }
 
     @Test
-    public void noZeroConstructorError() {
+    void noZeroConstructorError() {
+        final GenFactory factory = GenFactory.build();
+
         final DummyNoZeroConstructor dummy = factory.build(DummyNoZeroConstructor.class);
-        assertNull(dummy);
+        assertNotNull(dummy);
     }
 
     @Test
-    public void produceListOfTwo() {
+    void produceListOfTwo() {
+        final GenFactory factory = GenFactory.build();
+
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         assertNotNull(dummies);
@@ -60,7 +63,10 @@ public class GenFactoryBuildTests {
     }
 
     @Test
-    public void produceSingleDummy() {
+    void produceSingleDummy() {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.global().ignore("group"))
+                .build();
         final Dummy dummy = factory.build(Dummy.class);
 
         assertNotNull(dummy);
@@ -76,18 +82,9 @@ public class GenFactoryBuildTests {
     }
 
     @Test
-    public void produceWithNoPopulateFields() {
-        final DummyNoFillFields dummy = factory.build(DummyNoFillFields.class);
+    void produceWithCollectionFields() {
+        final GenFactory factory = GenFactory.build();
 
-        assertNotNull(dummy);
-        assertNull(dummy.getCity());
-        assertNull(dummy.getName());
-        assertNull(dummy.getNum());
-        assertEquals("100", dummy.getGroup());
-    }
-
-    @Test
-    public void produceWithCollectionFields() {
         final DummyCollection dummy = factory.build(DummyCollection.class);
 
         assertNotNull(dummy);
@@ -113,7 +110,9 @@ public class GenFactoryBuildTests {
     }
 
     @Test
-    public void produceAutoDummy() {
+    void produceAutoDummy() {
+        final GenFactory factory = GenFactory.build();
+
         final DummyAuto build = factory.build(DummyAuto.class);
         assertNotNull(build);
 
@@ -142,7 +141,9 @@ public class GenFactoryBuildTests {
     }
 
     @Test
-    public void produceWithWrongCollectionFields() {
+    void produceWithWrongCollectionFields() {
+        final GenFactory factory = GenFactory.build();
+
         final DummyCollectionWrong dummy = factory.build(DummyCollectionWrong.class);
 
         assertNotNull(dummy);
@@ -153,7 +154,8 @@ public class GenFactoryBuildTests {
     }
 
     @Test
-    public void produceWithTimeFields() {
+    void produceWithTimeFields() {
+        final GenFactory factory = GenFactory.build();
         final DummyTime d = factory.build(DummyTime.class);
 
         assertNotNull(d);
@@ -168,16 +170,17 @@ public class GenFactoryBuildTests {
         final Pattern localDatePattern = DummyTime.Patterns.LOCAL_DATE.getToStringPattern();
         final Pattern localTimePattern = DummyTime.Patterns.LOCAL_TIME.getToStringPattern();
         final Pattern localDateTimePattern = DummyTime.Patterns.LOCAL_DATETIME.getToStringPattern();
+        final Pattern offsetDateTimePattern = DummyTime.Patterns.OFFSET_DATETIME.getToStringPattern();
         final Pattern timestampPattern = DummyTime.Patterns.TIMESTAMP.getToStringPattern();
         final Pattern datePattern = DummyTime.Patterns.DATE.getToStringPattern();
 
-        assertTrue(d.getDateOld().toString(), datePattern.matcher(d.getDateOld().toString()).matches());
-        assertTrue(d.getDate().toString(), localDatePattern.matcher(d.getDate().toString()).matches());
-        assertTrue(d.getTime().toString(), localTimePattern.matcher(d.getTime().toString()).matches());
-        assertTrue(d.getDateTime().toString(), localDateTimePattern.matcher(d.getDateTime().toString()).matches());
-        assertTrue(d.getTimestamp().toString(), timestampPattern.matcher(d.getTimestamp().toString()).matches());
+        assertTrue(datePattern.matcher(d.getDateOld().toString()).matches(), d.getDateOld().toString());
+        assertTrue(localDatePattern.matcher(d.getDate().toString()).matches(), d.getDate().toString());
+        assertTrue(localTimePattern.matcher(d.getTime().toString()).matches(), d.getTime().toString());
+        assertTrue(localDateTimePattern.matcher(d.getDateTime().toString()).matches(), d.getDateTime().toString());
+        assertTrue(timestampPattern.matcher(d.getTimestamp().toString()).matches(), d.getTimestamp().toString());
 
-        assertTrue(d.getDateTimeObject().toString(), localDateTimePattern.matcher(d.getDateTimeObject().toString()).matches());
-        assertTrue(d.getDateTimeString(), localDateTimePattern.matcher(d.getDateTimeString()).matches());
+        assertTrue(offsetDateTimePattern.matcher(d.getDateTimeObject().toString()).matches(), d.getDateTimeObject().toString());
+        assertTrue(offsetDateTimePattern.matcher(d.getDateTimeString()).matches(), d.getDateTimeString());
     }
 }

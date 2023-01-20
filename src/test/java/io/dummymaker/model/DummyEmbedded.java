@@ -1,22 +1,23 @@
 package io.dummymaker.model;
 
-import io.dummymaker.annotation.special.GenAuto;
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.annotation.GenDepth;
 import java.util.List;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 11.08.2019
  */
-@GenAuto(depth = 3)
+@GenDepth(3)
+@GenAuto
 public class DummyEmbedded {
 
-    public class DummyEmbeddedIntoSimple {
+    public static class DummyEmbeddedIntoSimple {
 
         private int number;
         private String name;
         private DummyEmbedded embedded;
+        private DummyEmbeddedIntoSimple self;
 
         public int getNumber() {
             return number;
@@ -31,8 +32,9 @@ public class DummyEmbedded {
         }
     }
 
-    @GenAuto(depth = 4)
-    public class DummyEmbeddedSimple {
+    @GenDepth(4)
+    @GenAuto
+    public static class DummyEmbeddedSimple {
 
         private int number;
         private String simpleName;
@@ -51,7 +53,7 @@ public class DummyEmbedded {
         }
     }
 
-    public class DummyEmbeddedChild {
+    public static class DummyEmbeddedChild {
 
         private String name;
         private String childId;
@@ -94,5 +96,16 @@ public class DummyEmbedded {
 
     public DummyEmbeddedSimple getSimpleChild() {
         return simpleChild;
+    }
+
+    @Override
+    public String toString() {
+        return "DummyEmbedded{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", child=" + child +
+                ", simpleChild=" + simpleChild +
+                ", embeddedList=" + embeddedList +
+                '}';
     }
 }

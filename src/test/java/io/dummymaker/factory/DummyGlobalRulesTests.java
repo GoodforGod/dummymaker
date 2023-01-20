@@ -1,20 +1,10 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.bundle.impl.FemaleNameBundle;
-import io.dummymaker.bundle.impl.MaleNameBundle;
-import io.dummymaker.bundle.impl.NounBundle;
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.generator.simple.string.NounGenerator;
 import io.dummymaker.model.DummyEmbedded;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Global Gen rules tests
@@ -22,15 +12,16 @@ import org.junit.Test;
  * @author GoodforGod
  * @since 15.10.2019
  */
-public class DummyGlobalRulesTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory(GenRules.of(
-            GenRule.global(2)
-                    .add(ByteGenerator.class, int.class)
-                    .add(NounGenerator.class, "name")));
+class DummyGlobalRulesTests extends Assertions {
 
     @Test
-    public void validFieldsGeneration() {
+    void validFieldsGeneration() {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.global(2)
+                        .typed(ByteGenerator::new, int.class)
+                        .named(NounGenerator::new, "name"))
+                .build();
+
         final DummyEmbedded dummy = factory.build(DummyEmbedded.class);
 
         assertNotNull(dummy);

@@ -1,23 +1,19 @@
 package io.dummymaker.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyCollection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
- * Dummy collection tests
- *
  * @author GoodforGod
  * @since 19.10.2019
  */
-public class DummyCollectionTests {
-
-    private final MainGenFactory factory = new MainGenFactory();
+class DummyCollectionTests {
 
     @Test
-    public void produceWithCollectionFields() {
+    void produceWithCollectionFields() {
+        final GenFactory factory = GenFactory.build();
         final DummyCollection dummy = factory.build(DummyCollection.class);
 
         assertNotNull(dummy);

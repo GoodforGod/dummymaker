@@ -66,9 +66,9 @@ public class DummyArray {
     private Double[][] DoubleObjDouble;
 
     @GenExportIgnore
-    private DummyEnum[] dummies;
+    private DummyWithEnum[] dummies;
 
-    public DummyEnum[] getDummies() {
+    public DummyWithEnum[] getDummies() {
         return dummies;
     }
 

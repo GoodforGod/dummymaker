@@ -1,12 +1,12 @@
 package io.dummymaker.generator;
 
 import static java.util.regex.Pattern.compile;
-import static org.junit.Assert.*;
-import static org.junit.runners.Parameterized.Parameters;
+import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.generator.complex.ListComplexGenerator;
-import io.dummymaker.generator.complex.MapComplexGenerator;
-import io.dummymaker.generator.complex.SetComplexGenerator;
+import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.generator.parameterized.ListParameterizedGenerator;
+import io.dummymaker.generator.parameterized.MapParameterizedGenerator;
+import io.dummymaker.generator.parameterized.SetParameterizedGenerator;
 import io.dummymaker.generator.simple.*;
 import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.number.MccGenerator;
@@ -22,30 +22,15 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Generators Tests
- *
  * @author GoodforGod
  * @since 31.07.2017
  */
-@RunWith(Parameterized.class)
-public class GeneratorPatternValidTest {
+class GeneratorPatternValidTests {
 
-    private Generator generator;
-    private Class genClass;
-    private Pattern pattern;
-
-    public GeneratorPatternValidTest(Generator generator, Class genClass, Pattern pattern) {
-        this.generator = generator;
-        this.genClass = genClass;
-        this.pattern = pattern;
-    }
-
-    @Parameters(name = "{index}: Data Type ({1}), Regex {2}")
     public static Collection<Object[]> data() {
         final String uuidPattern = "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}";
 
@@ -53,7 +38,8 @@ public class GeneratorPatternValidTest {
                 { new BooleanGenerator(), Boolean.class, compile("false|true") },
                 { new ByteGenerator(), Byte.class, compile("-?[0-9]+") },
                 { new ShortGenerator(), Short.class, compile("[0-9]+") },
-                { new IntegerGenerator(), Integer.class, compile("[0-9]+") },
+                { new IntegerGenerator(0, Integer.MAX_VALUE), Integer.class, compile("[0-9]+") },
+                { new LongGenerator(0, Integer.MAX_VALUE), Long.class, compile("[0-9]+") },
                 { new FloatGenerator(), Float.class, compile("1|0\\.[0-9]+(E-[0-9])?") },
                 { new FloatBigGenerator(), Float.class, compile("[0-9]+\\.[0-9]+(E-[0-9])?") },
                 { new DoubleGenerator(), Double.class, compile("1|0\\.[0-9]+") },
@@ -62,7 +48,6 @@ public class GeneratorPatternValidTest {
                 { new BigIntegerGenerator(), BigInteger.class, compile("-?[0-9]+") },
                 { new BigDecimalGenerator(), BigDecimal.class, compile("-?[0-9]+\\.[0-9]+") },
                 { new IdBigGenerator(), String.class, compile("[0-9a-zA-Z\\-]+") },
-                { new io.dummymaker.generator.simple.number.UnixTimeGenerator(), Long.class, compile("[0-9]+") },
                 { new BtcAddressGenerator(), String.class, compile("[a-zA-Z0-9]{34}") },
                 { new BtcTxHashGenerator(), String.class, compile("[a-zA-Z0-9]{64}") },
                 { new CityGenerator(), String.class, compile("[a-zA-Z\\-]+") },
@@ -97,28 +82,42 @@ public class GeneratorPatternValidTest {
                 { new CharacterGenerator(), Character.class, compile("[a-zA-Z]") },
                 { new CharGenerator(), Character.class, compile(".") },
                 { new ObjectGenerator(), String.class, compile("object_[0-9]+") },
-                { new ListComplexGenerator(), ArrayList.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
-                { new SetComplexGenerator(), HashSet.class, compile("\\[(" + uuidPattern + "(, )?)+]") },
-                { new MapComplexGenerator(), HashMap.class, compile("\\{(" + uuidPattern + "=" + uuidPattern + "(, )?)+}") },
-                { new YearMonthGenerator(), YearMonth.class, compile("[0-9]+-[0-9]+") },
-                { new YearGenerator(), Year.class, compile("[0-9]+") },
-                { new MonthDayGenerator(), MonthDay.class, compile("--[0-9]+-[0-9]+") },
-                { new MonthGenerator(), Month.class, compile("[A-Z]+") },
-                { new InstantGenerator(), Instant.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
-                { new ZonedDateTimeGenerator(), ZonedDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
-                { new OffsetDateTimeGenerator(), OffsetDateTime.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
-                { new LocalDateTimeGenerator(), LocalDateTime.class, Patterns.LOCAL_DATETIME.getToStringPattern() },
-                { new LocalDateGenerator(), LocalDate.class, Patterns.LOCAL_DATE.getToStringPattern() },
-                { new LocalTimeGenerator(), LocalTime.class, Patterns.LOCAL_TIME.getToStringPattern() },
-                { new TimestampGenerator(), Timestamp.class, Patterns.TIMESTAMP.getToStringPattern() },
-                { new DateSqlGenerator(), java.sql.Date.class, Patterns.DATE_SQL.getToStringPattern() },
-                { new DateGenerator(), Date.class, Patterns.DATE.getToStringPattern() },
-                { new TimeGenerator(), Time.class, Patterns.TIME.getToStringPattern() }
+                { new ListParameterizedGenerator(1, 3), ArrayList.class, compile("\\[(object_[0-9]+(, )?)+]") },
+                { new SetParameterizedGenerator(1, 3), HashSet.class, compile("\\[(object_[0-9]+(, )?)+]") },
+                {
+                        new MapParameterizedGenerator(1, 3),
+                        HashMap.class,
+                        compile("\\{(object_[0-9]+=object_[0-9]+(, )?)+}") },
+                { new UnixTimeGenerator(GenTime.MIN, GenTime.MAX), Long.class, compile("[0-9]+") },
+                { new YearMonthGenerator(GenTime.MIN, GenTime.MAX), YearMonth.class, compile("[0-9]+-[0-9]+") },
+                { new YearGenerator(GenTime.MIN, GenTime.MAX), Year.class, compile("[0-9]+") },
+                { new MonthDayGenerator(GenTime.MIN, GenTime.MAX), MonthDay.class, compile("--[0-9]+-[0-9]+") },
+                { new MonthGenerator(GenTime.MIN, GenTime.MAX), Month.class, compile("[A-Z]+") },
+                { new InstantGenerator(GenTime.MIN, GenTime.MAX), Instant.class, Patterns.OFFSET_DATETIME.getToStringPattern() },
+                {
+                        new ZonedDateTimeGenerator(GenTime.MIN, GenTime.MAX),
+                        ZonedDateTime.class,
+                        Patterns.OFFSET_DATETIME.getToStringPattern() },
+                {
+                        new OffsetDateTimeGenerator(GenTime.MIN, GenTime.MAX),
+                        OffsetDateTime.class,
+                        Patterns.OFFSET_DATETIME.getToStringPattern() },
+                {
+                        new LocalDateTimeGenerator(GenTime.MIN, GenTime.MAX),
+                        LocalDateTime.class,
+                        Patterns.LOCAL_DATETIME.getToStringPattern() },
+                { new LocalDateGenerator(GenTime.MIN, GenTime.MAX), LocalDate.class, Patterns.LOCAL_DATE.getToStringPattern() },
+                { new LocalTimeGenerator(GenTime.MIN, GenTime.MAX), LocalTime.class, Patterns.LOCAL_TIME.getToStringPattern() },
+                { new TimestampGenerator(GenTime.MIN, GenTime.MAX), Timestamp.class, Patterns.TIMESTAMP.getToStringPattern() },
+                { new DateSqlGenerator(GenTime.MIN, GenTime.MAX), java.sql.Date.class, Patterns.DATE_SQL.getToStringPattern() },
+                { new DateGenerator(GenTime.MIN, GenTime.MAX), Date.class, Patterns.DATE.getToStringPattern() },
+                { new TimeSqlGenerator(GenTime.MIN, GenTime.MAX), Time.class, Patterns.TIME.getToStringPattern() }
         });
     }
 
-    @Test
-    public void valueRegexMatching() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void valueRegexMatching(Generator generator, Class genClass, Pattern pattern) {
         // Due to bundles for some generators, need more than 1 iteration
         // for more confidence that value is matching
         for (int i = 0; i < 5; i++) {
@@ -129,7 +128,7 @@ public class GeneratorPatternValidTest {
             final String v = String.valueOf(generated);
             final String msg = generator.getClass().getSimpleName() + " : Pattern - '" + pattern.pattern() + "' : Value - '" + v
                     + "'";
-            assertTrue(msg, pattern.matcher(v).matches());
+            assertTrue(pattern.matcher(v).matches(), msg);
         }
     }
 }

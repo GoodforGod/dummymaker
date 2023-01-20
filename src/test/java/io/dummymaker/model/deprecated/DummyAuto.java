@@ -1,19 +1,20 @@
 package io.dummymaker.model.deprecated;
 
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
+import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.simple.number.GenLong;
-import io.dummymaker.annotation.special.GenAuto;
 import java.util.List;
 import java.util.Map;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 26.04.2018
  */
-@GenAuto(depth = 2)
+@GenDepth(2)
+@GenAuto
 public class DummyAuto {
 
     private int anInt;
@@ -22,9 +23,11 @@ public class DummyAuto {
     private Long aLong;
 
     @GenList
+    @GenExportIgnore
     private List list;
 
     @GenMap
+    @GenExportIgnore
     private Map<Integer, String> map;
 
     private DummyAuto dummyAuto;

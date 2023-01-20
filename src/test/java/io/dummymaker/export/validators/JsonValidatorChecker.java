@@ -4,20 +4,20 @@ import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTime.Patterns.OFFSET_DATETIME;
 import static io.dummymaker.model.DummyTime.Patterns.OFFSET_TIME;
 import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.model.DummyTime.Fields;
 import io.dummymaker.model.DummyTime.Patterns;
+import io.dummymaker.model.DummyTimeFormatter;
+import io.dummymaker.model.DummyUnixTime;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class JsonValidator implements IValidator {
+public class JsonValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isSingleDummyListValid(String[] dummy) {
@@ -38,10 +38,10 @@ public class JsonValidator implements IValidator {
 
     @Override
     public void isSingleAutoDummyValid(String[] dummy) {
-        assertTrue(dummy[0].matches("\\{"));
-        assertTrue(dummy[1].matches("\\t\"aLong\":-?[0-9]+,"));
-        assertTrue(dummy[2].matches("\\t\"anInt\":-?[0-9]+"));
-        assertTrue(dummy[3].matches("}"));
+        assertTrue(dummy[0].matches("\\{"
+                + "\"anInt\":-?[0-9]+,"
+                + "\"aLong\":-?[0-9]+"
+                + "}"));
     }
 
     @Override
@@ -79,24 +79,25 @@ public class JsonValidator implements IValidator {
                 + "\"" + Fields.TIMESTAMP.getName() + "\":\"" + Patterns.TIMESTAMP.getPattern() + "\","
                 + "\"" + Fields.DATE.getName() + "\":\"" + Patterns.DATE_SQL.getPattern() + "\","
                 + "\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + Patterns.DATE.getPattern() + "\","
-                + "\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","
-                + "\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\""
+                + "\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + Patterns.OFFSET_DATETIME.getPattern().pattern()
+                + "\","
+                + "\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.OFFSET_DATETIME.getPattern().pattern() + "\""
                 + "}"));
     }
 
     @Override
     public void isDummyUnixTimeValid(String[] dummy) {
         assertTrue(dummy[0].matches("\\{"
-                + "\"" + Fields.LOCAL_TIME.getName() + "\":[0-9]+,"
-                + "\"" + Fields.LOCAL_DATE.getName() + "\":[0-9]+,"
-                + "\"" + Fields.LOCAL_DATETIME.getName() + "\":[0-9]+,"
-                + "\"" + Fields.OFFSET_TIME.getName() + "\":[0-9]+,"
-                + "\"" + Fields.OFFSET_DATETIME.getName() + "\":[0-9]+,"
-                + "\"" + Fields.TIMESTAMP.getName() + "\":[0-9]+,"
-                + "\"" + Fields.DATE.getName() + "\":[0-9]+,"
-                + "\"" + Fields.DATE_COVERAGE.getName() + "\":[0-9]+,"
-                + "\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\","
-                + "\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + Patterns.LOCAL_DATETIME.getPattern() + "\""
+                + "\"" + DummyUnixTime.Fields.SHORT_PRIM.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.INT_PRIM.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.LONG_PRIM.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.SHORT_BOX.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.INT_BOX.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.LONG_BOX.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.BIG_INT.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.BIT_DECIMAL.getName() + "\":[0-9]+,"
+                + "\"" + DummyUnixTime.Fields.STRING.getName() + "\":\"[0-9]+\","
+                + "\"" + DummyUnixTime.Fields.OBJECT.getName() + "\":\"[0-9]+\""
                 + "}"));
     }
 
@@ -111,8 +112,8 @@ public class JsonValidator implements IValidator {
                 + "\"" + Fields.TIMESTAMP.getName() + "\":\"" + TIMESTAMP.getPattern() + "\","
                 + "\"" + Fields.DATE.getName() + "\":\"" + DATE_SQL.getPattern() + "\","
                 + "\"" + Fields.DATE_COVERAGE.getName() + "\":\"" + DATE.getPattern() + "\","
-                + "\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + LOCAL_DATETIME.getPattern() + "\","
-                + "\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + LOCAL_DATETIME.getPattern() + "\""
+                + "\"" + Fields.LOCAL_DATETIME_STRING.getName() + "\":\"" + DummyTimeFormatter.ISO_DATE_TIME_PATTERN + "\","
+                + "\"" + Fields.LOCAL_DATETIME_OBJECT.getName() + "\":\"" + DummyTimeFormatter.ISO_DATE_TIME_PATTERN + "\""
                 + "}"));
     }
 }

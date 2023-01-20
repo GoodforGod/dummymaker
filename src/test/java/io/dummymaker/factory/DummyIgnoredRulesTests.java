@@ -1,11 +1,8 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.Dummy;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Ignore rules tests
@@ -13,16 +10,15 @@ import org.junit.Test;
  * @author GoodforGod
  * @since 15.10.2019
  */
-public class DummyIgnoredRulesTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory(GenRules.of(
-            GenRule.auto(Dummy.class).ignore("city")));
-
-    private final MainGenFactory factoryGlobal = new MainGenFactory(GenRules.of(
-            GenRule.global(1).ignore("city")));
+class DummyIgnoredRulesTests extends Assertions {
 
     @Test
-    public void cityIsNotPresentForAuto() {
+    void cityIsNotPresentForAuto() {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.auto(Dummy.class)
+                        .ignore("city"))
+                .build();
+
         final Dummy build = factory.build(Dummy.class);
         assertNotNull(build.getBigd());
         assertNotNull(build.getGroup());
@@ -34,8 +30,13 @@ public class DummyIgnoredRulesTests extends Assert {
     }
 
     @Test
-    public void cityIsNotPresentForGlobal() {
-        final Dummy build = factoryGlobal.build(Dummy.class);
+    void cityIsNotPresentForGlobal() {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.global(1)
+                        .ignore("city"))
+                .build();
+
+        final Dummy build = factory.build(Dummy.class);
         assertNotNull(build.getBigd());
         assertNotNull(build.getGroup());
         assertNotNull(build.getLng());

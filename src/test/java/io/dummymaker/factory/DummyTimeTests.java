@@ -1,20 +1,19 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyTime;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod
  * @see DummyTime
  * @since 20.10.2019
  */
-public class DummyTimeTests extends Assert {
+class DummyTimeTests extends Assertions {
 
     @Test
-    public void validFieldsFilled() {
-        final MainGenFactory factory = new MainGenFactory();
+    void validFieldsFilled() {
+        final GenFactory factory = GenFactory.build();
         final DummyTime build = factory.build(DummyTime.class);
 
         assertNotNull(build.getDate());

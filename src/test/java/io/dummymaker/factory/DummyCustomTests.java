@@ -1,30 +1,30 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyCustom;
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.concurrent.BlockingQueue;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 12.10.2019
  */
-public class DummyCustomTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory();
+class DummyCustomTests extends Assertions {
 
     @Test
-    public void allCustomFieldsCorrect() throws InterruptedException {
+    void allCustomFieldsCorrect() throws InterruptedException {
+        final GenFactory factory = GenFactory.builder()
+                .rule(GenRule.global().typed(DummyCustom.QueueGenerator::new, BlockingQueue.class))
+                .build();
+
         final DummyCustom build = factory.build(DummyCustom.class);
 
-        assertNotNull(build.getNnn());
+        assertNotNull(build.getInn());
         assertNotNull(build.getType());
         assertNotNull(build.getQueue());
         assertFalse(build.getQueue().isEmpty());
 
-        final Short nnn = Short.valueOf(build.getNnn());
+        final Short nnn = Short.valueOf(build.getInn());
         final Boolean type = Boolean.valueOf(build.getType());
         assertNotNull(nnn);
         assertNotNull(type);

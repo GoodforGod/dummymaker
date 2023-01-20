@@ -3,12 +3,10 @@ package io.dummymaker.model;
 import io.dummymaker.annotation.complex.GenEnum;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 15.09.2019
  */
-public class DummyEnum {
+public class DummyWithEnum {
 
     public enum DummyType {
         SIMPLE,

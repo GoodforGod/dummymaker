@@ -1,53 +1,36 @@
 package io.dummymaker.export;
 
-import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.factory.GenFactory;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTimeFormatter;
 import io.dummymaker.model.DummyUnixTime;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 28.04.2018
  */
-@RunWith(Parameterized.class)
-public class ValidatorExporterTest extends Assert {
+public class ValidatorExporterTest extends Assertions {
 
-    private final MainGenFactory factory = new MainGenFactory();
+    private final GenFactory factory = GenFactory.build();
 
-    private Exporter exporter;
-    private IValidator validator;
-
-    public ValidatorExporterTest(Exporter exporter, IValidator validator) {
-        this.exporter = exporter;
-        this.validator = validator;
-    }
-
-    @Parameters(name = "{index}: Exporter - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new CsvExporter(), new CsvValidator() },
-                { new JsonExporter(), new JsonValidator() },
-                { new XmlExporter(), new XmlValidator() },
-                { new SqlExporter(), new SqlValidator() }
+                { CsvExporter.build(), new CsvValidatorChecker() },
+                { JsonExporter.build(), new JsonValidatorChecker() },
+                { XmlExporter.build(), new XmlValidatorChecker() },
+                { SqlExporter.build(), new SqlValidatorChecker() }
         });
     }
 
-    @Test
-    public void datesPatternMatchWhenExported() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void datesPatternMatchWhenExported(Exporter exporter, ValidatorChecker validator) {
         final DummyTime dummy = factory.build(DummyTime.class);
         assertNotNull(dummy);
 
@@ -62,24 +45,26 @@ public class ValidatorExporterTest extends Assert {
         validator.isDummyTimeValid(split);
     }
 
-    @Test
-    public void datetimeUnixWhenExported() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void datetimeUnixWhenExported(Exporter exporter, ValidatorChecker validator) {
         final DummyUnixTime dummy = factory.build(DummyUnixTime.class);
         assertNotNull(dummy);
 
         final String exported = exporter.convert(dummy);
-
         final String splitter = (exporter instanceof CsvExporter)
                 ? ","
                 : "\n";
+
         final String[] split = exported.split(splitter);
         assertNotNull(split);
 
         validator.isDummyUnixTimeValid(split);
     }
 
-    @Test
-    public void datetimeFormatterWhenExported() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void datetimeFormatterWhenExported(Exporter exporter, ValidatorChecker validator) {
         final DummyTimeFormatter dummy = factory.build(DummyTimeFormatter.class);
         assertNotNull(dummy);
 

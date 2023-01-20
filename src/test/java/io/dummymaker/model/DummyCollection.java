@@ -1,9 +1,9 @@
 package io.dummymaker.model;
 
+import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.complex.GenSet;
-import io.dummymaker.annotation.special.GenEmbedded;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.string.HexDataGenerator;
 import java.util.List;
@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 05.03.2018
  */
@@ -31,7 +29,7 @@ public class DummyCollection {
 
     private Map<String, Object> mapAuto;
 
-    @GenList(value = BooleanGenerator.class, fixed = 4)
+    @GenList(fixed = 4, value = BooleanGenerator.class)
     private List<String> objectsFix;
 
     @GenSet(fixed = 5, value = HexDataGenerator.class)
@@ -40,7 +38,7 @@ public class DummyCollection {
     @GenMap(fixed = 3, key = HexDataGenerator.class)
     private Map<String, Object> mapFix;
 
-    @GenEmbedded
+    @GenAuto
     private DummyCollection dummyCollection;
 
     public List<String> getObjects() {

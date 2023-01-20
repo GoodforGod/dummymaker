@@ -1,38 +1,34 @@
-package io.dummymaker.export.asfile;
+package io.dummymaker.export;
 
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.Exporter;
-import io.dummymaker.export.Format;
-import io.dummymaker.export.impl.XmlExporter;
-import io.dummymaker.export.validators.XmlValidator;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
+import io.dummymaker.export.validators.XmlValidatorChecker;
+import io.dummymaker.factory.GenFactory;
 import io.dummymaker.model.Dummy;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class XmlExportAsFileTest extends FileExportAssert {
+class XmlExportAsFileTests extends FileExportAssert {
 
-    private final MainGenFactory factory = new MainGenFactory();
-    private final XmlValidator validation = new XmlValidator();
+    private final GenFactory factory = GenFactory.build();
+    private final XmlValidatorChecker validation = new XmlValidatorChecker();
     private final Format format = Format.XML;
 
-    public XmlExportAsFileTest() {
-        super(new XmlExporter(), new XmlValidator(), Format.XML, 5, 7, 12);
+    public XmlExportAsFileTests() {
+        super(XmlExporter.build(), new XmlValidatorChecker(), Format.XML, 5, 7, 12);
     }
 
-    // @Test
-    public void exportListOfDummiesWithNamingStrategy() {
+    @Test
+    void exportListOfDummiesWithNamingStrategy() {
         final Case strategy = Cases.CAMEL_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final Exporter exporter = new XmlExporter().withCase(strategy);
+        final Exporter exporter = XmlExporter.builder().withCase(strategy).build();
 
         boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);

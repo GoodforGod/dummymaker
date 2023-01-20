@@ -1,13 +1,11 @@
 package io.dummymaker.model;
 
-import io.dummymaker.annotation.complex.GenTime;
-import java.sql.Timestamp;
+import io.dummymaker.annotation.complex.GenUnixTime;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.*;
-import java.util.Date;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 07.03.2018
  */
@@ -15,14 +13,16 @@ public class DummyUnixTime {
 
     public enum Fields {
 
-        LOCAL_TIME("time"),
-        LOCAL_DATE("date"),
-        LOCAL_DATETIME("dateTime"),
-        TIMESTAMP("timestamp"),
-        DATE("dateOld"),
-        DATE_COVERAGE("dateOldCoverage"),
-        LOCAL_DATETIME_STRING("dateTimeString"),
-        LOCAL_DATETIME_OBJECT("dateTimeObject");
+        SHORT_PRIM("shortPrim"),
+        INT_PRIM("integerPrim"),
+        LONG_PRIM("longPrim"),
+        SHORT_BOX("shortBox"),
+        INT_BOX("integerBox"),
+        LONG_BOX("longBox"),
+        BIG_INT("bigInteger"),
+        BIT_DECIMAL("bigDecimal"),
+        STRING("string"),
+        OBJECT("object");
 
         private final String name;
 
@@ -35,65 +35,73 @@ public class DummyUnixTime {
         }
     }
 
-    @GenTime(exportAsUnixTime = true)
-    private LocalTime time;
+    @GenUnixTime
+    private short shortPrim;
 
-    @GenTime(exportAsUnixTime = true)
-    private LocalDate date;
+    @GenUnixTime
+    private int integerPrim;
 
-    @GenTime(exportAsUnixTime = true)
-    private LocalDateTime dateTime;
+    @GenUnixTime
+    private long longPrim;
 
-    @GenTime(exportAsUnixTime = true)
-    private OffsetTime offsetTime;
+    @GenUnixTime
+    private Short shortBox;
 
-    @GenTime(exportAsUnixTime = true)
-    private OffsetDateTime offsetDateTime;
+    @GenUnixTime
+    private Integer integerBox;
 
-    @GenTime(exportAsUnixTime = true)
-    private Timestamp timestamp;
+    @GenUnixTime
+    private Long longBox;
 
-    @GenTime(exportAsUnixTime = true)
-    private Date dateOld;
+    @GenUnixTime
+    private BigInteger bigInteger;
 
-    @GenTime(exportAsUnixTime = true)
-    private Date dateOldCoverage;
+    @GenUnixTime
+    private BigDecimal bigDecimal;
 
-    @GenTime(exportAsUnixTime = true)
-    private String dateTimeString;
+    @GenUnixTime
+    private String string;
 
-    @GenTime(exportAsUnixTime = true)
-    private Object dateTimeObject;
+    @GenUnixTime
+    private Object object;
 
-    public LocalTime getTime() {
-        return time;
+    public short getShortPrim() {
+        return shortPrim;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public int getIntegerPrim() {
+        return integerPrim;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public long getLongPrim() {
+        return longPrim;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Short getShortBox() {
+        return shortBox;
     }
 
-    public Date getDateOld() {
-        return dateOld;
+    public Integer getIntegerBox() {
+        return integerBox;
     }
 
-    public String getDateTimeString() {
-        return dateTimeString;
+    public Long getLongBox() {
+        return longBox;
     }
 
-    public Object getDateTimeObject() {
-        return dateTimeObject;
+    public BigInteger getBigInteger() {
+        return bigInteger;
     }
 
-    public Date getDateOldCoverage() {
-        return dateOldCoverage;
+    public BigDecimal getBigDecimal() {
+        return bigDecimal;
+    }
+
+    public String getString() {
+        return string;
+    }
+
+    public Object getObject() {
+        return object;
     }
 }

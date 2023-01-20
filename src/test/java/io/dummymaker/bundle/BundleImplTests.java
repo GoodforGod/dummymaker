@@ -1,32 +1,17 @@
 package io.dummymaker.bundle;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.runners.Parameterized.Parameters;
-
-import io.dummymaker.bundle.impl.*;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 20.08.2017
  */
-@RunWith(Parameterized.class)
-public class BundleImplTest extends Assert {
+class BundleImplTests extends Assertions {
 
-    private BasicBundle bundle;
-
-    public BundleImplTest(BasicBundle bundle) {
-        this.bundle = bundle;
-    }
-
-    @Parameters(name = "{index}: Bundle - ({0})")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 { new CityBundle() },
@@ -49,25 +34,16 @@ public class BundleImplTest extends Assert {
         });
     }
 
-    @Test
-    public void bundlePresentSizeCheck() {
-        assertEquals(bundle.all().length, bundle.size());
-    }
-
-    @Test
-    public void bundlePresentIndexGet() {
-        int index = current().nextInt(0, bundle.size() - 1);
-        assertEquals(bundle.all()[index], bundle.get(index));
-    }
-
-    @Test
-    public void testIndexOutOfBound() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testIndexOutOfBound(Bundle bundle) {
         int integer = -1;
         assertNotNull(bundle.get(integer));
     }
 
-    @Test
-    public void bundlePresentRandomGet() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void bundlePresentRandomGet(Bundle bundle) {
         assertNotNull(bundle.random());
     }
 }

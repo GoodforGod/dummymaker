@@ -1,22 +1,20 @@
 package io.dummymaker.export.validators;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.impl.CsvExporter;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
+import io.dummymaker.export.CsvExporter;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class CsvValidator implements IValidator {
+public class CsvValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isSingleDummyListValid(String[] dummy) {
@@ -135,8 +133,8 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[5].matches(Patterns.TIMESTAMP.getPattern().pattern()));
         assertTrue(dummy[6].matches(Patterns.DATE.getPattern().pattern()));
         assertTrue(dummy[7].matches(Patterns.DATE_SQL.getPattern().pattern()));
-        assertTrue(dummy[8].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[9].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[8].matches(Patterns.OFFSET_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[9].matches(Patterns.OFFSET_DATETIME.getPattern().pattern()));
     }
 
     @Override
@@ -149,8 +147,8 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[5].matches("[0-9]+"));
         assertTrue(dummy[6].matches("[0-9]+"));
         assertTrue(dummy[7].matches("[0-9]+"));
-        assertTrue(dummy[8].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[9].matches(Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[8].matches("[0-9]+"));
+        assertTrue(dummy[9].matches("[0-9]+"));
     }
 
     @Override
@@ -163,7 +161,7 @@ public class CsvValidator implements IValidator {
         assertTrue(dummy[5].matches(DummyTimeFormatter.Patterns.TIMESTAMP.getPattern().pattern()));
         assertTrue(dummy[6].matches(DummyTimeFormatter.Patterns.DATE.getPattern().pattern()));
         assertTrue(dummy[7].matches(DummyTimeFormatter.Patterns.DATE_SQL.getPattern().pattern()));
-        assertTrue(dummy[8].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
-        assertTrue(dummy[9].matches(DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern().pattern()));
+        assertTrue(dummy[8].matches(DummyTimeFormatter.ISO_DATE_TIME_PATTERN));
+        assertTrue(dummy[9].matches(DummyTimeFormatter.ISO_DATE_TIME_PATTERN));
     }
 }

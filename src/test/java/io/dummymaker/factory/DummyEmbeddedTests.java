@@ -1,21 +1,19 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyEmbedded;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod
  * @see io.dummymaker.model.DummyEmbedded
  * @since 19.10.2019
  */
-public class DummyEmbeddedTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory();
+class DummyEmbeddedTests extends Assertions {
 
     @Test
-    public void embeddedFieldsFilled() {
+    void embeddedFieldsFilled() {
+        final GenFactory factory = GenFactory.build();
         final DummyEmbedded build = factory.build(DummyEmbedded.class);
 
         assertNotNull(build.getId());

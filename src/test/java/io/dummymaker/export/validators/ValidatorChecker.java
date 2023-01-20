@@ -1,14 +1,12 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.export.Case;
+import io.dummymaker.cases.Case;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 03.03.2018
  */
-public interface IValidator {
+public interface ValidatorChecker {
 
     void isSingleDummyListValid(String[] dummy);
 

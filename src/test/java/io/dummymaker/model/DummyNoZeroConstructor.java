@@ -1,18 +1,16 @@
 package io.dummymaker.model;
 
+import io.dummymaker.annotation.GenAuto;
+import io.dummymaker.annotation.GenIgnore;
 import io.dummymaker.annotation.complex.GenList;
 import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.complex.GenSet;
-import io.dummymaker.annotation.special.GenAuto;
-import io.dummymaker.annotation.special.GenIgnore;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 27.02.2018
  */
@@ -29,7 +27,7 @@ public class DummyNoZeroConstructor {
     @GenList(value = EmbeddedGenerator.class, fixed = 4)
     private List<String> objectsFix;
 
-    @GenSet(fixed = 5, value = EmbeddedGenerator.class)
+    @GenSet(fixed = 1, value = EmbeddedGenerator.class)
     private Set<DummyNoZeroConstructor> stringsFix;
 
     public DummyNoZeroConstructor(Integer amount) {

@@ -1,33 +1,24 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
-import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyEmbedded;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
-import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 11.10.2019
  */
-public class DummyEmbeddedComplexAutoTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory(GenRules.of(GenRule.auto(Dummy.class)));
+class DummyEmbeddedComplexAutoTests extends Assertions {
 
     @Test
-    public void listComplexAutoValid() {
+    void listComplexAutoValid() {
+        final GenFactory factory = GenFactory.build();
         final DummyEmbedded build = factory.build(DummyEmbedded.class);
-        final List<DummyEmbedded> list = build.getEmbeddedList();
 
-        assertNotNull(list);
-        assertFalse(list.isEmpty());
+        assertNotNull(build.getEmbeddedList());
+        assertFalse(build.getEmbeddedList().isEmpty());
 
-        for (DummyEmbedded embedded : list) {
+        for (DummyEmbedded embedded : build.getEmbeddedList()) {
             assertNotNull(embedded.getEmbeddedList());
             assertFalse(embedded.getEmbeddedList().isEmpty());
         }

@@ -2,21 +2,20 @@ package io.dummymaker.export.validators;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
 import static io.dummymaker.model.DummyTime.Fields.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
 import io.dummymaker.model.DummyTime;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
+import io.dummymaker.model.DummyUnixTime;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 01.09.2017
  */
-public class XmlValidator implements IValidator {
+public class XmlValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isSingleDummyListValid(String[] dummy) {
@@ -41,8 +40,8 @@ public class XmlValidator implements IValidator {
     @Override
     public void isSingleAutoDummyValid(String[] dummy) {
         assertTrue(dummy[0].matches("<DummyAuto>"));
-        assertTrue(dummy[1].matches("\\t<aLong>" + "-?[0-9]+" + "</aLong>"));
-        assertTrue(dummy[2].matches("\\t<anInt>" + "-?[0-9]+" + "</anInt>"));
+        assertTrue(dummy[1].matches("\\t<anInt>" + "-?[0-9]+" + "</anInt>"));
+        assertTrue(dummy[2].matches("\\t<aLong>" + "-?[0-9]+" + "</aLong>"));
         assertTrue(dummy[3].matches("</DummyAuto>"));
     }
 
@@ -99,10 +98,10 @@ public class XmlValidator implements IValidator {
                 + Patterns.DATE.getPattern()
                 + "</" + DATE_COVERAGE.getName() + ">"));
         assertTrue(dummy[9].matches("\\t<" + LOCAL_DATETIME_STRING.getName() + ">"
-                + Patterns.LOCAL_DATETIME.getPattern()
+                + Patterns.OFFSET_DATETIME.getPattern()
                 + "</" + LOCAL_DATETIME_STRING.getName() + ">"));
         assertTrue(dummy[10].matches("\\t<" + LOCAL_DATETIME_OBJECT.getName() + ">"
-                + Patterns.LOCAL_DATETIME.getPattern()
+                + Patterns.OFFSET_DATETIME.getPattern()
                 + "</" + LOCAL_DATETIME_OBJECT.getName() + ">"));
         assertTrue(dummy[11].matches("</DummyTime>"));
     }
@@ -110,36 +109,36 @@ public class XmlValidator implements IValidator {
     @Override
     public void isDummyUnixTimeValid(String[] dummy) {
         assertTrue(dummy[0].matches("<DummyUnixTime>"));
-        assertTrue(dummy[1].matches("\\t<" + LOCAL_TIME.getName() + ">"
+        assertTrue(dummy[1].matches("\\t<" + DummyUnixTime.Fields.SHORT_PRIM.getName() + ">"
                 + "[0-9]+"
-                + "</" + LOCAL_TIME.getName() + ">"));
-        assertTrue(dummy[2].matches("\\t<" + LOCAL_DATE.getName() + ">"
+                + "</" + DummyUnixTime.Fields.SHORT_PRIM.getName() + ">"));
+        assertTrue(dummy[2].matches("\\t<" + DummyUnixTime.Fields.INT_PRIM.getName() + ">"
                 + "[0-9]+"
-                + "</" + LOCAL_DATE.getName() + ">"));
-        assertTrue(dummy[3].matches("\\t<" + LOCAL_DATETIME.getName() + ">"
+                + "</" + DummyUnixTime.Fields.INT_PRIM.getName() + ">"));
+        assertTrue(dummy[3].matches("\\t<" + DummyUnixTime.Fields.LONG_PRIM.getName() + ">"
                 + "[0-9]+"
-                + "</" + LOCAL_DATETIME.getName() + ">"));
-        assertTrue(dummy[4].matches("\\t<" + OFFSET_TIME.getName() + ">"
+                + "</" + DummyUnixTime.Fields.LONG_PRIM.getName() + ">"));
+        assertTrue(dummy[4].matches("\\t<" + DummyUnixTime.Fields.SHORT_BOX.getName() + ">"
                 + "[0-9]+"
-                + "</" + OFFSET_TIME.getName() + ">"));
-        assertTrue(dummy[5].matches("\\t<" + OFFSET_DATETIME.getName() + ">"
+                + "</" + DummyUnixTime.Fields.SHORT_BOX.getName() + ">"));
+        assertTrue(dummy[5].matches("\\t<" + DummyUnixTime.Fields.INT_BOX.getName() + ">"
                 + "[0-9]+"
-                + "</" + OFFSET_DATETIME.getName() + ">"));
-        assertTrue(dummy[6].matches("\\t<" + TIMESTAMP.getName() + ">"
+                + "</" + DummyUnixTime.Fields.INT_BOX.getName() + ">"));
+        assertTrue(dummy[6].matches("\\t<" + DummyUnixTime.Fields.LONG_BOX.getName() + ">"
                 + "[0-9]+"
-                + "</" + TIMESTAMP.getName() + ">"));
-        assertTrue(dummy[7].matches("\\t<" + DATE.getName() + ">"
+                + "</" + DummyUnixTime.Fields.LONG_BOX.getName() + ">"));
+        assertTrue(dummy[7].matches("\\t<" + DummyUnixTime.Fields.BIG_INT.getName() + ">"
                 + "[0-9]+"
-                + "</" + DATE.getName() + ">"));
-        assertTrue(dummy[8].matches("\\t<" + DATE_COVERAGE.getName() + ">"
+                + "</" + DummyUnixTime.Fields.BIG_INT.getName() + ">"));
+        assertTrue(dummy[8].matches("\\t<" + DummyUnixTime.Fields.BIT_DECIMAL.getName() + ">"
                 + "[0-9]+"
-                + "</" + DATE_COVERAGE.getName() + ">"));
-        assertTrue(dummy[9].matches("\\t<" + LOCAL_DATETIME_STRING.getName() + ">"
-                + Patterns.LOCAL_DATETIME.getPattern().pattern()
-                + "</" + LOCAL_DATETIME_STRING.getName() + ">"));
-        assertTrue(dummy[10].matches("\\t<" + LOCAL_DATETIME_OBJECT.getName() + ">"
-                + Patterns.LOCAL_DATETIME.getPattern().pattern()
-                + "</" + LOCAL_DATETIME_OBJECT.getName() + ">"));
+                + "</" + DummyUnixTime.Fields.BIT_DECIMAL.getName() + ">"));
+        assertTrue(dummy[9].matches("\\t<" + DummyUnixTime.Fields.STRING.getName() + ">"
+                + "[0-9]+"
+                + "</" + DummyUnixTime.Fields.STRING.getName() + ">"));
+        assertTrue(dummy[10].matches("\\t<" + DummyUnixTime.Fields.OBJECT.getName() + ">"
+                + "[0-9]+"
+                + "</" + DummyUnixTime.Fields.OBJECT.getName() + ">"));
         assertTrue(dummy[11].matches("</DummyUnixTime>"));
     }
 
@@ -171,10 +170,10 @@ public class XmlValidator implements IValidator {
                 + DummyTimeFormatter.Patterns.DATE.getPattern()
                 + "</" + DATE_COVERAGE.getName() + ">"));
         assertTrue(dummy[9].matches("\\t<" + LOCAL_DATETIME_STRING.getName() + ">"
-                + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern()
+                + DummyTimeFormatter.ISO_DATE_TIME_PATTERN
                 + "</" + LOCAL_DATETIME_STRING.getName() + ">"));
         assertTrue(dummy[10].matches("\\t<" + LOCAL_DATETIME_OBJECT.getName() + ">"
-                + DummyTimeFormatter.Patterns.LOCAL_DATETIME.getPattern()
+                + DummyTimeFormatter.ISO_DATE_TIME_PATTERN
                 + "</" + LOCAL_DATETIME_OBJECT.getName() + ">"));
         assertTrue(dummy[11].matches("</DummyTimeFormatter>"));
     }

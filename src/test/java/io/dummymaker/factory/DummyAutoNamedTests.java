@@ -1,25 +1,19 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyAutoNamed;
-import io.dummymaker.model.GenRule;
-import io.dummymaker.model.GenRules;
 import java.util.UUID;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 12.10.2019
  */
-public class DummyAutoNamedTests extends Assert {
-
-    private final MainGenFactory factory = new MainGenFactory(GenRules.of().add(GenRule.auto(DummyAutoNamed.class)));
+class DummyAutoNamedTests extends Assertions {
 
     @Test
-    public void allNamedFieldsCorrect() {
+    void allNamedFieldsCorrect() {
+        final GenFactory factory = GenFactory.builder().rule(GenRule.auto(DummyAutoNamed.class)).build();
         final DummyAutoNamed build = factory.build(DummyAutoNamed.class);
 
         assertNotNull(build);

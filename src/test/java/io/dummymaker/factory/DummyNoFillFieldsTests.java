@@ -1,28 +1,24 @@
 package io.dummymaker.factory;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.factory.impl.MainGenFactory;
 import io.dummymaker.model.DummyNoFillFields;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
- * ! NO DESCRIPTION !
- *
  * @author GoodforGod
  * @since 05.10.2019
  */
-public class DummyNoFillFieldsTests {
-
-    private final MainGenFactory factory = new MainGenFactory();
+class DummyNoFillFieldsTests {
 
     @Test
-    public void allFieldsNull() {
+    void allFieldsNull() {
+        final GenFactory factory = GenFactory.builder().autoByDefault(false).build();
         final String group = "300";
         final DummyNoFillFields dummy = new DummyNoFillFields();
         dummy.setGroup(group);
 
-        final DummyNoFillFields filled = factory.fill(dummy);
+        final DummyNoFillFields filled = factory.build(() -> dummy);
         assertNotNull(filled);
         assertNull(filled.getCity());
         assertNull(filled.getName());

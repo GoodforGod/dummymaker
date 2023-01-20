@@ -1,77 +1,42 @@
-package io.dummymaker.export.asfile;
+package io.dummymaker.export;
 
-import io.dummymaker.export.Exporter;
-import io.dummymaker.export.Format;
-import io.dummymaker.export.impl.CsvExporter;
-import io.dummymaker.export.impl.JsonExporter;
-import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.impl.XmlExporter;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.factory.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyNoExportFields;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 03.03.2018
  */
-@Ignore
-@RunWith(Parameterized.class)
 public class ExportAsFileTests extends ExportAssert {
 
-    private final MainGenFactory factory = new MainGenFactory();
+    private final GenFactory factory = GenFactory.build();
 
-    private final Exporter exporter;
-    private final IValidator validator;
-    private final Format format;
-
-    private final int singleSplitLength;
-    private final int listSplitLength;
-
-    public ExportAsFileTests(Exporter exporter,
-                             IValidator validator,
-                             Format format,
-                             int singleSplitLength,
-                             int listSplitLength) {
-        this.exporter = exporter;
-        this.validator = validator;
-        this.format = format;
-        this.singleSplitLength = singleSplitLength;
-        this.listSplitLength = listSplitLength;
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of(JsonExporter.build(), new JsonValidatorChecker(), Format.JSON, 1, 1, 2),
+                Arguments.of(CsvExporter.build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2),
+                Arguments.of(SqlExporter.build(), new SqlValidatorChecker(), Format.SQL, 8, 8, 9),
+                Arguments.of(XmlExporter.build(), new XmlValidatorChecker(), Format.XML, 5, 7, 12));
     }
 
-    @Parameters(name = "{index}: Exporter - ({0})")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { new JsonExporter(), new JsonValidator(), Format.JSON, 5, 14 },
-
-                { new CsvExporter(), new CsvValidator(), Format.CSV, 3, 2 },
-
-                { new SqlExporter(), new SqlValidator(), Format.SQL, 9, 10 },
-
-                { new XmlExporter(), new XmlValidator(), Format.XML, 5, 12 },
-        });
-    }
-
-    @Test
-    public void exportSingleDummyInvalidExportEntity() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportSingleDummyInvalidExportEntity(Exporter exporter) {
         final boolean exportResult = exporter.export((DummyNoExportFields) null);
         assertFalse(exportResult);
     }
 
-    @Test
-    public void exportDummyListInvalidExportEntity() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportDummyListInvalidExportEntity(Exporter exporter) {
         final boolean exportResult = exporter.export(null);
         assertFalse(exportResult);
 
@@ -79,8 +44,9 @@ public class ExportAsFileTests extends ExportAssert {
         assertFalse(exportEmptyResult);
     }
 
-    @Test
-    public void exportSingleDummyEmptyContainer() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportSingleDummyEmptyContainer(Exporter exporter, ValidatorChecker validator, Format format) {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
@@ -90,8 +56,9 @@ public class ExportAsFileTests extends ExportAssert {
         assertFalse(exportResult);
     }
 
-    @Test
-    public void exportDummyListEmptyContainer() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportDummyListEmptyContainer(Exporter exporter, ValidatorChecker validator, Format format) {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
@@ -101,8 +68,12 @@ public class ExportAsFileTests extends ExportAssert {
         assertFalse(exportResult);
     }
 
-    @Test
-    public void exportSingleDummy() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportSingleDummy(Exporter exporter,
+                           ValidatorChecker validator,
+                           Format format,
+                           int singleSplitLength) {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
@@ -123,8 +94,13 @@ public class ExportAsFileTests extends ExportAssert {
         validator.isSingleDummyValid(csvArray);
     }
 
-    @Test
-    public void exportSingleDummyList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportSingleDummyList(Exporter exporter,
+                               ValidatorChecker validator,
+                               Format format,
+                               int singleSplitLength,
+                               int singleListSplitLength) {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
@@ -139,14 +115,20 @@ public class ExportAsFileTests extends ExportAssert {
                 ? ","
                 : "\n";
 
-        final String[] csvArray = dummyAsString.split(splitter);
-        assertEquals(singleSplitLength, csvArray.length);
+        final String[] array = dummyAsString.split(splitter);
+        assertEquals(singleListSplitLength, array.length);
 
-        validator.isSingleDummyValid(csvArray);
+        validator.isSingleDummyListValid(array);
     }
 
-    @Test
-    public void exportListOfDummies() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportListOfDummies(Exporter exporter,
+                             ValidatorChecker validator,
+                             Format format,
+                             int singleSplitLength,
+                             int singleListSplitLength,
+                             int listSplitLength) {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 

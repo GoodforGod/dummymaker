@@ -1,25 +1,24 @@
 package io.dummymaker.generator;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
-import io.dummymaker.generator.simple.SequenceGenerator;
 import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
 import java.time.LocalDateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class UniqueGeneratorsTest {
+class UniqueGeneratorsTests {
 
     @Test
-    public void enumerateGen() {
-        Generator generator = new SequenceGenerator();
+    void enumerateGen() {
+        Generator generator = new SequenceParameterizedGenerator(0);
 
         Object generated = generator.get();
 
@@ -27,8 +26,8 @@ public class UniqueGeneratorsTest {
     }
 
     @Test
-    public void localDateTimeGen() {
-        Generator generator = new LocalDateTimeGenerator();
+    void localDateTimeGen() {
+        Generator generator = new LocalDateTimeGenerator(0, GenTime.MAX);
 
         Object generated = generator.get();
 
@@ -37,7 +36,7 @@ public class UniqueGeneratorsTest {
     }
 
     @Test
-    public void embeddedGen() {
+    void embeddedGen() {
         Generator generator = new EmbeddedGenerator();
 
         Object generated = generator.get();
@@ -46,7 +45,7 @@ public class UniqueGeneratorsTest {
     }
 
     @Test
-    public void nullGen() {
+    void nullGen() {
         Generator generator = new NullGenerator();
 
         Object generated = generator.get();

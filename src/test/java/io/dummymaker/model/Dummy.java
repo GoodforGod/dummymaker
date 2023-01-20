@@ -1,12 +1,13 @@
 package io.dummymaker.model;
 
+import io.dummymaker.annotation.GenIgnore;
+import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.number.GenDoubleBig;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
-import io.dummymaker.annotation.special.GenSequence;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,8 +59,12 @@ public class Dummy {
             return origin;
         }
 
-        public Field getField() throws NoSuchFieldException {
-            return Dummy.class.getDeclaredField(origin);
+        public Field getField() {
+            try {
+                return Dummy.class.getDeclaredField(origin);
+            } catch (NoSuchFieldException e) {
+                throw new IllegalStateException(e);
+            }
         }
 
         public Set<Class> getAnnotations() {
@@ -81,6 +86,7 @@ public class Dummy {
 
     @GenExportName("socialGroup")
     @GenExportForce
+    @GenIgnore
     private String group = "100";
 
     @GenCity

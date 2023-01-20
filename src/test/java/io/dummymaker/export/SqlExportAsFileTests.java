@@ -1,42 +1,37 @@
-package io.dummymaker.export.asfile;
+package io.dummymaker.export;
 
-import io.dummymaker.export.Case;
-import io.dummymaker.export.Cases;
-import io.dummymaker.export.Exporter;
-import io.dummymaker.export.Format;
-import io.dummymaker.export.impl.SqlExporter;
-import io.dummymaker.export.validators.SqlValidator;
-import io.dummymaker.factory.impl.MainGenFactory;
+import io.dummymaker.cases.Case;
+import io.dummymaker.cases.Cases;
+import io.dummymaker.export.validators.SqlValidatorChecker;
+import io.dummymaker.factory.GenFactory;
 import io.dummymaker.model.Dummy;
 import io.dummymaker.model.DummyTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
- * "Default Description"
- *
  * @author GoodforGod
  * @since 20.08.2017
  */
-public class SqlExportAsFileTest extends FileExportAssert {
+class SqlExportAsFileTests extends FileExportAssert {
 
-    private final MainGenFactory factory = new MainGenFactory();
-    private final SqlValidator validation = new SqlValidator();
+    private final GenFactory factory = GenFactory.build();
+    private final SqlValidatorChecker validation = new SqlValidatorChecker();
     private final Format format = Format.SQL;
 
-    public SqlExportAsFileTest() {
-        super(new SqlExporter(), new SqlValidator(), Format.SQL, 8, 8, 9);
+    public SqlExportAsFileTests() {
+        super(SqlExporter.build(), new SqlValidatorChecker(), Format.SQL, 8, 8, 9);
     }
 
-    // @Test
-    public void exportListOfDummiesWithNamingStrategy() throws Exception {
-        final Case strategy = Cases.SNAKE_CASE.value();
+    @Test
+    void exportListOfDummiesWithNamingStrategy() {
+        final Case strategy = Cases.SNAKE_LOWER_CASE.value();
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final Exporter exporter = new SqlExporter().withCase(strategy);
+        final Exporter exporter = SqlExporter.builder().withCase(strategy).build();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);
@@ -46,23 +41,23 @@ public class SqlExportAsFileTest extends FileExportAssert {
         assertFalse(dummyAsString.isEmpty());
 
         final String[] sqlArray = dummyAsString.split("\n");
-        assertEquals(10, sqlArray.length);
+        assertEquals(9, sqlArray.length);
 
         validation.isTwoDummiesValidWithNamingStrategy(sqlArray, strategy);
     }
 
     @Test
-    public void exportSqlWithTimestampWithNamingStrategy() throws Exception {
-        final Case strategy = Cases.LOW_CASE.value();
-        final MainGenFactory factory = new MainGenFactory();
+    void exportSqlWithTimestampWithNamingStrategy() {
+        final Case strategy = Cases.LOWER_CASE.value();
 
         final Map<Class<?>, String> dataTypes = new HashMap<>();
         dataTypes.put(Object.class, "TIMESTAMP");
 
         final List<DummyTime> dummies = factory.build(DummyTime.class, 2);
-        final Exporter exporter = new SqlExporter()
-                .withTypes(dataTypes)
-                .withCase(strategy);
+        final Exporter exporter = SqlExporter.builder()
+                .withCase(strategy)
+                .withDataTypes(dataTypes)
+                .build();
 
         final boolean exportResult = exporter.export(dummies);
         assertTrue(exportResult);

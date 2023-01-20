@@ -1,24 +1,22 @@
-package io.dummymaker.scan;
+package io.dummymaker.export;
 
 import static io.dummymaker.model.Dummy.DummyFields.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import io.dummymaker.model.Dummy;
-import io.dummymaker.model.export.FieldContainer;
-import io.dummymaker.scan.impl.MainExportScanner;
 import java.util.Collection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod
  * @since 05.10.2019
  */
-public class ExportScannerTests {
+class ExportScannerTests {
 
     @Test
-    public void verifyThatExportFieldsContains() {
-        final ExportScanner scanner = new MainExportScanner();
-        final Collection<FieldContainer> fields = scanner.scan(Dummy.class);
+    void verifyThatExportFieldsContains() {
+        final ExportScanner scanner = new ExportScanner();
+        final Collection<ExportField> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -26,11 +24,11 @@ public class ExportScannerTests {
         assertEquals(3, fields.size());
 
         // Check for correct map values
-        final FieldContainer groupAnnotations = fields.stream().filter(c -> c.getExportName().equals(GROUP.exportName()))
+        final ExportField groupAnnotations = fields.stream().filter(c -> c.getName().equals(GROUP.exportName()))
                 .findFirst().get();
-        final FieldContainer numAnnotations = fields.stream().filter(c -> c.getExportName().equals(NUM.exportName())).findFirst()
+        final ExportField numAnnotations = fields.stream().filter(c -> c.getName().equals(NUM.exportName())).findFirst()
                 .get();
-        final FieldContainer nameAnnotations = fields.stream().filter(c -> c.getExportName().equals(NAME.exportName()))
+        final ExportField nameAnnotations = fields.stream().filter(c -> c.getName().equals(NAME.exportName()))
                 .findFirst().get();
 
         assertNotNull(groupAnnotations);

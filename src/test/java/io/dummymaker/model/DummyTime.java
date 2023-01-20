@@ -82,10 +82,10 @@ public class DummyTime {
     @GenTime
     private LocalTime time;
 
-    @GenTime(minUnix = 1000, maxUnix = 999)
+    @GenTime(from = 1000, to = 999)
     private LocalDate date;
 
-    @GenTime(minUnix = -100)
+    @GenTime(from = -100)
     private LocalDateTime dateTime;
 
     @GenTime
@@ -94,13 +94,13 @@ public class DummyTime {
     @GenTime
     private OffsetDateTime offsetDateTime;
 
-    @GenTime(minUnix = 1)
+    @GenTime(from = 1)
     private Timestamp timestamp;
 
-    @GenTime(maxUnix = GenTime.MAX_UNIX + 1000)
+    @GenTime(to = GenTime.MAX + 1000)
     private Date dateOld;
 
-    @GenTime(minUnix = -100, maxUnix = GenTime.MAX_UNIX + 1000)
+    @GenTime(from = -100, to = GenTime.MAX + 1000)
     private Date dateOldCoverage;
 
     @GenTime
