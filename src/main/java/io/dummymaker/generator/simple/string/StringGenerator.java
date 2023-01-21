@@ -3,7 +3,8 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
-import java.util.UUID;
+import io.dummymaker.util.RandomUtils;
+import java.util.Random;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,12 +16,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class StringGenerator implements Generator<String> {
 
-    private static final Pattern PATTERN = Pattern.compile("str", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("str|string", CASE_INSENSITIVE);
+    private static final int LEFT_LIMIT = 48; // numeral '0'
+    private static final int RIGHT_LIMIT = 122; // letter 'z'
+
+    private final Random random = new Random();
+    private final int min;
+    private final int max;
+
+    public StringGenerator(int min, int max) {
+        if (min < 1) {
+            throw new IllegalArgumentException("Min can't be less than 1, but was: " + min);
+        } else if (max < min) {
+            throw new IllegalArgumentException("Max can't be less than Min, but was " + max + " when Min was " + min);
+        }
+
+        this.min = min;
+        this.max = max;
+    }
 
     @Override
     public @NotNull String get() {
-        final String s = UUID.randomUUID().toString() + UUID.randomUUID();
-        return s.replace("-", "");
+        final int length = RandomUtils.random(min, max);
+        return random.ints(LEFT_LIMIT, RIGHT_LIMIT + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(length)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
     @Override

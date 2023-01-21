@@ -29,14 +29,21 @@ final class DefaultGenFactory implements GenFactory {
     private final GenGraphBuilder graphBuilder;
     private final GeneratorSupplier generatorSupplier;
     private final boolean ignoreErrors;
+    private final boolean overrideDefaultValues;
 
-    DefaultGenFactory(long salt, GenRules rules, boolean isAutoByDefault, int depthByDefault, boolean ignoreErrors) {
-        this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(salt));
+    DefaultGenFactory(long seed,
+                      GenRules rules,
+                      boolean isAutoByDefault,
+                      int depthByDefault,
+                      boolean ignoreErrors,
+                      boolean overrideDefaultValues) {
+        this.ignoreErrors = ignoreErrors;
+        this.overrideDefaultValues = overrideDefaultValues;
+        this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(seed));
         this.zeroArgConstructor = new ZeroArgClassConstructor();
         this.fullArgConstructor = new FullArgClassConstructor(generatorSupplier);
         final GenScanner scanner = new GenScanner(generatorSupplier, rules, isAutoByDefault, depthByDefault);
         this.graphBuilder = new GenGraphBuilder(scanner, rules, depthByDefault);
-        this.ignoreErrors = ignoreErrors;
     }
 
     @Override
@@ -92,6 +99,14 @@ final class DefaultGenFactory implements GenFactory {
             for (GenContainer fieldMeta : fields) {
                 final Field field = fieldMeta.field();
                 field.setAccessible(true);
+
+                if (!overrideDefaultValues) {
+                    final Object fieldDefaultValue = field.get(value);
+                    if (fieldDefaultValue != null) {
+                        continue;
+                    }
+                }
+
                 final Object generated = generateObject(fieldMeta, context);
                 if (generated != null) {
                     field.set(value, generated);

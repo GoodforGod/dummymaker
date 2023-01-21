@@ -9,6 +9,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface GenTypeBuilder {
 
+    /**
+     * @param type to generate
+     * @return type instance with generated fields
+     * @param <T> erasure
+     */
     @Nullable
     <T> T build(@NotNull Class<T> type);
 }

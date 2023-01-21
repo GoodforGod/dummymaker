@@ -30,7 +30,7 @@ class XmlExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = XmlExporter.builder().withCase(strategy).build();
 
-        boolean exportResult = exporter.export(dummies);
+        boolean exportResult = exporter.exportAsFile(dummies);
         assertTrue(exportResult);
 
         final String dummyAsString = readFromFile(filename);

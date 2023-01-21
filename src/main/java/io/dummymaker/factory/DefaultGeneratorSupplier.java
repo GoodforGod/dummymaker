@@ -57,20 +57,21 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
                 new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
                 new PhoneGenerator(),
                 new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(), new StatusGenerator(), new StreetGenerator(),
-                new StringGenerator(), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(), new VersionGenerator()));
+                new StringGenerator(6, 12), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(),
+                new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));
 
         TYPE_TO_GENERATORS.put(Object.class, Collections.singletonList(new ObjectGenerator()));
         TYPE_TO_GENERATORS.put(Boolean.class, Collections.singletonList(new BooleanGenerator()));
         TYPE_TO_GENERATORS.put(Byte.class, Collections.singletonList(new ByteGenerator()));
         TYPE_TO_GENERATORS.put(Character.class, Arrays.asList(new CharacterGenerator(), new CharGenerator()));
-        TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator()));
+        TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator((short) 0, Short.MAX_VALUE)));
         TYPE_TO_GENERATORS.put(Integer.class,
                 Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE), new IntegerSmallGenerator(), new PostalGenerator(),
                         new MccGenerator()));
         TYPE_TO_GENERATORS.put(Long.class,
                 Arrays.asList(new LongGenerator(0, Long.MAX_VALUE), new UnixTimeGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(Float.class, Arrays.asList(new FloatGenerator(), new FloatBigGenerator()));
-        TYPE_TO_GENERATORS.put(Double.class, Collections.singletonList(new DoubleGenerator()));
+        TYPE_TO_GENERATORS.put(Float.class, Collections.singletonList(new FloatSmallGenerator()));
+        TYPE_TO_GENERATORS.put(Double.class, Collections.singletonList(new DoubleSmallGenerator()));
         TYPE_TO_GENERATORS.put(BigInteger.class, Collections.singletonList(new BigIntegerGenerator()));
         TYPE_TO_GENERATORS.put(BigDecimal.class, Arrays.asList(new BigDecimalGenerator(), new PriceGenerator()));
 
@@ -138,12 +139,12 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
     }
 
     /**
-     * Salt used to select always the same generator for specific field
+     * Seed used to select always the same generator for specific field
      */
-    private final long salt;
+    private final long seed;
 
-    DefaultGeneratorSupplier(long salt) {
-        this.salt = salt;
+    DefaultGeneratorSupplier(long seed) {
+        this.seed = seed;
     }
 
     @Override
@@ -161,7 +162,7 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
             return DEFAULT_GENERATOR;
         }
 
-        return getIndexWithSalt(generators, "null", salt);
+        return getIndexWithSalt(generators, "null", seed);
     }
 
     @Override
@@ -192,6 +193,6 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
             return DEFAULT_GENERATOR;
         }
 
-        return getIndexWithSalt(generators, fieldName, salt);
+        return getIndexWithSalt(generators, fieldName, seed);
     }
 }

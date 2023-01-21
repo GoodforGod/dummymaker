@@ -18,10 +18,15 @@ public final class XmlExporter extends AbstractExporter {
     /**
      * Is used with className for XML list tag
      */
-    private static final String TAG_ENDING = "List";
+    private static final String DEFAULT_TAG_LIST_SUFFIX = "List";
 
-    private XmlExporter(boolean appendFile, Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
-        super(appendFile, fieldCase, writerFunction);
+    private final Function<String, String> listTagSuffix;
+
+    private XmlExporter(Case fieldCase,
+                        @NotNull Function<String, Writer> writerFunction,
+                        Function<String, String> listTagSuffix) {
+        super(fieldCase, writerFunction);
+        this.listTagSuffix = listTagSuffix;
     }
 
     public static final class Builder {
@@ -29,6 +34,7 @@ public final class XmlExporter extends AbstractExporter {
         private boolean appendFile = false;
         private Case fieldCase = Cases.DEFAULT.value();
         private Function<String, Writer> writerFunction;
+        private Function<String, String> listTagSuffix = name -> name + DEFAULT_TAG_LIST_SUFFIX;
 
         private Builder() {}
 
@@ -51,12 +57,18 @@ public final class XmlExporter extends AbstractExporter {
         }
 
         @NotNull
+        public Builder withListSuffix(@NotNull Function<String, String> listTagSuffix) {
+            this.listTagSuffix = listTagSuffix;
+            return this;
+        }
+
+        @NotNull
         public XmlExporter build() {
             final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
                     : writerFunction;
 
-            return new XmlExporter(appendFile, fieldCase, writer);
+            return new XmlExporter(fieldCase, writer, listTagSuffix);
         }
     }
 
@@ -124,7 +136,7 @@ public final class XmlExporter extends AbstractExporter {
     protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? openXmlTag(fieldCase.apply(type + TAG_ENDING)) + "\n"
+                ? openXmlTag(fieldCase.apply(listTagSuffix.apply(type))) + "\n"
                 : "";
     }
 
@@ -132,7 +144,7 @@ public final class XmlExporter extends AbstractExporter {
     protected @NotNull <T> String tail(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? "\n" + closeXmlTag(fieldCase.apply(type + TAG_ENDING))
+                ? "\n" + closeXmlTag(fieldCase.apply(listTagSuffix.apply(type)))
                 : "";
     }
 }

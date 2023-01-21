@@ -82,6 +82,14 @@ final class GenScanner {
                 return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, marker));
             }
 
+            if (IS_FACTORY.test(marker)) {
+                final AnnotationGeneratorFactory generatorFactory = CastUtils
+                        .instantiate(((GenCustomFactory) marker).value());
+                final Generator<?> generator = generatorFactory.get(marker);
+                final boolean isComplex = isComplex(field);
+                return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
+            }
+
             if (IS_GEN.test(marker)) {
                 final Generator<?> generator = CastUtils.instantiate(((GenCustom) marker).value());
                 final boolean isComplex = isComplex(field);

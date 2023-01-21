@@ -34,6 +34,12 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
     }
 
     public ListParameterizedGenerator(int min, int max, int fixed, @Nullable Generator<?> generator) {
+        if (min < 1) {
+            throw new IllegalArgumentException("Min can't be less than 1, but was: " + min);
+        } else if (max < min) {
+            throw new IllegalArgumentException("Max can't be less than Min, but was " + max + " when Min was " + min);
+        }
+
         this.min = min;
         this.max = max;
         this.fixed = fixed;
@@ -46,7 +52,7 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
             return get();
         }
 
-        final int size = (fixed == -1)
+        final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;
 
@@ -70,7 +76,7 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
 
     @Override
     public Object get() {
-        final int size = (fixed == -1)
+        final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;
 

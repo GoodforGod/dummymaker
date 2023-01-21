@@ -16,11 +16,11 @@ public interface Exporter {
     /**
      * Allow exporting single object
      *
-     * @param t   object to export
-     * @param <T> object type
+     * @param value object to export
+     * @param <T>   object type
      * @return true if export successful
      */
-    <T> boolean export(@Nullable T t);
+    <T> boolean exportAsFile(@Nullable T value);
 
     /**
      * Allow exporting collection of objects
@@ -29,17 +29,17 @@ public interface Exporter {
      * @param <T>        object type
      * @return true if export successful
      */
-    <T> boolean export(@Nullable Collection<T> collection);
+    <T> boolean exportAsFile(@Nullable Collection<T> collection);
 
     /**
      * Allow exporting single object as a single string value
      *
-     * @param t   object to export
-     * @param <T> object type
+     * @param value object to export
+     * @param <T>   object type
      * @return object string representation
      */
     @NotNull
-    <T> String convert(@Nullable T t);
+    <T> String exportAsString(@Nullable T value);
 
     /**
      * Allow exporting list of objects as single a string value
@@ -49,5 +49,5 @@ public interface Exporter {
      * @return objects string representation
      */
     @NotNull
-    <T> String convert(@NotNull Collection<T> collection);
+    <T> String exportAsString(@NotNull Collection<T> collection);
 }

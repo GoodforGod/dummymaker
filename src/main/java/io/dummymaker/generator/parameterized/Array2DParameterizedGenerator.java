@@ -41,6 +41,16 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
                                          int maxSecond,
                                          int fixedSecond,
                                          @Nullable Generator<?> generator) {
+        if (minFirst < 1) {
+            throw new IllegalArgumentException("Min can't be less than 1, but was: " + minFirst);
+        } else if (maxFirst < minFirst) {
+            throw new IllegalArgumentException("Max can't be less than Min, but was " + maxFirst + " when Min was " + minFirst);
+        } else if (minSecond < 1) {
+            throw new IllegalArgumentException("Min can't be less than 1, but was: " + minSecond);
+        } else if (maxSecond < minSecond) {
+            throw new IllegalArgumentException("Max can't be less than Min, but was " + maxSecond + " when Min was " + minSecond);
+        }
+
         this.minFirst = minFirst;
         this.maxFirst = maxFirst;
         this.fixedFirst = fixedFirst;
@@ -68,11 +78,11 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
     }
 
     private Object getCollector(Class<?> arrayType, Supplier<Object> supplier) {
-        final int sizeFirst = (fixedFirst == -1)
+        final int sizeFirst = (fixedFirst < 1)
                 ? RandomUtils.random(minFirst, maxFirst)
                 : fixedFirst;
 
-        final int sizeSecond = (fixedSecond == -1)
+        final int sizeSecond = (fixedSecond < 1)
                 ? RandomUtils.random(minSecond, maxSecond)
                 : fixedSecond;
 

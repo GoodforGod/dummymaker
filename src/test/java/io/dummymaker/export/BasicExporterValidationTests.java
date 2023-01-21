@@ -28,7 +28,7 @@ public class BasicExporterValidationTests extends Assertions {
     @ParameterizedTest
     void exportNotExportable(Exporter exporter) {
         DummyNoZeroConstructor d = new DummyNoZeroConstructor(null);
-        String s = exporter.convert(d);
+        String s = exporter.exportAsString(d);
         if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
         else
@@ -42,7 +42,7 @@ public class BasicExporterValidationTests extends Assertions {
                 new DummyNoZeroConstructor(null),
                 new DummyNoZeroConstructor(null));
 
-        String s = exporter.convert(dummyNoZeroConstructors);
+        String s = exporter.exportAsString(dummyNoZeroConstructors);
         if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
         else
@@ -52,21 +52,21 @@ public class BasicExporterValidationTests extends Assertions {
     @MethodSource("data")
     @ParameterizedTest
     void exportNullableDummyReturnEmpty(Exporter exporter) {
-        String s = exporter.convert(null);
+        String s = exporter.exportAsString(null);
         assertTrue(s.isEmpty());
     }
 
     @MethodSource("data")
     @ParameterizedTest
     void exportNullableDummiesReturnEmptyList(Exporter exporter) {
-        String s = exporter.convert(null);
+        String s = exporter.exportAsString(null);
         assertTrue(s.isEmpty());
     }
 
     @MethodSource("data")
     @ParameterizedTest
     void exportEmptyDummiesReturnEmptyList(Exporter exporter) {
-        String s = exporter.convert(new ArrayList<>());
+        String s = exporter.exportAsString(new ArrayList<>());
         assertTrue(s.isEmpty());
     }
 }

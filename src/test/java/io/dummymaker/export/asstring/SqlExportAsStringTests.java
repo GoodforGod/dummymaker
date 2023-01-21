@@ -31,7 +31,7 @@ class SqlExportAsStringTests extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final Exporter exporter = SqlExporter.builder().withCase(strategy).build();
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
         final String[] sqlArray = dummyAsString.split("\n");
@@ -47,7 +47,7 @@ class SqlExportAsStringTests extends StringExportAssert {
         final List<DummyArray> dummies = factory.build(DummyArray.class, 2);
         final Exporter exporter = SqlExporter.builder().withCase(strategy).build();
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
         final String[] sqlArray = dummyAsString.split("\n");

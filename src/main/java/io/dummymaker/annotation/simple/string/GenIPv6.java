@@ -1,7 +1,7 @@
-package io.dummymaker.annotation.simple.number;
+package io.dummymaker.annotation.simple.string;
 
 import io.dummymaker.annotation.GenCustom;
-import io.dummymaker.generator.simple.number.FloatBigGenerator;
+import io.dummymaker.generator.simple.string.IPv6Generator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author Anton Kurako (GoodforGod)
- * @see FloatBigGenerator
- * @since 04.11.2018
+ * @see IPv6Generator
+ * @since 21.01.2023
  */
-@GenCustom(FloatBigGenerator.class)
+@GenCustom(IPv6Generator.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenFloatBig {
+public @interface GenIPv6 {
 
 }

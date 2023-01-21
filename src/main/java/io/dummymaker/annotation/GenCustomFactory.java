@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.ANNOTATION_TYPE })
+@Target(value = { ElementType.ANNOTATION_TYPE, ElementType.FIELD })
 public @interface GenCustomFactory {
 
     /**

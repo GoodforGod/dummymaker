@@ -4,7 +4,7 @@ import static io.dummymaker.model.Dummy.DummyFields.*;
 
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.annotation.complex.GenSequence;
-import io.dummymaker.annotation.simple.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.number.GenDoubleSmall;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.model.Dummy;
@@ -66,9 +66,9 @@ class GenScannerTests extends Assertions {
         assertEquals(cityAnnotations.marker().annotationType(), GenCity.class);
         assertEquals(numAnnotations.marker().annotationType(), GenSequence.class);
         assertEquals(nameAnnotations.marker().annotationType(), GenName.class);
-        assertEquals(bigdAnnotations.marker().annotationType(), GenDoubleBig.class);
+        assertEquals(bigdAnnotations.marker().annotationType(), GenDoubleSmall.class);
         assertEquals(lngAnnotations.marker().annotationType(), GenSequence.class);
-        assertEquals(uncompaAnnotations.marker().annotationType(), GenDoubleBig.class);
+        assertEquals(uncompaAnnotations.marker().annotationType(), GenDoubleSmall.class);
     }
 
     @Test

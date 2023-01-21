@@ -5,7 +5,7 @@ import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
-import io.dummymaker.annotation.simple.number.GenDoubleBig;
+import io.dummymaker.annotation.simple.number.GenDoubleSmall;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
 import java.lang.reflect.Field;
@@ -33,10 +33,10 @@ public class Dummy {
      */
     public enum DummyFields {
 
-        UNCOMPA("uncompatible", "uncompatible", GenDoubleBig.class, GenExportIgnore.class),
+        UNCOMPA("uncompatible", "uncompatible", GenDoubleSmall.class, GenExportIgnore.class),
         GROUP("group", "socialGroup", GenExportName.class),
         LNG("lng", "lng", GenSequence.class, GenExportIgnore.class),
-        BIGD("bigd", "bigd", GenDoubleBig.class, GenExportIgnore.class),
+        BIGD("bigd", "bigd", GenDoubleSmall.class, GenExportIgnore.class),
         CITY("city", "city", GenCity.class, GenExportIgnore.class),
         NUM("num", "num", GenSequence.class),
         NAME("name", "name", GenName.class);
@@ -94,11 +94,11 @@ public class Dummy {
     private String city;
 
     @GenExportIgnore
-    @GenDoubleBig
+    @GenDoubleSmall
     private List uncompatible;
 
     @GenExportIgnore
-    @GenDoubleBig
+    @GenDoubleSmall
     private String bigd;
 
     @GenExportIgnore

@@ -37,12 +37,11 @@ public final class SqlExporter extends AbstractExporter {
      */
     private final Map<Class<?>, String> dataTypes;
 
-    private SqlExporter(boolean appendFile,
-                        Case fieldCase,
+    private SqlExporter(Case fieldCase,
                         @NotNull Function<String, Writer> writerFunction,
                         int batchSize,
                         Map<Class<?>, String> dataTypes) {
-        super(appendFile, fieldCase, writerFunction);
+        super(fieldCase, writerFunction);
         this.batchSize = batchSize;
         this.dataTypes = dataTypes;
     }
@@ -77,6 +76,10 @@ public final class SqlExporter extends AbstractExporter {
 
         @NotNull
         public Builder withBatchSize(int batchSize) {
+            if (batchSize > 999 || batchSize < 1) {
+                throw new IllegalArgumentException("Batch Size can be from 1 to 999");
+            }
+
             this.batchSize = batchSize;
             return this;
         }
@@ -96,10 +99,10 @@ public final class SqlExporter extends AbstractExporter {
         @NotNull
         public SqlExporter build() {
             final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
                     : writerFunction;
 
-            return new SqlExporter(appendFile, fieldCase, writer, batchSize, dataTypes);
+            return new SqlExporter(fieldCase, writer, batchSize, dataTypes);
         }
 
         private static Map<Class<?>, String> buildDefaultDataTypeMap() {
@@ -342,7 +345,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    public <T> boolean export(Collection<T> collection) {
+    public <T> boolean exportAsFile(Collection<T> collection) {
         if (CollectionUtils.isEmpty(collection))
             return false;
 
@@ -387,7 +390,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    public @NotNull <T> String convert(@NotNull Collection<T> collection) {
+    public @NotNull <T> String exportAsString(@NotNull Collection<T> collection) {
         if (CollectionUtils.isEmpty(collection))
             return "";
 

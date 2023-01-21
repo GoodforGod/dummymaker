@@ -14,6 +14,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface ParameterizedGenerator<T> extends Generator<T> {
 
+    /**
+     * @param fieldType   field type extension
+     * @param typeBuilder builder that can be used to build type generics
+     * @return generated value
+     */
     @Nullable
     T get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder);
 }

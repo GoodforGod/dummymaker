@@ -34,7 +34,7 @@ public class ValidatorExporterTest extends Assertions {
         final DummyTime dummy = factory.build(DummyTime.class);
         assertNotNull(dummy);
 
-        final String exported = exporter.convert(dummy);
+        final String exported = exporter.exportAsString(dummy);
 
         final String splitter = (exporter instanceof CsvExporter)
                 ? ","
@@ -51,7 +51,7 @@ public class ValidatorExporterTest extends Assertions {
         final DummyUnixTime dummy = factory.build(DummyUnixTime.class);
         assertNotNull(dummy);
 
-        final String exported = exporter.convert(dummy);
+        final String exported = exporter.exportAsString(dummy);
         final String splitter = (exporter instanceof CsvExporter)
                 ? ","
                 : "\n";
@@ -68,7 +68,7 @@ public class ValidatorExporterTest extends Assertions {
         final DummyTimeFormatter dummy = factory.build(DummyTimeFormatter.class);
         assertNotNull(dummy);
 
-        final String exported = exporter.convert(dummy);
+        final String exported = exporter.exportAsString(dummy);
 
         final String splitter = (exporter instanceof CsvExporter)
                 ? ","

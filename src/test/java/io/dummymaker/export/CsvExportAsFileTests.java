@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
  */
 class CsvExportAsFileTests extends FileExportAssert {
 
+    private static final char DEFAULT_SEPARATOR = ',';
+
     private final GenFactory factory = GenFactory.build();
     private final CsvValidatorChecker validation = new CsvValidatorChecker();
 
@@ -27,9 +29,9 @@ class CsvExportAsFileTests extends FileExportAssert {
     void exportSingleDummyWithStringWrapAndHeader() {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
-        final Exporter exporter = CsvExporter.builder().withHeader(true).withSeparator(CsvExporter.DEFAULT_SEPARATOR).build();
+        final Exporter exporter = CsvExporter.builder().withHeader(true).withSeparator(DEFAULT_SEPARATOR).build();
 
-        final boolean exportResult = exporter.export(dummy);
+        final boolean exportResult = exporter.exportAsFile(dummy);
         assertTrue(exportResult);
 
         final String dummyAsString = readFromFile(filename);
@@ -39,7 +41,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
+        validation.isSingleDummyValidWithHeader(csvArray, DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -48,7 +50,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = CsvExporter.builder().withHeader(true).build();
 
-        final boolean exportResult = exporter.export(dummies);
+        final boolean exportResult = exporter.exportAsFile(dummies);
         assertTrue(exportResult);
 
         final String dummyAsString = readFromFile(filename);
@@ -58,7 +60,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
+        validation.isTwoDummiesValidWithHeader(csvArray, DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -69,7 +71,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = CsvExporter.builder().withHeader(true).withCase(strategy).build();
 
-        final boolean exportResult = exporter.export(dummies);
+        final boolean exportResult = exporter.exportAsFile(dummies);
         assertTrue(exportResult);
 
         final String dummyAsString = readFromFile(filename);
@@ -79,6 +81,6 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, CsvExporter.DEFAULT_SEPARATOR, strategy);
+        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, DEFAULT_SEPARATOR, strategy);
     }
 }

@@ -98,7 +98,7 @@ final class GenGraphBuilder {
                                 ? depthByDefault
                                 : parentPayload.depth()));
 
-        final List<GenContainer> containers = scanner.scan(SimpleGenType.ofClass(target.plain()));
+        final List<GenContainer> containers = scanner.scan(SimpleGenType.ofClass(targetType));
         return new GenPayload(target, depth, containers);
     }
 

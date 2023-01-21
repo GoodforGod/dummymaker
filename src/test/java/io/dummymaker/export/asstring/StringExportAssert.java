@@ -47,18 +47,18 @@ public abstract class StringExportAssert extends Assertions {
 
     @Test
     void exportSingleDummyInvalidExportEntity() {
-        final String exportResult = exporter.convert((DummyNoExportFields) null);
+        final String exportResult = exporter.exportAsString((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
 
     @Test
     void exportDummyListInvalidExportEntity() {
-        final String exportResult = exporter.convert(null);
+        final String exportResult = exporter.exportAsString(null);
         assertNotNull(exportResult);
         assertEquals(getEmptyListResult(), exportResult);
 
-        final String exportEmptyResult = exporter.convert(Collections.emptyList());
+        final String exportEmptyResult = exporter.exportAsString(Collections.emptyList());
         assertNotNull(exportEmptyResult);
         assertEquals(getEmptyListResult(), exportResult);
     }
@@ -67,7 +67,7 @@ public abstract class StringExportAssert extends Assertions {
     void exportDummyListEmptyContainer() {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
-        final String exportResult = exporter.convert(dummy);
+        final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
         assertEquals(getEmptyListResult(), exportResult);
     }
@@ -76,7 +76,7 @@ public abstract class StringExportAssert extends Assertions {
     void exportSingleDummy() {
         final Dummy dummy = factory.build(Dummy.class);
 
-        final String dummyAsString = exporter.convert(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -94,7 +94,7 @@ public abstract class StringExportAssert extends Assertions {
     void exportSingleDummyList() {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -112,7 +112,7 @@ public abstract class StringExportAssert extends Assertions {
     void exportListOfDummies() {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

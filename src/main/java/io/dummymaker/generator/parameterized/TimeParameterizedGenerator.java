@@ -40,25 +40,25 @@ public final class TimeParameterizedGenerator implements ParameterizedGenerator<
     private final DateTimeFormatter formatter;
 
     public TimeParameterizedGenerator(long fromUnixTime, long toUnixTime, String formatter) {
-        instantGenerator = new InstantGenerator(fromUnixTime, toUnixTime);
-        localDateGenerator = new LocalDateGenerator(fromUnixTime, toUnixTime);
-        localDateTimeGenerator = new LocalDateTimeGenerator(fromUnixTime, toUnixTime);
-        localTimeGenerator = new LocalTimeGenerator(fromUnixTime, toUnixTime);
-        offsetDateTimeGenerator = new OffsetDateTimeGenerator(fromUnixTime, toUnixTime);
-        offsetTimeGenerator = new OffsetTimeGenerator(fromUnixTime, toUnixTime);
-        zonedDateTimeGenerator = new ZonedDateTimeGenerator(fromUnixTime, toUnixTime);
-        zonedOffsetGenerator = new ZonedOffsetGenerator();
+        this.instantGenerator = new InstantGenerator(fromUnixTime, toUnixTime);
+        this.localDateGenerator = new LocalDateGenerator(fromUnixTime, toUnixTime);
+        this.localDateTimeGenerator = new LocalDateTimeGenerator(fromUnixTime, toUnixTime);
+        this.localTimeGenerator = new LocalTimeGenerator(fromUnixTime, toUnixTime);
+        this.offsetDateTimeGenerator = new OffsetDateTimeGenerator(fromUnixTime, toUnixTime);
+        this.offsetTimeGenerator = new OffsetTimeGenerator(fromUnixTime, toUnixTime);
+        this.zonedDateTimeGenerator = new ZonedDateTimeGenerator(fromUnixTime, toUnixTime);
+        this.zonedOffsetGenerator = new ZonedOffsetGenerator();
 
-        dayOfWeekGenerator = new DayOfWeekGenerator();
-        monthGenerator = new MonthGenerator(fromUnixTime, toUnixTime);
-        monthDayGenerator = new MonthDayGenerator(fromUnixTime, toUnixTime);
-        yearGenerator = new YearGenerator(fromUnixTime, toUnixTime);
-        yearMonthGenerator = new YearMonthGenerator(fromUnixTime, toUnixTime);
+        this.dayOfWeekGenerator = new DayOfWeekGenerator();
+        this.monthGenerator = new MonthGenerator(fromUnixTime, toUnixTime);
+        this.monthDayGenerator = new MonthDayGenerator(fromUnixTime, toUnixTime);
+        this.yearGenerator = new YearGenerator(fromUnixTime, toUnixTime);
+        this.yearMonthGenerator = new YearMonthGenerator(fromUnixTime, toUnixTime);
 
-        dateGenerator = new DateGenerator(fromUnixTime, toUnixTime);
-        dateSqlGenerator = new DateSqlGenerator(fromUnixTime, toUnixTime);
-        timeSqlGenerator = new TimeSqlGenerator(fromUnixTime, toUnixTime);
-        timestampGenerator = new TimestampGenerator(fromUnixTime, toUnixTime);
+        this.dateGenerator = new DateGenerator(fromUnixTime, toUnixTime);
+        this.dateSqlGenerator = new DateSqlGenerator(fromUnixTime, toUnixTime);
+        this.timeSqlGenerator = new TimeSqlGenerator(fromUnixTime, toUnixTime);
+        this.timestampGenerator = new TimestampGenerator(fromUnixTime, toUnixTime);
         this.formatter = DateTimeFormatter.ofPattern(formatter);
     }
 

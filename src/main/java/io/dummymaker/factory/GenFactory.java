@@ -61,19 +61,34 @@ public interface GenFactory {
     interface Builder {
 
         @NotNull
-        Builder salt(long salt);
+        Builder seed(long seed);
 
         @NotNull
         Builder rule(@NotNull GenRule rule);
 
+        /**
+         * @param autoByDefault is true by Default
+         * @return self
+         */
         @NotNull
         Builder autoByDefault(boolean autoByDefault);
 
         @NotNull
         Builder depthByDefault(int depthMax);
 
+        /**
+         * @param ignoreExceptions is false by Default
+         * @return self
+         */
         @NotNull
         Builder ignoreExceptions(boolean ignoreExceptions);
+
+        /**
+         * @param overrideDefaultValues is true by Default
+         * @return self
+         */
+        @NotNull
+        Builder overrideDefaultValues(boolean overrideDefaultValues);
 
         @NotNull
         GenFactory build();

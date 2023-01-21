@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
  */
 class CsvExportAsStringTests extends StringExportAssert {
 
+    private static final char DEFAULT_SEPARATOR = ',';
+
     private final GenFactory factory = GenFactory.build();
     private final CsvValidatorChecker validation = new CsvValidatorChecker();
 
@@ -28,13 +30,13 @@ class CsvExportAsStringTests extends StringExportAssert {
         final Dummy dummy = factory.build(Dummy.class);
         final Exporter exporter = CsvExporter.builder().withHeader(true).build();
 
-        final String dummyAsString = exporter.convert(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(2, csvArray.length);
 
-        validation.isSingleDummyValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
+        validation.isSingleDummyValidWithHeader(csvArray, DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -42,13 +44,13 @@ class CsvExportAsStringTests extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final Exporter exporter = CsvExporter.builder().withHeader(true).build();
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeader(csvArray, CsvExporter.DEFAULT_SEPARATOR);
+        validation.isTwoDummiesValidWithHeader(csvArray, DEFAULT_SEPARATOR);
     }
 
     @Test
@@ -58,12 +60,12 @@ class CsvExportAsStringTests extends StringExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final Exporter exporter = CsvExporter.builder().withHeader(true).withCase(strategy).build();
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
 
         final String[] csvArray = dummyAsString.split("\n");
         assertEquals(3, csvArray.length);
 
-        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, CsvExporter.DEFAULT_SEPARATOR, strategy);
+        validation.isTwoDummiesValidWithHeaderAndNameStrategy(csvArray, DEFAULT_SEPARATOR, strategy);
     }
 }

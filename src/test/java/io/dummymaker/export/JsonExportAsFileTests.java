@@ -26,7 +26,7 @@ class JsonExportAsFileTests extends FileExportAssert {
     void exportStreamingToFileMultiBatch() {
         final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 31000);
-        final boolean exported = exporter.export(dummies);
+        final boolean exported = exporter.exportAsFile(dummies);
         assertTrue(exported);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
@@ -43,7 +43,7 @@ class JsonExportAsFileTests extends FileExportAssert {
     void exportStreamingToFileSingleBatch() {
         final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 11000);
-        final boolean exported = exporter.export(dummies);
+        final boolean exported = exporter.exportAsFile(dummies);
         assertTrue(exported);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
@@ -60,7 +60,7 @@ class JsonExportAsFileTests extends FileExportAssert {
     void exportStreamingToFileNoBatch() {
         final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 1000);
-        final boolean exported = exporter.export(dummies);
+        final boolean exported = exporter.exportAsFile(dummies);
         assertTrue(exported);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
@@ -81,7 +81,7 @@ class JsonExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = JsonExporter.builder().withCase(strategy).build();
 
-        final boolean exportResult = exporter.export(dummy);
+        final boolean exportResult = exporter.exportAsFile(dummy);
         assertTrue(exportResult);
 
         final String dummyAsString = readFromFile(filename);

@@ -33,7 +33,7 @@ public class ExportAsStringTests extends Assertions {
     @MethodSource("data")
     @ParameterizedTest
     void exportSingleDummyInvalidExportEntity(Exporter exporter) {
-        final String exportResult = exporter.convert((DummyNoExportFields) null);
+        final String exportResult = exporter.exportAsString((DummyNoExportFields) null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
@@ -41,11 +41,11 @@ public class ExportAsStringTests extends Assertions {
     @MethodSource("data")
     @ParameterizedTest
     void exportDummyListInvalidExportEntity(Exporter exporter) {
-        final String exportResult = exporter.convert(null);
+        final String exportResult = exporter.exportAsString(null);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
 
-        final String exportEmptyResult = exporter.convert(Collections.emptyList());
+        final String exportEmptyResult = exporter.exportAsString(Collections.emptyList());
         assertNotNull(exportEmptyResult);
         assertTrue(exportEmptyResult.isEmpty());
     }
@@ -55,7 +55,7 @@ public class ExportAsStringTests extends Assertions {
     void exportSingleDummyEmptyContainer(Exporter exporter) {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
 
-        final String exportResult = exporter.convert(dummy);
+        final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
@@ -65,7 +65,7 @@ public class ExportAsStringTests extends Assertions {
     void exportDummyListEmptyContainer(Exporter exporter) {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
 
-        final String exportResult = exporter.convert(dummy);
+        final String exportResult = exporter.exportAsString(dummy);
         assertNotNull(exportResult);
         assertTrue(exportResult.isEmpty());
     }
@@ -75,7 +75,7 @@ public class ExportAsStringTests extends Assertions {
     void exportSingleDummy(Exporter exporter, ValidatorChecker validator, int singleSplitLength) {
         final Dummy dummy = factory.build(Dummy.class);
 
-        final String dummyAsString = exporter.convert(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -94,7 +94,7 @@ public class ExportAsStringTests extends Assertions {
     void exportSingleAutoDummy(Exporter exporter, ValidatorChecker validator, int singleSplitLength) {
         final DummyAuto dummy = factory.build(DummyAuto.class);
 
-        final String dummyAsString = exporter.convert(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -113,7 +113,7 @@ public class ExportAsStringTests extends Assertions {
     void exportSingleDummyList(Exporter exporter, ValidatorChecker validator, int singleSplitLength, int singleListSplitLength) {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 
@@ -136,7 +136,7 @@ public class ExportAsStringTests extends Assertions {
                              int listSplitLength) {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
-        final String dummyAsString = exporter.convert(dummies);
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

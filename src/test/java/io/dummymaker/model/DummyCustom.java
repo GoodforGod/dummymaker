@@ -38,7 +38,7 @@ public class DummyCustom {
 
     public static class QueueGenerator implements ParameterizedGenerator<Queue> {
 
-        private final FloatGenerator generator = new FloatGenerator();
+        private final FloatGenerator generator = new FloatGenerator(0, 1);
 
         @Override
         public @Nullable Queue get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {

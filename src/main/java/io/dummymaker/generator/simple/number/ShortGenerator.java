@@ -13,8 +13,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ShortGenerator implements Generator<Short> {
 
+    private final short from;
+    private final short to;
+
+    public ShortGenerator(short from, short to) {
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public @NotNull Short get() {
-        return ((short) RandomUtils.random(Short.MAX_VALUE));
+        return ((short) RandomUtils.random(from, to));
     }
 }

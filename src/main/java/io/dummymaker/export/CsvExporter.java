@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CsvExporter extends AbstractExporter {
 
-    public static final char DEFAULT_SEPARATOR = ',';
+    private static final char DEFAULT_SEPARATOR = ',';
 
     /**
      * CSV format separator for values: value1,value2,value3 ...
@@ -27,12 +27,8 @@ public final class CsvExporter extends AbstractExporter {
      */
     private final boolean hasHeader;
 
-    private CsvExporter(boolean appendFile,
-                        Case fieldCase,
-                        boolean hasHeader,
-                        String separator,
-                        @NotNull Function<String, Writer> writerFunction) {
-        super(appendFile, fieldCase, writerFunction);
+    private CsvExporter(Case fieldCase, boolean hasHeader, String separator, @NotNull Function<String, Writer> writerFunction) {
+        super(fieldCase, writerFunction);
         this.hasHeader = hasHeader;
         this.separator = separator;
     }
@@ -86,10 +82,10 @@ public final class CsvExporter extends AbstractExporter {
         @NotNull
         public CsvExporter build() {
             final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
                     : writerFunction;
 
-            return new CsvExporter(appendFile, fieldCase, hasHeader, separator, writer);
+            return new CsvExporter(fieldCase, hasHeader, separator, writer);
         }
     }
 

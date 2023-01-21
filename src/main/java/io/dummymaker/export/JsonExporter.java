@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class JsonExporter extends AbstractExporter {
 
-    private JsonExporter(boolean appendFile, Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
-        super(appendFile, fieldCase, writerFunction);
+    private JsonExporter(Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
+        super(fieldCase, writerFunction);
     }
 
     public static final class Builder {
@@ -48,10 +48,10 @@ public final class JsonExporter extends AbstractExporter {
         @NotNull
         public JsonExporter build() {
             final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, true)
+                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
                     : writerFunction;
 
-            return new JsonExporter(appendFile, fieldCase, writer);
+            return new JsonExporter(fieldCase, writer);
         }
     }
 

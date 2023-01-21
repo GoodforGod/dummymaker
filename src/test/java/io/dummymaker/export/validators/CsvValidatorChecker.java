@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.dummymaker.cases.Case;
 import io.dummymaker.cases.Cases;
-import io.dummymaker.export.CsvExporter;
 import io.dummymaker.model.DummyTime.Patterns;
 import io.dummymaker.model.DummyTimeFormatter;
 
@@ -15,6 +14,8 @@ import io.dummymaker.model.DummyTimeFormatter;
  * @since 01.09.2017
  */
 public class CsvValidatorChecker implements ValidatorChecker {
+
+    private static final char DEFAULT_SEPARATOR = ',';
 
     @Override
     public void isSingleDummyListValid(String[] dummy) {
@@ -79,8 +80,8 @@ public class CsvValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
-        String[] valueArray1 = dummies[0].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
-        String[] valueArray2 = dummies[1].split(String.valueOf(CsvExporter.DEFAULT_SEPARATOR));
+        String[] valueArray1 = dummies[0].split(String.valueOf(DEFAULT_SEPARATOR));
+        String[] valueArray2 = dummies[1].split(String.valueOf(DEFAULT_SEPARATOR));
 
         // first line values check
         assertEquals(3, valueArray1.length);

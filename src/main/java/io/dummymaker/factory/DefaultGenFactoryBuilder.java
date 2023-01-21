@@ -12,15 +12,16 @@ import org.jetbrains.annotations.NotNull;
 final class DefaultGenFactoryBuilder implements GenFactory.Builder {
 
     private final List<GenRule> rules = new ArrayList<>();
-    private long salt = System.nanoTime();
+    private long seed = System.nanoTime();
     private boolean autoByDefault = true;
     private int depthByDefault = GenDepth.DEFAULT;
     private boolean ignoreErrors = false;
+    private boolean overrideDefaultValues = true;
 
     @NotNull
     @Override
-    public GenFactory.Builder salt(long salt) {
-        this.salt = salt;
+    public GenFactory.Builder seed(long seed) {
+        this.seed = seed;
         return this;
     }
 
@@ -41,6 +42,10 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
     @NotNull
     @Override
     public GenFactory.Builder depthByDefault(int depthByDefault) {
+        if (depthByDefault > GenDepth.MAX || depthByDefault < 1) {
+            throw new IllegalArgumentException("Depth should be from 1 to " + GenDepth.MAX);
+        }
+
         this.depthByDefault = depthByDefault;
         return this;
     }
@@ -52,7 +57,14 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
     }
 
     @Override
+    public GenFactory.@NotNull Builder overrideDefaultValues(boolean overrideDefaultValues) {
+        this.overrideDefaultValues = overrideDefaultValues;
+        return this;
+    }
+
+    @Override
     public @NotNull GenFactory build() {
-        return new DefaultGenFactory(salt, GenRules.of(rules), autoByDefault, depthByDefault, ignoreErrors);
+        return new DefaultGenFactory(seed, GenRules.of(rules), autoByDefault, depthByDefault, ignoreErrors,
+                overrideDefaultValues);
     }
 }

@@ -6,6 +6,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.Range;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -17,7 +18,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenInt {
 
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
     int from() default Integer.MIN_VALUE;
 
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
     int to() default Integer.MAX_VALUE;
 }

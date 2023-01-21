@@ -38,6 +38,12 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
                                      int fixed,
                                      @Nullable Generator<?> keyGenerator,
                                      @Nullable Generator<?> valueGenerator) {
+        if (min < 1) {
+            throw new IllegalArgumentException("Min can't be less than 1, but was: " + min);
+        } else if (max < min) {
+            throw new IllegalArgumentException("Max can't be less than Min, but was " + max + " when Min was " + min);
+        }
+
         this.min = min;
         this.max = max;
         this.fixed = fixed;
@@ -51,7 +57,7 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
             return get();
         }
 
-        final int size = (fixed == -1)
+        final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;
 
@@ -82,7 +88,7 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
 
     @Override
     public Object get() {
-        final int size = (fixed == -1)
+        final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;
 

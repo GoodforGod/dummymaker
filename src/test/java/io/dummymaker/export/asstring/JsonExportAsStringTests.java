@@ -34,7 +34,7 @@ class JsonExportAsStringTests extends StringExportAssert {
         final List<Dummy> dummy = factory.build(Dummy.class, 2);
         final Exporter exporter = JsonExporter.builder().withCase(strategy.value()).build();
 
-        final String dummyAsString = exporter.convert(dummy);
+        final String dummyAsString = exporter.exportAsString(dummy);
         assertNotNull(dummyAsString);
 
         final String[] jsonArray = dummyAsString.split("\n");
