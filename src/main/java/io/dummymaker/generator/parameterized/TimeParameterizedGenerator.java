@@ -2,6 +2,7 @@ package io.dummymaker.generator.parameterized;
 
 import io.dummymaker.factory.GenType;
 import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.time.*;
 import java.sql.Time;
@@ -63,7 +64,7 @@ public final class TimeParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         final Class<?> fieldClass = fieldType.raw();
         if (ZoneOffset.class.isAssignableFrom(fieldClass)) {
             return zonedOffsetGenerator.get();
@@ -106,7 +107,7 @@ public final class TimeParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get() {
+    public Object get(@NotNull Localisation localisation) {
         final OffsetDateTime dateTime = offsetDateTimeGenerator.get();
         return dateTime.format(formatter);
     }

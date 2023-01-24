@@ -17,4 +17,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface GenPhone {
 
+    /**
+     * @return if true return phone number in format: +79876543210
+     */
+    boolean formatted() default false;
 }

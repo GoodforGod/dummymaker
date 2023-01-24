@@ -5,7 +5,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.LoginBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,24 +16,25 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 05.06.2017
  */
-public final class LoginGenerator implements Generator<String> {
+public final class LoginGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("nick(name)?|login", CASE_INSENSITIVE);
     private static final Bundle BUNDLE = new LoginBundle();
 
     @Override
-    public @NotNull String get() {
-        final String first = BUNDLE.random();
+    public @NotNull String get(@NotNull Localisation localisation) {
+        final String first = BUNDLE.random(localisation);
         final boolean tuple = current().nextBoolean();
         if (!tuple)
             return first;
 
-        final String second = BUNDLE.random();
+        final String second = BUNDLE.random(localisation);
         final boolean revert = current().nextBoolean();
 
         final String separator = current().nextBoolean()
                 ? "_"
                 : "";
+
         return (revert)
                 ? second + separator + first
                 : first + separator + second;

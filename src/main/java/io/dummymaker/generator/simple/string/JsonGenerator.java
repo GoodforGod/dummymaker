@@ -3,6 +3,8 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class JsonGenerator implements Generator<String> {
+public final class JsonGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("jsonb?", CASE_INSENSITIVE);
 
-    private final Generator<String> idGenerator = new IdGenerator();
-    private final Generator<String> nickGenerator = new LoginGenerator();
-    private final Generator<String> fieldGenerator = new NounGenerator();
+    private static final Generator<String> ID_GENERATOR = new IdGenerator();
+    private static final LocalizedGenerator<String> NICK_GENERATOR = new LoginGenerator();
+    private static final LocalizedGenerator<String> FIELD_GENERATOR = new NounGenerator();
 
     @Override
-    public @NotNull String get() {
+    public @NotNull String get(@NotNull Localisation localisation) {
         final StringBuilder builder = new StringBuilder();
 
         final int depth = RandomUtils.random(1, 6);
@@ -35,10 +37,10 @@ public final class JsonGenerator implements Generator<String> {
             final int lines = RandomUtils.random(1, 5);
             final Set<String> usedFieldNames = new HashSet<>();
             for (int j = 0; j < lines; j++) {
-                final String fieldName = generateFieldName(usedFieldNames);
-                final String fieldValue = nickGenerator.get()
+                final String fieldName = generateFieldName(usedFieldNames, localisation);
+                final String fieldValue = NICK_GENERATOR.get(localisation)
                         + "-"
-                        + idGenerator.get();
+                        + ID_GENERATOR.get();
 
                 builder.append("\"")
                         .append(fieldName)
@@ -54,7 +56,7 @@ public final class JsonGenerator implements Generator<String> {
                     builder.append(",");
 
                 if (lastLine && !lastDepth) {
-                    final String objectName = generateFieldName(usedFieldNames);
+                    final String objectName = generateFieldName(usedFieldNames, localisation);
                     builder.append(",")
                             .append("\"")
                             .append(objectName)
@@ -70,10 +72,10 @@ public final class JsonGenerator implements Generator<String> {
         return builder.toString();
     }
 
-    private String generateFieldName(Set<String> used) {
+    private String generateFieldName(Set<String> used, Localisation localisation) {
         String fieldName;
         while (true) {
-            fieldName = fieldGenerator.get();
+            fieldName = FIELD_GENERATOR.get(localisation);
             if (!used.contains(fieldName)) {
                 used.add(fieldName);
                 break;

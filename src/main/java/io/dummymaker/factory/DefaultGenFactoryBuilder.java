@@ -1,6 +1,7 @@
 package io.dummymaker.factory;
 
 import io.dummymaker.annotation.GenDepth;
+import io.dummymaker.generator.Localisation;
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
     private int depthByDefault = GenDepth.DEFAULT;
     private boolean ignoreErrors = false;
     private boolean overrideDefaultValues = true;
+    private Localisation localisation = Localisation.DEFAULT;
 
     @NotNull
     @Override
@@ -62,9 +64,15 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
         return this;
     }
 
+    @NotNull
+    public DefaultGenFactoryBuilder localisation(@NotNull Localisation localisation) {
+        this.localisation = localisation;
+        return this;
+    }
+
     @Override
     public @NotNull GenFactory build() {
         return new DefaultGenFactory(seed, GenRules.of(rules), autoByDefault, depthByDefault, ignoreErrors,
-                overrideDefaultValues);
+                overrideDefaultValues, localisation);
     }
 }

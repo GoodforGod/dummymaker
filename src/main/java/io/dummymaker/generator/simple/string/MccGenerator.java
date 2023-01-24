@@ -5,6 +5,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.MerchantBundle;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
 
 /**
@@ -20,7 +21,7 @@ public final class MccGenerator implements Generator<String> {
 
     @Override
     public String get() {
-        return BUNDLE.random();
+        return BUNDLE.random(Localisation.ENGLISH);
     }
 
     @Override

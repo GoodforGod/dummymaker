@@ -3,6 +3,7 @@ package io.dummymaker.generator.parameterized;
 import io.dummymaker.factory.GenType;
 import io.dummymaker.factory.GenTypeBuilder;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
@@ -61,7 +62,7 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         if (!fieldType.raw().getTypeName().endsWith("[][]")) {
             return null;
         }
@@ -73,7 +74,7 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
     }
 
     @Override
-    public Object get() {
+    public Object get(@NotNull Localisation localisation) {
         return getCollector(Object.class, DEFAULT_GENERATOR);
     }
 

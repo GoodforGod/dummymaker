@@ -6,13 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Complex Generator used by ComplexGen annotation to populate fields When annotation have
- * attributes or value generates for multiple field types
+ * Complex Generator is used when have attributes or value generates for multiple field types
  *
  * @author Anton Kurako (GoodforGod)
  * @since 19.11.2022
  */
-public interface ParameterizedGenerator<T> extends Generator<T> {
+public interface ParameterizedGenerator<T> extends LocalizedGenerator<T> {
 
     /**
      * @param fieldType   field type extension
@@ -20,5 +19,5 @@ public interface ParameterizedGenerator<T> extends Generator<T> {
      * @return generated value
      */
     @Nullable
-    T get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder);
+    T get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder);
 }

@@ -4,7 +4,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.ProductBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.7.2020
  */
-public final class ProductGenerator implements Generator<String> {
+public final class ProductGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern
             .compile("association|administrative|academy?|university|org(anization)?|product|good|supply|topic",
@@ -23,8 +24,8 @@ public final class ProductGenerator implements Generator<String> {
     private static final Bundle BUNDLE = new ProductBundle();
 
     @Override
-    public String get() {
-        return BUNDLE.random();
+    public String get(@NotNull Localisation localisation) {
+        return BUNDLE.random(localisation);
     }
 
     @Override

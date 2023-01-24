@@ -7,6 +7,7 @@ import io.dummymaker.bundle.DomainBundle;
 import io.dummymaker.bundle.EmailServicesBundle;
 import io.dummymaker.bundle.LoginBundle;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,10 +26,10 @@ public final class EmailGenerator implements Generator<String> {
 
     @Override
     public @NotNull String get() {
-        return LOGIN_BUNDLE.random()
+        return LOGIN_BUNDLE.random(Localisation.ENGLISH)
                 + "@"
-                + EMAIL_BUNDLE.random()
-                + DOMAIN_BUNDLE.random();
+                + EMAIL_BUNDLE.random(Localisation.ENGLISH)
+                + DOMAIN_BUNDLE.random(Localisation.ENGLISH);
     }
 
     @Override

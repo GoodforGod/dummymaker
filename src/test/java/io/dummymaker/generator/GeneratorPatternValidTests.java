@@ -79,7 +79,7 @@ class GeneratorPatternValidTests {
                 { new CurrencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
                 { new FrequencyGenerator(), String.class, compile("[0-9a-zA-Z ]+") },
                 { new DocumentGenerator(), String.class, compile("[0-9a-zA-Z]{6,}") },
-                { new PhoneGenerator(), String.class, compile("[0-9]\\([0-9]{1,3}\\)[0-9]+") },
+                { new PhoneGenerator(true), String.class, compile("\\+[0-9\\-]+") },
                 { new StringGenerator(6, 12), String.class, compile("[0-9a-zA-Z]+") },
                 { new VersionGenerator(), String.class, compile("[0-9]\\.[0-9]{1,2}\\.[0-9]{1,2}(-SNAPSHOT)?") },
                 { new TagGenerator(), String.class, compile("#[0-9a-zA-Z]+") },

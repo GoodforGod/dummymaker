@@ -2,6 +2,7 @@ package io.dummymaker.model;
 
 import io.dummymaker.factory.GenType;
 import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.number.FloatGenerator;
 import java.util.Queue;
@@ -41,12 +42,13 @@ public class DummyCustom {
         private final FloatGenerator generator = new FloatGenerator(0, 1);
 
         @Override
-        public @Nullable Queue get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+        public @Nullable Queue
+                get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
             return get();
         }
 
         @Override
-        public Queue get() {
+        public Queue get(@NotNull Localisation localisation) {
             final BlockingQueue<String> queue = new ArrayBlockingQueue<>(4);
             queue.add(String.valueOf(generator.get()));
             queue.add(String.valueOf(generator.get()));

@@ -5,7 +5,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.FemaleNameBundle;
 import io.dummymaker.bundle.MaleNameBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class NameGenerator implements Generator<String> {
+public final class NameGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
 
@@ -24,10 +25,10 @@ public final class NameGenerator implements Generator<String> {
     private static final Bundle FEMALE_BUNDLE = new FemaleNameBundle();
 
     @Override
-    public @NotNull String get() {
+    public @NotNull String get(@NotNull Localisation localisation) {
         return ThreadLocalRandom.current().nextBoolean()
-                ? MALE_BUNDLE.random()
-                : FEMALE_BUNDLE.random();
+                ? MALE_BUNDLE.random(localisation)
+                : FEMALE_BUNDLE.random(localisation);
     }
 
     @Override

@@ -20,14 +20,16 @@ public final class VersionGenerator implements Generator<String> {
 
     @Override
     public @NotNull String get() {
+        final String suffix = ThreadLocalRandom.current().nextBoolean()
+                ? "-SNAPSHOT"
+                : "";
+
         return RandomUtils.random(1, 9)
                 + "."
                 + RandomUtils.random(1, 99)
                 + "."
                 + RandomUtils.random(1, 99)
-                + (ThreadLocalRandom.current().nextBoolean()
-                        ? "-SNAPSHOT"
-                        : "");
+                + suffix;
     }
 
     @Override

@@ -4,7 +4,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.NounBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class NounGenerator implements Generator<String> {
+public final class NounGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile(
             "record|commission|education|subj(ect)?|program|word|noun|field|data(base)?|schema|collection|class",
@@ -23,8 +24,8 @@ public final class NounGenerator implements Generator<String> {
     private static final Bundle BUNDLE = new NounBundle();
 
     @Override
-    public @NotNull String get() {
-        return BUNDLE.random();
+    public @NotNull String get(@NotNull Localisation localisation) {
+        return BUNDLE.random(localisation);
     }
 
     @Override

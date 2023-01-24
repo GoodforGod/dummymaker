@@ -2,6 +2,7 @@ package io.dummymaker.generator.parameterized;
 
 import io.dummymaker.factory.GenType;
 import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.lang.reflect.Field;
@@ -28,7 +29,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         final Predicate<String> predicate;
         if (!only.isEmpty()) {
             predicate = only::contains;
@@ -52,7 +53,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get() {
+    public Object get(@NotNull Localisation localisation) {
         return null;
     }
 }

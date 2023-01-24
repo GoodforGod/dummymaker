@@ -1,5 +1,6 @@
 package io.dummymaker.bundle;
 
+import io.dummymaker.generator.Localisation;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.jupiter.api.Assertions;
@@ -36,14 +37,9 @@ class BundleImplTests extends Assertions {
 
     @MethodSource("data")
     @ParameterizedTest
-    void testIndexOutOfBound(Bundle bundle) {
-        int integer = -1;
-        assertNotNull(bundle.get(integer));
-    }
-
-    @MethodSource("data")
-    @ParameterizedTest
     void bundlePresentRandomGet(Bundle bundle) {
-        assertNotNull(bundle.random());
+        for (Localisation localisation : Localisation.values()) {
+            assertNotNull(bundle.random(localisation));
+        }
     }
 }

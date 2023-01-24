@@ -4,7 +4,6 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates photo as base64
@@ -24,7 +23,7 @@ public final class PhotoGenerator implements Generator<String> {
     }
 
     @Override
-    public @Nullable Pattern pattern() {
+    public Pattern pattern() {
         return PATTERN;
     }
 }

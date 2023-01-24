@@ -4,7 +4,8 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.CityBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod) (Anton Kurako)
  * @since 07.06.2017
  */
-public final class CityGenerator implements Generator<String> {
+public final class CityGenerator implements LocalizedGenerator<String> {
 
     private static final Bundle BUNDLE = new CityBundle();
     private static final Pattern PATTERN = Pattern.compile("city|town|village|settlement", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String get() {
-        return BUNDLE.random();
+    public @NotNull String get(@NotNull Localisation localisation) {
+        return BUNDLE.random(localisation);
     }
 
     @Override

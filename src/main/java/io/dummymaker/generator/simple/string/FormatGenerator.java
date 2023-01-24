@@ -5,6 +5,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.FormatBundle;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ public final class FormatGenerator implements Generator<String> {
 
     @Override
     public @NotNull String get() {
-        return FORMATS.random();
+        return FORMATS.random(Localisation.ENGLISH);
     }
 
     @Override

@@ -5,6 +5,8 @@ import static io.dummymaker.util.CastUtils.castObject;
 import io.dummymaker.error.ClassConstructorException;
 import io.dummymaker.error.GenException;
 import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
@@ -30,15 +32,18 @@ final class DefaultGenFactory implements GenFactory {
     private final GeneratorSupplier generatorSupplier;
     private final boolean ignoreErrors;
     private final boolean overrideDefaultValues;
+    private final Localisation localisation;
 
     DefaultGenFactory(long seed,
                       GenRules rules,
                       boolean isAutoByDefault,
                       int depthByDefault,
                       boolean ignoreErrors,
-                      boolean overrideDefaultValues) {
+                      boolean overrideDefaultValues,
+                      Localisation localisation) {
         this.ignoreErrors = ignoreErrors;
         this.overrideDefaultValues = overrideDefaultValues;
+        this.localisation = localisation;
         this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(seed));
         this.zeroArgConstructor = new ZeroArgClassConstructor();
         this.fullArgConstructor = new FullArgClassConstructor(generatorSupplier);
@@ -134,11 +139,12 @@ final class DefaultGenFactory implements GenFactory {
         if (generator instanceof EmbeddedGenerator) {
             generated = generateEmbeddedObject(fieldMeta, context);
         } else if (generator instanceof SequenceParameterizedGenerator) {
-            generated = CastUtils.castToNumber(generator.get(), field.getType());
+            final Object sequence = generator.get();
+            generated = CastUtils.castToNumber(sequence, field.getType());
         } else if (generator instanceof ParameterizedGenerator) {
             // If complexGen can generate embedded objects
             // And not handling it like AbstractComplexGenerator, you are probably StackOverFlowed
-            generated = ((ParameterizedGenerator) generator).get(fieldMeta.type(), new GenTypeBuilder() {
+            generated = ((ParameterizedGenerator) generator).get(localisation, fieldMeta.type(), new GenTypeBuilder() {
 
                 @Override
                 public <T> @Nullable T build(@NotNull Class<T> type) {
@@ -156,6 +162,8 @@ final class DefaultGenFactory implements GenFactory {
                     }
                 }
             });
+        } else if (generator instanceof LocalizedGenerator) {
+            generated = ((LocalizedGenerator<?>) generator).get(localisation);
         } else {
             generated = generator.get();
         }

@@ -2,7 +2,8 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import io.dummymaker.util.CollectionUtils;
 import java.util.Arrays;
 import java.util.List;
@@ -15,16 +16,22 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.12.2021
  */
-public final class StatusGenerator implements Generator<String> {
+public final class StatusGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("status|type", CASE_INSENSITIVE);
 
-    private static final List<String> TYPES = Arrays.asList("success", "failed", "rejected", "invalid");
+    private static final List<String> TYPES_RUSSIAN = Arrays.asList("успех", "ошибка", "отклоненный", "неверно");
+    private static final List<String> TYPES_ENGLISH = Arrays.asList("success", "failed", "rejected", "invalid");
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public @NotNull String get() {
-        return CollectionUtils.random(TYPES);
+    public @NotNull String get(@NotNull Localisation localisation) {
+        switch (localisation) {
+            case RUSSIAN:
+                return CollectionUtils.random(TYPES_RUSSIAN);
+            default:
+                return CollectionUtils.random(TYPES_ENGLISH);
+        }
     }
 
     @Override

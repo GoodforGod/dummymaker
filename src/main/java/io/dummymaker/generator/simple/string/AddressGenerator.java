@@ -6,7 +6,8 @@ import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.CityBundle;
 import io.dummymaker.bundle.DistrictBundle;
 import io.dummymaker.bundle.StreetBundle;
-import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.LocalizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * @see AddressGenerator
  * @since 16.07.2019
  */
-public final class AddressGenerator implements Generator<String> {
+public final class AddressGenerator implements LocalizedGenerator<String> {
 
     private static final Pattern PATTERN = Pattern.compile("addr(ess)?", CASE_INSENSITIVE);
 
@@ -27,10 +28,10 @@ public final class AddressGenerator implements Generator<String> {
     private static final Bundle CITY_BUNDLE = new CityBundle();
 
     @Override
-    public @NotNull String get() {
-        return CITY_BUNDLE.random()
-                + ", " + DISTRICT_BUNDLE.random()
-                + ", " + STREET_BUNDLE.random()
+    public @NotNull String get(@NotNull Localisation localisation) {
+        return CITY_BUNDLE.random(localisation)
+                + ", " + DISTRICT_BUNDLE.random(localisation)
+                + ", " + STREET_BUNDLE.random(localisation)
                 + " " + RandomUtils.random(20);
     }
 

@@ -55,7 +55,7 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
                 new HexDataGenerator(), new HexNumberGenerator(), new HouseGenerator(), new IdBigGenerator(), new IdGenerator(),
                 new JobGenerator(), new LevelGenerator(), new LoginGenerator(), new MccGenerator(), new MerchantGenerator(),
                 new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
-                new PhoneGenerator(),
+                new PhoneGenerator(false),
                 new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(), new StatusGenerator(), new StreetGenerator(),
                 new StringGenerator(6, 12), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(),
                 new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));

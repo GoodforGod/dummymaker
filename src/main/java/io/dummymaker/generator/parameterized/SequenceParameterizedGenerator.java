@@ -3,6 +3,7 @@ package io.dummymaker.generator.parameterized;
 import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.factory.GenType;
 import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import java.util.concurrent.atomic.AtomicLong;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +24,12 @@ public final class SequenceParameterizedGenerator implements ParameterizedGenera
     }
 
     @Override
-    public Long get(@NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+    public Long get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
         return get();
     }
 
     @Override
-    public @NotNull Long get() {
+    public @NotNull Long get(@NotNull Localisation localisation) {
         return counter.getAndIncrement();
     }
 }
