@@ -11,19 +11,16 @@ import java.util.List;
  */
 public final class FormatBundle extends AbstractBundle {
 
-    private static final List<String> BUNDLE = Arrays.asList(
-            "json",
-            "avro",
-            "text",
-            "xml",
-            "protobuf",
-            "binary",
-            "yaml",
-            "csv",
-            "html",
-            "css");
+    private static final List<String> BUNDLE_ENGLISH = Arrays.asList(
+            "json", "avro", "text", "xml", "protobuf", "binary", "yaml", "csv", "html", "css");
 
-    public FormatBundle() {
-        super(BUNDLE);
+    @Override
+    List<String> getEnglish() {
+        return BUNDLE_ENGLISH;
+    }
+
+    @Override
+    List<String> getRussian() {
+        return BUNDLE_ENGLISH;
     }
 }

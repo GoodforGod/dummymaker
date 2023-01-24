@@ -9,16 +9,19 @@ import java.util.List;
  */
 public final class FrequencyBundle extends AbstractBundle {
 
-    private static final List<String> BUNDLE = Arrays.asList(
-            "SECONDLY",
-            "MINUTELY",
-            "HOURLY",
-            "DAILY",
-            "WEEKLY",
-            "MONTHLY",
-            "YEARLY");
+    private static final List<String> BUNDLE_ENGLISH = Arrays.asList(
+            "Secondly", "Minutely", "Hourly", "Daily", "Weekly", "Monthly", "Yearly");
 
-    public FrequencyBundle() {
-        super(BUNDLE);
+    private static final List<String> BUNDLE_RUSSIAN = Arrays.asList(
+            "Ежесекундно", "Ежеминутно", "Ежечасно", "Ежедневно", "Еженедельно", "Ежемесячно", "Каждый год");
+
+    @Override
+    List<String> getEnglish() {
+        return BUNDLE_ENGLISH;
+    }
+
+    @Override
+    List<String> getRussian() {
+        return BUNDLE_RUSSIAN;
     }
 }

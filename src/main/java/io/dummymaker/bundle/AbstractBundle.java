@@ -1,5 +1,6 @@
 package io.dummymaker.bundle;
 
+import io.dummymaker.generator.Localisation;
 import io.dummymaker.util.CollectionUtils;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -13,28 +14,22 @@ import org.jetbrains.annotations.NotNull;
  */
 abstract class AbstractBundle implements Bundle {
 
-    private final List<String> data;
+    private final List<String> english = getEnglish();
+    private final List<String> russian = getRussian();
 
-    AbstractBundle(List<String> data) {
-        this.data = data;
-    }
+    abstract List<String> getEnglish();
 
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public @NotNull String get(int index) {
-        return (index > -1 && index < data.size() - 1)
-                ? data.get(index)
-                : CollectionUtils.random(data);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public @NotNull String random() {
-        return CollectionUtils.random(data);
-    }
+    abstract List<String> getRussian();
 
     @Override
-    public int size() {
-        return data.size();
+    public @NotNull String random(@NotNull Localisation localisation) {
+        switch (localisation) {
+            case RUSSIAN:
+                return CollectionUtils.random(russian);
+            case ENGLISH:
+                return CollectionUtils.random(english);
+            default:
+                throw new IllegalStateException("Unknown localisation: " + localisation);
+        }
     }
 }

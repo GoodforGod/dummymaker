@@ -11,23 +11,17 @@ import java.util.List;
  */
 public final class EmailServicesBundle extends AbstractBundle {
 
-    private static final List<String> BUNDLE = Arrays.asList(
-            "zoho",
-            "yandex",
-            "mail",
-            "gmail",
-            "outlook",
-            "proton",
-            "aim",
-            "icloud",
-            "yahoo",
-            "custom",
-            "aol",
-            "gmx",
-            "hotmail",
+    private static final List<String> BUNDLE_ENGLISH = Arrays.asList(
+            "zoho", "yandex", "mail", "gmail", "outlook", "proton", "aim", "icloud", "yahoo", "custom", "aol", "gmx", "hotmail",
             "inbox");
 
-    public EmailServicesBundle() {
-        super(BUNDLE);
+    @Override
+    List<String> getEnglish() {
+        return BUNDLE_ENGLISH;
+    }
+
+    @Override
+    List<String> getRussian() {
+        return BUNDLE_ENGLISH;
     }
 }
