@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface LocalizedGenerator<T> extends Generator<T> {
 
+    /**
+     * @param localisation to use when generation value
+     * @return newly generated value
+     */
     T get(@NotNull Localisation localisation);
 
     @Override

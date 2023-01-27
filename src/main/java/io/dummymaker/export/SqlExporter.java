@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SqlExporter extends AbstractExporter {
 
+    private static final Pattern ID_PATTERN = Pattern.compile("id|[gu]?uid");
+
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
      */
@@ -48,19 +50,12 @@ public final class SqlExporter extends AbstractExporter {
 
     public static final class Builder {
 
-        private boolean appendFile = false;
         private Case fieldCase = Cases.DEFAULT.value();
         private Function<String, Writer> writerFunction;
         private int batchSize = 999;
         private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
 
         private Builder() {}
-
-        @NotNull
-        public Builder appendFile(boolean appendFile) {
-            this.appendFile = appendFile;
-            return this;
-        }
 
         @NotNull
         public Builder withCase(@NotNull Case fieldCase) {
@@ -98,11 +93,7 @@ public final class SqlExporter extends AbstractExporter {
 
         @NotNull
         public SqlExporter build() {
-            final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
-                    : writerFunction;
-
-            return new SqlExporter(fieldCase, writer, batchSize, dataTypes);
+            return new SqlExporter(fieldCase, writerFunction, batchSize, dataTypes);
         }
 
         private static Map<Class<?>, String> buildDefaultDataTypeMap() {
@@ -152,17 +143,6 @@ public final class SqlExporter extends AbstractExporter {
     @Override
     protected @NotNull String getExtension() {
         return "sql";
-    }
-
-    /**
-     * @param dataTypes map with user custom types for 'dataTypeMap'
-     * @return exporter
-     */
-    public SqlExporter withTypes(Map<Class<?>, String> dataTypes) {
-        if (CollectionUtils.isNotEmpty(dataTypes))
-            this.dataTypes.putAll(dataTypes);
-
-        return this;
     }
 
     private String wrap(String value) {
@@ -228,16 +208,12 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     private String getPrimaryField(Collection<ExportField> containers) {
-        final Pattern pattern = Pattern.compile("id|[gu]?uid");
-        if (containers.isEmpty())
-            return "";
-
         return containers.stream()
                 .filter(ExportField::isSequential)
                 .map(ExportField::getName)
                 .findFirst()
                 .orElseGet(() -> containers.stream()
-                        .filter(c -> pattern.matcher(c.getName()).matches())
+                        .filter(c -> ID_PATTERN.matcher(c.getName()).matches())
                         .map(ExportField::getName)
                         .findFirst()
                         .orElseGet(() -> containers.iterator().next().getName()));
@@ -345,20 +321,21 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    public <T> boolean exportAsFile(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
-            return false;
+    public <T> void exportAsFile(Collection<T> collection) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return;
+        }
 
         final T t = collection.iterator().next();
         final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
-            return false;
+        if (containers.isEmpty()) {
+            return;
+        }
 
         final Writer writer = getWriter(t.getClass().getSimpleName());
 
         // Create Table Query
-        if (!writer.write(head(t, containers, true)))
-            return false;
+        writer.write(head(t, containers, true));
 
         int i = batchSize;
         StringBuilder builder = new StringBuilder();
@@ -375,9 +352,7 @@ public final class SqlExporter extends AbstractExporter {
             final boolean hasNext = iterator.hasNext();
             if (i <= 0 || !hasNext) {
                 builder.append(";\n");
-                if (!writer.write(builder.toString()))
-                    return false;
-
+                writer.write(builder.toString());
                 builder = new StringBuilder();
             } else {
                 builder.append(",\n");
@@ -386,18 +361,20 @@ public final class SqlExporter extends AbstractExporter {
             i = nextInsertValue(i);
         }
 
-        return writer.write(builder.toString());
+        writer.write(builder.toString());
     }
 
     @Override
     public @NotNull <T> String exportAsString(@NotNull Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection)) {
             return "";
+        }
 
         final T t = collection.iterator().next();
         final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
+        if (containers.isEmpty()) {
             return "";
+        }
 
         // Create Table Query
         final StringBuilder builder = new StringBuilder(head(t, containers, true));

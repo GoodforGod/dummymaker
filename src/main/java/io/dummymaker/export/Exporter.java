@@ -20,7 +20,7 @@ public interface Exporter {
      * @param <T>   object type
      * @return true if export successful
      */
-    <T> boolean exportAsFile(@Nullable T value);
+    <T> void exportAsFile(@Nullable T value);
 
     /**
      * Allow exporting collection of objects
@@ -29,7 +29,7 @@ public interface Exporter {
      * @param <T>        object type
      * @return true if export successful
      */
-    <T> boolean exportAsFile(@Nullable Collection<T> collection);
+    <T> void exportAsFile(@Nullable Collection<T> collection);
 
     /**
      * Allow exporting single object as a single string value

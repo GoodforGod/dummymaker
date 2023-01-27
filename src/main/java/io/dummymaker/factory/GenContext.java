@@ -23,7 +23,16 @@ final class GenContext {
                 .filter(n -> n.value().type().raw().equals(target))
                 .findFirst()
                 .orElseGet(() -> context.graph().nodes().stream()
-                        .filter(n -> n.value().type().flatten().stream().anyMatch(type -> type.plain().equals(target)))
+                        .filter(n -> n.value().type().flatten().stream().anyMatch(type -> {
+                            Class<?> plain = type.raw();
+                            if (plain.getTypeName().endsWith("[][]")) {
+                                plain = plain.getComponentType().getComponentType();
+                            } else if (plain.getTypeName().endsWith("[]")) {
+                                plain = plain.getComponentType();
+                            }
+
+                            return plain.equals(target);
+                        }))
                         .findFirst()
                         .orElse(null));
 

@@ -27,7 +27,7 @@ public final class CsvExporter extends AbstractExporter {
      */
     private final boolean hasHeader;
 
-    private CsvExporter(Case fieldCase, boolean hasHeader, String separator, @NotNull Function<String, Writer> writerFunction) {
+    private CsvExporter(Case fieldCase, Function<String, Writer> writerFunction, boolean hasHeader, String separator) {
         super(fieldCase, writerFunction);
         this.hasHeader = hasHeader;
         this.separator = separator;
@@ -35,19 +35,12 @@ public final class CsvExporter extends AbstractExporter {
 
     public static final class Builder {
 
-        private boolean appendFile = false;
         private Case fieldCase = Cases.DEFAULT.value();
         private boolean hasHeader = false;
         private String separator = String.valueOf(DEFAULT_SEPARATOR);
-        private Function<String, Writer> writerFunction;
+        private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
 
         private Builder() {}
-
-        @NotNull
-        public Builder appendFile(boolean appendFile) {
-            this.appendFile = appendFile;
-            return this;
-        }
 
         @NotNull
         public Builder withCase(@NotNull Case fieldCase) {
@@ -81,11 +74,7 @@ public final class CsvExporter extends AbstractExporter {
 
         @NotNull
         public CsvExporter build() {
-            final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
-                    : writerFunction;
-
-            return new CsvExporter(fieldCase, hasHeader, separator, writer);
+            return new CsvExporter(fieldCase, writerFunction, hasHeader, separator);
         }
     }
 

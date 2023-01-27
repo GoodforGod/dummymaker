@@ -23,7 +23,7 @@ public final class XmlExporter extends AbstractExporter {
     private final Function<String, String> listTagSuffix;
 
     private XmlExporter(Case fieldCase,
-                        @NotNull Function<String, Writer> writerFunction,
+                        Function<String, Writer> writerFunction,
                         Function<String, String> listTagSuffix) {
         super(fieldCase, writerFunction);
         this.listTagSuffix = listTagSuffix;
@@ -31,31 +31,36 @@ public final class XmlExporter extends AbstractExporter {
 
     public static final class Builder {
 
-        private boolean appendFile = false;
         private Case fieldCase = Cases.DEFAULT.value();
         private Function<String, Writer> writerFunction;
         private Function<String, String> listTagSuffix = name -> name + DEFAULT_TAG_LIST_SUFFIX;
 
         private Builder() {}
 
-        @NotNull
-        public Builder appendFile(boolean appendFile) {
-            this.appendFile = appendFile;
-            return this;
-        }
-
+        /**
+         * @param fieldCase case that is applied to field names
+         * @return self
+         */
         @NotNull
         public Builder withCase(@NotNull Case fieldCase) {
             this.fieldCase = fieldCase;
             return this;
         }
 
+        /**
+         * @param writerFunction that receive File Name and return {@link Writer}
+         * @return self
+         */
         @NotNull
         public Builder withWriter(@NotNull Function<String, Writer> writerFunction) {
             this.writerFunction = writerFunction;
             return this;
         }
 
+        /**
+         * @param listTagSuffix that receive Type Name and return its associated List Tag
+         * @return self
+         */
         @NotNull
         public Builder withListSuffix(@NotNull Function<String, String> listTagSuffix) {
             this.listTagSuffix = listTagSuffix;
@@ -64,11 +69,7 @@ public final class XmlExporter extends AbstractExporter {
 
         @NotNull
         public XmlExporter build() {
-            final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
-                    : writerFunction;
-
-            return new XmlExporter(fieldCase, writer, listTagSuffix);
+            return new XmlExporter(fieldCase, writerFunction, listTagSuffix);
         }
     }
 

@@ -87,7 +87,14 @@ final class GenGraphBuilder {
      */
     private GenPayload buildPayload(GenType target, @Nullable GenPayload parentPayload) {
         // First check rules for auto depth then check annotation if present
-        final Class<?> targetType = target.plain();
+        Class<?> plain = target.raw();
+        if (plain.getTypeName().endsWith("[][]")) {
+            plain = plain.getComponentType().getComponentType();
+        } else if (plain.getTypeName().endsWith("[]")) {
+            plain = plain.getComponentType();
+        }
+
+        final Class<?> targetType = plain;
         final Optional<GenRule> rule = rules.find(targetType);
         final int depth = rule.flatMap(GenRule::getDepth)
                 .orElseGet(() -> Arrays.stream(targetType.getDeclaredAnnotations())

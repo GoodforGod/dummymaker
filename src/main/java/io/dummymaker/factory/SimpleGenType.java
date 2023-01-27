@@ -45,8 +45,7 @@ final class SimpleGenType implements GenType {
         return ofType(field.getGenericType());
     }
 
-    @Override
-    public @NotNull Class<?> plain() {
+    private Class<?> plain() {
         final Class<?> raw = raw();
         if (raw.getTypeName().endsWith("[][]")) {
             return raw.getComponentType().getComponentType();

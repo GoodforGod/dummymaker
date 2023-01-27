@@ -11,9 +11,8 @@ public interface Writer {
 
     /**
      * Writes string and add newline symbol to the end
-     *
+     * 
      * @param value string to write
-     * @return indicates operation success
      */
-    boolean write(String value);
+    void write(String value);
 }

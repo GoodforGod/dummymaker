@@ -14,6 +14,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Generator<T> extends Supplier<T>, Ordered {
 
+    /**
+     * @return pattern used to associated generator by Field Name when choosing generator
+     */
     @Nullable
     default Pattern pattern() {
         return null;

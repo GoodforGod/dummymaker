@@ -15,23 +15,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class JsonExporter extends AbstractExporter {
 
-    private JsonExporter(Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
+    private JsonExporter(Case fieldCase, Function<String, Writer> writerFunction) {
         super(fieldCase, writerFunction);
     }
 
     public static final class Builder {
 
-        private boolean appendFile = false;
         private Case fieldCase = Cases.DEFAULT.value();
         private Function<String, Writer> writerFunction;
 
         private Builder() {}
-
-        @NotNull
-        public Builder appendFile(boolean appendFile) {
-            this.appendFile = appendFile;
-            return this;
-        }
 
         @NotNull
         public Builder withCase(@NotNull Case fieldCase) {
@@ -47,11 +40,7 @@ public final class JsonExporter extends AbstractExporter {
 
         @NotNull
         public JsonExporter build() {
-            final Function<String, Writer> writer = (writerFunction == null)
-                    ? fileName -> new DefaultFileWriter(fileName, appendFile)
-                    : writerFunction;
-
-            return new JsonExporter(fieldCase, writer);
+            return new JsonExporter(fieldCase, writerFunction);
         }
     }
 

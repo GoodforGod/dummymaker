@@ -32,7 +32,7 @@ abstract class AbstractExporter implements Exporter {
     protected final Case fieldCase;
     protected final Function<String, Writer> writerFunction;
 
-    AbstractExporter(Case fieldCase, @NotNull Function<String, Writer> writerFunction) {
+    AbstractExporter(Case fieldCase, Function<String, Writer> writerFunction) {
         this.fieldCase = fieldCase;
         this.writerFunction = writerFunction;
     }
@@ -271,48 +271,54 @@ abstract class AbstractExporter implements Exporter {
     }
 
     @Override
-    public <T> boolean exportAsFile(T value) {
-        if (value == null)
-            return false;
+    public <T> void exportAsFile(T value) {
+        if (value == null) {
+            return;
+        }
 
         final Collection<ExportField> containers = scan(value.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
-            return false;
+        if (containers.isEmpty()) {
+            return;
+        }
 
         final Writer writer = getWriter(value.getClass().getSimpleName());
 
         final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
         final String head = head(value, containers, false);
         final String tail = tail(value, containers, false);
-        return writer.write(head + data + tail);
+        writer.write(head + data + tail);
     }
 
     @Override
-    public <T> boolean exportAsFile(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
-            return false;
+    public <T> void exportAsFile(Collection<T> collection) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return;
+        }
 
         final T t = collection.iterator().next();
         final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
-            return false;
+        if (containers.isEmpty()) {
+            return;
+        }
 
         final Writer writer = getWriter(t.getClass().getSimpleName());
 
         final String data = convertData(collection, containers);
         final String head = head(t, containers, true);
         final String tail = tail(t, containers, true);
-        return writer.write(head + data + tail);
+        writer.write(head + data + tail);
     }
 
     @Override
     public <T> @NotNull String exportAsString(T value) {
-        if (value == null)
+        if (value == null) {
             return DEFAULT_EMPTY_VALUE;
+        }
 
         final Collection<ExportField> containers = scan(value.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
+        if (containers.isEmpty()) {
             return DEFAULT_EMPTY_VALUE;
+        }
 
         final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
         final String head = head(value, containers, false);
@@ -322,13 +328,15 @@ abstract class AbstractExporter implements Exporter {
 
     @Override
     public <T> @NotNull String exportAsString(@NotNull Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection)) {
             return DEFAULT_EMPTY_VALUE;
+        }
 
         final T t = collection.iterator().next();
         final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty())
+        if (containers.isEmpty()) {
             return DEFAULT_EMPTY_VALUE;
+        }
 
         final String data = convertData(collection, containers);
         final String head = head(t, containers, true);
