@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.error.ClassConstructorException;
+import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ final class ZeroArgClassConstructor implements ClassConstructor {
                 .orElse(Arrays.stream(target.getDeclaredConstructors())
                         .filter(c -> c.getParameterCount() == 1) // search for potential inner class constructor
                         .findFirst()
-                        .orElseThrow(() -> new ClassConstructorException(
+                        .orElseThrow(() -> new GenConstructionException(
                                 "Can't instantiate, zero argument constructor not found for: " + target)));
 
         try {
@@ -31,15 +31,15 @@ final class ZeroArgClassConstructor implements ClassConstructor {
 
             final Class<?> parentType = constructor.getParameterTypes()[0];
             if (!CastUtils.CastType.of(parentType).equals(CastUtils.CastType.UNKNOWN)) {
-                throw new ClassConstructorException("Can't instantiate '" + target + "', zero argument constructor not found");
+                throw new GenConstructionException("Can't instantiate '" + target + "', zero argument constructor not found");
             }
 
             final Object parent = instantiate(parentType);
             return ((T) constructor.newInstance(parent));
-        } catch (ClassConstructorException e) {
+        } catch (GenConstructionException e) {
             throw e;
         } catch (Exception e) {
-            throw new ClassConstructorException(e);
+            throw new GenConstructionException(e);
         }
     }
 }

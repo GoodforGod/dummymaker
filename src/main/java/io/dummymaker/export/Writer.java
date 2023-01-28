@@ -7,7 +7,7 @@ package io.dummymaker.export;
  * @see Exporter
  * @since 31.05.2017
  */
-public interface Writer {
+public interface Writer extends AutoCloseable {
 
     /**
      * Writes string and add newline symbol to the end

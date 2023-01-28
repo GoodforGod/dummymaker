@@ -31,8 +31,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = CsvExporter.builder().withHeader(true).withSeparator(DEFAULT_SEPARATOR).build();
 
-        final boolean exportResult = exporter.exportAsFile(dummy);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummy);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -50,8 +49,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = CsvExporter.builder().withHeader(true).build();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -71,8 +69,7 @@ class CsvExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = CsvExporter.builder().withHeader(true).withCase(strategy).build();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

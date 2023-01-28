@@ -2,6 +2,7 @@ package io.dummymaker.export;
 
 import io.dummymaker.cases.Case;
 import io.dummymaker.cases.Cases;
+import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -51,7 +52,7 @@ public final class SqlExporter extends AbstractExporter {
     public static final class Builder {
 
         private Case fieldCase = Cases.DEFAULT.value();
-        private Function<String, Writer> writerFunction;
+        private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private int batchSize = 999;
         private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
 
@@ -332,36 +333,39 @@ public final class SqlExporter extends AbstractExporter {
             return;
         }
 
-        final Writer writer = getWriter(t.getClass().getSimpleName());
+        try (final Writer writer = getWriter(t.getClass().getSimpleName())) {
+            // Create Table Query
+            writer.write(head(t, containers, true));
 
-        // Create Table Query
-        writer.write(head(t, containers, true));
+            int i = batchSize;
+            StringBuilder builder = new StringBuilder();
 
-        int i = batchSize;
-        StringBuilder builder = new StringBuilder();
+            final Iterator<T> iterator = collection.iterator();
+            while (iterator.hasNext()) {
+                final T next = iterator.next();
+                if (i == batchSize) {
+                    builder.append(buildInsertQuery(next, containers));
+                }
 
-        final Iterator<T> iterator = collection.iterator();
-        while (iterator.hasNext()) {
-            final T next = iterator.next();
-            if (i == batchSize)
-                builder.append(buildInsertQuery(next, containers));
+                builder.append(map(next, containers));
 
-            builder.append(map(next, containers));
+                // End insert Query if no elements left or need to organize next batch
+                final boolean hasNext = iterator.hasNext();
+                if (i <= 0 || !hasNext) {
+                    builder.append(";\n");
+                    writer.write(builder.toString());
+                    builder = new StringBuilder();
+                } else {
+                    builder.append(",\n");
+                }
 
-            // End insert Query if no elements left or need to organize next batch
-            final boolean hasNext = iterator.hasNext();
-            if (i <= 0 || !hasNext) {
-                builder.append(";\n");
-                writer.write(builder.toString());
-                builder = new StringBuilder();
-            } else {
-                builder.append(",\n");
+                i = nextInsertValue(i);
             }
 
-            i = nextInsertValue(i);
+            writer.write(builder.toString());
+        } catch (Exception e) {
+            throw new GenExportException(e);
         }
-
-        writer.write(builder.toString());
     }
 
     @Override

@@ -40,17 +40,13 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportSingleDummyInvalidExportEntity() {
-        final boolean exportResult = exporter.exportAsFile((DummyNoExportFields) null);
-        assertFalse(exportResult);
+        exporter.exportAsFile((DummyNoExportFields) null);
     }
 
     @Test
     public void exportDummyListInvalidExportEntity() {
-        final boolean exportResult = exporter.exportAsFile(null);
-        assertFalse(exportResult);
-
-        final boolean exportEmptyResult = exporter.exportAsFile(Collections.emptyList());
-        assertFalse(exportEmptyResult);
+        exporter.exportAsFile(null);
+        exporter.exportAsFile(Collections.emptyList());
     }
 
     @Test
@@ -58,9 +54,8 @@ abstract class FileExportAssert extends ExportAssert {
         final DummyNoExportFields dummy = factory.build(DummyNoExportFields.class);
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
-        final boolean exportResult = exporter.exportAsFile(dummy);
+        exporter.exportAsFile(dummy);
         markFileForRemoval(filename);
-        assertFalse(exportResult);
     }
 
     @Test
@@ -68,9 +63,8 @@ abstract class FileExportAssert extends ExportAssert {
         final List<DummyNoExportFields> dummy = factory.build(DummyNoExportFields.class, 2);
         final String filename = DummyNoExportFields.class.getSimpleName() + format.getExtension();
 
-        final boolean exportResult = exporter.exportAsFile(dummy);
+        exporter.exportAsFile(dummy);
         markFileForRemoval(filename);
-        assertFalse(exportResult);
     }
 
     @Test
@@ -78,8 +72,7 @@ abstract class FileExportAssert extends ExportAssert {
         final Dummy dummy = factory.build(Dummy.class);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
-        final boolean exportResult = exporter.exportAsFile(dummy);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummy);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -100,8 +93,7 @@ abstract class FileExportAssert extends ExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 1);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -122,8 +114,7 @@ abstract class FileExportAssert extends ExportAssert {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

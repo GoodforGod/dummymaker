@@ -22,7 +22,7 @@ public final class JsonExporter extends AbstractExporter {
     public static final class Builder {
 
         private Case fieldCase = Cases.DEFAULT.value();
-        private Function<String, Writer> writerFunction;
+        private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
 
         private Builder() {}
 

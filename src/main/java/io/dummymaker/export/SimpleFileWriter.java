@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.error.ExportException;
+import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.StringUtils;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -19,9 +19,7 @@ public final class SimpleFileWriter implements Writer {
 
     private static final String DEFAULT_PATH = "";
 
-    private final boolean appendFile;
-    private final String path;
-    private final Charset charset;
+    private final java.io.Writer writer;
 
     SimpleFileWriter(boolean appendFile, @NotNull String filename) {
         this(appendFile, filename, DEFAULT_PATH);
@@ -42,14 +40,19 @@ public final class SimpleFileWriter implements Writer {
             throw new IllegalArgumentException("File name can't be empty");
         }
 
-        this.appendFile = appendFile;
-        this.charset = charset;
+        final String filePath;
         if (path == null || StringUtils.isBlank(path)) {
-            this.path = filename;
+            filePath = filename;
         } else if (path.endsWith("/")) {
-            this.path = path + filename;
+            filePath = path + filename;
         } else {
-            this.path = path + "/" + filename;
+            filePath = path + "/" + filename;
+        }
+
+        try {
+            this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, appendFile), charset));
+        } catch (FileNotFoundException e) {
+            throw new GenExportException(e);
         }
     }
 
@@ -59,14 +62,15 @@ public final class SimpleFileWriter implements Writer {
             return;
         }
 
-        try (java.io.Writer writer = getWriter()) {
+        try {
             writer.append(value);
         } catch (IOException e) {
-            throw new ExportException(e);
+            throw new GenExportException(e);
         }
     }
 
-    private java.io.Writer getWriter() throws IOException {
-        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, appendFile), charset));
+    @Override
+    public void close() throws Exception {
+        writer.close();
     }
 }

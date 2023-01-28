@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * Factory used to provide {@link Generator} and construct it from {@link Annotation}
+ * Must have Zero Argument constructor
+ *
  * @see io.dummymaker.annotation.GenCustomFactory
  * @see ParameterizedGenerator
  * @author Anton Kurako (GoodforGod)

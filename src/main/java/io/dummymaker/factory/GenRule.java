@@ -50,8 +50,9 @@ public final class GenRule {
 
     @NotNull
     public static GenRule auto(@NotNull Class<?> target, int depth) {
-        if (GLOBAL_MARKER.equals(target))
+        if (GLOBAL_MARKER.equals(target)) {
             throw new IllegalArgumentException("Void can't be Rule type");
+        }
 
         return new GenRule(target, true, depth);
     }
@@ -88,8 +89,9 @@ public final class GenRule {
 
     @NotNull
     Optional<Generator<?>> find(Field field) {
-        if (field == null || isIgnored(field))
+        if (field == null || isIgnored(field)) {
             return Optional.empty();
+        }
 
         final Optional<Generator<?>> namedGenerator = fieldRules.stream()
                 .filter(r -> r.getNames().contains(field.getName()))
@@ -105,8 +107,9 @@ public final class GenRule {
 
     @NotNull
     Optional<Generator<?>> find(Class<?> type) {
-        if (type == null)
+        if (type == null) {
             return Optional.empty();
+        }
 
         final Optional<? extends Generator<?>> equalType = fieldRules.stream()
                 .filter(GenRuleField::isTyped)

@@ -33,8 +33,7 @@ class SqlExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = SqlExporter.builder().withCase(strategy).build();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);
@@ -59,8 +58,7 @@ class SqlExportAsFileTests extends FileExportAssert {
                 .withDataTypes(dataTypes)
                 .build();
 
-        final boolean exportResult = exporter.exportAsFile(dummies);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummies);
 
         final String filename = "DummyTime" + format.getExtension();
 

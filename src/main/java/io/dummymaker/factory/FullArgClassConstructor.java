@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.error.ClassConstructorException;
+import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.generator.Generator;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ final class FullArgClassConstructor implements ClassConstructor {
     public <T> T instantiate(@NotNull Class<T> target) {
         final Constructor<?> constructor = Arrays.stream(target.getDeclaredConstructors())
                 .max(Comparator.comparing(Constructor::getParameterCount))
-                .orElseThrow(() -> new ClassConstructorException("Suitable constructor not found for: " + target));
+                .orElseThrow(() -> new GenConstructionException("Suitable constructor not found for: " + target));
 
         try {
             constructor.setAccessible(true);
@@ -37,10 +37,10 @@ final class FullArgClassConstructor implements ClassConstructor {
                     .toArray(Object[]::new);
 
             return ((T) constructor.newInstance(typeParameters));
-        } catch (ClassConstructorException e) {
+        } catch (GenConstructionException e) {
             throw e;
         } catch (Exception e) {
-            throw new ClassConstructorException(e);
+            throw new GenConstructionException(e);
         }
     }
 }

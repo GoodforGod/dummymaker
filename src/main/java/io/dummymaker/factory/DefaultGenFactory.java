@@ -2,7 +2,7 @@ package io.dummymaker.factory;
 
 import static io.dummymaker.util.CastUtils.castObject;
 
-import io.dummymaker.error.ClassConstructorException;
+import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.error.GenException;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.Localisation;
@@ -188,7 +188,7 @@ final class DefaultGenFactory implements GenFactory {
     private <T> T instantiate(Class<T> target) {
         try {
             return zeroArgConstructor.instantiate(target);
-        } catch (ClassConstructorException e) {
+        } catch (GenConstructionException e) {
             return fullArgConstructor.instantiate(target);
         }
     }

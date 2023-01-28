@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Generator used by PrimeGen to populate field
+ * Generator used by GenCustom to populate field
+ * Must have Zero Argument constructor
  *
  * @author Anton Kurako (GoodforGod)
  * @see GenCustom

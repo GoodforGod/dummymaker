@@ -1,6 +1,6 @@
 package io.dummymaker.factory;
 
-import io.dummymaker.error.ClassConstructorException;
+import io.dummymaker.error.GenConstructionException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,5 +11,5 @@ import org.jetbrains.annotations.Nullable;
 interface ClassConstructor {
 
     @Nullable
-    <T> T instantiate(@NotNull Class<T> target) throws ClassConstructorException;
+    <T> T instantiate(@NotNull Class<T> target) throws GenConstructionException;
 }

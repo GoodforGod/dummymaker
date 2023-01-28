@@ -2,7 +2,7 @@ package io.dummymaker.export;
 
 import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.cases.Case;
-import io.dummymaker.error.ExportException;
+import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import java.lang.reflect.Field;
@@ -90,7 +90,7 @@ abstract class AbstractExporter implements Exporter {
                     return convertComplex(value);
             }
         } catch (Exception ex) {
-            throw new ExportException(ex);
+            throw new GenExportException(ex);
         }
     }
 
@@ -281,12 +281,14 @@ abstract class AbstractExporter implements Exporter {
             return;
         }
 
-        final Writer writer = getWriter(value.getClass().getSimpleName());
-
-        final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
-        final String head = head(value, containers, false);
-        final String tail = tail(value, containers, false);
-        writer.write(head + data + tail);
+        try (final Writer writer = getWriter(value.getClass().getSimpleName())) {
+            final String head = head(value, containers, false);
+            final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
+            final String tail = tail(value, containers, false);
+            writer.write(head + data + tail);
+        } catch (Exception e) {
+            throw new GenExportException(e);
+        }
     }
 
     @Override
@@ -301,12 +303,33 @@ abstract class AbstractExporter implements Exporter {
             return;
         }
 
-        final Writer writer = getWriter(t.getClass().getSimpleName());
+        try (final Writer writer = getWriter(t.getClass().getSimpleName())) {
+            final String head = head(t, containers, true);
+            writer.write(head);
 
-        final String data = convertData(collection, containers);
-        final String head = head(t, containers, true);
-        final String tail = tail(t, containers, true);
-        writer.write(head + data + tail);
+            final Iterator<T> iterator = collection.iterator();
+            while (iterator.hasNext()) {
+                final T value = iterator.next();
+                if (value != null) {
+                    final String valueAsString = map(value, containers);
+                    if (StringUtils.isNotBlank(valueAsString)) {
+                        final String result = prefix(valueAsString, containers) + valueAsString
+                                + suffix(valueAsString, containers);
+                        if (iterator.hasNext()) {
+                            final String separator = separator(value, containers);
+                            writer.write(result + separator);
+                        } else {
+                            writer.write(result);
+                        }
+                    }
+                }
+            }
+
+            final String tail = tail(t, containers, true);
+            writer.write(tail);
+        } catch (Exception e) {
+            throw new GenExportException(e);
+        }
     }
 
     @Override
@@ -320,8 +343,8 @@ abstract class AbstractExporter implements Exporter {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
         final String head = head(value, containers, false);
+        final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
         final String tail = tail(value, containers, false);
         return head + data + tail;
     }
@@ -338,14 +361,14 @@ abstract class AbstractExporter implements Exporter {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final String data = convertData(collection, containers);
         final String head = head(t, containers, true);
+        final String data = convertData(collection, containers);
         final String tail = tail(t, containers, true);
         return head + data + tail;
     }
 
     protected <T> String convertData(Collection<T> collection, Collection<ExportField> containers) {
-        final T t = collection.iterator().next();
+        final T first = collection.iterator().next();
         return collection.stream()
                 .filter(Objects::nonNull)
                 .map(v -> {
@@ -355,6 +378,6 @@ abstract class AbstractExporter implements Exporter {
                             : prefix(v, containers) + value + suffix(v, containers);
                 })
                 .filter(StringUtils::isNotEmpty)
-                .collect(Collectors.joining(separator(t, containers)));
+                .collect(Collectors.joining(separator(first, containers)));
     }
 }

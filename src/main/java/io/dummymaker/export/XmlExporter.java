@@ -32,7 +32,7 @@ public final class XmlExporter extends AbstractExporter {
     public static final class Builder {
 
         private Case fieldCase = Cases.DEFAULT.value();
-        private Function<String, Writer> writerFunction;
+        private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private Function<String, String> listTagSuffix = name -> name + DEFAULT_TAG_LIST_SUFFIX;
 
         private Builder() {}

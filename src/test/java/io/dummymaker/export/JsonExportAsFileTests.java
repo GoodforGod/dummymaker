@@ -24,10 +24,9 @@ class JsonExportAsFileTests extends FileExportAssert {
 
     @Test
     void exportStreamingToFileMultiBatch() {
-        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
+        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new SimpleFileWriter(false, name)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 31000);
-        final boolean exported = exporter.exportAsFile(dummies);
-        assertTrue(exported);
+        exporter.exportAsFile(dummies);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final String dummyAsString = readFromFile(filename);
@@ -41,10 +40,9 @@ class JsonExportAsFileTests extends FileExportAssert {
 
     @Test
     void exportStreamingToFileSingleBatch() {
-        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
+        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new SimpleFileWriter(false, name)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 11000);
-        final boolean exported = exporter.exportAsFile(dummies);
-        assertTrue(exported);
+        exporter.exportAsFile(dummies);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final String dummyAsString = readFromFile(filename);
@@ -58,10 +56,9 @@ class JsonExportAsFileTests extends FileExportAssert {
 
     @Test
     void exportStreamingToFileNoBatch() {
-        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new DefaultFileWriter(name, false)).build();
+        final JsonExporter exporter = JsonExporter.builder().withWriter(name -> new SimpleFileWriter(false, name)).build();
         final List<Dummy> dummies = factory.build(Dummy::new, 1000);
-        final boolean exported = exporter.exportAsFile(dummies);
-        assertTrue(exported);
+        exporter.exportAsFile(dummies);
 
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final String dummyAsString = readFromFile(filename);
@@ -81,8 +78,7 @@ class JsonExportAsFileTests extends FileExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
         final Exporter exporter = JsonExporter.builder().withCase(strategy).build();
 
-        final boolean exportResult = exporter.exportAsFile(dummy);
-        assertTrue(exportResult);
+        exporter.exportAsFile(dummy);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

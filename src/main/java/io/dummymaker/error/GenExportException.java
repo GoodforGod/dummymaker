@@ -6,13 +6,13 @@ package io.dummymaker.error;
  * @author Anton Kurako (GoodforGod)
  * @since 22.7.2020
  */
-public final class ExportException extends GenException {
+public final class GenExportException extends GenException {
 
-    public ExportException(String message) {
+    public GenExportException(String message) {
         super(message);
     }
 
-    public ExportException(Throwable throwable) {
+    public GenExportException(Throwable throwable) {
         super(throwable);
     }
 }
