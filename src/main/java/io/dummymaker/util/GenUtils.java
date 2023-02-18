@@ -3,7 +3,6 @@ package io.dummymaker.util;
 import io.dummymaker.generator.Generator;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +36,7 @@ public final class GenUtils {
 
     public static List<Type> getTypes(Class<?> target) {
         if (Object.class.equals(target)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         try {
@@ -53,7 +52,7 @@ public final class GenUtils {
 
     private static List<Type> getTypesFromInterfaces(Type targetType) {
         if (isGenerator(targetType) || ParameterizedType.class.equals(targetType)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         final Class targetClass = (Class) targetType;

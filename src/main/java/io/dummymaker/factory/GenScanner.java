@@ -58,15 +58,20 @@ final class GenScanner {
         final int depth = rule.flatMap(GenRule::getDepth)
                 .orElseGet(() -> {
                     final GenDepth annotation = field.getAnnotation(GenDepth.class);
-                    if (annotation != null) {
-                        return annotation.value();
+                    final int expectedDepth = (annotation != null)
+                            ? annotation.value()
+                            : Arrays.stream(target.getDeclaredAnnotations())
+                                    .filter(a -> a instanceof GenDepth)
+                                    .map(a -> ((GenDepth) a).value())
+                                    .findAny()
+                                    .orElse(depthByDefault);
+
+                    if (expectedDepth < 1 || expectedDepth > GenDepth.MAX) {
+                        throw new IllegalArgumentException(
+                                "Depth must be between 1 and 50, but was " + expectedDepth + " for " + target);
                     }
 
-                    return Arrays.stream(target.getDeclaredAnnotations())
-                            .filter(a -> a instanceof GenDepth)
-                            .map(a -> ((GenDepth) a).value())
-                            .findAny()
-                            .orElse(depthByDefault);
+                    return expectedDepth;
                 });
 
         final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field));

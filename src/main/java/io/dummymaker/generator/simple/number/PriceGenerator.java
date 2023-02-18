@@ -13,13 +13,15 @@ import java.util.regex.Pattern;
  */
 public final class PriceGenerator implements Generator<BigDecimal> {
 
-    private static final Pattern PATTERN = Pattern.compile("price|money|cash|bucks|bills", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("price|cost|fee|bills?|balance|money|cash|bucks|funds?",
+            CASE_INSENSITIVE);
 
     @Override
     public BigDecimal get() {
-        final int preDot = RandomUtils.random(1, 999999);
-        final int afterDot = RandomUtils.random(1, 99);
-        return new BigDecimal(preDot + "." + afterDot);
+        final BigDecimal preDot = BigDecimal.valueOf(RandomUtils.random(1, 9999));
+        final double afterDotDouble = ((double) RandomUtils.random(0, 99) / 100);
+        final BigDecimal afterDot = BigDecimal.valueOf(afterDotDouble);
+        return preDot.add(afterDot);
     }
 
     @Override

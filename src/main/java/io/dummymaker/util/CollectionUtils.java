@@ -74,8 +74,9 @@ public final class CollectionUtils {
      * @return random element of collection or null if collection is empty
      */
     public static <T> T random(@NotNull Collection<T> collection) {
-        if (collection.isEmpty())
+        if (collection.isEmpty()) {
             return null;
+        }
 
         final int random = RandomUtils.random(collection.size());
         if (collection instanceof List) {
