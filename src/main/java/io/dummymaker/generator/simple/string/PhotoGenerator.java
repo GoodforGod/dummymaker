@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * @author Anton Kurako (GoodforGod)
  * @since 04.12.2021
  */
-public final class PhotoGenerator implements Generator<String> {
+public final class PhotoGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("pic(ture)?|photo|avatar|base64", CASE_INSENSITIVE);
 

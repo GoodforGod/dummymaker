@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public final class BtcTxHashGenerator implements Generator<String> {
+public final class BtcTxHashGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("tx|btctx|bitcointx|btchash|bictoinhash", CASE_INSENSITIVE);
 

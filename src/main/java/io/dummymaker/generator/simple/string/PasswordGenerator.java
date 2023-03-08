@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 12.11.2022
  */
-public final class PasswordGenerator implements Generator<String> {
+public final class PasswordGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("pass(word)?", CASE_INSENSITIVE);
 

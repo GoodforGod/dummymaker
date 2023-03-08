@@ -5,8 +5,9 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.FemaleNameBundle;
 import io.dummymaker.bundle.MaleNameBundle;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Localisation;
-import io.dummymaker.generator.LocalizedGenerator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -17,15 +18,25 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class NameGenerator implements LocalizedGenerator<String> {
+public final class NameGenerator implements ParameterizedGenerator<CharSequence> {
 
-    private static final Pattern PATTERN = Pattern.compile("user|account|name|assignee|employe|worker", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("user|account|name|assignee|employee?|employer|worker",
+            CASE_INSENSITIVE);
 
     private static final Bundle MALE_BUNDLE = new MaleNameBundle();
     private static final Bundle FEMALE_BUNDLE = new FemaleNameBundle();
 
     @Override
-    public @NotNull String get(@NotNull Localisation localisation) {
+    public String get(@NotNull GenParameters parameters) {
+        return parameters.namingCase().apply(get(parameters.localisation())).toString();
+    }
+
+    @Override
+    public String get() {
+        return get(Localisation.ENGLISH);
+    }
+
+    private static String get(@NotNull Localisation localisation) {
         return ThreadLocalRandom.current().nextBoolean()
                 ? MALE_BUNDLE.random(localisation)
                 : FEMALE_BUNDLE.random(localisation);

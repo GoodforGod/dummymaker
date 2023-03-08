@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.01.2023
  */
-public final class IPv4Generator implements Generator<String> {
+public final class IPv4Generator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("ip|ipv4", CASE_INSENSITIVE);
 

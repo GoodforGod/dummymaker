@@ -4,8 +4,9 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.Bundle;
 import io.dummymaker.bundle.PhraseBundle;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Localisation;
-import io.dummymaker.generator.LocalizedGenerator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,14 +16,23 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 20.07.2019
  */
-public final class DescriptionGenerator implements LocalizedGenerator<String> {
+public final class DescriptionGenerator implements ParameterizedGenerator<CharSequence> {
 
     private static final Bundle BUNDLE = new PhraseBundle();
     private static final Pattern PATTERN = Pattern.compile("diploma|info|desc(ription)?|phrase|comment|sentence|reason",
             CASE_INSENSITIVE);
 
     @Override
-    public @NotNull String get(@NotNull Localisation localisation) {
+    public CharSequence get(@NotNull GenParameters parameters) {
+        return parameters.namingCase().apply(get(parameters.localisation())).toString();
+    }
+
+    @Override
+    public CharSequence get() {
+        return get(Localisation.ENGLISH);
+    }
+
+    private static String get(@NotNull Localisation localisation) {
         return BUNDLE.random(localisation);
     }
 

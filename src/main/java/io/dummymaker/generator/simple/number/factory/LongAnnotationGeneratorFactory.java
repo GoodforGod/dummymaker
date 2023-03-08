@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class LongAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenLong> {
 
     @Override
-    public @NotNull Generator<?> get(GenLong annotation) {
+    public @NotNull Generator<Long> get(GenLong annotation) {
         return new LongGenerator(annotation.from(), annotation.to());
     }
 }

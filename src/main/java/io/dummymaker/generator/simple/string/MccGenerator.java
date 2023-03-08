@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * @author Anton Kurako (GoodforGod)
  * @since 27.08.2022
  */
-public final class MccGenerator implements Generator<String> {
+public final class MccGenerator implements Generator<CharSequence> {
 
     private static final Bundle BUNDLE = new MerchantBundle();
     private static final Pattern PATTERN = Pattern.compile("mcc|MerchantCategoryCode", CASE_INSENSITIVE);

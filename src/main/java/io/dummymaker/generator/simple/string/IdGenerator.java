@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class IdGenerator implements Generator<String> {
+public final class IdGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("[UuGg]?[Uu]?[Ii]d$|^[UuGg]?[Uu]?[Ii]d");
 

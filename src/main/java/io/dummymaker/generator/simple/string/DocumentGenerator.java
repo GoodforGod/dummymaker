@@ -15,10 +15,11 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class DocumentGenerator implements Generator<String> {
+public final class DocumentGenerator implements Generator<CharSequence> {
+
+    private static final Pattern PATTERN = Pattern.compile("pass(word)?|project", CASE_INSENSITIVE);
 
     private static final Generator<Character> CHARACTER_GENERATOR = new CharacterGenerator();
-    private static final Pattern PATTERN = Pattern.compile("pass(word)?|project", CASE_INSENSITIVE);
 
     @Override
     public @NotNull String get() {

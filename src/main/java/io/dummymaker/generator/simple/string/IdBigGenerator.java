@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class IdBigGenerator implements Generator<String> {
+public final class IdBigGenerator implements Generator<CharSequence> {
 
     @Override
     public @NotNull String get() {

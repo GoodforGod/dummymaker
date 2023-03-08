@@ -14,10 +14,11 @@ import java.util.regex.Pattern;
  * @author Anton Kurako (GoodforGod)
  * @since 27.7.2020
  */
-public final class ExtensionGenerator implements Generator<String> {
+public final class ExtensionGenerator implements Generator<CharSequence> {
+
+    private static final Pattern PATTERN = Pattern.compile("ext(ension)?", CASE_INSENSITIVE);
 
     private static final Bundle BUNDLE = new ExtensionBundle();
-    private static final Pattern PATTERN = Pattern.compile("ext(ension)?", CASE_INSENSITIVE);
 
     @Override
     public String get() {

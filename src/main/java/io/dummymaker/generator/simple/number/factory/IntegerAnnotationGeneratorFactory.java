@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class IntegerAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenInt> {
 
     @Override
-    public @NotNull Generator<?> get(GenInt annotation) {
+    public @NotNull Generator<Integer> get(GenInt annotation) {
         return new IntegerGenerator(annotation.from(), annotation.to());
     }
 }

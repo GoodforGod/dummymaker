@@ -2,9 +2,14 @@ package io.dummymaker.generator.simple.string;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
-import io.dummymaker.generator.Generator;
+import io.dummymaker.bundle.Bundle;
+import io.dummymaker.bundle.LoginBundle;
+import io.dummymaker.bundle.NounBundle;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Localisation;
-import io.dummymaker.generator.LocalizedGenerator;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,16 +22,25 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class JsonGenerator implements LocalizedGenerator<String> {
+public final class JsonGenerator implements ParameterizedGenerator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("jsonb?", CASE_INSENSITIVE);
 
-    private static final Generator<String> ID_GENERATOR = new IdGenerator();
-    private static final LocalizedGenerator<String> NICK_GENERATOR = new LoginGenerator();
-    private static final LocalizedGenerator<String> FIELD_GENERATOR = new NounGenerator();
+    private static final Bundle FIELD_NAME_GENERATOR = new LoginBundle();
+    private static final Bundle FIELD_VALUE_GENERATOR = new NounBundle();
 
     @Override
-    public @NotNull String get(@NotNull Localisation localisation) {
+    public String get(@NotNull GenParameters parameters) {
+        return get(parameters.localisation(), parameters.namingCase());
+    }
+
+    @Override
+    public String get() {
+        return get(Localisation.ENGLISH, NamingCases.DEFAULT);
+    }
+
+    private static String get(@NotNull Localisation localisation,
+                              @NotNull NamingCase namingCase) {
         final StringBuilder builder = new StringBuilder();
 
         final int depth = RandomUtils.random(1, 6);
@@ -37,10 +51,8 @@ public final class JsonGenerator implements LocalizedGenerator<String> {
             final int lines = RandomUtils.random(1, 5);
             final Set<String> usedFieldNames = new HashSet<>();
             for (int j = 0; j < lines; j++) {
-                final String fieldName = generateFieldName(usedFieldNames, localisation);
-                final String fieldValue = NICK_GENERATOR.get(localisation)
-                        + "-"
-                        + ID_GENERATOR.get();
+                final String fieldName = namingCase.apply(generateFieldName(localisation, usedFieldNames)).toString();
+                final String fieldValue = namingCase.apply(FIELD_VALUE_GENERATOR.random(localisation)).toString();
 
                 builder.append("\"")
                         .append(fieldName)
@@ -52,11 +64,12 @@ public final class JsonGenerator implements LocalizedGenerator<String> {
 
                 final boolean lastLine = (j == (lines - 1));
 
-                if (!lastLine)
+                if (!lastLine) {
                     builder.append(",");
+                }
 
                 if (lastLine && !lastDepth) {
-                    final String objectName = generateFieldName(usedFieldNames, localisation);
+                    final String objectName = namingCase.apply(generateFieldName(localisation, usedFieldNames)).toString();
                     builder.append(",")
                             .append("\"")
                             .append(objectName)
@@ -66,16 +79,17 @@ public final class JsonGenerator implements LocalizedGenerator<String> {
             }
         }
 
-        for (int i = 0; i < depth; i++)
+        for (int i = 0; i < depth; i++) {
             builder.append("}");
+        }
 
         return builder.toString();
     }
 
-    private String generateFieldName(Set<String> used, Localisation localisation) {
+    private static String generateFieldName(Localisation localisation, Set<String> used) {
         String fieldName;
         while (true) {
-            fieldName = FIELD_GENERATOR.get(localisation);
+            fieldName = FIELD_NAME_GENERATOR.random(localisation);
             if (!used.contains(fieldName)) {
                 used.add(fieldName);
                 break;

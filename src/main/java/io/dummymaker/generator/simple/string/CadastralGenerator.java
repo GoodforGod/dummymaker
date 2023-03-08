@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 12.10.2019
  */
-public final class CadastralGenerator implements Generator<String> {
+public final class CadastralGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("cadastral|cad(num)?", CASE_INSENSITIVE);
 

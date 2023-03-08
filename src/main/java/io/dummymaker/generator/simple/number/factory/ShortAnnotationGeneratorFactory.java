@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ShortAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenShort> {
 
     @Override
-    public @NotNull Generator<?> get(GenShort annotation) {
+    public @NotNull Generator<Short> get(GenShort annotation) {
         return new ShortGenerator(annotation.from(), annotation.to());
     }
 }

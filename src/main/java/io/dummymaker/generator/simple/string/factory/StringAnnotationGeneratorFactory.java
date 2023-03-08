@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class StringAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenString> {
 
     @Override
-    public @NotNull Generator<?> get(GenString annotation) {
+    public @NotNull Generator<CharSequence> get(GenString annotation) {
         return new StringGenerator(annotation.min(), annotation.max());
     }
 }

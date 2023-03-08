@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class DoubleAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenDouble> {
 
     @Override
-    public @NotNull Generator<?> get(GenDouble annotation) {
+    public @NotNull Generator<Double> get(GenDouble annotation) {
         return new DoubleGenerator(annotation.from(), annotation.to());
     }
 }

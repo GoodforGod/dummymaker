@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class StringGenerator implements Generator<String> {
+public final class StringGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("str|string", CASE_INSENSITIVE);
     private static final int LEFT_LIMIT = 48; // numeral '0'

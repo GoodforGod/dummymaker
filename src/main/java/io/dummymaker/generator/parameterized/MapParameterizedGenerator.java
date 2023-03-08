@@ -1,9 +1,8 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.GenType;
-import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.GenType;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
@@ -53,8 +52,8 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
-        if (fieldType.generics().size() != 2) {
+    public Object get(@NotNull GenParameters parameters) {
+        if (parameters.fieldType().generics().size() != 2) {
             return get();
         }
 
@@ -62,22 +61,22 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
                 ? RandomUtils.random(min, max)
                 : fixed;
 
-        final GenType keyType = fieldType.generics().get(0);
-        final GenType valueType = fieldType.generics().get(1);
+        final GenType keyType = parameters.fieldType().generics().get(0);
+        final GenType valueType = parameters.fieldType().generics().get(1);
 
         Map<Object, Object> collector = Collections.emptyMap();
         for (int i = 0; i < size; i++) {
             final Object key = (keyGenerator != null)
                     ? keyGenerator.get()
-                    : typeBuilder.build(keyType.raw());
+                    : parameters.fieldTypeBuilder().build(keyType.raw());
 
             final Object value = (valueGenerator != null)
                     ? valueGenerator.get()
-                    : typeBuilder.build(valueType.raw());
+                    : parameters.fieldTypeBuilder().build(valueType.raw());
 
             if (key != null) {
                 if (collector.isEmpty()) {
-                    collector = buildCollector(fieldType, size);
+                    collector = buildCollector(parameters.fieldType(), size);
                 }
 
                 collector.put(key, value);
@@ -88,7 +87,7 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation) {
+    public Object get() {
         final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;

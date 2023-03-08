@@ -10,7 +10,7 @@ import java.util.List;
  * @author Anton Kurako (GoodforGod)
  * @since 21.01.2023
  */
-public final class StringValuesGenerator implements Generator<String> {
+public final class StringValuesGenerator implements Generator<CharSequence> {
 
     private final List<String> values;
 

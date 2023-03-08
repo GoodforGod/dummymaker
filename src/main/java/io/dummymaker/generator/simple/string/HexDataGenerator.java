@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public final class HexDataGenerator implements Generator<String> {
+public final class HexDataGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("hex", CASE_INSENSITIVE);
 

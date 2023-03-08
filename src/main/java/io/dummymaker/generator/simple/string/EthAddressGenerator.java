@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.11.2018
  */
-public final class EthAddressGenerator implements Generator<String> {
+public final class EthAddressGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("eth(ereum)?|etc", CASE_INSENSITIVE);
 

@@ -1,21 +1,21 @@
-package io.dummymaker.generator.parameterized.factory;
+package io.dummymaker.generator.simple.number.factory;
 
 import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
-import io.dummymaker.generator.ParameterizedGenerator;
-import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
+import io.dummymaker.generator.Generator;
+import io.dummymaker.generator.simple.number.SequenceGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @see GenSequence
- * @see SequenceParameterizedGenerator
+ * @see SequenceGenerator
  * @author Anton Kurako (GoodforGod)
  * @since 26.12.2022
  */
 public final class SequenceAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenSequence> {
 
     @Override
-    public @NotNull ParameterizedGenerator<?> get(GenSequence annotation) {
-        return new SequenceParameterizedGenerator(annotation.from());
+    public @NotNull Generator<Long> get(GenSequence annotation) {
+        return new SequenceGenerator(annotation.from());
     }
 }

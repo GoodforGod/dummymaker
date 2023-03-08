@@ -1,8 +1,6 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.GenType;
-import io.dummymaker.factory.GenTypeBuilder;
-import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.lang.reflect.Field;
@@ -29,7 +27,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
+    public Object get(@NotNull GenParameters parameters) {
         final Predicate<String> predicate;
         if (!only.isEmpty()) {
             predicate = only::contains;
@@ -39,7 +37,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
             predicate = s -> true;
         }
 
-        final Field[] fields = fieldType.raw().getFields();
+        final Field[] fields = parameters.fieldType().raw().getFields();
         final List<Field> candidates = Arrays.stream(fields)
                 .filter(f -> predicate.test(f.getName()))
                 .collect(Collectors.toList());
@@ -49,11 +47,16 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
         }
 
         final int index = RandomUtils.random(candidates.size());
-        return Enum.valueOf((Class<? extends Enum>) fieldType.raw(), candidates.get(index).getName());
+        final Enum e = Enum.valueOf((Class<? extends Enum>) parameters.fieldType().raw(), candidates.get(index).getName());
+        if (CharSequence.class.isAssignableFrom(parameters.fieldType().raw())) {
+            return parameters.namingCase().apply(e.toString()).toString();
+        } else {
+            return e;
+        }
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation) {
+    public Object get() {
         return null;
     }
 }

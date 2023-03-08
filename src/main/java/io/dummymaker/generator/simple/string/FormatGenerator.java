@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 4.5.2020
  */
-public final class FormatGenerator implements Generator<String> {
+public final class FormatGenerator implements Generator<CharSequence> {
 
     private static final Bundle FORMATS = new FormatBundle();
     private static final Pattern PATTERN = Pattern.compile("protocol|format", CASE_INSENSITIVE);

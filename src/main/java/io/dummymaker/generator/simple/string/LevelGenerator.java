@@ -15,16 +15,15 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 04.12.2021
  */
-public final class LevelGenerator implements Generator<String> {
+public final class LevelGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("level|lvl", CASE_INSENSITIVE);
 
-    private static final List<String> types = Arrays.asList("error", "warn", "info", "debug", "trace");
+    private static final List<String> TYPES_EN = Arrays.asList("error", "warn", "info", "debug", "trace");
 
-    @SuppressWarnings("ConstantConditions")
     @Override
-    public @NotNull String get() {
-        return CollectionUtils.random(types);
+    public String get() {
+        return CollectionUtils.random(TYPES_EN);
     }
 
     @Override

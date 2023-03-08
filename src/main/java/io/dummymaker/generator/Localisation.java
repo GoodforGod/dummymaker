@@ -7,7 +7,5 @@ package io.dummymaker.generator;
 public enum Localisation {
 
     RUSSIAN,
-    ENGLISH;
-
-    public static final Localisation DEFAULT = ENGLISH;
+    ENGLISH
 }

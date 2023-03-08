@@ -1,9 +1,8 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.GenType;
-import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.GenType;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
@@ -48,8 +47,8 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
-        if (fieldType.generics().isEmpty()) {
+    public Object get(@NotNull GenParameters parameters) {
+        if (parameters.fieldType().generics().isEmpty()) {
             return get();
         }
 
@@ -61,11 +60,11 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
         for (int i = 0; i < size; i++) {
             final Object element = (generator != null)
                     ? generator.get()
-                    : typeBuilder.build(fieldType.generics().get(0).raw());
+                    : parameters.fieldTypeBuilder().build(parameters.fieldType().generics().get(0).raw());
 
             if (element != null) {
                 if (collector.isEmpty()) {
-                    collector = buildCollector(fieldType, size);
+                    collector = buildCollector(parameters.fieldType(), size);
                 }
 
                 collector.add(element);
@@ -76,7 +75,7 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation) {
+    public Object get() {
         final int size = (fixed < 1)
                 ? RandomUtils.random(min, max)
                 : fixed;

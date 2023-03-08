@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class PhoneGenerator implements Generator<String> {
+public final class PhoneGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("telefax|phone|mobile(phone)?|dial", CASE_INSENSITIVE);
     private static final Bundle PHONE_CODE_BUNDLE = new PhoneCodeBundle();
@@ -33,7 +33,7 @@ public final class PhoneGenerator implements Generator<String> {
         final int first = RandomUtils.random(100, 999);
         final int second = RandomUtils.random(100, 999);
         final int third = RandomUtils.random(1000, 9999);
-        String prefix = PHONE_CODE_BUNDLE.random(Localisation.DEFAULT);
+        String prefix = PHONE_CODE_BUNDLE.random(Localisation.ENGLISH);
 
         if (formatted) {
             return "+" + prefix + first + second + third;

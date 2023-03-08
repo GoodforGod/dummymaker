@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class UnixTimeAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenUnixTime> {
 
     @Override
-    public @NotNull Generator<?> get(GenUnixTime annotation) {
+    public @NotNull Generator<Long> get(GenUnixTime annotation) {
         return new UnixTimeGenerator(annotation.from(), annotation.to());
     }
 }

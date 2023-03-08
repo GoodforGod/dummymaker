@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 26.05.2017
  */
-public final class EmailGenerator implements Generator<String> {
+public final class EmailGenerator implements Generator<CharSequence> {
 
     private static final Bundle LOGIN_BUNDLE = new LoginBundle();
     private static final Bundle EMAIL_BUNDLE = new EmailServicesBundle();

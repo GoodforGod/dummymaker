@@ -1,9 +1,7 @@
 package io.dummymaker.generator.parameterized;
 
-import io.dummymaker.factory.GenType;
-import io.dummymaker.factory.GenTypeBuilder;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.Localisation;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.ObjectGenerator;
 import io.dummymaker.util.RandomUtils;
@@ -62,19 +60,19 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation, @NotNull GenType fieldType, @NotNull GenTypeBuilder typeBuilder) {
-        if (!fieldType.raw().getTypeName().endsWith("[][]")) {
+    public Object get(@NotNull GenParameters parameters) {
+        if (!parameters.fieldType().raw().getTypeName().endsWith("[][]")) {
             return null;
         }
 
-        final Class<?> componentType = fieldType.raw().getComponentType().getComponentType();
+        final Class<?> componentType = parameters.fieldType().raw().getComponentType().getComponentType();
         return getCollector(componentType, () -> (generator != null)
                 ? generator.get()
-                : typeBuilder.build(componentType));
+                : parameters.fieldTypeBuilder().build(componentType));
     }
 
     @Override
-    public Object get(@NotNull Localisation localisation) {
+    public Object get() {
         return getCollector(Object.class, DEFAULT_GENERATOR);
     }
 

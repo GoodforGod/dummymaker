@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class FloatAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenFloat> {
 
     @Override
-    public @NotNull Generator<?> get(GenFloat annotation) {
+    public @NotNull Generator<Float> get(GenFloat annotation) {
         return new FloatGenerator(annotation.from(), annotation.to());
     }
 }

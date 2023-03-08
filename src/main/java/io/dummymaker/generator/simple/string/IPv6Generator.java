@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.01.2023
  */
-public final class IPv6Generator implements Generator<String> {
+public final class IPv6Generator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("ipv6", CASE_INSENSITIVE);
     private static final List<Character> CHARACTERS = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 6.4.2020
  */
-public final class VersionGenerator implements Generator<String> {
+public final class VersionGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("ver(sion)?", CASE_INSENSITIVE);
 

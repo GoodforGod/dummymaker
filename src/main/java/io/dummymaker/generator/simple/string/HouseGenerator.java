@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 12.10.2019
  */
-public final class HouseGenerator implements Generator<String> {
+public final class HouseGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("house|block|struct(ure)?|room|flat", CASE_INSENSITIVE);
 

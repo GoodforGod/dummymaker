@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public final class StringValuesAnnotationGeneratorFactory implements AnnotationGeneratorFactory<GenStringValues> {
 
     @Override
-    public @NotNull Generator<?> get(GenStringValues annotation) {
+    public @NotNull Generator<CharSequence> get(GenStringValues annotation) {
         return new StringValuesGenerator(Arrays.asList(annotation.value()));
     }
 }
