@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class DefaultCase implements Case {
+public final class DefaultCase implements NamingCase {
 
     DefaultCase() {}
 
     @Override
-    public @NotNull String apply(@NotNull String value) {
+    public @NotNull CharSequence apply(@NotNull CharSequence value) {
         return value;
     }
 }

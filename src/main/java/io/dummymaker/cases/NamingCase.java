@@ -1,17 +1,15 @@
 package io.dummymaker.cases;
 
-import io.dummymaker.export.Exporter;
 import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Allow applying naming strategy for field names or class name during export
+ * Allow applying naming strategy for string values
  *
  * @author Anton Kurako (GoodforGod)
- * @see Exporter
  * @since 21.02.2018
  */
-public interface Case extends Function<String, String> {
+public interface NamingCase extends Function<CharSequence, CharSequence> {
 
     /**
      * Format value using naming strategy
@@ -21,5 +19,5 @@ public interface Case extends Function<String, String> {
      */
     @NotNull
     @Override
-    String apply(@NotNull String value);
+    CharSequence apply(@NotNull CharSequence value);
 }

@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
 import java.util.Collection;
 import java.util.function.Function;
@@ -22,28 +22,26 @@ public final class XmlExporter extends AbstractExporter {
 
     private final Function<String, String> listTagSuffix;
 
-    private XmlExporter(Case fieldCase,
-                        Function<String, Writer> writerFunction,
-                        Function<String, String> listTagSuffix) {
-        super(fieldCase, writerFunction);
+    private XmlExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction, Function<String, String> listTagSuffix) {
+        super(fieldNamingCase, writerFunction);
         this.listTagSuffix = listTagSuffix;
     }
 
     public static final class Builder {
 
-        private Case fieldCase = Cases.DEFAULT.value();
+        private NamingCase fieldNamingCase = NamingCases.DEFAULT;
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private Function<String, String> listTagSuffix = name -> name + DEFAULT_TAG_LIST_SUFFIX;
 
         private Builder() {}
 
         /**
-         * @param fieldCase case that is applied to field names
+         * @param fieldNamingCase apply to XML tag name
          * @return self
          */
         @NotNull
-        public Builder withCase(@NotNull Case fieldCase) {
-            this.fieldCase = fieldCase;
+        public Builder withCase(@NotNull NamingCase fieldNamingCase) {
+            this.fieldNamingCase = fieldNamingCase;
             return this;
         }
 
@@ -58,7 +56,8 @@ public final class XmlExporter extends AbstractExporter {
         }
 
         /**
-         * @param listTagSuffix that receive Type Name and return its associated List Tag
+         * @param listTagSuffix that receive Type Name and return its associated List Tag (users ->
+         *                      usersList)
          * @return self
          */
         @NotNull
@@ -69,7 +68,7 @@ public final class XmlExporter extends AbstractExporter {
 
         @NotNull
         public XmlExporter build() {
-            return new XmlExporter(fieldCase, writerFunction, listTagSuffix);
+            return new XmlExporter(fieldNamingCase, writerFunction, listTagSuffix);
         }
     }
 
@@ -107,12 +106,12 @@ public final class XmlExporter extends AbstractExporter {
 
     @Override
     protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
-        return openXmlTag(fieldCase.apply(t.getClass().getSimpleName())) + "\n";
+        return openXmlTag(fieldNamingCase.apply(t.getClass().getSimpleName()).toString()) + "\n";
     }
 
     @Override
     protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
-        return "\n" + closeXmlTag(fieldCase.apply(t.getClass().getSimpleName()));
+        return "\n" + closeXmlTag(fieldNamingCase.apply(t.getClass().getSimpleName()).toString());
     }
 
     @Override
@@ -125,10 +124,12 @@ public final class XmlExporter extends AbstractExporter {
         return containers.stream()
                 .map(c -> {
                     final String value = getValue(t, c);
-                    final String tag = c.getName(fieldCase);
-                    return StringUtils.isEmpty(value)
-                            ? ""
-                            : "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
+                    if (StringUtils.isEmpty(value)) {
+                        return "";
+                    }
+
+                    final String tag = c.getName(fieldNamingCase);
+                    return "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
                 })
                 .collect(Collectors.joining("\n"));
     }
@@ -137,7 +138,7 @@ public final class XmlExporter extends AbstractExporter {
     protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? openXmlTag(fieldCase.apply(listTagSuffix.apply(type))) + "\n"
+                ? openXmlTag(fieldNamingCase.apply(listTagSuffix.apply(type)).toString()) + "\n"
                 : "";
     }
 
@@ -145,7 +146,7 @@ public final class XmlExporter extends AbstractExporter {
     protected @NotNull <T> String tail(T t, Collection<ExportField> containers, boolean isCollection) {
         final String type = t.getClass().getSimpleName();
         return isCollection
-                ? "\n" + closeXmlTag(fieldCase.apply(listTagSuffix.apply(type)))
+                ? "\n" + closeXmlTag(fieldNamingCase.apply(listTagSuffix.apply(type)).toString())
                 : "";
     }
 }

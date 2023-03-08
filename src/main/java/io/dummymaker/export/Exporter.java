@@ -18,7 +18,6 @@ public interface Exporter {
      *
      * @param value object to export
      * @param <T>   object type
-     * @return true if export successful
      */
     <T> void exportAsFile(@Nullable T value);
 
@@ -27,7 +26,6 @@ public interface Exporter {
      *
      * @param collection objects to export
      * @param <T>        object type
-     * @return true if export successful
      */
     <T> void exportAsFile(@Nullable Collection<T> collection);
 

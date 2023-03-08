@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
 import java.lang.reflect.Field;
 
@@ -29,13 +29,13 @@ public class ExportField {
     /**
      * Final field name (renamed or converted by naming strategy)
      */
-    private final String name;
+    private final String exportName;
     private final Type type;
     private final Field field;
 
-    ExportField(Field field, Type type, String name) {
+    ExportField(Field field, Type type, String exportName) {
         this.field = field;
-        this.name = name;
+        this.exportName = exportName;
         this.type = type;
     }
 
@@ -76,12 +76,12 @@ public class ExportField {
     }
 
     public String getName() {
-        return getName(Cases.DEFAULT.value());
+        return getName(NamingCases.DEFAULT);
     }
 
-    public String getName(Case naming) {
-        return StringUtils.isEmpty(name)
-                ? naming.apply(field.getName())
-                : name;
+    public String getName(NamingCase naming) {
+        return StringUtils.isEmpty(exportName)
+                ? naming.apply(field.getName()).toString()
+                : exportName;
     }
 }

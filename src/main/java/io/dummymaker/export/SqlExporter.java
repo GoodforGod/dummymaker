@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import java.lang.reflect.Field;
@@ -40,27 +40,31 @@ public final class SqlExporter extends AbstractExporter {
      */
     private final Map<Class<?>, String> dataTypes;
 
-    private SqlExporter(Case fieldCase,
+    private SqlExporter(NamingCase fieldNamingCase,
                         @NotNull Function<String, Writer> writerFunction,
                         int batchSize,
                         Map<Class<?>, String> dataTypes) {
-        super(fieldCase, writerFunction);
+        super(fieldNamingCase, writerFunction);
         this.batchSize = batchSize;
         this.dataTypes = dataTypes;
     }
 
     public static final class Builder {
 
-        private Case fieldCase = Cases.DEFAULT.value();
+        private NamingCase fieldNamingCase = NamingCases.SNAKE_LOWER_CASE;
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private int batchSize = 999;
         private final Map<Class<?>, String> dataTypes = buildDefaultDataTypeMap();
 
         private Builder() {}
 
+        /**
+         * @param fieldNamingCase apply to SQL column name
+         * @return self
+         */
         @NotNull
-        public Builder withCase(@NotNull Case fieldCase) {
-            this.fieldCase = fieldCase;
+        public Builder withCase(@NotNull NamingCase fieldNamingCase) {
+            this.fieldNamingCase = fieldNamingCase;
             return this;
         }
 
@@ -94,7 +98,7 @@ public final class SqlExporter extends AbstractExporter {
 
         @NotNull
         public SqlExporter build() {
-            return new SqlExporter(fieldCase, writerFunction, batchSize, dataTypes);
+            return new SqlExporter(fieldNamingCase, writerFunction, batchSize, dataTypes);
         }
 
         private static Map<Class<?>, String> buildDefaultDataTypeMap() {
@@ -118,6 +122,7 @@ public final class SqlExporter extends AbstractExporter {
             typeMap.put(char.class, "CHAR");
             typeMap.put(Character.class, "CHAR");
             typeMap.put(String.class, "VARCHAR");
+            typeMap.put(CharSequence.class, "VARCHAR");
             typeMap.put(UUID.class, "UUID");
             typeMap.put(Object.class, "VARCHAR");
             typeMap.put(Time.class, "TIME");
@@ -151,7 +156,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     private <T> String getCollectionName(T t) {
-        return fieldCase.apply(t.getClass().getSimpleName()).toLowerCase();
+        return fieldNamingCase.apply(t.getClass().getSimpleName()).toString();
     }
 
     /**
@@ -170,7 +175,7 @@ public final class SqlExporter extends AbstractExporter {
      * @return sql create table (name - type)
      */
     private String translateContainerToSqlType(ExportField container) {
-        final String field = container.getName(fieldCase);
+        final String field = container.getName(fieldNamingCase);
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
@@ -199,7 +204,7 @@ public final class SqlExporter extends AbstractExporter {
                 .append(" (");
 
         final String names = containers.stream()
-                .map(c -> c.getName(fieldCase))
+                .map(c -> c.getName(fieldNamingCase))
                 .collect(Collectors.joining(", "));
 
         return builder.append(names)
@@ -297,7 +302,7 @@ public final class SqlExporter extends AbstractExporter {
         // Write primary key constraint
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
-                .append(fieldCase.apply(primaryKeyField))
+                .append(fieldNamingCase.apply(primaryKeyField))
                 .append(")\n);\n")
                 .toString();
     }

@@ -1,7 +1,5 @@
 package io.dummymaker.cases;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Each upper letter separated with underscore symbol, and transform to low case EXCLUDE FIRST
  * LETTER, first letter to low case Example: ( DummyList - dummy_list )
@@ -9,22 +7,30 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class SnakeLowerCase implements Case {
+public final class SnakeLowerCase extends AbstractSeparatorCase {
 
     SnakeLowerCase() {}
 
     @Override
-    public @NotNull String apply(@NotNull String value) {
-        final StringBuilder builder = new StringBuilder();
+    protected String mapFirstLetter(char letter) {
+        return String.valueOf(Character.toLowerCase(letter));
+    }
 
-        for (final char letter : value.toCharArray()) {
-            if (Character.isUpperCase(letter) && builder.length() != 0) {
-                builder.append("_");
+    @Override
+    protected String mapAfterSeparator(char letter) {
+        return "_" + Character.toLowerCase(letter);
+    }
+
+    @Override
+    protected String mapDefault(char previousLetter, char letter) {
+        if (Character.isUpperCase(letter)) {
+            if (Character.isUpperCase(previousLetter)) {
+                return String.valueOf(Character.toLowerCase(letter));
+            } else {
+                return "_" + Character.toLowerCase(letter);
             }
-
-            builder.append(Character.toLowerCase(letter));
+        } else {
+            return String.valueOf(Character.toLowerCase(letter));
         }
-
-        return builder.toString();
     }
 }

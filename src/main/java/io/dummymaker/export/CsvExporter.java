@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.export.ExportField.Type;
 import java.util.Collection;
 import java.util.function.Function;
@@ -27,24 +27,28 @@ public final class CsvExporter extends AbstractExporter {
      */
     private final boolean hasHeader;
 
-    private CsvExporter(Case fieldCase, Function<String, Writer> writerFunction, boolean hasHeader, String separator) {
-        super(fieldCase, writerFunction);
+    private CsvExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction, boolean hasHeader, String separator) {
+        super(fieldNamingCase, writerFunction);
         this.hasHeader = hasHeader;
         this.separator = separator;
     }
 
     public static final class Builder {
 
-        private Case fieldCase = Cases.DEFAULT.value();
+        private NamingCase fieldNamingCase = NamingCases.DEFAULT;
         private boolean hasHeader = false;
         private String separator = String.valueOf(DEFAULT_SEPARATOR);
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
 
         private Builder() {}
 
+        /**
+         * @param fieldNamingCase apply to CSV header field name
+         * @return self
+         */
         @NotNull
-        public Builder withCase(@NotNull Case fieldCase) {
-            this.fieldCase = fieldCase;
+        public Builder withCase(@NotNull NamingCase fieldNamingCase) {
+            this.fieldNamingCase = fieldNamingCase;
             return this;
         }
 
@@ -74,7 +78,7 @@ public final class CsvExporter extends AbstractExporter {
 
         @NotNull
         public CsvExporter build() {
-            return new CsvExporter(fieldCase, writerFunction, hasHeader, separator);
+            return new CsvExporter(fieldNamingCase, writerFunction, hasHeader, separator);
         }
     }
 
@@ -108,7 +112,7 @@ public final class CsvExporter extends AbstractExporter {
             return "";
 
         return containers.stream()
-                .map(c -> c.getName(fieldCase))
+                .map(c -> c.getName(fieldNamingCase))
                 .collect(Collectors.joining(separator, "", "\n"));
     }
 

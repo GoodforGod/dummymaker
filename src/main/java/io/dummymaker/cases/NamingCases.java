@@ -1,6 +1,7 @@
 package io.dummymaker.cases;
 
 import io.dummymaker.export.Exporter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Naming strategy for class and field names
@@ -11,7 +12,7 @@ import io.dummymaker.export.Exporter;
  * @see Exporter
  * @since 21.02.2018
  */
-public enum Cases {
+public enum NamingCases implements NamingCase {
 
     DEFAULT(new DefaultCase()),
     LOWER_CASE(new LowerCase()),
@@ -21,15 +22,18 @@ public enum Cases {
     KEBAB_LOWER_CASE(new KebabLowerCase()),
     KEBAB_UPPER_CASE(new KebabUpperCase()),
     CAMEL_CASE(new CamelCase()),
-    PASCAL_CASE(new PascalCase());
+    CAMEL_WORD_CASE(new CamelWordCase()),
+    PASCAL_CASE(new PascalCase()),
+    PASCAL_WORD_CASE(new PascalWordCase());
 
-    private final Case value;
+    private final NamingCase namingCase;
 
-    Cases(final Case value) {
-        this.value = value;
+    NamingCases(final NamingCase namingCase) {
+        this.namingCase = namingCase;
     }
 
-    public Case value() {
-        return value;
+    @Override
+    public @NotNull CharSequence apply(@NotNull CharSequence value) {
+        return namingCase.apply(value);
     }
 }

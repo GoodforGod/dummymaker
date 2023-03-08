@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
 import io.dummymaker.annotation.complex.GenTime;
-import io.dummymaker.cases.Case;
+import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
@@ -29,11 +29,11 @@ abstract class AbstractExporter implements Exporter {
 
     protected final ExportScanner scanner = new ExportScanner();
 
-    protected final Case fieldCase;
+    protected final NamingCase fieldNamingCase;
     protected final Function<String, Writer> writerFunction;
 
-    AbstractExporter(Case fieldCase, Function<String, Writer> writerFunction) {
-        this.fieldCase = fieldCase;
+    AbstractExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction) {
+        this.fieldNamingCase = fieldNamingCase;
         this.writerFunction = writerFunction;
     }
 

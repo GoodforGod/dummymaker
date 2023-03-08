@@ -1,19 +1,18 @@
 package io.dummymaker.cases;
 
 /**
- * First letter is lower case, letter after separator lower case, other letters are as is: Bobby -
- * bobby, TonNy - tonny
+ * First letter is upper case, other letters are as is: Bobby - Bobby, tonNy - TonNy
  *
  * @author Anton Kurako (GoodforGod)
- * @since 21.02.2018
+ * @since 21.04.2018
  */
-public final class CamelCase extends AbstractSeparatorCase {
+public final class PascalWordCase extends AbstractSeparatorCase {
 
-    CamelCase() {}
+    PascalWordCase() {}
 
     @Override
     protected String mapFirstLetter(char letter) {
-        return String.valueOf(Character.toLowerCase(letter));
+        return String.valueOf(Character.toUpperCase(letter));
     }
 
     @Override
@@ -23,6 +22,6 @@ public final class CamelCase extends AbstractSeparatorCase {
 
     @Override
     protected String mapDefault(char previousLetter, char letter) {
-        return String.valueOf(Character.toLowerCase(letter));
+        return String.valueOf(letter);
     }
 }

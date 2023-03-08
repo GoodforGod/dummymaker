@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class LowerCase implements Case {
+public final class LowerCase implements NamingCase {
 
     LowerCase() {}
 
     @Override
-    public @NotNull String apply(@NotNull String value) {
-        return value.toLowerCase();
+    public @NotNull CharSequence apply(@NotNull CharSequence value) {
+        return value.toString().toLowerCase();
     }
 }

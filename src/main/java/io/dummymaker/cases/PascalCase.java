@@ -1,21 +1,28 @@
 package io.dummymaker.cases;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
- * First letter is upper case, next letters are as is: Bobby - Bobby, tonNy - TonNy
+ * First letter is upper case, letter after separator upper case, other letters are lower case is:
+ * Bobby - Bobby, tonNy - Tonny
  *
  * @author Anton Kurako (GoodforGod)
  * @since 21.04.2018
  */
-public final class PascalCase implements Case {
+public final class PascalCase extends AbstractSeparatorCase {
 
     PascalCase() {}
 
     @Override
-    public @NotNull String apply(@NotNull String value) {
-        return (value.length() == 1)
-                ? value.toUpperCase()
-                : value.substring(0, 1).toUpperCase() + value.substring(1);
+    protected String mapFirstLetter(char letter) {
+        return String.valueOf(Character.toUpperCase(letter));
+    }
+
+    @Override
+    protected String mapAfterSeparator(char letter) {
+        return String.valueOf(Character.toUpperCase(letter));
+    }
+
+    @Override
+    protected String mapDefault(char previousLetter, char letter) {
+        return String.valueOf(Character.toLowerCase(letter));
     }
 }
