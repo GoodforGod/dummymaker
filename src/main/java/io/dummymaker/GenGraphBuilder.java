@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.annotation.GenDepth;
 import java.util.*;

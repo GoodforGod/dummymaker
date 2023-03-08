@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.generator.Generator;
@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Rule for settings generator type for specific field name or field type
@@ -17,72 +18,71 @@ public final class GenRule {
 
     private static final Class<?> GLOBAL_MARKER = Void.class;
 
-    private final int depth;
-    private final boolean isAuto;
+    private final Integer depth;
+    private final Boolean isAuto;
     private final Class<?> target;
     private final Set<String> ignored = new HashSet<>();
     private final Set<GenRuleField> fieldRules = new HashSet<>();
 
-    private GenRule(Class<?> target, boolean isAuto, int depth) {
+    private GenRule(Class<?> target, Boolean isAuto, Integer depth) {
         this.isAuto = isAuto;
         this.target = target;
         this.depth = depth;
     }
 
     @NotNull
-    public static GenRule manual(@NotNull Class<?> target) {
-        return manual(target, GenDepth.DEFAULT);
+    public static GenRule ofClass(@NotNull Class<?> target) {
+        return ofClassInner(target, null, null);
     }
 
     @NotNull
-    public static GenRule manual(@NotNull Class<?> target, int depth) {
+    public static GenRule ofClass(@NotNull Class<?> target, boolean isAuto) {
+        return ofClassInner(target, isAuto, null);
+    }
+
+    @NotNull
+    public static GenRule ofClass(@NotNull Class<?> target, int depth) {
+        return ofClassInner(target, null, depth);
+    }
+
+    @NotNull
+    public static GenRule ofClass(@NotNull Class<?> target, boolean isAuto, int depth) {
+        return ofClassInner(target, isAuto, depth);
+    }
+
+    private static GenRule ofClassInner(@NotNull Class<?> target, @Nullable Boolean isAuto, @Nullable Integer depth) {
         if (GLOBAL_MARKER.equals(target)) {
-            throw new IllegalArgumentException("Void can't be Rule type");
+            throw new IllegalArgumentException(GLOBAL_MARKER + " can't be GenRule type");
         }
 
-        return new GenRule(target, false, depth);
-    }
-
-    @NotNull
-    public static GenRule auto(@NotNull Class<?> target) {
-        return auto(target, GenDepth.DEFAULT);
-    }
-
-    @NotNull
-    public static GenRule auto(@NotNull Class<?> target, int depth) {
-        if (GLOBAL_MARKER.equals(target)) {
-            throw new IllegalArgumentException("Void can't be Rule type");
+        if (depth != null && (depth < 1 || depth > GenDepth.MAX)) {
+            throw new IllegalArgumentException("Depth must be between 1 and 50, but was " + depth + " for " + target);
         }
 
-        return new GenRule(target, true, depth);
+        return new GenRule(target, isAuto, depth);
     }
 
     @NotNull
-    public static GenRule global() {
-        return new GenRule(GLOBAL_MARKER, true, GenDepth.DEFAULT);
+    public static GenRule ofGlobal() {
+        return new GenRule(GLOBAL_MARKER, null, null);
     }
 
     @NotNull
-    public static GenRule global(int depth) {
-        return new GenRule(GLOBAL_MARKER, true, depth);
-    }
-
-    @NotNull
-    public GenRule named(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
+    public GenRule registerFields(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldNames);
         this.fieldRules.add(rule);
         return this;
     }
 
     @NotNull
-    public GenRule typed(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
+    public GenRule registerType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
         this.fieldRules.add(rule);
         return this;
     }
 
     @NotNull
-    public GenRule ignore(@NotNull String... fieldNames) {
+    public GenRule excludeFields(@NotNull String... fieldNames) {
         this.ignored.addAll(Arrays.asList(fieldNames));
         return this;
     }
@@ -156,11 +156,11 @@ public final class GenRule {
     }
 
     Optional<Integer> getDepth() {
-        return Optional.of(depth);
+        return Optional.ofNullable(depth);
     }
 
-    boolean isAuto() {
-        return isAuto;
+    Optional<Boolean> isAuto() {
+        return Optional.ofNullable(isAuto);
     }
 
     Class<?> getTarget() {

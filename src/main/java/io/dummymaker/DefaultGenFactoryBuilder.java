@@ -1,10 +1,13 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.annotation.GenDepth;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.generator.Localisation;
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -18,7 +21,9 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
     private int depthByDefault = GenDepth.DEFAULT;
     private boolean ignoreErrors = false;
     private boolean overrideDefaultValues = true;
-    private Localisation localisation = Localisation.DEFAULT;
+    @Nullable
+    private Localisation localisation;
+    private NamingCase namingCaseStrategy = NamingCases.DEFAULT;
 
     @NotNull
     @Override
@@ -29,8 +34,15 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
 
     @NotNull
     @Override
-    public GenFactory.Builder rule(@NotNull GenRule rule) {
+    public GenFactory.Builder addRule(@NotNull GenRule rule) {
         this.rules.add(rule);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public GenFactory.Builder applyCase(@NotNull NamingCase namingCase) {
+        this.namingCaseStrategy = namingCase;
         return this;
     }
 
@@ -52,27 +64,30 @@ final class DefaultGenFactoryBuilder implements GenFactory.Builder {
         return this;
     }
 
+    @NotNull
     @Override
-    public GenFactory.@NotNull Builder ignoreExceptions(boolean ignoreExceptions) {
+    public GenFactory.Builder ignoreExceptions(boolean ignoreExceptions) {
         this.ignoreErrors = ignoreExceptions;
         return this;
     }
 
+    @NotNull
     @Override
-    public GenFactory.@NotNull Builder overrideDefaultValues(boolean overrideDefaultValues) {
+    public GenFactory.Builder overrideDefaultValues(boolean overrideDefaultValues) {
         this.overrideDefaultValues = overrideDefaultValues;
         return this;
     }
 
     @NotNull
-    public DefaultGenFactoryBuilder localisation(@NotNull Localisation localisation) {
+    @Override
+    public GenFactory.Builder localisation(@NotNull Localisation localisation) {
         this.localisation = localisation;
         return this;
     }
 
     @Override
     public @NotNull GenFactory build() {
-        return new DefaultGenFactory(seed, GenRules.of(rules), autoByDefault, depthByDefault, ignoreErrors,
-                overrideDefaultValues, localisation);
+        return new DefaultGenFactory(seed, GenRules.of(rules), autoByDefault, depthByDefault,
+                ignoreErrors, overrideDefaultValues, namingCaseStrategy, localisation);
     }
 }

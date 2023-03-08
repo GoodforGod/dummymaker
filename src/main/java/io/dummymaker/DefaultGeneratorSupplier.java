@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
@@ -59,6 +59,8 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
                 new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(), new StatusGenerator(), new StreetGenerator(),
                 new StringGenerator(6, 12), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(),
                 new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));
+
+        TYPE_TO_GENERATORS.put(CharSequence.class, TYPE_TO_GENERATORS.get(String.class));
 
         TYPE_TO_GENERATORS.put(Object.class, Collections.singletonList(new ObjectGenerator()));
         TYPE_TO_GENERATORS.put(Boolean.class, Collections.singletonList(new BooleanGenerator()));

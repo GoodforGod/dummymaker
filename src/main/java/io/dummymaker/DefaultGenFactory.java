@@ -1,19 +1,22 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import static io.dummymaker.util.CastUtils.castObject;
 
+import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.error.GenException;
+import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.Localisation;
-import io.dummymaker.generator.LocalizedGenerator;
 import io.dummymaker.generator.ParameterizedGenerator;
-import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -24,14 +27,20 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 13.11.2022
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 final class DefaultGenFactory implements GenFactory {
+
+    private static final Pattern LOCALISATION_MATCH_PATTERN_EN = Pattern.compile("(eng?|english)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LOCALISATION_MATCH_PATTERN_RU = Pattern.compile("(ru|russian)$", Pattern.CASE_INSENSITIVE);
 
     private final ClassConstructor zeroArgConstructor;
     private final ClassConstructor fullArgConstructor;
     private final GenGraphBuilder graphBuilder;
     private final GeneratorSupplier generatorSupplier;
+    private final NamingCase namingCase;
     private final boolean ignoreErrors;
     private final boolean overrideDefaultValues;
+    @Nullable
     private final Localisation localisation;
 
     DefaultGenFactory(long seed,
@@ -40,7 +49,9 @@ final class DefaultGenFactory implements GenFactory {
                       int depthByDefault,
                       boolean ignoreErrors,
                       boolean overrideDefaultValues,
-                      Localisation localisation) {
+                      NamingCase namingCase,
+                      @Nullable Localisation localisation) {
+        this.namingCase = namingCase;
         this.ignoreErrors = ignoreErrors;
         this.overrideDefaultValues = overrideDefaultValues;
         this.localisation = localisation;
@@ -87,14 +98,21 @@ final class DefaultGenFactory implements GenFactory {
             return Stream.empty();
         }
 
+        final Generator<?> generator = generatorSupplier.get(first.getClass());
+        if (!(generator instanceof EmbeddedGenerator)) {
+            return Stream.of((T) generator.get())
+                    .filter(Objects::nonNull);
+        }
+
         final GenNode graph = graphBuilder.build(first.getClass());
         final GenContext context = GenContext.ofNew(graph.value().depth(), graph);
         return LongStream.range(0, size)
-                .mapToObj(i -> fillEntity(first, context));
+                .mapToObj(i -> fillValueFields(first, context))
+                .filter(Objects::nonNull);
     }
 
     @Nullable
-    <T> T fillEntity(@Nullable T value, GenContext context) {
+    <T> T fillValueFields(@Nullable T value, GenContext context) {
         if (value == null || context.graph() == null) {
             return null;
         }
@@ -104,7 +122,6 @@ final class DefaultGenFactory implements GenFactory {
             for (GenContainer fieldMeta : fields) {
                 final Field field = fieldMeta.field();
                 field.setAccessible(true);
-
                 if (!overrideDefaultValues) {
                     final Object fieldDefaultValue = field.get(value);
                     if (fieldDefaultValue != null) {
@@ -112,7 +129,7 @@ final class DefaultGenFactory implements GenFactory {
                     }
                 }
 
-                final Object generated = generateObject(fieldMeta, context);
+                final Object generated = generateFieldValue(fieldMeta, context);
                 if (generated != null) {
                     field.set(value, generated);
                 }
@@ -130,40 +147,87 @@ final class DefaultGenFactory implements GenFactory {
         return value;
     }
 
-    private Object generateObject(GenContainer fieldMeta, GenContext context) {
+    private Object generateFieldValue(GenContainer fieldMeta, GenContext context) {
         final Field field = fieldMeta.field();
         final Generator<?> generator = fieldMeta.getGenerator();
+        final Localisation matchedLocalisation = (localisation == null)
+                ? tryMatchLocalisation(field)
+                : localisation;
 
         Object generated;
 
         if (generator instanceof EmbeddedGenerator) {
             generated = generateEmbeddedObject(fieldMeta, context);
-        } else if (generator instanceof SequenceParameterizedGenerator) {
+        } else if (generator instanceof SequenceGenerator) {
             final Object sequence = generator.get();
             generated = CastUtils.castToNumber(sequence, field.getType());
         } else if (generator instanceof ParameterizedGenerator) {
-            // If complexGen can generate embedded objects
-            // And not handling it like AbstractComplexGenerator, you are probably StackOverFlowed
-            generated = ((ParameterizedGenerator) generator).get(localisation, fieldMeta.type(), new GenTypeBuilder() {
+            // may stackOverFlow if ton of embedded will be generated
+            final GenTypeBuilder genTypeBuilder = new GenTypeBuilder() {
 
                 @Override
                 public <T> @Nullable T build(@NotNull Class<T> type) {
-                    final Generator<?> suitable = generatorSupplier.get(type);
-                    if (suitable instanceof EmbeddedGenerator) {
+                    final Generator<?> suitableGenerator = generatorSupplier.get(type);
+                    if (suitableGenerator instanceof EmbeddedGenerator) {
                         final GenContext embeddedContext = GenContext.ofChild(context, type);
                         if (embeddedContext.depthCurrent() <= embeddedContext.depthMax()) {
                             final T instantiate = instantiate(type);
-                            return fillEntity(instantiate, embeddedContext);
+                            return fillValueFields(instantiate, embeddedContext);
                         } else {
                             return null;
                         }
+                    } else if (suitableGenerator instanceof ParameterizedGenerator) {
+                        final GenTypeBuilder thisGenTypeBuilder = this;
+                        return (T) ((ParameterizedGenerator<?>) suitableGenerator).get(new GenParameters() {
+
+                            @Override
+                            public @NotNull Localisation localisation() {
+                                return matchedLocalisation;
+                            }
+
+                            @Override
+                            public @NotNull NamingCase namingCase() {
+                                return namingCase;
+                            }
+
+                            @Override
+                            public @NotNull GenType fieldType() {
+                                return SimpleGenType.ofClass(type);
+                            }
+
+                            @Override
+                            public @NotNull GenTypeBuilder fieldTypeBuilder() {
+                                return thisGenTypeBuilder;
+                            }
+                        });
                     } else {
-                        return (T) suitable.get();
+                        return (T) suitableGenerator.get();
                     }
                 }
+            };
+
+            generated = ((ParameterizedGenerator) generator).get(new GenParameters() {
+
+                @Override
+                public @NotNull Localisation localisation() {
+                    return matchedLocalisation;
+                }
+
+                @Override
+                public @NotNull NamingCase namingCase() {
+                    return namingCase;
+                }
+
+                @Override
+                public @NotNull GenType fieldType() {
+                    return fieldMeta.type();
+                }
+
+                @Override
+                public @NotNull GenTypeBuilder fieldTypeBuilder() {
+                    return genTypeBuilder;
+                }
             });
-        } else if (generator instanceof LocalizedGenerator) {
-            generated = ((LocalizedGenerator<?>) generator).get(localisation);
         } else {
             generated = generator.get();
         }
@@ -179,9 +243,20 @@ final class DefaultGenFactory implements GenFactory {
             }
 
             final Object childValue = instantiate(childType);
-            return fillEntity(childValue, GenContext.ofChild(context, childType));
+            return fillValueFields(childValue, GenContext.ofChild(context, childType));
         } else {
             return null;
+        }
+    }
+
+    @NotNull
+    private Localisation tryMatchLocalisation(Field field) {
+        if (LOCALISATION_MATCH_PATTERN_EN.matcher(field.getName()).matches()) {
+            return Localisation.ENGLISH;
+        } else if (LOCALISATION_MATCH_PATTERN_RU.matcher(field.getName()).matches()) {
+            return Localisation.RUSSIAN;
+        } else {
+            return Localisation.ENGLISH;
         }
     }
 

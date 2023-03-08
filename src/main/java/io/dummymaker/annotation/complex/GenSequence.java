@@ -1,7 +1,7 @@
 package io.dummymaker.annotation.complex;
 
 import io.dummymaker.annotation.GenCustomFactory;
-import io.dummymaker.generator.parameterized.factory.SequenceAnnotationGeneratorFactory;
+import io.dummymaker.generator.simple.number.factory.SequenceAnnotationGeneratorFactory;
 import java.lang.annotation.*;
 import org.jetbrains.annotations.Range;
 

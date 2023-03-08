@@ -1,5 +1,7 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.generator.Localisation;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -64,7 +66,21 @@ public interface GenFactory {
         Builder seed(long seed);
 
         @NotNull
-        Builder rule(@NotNull GenRule rule);
+        Builder addRule(@NotNull GenRule rule);
+
+        /**
+         * @param namingCase to apply for {@link CharSequence} values
+         * @return self
+         */
+        @NotNull
+        Builder applyCase(@NotNull NamingCase namingCase);
+
+        /**
+         * @param localisation to use when generating {@link CharSequence} values
+         * @return self
+         */
+        @NotNull
+        Builder localisation(@NotNull Localisation localisation);
 
         /**
          * @param autoByDefault is true by Default

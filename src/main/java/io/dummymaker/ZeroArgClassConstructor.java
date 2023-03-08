@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.util.CastUtils;
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 13.11.2022
  */
+@SuppressWarnings("unchecked")
 final class ZeroArgClassConstructor implements ClassConstructor {
 
     @Override

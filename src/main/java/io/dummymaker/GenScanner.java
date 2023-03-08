@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.annotation.*;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
@@ -118,7 +118,7 @@ final class GenScanner {
             }
         }
 
-        if (isAutoByDefault) {
+        if (isAutoByDefault || rule.flatMap(GenRule::isAuto).orElse(false)) {
             final Generator<?> generator = generatorSupplier.get(field);
             final boolean isComplex = isComplex(field);
             return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, null));
@@ -143,8 +143,8 @@ final class GenScanner {
                 .filter(f -> !f.isSynthetic())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
-                .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .filter(f -> !Modifier.isFinal(f.getModifiers()))
+                .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .collect(Collectors.toList());
     }
 

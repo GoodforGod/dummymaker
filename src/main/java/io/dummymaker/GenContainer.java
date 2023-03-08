@@ -1,9 +1,9 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.parameterized.SequenceParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
+import io.dummymaker.generator.simple.number.SequenceGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.Nullable;
@@ -79,7 +79,7 @@ final class GenContainer {
     }
 
     boolean isSequence() {
-        return generator instanceof SequenceParameterizedGenerator;
+        return generator instanceof SequenceGenerator;
     }
 
     int depth() {

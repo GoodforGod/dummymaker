@@ -186,14 +186,14 @@ public final class CastUtils {
      * @param castObject cast object
      * @param fieldType  actual field type
      * @param <T>        generic type
-     * @return generated and casted object
+     * @return generated and cast object
      */
     @SuppressWarnings("unchecked")
     public static <T> T castObject(Object castObject, Class<T> fieldType) {
         if (fieldType == null)
             return null;
 
-        final boolean isTypeString = fieldType.equals(String.class);
+        final boolean isTypeString = String.class.equals(fieldType) || CharSequence.class.isAssignableFrom(fieldType);
         if (castObject == null)
             return isTypeString
                     ? ((T) "null")
@@ -274,9 +274,9 @@ public final class CastUtils {
         BIG_DECIMAL;
 
         public static CastType of(Class<?> type) {
-            if (type.isAssignableFrom(String.class)) {
+            if (String.class.isAssignableFrom(type) || CharSequence.class.isAssignableFrom(type)) {
                 return STRING;
-            } else if (type.isAssignableFrom(Boolean.class) || type.isAssignableFrom(boolean.class)) {
+            } else if (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type)) {
                 return BOOLEAN;
             } else if (type.isAssignableFrom(Byte.class) || type.isAssignableFrom(byte.class)) {
                 return BYTE;
@@ -292,9 +292,9 @@ public final class CastUtils {
                 return FLOAT;
             } else if (type.isAssignableFrom(Double.class) || type.isAssignableFrom(double.class)) {
                 return DOUBLE;
-            } else if (type.isAssignableFrom(BigInteger.class)) {
+            } else if (BigInteger.class.isAssignableFrom(type)) {
                 return BIG_INT;
-            } else if (type.isAssignableFrom(BigDecimal.class)) {
+            } else if (BigDecimal.class.isAssignableFrom(type)) {
                 return BIG_DECIMAL;
             }
 

@@ -27,7 +27,10 @@ public final class CsvExporter extends AbstractExporter {
      */
     private final boolean hasHeader;
 
-    private CsvExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction, boolean hasHeader, String separator) {
+    private CsvExporter(NamingCase fieldNamingCase,
+                        Function<String, Writer> writerFunction,
+                        boolean hasHeader,
+                        String separator) {
         super(fieldNamingCase, writerFunction);
         this.hasHeader = hasHeader;
         this.separator = separator;

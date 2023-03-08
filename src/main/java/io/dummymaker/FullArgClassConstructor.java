@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.generator.Generator;

@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import io.dummymaker.error.GenConstructionException;
 import org.jetbrains.annotations.NotNull;

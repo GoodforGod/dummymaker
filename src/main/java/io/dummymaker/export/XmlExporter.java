@@ -22,7 +22,9 @@ public final class XmlExporter extends AbstractExporter {
 
     private final Function<String, String> listTagSuffix;
 
-    private XmlExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction, Function<String, String> listTagSuffix) {
+    private XmlExporter(NamingCase fieldNamingCase,
+                        Function<String, Writer> writerFunction,
+                        Function<String, String> listTagSuffix) {
         super(fieldNamingCase, writerFunction);
         this.listTagSuffix = listTagSuffix;
     }

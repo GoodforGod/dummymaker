@@ -1,4 +1,4 @@
-package io.dummymaker.factory;
+package io.dummymaker;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 30.11.2022
  */
+@SuppressWarnings("DataFlowIssue")
 final class SimpleGenType implements GenType {
 
     private final Class<?> value;
