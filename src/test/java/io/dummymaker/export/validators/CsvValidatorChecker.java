@@ -1,13 +1,13 @@
 package io.dummymaker.export.validators;
 
-import static io.dummymaker.model.Dummy.DummyFields.*;
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
-import io.dummymaker.model.DummyTime.Patterns;
-import io.dummymaker.model.DummyTimeFormatter;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
+import io.dummymaker.testdata.DummyTime.Patterns;
+import io.dummymaker.testdata.DummyTimeFormatter;
 
 /**
  * @author GoodforGod
@@ -75,11 +75,11 @@ public class CsvValidatorChecker implements ValidatorChecker {
     }
 
     public void isTwoDummiesValidWithHeader(String[] dummies, char separator) {
-        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, Cases.DEFAULT.value());
+        isTwoDummiesValidWithHeaderAndNameStrategy(dummies, separator, NamingCases.DEFAULT);
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy) {
         String[] valueArray1 = dummies[0].split(String.valueOf(DEFAULT_SEPARATOR));
         String[] valueArray2 = dummies[1].split(String.valueOf(DEFAULT_SEPARATOR));
 
@@ -96,10 +96,10 @@ public class CsvValidatorChecker implements ValidatorChecker {
         assertTrue(valueArray2[2].matches("\'[a-zA-Z0-9]+\'"));
     }
 
-    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, Case strategy) {
-        final String expectedNameField = strategy.apply(NAME.exportName());
+    public void isTwoDummiesValidWithHeaderAndNameStrategy(String[] dummies, char separator, NamingCase strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName()).toString();
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.apply(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName()).toString();
 
         String[] headerArray = dummies[0].split(String.valueOf(separator));
         String[] valueArray1 = dummies[1].split(String.valueOf(separator));

@@ -1,11 +1,11 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.GenFactory;
 import io.dummymaker.export.CsvExporter;
 import io.dummymaker.export.Exporter;
 import io.dummymaker.export.validators.ValidatorChecker;
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.model.Dummy;
-import io.dummymaker.model.DummyNoExportFields;
+import io.dummymaker.testdata.Dummy;
+import io.dummymaker.testdata.DummyNoExportFields;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

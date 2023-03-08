@@ -12,7 +12,7 @@ import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
-import io.dummymaker.model.DummyTime.Patterns;
+import io.dummymaker.testdata.DummyTime.Patterns;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;

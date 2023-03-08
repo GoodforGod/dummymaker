@@ -1,6 +1,6 @@
 package io.dummymaker.export.validators;
 
-import io.dummymaker.cases.Case;
+import io.dummymaker.cases.NamingCase;
 
 /**
  * @author GoodforGod
@@ -16,7 +16,7 @@ public interface ValidatorChecker {
 
     void isTwoDummiesValid(String[] dummies);
 
-    void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy);
+    void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy);
 
     void isDummyTimeValid(String[] dummy);
 

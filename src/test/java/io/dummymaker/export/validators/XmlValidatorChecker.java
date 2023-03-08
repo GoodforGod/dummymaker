@@ -1,15 +1,15 @@
 package io.dummymaker.export.validators;
 
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static io.dummymaker.model.DummyTime.Fields.*;
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
+import static io.dummymaker.testdata.DummyTime.Fields.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
-import io.dummymaker.model.DummyTime;
-import io.dummymaker.model.DummyTime.Patterns;
-import io.dummymaker.model.DummyTimeFormatter;
-import io.dummymaker.model.DummyUnixTime;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
+import io.dummymaker.testdata.DummyTime;
+import io.dummymaker.testdata.DummyTime.Patterns;
+import io.dummymaker.testdata.DummyTimeFormatter;
+import io.dummymaker.testdata.DummyUnixTime;
 
 /**
  * @author GoodforGod
@@ -47,16 +47,16 @@ public class XmlValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
+        isTwoDummiesValidWithNamingStrategy(dummies, NamingCases.DEFAULT);
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
-        final String expectedNameField = strategy.apply(NAME.exportName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName()).toString();
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.apply(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName()).toString();
 
-        assertTrue(dummies[0].matches("<[a-zA-Z]+List>"));
+        assertTrue(dummies[0].matches("<[a-zA-Z]+" + strategy.apply("List") + ">"));
         assertTrue(dummies[1].matches("<[a-zA-Z]+>"));
         assertTrue(dummies[2].matches("\\t<" + expectedGroupField + ">" + "[0-9]+" + "</" + expectedGroupField + ">"));
         assertTrue(dummies[3].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
@@ -67,7 +67,7 @@ public class XmlValidatorChecker implements ValidatorChecker {
         assertTrue(dummies[8].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
         assertTrue(dummies[9].matches("\\t<" + expectedNameField + ">" + "[a-zA-Z]+" + "</" + expectedNameField + ">"));
         assertTrue(dummies[10].matches("</[a-zA-Z]+>"));
-        assertTrue(dummies[11].matches("</[a-zA-Z]+List>"));
+        assertTrue(dummies[11].matches("</[a-zA-Z]+" + strategy.apply("List") + ">"));
     }
 
     @Override

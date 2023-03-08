@@ -1,14 +1,14 @@
 package io.dummymaker.export;
 
+import io.dummymaker.GenFactory;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.model.DummyTime;
-import io.dummymaker.model.DummyTimeFormatter;
-import io.dummymaker.model.DummyUnixTime;
-import java.util.Arrays;
-import java.util.Collection;
+import io.dummymaker.testdata.DummyTime;
+import io.dummymaker.testdata.DummyTimeFormatter;
+import io.dummymaker.testdata.DummyUnixTime;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
@@ -19,13 +19,12 @@ public class ValidatorExporterTest extends Assertions {
 
     private final GenFactory factory = GenFactory.build();
 
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { CsvExporter.build(), new CsvValidatorChecker() },
-                { JsonExporter.build(), new JsonValidatorChecker() },
-                { XmlExporter.build(), new XmlValidatorChecker() },
-                { SqlExporter.build(), new SqlValidatorChecker() }
-        });
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of(CsvExporter.build(), new CsvValidatorChecker()),
+                Arguments.of(JsonExporter.build(), new JsonValidatorChecker()),
+                Arguments.of(XmlExporter.build(), new XmlValidatorChecker()),
+                Arguments.of(SqlExporter.build(), new SqlValidatorChecker()));
     }
 
     @MethodSource("data")

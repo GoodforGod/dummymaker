@@ -1,9 +1,9 @@
 package io.dummymaker.export;
 
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.factory.GenRule;
+import io.dummymaker.GenFactory;
+import io.dummymaker.GenRule;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.model.DummyEmbedded.DummyEmbeddedIntoSimple;
+import io.dummymaker.testdata.DummyEmbedded.DummyEmbeddedIntoSimple;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ class UniqueExporterTests extends Assertions {
                 ? 1
                 : 2;
 
-        final GenRule rule = GenRule.manual(DummyEmbeddedIntoSimple.class)
-                .named(() -> generator, "number");
+        final GenRule rule = GenRule.ofClass(DummyEmbeddedIntoSimple.class, false)
+                .registerFields(() -> generator, "number");
 
-        final GenFactory factory = GenFactory.builder().rule(rule).build();
+        final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbeddedIntoSimple dummy = factory.build(DummyEmbeddedIntoSimple.class);
 
         final String json = JsonExporter.build().exportAsString(dummy);

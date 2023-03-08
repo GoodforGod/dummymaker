@@ -1,10 +1,10 @@
 package io.dummymaker.export;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.GenFactory;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.export.validators.CsvValidatorChecker;
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.model.Dummy;
+import io.dummymaker.testdata.Dummy;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +63,7 @@ class CsvExportAsFileTests extends FileExportAssert {
 
     @Test
     void exportListDummyWithStringWrapAndHeaderAndNamingStrategy() {
-        final Case strategy = Cases.SNAKE_UPPER_CASE.value();
+        final NamingCase strategy = NamingCases.SNAKE_UPPER_CASE;
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final String filename = Dummy.class.getSimpleName() + format.getExtension();

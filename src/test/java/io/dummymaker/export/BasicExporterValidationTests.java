@@ -1,12 +1,13 @@
 package io.dummymaker.export;
 
-import io.dummymaker.model.DummyNoZeroConstructor;
+import io.dummymaker.testdata.DummyNoZeroConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
@@ -15,13 +16,12 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 public class BasicExporterValidationTests extends Assertions {
 
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { CsvExporter.build() },
-                { JsonExporter.build() },
-                { XmlExporter.build() },
-                { SqlExporter.build() }
-        });
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of(CsvExporter.build()),
+                Arguments.of(JsonExporter.build()),
+                Arguments.of(XmlExporter.build()),
+                Arguments.of(SqlExporter.build()));
     }
 
     @MethodSource("data")

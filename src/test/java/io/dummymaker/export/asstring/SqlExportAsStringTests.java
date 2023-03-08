@@ -1,13 +1,13 @@
 package io.dummymaker.export.asstring;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
+import io.dummymaker.GenFactory;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.export.Exporter;
 import io.dummymaker.export.SqlExporter;
 import io.dummymaker.export.validators.SqlValidatorChecker;
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.model.Dummy;
-import io.dummymaker.model.DummyArray;
+import io.dummymaker.testdata.Dummy;
+import io.dummymaker.testdata.DummyArray;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class SqlExportAsStringTests extends StringExportAssert {
 
     @Test
     void exportListOfDummiesInSqlWithNamingStrategy() {
-        final Case strategy = Cases.SNAKE_LOWER_CASE.value();
+        final NamingCase strategy = NamingCases.SNAKE_LOWER_CASE;
 
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
         final Exporter exporter = SqlExporter.builder().withCase(strategy).build();
@@ -42,7 +42,7 @@ class SqlExportAsStringTests extends StringExportAssert {
 
     @Test
     void exportDummiesWithArrays() {
-        final Case strategy = Cases.SNAKE_LOWER_CASE.value();
+        final NamingCase strategy = NamingCases.SNAKE_LOWER_CASE;
 
         final List<DummyArray> dummies = factory.build(DummyArray.class, 2);
         final Exporter exporter = SqlExporter.builder().withCase(strategy).build();

@@ -1,17 +1,17 @@
 package io.dummymaker.export.validators;
 
-import static io.dummymaker.model.Dummy.DummyFields.*;
-import static io.dummymaker.model.DummyTime.Patterns.OFFSET_DATETIME;
-import static io.dummymaker.model.DummyTime.Patterns.OFFSET_TIME;
-import static io.dummymaker.model.DummyTimeFormatter.Patterns.*;
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
+import static io.dummymaker.testdata.DummyTime.Patterns.OFFSET_DATETIME;
+import static io.dummymaker.testdata.DummyTime.Patterns.OFFSET_TIME;
+import static io.dummymaker.testdata.DummyTimeFormatter.Patterns.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.dummymaker.cases.Case;
-import io.dummymaker.cases.Cases;
-import io.dummymaker.model.DummyTime.Fields;
-import io.dummymaker.model.DummyTime.Patterns;
-import io.dummymaker.model.DummyTimeFormatter;
-import io.dummymaker.model.DummyUnixTime;
+import io.dummymaker.cases.NamingCase;
+import io.dummymaker.cases.NamingCases;
+import io.dummymaker.testdata.DummyTime.Fields;
+import io.dummymaker.testdata.DummyTime.Patterns;
+import io.dummymaker.testdata.DummyTimeFormatter;
+import io.dummymaker.testdata.DummyUnixTime;
 
 /**
  * @author GoodforGod
@@ -46,14 +46,14 @@ public class JsonValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isTwoDummiesValid(String[] dummies) {
-        isTwoDummiesValidWithNamingStrategy(dummies, Cases.DEFAULT.value());
+        isTwoDummiesValidWithNamingStrategy(dummies, NamingCases.DEFAULT);
     }
 
     @Override
-    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, Case strategy) {
-        final String expectedNameField = strategy.apply(NAME.exportName());
+    public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy) {
+        final String expectedNameField = strategy.apply(NAME.exportName()).toString();
         final String expectedGroupField = GROUP.exportName();
-        final String expectedNumField = strategy.apply(NUM.exportName());
+        final String expectedNumField = strategy.apply(NUM.exportName()).toString();
 
         assertTrue(dummies[0].matches("\\["
                 + "\\{\"" + expectedGroupField + "\":\"[0-9]+\","

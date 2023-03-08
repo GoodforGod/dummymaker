@@ -1,10 +1,10 @@
 package io.dummymaker.bundle;
 
 import io.dummymaker.generator.Localisation;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
@@ -13,26 +13,25 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class BundleImplTests extends Assertions {
 
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { new CityBundle() },
-                { new FormatBundle() },
-                { new JobBundle() },
-                { new StreetBundle() },
-                { new DistrictBundle() },
-                { new MiddleNameBundle() },
-                { new CompanyBundle() },
-                { new CountryBundle() },
-                { new DomainBundle() },
-                { new EmailServicesBundle() },
-                { new FemaleNameBundle() },
-                { new MaleNameBundle() },
-                { new LoginBundle() },
-                { new NounBundle() },
-                { new PhraseBundle() },
-                { new SurnameBundle() },
-                { new TagsBundle() }
-        });
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of(new CityBundle()),
+                Arguments.of(new FormatBundle()),
+                Arguments.of(new JobBundle()),
+                Arguments.of(new StreetBundle()),
+                Arguments.of(new DistrictBundle()),
+                Arguments.of(new MiddleNameBundle()),
+                Arguments.of(new CompanyBundle()),
+                Arguments.of(new CountryBundle()),
+                Arguments.of(new DomainBundle()),
+                Arguments.of(new EmailServicesBundle()),
+                Arguments.of(new FemaleNameBundle()),
+                Arguments.of(new MaleNameBundle()),
+                Arguments.of(new LoginBundle()),
+                Arguments.of(new NounBundle()),
+                Arguments.of(new PhraseBundle()),
+                Arguments.of(new SurnameBundle()),
+                Arguments.of(new TagsBundle()));
     }
 
     @MethodSource("data")

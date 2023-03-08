@@ -1,11 +1,11 @@
 package io.dummymaker.export.asstring;
 
+import io.dummymaker.GenFactory;
 import io.dummymaker.export.*;
 import io.dummymaker.export.validators.*;
-import io.dummymaker.factory.GenFactory;
-import io.dummymaker.model.Dummy;
-import io.dummymaker.model.DummyNoExportFields;
-import io.dummymaker.model.deprecated.DummyAuto;
+import io.dummymaker.testdata.Dummy;
+import io.dummymaker.testdata.DummyAuto;
+import io.dummymaker.testdata.DummyNoExportFields;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;

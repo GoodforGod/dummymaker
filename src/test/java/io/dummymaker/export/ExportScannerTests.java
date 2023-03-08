@@ -1,9 +1,9 @@
 package io.dummymaker.export;
 
-import static io.dummymaker.model.Dummy.DummyFields.*;
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.model.Dummy;
+import io.dummymaker.testdata.Dummy;
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
 
