@@ -2,11 +2,12 @@ package io.dummymaker;
 
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.generator.Localisation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Factory that generates data objects Core that handles all top level logic
@@ -63,10 +64,10 @@ public interface GenFactory {
     interface Builder {
 
         @NotNull
-        Builder seed(long seed);
+        Builder addRule(@NotNull GenRule rule);
 
         @NotNull
-        Builder addRule(@NotNull GenRule rule);
+        Builder seed(long seed);
 
         /**
          * @param namingCase to apply for {@link CharSequence} values

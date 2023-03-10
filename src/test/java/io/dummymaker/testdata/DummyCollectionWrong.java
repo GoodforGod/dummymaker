@@ -1,8 +1,9 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.complex.GenList;
-import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.annotation.parameterized.GenList;
+import io.dummymaker.annotation.parameterized.GenMap;
+import io.dummymaker.annotation.parameterized.GenSet;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

@@ -1,7 +1,9 @@
 package io.dummymaker.annotation.simple.string;
 
-import io.dummymaker.annotation.GenCustom;
+import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.simple.string.PhoneGenerator;
+import io.dummymaker.generator.simple.string.factory.PhoneAnnotationGeneratorFactory;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +14,7 @@ import java.lang.annotation.Target;
  * @see PhoneGenerator
  * @since 31.05.2017
  */
-@GenCustom(PhoneGenerator.class)
+@GenCustomFactory(PhoneAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface GenPhone {

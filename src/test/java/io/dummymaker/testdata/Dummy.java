@@ -1,13 +1,14 @@
 package io.dummymaker.testdata;
 
 import io.dummymaker.annotation.GenIgnore;
-import io.dummymaker.annotation.complex.GenSequence;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.number.GenDoubleSmall;
+import io.dummymaker.annotation.simple.number.GenSequence;
 import io.dummymaker.annotation.simple.string.GenCity;
 import io.dummymaker.annotation.simple.string.GenName;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;

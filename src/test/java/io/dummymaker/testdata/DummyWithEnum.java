@@ -1,6 +1,6 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.complex.GenEnum;
+import io.dummymaker.annotation.parameterized.GenEnum;
 
 /**
  * @author GoodforGod

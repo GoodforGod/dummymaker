@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.number.factory;
 
-import io.dummymaker.annotation.complex.GenSequence;
+import io.dummymaker.annotation.simple.number.GenSequence;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;

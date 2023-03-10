@@ -1,6 +1,6 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.complex.GenSequence;
+import io.dummymaker.annotation.simple.number.GenSequence;
 
 /**
  * @author GoodforGod

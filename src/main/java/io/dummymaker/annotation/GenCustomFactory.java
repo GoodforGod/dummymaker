@@ -2,6 +2,7 @@ package io.dummymaker.annotation;
 
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.ParameterizedGenerator;
+
 import java.lang.annotation.*;
 
 /**
@@ -12,7 +13,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.ANNOTATION_TYPE, ElementType.FIELD })
+@Target(value = ElementType.ANNOTATION_TYPE)
 public @interface GenCustomFactory {
 
     /**

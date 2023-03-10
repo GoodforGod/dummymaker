@@ -2,10 +2,11 @@ package io.dummymaker.testdata;
 
 import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenDepth;
-import io.dummymaker.annotation.complex.GenList;
-import io.dummymaker.annotation.complex.GenMap;
 import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.parameterized.GenList;
+import io.dummymaker.annotation.parameterized.GenMap;
 import io.dummymaker.annotation.simple.number.GenLong;
+
 import java.util.List;
 import java.util.Map;
 

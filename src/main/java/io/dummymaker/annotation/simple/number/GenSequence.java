@@ -1,9 +1,10 @@
-package io.dummymaker.annotation.complex;
+package io.dummymaker.annotation.simple.number;
 
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.simple.number.factory.SequenceAnnotationGeneratorFactory;
-import java.lang.annotation.*;
 import org.jetbrains.annotations.Range;
+
+import java.lang.annotation.*;
 
 /**
  * Generates numeric sequence from given number (default 0) to all produced/populated Dummies Works

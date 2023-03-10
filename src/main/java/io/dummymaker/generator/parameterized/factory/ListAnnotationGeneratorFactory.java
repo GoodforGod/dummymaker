@@ -1,6 +1,6 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenList;
+import io.dummymaker.annotation.parameterized.GenList;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.ParameterizedGenerator;

@@ -1,11 +1,10 @@
 package io.dummymaker.export;
 
-import static io.dummymaker.util.StringUtils.isEmpty;
-
-import io.dummymaker.annotation.complex.GenSequence;
-import io.dummymaker.annotation.complex.GenTime;
 import io.dummymaker.annotation.export.GenExportName;
+import io.dummymaker.annotation.parameterized.GenTime;
+import io.dummymaker.annotation.simple.number.GenSequence;
 import io.dummymaker.util.CastUtils;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,6 +15,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+
+import static io.dummymaker.util.StringUtils.isEmpty;
 
 /**
  * @author Anton Kurako (GoodforGod)

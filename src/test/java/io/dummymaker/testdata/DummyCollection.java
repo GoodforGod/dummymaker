@@ -1,11 +1,12 @@
 package io.dummymaker.testdata;
 
 import io.dummymaker.annotation.GenAuto;
-import io.dummymaker.annotation.complex.GenList;
-import io.dummymaker.annotation.complex.GenMap;
-import io.dummymaker.annotation.complex.GenSet;
+import io.dummymaker.annotation.parameterized.GenList;
+import io.dummymaker.annotation.parameterized.GenMap;
+import io.dummymaker.annotation.parameterized.GenSet;
 import io.dummymaker.generator.simple.BooleanGenerator;
 import io.dummymaker.generator.simple.string.HexDataGenerator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

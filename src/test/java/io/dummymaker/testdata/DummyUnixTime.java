@@ -1,6 +1,7 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.complex.GenUnixTime;
+import io.dummymaker.annotation.parameterized.GenUnixTime;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 

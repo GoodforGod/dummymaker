@@ -1,6 +1,6 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenArray2D;
+import io.dummymaker.annotation.parameterized.GenArray2D;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.ParameterizedGenerator;

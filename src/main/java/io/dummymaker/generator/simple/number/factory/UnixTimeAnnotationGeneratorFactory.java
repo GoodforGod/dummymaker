@@ -1,6 +1,6 @@
 package io.dummymaker.generator.simple.number.factory;
 
-import io.dummymaker.annotation.complex.GenUnixTime;
+import io.dummymaker.annotation.parameterized.GenUnixTime;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.UnixTimeGenerator;

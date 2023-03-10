@@ -1,6 +1,6 @@
 package io.dummymaker.generator.parameterized.factory;
 
-import io.dummymaker.annotation.complex.GenEnum;
+import io.dummymaker.annotation.parameterized.GenEnum;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.parameterized.EnumParameterizedGenerator;

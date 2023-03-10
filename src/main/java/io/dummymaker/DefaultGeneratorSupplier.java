@@ -1,16 +1,16 @@
 package io.dummymaker;
 
-import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
-
-import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.parameterized.*;
 import io.dummymaker.generator.simple.*;
-import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.number.MccGenerator;
+import io.dummymaker.generator.simple.number.*;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,7 +21,8 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import org.jetbrains.annotations.NotNull;
+
+import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
 /**
  * Default gen config implementation for generators discovery With all library generators and their
@@ -45,20 +46,16 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
     static {
         TYPE_TO_GENERATORS.put(String.class, Arrays.asList(new AddressFullGenerator(), new AddressGenerator(),
                 new BtcAddressGenerator(), new BtcTxHashGenerator(), new CadastralGenerator(), new CategoryGenerator(),
-                new CityGenerator(),
-                new CompanyGenerator(), new CountryGenerator(), new CurrencyGenerator(), new DescriptionGenerator(),
-                new DistrictGenerator(),
-                new DocumentGenerator(), new EmailGenerator(), new EthAddressGenerator(), new EthTxHashGenerator(),
-                new ExtensionGenerator(),
-                new FileGenerator(), new FormatGenerator(), new FrequencyGenerator(), new FullnameGenerator(),
-                new GenderGenerator(),
+                new CityGenerator(), new CompanyGenerator(), new CountryGenerator(), new CurrencyGenerator(),
+                new DescriptionGenerator(), new DistrictGenerator(), new DocumentGenerator(), new EmailGenerator(),
+                new EthAddressGenerator(), new EthTxHashGenerator(), new ExtensionGenerator(), new FileGenerator(),
+                new FormatGenerator(), new FrequencyGenerator(), new FullnameGenerator(), new GenderGenerator(),
                 new HexDataGenerator(), new HexNumberGenerator(), new HouseGenerator(), new IdBigGenerator(), new IdGenerator(),
                 new JobGenerator(), new LevelGenerator(), new LoginGenerator(), new MccGenerator(), new MerchantGenerator(),
                 new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
-                new PhoneGenerator(false),
-                new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(), new StatusGenerator(), new StreetGenerator(),
-                new StringGenerator(6, 12), new SurnameGenerator(), new TagGenerator(), new TypeGenerator(),
-                new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));
+                new PhoneGenerator(false), new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(),
+                new StatusGenerator(), new StreetGenerator(), new StringGenerator(6, 12), new SurnameGenerator(),
+                new TagGenerator(), new TypeGenerator(), new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));
 
         TYPE_TO_GENERATORS.put(CharSequence.class, TYPE_TO_GENERATORS.get(String.class));
 
@@ -68,10 +65,10 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
         TYPE_TO_GENERATORS.put(Character.class, Arrays.asList(new CharacterGenerator(), new CharGenerator()));
         TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator((short) 0, Short.MAX_VALUE)));
         TYPE_TO_GENERATORS.put(Integer.class,
-                Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE), new IntegerSmallGenerator(), new PostalGenerator(),
-                        new MccGenerator()));
-        TYPE_TO_GENERATORS.put(Long.class,
-                Arrays.asList(new LongGenerator(0, Long.MAX_VALUE), new UnixTimeGenerator(GenTime.MIN, GenTime.MAX)));
+                Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE), new IntegerSmallGenerator(),
+                        new PostalGenerator(), new MccGenerator()));
+        TYPE_TO_GENERATORS.put(Long.class, Arrays.asList(new LongGenerator(0, Long.MAX_VALUE),
+                new UnixTimeGenerator(GenTime.MIN, GenTime.MAX)));
         TYPE_TO_GENERATORS.put(Float.class, Collections.singletonList(new FloatSmallGenerator()));
         TYPE_TO_GENERATORS.put(Double.class, Collections.singletonList(new DoubleSmallGenerator()));
         TYPE_TO_GENERATORS.put(BigInteger.class, Collections.singletonList(new BigIntegerGenerator()));

@@ -1,14 +1,15 @@
 package io.dummymaker.generator;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.NullGenerator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.generator.simple.time.LocalDateTimeGenerator;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author GoodforGod

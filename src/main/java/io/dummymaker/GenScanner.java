@@ -4,13 +4,14 @@ import io.dummymaker.annotation.*;
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CastUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -85,14 +86,6 @@ final class GenScanner {
                 final Generator<?> generator = generatorSupplier.get(field);
                 final boolean isComplex = isComplex(field);
                 return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, marker));
-            }
-
-            if (IS_FACTORY.test(marker)) {
-                final AnnotationGeneratorFactory generatorFactory = CastUtils
-                        .instantiate(((GenCustomFactory) marker).value());
-                final Generator<?> generator = generatorFactory.get(marker);
-                final boolean isComplex = isComplex(field);
-                return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
             }
 
             if (IS_GEN.test(marker)) {

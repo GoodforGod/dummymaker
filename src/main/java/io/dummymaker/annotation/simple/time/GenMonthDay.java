@@ -1,14 +1,15 @@
 package io.dummymaker.annotation.simple.time;
 
 import io.dummymaker.annotation.GenCustomFactory;
-import io.dummymaker.annotation.complex.GenTime;
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.simple.time.MonthDayGenerator;
 import io.dummymaker.generator.simple.time.factory.MonthDayAnnotationGeneratorFactory;
+import org.jetbrains.annotations.Range;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.jetbrains.annotations.Range;
 
 /**
  * @author Anton Kurako (GoodforGod)

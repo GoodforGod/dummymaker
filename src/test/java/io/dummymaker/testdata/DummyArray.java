@@ -1,8 +1,8 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.complex.GenArray;
-import io.dummymaker.annotation.complex.GenArray2D;
 import io.dummymaker.annotation.export.GenExportIgnore;
+import io.dummymaker.annotation.parameterized.GenArray;
+import io.dummymaker.annotation.parameterized.GenArray2D;
 
 /**
  * @author GoodforGod

@@ -1,25 +1,26 @@
-package io.dummymaker.annotation.complex;
+package io.dummymaker.annotation.parameterized;
 
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
-import io.dummymaker.generator.parameterized.factory.ListAnnotationGeneratorFactory;
+import io.dummymaker.generator.parameterized.factory.ArrayAnnotationGeneratorFactory;
+import org.jetbrains.annotations.Range;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.jetbrains.annotations.Range;
 
 /**
- * Generate list collection
+ * Generate array
  *
  * @author Anton Kurako (GoodforGod)
- * @see io.dummymaker.generator.parameterized.ListParameterizedGenerator
- * @since 05.03.2018
+ * @see io.dummymaker.generator.parameterized.ArrayParameterizedGenerator
+ * @since 04.11.2018
  */
-@GenCustomFactory(ListAnnotationGeneratorFactory.class)
+@GenCustomFactory(ArrayAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenList {
+public @interface GenArray {
 
     Class<? extends Generator> value() default Generator.class;
 
