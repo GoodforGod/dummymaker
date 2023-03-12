@@ -4,9 +4,10 @@ import io.dummymaker.GenFactory;
 import io.dummymaker.export.validators.ValidatorChecker;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyNoExportFields;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod
@@ -45,7 +46,6 @@ abstract class FileExportAssert extends ExportAssert {
 
     @Test
     public void exportDummyListInvalidExportEntity() {
-        exporter.exportAsFile(null);
         exporter.exportAsFile(Collections.emptyList());
     }
 

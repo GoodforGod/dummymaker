@@ -4,12 +4,13 @@ import io.dummymaker.GenFactory;
 import io.dummymaker.export.validators.*;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyNoExportFields;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author GoodforGod
@@ -23,7 +24,7 @@ public class ExportAsFileTests extends ExportAssert {
         return Stream.of(
                 Arguments.of(JsonExporter.build(), new JsonValidatorChecker(), Format.JSON, 1, 1, 2),
                 Arguments.of(CsvExporter.build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2),
-                Arguments.of(SqlExporter.build(), new SqlValidatorChecker(), Format.SQL, 8, 8, 9),
+                Arguments.of(SqlExporter.build(), new SqlValidatorChecker(), Format.SQL, 9, 9, 10),
                 Arguments.of(XmlExporter.build(), new XmlValidatorChecker(), Format.XML, 5, 7, 12));
     }
 
@@ -36,7 +37,6 @@ public class ExportAsFileTests extends ExportAssert {
     @MethodSource("data")
     @ParameterizedTest
     void exportDummyListInvalidExportEntity(Exporter exporter) {
-        exporter.exportAsFile(null);
         exporter.exportAsFile(Collections.emptyList());
     }
 
@@ -123,6 +123,29 @@ public class ExportAsFileTests extends ExportAssert {
         final String filename = Dummy.class.getSimpleName() + format.getExtension();
 
         exporter.exportAsFile(dummies);
+
+        final String dummyAsString = readFromFile(filename);
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] csvArray = dummyAsString.split("\n");
+        assertEquals(listSplitLength, csvArray.length);
+
+        validator.isTwoDummiesValid(csvArray);
+    }
+
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportStreamOfDummies(Exporter exporter,
+                               ValidatorChecker validator,
+                               Format format,
+                               int singleSplitLength,
+                               int singleListSplitLength,
+                               int listSplitLength) {
+        final Stream<Dummy> dummies = factory.stream(Dummy.class, 2);
+        final String filename = Dummy.class.getSimpleName() + format.getExtension();
+
+        exporter.streamToFile(dummies, Dummy.class);
 
         final String dummyAsString = readFromFile(filename);
         assertNotNull(dummyAsString);

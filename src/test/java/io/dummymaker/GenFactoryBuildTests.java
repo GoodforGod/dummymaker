@@ -1,12 +1,13 @@
 package io.dummymaker;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import io.dummymaker.testdata.*;
-import io.dummymaker.testdata.DummyAuto;
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.regex.Pattern;
-import org.junit.jupiter.api.Test;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author GoodforGod
@@ -60,6 +61,34 @@ class GenFactoryBuildTests {
         assertNotNull(dummy2.getName());
         assertNotNull(dummy2.getNum());
         assertNotNull(dummy2.getGroup());
+
+        assertNotEquals(dummy1, dummy2);
+    }
+
+    @Test
+    void produceStreamOfTwo() {
+        final GenFactory factory = GenFactory.build();
+
+        final List<Dummy> dummies = factory.stream(Dummy.class, 2).collect(Collectors.toList());
+
+        assertNotNull(dummies);
+        assertFalse(dummies.isEmpty());
+
+        final Dummy dummy1 = dummies.get(0);
+        assertNotNull(dummy1);
+        assertNotNull(dummy1.getCity());
+        assertNotNull(dummy1.getName());
+        assertNotNull(dummy1.getNum());
+        assertNotNull(dummy1.getGroup());
+
+        final Dummy dummy2 = dummies.get(1);
+        assertNotNull(dummy2);
+        assertNotNull(dummy2.getCity());
+        assertNotNull(dummy2.getName());
+        assertNotNull(dummy2.getNum());
+        assertNotNull(dummy2.getGroup());
+
+        assertNotEquals(dummy1, dummy2);
     }
 
     @Test
