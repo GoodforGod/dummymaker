@@ -3,12 +3,11 @@ package io.dummymaker.annotation.parameterized;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.parameterized.factory.MapAnnotationGeneratorFactory;
-import org.jetbrains.annotations.Range;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.Range;
 
 /**
  * Generate map with KEY and VALUE from generators

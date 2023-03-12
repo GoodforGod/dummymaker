@@ -3,12 +3,11 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)

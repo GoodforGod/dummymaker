@@ -2,7 +2,6 @@ package io.dummymaker.generator.simple.number;
 
 import io.dummymaker.annotation.simple.number.GenSequence;
 import io.dummymaker.generator.Generator;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

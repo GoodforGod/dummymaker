@@ -1,16 +1,16 @@
 package io.dummymaker;
 
+import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+
 import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.parameterized.*;
 import io.dummymaker.generator.simple.*;
-import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,8 +21,7 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Default gen config implementation for generators discovery With all library generators and their

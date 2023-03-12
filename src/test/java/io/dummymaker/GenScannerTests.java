@@ -1,5 +1,7 @@
 package io.dummymaker;
 
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
+
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.annotation.simple.number.GenDoubleSmall;
 import io.dummymaker.annotation.simple.number.GenSequence;
@@ -8,12 +10,9 @@ import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyCollection;
 import io.dummymaker.testdata.DummyNoFillFields;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static io.dummymaker.testdata.Dummy.DummyFields.*;
 
 /**
  * @author GoodforGod

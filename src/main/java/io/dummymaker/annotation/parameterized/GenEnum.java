@@ -2,7 +2,6 @@ package io.dummymaker.annotation.parameterized;
 
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.parameterized.factory.EnumAnnotationGeneratorFactory;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

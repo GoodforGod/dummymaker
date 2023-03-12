@@ -1,18 +1,18 @@
 package io.dummymaker.generator;
 
+import static java.util.regex.Pattern.compile;
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.parameterized.ListParameterizedGenerator;
 import io.dummymaker.generator.parameterized.MapParameterizedGenerator;
 import io.dummymaker.generator.parameterized.SetParameterizedGenerator;
 import io.dummymaker.generator.simple.*;
-import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.number.*;
+import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.testdata.DummyTime.Patterns;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
@@ -22,9 +22,8 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.compile;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * @author GoodforGod

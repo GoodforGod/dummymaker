@@ -3,7 +3,6 @@ package io.dummymaker.annotation.simple.string;
 import io.dummymaker.annotation.GenCustomFactory;
 import io.dummymaker.generator.simple.string.PhoneGenerator;
 import io.dummymaker.generator.simple.string.factory.PhoneAnnotationGeneratorFactory;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

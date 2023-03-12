@@ -1,13 +1,13 @@
 package io.dummymaker;
 
-import io.dummymaker.testdata.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+import io.dummymaker.testdata.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod
@@ -211,5 +211,34 @@ class GenFactoryBuildTests {
 
         assertTrue(offsetDateTimePattern.matcher(d.getDateTimeObject().toString()).matches(), d.getDateTimeObject().toString());
         assertTrue(offsetDateTimePattern.matcher(d.getDateTimeString()).matches(), d.getDateTimeString());
+    }
+
+    @Test
+    void buildSingleKnown() {
+        final GenFactory factory = GenFactory.build();
+
+        final Integer v1 = factory.build(Integer.class);
+        final String v2 = factory.build(String.class);
+        final BigDecimal v3 = factory.build(BigDecimal.class);
+
+        assertNotNull(v1);
+        assertNotNull(v2);
+        assertNotNull(v3);
+    }
+
+    @Test
+    void buildListKnown() {
+        final GenFactory factory = GenFactory.build();
+
+        final List<Integer> v1 = factory.build(Integer.class, 2);
+        final List<String> v2 = factory.build(String.class, 2);
+        final List<BigDecimal> v3 = factory.build(BigDecimal.class, 2);
+
+        assertNotNull(v1);
+        assertEquals(2, v1.size());
+        assertNotNull(v2);
+        assertEquals(2, v2.size());
+        assertNotNull(v3);
+        assertEquals(2, v3.size());
     }
 }

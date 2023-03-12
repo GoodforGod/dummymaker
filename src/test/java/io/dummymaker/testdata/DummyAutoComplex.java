@@ -4,7 +4,6 @@ import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.parameterized.GenList;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.string.BtcAddressGenerator;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

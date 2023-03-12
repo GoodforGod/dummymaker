@@ -6,12 +6,11 @@ import io.dummymaker.cases.NamingCases;
 import io.dummymaker.export.validators.SqlValidatorChecker;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyTime;
-import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod

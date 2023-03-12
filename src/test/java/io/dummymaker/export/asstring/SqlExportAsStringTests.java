@@ -8,10 +8,9 @@ import io.dummymaker.export.SqlExporter;
 import io.dummymaker.export.validators.SqlValidatorChecker;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyArray;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author GoodforGod

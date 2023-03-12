@@ -6,7 +6,6 @@ import io.dummymaker.annotation.parameterized.GenList;
 import io.dummymaker.annotation.parameterized.GenMap;
 import io.dummymaker.annotation.parameterized.GenSet;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

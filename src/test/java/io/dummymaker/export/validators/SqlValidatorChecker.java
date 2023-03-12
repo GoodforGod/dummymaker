@@ -1,16 +1,16 @@
 package io.dummymaker.export.validators;
 
+import static io.dummymaker.testdata.Dummy.DummyFields.*;
+import static io.dummymaker.testdata.DummyTime.*;
+import static io.dummymaker.testdata.DummyTime.Fields.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.testdata.DummyArray;
 import io.dummymaker.testdata.DummyTime;
 import io.dummymaker.testdata.DummyTimeFormatter;
 import io.dummymaker.testdata.DummyUnixTime;
-
-import static io.dummymaker.testdata.Dummy.DummyFields.*;
-import static io.dummymaker.testdata.DummyTime.Fields.*;
-import static io.dummymaker.testdata.DummyTime.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author GoodforGod

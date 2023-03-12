@@ -2,7 +2,6 @@ package io.dummymaker.annotation;
 
 import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.ParameterizedGenerator;
-
 import java.lang.annotation.*;
 
 /**

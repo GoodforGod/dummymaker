@@ -2,12 +2,10 @@ package io.dummymaker;
 
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.generator.Localisation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Factory that generates data objects Core that handles all top level logic
@@ -24,7 +22,7 @@ public interface GenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> T build(@Nullable Class<T> target);
+    <T> T build(@NotNull Class<T> target);
 
     /**
      * {@link #build(Class)}
@@ -39,7 +37,7 @@ public interface GenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull List<T> build(@Nullable Class<T> target, int amount);
+    <T> @NotNull List<T> build(@NotNull Class<T> target, int amount);
 
     /**
      * {@link #build(Class, int)}
@@ -54,7 +52,7 @@ public interface GenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull Stream<T> stream(@Nullable Class<T> target, long amount);
+    <T> @NotNull Stream<T> stream(@NotNull Class<T> target, long amount);
 
     /**
      * {@link #stream(Class, long)}

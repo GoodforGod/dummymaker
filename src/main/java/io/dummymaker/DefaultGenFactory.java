@@ -1,5 +1,7 @@
 package io.dummymaker;
 
+import static io.dummymaker.util.CastUtils.castObject;
+
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.error.GenException;
@@ -10,9 +12,6 @@ import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.util.CastUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +19,8 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.dummymaker.util.CastUtils.castObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -63,7 +62,7 @@ final class DefaultGenFactory implements GenFactory {
     }
 
     @Override
-    public <T> T build(@Nullable Class<T> target) {
+    public <T> T build(@NotNull Class<T> target) {
         return stream(target, 1).findFirst().orElse(null);
     }
 
@@ -73,7 +72,7 @@ final class DefaultGenFactory implements GenFactory {
     }
 
     @Override
-    public @NotNull <T> List<T> build(@Nullable Class<T> target, int size) {
+    public @NotNull <T> List<T> build(@NotNull Class<T> target, int size) {
         return stream(target, size).collect(Collectors.toList());
     }
 
@@ -83,7 +82,14 @@ final class DefaultGenFactory implements GenFactory {
     }
 
     @Override
-    public @NotNull <T> Stream<T> stream(@Nullable Class<T> target, long size) {
+    public @NotNull <T> Stream<T> stream(@NotNull Class<T> target, long size) {
+        final Generator<?> generator = generatorSupplier.get(target);
+        if (!(generator instanceof EmbeddedGenerator)) {
+            return Stream.generate(() -> (T) generator.get())
+                    .limit(size)
+                    .filter(Objects::nonNull);
+        }
+
         return stream(() -> instantiate(target), size);
     }
 
