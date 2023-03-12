@@ -1,7 +1,5 @@
 package io.dummymaker;
 
-import static io.dummymaker.util.CastUtils.castObject;
-
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.error.GenException;
@@ -12,16 +10,18 @@ import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.util.CastUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import static io.dummymaker.util.CastUtils.castObject;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 final class DefaultGenFactory implements GenFactory {
 
-    private static final Pattern LOCALISATION_MATCH_PATTERN_EN = Pattern.compile("(eng?|english)$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern LOCALISATION_MATCH_PATTERN_RU = Pattern.compile("(ru|russian)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_LOCALISATION_EN = Pattern.compile("(Eng?|English)$");
+    private static final Pattern PATTERN_LOCALISATION_RU = Pattern.compile("(Ru|Russian)$");
 
     private final ClassConstructor zeroArgConstructor;
     private final ClassConstructor fullArgConstructor;
@@ -100,15 +100,17 @@ final class DefaultGenFactory implements GenFactory {
 
         final Generator<?> generator = generatorSupplier.get(first.getClass());
         if (!(generator instanceof EmbeddedGenerator)) {
-            return Stream.of((T) generator.get())
+            return Stream.generate(() -> (T) generator.get())
+                    .limit(size)
                     .filter(Objects::nonNull);
         }
 
         final GenNode graph = graphBuilder.build(first.getClass());
         final GenContext context = GenContext.ofNew(graph.value().depth(), graph);
-        return LongStream.range(0, size)
-                .mapToObj(i -> fillValueFields(first, context))
-                .filter(Objects::nonNull);
+        return Stream.generate(supplier)
+                .limit(size)
+                .filter(Objects::nonNull)
+                .map(value -> fillValueFields(value, context));
     }
 
     @Nullable
@@ -251,9 +253,9 @@ final class DefaultGenFactory implements GenFactory {
 
     @NotNull
     private Localisation tryMatchLocalisation(Field field) {
-        if (LOCALISATION_MATCH_PATTERN_EN.matcher(field.getName()).matches()) {
+        if (PATTERN_LOCALISATION_EN.matcher(field.getName()).matches()) {
             return Localisation.ENGLISH;
-        } else if (LOCALISATION_MATCH_PATTERN_RU.matcher(field.getName()).matches()) {
+        } else if (PATTERN_LOCALISATION_RU.matcher(field.getName()).matches()) {
             return Localisation.RUSSIAN;
         } else {
             return Localisation.ENGLISH;

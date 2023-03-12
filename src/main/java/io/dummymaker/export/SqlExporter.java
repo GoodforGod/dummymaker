@@ -4,6 +4,9 @@ import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
+import io.dummymaker.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
@@ -15,11 +18,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
+import java.util.stream.Stream;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -155,8 +161,8 @@ public final class SqlExporter extends AbstractExporter {
         return "'" + value + "'";
     }
 
-    private <T> String getCollectionName(T t) {
-        return fieldNamingCase.apply(t.getClass().getSimpleName()).toString();
+    private <T> String getCollectionName(Class<T> type) {
+        return fieldNamingCase.apply(type.getSimpleName()).toString();
     }
 
     /**
@@ -197,11 +203,11 @@ public final class SqlExporter extends AbstractExporter {
     /**
      * Build insert query part with values
      */
-    private <T> String buildInsertQuery(T t, Collection<ExportField> containers) {
-        final String collectionName = getCollectionName(t);
+    private <T> String buildInsertQuery(Class<T> type, Collection<ExportField> containers) {
+        final String collectionName = getCollectionName(type);
         final StringBuilder builder = new StringBuilder("INSERT INTO ")
                 .append(collectionName)
-                .append(" (");
+                .append("(");
 
         final String names = containers.stream()
                 .map(c -> c.getName(fieldNamingCase))
@@ -219,8 +225,8 @@ public final class SqlExporter extends AbstractExporter {
                 .map(ExportField::getName)
                 .findFirst()
                 .orElseGet(() -> containers.stream()
-                        .filter(c -> ID_PATTERN.matcher(c.getName()).matches())
                         .map(ExportField::getName)
+                        .filter(name -> ID_PATTERN.matcher(name).matches())
                         .findFirst()
                         .orElseGet(() -> containers.iterator().next().getName()));
     }
@@ -285,8 +291,8 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
-        final String collectionName = getCollectionName(t);
+    protected @NotNull <T> String head(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
+        final String collectionName = getCollectionName(type);
         final StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(collectionName)
                 .append("(\n");
@@ -303,115 +309,146 @@ public final class SqlExporter extends AbstractExporter {
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
                 .append(fieldNamingCase.apply(primaryKeyField))
-                .append(")\n);\n")
+                .append(")\n);\n\n")
                 .toString();
     }
 
     @Override
-    protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
-        return buildInsertQuery(t, containers);
+    protected @NotNull <T> String prefix(Class<T> type, Collection<ExportField> containers) {
+        return buildInsertQuery(type, containers);
     }
 
     @Override
-    protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String suffix(Class<T> type, Collection<ExportField> containers) {
         return ";";
     }
 
     @Override
-    protected @NotNull <T> String map(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String map(T value, Collection<ExportField> containers) {
         final String resultValues = containers.stream()
-                .map(c -> getValue(t, c))
+                .map(c -> getValue(value, c))
                 .collect(Collectors.joining(", "));
 
         return "(" + resultValues + ")";
     }
 
     @Override
-    public <T> void exportAsFile(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection)) {
+    public void exportAsFile(@NotNull Collection<?> collection) {
+        if (collection.isEmpty()) {
             return;
         }
 
-        final T t = collection.iterator().next();
-        final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty()) {
-            return;
-        }
-
-        try (final Writer writer = getWriter(t.getClass().getSimpleName())) {
-            // Create Table Query
-            writer.write(head(t, containers, true));
-
-            int i = batchSize;
-            StringBuilder builder = new StringBuilder();
-
-            final Iterator<T> iterator = collection.iterator();
-            while (iterator.hasNext()) {
-                final T next = iterator.next();
-                if (i == batchSize) {
-                    builder.append(buildInsertQuery(next, containers));
-                }
-
-                builder.append(map(next, containers));
-
-                // End insert Query if no elements left or need to organize next batch
-                final boolean hasNext = iterator.hasNext();
-                if (i <= 0 || !hasNext) {
-                    builder.append(";\n");
-                    writer.write(builder.toString());
-                    builder = new StringBuilder();
-                } else {
-                    builder.append(",\n");
-                }
-
-                i = nextInsertValue(i);
-            }
-
-            writer.write(builder.toString());
+        final Object firstValue = collection.iterator().next();
+        try (final Writer writer = getWriter(firstValue.getClass().getSimpleName())) {
+            exportAsStringInternal(collection, writer::write);
         } catch (Exception e) {
             throw new GenExportException(e);
         }
     }
 
     @Override
-    public @NotNull <T> String exportAsString(@NotNull Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection)) {
-            return "";
+    public <T> void streamToFile(@NotNull Stream<T> stream, Class<T> type) {
+        try (final Writer writer = getWriter(type.getSimpleName())) {
+            streamToStringInternal(stream, type, writer::write);
+        } catch (Exception e) {
+            throw new GenExportException(e);
         }
+    }
 
-        final T t = collection.iterator().next();
-        final List<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty()) {
-            return "";
-        }
-
-        // Create Table Query
-        final StringBuilder builder = new StringBuilder(head(t, containers, true));
-        final Iterator<T> iterator = collection.iterator();
-        int i = batchSize;
-
-        while (iterator.hasNext()) {
-            final T next = iterator.next();
-            if (i == batchSize)
-                builder.append(buildInsertQuery(next, containers));
-
-            builder.append(map(next, containers));
-
-            // End insert Query if no elements left or need to organize next batch
-            final String suffix = (i <= 0 || !iterator.hasNext())
-                    ? ";\n"
-                    : ",\n";
-            builder.append(suffix);
-
-            i = nextInsertValue(i);
-        }
-
+    @Override
+    public @NotNull String exportAsString(@NotNull Collection<?> collection) {
+        final StringBuilder builder = new StringBuilder();
+        exportAsStringInternal(collection, builder::append);
         return builder.toString();
     }
 
-    private int nextInsertValue(int current) {
-        return (current <= 0)
-                ? batchSize
-                : current - 1;
+    @Override
+    public @NotNull <T> String streamToString(@NotNull Stream<T> stream, Class<T> type) {
+        final StringBuilder builder = new StringBuilder();
+        streamToStringInternal(stream, type, builder::append);
+        return builder.toString();
+    }
+
+    private void exportAsStringInternal(@NotNull Collection<?> collection, Consumer<String> stringConsumer) {
+        if (CollectionUtils.isEmpty(collection)) {
+            return;
+        }
+
+        final Object firstValue = collection.iterator().next();
+        final Class<?> type = firstValue.getClass();
+        final List<ExportField> containers = scan(type).collect(Collectors.toList());
+        if (containers.isEmpty()) {
+            return;
+        }
+
+        // Create Table Query
+        stringConsumer.accept(head(type, containers, true));
+        final Iterator<?> iterator = collection.iterator();
+        int i = batchSize;
+
+        while (iterator.hasNext()) {
+            final Object next = iterator.next();
+            if (i == batchSize) {
+                stringConsumer.accept(buildInsertQuery(type, containers));
+            }
+
+            stringConsumer.accept(map(next, containers));
+
+            i = i - 1;
+
+            // End insert Query if no elements left or need to organize next batch
+            final String suffix = (i <= 0 || !iterator.hasNext())
+                    ? ";\n\n"
+                    : ",\n";
+            stringConsumer.accept(suffix);
+
+            if (i <= 0) {
+                i = batchSize;
+            }
+        }
+    }
+
+    private <T> void streamToStringInternal(@NotNull Stream<T> stream, Class<T> type, Consumer<String> stringConsumer) {
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
+        if (containers.isEmpty()) {
+            return;
+        }
+
+        final AtomicInteger counter = new AtomicInteger(batchSize);
+        final AtomicReference<T> firstValueRef = new AtomicReference<>();
+
+        stream.filter(Objects::nonNull).forEach(value -> {
+            synchronized (firstValueRef) {
+                final String valueAsString = map(value, containers);
+                if (StringUtils.isNotBlank(valueAsString)) {
+                    int currentCounter = counter.getAndDecrement();
+                    if (currentCounter <= 0) {
+                        counter.set(batchSize - 1);
+                        currentCounter = batchSize;
+                    }
+
+                    final boolean isFirst = (firstValueRef.get() == null);
+                    if (isFirst) {
+                        final String head = head(type, containers, true);
+                        stringConsumer.accept(head);
+                        firstValueRef.set(value);
+                    } else if (currentCounter == batchSize) {
+                        stringConsumer.accept(";\n\n");
+                    } else {
+                        stringConsumer.accept(",\n");
+                    }
+
+                    if (currentCounter == batchSize) {
+                        stringConsumer.accept(buildInsertQuery(type, containers));
+                    }
+
+                    stringConsumer.accept(valueAsString);
+                }
+            }
+        });
+
+        if (firstValueRef.get() != null) {
+            stringConsumer.accept(";");
+        }
     }
 }

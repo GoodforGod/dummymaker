@@ -13,6 +13,7 @@ import java.time.*;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ abstract class AbstractExporter implements Exporter {
 
     protected abstract @NotNull String getExtension();
 
-    protected abstract <T> @NotNull String map(T t, Collection<ExportField> containers);
+    protected abstract <T> @NotNull String map(T value, Collection<ExportField> containers);
 
     protected Predicate<ExportField> filter() {
         return c -> true;
@@ -233,37 +234,37 @@ abstract class AbstractExporter implements Exporter {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String prefix(T t, Collection<ExportField> containers) {
+    protected <T> @NotNull String prefix(Class<T> type, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String suffix(T t, Collection<ExportField> containers) {
+    protected <T> @NotNull String suffix(Class<T> type, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
-    protected <T> @NotNull String separator(T t, Collection<ExportField> containers) {
+    protected <T> @NotNull String separator(Class<T> type, Collection<ExportField> containers) {
         return DEFAULT_EMPTY_VALUE;
     }
 
     /**
-     * @param t            one of exported objects as example
+     * @param type         one of exported objects as example
      * @param containers   scanned from object
      * @param isCollection true if collection is exported or false otherwise
      * @param <T>          type of exported object
      * @return head for data
      */
-    protected <T> @NotNull String head(T t, Collection<ExportField> containers, boolean isCollection) {
+    protected <T> @NotNull String head(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
         return DEFAULT_EMPTY_VALUE;
     }
 
     /**
-     * @param t            one of exported objects as example
+     * @param type         one of exported objects as example
      * @param containers   scanned from object
      * @param isCollection true if collection is exported or false otherwise
      * @param <T>          type of exported object
      * @return tail for data
      */
-    protected <T> @NotNull String tail(T t, Collection<ExportField> containers, boolean isCollection) {
+    protected <T> @NotNull String tail(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
         return DEFAULT_EMPTY_VALUE;
     }
 
@@ -272,20 +273,21 @@ abstract class AbstractExporter implements Exporter {
     }
 
     @Override
-    public <T> void exportAsFile(T value) {
+    public void exportAsFile(Object value) {
         if (value == null) {
             return;
         }
 
-        final Collection<ExportField> containers = scan(value.getClass()).collect(Collectors.toList());
+        final Class<?> type = value.getClass();
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
         if (containers.isEmpty()) {
             return;
         }
 
-        try (final Writer writer = getWriter(value.getClass().getSimpleName())) {
-            final String head = head(value, containers, false);
-            final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
-            final String tail = tail(value, containers, false);
+        try (final Writer writer = getWriter(type.getSimpleName())) {
+            final String head = head(type, containers, false);
+            final String data = prefix(type, containers) + map(value, containers) + suffix(type, containers);
+            final String tail = tail(type, containers, false);
             writer.write(head + data + tail);
         } catch (Exception e) {
             throw new GenExportException(e);
@@ -293,31 +295,28 @@ abstract class AbstractExporter implements Exporter {
     }
 
     @Override
-    public <T> void exportAsFile(Collection<T> collection) {
-        if (CollectionUtils.isEmpty(collection)) {
+    public void exportAsFile(@NotNull Collection<?> collection) {
+        if (collection.isEmpty()) {
             return;
         }
 
-        final T t = collection.iterator().next();
-        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
-        if (containers.isEmpty()) {
-            return;
-        }
+        final Object firstValue = collection.iterator().next();
+        final Collection<ExportField> containers = scan(firstValue.getClass()).collect(Collectors.toList());
 
-        try (final Writer writer = getWriter(t.getClass().getSimpleName())) {
-            final String head = head(t, containers, true);
+        try (final Writer writer = getWriter(firstValue.getClass().getSimpleName())) {
+            final String head = head(firstValue.getClass(), containers, true);
             writer.write(head);
 
-            final Iterator<T> iterator = collection.iterator();
+            final Iterator<?> iterator = collection.iterator();
             while (iterator.hasNext()) {
-                final T value = iterator.next();
+                final Object value = iterator.next();
                 if (value != null) {
                     final String valueAsString = map(value, containers);
                     if (StringUtils.isNotBlank(valueAsString)) {
-                        final String result = prefix(valueAsString, containers) + valueAsString
-                                + suffix(valueAsString, containers);
+                        final String result = prefix(firstValue.getClass(), containers) + valueAsString
+                                + suffix(firstValue.getClass(), containers);
                         if (iterator.hasNext()) {
-                            final String separator = separator(value, containers);
+                            final String separator = separator(firstValue.getClass(), containers);
                             writer.write(result + separator);
                         } else {
                             writer.write(result);
@@ -326,7 +325,7 @@ abstract class AbstractExporter implements Exporter {
                 }
             }
 
-            final String tail = tail(t, containers, true);
+            final String tail = tail(firstValue.getClass(), containers, true);
             writer.write(tail);
         } catch (Exception e) {
             throw new GenExportException(e);
@@ -334,51 +333,123 @@ abstract class AbstractExporter implements Exporter {
     }
 
     @Override
-    public <T> @NotNull String exportAsString(T value) {
+    public <T> void streamToFile(@NotNull Stream<T> stream, Class<T> type) {
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
+        final AtomicReference<T> firstValueRef = new AtomicReference<>();
+
+        try (final Writer writer = getWriter(type.getSimpleName())) {
+            stream.filter(Objects::nonNull).forEach(value -> {
+                boolean isFirst = false;
+                if (firstValueRef.get() == null) {
+                    synchronized (firstValueRef) {
+                        if (firstValueRef.get() == null) {
+                            final String head = head(type, containers, true);
+                            writer.write(head);
+                            isFirst = true;
+                            firstValueRef.set(value);
+                        }
+                    }
+                }
+
+                final String valueAsString = map(value, containers);
+                if (StringUtils.isNotBlank(valueAsString)) {
+                    final String result = prefix(type, containers) + valueAsString + suffix(type, containers);
+                    final String separator = separator(type, containers);
+                    if (isFirst) {
+                        writer.write(result);
+                    } else {
+                        writer.write(separator + result);
+                    }
+                }
+            });
+
+            if (firstValueRef.get() != null) {
+                final String tail = tail(type, containers, true);
+                writer.write(tail);
+            }
+        } catch (Exception e) {
+            throw new GenExportException(e);
+        }
+    }
+
+    @Override
+    public @NotNull String exportAsString(Object value) {
         if (value == null) {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final Collection<ExportField> containers = scan(value.getClass()).collect(Collectors.toList());
+        final Class<?> type = value.getClass();
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
         if (containers.isEmpty()) {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final String head = head(value, containers, false);
-        final String data = prefix(value, containers) + map(value, containers) + suffix(value, containers);
-        final String tail = tail(value, containers, false);
+        final String head = head(type, containers, false);
+        final String data = prefix(type, containers) + map(value, containers) + suffix(type, containers);
+        final String tail = tail(type, containers, false);
         return head + data + tail;
     }
 
     @Override
-    public <T> @NotNull String exportAsString(@NotNull Collection<T> collection) {
+    public @NotNull String exportAsString(@NotNull Collection<?> collection) {
         if (CollectionUtils.isEmpty(collection)) {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final T t = collection.iterator().next();
-        final Collection<ExportField> containers = scan(t.getClass()).collect(Collectors.toList());
+        final Object firstValue = collection.iterator().next();
+        final Class<?> type = firstValue.getClass();
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
         if (containers.isEmpty()) {
             return DEFAULT_EMPTY_VALUE;
         }
 
-        final String head = head(t, containers, true);
-        final String data = convertData(collection, containers);
-        final String tail = tail(t, containers, true);
+        final String head = head(type, containers, true);
+        final String data = convertData(type, collection, containers);
+        final String tail = tail(type, containers, true);
         return head + data + tail;
     }
 
-    protected <T> String convertData(Collection<T> collection, Collection<ExportField> containers) {
-        final T first = collection.iterator().next();
+    @Override
+    public @NotNull <T> String streamToString(@NotNull Stream<T> stream, Class<T> type) {
+        final Collection<ExportField> containers = scan(type).collect(Collectors.toList());
+        if (containers.isEmpty()) {
+            return "";
+        }
+
+        final AtomicReference<T> firstValueRef = new AtomicReference<>();
+        return stream
+                .filter(Objects::nonNull)
+                .map(value -> {
+                    if (firstValueRef.get() == null) {
+                        synchronized (firstValueRef) {
+                            if (firstValueRef.get() == null) {
+                                firstValueRef.set(value);
+                            }
+                        }
+                    }
+
+                    final String valueAsString = map(value, containers);
+                    if (StringUtils.isBlank(valueAsString)) {
+                        return "";
+                    }
+
+                    return prefix(type, containers) + valueAsString + suffix(type, containers);
+                })
+                .collect(Collectors.joining(separator(type, containers),
+                        head(type, containers, true),
+                        tail(type, containers, true)));
+    }
+
+    protected String convertData(Class<?> type, Collection<?> collection, Collection<ExportField> containers) {
         return collection.stream()
                 .filter(Objects::nonNull)
-                .map(v -> {
-                    final String value = map(v, containers);
-                    return StringUtils.isEmpty(value)
+                .map(value -> {
+                    final String valueAsString = map(value, containers);
+                    return StringUtils.isEmpty(valueAsString)
                             ? DEFAULT_EMPTY_VALUE
-                            : prefix(v, containers) + value + suffix(v, containers);
+                            : prefix(type, containers) + valueAsString + suffix(type, containers);
                 })
                 .filter(StringUtils::isNotEmpty)
-                .collect(Collectors.joining(separator(first, containers)));
+                .collect(Collectors.joining(separator(type, containers)));
     }
 }

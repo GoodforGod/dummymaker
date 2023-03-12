@@ -3,11 +3,12 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -99,17 +100,17 @@ public final class JsonExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String prefix(Class<T> type, Collection<ExportField> containers) {
         return "{";
     }
 
     @Override
-    protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String suffix(Class<T> type, Collection<ExportField> containers) {
         return "}";
     }
 
     @Override
-    protected @NotNull <T> String separator(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String separator(Class<T> type, Collection<ExportField> containers) {
         return ",\n";
     }
 
@@ -127,14 +128,14 @@ public final class JsonExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
+    protected @NotNull <T> String head(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
         return isCollection
                 ? "["
                 : "";
     }
 
     @Override
-    protected @NotNull <T> String tail(T t, Collection<ExportField> containers, boolean isCollection) {
+    protected @NotNull <T> String tail(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
         return isCollection
                 ? "]"
                 : "";

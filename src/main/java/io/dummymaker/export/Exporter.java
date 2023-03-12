@@ -1,8 +1,10 @@
 package io.dummymaker.export;
 
-import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Allow to export objects in desired format
@@ -17,35 +19,47 @@ public interface Exporter {
      * Allow exporting single object
      *
      * @param value object to export
-     * @param <T>   object type
      */
-    <T> void exportAsFile(@Nullable T value);
+    void exportAsFile(@Nullable Object value);
 
     /**
      * Allow exporting collection of objects
      *
      * @param collection objects to export
-     * @param <T>        object type
      */
-    <T> void exportAsFile(@Nullable Collection<T> collection);
+    void exportAsFile(@NotNull Collection<?> collection);
+
+    /**
+     * Allow exporting steam of objects
+     *
+     * @param stream of objects to export
+     */
+    <T> void streamToFile(@NotNull Stream<T> stream, Class<T> type);
 
     /**
      * Allow exporting single object as a single string value
      *
      * @param value object to export
-     * @param <T>   object type
      * @return object string representation
      */
     @NotNull
-    <T> String exportAsString(@Nullable T value);
+    String exportAsString(@Nullable Object value);
 
     /**
-     * Allow exporting list of objects as single a string value
+     * Allow exporting collection of objects as single a string value
      *
-     * @param <T>        object type
      * @param collection objects to export
      * @return objects string representation
      */
     @NotNull
-    <T> String exportAsString(@NotNull Collection<T> collection);
+    String exportAsString(@NotNull Collection<?> collection);
+
+    /**
+     * Allow exporting steam of objects as single a string value
+     *
+     * @param stream of objects to export
+     * @return objects string representation
+     */
+    @NotNull
+    <T> String streamToString(@NotNull Stream<T> stream, Class<T> type);
 }

@@ -3,11 +3,12 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.export.ExportField.Type;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -110,7 +111,7 @@ public final class CsvExporter extends AbstractExporter {
     }
 
     @Override
-    protected <T> @NotNull String head(T t, Collection<ExportField> containers, boolean isCollection) {
+    protected <T> @NotNull String head(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
         if (!hasHeader)
             return "";
 
@@ -120,14 +121,14 @@ public final class CsvExporter extends AbstractExporter {
     }
 
     @Override
-    protected <T> @NotNull String map(T t, Collection<ExportField> containers) {
+    protected <T> @NotNull String map(T value, Collection<ExportField> containers) {
         return containers.stream()
-                .map(c -> getValue(t, c))
+                .map(c -> getValue(value, c))
                 .collect(Collectors.joining(separator));
     }
 
     @Override
-    protected @NotNull <T> String separator(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String separator(Class<T> type, Collection<ExportField> containers) {
         return "\n";
     }
 }

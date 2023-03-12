@@ -3,11 +3,12 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -107,17 +108,17 @@ public final class XmlExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String prefix(T t, Collection<ExportField> containers) {
-        return openXmlTag(fieldNamingCase.apply(t.getClass().getSimpleName()).toString()) + "\n";
+    protected @NotNull <T> String prefix(Class<T> type, Collection<ExportField> containers) {
+        return openXmlTag(fieldNamingCase.apply(type.getSimpleName()).toString()) + "\n";
     }
 
     @Override
-    protected @NotNull <T> String suffix(T t, Collection<ExportField> containers) {
-        return "\n" + closeXmlTag(fieldNamingCase.apply(t.getClass().getSimpleName()).toString());
+    protected @NotNull <T> String suffix(Class<T> type, Collection<ExportField> containers) {
+        return "\n" + closeXmlTag(fieldNamingCase.apply(type.getSimpleName()).toString());
     }
 
     @Override
-    protected @NotNull <T> String separator(T t, Collection<ExportField> containers) {
+    protected @NotNull <T> String separator(Class<T> type, Collection<ExportField> containers) {
         return "\n";
     }
 
@@ -137,18 +138,18 @@ public final class XmlExporter extends AbstractExporter {
     }
 
     @Override
-    protected @NotNull <T> String head(T t, Collection<ExportField> containers, boolean isCollection) {
-        final String type = t.getClass().getSimpleName();
+    protected @NotNull <T> String head(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
+        final String typeAsString = type.getSimpleName();
         return isCollection
-                ? openXmlTag(fieldNamingCase.apply(listTagSuffix.apply(type)).toString()) + "\n"
+                ? openXmlTag(fieldNamingCase.apply(listTagSuffix.apply(typeAsString)).toString()) + "\n"
                 : "";
     }
 
     @Override
-    protected @NotNull <T> String tail(T t, Collection<ExportField> containers, boolean isCollection) {
-        final String type = t.getClass().getSimpleName();
+    protected @NotNull <T> String tail(Class<T> type, Collection<ExportField> containers, boolean isCollection) {
+        final String typeAsString = type.getSimpleName();
         return isCollection
-                ? "\n" + closeXmlTag(fieldNamingCase.apply(listTagSuffix.apply(type)).toString())
+                ? "\n" + closeXmlTag(fieldNamingCase.apply(listTagSuffix.apply(typeAsString)).toString())
                 : "";
     }
 }
