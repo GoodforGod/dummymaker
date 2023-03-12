@@ -83,6 +83,10 @@ final class DefaultGenFactory implements GenFactory {
 
     @Override
     public @NotNull <T> Stream<T> stream(@NotNull Class<T> target, long size) {
+        if (size < 1) {
+            return Stream.empty();
+        }
+
         final Generator<?> generator = generatorSupplier.get(target);
         if (!(generator instanceof EmbeddedGenerator)) {
             return Stream.generate(() -> (T) generator.get())
@@ -106,7 +110,7 @@ final class DefaultGenFactory implements GenFactory {
 
         final Generator<?> generator = generatorSupplier.get(first.getClass());
         if (!(generator instanceof EmbeddedGenerator)) {
-            return Stream.generate(() -> (T) generator.get())
+            return Stream.generate(supplier)
                     .limit(size)
                     .filter(Objects::nonNull);
         }
