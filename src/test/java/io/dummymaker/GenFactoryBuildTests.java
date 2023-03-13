@@ -24,15 +24,15 @@ class GenFactoryBuildTests {
     }
 
     @Test
-    void noZeroConstructorErrorList() {
+    void noZeroConstructorList() {
         final GenFactory factory = GenFactory.build();
 
         final List<DummyNoZeroConstructor> dummies = factory.build(DummyNoZeroConstructor.class, 20);
-        assertFalse(dummies.isEmpty());
+        assertEquals(20, dummies.size());
     }
 
     @Test
-    void noZeroConstructorError() {
+    void noZeroConstructorSingle() {
         final GenFactory factory = GenFactory.build();
 
         final DummyNoZeroConstructor dummy = factory.build(DummyNoZeroConstructor.class);
@@ -46,7 +46,7 @@ class GenFactoryBuildTests {
         final List<Dummy> dummies = factory.build(Dummy.class, 2);
 
         assertNotNull(dummies);
-        assertFalse(dummies.isEmpty());
+        assertEquals(2, dummies.size());
 
         final Dummy dummy1 = dummies.get(0);
         assertNotNull(dummy1);
@@ -72,7 +72,7 @@ class GenFactoryBuildTests {
         final List<Dummy> dummies = factory.stream(Dummy.class, 2).collect(Collectors.toList());
 
         assertNotNull(dummies);
-        assertFalse(dummies.isEmpty());
+        assertEquals(2, dummies.size());
 
         final Dummy dummy1 = dummies.get(0);
         assertNotNull(dummy1);

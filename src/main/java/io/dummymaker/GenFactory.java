@@ -1,11 +1,13 @@
 package io.dummymaker;
 
+import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.generator.Localisation;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 /**
  * Factory that generates data objects Core that handles all top level logic
@@ -37,12 +39,12 @@ public interface GenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull List<T> build(@NotNull Class<T> target, int amount);
+    <T> @NotNull List<T> build(@NotNull Class<T> target, @Range(from = 0, to = Integer.MAX_VALUE) int amount);
 
     /**
      * {@link #build(Class, int)}
      */
-    <T> @NotNull List<T> build(@NotNull Supplier<T> supplier, int amount);
+    <T> @NotNull List<T> build(@NotNull Supplier<T> supplier, @Range(from = 0, to = Integer.MAX_VALUE) int amount);
 
     /**
      * Instantiates class instance and populate its fields
@@ -52,12 +54,12 @@ public interface GenFactory {
      * @param <T>    object type
      * @return generates class filled with data
      */
-    <T> @NotNull Stream<T> stream(@NotNull Class<T> target, long amount);
+    <T> @NotNull Stream<T> stream(@NotNull Class<T> target, @Range(from = 0, to = Long.MAX_VALUE) long amount);
 
     /**
      * {@link #stream(Class, long)}
      */
-    <T> @NotNull Stream<T> stream(@NotNull Supplier<T> supplier, long amount);
+    <T> @NotNull Stream<T> stream(@NotNull Supplier<T> supplier, @Range(from = 0, to = Long.MAX_VALUE) long amount);
 
     interface Builder {
 
@@ -89,7 +91,7 @@ public interface GenFactory {
         Builder autoByDefault(boolean autoByDefault);
 
         @NotNull
-        Builder depthByDefault(int depthMax);
+        Builder depthByDefault(@Range(from = 0, to = GenDepth.MAX) int depthMax);
 
         /**
          * @param ignoreExceptions is false by Default

@@ -32,7 +32,7 @@ final class FullArgClassConstructor implements ClassConstructor {
             }
 
             final Object[] typeParameters = Arrays.stream(constructor.getParameters())
-                    .map(p -> supplier.get(p.getType(), p.getName()))
+                    .map(parameter -> supplier.get(parameter.getType(), parameter.getName()))
                     .map(Generator::get)
                     .toArray(Object[]::new);
 
