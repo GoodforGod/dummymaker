@@ -36,7 +36,7 @@ public @interface GenSet {
     int max() default 3;
 
     /**
-     * @return fixed amount elements to generate (override min & max)
+     * @return fixed amount elements to generate (override min and max)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
     int fixed() default -1;

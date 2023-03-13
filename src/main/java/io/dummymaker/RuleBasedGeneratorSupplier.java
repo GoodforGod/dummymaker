@@ -1,7 +1,6 @@
 package io.dummymaker;
 
 import io.dummymaker.generator.Generator;
-import java.lang.reflect.Field;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,15 +31,15 @@ final class RuleBasedGeneratorSupplier implements GeneratorSupplier {
     }
 
     @Override
-    public @NotNull Generator<?> get(@NotNull Field field) {
+    public @NotNull Generator<?> get(@NotNull Class<?> type, @NotNull String fieldName) {
         final Optional<? extends Generator<?>> generator = rules.rules().stream()
-                .map(rule -> rule.find(field))
+                .map(rule -> rule.find(type, fieldName))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst();
 
         return (generator.isPresent())
                 ? generator.get()
-                : defaultGeneratorSupplier.get(field);
+                : defaultGeneratorSupplier.get(type, fieldName);
     }
 }

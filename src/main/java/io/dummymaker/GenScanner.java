@@ -74,7 +74,7 @@ final class GenScanner {
                     return expectedDepth;
                 });
 
-        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field));
+        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field.getType(), field.getName()));
         if (ruleGenerator.isPresent()) {
             final boolean isComplex = isComplex(field);
             return Optional.of(GenContainer.ofRule(field, ruleGenerator.get(), depth, isComplex));
@@ -82,7 +82,7 @@ final class GenScanner {
 
         for (Annotation marker : field.getDeclaredAnnotations()) {
             if (IS_AUTO.test(marker)) {
-                final Generator<?> generator = generatorSupplier.get(field);
+                final Generator<?> generator = generatorSupplier.get(field.getType(), field.getName());
                 final boolean isComplex = isComplex(field);
                 return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, marker));
             }
@@ -111,7 +111,7 @@ final class GenScanner {
         }
 
         if (isAutoByDefault || rule.flatMap(GenRule::isAuto).orElse(false)) {
-            final Generator<?> generator = generatorSupplier.get(field);
+            final Generator<?> generator = generatorSupplier.get(field.getType(), field.getName());
             final boolean isComplex = isComplex(field);
             return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, null));
         }

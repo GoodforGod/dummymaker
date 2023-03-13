@@ -48,13 +48,13 @@ public @interface GenArray2D {
     int maxSecond() default 3;
 
     /**
-     * @return fixed amount elements to generate for row (override min & max)
+     * @return fixed amount elements to generate for row (override min and max)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
     int fixedFirst() default -1;
 
     /**
-     * @return fixed amount elements to generate for column (override min & max)
+     * @return fixed amount elements to generate for column (override min and max)
      */
     @Range(from = 1, to = Integer.MAX_VALUE)
     int fixedSecond() default -1;

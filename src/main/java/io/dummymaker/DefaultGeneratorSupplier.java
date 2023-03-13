@@ -11,7 +11,6 @@ import io.dummymaker.generator.simple.number.MccGenerator;
 import io.dummymaker.generator.simple.string.*;
 import io.dummymaker.generator.simple.time.*;
 import io.dummymaker.util.CastUtils;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
@@ -164,10 +163,7 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
     }
 
     @Override
-    public @NotNull Generator<?> get(@NotNull Field field) {
-        final Class<?> type = field.getType();
-        final String fieldName = field.getName();
-
+    public @NotNull Generator<?> get(@NotNull Class<?> type, @NotNull String fieldName) {
         if (type.getTypeName().endsWith("[][]")) {
             return ARRAY2D_GENERATOR;
         } else if (type.getTypeName().endsWith("[]")) {

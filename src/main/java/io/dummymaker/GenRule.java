@@ -2,7 +2,6 @@ package io.dummymaker;
 
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.generator.Generator;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
@@ -88,13 +87,13 @@ public final class GenRule {
     }
 
     @NotNull
-    Optional<Generator<?>> find(Field field) {
-        if (field == null || isIgnored(field)) {
+    Optional<Generator<?>> find(@NotNull Class<?> type, @NotNull String fieldName) {
+        if (isIgnored(fieldName)) {
             return Optional.empty();
         }
 
         final Optional<Generator<?>> namedGenerator = fieldRules.stream()
-                .filter(r -> r.getNames().contains(field.getName()))
+                .filter(r -> r.getNames().contains(fieldName))
                 .findAny()
                 .map(rule -> rule.getGeneratorSupplier().get());
 
@@ -102,7 +101,7 @@ public final class GenRule {
             return namedGenerator;
         }
 
-        return find(field.getType());
+        return find(type);
     }
 
     @NotNull
@@ -151,8 +150,8 @@ public final class GenRule {
         return GLOBAL_MARKER.equals(target);
     }
 
-    boolean isIgnored(Field field) {
-        return ignored.contains(field.getName());
+    boolean isIgnored(String fieldName) {
+        return ignored.contains(fieldName);
     }
 
     Optional<Integer> getDepth() {
