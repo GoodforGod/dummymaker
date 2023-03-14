@@ -19,6 +19,7 @@ final class FullArgClassConstructor implements ClassConstructor {
         this.supplier = supplier;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T instantiate(@NotNull Class<T> target) {
         final Constructor<?> constructor = Arrays.stream(target.getDeclaredConstructors())

@@ -26,7 +26,11 @@ final class SimpleGenType implements GenType {
 
     static SimpleGenType ofType(Type type) {
         if (type instanceof TypeVariable) {
-            return ofClass((Class<?>) type);
+            if (((TypeVariable<?>) type).getGenericDeclaration() instanceof Class) {
+                return ofClass(((Class) ((TypeVariable<?>) type).getGenericDeclaration()));
+            } else {
+                return ofClass(Object.class);
+            }
         } else if (type instanceof ParameterizedType) {
             final List<GenType> generics = Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
                     .map(SimpleGenType::ofType)
@@ -40,10 +44,6 @@ final class SimpleGenType implements GenType {
         } else {
             return ofClass((Class<?>) type);
         }
-    }
-
-    static SimpleGenType ofField(Field field) {
-        return ofType(field.getGenericType());
     }
 
     private Class<?> plain() {

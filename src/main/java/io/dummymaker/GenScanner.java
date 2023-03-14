@@ -5,11 +5,11 @@ import io.dummymaker.generator.AnnotationGeneratorFactory;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.CastUtils;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,6 +17,25 @@ import org.jetbrains.annotations.NotNull;
  * @since 18.11.2022
  */
 final class GenScanner {
+
+    private static class GenField {
+
+        private final Field field;
+        private final GenType type;
+
+        private GenField(Field field, GenType type) {
+            this.field = field;
+            this.type = type;
+        }
+
+        public Field field() {
+            return field;
+        }
+
+        public GenType type() {
+            return type;
+        }
+    }
 
     private static final Predicate<Annotation> IS_AUTO = a -> GenAuto.class.equals(a.annotationType());
     private static final Predicate<Annotation> IS_GEN = a -> GenCustom.class.equals(a.annotationType());
@@ -37,27 +56,27 @@ final class GenScanner {
     public @NotNull List<GenContainer> scan(GenType target) {
         // TODO scan generic type parameters for target
         final Class<?> targetType = target.raw();
-        final List<Field> validFields = getValidFields(targetType);
+        final List<GenField> validFields = getValidFields(targetType);
         final Set<String> ignored = rules.find(targetType)
                 .map(GenRule::getIgnored)
                 .orElse(Collections.emptySet());
 
-        final List<Field> fields = validFields.stream()
-                .filter(f -> !f.isAnnotationPresent(GenIgnore.class))
-                .filter(f -> !ignored.contains(f.getName()))
+        final List<GenField> fields = validFields.stream()
+                .filter(f -> !f.field().isAnnotationPresent(GenIgnore.class))
+                .filter(f -> !ignored.contains(f.field().getName()))
                 .collect(Collectors.toList());
 
         return fields.stream()
-                .map(f -> getContainer(targetType, f).orElse(null))
+                .map(field -> getContainer(targetType, field).orElse(null))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private Optional<GenContainer> getContainer(Class<?> target, Field field) {
+    private Optional<GenContainer> getContainer(Class<?> target, GenField genField) {
         final Optional<GenRule> rule = rules.find(target);
         final int depth = rule.flatMap(GenRule::getDepth)
                 .orElseGet(() -> {
-                    final GenDepth annotation = field.getAnnotation(GenDepth.class);
+                    final GenDepth annotation = genField.field().getAnnotation(GenDepth.class);
                     final int expectedDepth = (annotation != null)
                             ? annotation.value()
                             : Arrays.stream(target.getDeclaredAnnotations())
@@ -74,23 +93,21 @@ final class GenScanner {
                     return expectedDepth;
                 });
 
-        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field.getType(), field.getName()));
+        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(genField.type().raw(), genField.field().getName()));
+        final boolean isComplex = isComplex(genField.type());
         if (ruleGenerator.isPresent()) {
-            final boolean isComplex = isComplex(field);
-            return Optional.of(GenContainer.ofRule(field, ruleGenerator.get(), depth, isComplex));
+            return Optional.of(GenContainer.ofRule(genField.field(), genField.type(), ruleGenerator.get(), depth, isComplex));
         }
 
-        for (Annotation marker : field.getDeclaredAnnotations()) {
+        for (Annotation marker : genField.field().getDeclaredAnnotations()) {
             if (IS_AUTO.test(marker)) {
-                final Generator<?> generator = generatorSupplier.get(field.getType(), field.getName());
-                final boolean isComplex = isComplex(field);
-                return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, marker));
+                final Generator<?> generator = generatorSupplier.get(genField.type().raw(), genField.field().getName());
+                return Optional.of(GenContainer.ofAuto(genField.field(), genField.type(), generator, depth, isComplex, marker));
             }
 
             if (IS_GEN.test(marker)) {
                 final Generator<?> generator = CastUtils.instantiate(((GenCustom) marker).value());
-                final boolean isComplex = isComplex(field);
-                return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
+                return Optional.of(GenContainer.ofMarker(genField.field(), genField.type(), generator, depth, isComplex, marker));
             }
 
             for (Annotation custom : marker.annotationType().getDeclaredAnnotations()) {
@@ -98,30 +115,30 @@ final class GenScanner {
                     final AnnotationGeneratorFactory generatorFactory = CastUtils
                             .instantiate(((GenCustomFactory) custom).value());
                     final Generator<?> generator = generatorFactory.get(marker);
-                    final boolean isComplex = isComplex(field);
-                    return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
+                    return Optional
+                            .of(GenContainer.ofMarker(genField.field(), genField.type(), generator, depth, isComplex, marker));
                 }
 
                 if (IS_GEN.test(custom)) {
                     final Generator<?> generator = CastUtils.instantiate(((GenCustom) custom).value());
-                    final boolean isComplex = isComplex(field);
-                    return Optional.of(GenContainer.ofMarker(field, generator, depth, isComplex, marker));
+                    return Optional
+                            .of(GenContainer.ofMarker(genField.field(), genField.type(), generator, depth, isComplex, marker));
                 }
             }
         }
 
-        if (isAutoByDefault || rule.flatMap(GenRule::isAuto).orElse(false)) {
-            final Generator<?> generator = generatorSupplier.get(field.getType(), field.getName());
-            final boolean isComplex = isComplex(field);
-            return Optional.of(GenContainer.ofAuto(field, generator, depth, isComplex, null));
+        if (rule.flatMap(GenRule::isAuto).orElse(isAutoByDefault)) {
+            final Generator<?> generator = generatorSupplier.get(genField.type().raw(), genField.field().getName());
+            return Optional.of(GenContainer.ofAuto(genField.field(), genField.type(), generator, depth, isComplex, null));
         }
 
         return Optional.empty();
     }
 
-    private static boolean isComplex(Field field) {
-        final Class<?> declaringClass = field.getType();
-        return (List.class.isAssignableFrom(declaringClass)
+    private static boolean isComplex(GenType genType) {
+        final Class<?> declaringClass = genType.raw();
+        return (Collection.class.isAssignableFrom(declaringClass)
+                || List.class.isAssignableFrom(declaringClass)
                 || Set.class.isAssignableFrom(declaringClass)
                 || Map.class.isAssignableFrom(declaringClass))
                 || declaringClass.getTypeName().endsWith("[][]")
@@ -130,29 +147,38 @@ final class GenScanner {
     }
 
     @NotNull
-    private List<Field> getValidFields(Class<?> target) {
-        return getAllFields(target).stream()
+    private List<GenField> getValidFields(Type target) {
+        if (target == null || Object.class.equals(target)) {
+            return new ArrayList<>();
+        }
+
+        final Class<?> targetClass = (target instanceof ParameterizedType)
+                ? (Class<?>) ((ParameterizedType) target).getRawType()
+                : ((Class<?>) target);
+
+        final List<GenField> superFields = getValidFields(targetClass.getGenericSuperclass());
+        final List<GenField> targetFields = Arrays.stream(targetClass.getDeclaredFields())
                 .filter(f -> !f.isSynthetic())
                 .filter(f -> !Modifier.isStatic(f.getModifiers()))
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
                 .filter(f -> !Modifier.isFinal(f.getModifiers()))
                 .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
+                .flatMap(f -> {
+                    if (f.getGenericType() instanceof TypeVariable && target instanceof ParameterizedType) {
+                        final TypeVariable<? extends Class<?>>[] typeParameters = targetClass.getTypeParameters();
+                        for (int i = 0; i < typeParameters.length; i++) {
+                            if (typeParameters[i].getTypeName().equals(f.getGenericType().getTypeName())) {
+                                return Stream.of(new GenField(f,
+                                        SimpleGenType.ofType(((ParameterizedType) target).getActualTypeArguments()[i])));
+                            }
+                        }
+                    }
+
+                    return Stream.of(new GenField(f, SimpleGenType.ofType(f.getGenericType())));
+                })
                 .collect(Collectors.toList());
-    }
 
-    @NotNull
-    private List<Field> getAllFields(Class<?> target) {
-        if (target == null || Object.class.equals(target)) {
-            return Collections.emptyList();
-        }
-
-        final List<Field> superFields = getValidFields(target.getSuperclass());
-        if (superFields.isEmpty()) {
-            return Arrays.asList(target.getDeclaredFields());
-        } else {
-            final List<Field> targetFields = Arrays.asList(target.getDeclaredFields());
-            superFields.addAll(targetFields);
-            return superFields;
-        }
+        superFields.addAll(targetFields);
+        return superFields;
     }
 }

@@ -3,7 +3,6 @@ package io.dummymaker;
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-import io.dummymaker.generator.simple.number.SequenceGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.jetbrains.annotations.Nullable;
@@ -42,24 +41,30 @@ final class GenContainer {
         this.generator = generator;
     }
 
-    static GenContainer ofMarker(Field field, Generator<?> generator, int depth, boolean isComplex, Annotation marker) {
-        return new GenContainer(field, getGenType(field), marker, isComplex, false, depth, generator);
+    static GenContainer ofMarker(Field field,
+                                 GenType type,
+                                 Generator<?> generator,
+                                 int depth,
+                                 boolean isComplex,
+                                 Annotation marker) {
+        return new GenContainer(field, type, marker, isComplex, false, depth, generator);
     }
 
-    static GenContainer ofRule(Field field, Generator<?> generator, int depth, boolean isComplex) {
-        return new GenContainer(field, getGenType(field), null, isComplex, false, depth, generator);
+    static GenContainer ofRule(Field field,
+                               GenType type,
+                               Generator<?> generator,
+                               int depth,
+                               boolean isComplex) {
+        return new GenContainer(field, type, null, isComplex, false, depth, generator);
     }
 
     static GenContainer ofAuto(Field field,
+                               GenType type,
                                Generator<?> generator,
                                int depth,
                                boolean isComplex,
                                @Nullable Annotation marker) {
-        return new GenContainer(field, getGenType(field), marker, isComplex, true, depth, generator);
-    }
-
-    private static GenType getGenType(Field field) {
-        return SimpleGenType.ofField(field);
+        return new GenContainer(field, type, marker, isComplex, true, depth, generator);
     }
 
     boolean isEmbedded() {
@@ -76,10 +81,6 @@ final class GenContainer {
 
     boolean isAuto() {
         return isAuto;
-    }
-
-    boolean isSequence() {
-        return generator instanceof SequenceGenerator;
     }
 
     int depth() {

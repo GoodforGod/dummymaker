@@ -181,8 +181,9 @@ public final class GenRule {
         if (!(o instanceof GenRule))
             return false;
         GenRule genRule = (GenRule) o;
-        return depth == genRule.depth && isAuto == genRule.isAuto && Objects.equals(target, genRule.target)
-                && Objects.equals(ignored, genRule.ignored) && Objects.equals(fieldRules, genRule.fieldRules);
+        return Objects.equals(depth, genRule.depth) && Objects.equals(isAuto, genRule.isAuto)
+                && Objects.equals(target, genRule.target) && Objects.equals(ignored, genRule.ignored)
+                && Objects.equals(fieldRules, genRule.fieldRules);
     }
 
     @Override
