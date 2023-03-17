@@ -41,7 +41,8 @@ final class FullArgClassConstructor implements ClassConstructor {
         } catch (GenConstructionException e) {
             throw e;
         } catch (Exception e) {
-            throw new GenConstructionException(e);
+            throw new GenConstructionException(
+                    "Exception occurred during '" + target + "' class instantiation with full argument constructor due to: ", e);
         }
     }
 }

@@ -10,7 +10,7 @@ public final class GenConstructionException extends GenException {
         super(message);
     }
 
-    public GenConstructionException(Throwable throwable) {
-        super(throwable);
+    public GenConstructionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -40,7 +40,8 @@ final class ZeroArgClassConstructor implements ClassConstructor {
         } catch (GenConstructionException e) {
             throw e;
         } catch (Exception e) {
-            throw new GenConstructionException(e);
+            throw new GenConstructionException(
+                    "Exception occurred during '" + target + "' class instantiation with zero argument constructor due to: ", e);
         }
     }
 }

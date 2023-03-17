@@ -12,7 +12,7 @@ public final class GenExportException extends GenException {
         super(message);
     }
 
-    public GenExportException(Throwable throwable) {
-        super(throwable);
+    public GenExportException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

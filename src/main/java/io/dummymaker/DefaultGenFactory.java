@@ -83,7 +83,9 @@ final class DefaultGenFactory implements GenFactory {
 
     @Override
     public @NotNull <T> Stream<T> stream(@NotNull Class<T> target, long size) {
-        if (size < 1) {
+        if (size < 0) {
+            throw new GenException("Generation size can't be less than 0");
+        } else if (size == 0) {
             return Stream.empty();
         }
 
@@ -99,7 +101,9 @@ final class DefaultGenFactory implements GenFactory {
 
     @Override
     public @NotNull <T> Stream<T> stream(@NotNull Supplier<T> supplier, long size) {
-        if (size < 1) {
+        if (size < 0) {
+            throw new GenException("Generation size can't be less than 0");
+        } else if (size == 0) {
             return Stream.empty();
         }
 
@@ -152,7 +156,7 @@ final class DefaultGenFactory implements GenFactory {
             }
         } catch (Exception e) {
             if (!ignoreErrors) {
-                throw new GenException(e);
+                throw new GenException("Error occurred while generating '" + value.getClass() + "' field value due to: ", e);
             }
         }
 

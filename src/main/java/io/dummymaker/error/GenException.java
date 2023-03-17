@@ -10,7 +10,7 @@ public class GenException extends RuntimeException {
         super(message);
     }
 
-    public GenException(Throwable throwable) {
-        super(throwable);
+    public GenException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

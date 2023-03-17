@@ -54,7 +54,6 @@ final class GenScanner {
     }
 
     public @NotNull List<GenContainer> scan(GenType target) {
-        // TODO scan generic type parameters for target
         final Class<?> targetType = target.raw();
         final List<GenField> validFields = getValidFields(targetType);
         final Set<String> ignored = rules.find(targetType)

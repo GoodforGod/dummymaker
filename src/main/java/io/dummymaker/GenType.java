@@ -1,5 +1,6 @@
 package io.dummymaker;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +19,16 @@ public interface GenType {
     List<GenType> flatten();
 
     /**
-     * @return RAW class type as it was extracted
+     * @return RAW type as class
      */
     @NotNull
     Class<?> raw();
+
+    /**
+     * @return RAW type
+     */
+    @NotNull
+    Type type();
 
     /**
      * @return type generics

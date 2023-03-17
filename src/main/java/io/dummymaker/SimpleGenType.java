@@ -9,40 +9,40 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 30.11.2022
  */
-@SuppressWarnings("DataFlowIssue")
 final class SimpleGenType implements GenType {
 
+    private final Type type;
     private final Class<?> value;
     private final List<GenType> generics;
 
-    private SimpleGenType(Class<?> value, List<GenType> generics) {
+    private SimpleGenType(Type type, Class<?> value, List<GenType> generics) {
+        this.type = type;
         this.value = value;
         this.generics = generics;
     }
 
     static SimpleGenType ofClass(Class<?> type) {
-        return new SimpleGenType(type, Collections.emptyList());
+        return new SimpleGenType(type, type, Collections.emptyList());
     }
 
     static SimpleGenType ofType(Type type) {
         if (type instanceof TypeVariable) {
             if (((TypeVariable<?>) type).getGenericDeclaration() instanceof Class) {
-                return ofClass(((Class) ((TypeVariable<?>) type).getGenericDeclaration()));
+                return new SimpleGenType(type, ((Class) ((TypeVariable<?>) type).getGenericDeclaration()),
+                        Collections.emptyList());
             } else {
-                return ofClass(Object.class);
+                return new SimpleGenType(type, Object.class, Collections.emptyList());
             }
         } else if (type instanceof ParameterizedType) {
             final List<GenType> generics = Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
                     .map(SimpleGenType::ofType)
                     .collect(Collectors.toList());
 
-            return new SimpleGenType(((Class<?>) ((ParameterizedType) type).getRawType()), generics);
-        } else if (type instanceof GenericArrayType) {
-            return ofClass((Class<?>) type);
+            return new SimpleGenType(type, ((Class<?>) ((ParameterizedType) type).getRawType()), generics);
         } else if (type instanceof WildcardType) {
-            return ofClass(Object.class);
+            return new SimpleGenType(type, Object.class, Collections.emptyList());
         } else {
-            return ofClass((Class<?>) type);
+            return new SimpleGenType(type, (Class<?>) type, Collections.emptyList());
         }
     }
 
@@ -72,6 +72,11 @@ final class SimpleGenType implements GenType {
     @Override
     public @NotNull Class<?> raw() {
         return value;
+    }
+
+    @Override
+    public @NotNull Type type() {
+        return type;
     }
 
     @Override

@@ -91,7 +91,7 @@ abstract class AbstractExporter implements Exporter {
                     return convertComplex(value);
             }
         } catch (Exception ex) {
-            throw new GenExportException(ex);
+            throw new GenExportException("Error occurred while value conversion due to: ", ex);
         }
     }
 
@@ -289,7 +289,7 @@ abstract class AbstractExporter implements Exporter {
             final String tail = tail(type, containers, false);
             writer.write(head + data + tail);
         } catch (Exception e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Error occurred while exporting due to: ", e);
         }
     }
 
@@ -327,7 +327,7 @@ abstract class AbstractExporter implements Exporter {
             final String tail = tail(firstValue.getClass(), containers, true);
             writer.write(tail);
         } catch (Exception e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Error occurred while exporting due to: ", e);
         }
     }
 
@@ -367,7 +367,7 @@ abstract class AbstractExporter implements Exporter {
                 writer.write(tail);
             }
         } catch (Exception e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Error occurred while exporting due to: ", e);
         }
     }
 

@@ -341,7 +341,7 @@ public final class SqlExporter extends AbstractExporter {
         try (final Writer writer = getWriter(firstValue.getClass().getSimpleName())) {
             exportAsStringInternal(collection, writer::write);
         } catch (Exception e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Error occurred while exporting due to: ", e);
         }
     }
 
@@ -350,7 +350,7 @@ public final class SqlExporter extends AbstractExporter {
         try (final Writer writer = getWriter(type.getSimpleName())) {
             streamToStringInternal(stream, type, writer::write);
         } catch (Exception e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Error occurred while exporting due to: ", e);
         }
     }
 

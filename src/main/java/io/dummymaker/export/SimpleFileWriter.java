@@ -52,7 +52,7 @@ public final class SimpleFileWriter implements Writer {
         try {
             this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, appendFile), charset));
         } catch (FileNotFoundException e) {
-            throw new GenExportException(e);
+            throw new GenExportException("File not found while writing: ", e);
         }
     }
 
@@ -65,7 +65,7 @@ public final class SimpleFileWriter implements Writer {
         try {
             writer.append(value);
         } catch (IOException e) {
-            throw new GenExportException(e);
+            throw new GenExportException("Exception occurred while writing: ", e);
         }
     }
 

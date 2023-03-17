@@ -4,7 +4,8 @@ import io.dummymaker.generator.simple.EmbeddedGenerator;
 import java.lang.annotation.*;
 
 /**
- * Annotation is used on classes and uses default suitable generators to fill class fields
+ * Annotation is used on classes and uses default suitable generators to generate random field
+ * values
  *
  * @author Anton Kurako (GoodforGod)
  * @since 21.04.2018

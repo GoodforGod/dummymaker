@@ -1,5 +1,6 @@
 package io.dummymaker;
 
+import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.generator.Localisation;
@@ -66,6 +67,10 @@ public interface GenFactory {
         @NotNull
         Builder addRule(@NotNull GenRule rule);
 
+        /**
+         * @param seed to use when selecting default generators for random field value generation
+         * @return self
+         */
         @NotNull
         Builder seed(long seed);
 
@@ -77,6 +82,8 @@ public interface GenFactory {
         Builder applyCase(@NotNull NamingCase namingCase);
 
         /**
+         * Is selected
+         * 
          * @param localisation to use when generating {@link CharSequence} values
          * @return self
          */
@@ -84,24 +91,39 @@ public interface GenFactory {
         Builder localisation(@NotNull Localisation localisation);
 
         /**
-         * @param autoByDefault is true by Default
+         * True by default
+         * 
+         * @see GenAuto
+         * @param autoByDefault if TRUE than generate random field values for classes
          * @return self
          */
         @NotNull
         Builder autoByDefault(boolean autoByDefault);
 
+        /**
+         * {@link GenDepth#DEFAULT} by default
+         * 
+         * @see GenDepth
+         * @param depthMax to use when generating embedded classes
+         * @return self
+         */
         @NotNull
         Builder depthByDefault(@Range(from = 0, to = GenDepth.MAX) int depthMax);
 
         /**
-         * @param ignoreExceptions is false by Default
+         * False by default
+         * 
+         * @param ignoreExceptions if TRUE than will ignore exceptions that may occur
          * @return self
          */
         @NotNull
         Builder ignoreExceptions(boolean ignoreExceptions);
 
         /**
-         * @param overrideDefaultValues is true by Default
+         * True by default
+         * 
+         * @param overrideDefaultValues if TRUE than will generate random values for field with NOT NULL
+         *                              values
          * @return self
          */
         @NotNull
