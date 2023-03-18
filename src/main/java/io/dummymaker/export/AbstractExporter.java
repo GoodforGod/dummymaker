@@ -1,15 +1,10 @@
 package io.dummymaker.export;
 
-import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
 import java.lang.reflect.Field;
-import java.sql.Time;
-import java.time.*;
-import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -70,14 +65,11 @@ abstract class AbstractExporter implements Exporter {
                 case BOOLEAN:
                     return convertBoolean((Boolean) value);
                 case NUMBER:
-                case SEQUENTIAL:
                     return convertNumber(value);
                 case STRING:
                     return convertString(String.valueOf(value));
                 case DATE:
-                    return ((TimeExportField) container).isUnixTime()
-                            ? convertDateUnix(value)
-                            : convertDate(value, ((TimeExportField) container).getFormatter());
+                    return convertDate(value, ((DateExportField) container));
                 case ARRAY:
                     return convertArray(value);
                 case ARRAY_2D:
@@ -111,78 +103,8 @@ abstract class AbstractExporter implements Exporter {
         return String.valueOf(number);
     }
 
-    protected String convertDate(Object date, String formatterPattern) {
-        final DateTimeFormatter formatter = getDateFormatter(date, formatterPattern);
-        if (date instanceof Date) {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(((Date) date).getTime()), TimeZone.getDefault().toZoneId())
-                    .format(formatter);
-        } else if (date instanceof LocalDate) {
-            return ((LocalDate) date).format(formatter);
-        } else if (date instanceof LocalTime) {
-            return ((LocalTime) date).format(formatter);
-        } else if (date instanceof LocalDateTime) {
-            return ((LocalDateTime) date).format(formatter);
-        } else if (date instanceof OffsetTime) {
-            return ((OffsetTime) date).format(formatter);
-        } else if (date instanceof OffsetDateTime) {
-            return ((OffsetDateTime) date).format(formatter);
-        } else if (date instanceof ZonedDateTime) {
-            return ((ZonedDateTime) date).format(formatter);
-        } else {
-            return String.valueOf(date);
-        }
-    }
-
-    protected String convertDateUnix(Object date) {
-        if (date instanceof Date) {
-            return String.valueOf(((Date) date).getTime());
-        } else if (date instanceof ChronoLocalDate) {
-            return String.valueOf(((LocalDate) date).toEpochDay());
-        } else if (date instanceof LocalTime) {
-            return String.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1),
-                    ((LocalTime) date)).toEpochSecond(ZoneOffset.UTC));
-        } else if (date instanceof LocalDateTime) {
-            return String.valueOf(((LocalDateTime) date).toEpochSecond(ZoneOffset.UTC));
-        } else if (date instanceof OffsetTime) {
-            return String.valueOf(LocalDateTime.of(LocalDate.of(1970, 1, 1),
-                    ((OffsetTime) date).toLocalTime()).toEpochSecond(ZoneOffset.UTC));
-        } else if (date instanceof OffsetDateTime) {
-            return String.valueOf(((OffsetDateTime) date).toEpochSecond());
-        } else if (date instanceof ZonedDateTime) {
-            return String.valueOf(((ZonedDateTime) date).toEpochSecond());
-        } else {
-            return String.valueOf(date);
-        }
-    }
-
-    protected DateTimeFormatter getDateFormatter(Object date, String formatter) {
-        if (date instanceof Time || date instanceof LocalTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof LocalDate) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_DATE
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof Date || date instanceof LocalDateTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof OffsetTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_OFFSET_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof OffsetDateTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else if (date instanceof ZonedDateTime) {
-            return GenTime.DEFAULT_FORMAT.equals(formatter)
-                    ? DateTimeFormatter.ISO_ZONED_DATE_TIME
-                    : DateTimeFormatter.ofPattern(formatter);
-        } else {
-            return DateTimeFormatter.ofPattern(formatter);
-        }
+    protected String convertDate(Object date, DateExportField dateExportField) {
+        return dateExportField.getFormatted(date);
     }
 
     protected String convertArray(Object array) {

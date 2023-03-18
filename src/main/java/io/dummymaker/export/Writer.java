@@ -1,7 +1,7 @@
 package io.dummymaker.export;
 
 /**
- * Writer interface used by exporters to write values as files
+ * Writer interface used by exporters to write values
  *
  * @author Anton Kurako (GoodforGod)
  * @see Exporter

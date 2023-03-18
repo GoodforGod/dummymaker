@@ -7,7 +7,7 @@ package io.dummymaker.cases;
  * @author Anton Kurako (GoodforGod)
  * @since 21.04.2018
  */
-public final class PascalCase extends AbstractSeparatorCase {
+final class PascalCase extends AbstractSeparatorCase {
 
     PascalCase() {}
 

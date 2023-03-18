@@ -11,14 +11,13 @@ import java.lang.reflect.Field;
  * @author Anton Kurako (GoodforGod)
  * @since 03.09.2017
  */
-public class ExportField {
+class ExportField {
 
     enum Type {
         STRING,
         NUMBER,
         BOOLEAN,
         DATE,
-        SEQUENTIAL,
         COMPLEX,
         COLLECTION,
         MAP,
@@ -61,10 +60,6 @@ public class ExportField {
 
     public boolean isCollection() {
         return type.equals(Type.COLLECTION);
-    }
-
-    public boolean isSequential() {
-        return type.equals(Type.SEQUENTIAL);
     }
 
     public boolean isArray() {

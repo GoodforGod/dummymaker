@@ -7,7 +7,7 @@ package io.dummymaker.cases;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class SnakeLowerCase extends AbstractSeparatorCase {
+final class SnakeLowerCase extends AbstractSeparatorCase {
 
     SnakeLowerCase() {}
 

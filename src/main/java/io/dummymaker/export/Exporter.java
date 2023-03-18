@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Allow to export objects in desired format
+ * Allow to export objects in implementation specific format
  *
  * @author Anton Kurako (GoodforGod)
  * @see Format

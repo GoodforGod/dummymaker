@@ -3,7 +3,9 @@ package io.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.dummymaker.bundle.*;
-import io.dummymaker.generator.*;
+import io.dummymaker.generator.GenParameters;
+import io.dummymaker.generator.Localisation;
+import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.util.RandomUtils;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;

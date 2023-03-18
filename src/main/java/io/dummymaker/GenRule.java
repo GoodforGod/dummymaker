@@ -20,8 +20,8 @@ public final class GenRule {
     private final Integer depth;
     private final Boolean isAuto;
     private final Class<?> target;
-    private final Set<String> ignored = new HashSet<>();
-    private final Set<GenRuleField> fieldRules = new HashSet<>();
+    private final Set<String> excludedFields = new HashSet<>();
+    private final Set<GenRuleField> specifiedFields = new HashSet<>();
 
     private GenRule(Class<?> target, Boolean isAuto, Integer depth) {
         this.isAuto = isAuto;
@@ -69,30 +69,30 @@ public final class GenRule {
     @NotNull
     public GenRule registerFields(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldNames);
-        this.fieldRules.add(rule);
+        this.specifiedFields.add(rule);
         return this;
     }
 
     @NotNull
     public GenRule registerType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
-        this.fieldRules.add(rule);
+        this.specifiedFields.add(rule);
         return this;
     }
 
     @NotNull
     public GenRule excludeFields(@NotNull String... fieldNames) {
-        this.ignored.addAll(Arrays.asList(fieldNames));
+        this.excludedFields.addAll(Arrays.asList(fieldNames));
         return this;
     }
 
     @NotNull
     Optional<Generator<?>> find(@NotNull Class<?> type, @NotNull String fieldName) {
-        if (isIgnored(fieldName)) {
+        if (isExcluded(fieldName)) {
             return Optional.empty();
         }
 
-        final Optional<Generator<?>> namedGenerator = fieldRules.stream()
+        final Optional<Generator<?>> namedGenerator = specifiedFields.stream()
                 .filter(r -> r.getNames().contains(fieldName))
                 .findAny()
                 .map(rule -> rule.getGeneratorSupplier().get());
@@ -110,7 +110,7 @@ public final class GenRule {
             return Optional.empty();
         }
 
-        final Optional<? extends Generator<?>> equalType = fieldRules.stream()
+        final Optional<? extends Generator<?>> equalType = specifiedFields.stream()
                 .filter(GenRuleField::isTyped)
                 .filter(rule -> type.equals(rule.getType()))
                 .findAny()
@@ -120,7 +120,7 @@ public final class GenRule {
             return Optional.of(equalType.get());
         }
 
-        return fieldRules.stream()
+        return specifiedFields.stream()
                 .filter(GenRuleField::isTyped)
                 .filter(rule -> type.isAssignableFrom(rule.getType()))
                 .findAny()
@@ -133,16 +133,16 @@ public final class GenRule {
             return this;
         }
 
-        for (GenRuleField fieldRule : rule.fieldRules) {
-            for (GenRuleField innerFieldRule : fieldRules) {
+        for (GenRuleField fieldRule : rule.specifiedFields) {
+            for (GenRuleField innerFieldRule : specifiedFields) {
                 if (fieldRule.equals(innerFieldRule) && fieldRule.isTyped()) {
                     throw new IllegalArgumentException("Multiple Rules describe same type: " + fieldRule.getType());
                 }
             }
         }
 
-        this.fieldRules.addAll(rule.fieldRules);
-        this.ignored.addAll(rule.ignored);
+        this.specifiedFields.addAll(rule.specifiedFields);
+        this.excludedFields.addAll(rule.excludedFields);
         return this;
     }
 
@@ -150,8 +150,8 @@ public final class GenRule {
         return GLOBAL_MARKER.equals(target);
     }
 
-    boolean isIgnored(String fieldName) {
-        return ignored.contains(fieldName);
+    boolean isExcluded(String fieldName) {
+        return excludedFields.contains(fieldName);
     }
 
     Optional<Integer> getDepth() {
@@ -166,12 +166,12 @@ public final class GenRule {
         return target;
     }
 
-    Set<String> getIgnored() {
-        return ignored;
+    Set<String> getExcludedFields() {
+        return excludedFields;
     }
 
-    Set<GenRuleField> getFieldRules() {
-        return fieldRules;
+    Set<GenRuleField> getSpecifiedFields() {
+        return specifiedFields;
     }
 
     @Override
@@ -182,12 +182,12 @@ public final class GenRule {
             return false;
         GenRule genRule = (GenRule) o;
         return Objects.equals(depth, genRule.depth) && Objects.equals(isAuto, genRule.isAuto)
-                && Objects.equals(target, genRule.target) && Objects.equals(ignored, genRule.ignored)
-                && Objects.equals(fieldRules, genRule.fieldRules);
+                && Objects.equals(target, genRule.target) && Objects.equals(excludedFields, genRule.excludedFields)
+                && Objects.equals(specifiedFields, genRule.specifiedFields);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(depth, isAuto, target, ignored, fieldRules);
+        return Objects.hash(depth, isAuto, target, excludedFields, specifiedFields);
     }
 }

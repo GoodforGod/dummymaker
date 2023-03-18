@@ -12,9 +12,7 @@ import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SqlExporter extends AbstractExporter {
 
     private static final Pattern ID_PATTERN = Pattern.compile("id|[gu]?uid");
+    private static final Pattern ID_SUFFIX_PATTERN = Pattern.compile("id|[gu]?uid$");
 
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
@@ -133,10 +132,13 @@ public final class SqlExporter extends AbstractExporter {
             typeMap.put(Time.class, "TIME");
             typeMap.put(LocalTime.class, "TIME");
             typeMap.put(LocalDate.class, "DATE");
-            typeMap.put(Date.class, "DATETIME");
-            typeMap.put(java.util.Date.class, "DATETIME");
+            typeMap.put(Date.class, "TIMESTAMP");
+            typeMap.put(java.util.Date.class, "TIMESTAMP");
             typeMap.put(Timestamp.class, "TIMESTAMP");
             typeMap.put(LocalDateTime.class, "TIMESTAMP");
+            typeMap.put(OffsetTime.class, "TIME WITH TIME ZONE");
+            typeMap.put(OffsetDateTime.class, "TIMESTAMP WITH TIME ZONE");
+            typeMap.put(ZonedDateTime.class, "TIMESTAMP WITH TIME ZONE");
             return typeMap;
         }
     }
@@ -184,10 +186,7 @@ public final class SqlExporter extends AbstractExporter {
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
-                final String dateType = (container instanceof TimeExportField && ((TimeExportField) container).isUnixTime())
-                        ? "BIGINT"
-                        : translateJavaTypeToSqlType(fieldType);
-
+                final String dateType = translateJavaTypeToSqlType(fieldType);
                 return field + "\t" + dateType;
             case ARRAY:
             case COLLECTION:
@@ -220,14 +219,18 @@ public final class SqlExporter extends AbstractExporter {
 
     private String getPrimaryField(Collection<ExportField> containers) {
         return containers.stream()
-                .filter(ExportField::isSequential)
                 .map(ExportField::getName)
+                .filter(name -> ID_PATTERN.matcher(name).matches())
                 .findFirst()
                 .orElseGet(() -> containers.stream()
                         .map(ExportField::getName)
-                        .filter(name -> ID_PATTERN.matcher(name).matches())
+                        .filter(name -> ID_SUFFIX_PATTERN.matcher(name).matches())
                         .findFirst()
-                        .orElseGet(() -> containers.iterator().next().getName()));
+                        .orElseGet(() -> containers.stream()
+                                .filter(e -> e.getType().equals(ExportField.Type.NUMBER))
+                                .map(ExportField::getName)
+                                .findFirst()
+                                .orElseGet(() -> containers.iterator().next().getName())));
     }
 
     @Override
@@ -249,7 +252,7 @@ public final class SqlExporter extends AbstractExporter {
     }
 
     @Override
-    protected String convertDate(Object date, String formatterPattern) {
+    protected String convertDate(Object date, DateExportField formatterPattern) {
         return wrap(super.convertDate(date, formatterPattern));
     }
 
@@ -278,7 +281,6 @@ public final class SqlExporter extends AbstractExporter {
                 || c.getType() == ExportField.Type.BOOLEAN
                 || c.getType() == ExportField.Type.NUMBER
                 || c.getType() == ExportField.Type.DATE
-                || c.getType() == ExportField.Type.SEQUENTIAL
                 || c.getType() == ExportField.Type.ARRAY
                 || c.getType() == ExportField.Type.ARRAY_2D
                 || c.getType() == ExportField.Type.COLLECTION;

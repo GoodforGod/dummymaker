@@ -1,12 +1,10 @@
 package io.dummymaker.export;
 
+import io.dummymaker.GenFieldScanner;
 import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -23,37 +21,14 @@ import org.jetbrains.annotations.NotNull;
  */
 final class ExportScanner {
 
-    private final FieldContainerFactory factory = new FieldContainerFactory();
+    private static final ExportFieldFactory FACTORY = new ExportFieldFactory();
 
     @NotNull
-    List<ExportField> scan(Class<?> target) {
-        return getValidFields(target).stream()
-                .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
+    public List<ExportField> scan(Class<?> target) {
+        return GenFieldScanner.scan(target).stream()
+                .filter(genField -> Arrays.stream(genField.field().getDeclaredAnnotations())
                         .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
-                .map(factory::build)
+                .map(genField -> FACTORY.build(genField.field(), genField.type()))
                 .collect(Collectors.toList());
-    }
-
-    @NotNull
-    private List<Field> getValidFields(Class<?> target) {
-        return getAllFields(target).stream()
-                .filter(f -> !f.isSynthetic())
-                .filter(f -> !Modifier.isStatic(f.getModifiers()))
-                .filter(f -> !Modifier.isNative(f.getModifiers()))
-                .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
-                .filter(f -> !Modifier.isFinal(f.getModifiers()))
-                .collect(Collectors.toList());
-    }
-
-    @NotNull
-    private List<Field> getAllFields(Class<?> target) {
-        if (target == null || Object.class.equals(target))
-            return Collections.emptyList();
-
-        final List<Field> collected = Arrays.stream(target.getDeclaredFields())
-                .collect(Collectors.toList());
-
-        collected.addAll(getValidFields(target.getSuperclass()));
-        return collected;
     }
 }

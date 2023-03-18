@@ -102,8 +102,7 @@ public final class XmlExporter extends AbstractExporter {
         return c -> c.getType() == ExportField.Type.STRING
                 || c.getType() == ExportField.Type.BOOLEAN
                 || c.getType() == ExportField.Type.NUMBER
-                || c.getType() == ExportField.Type.DATE
-                || c.getType() == ExportField.Type.SEQUENTIAL;
+                || c.getType() == ExportField.Type.DATE;
     }
 
     @Override

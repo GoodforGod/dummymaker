@@ -75,7 +75,7 @@ public final class JsonExporter extends AbstractExporter {
     }
 
     @Override
-    protected String convertDate(Object date, String formatterPattern) {
+    protected String convertDate(Object date, DateExportField formatterPattern) {
         return wrap(super.convertDate(date, formatterPattern));
     }
 
@@ -91,7 +91,6 @@ public final class JsonExporter extends AbstractExporter {
                 || c.getType() == ExportField.Type.BOOLEAN
                 || c.getType() == ExportField.Type.NUMBER
                 || c.getType() == ExportField.Type.DATE
-                || c.getType() == ExportField.Type.SEQUENTIAL
                 || c.getType() == ExportField.Type.ARRAY
                 || c.getType() == ExportField.Type.ARRAY_2D
                 || c.getType() == ExportField.Type.COLLECTION

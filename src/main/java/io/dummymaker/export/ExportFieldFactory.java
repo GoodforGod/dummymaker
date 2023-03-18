@@ -1,10 +1,7 @@
 package io.dummymaker.export;
 
-import static io.dummymaker.util.StringUtils.isEmpty;
-
+import io.dummymaker.GenType;
 import io.dummymaker.annotation.export.GenExportName;
-import io.dummymaker.annotation.parameterized.GenTime;
-import io.dummymaker.annotation.simple.number.GenSequence;
 import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -21,13 +18,10 @@ import java.util.UUID;
  * @author Anton Kurako (GoodforGod)
  * @since 7.3.2020
  */
-public final class FieldContainerFactory {
+final class ExportFieldFactory {
 
-    public ExportField build(Field field) {
-        final ExportField.Type type = isSequential(field)
-                ? ExportField.Type.SEQUENTIAL
-                : getType(field.getType());
-
+    public ExportField build(Field field, GenType genType) {
+        final ExportField.Type type = getType(genType.raw());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
@@ -38,23 +32,14 @@ public final class FieldContainerFactory {
     }
 
     private ExportField build(Field field, ExportField.Type type, String fieldExportName) {
-        final String finalName = isEmpty(fieldExportName)
-                ? ""
-                : fieldExportName;
-
         if (type.equals(ExportField.Type.DATE) && field != null) {
-            final GenTime annotation = field.getAnnotation(GenTime.class);
-            return new TimeExportField(field, type, finalName, annotation);
+            return new DateExportField(field, type, fieldExportName);
         }
 
-        return new ExportField(field, type, finalName);
+        return new ExportField(field, type, fieldExportName);
     }
 
-    private boolean isSequential(Field field) {
-        return Arrays.stream(field.getDeclaredAnnotations()).anyMatch(a -> a.annotationType().equals(GenSequence.class));
-    }
-
-    private static ExportField.Type getType(final Class<?> type) {
+    private static ExportField.Type getType(Class<?> type) {
         if (type == null) {
             return ExportField.Type.STRING;
         }

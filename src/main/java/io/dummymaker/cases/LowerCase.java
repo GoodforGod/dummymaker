@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 21.02.2018
  */
-public final class LowerCase implements NamingCase {
+final class LowerCase implements NamingCase {
 
     LowerCase() {}
 

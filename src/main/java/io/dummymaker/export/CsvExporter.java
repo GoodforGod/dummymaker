@@ -105,8 +105,7 @@ public final class CsvExporter extends AbstractExporter {
         return c -> c.getType() == Type.STRING
                 || c.getType() == Type.BOOLEAN
                 || c.getType() == Type.NUMBER
-                || c.getType() == Type.DATE
-                || c.getType() == Type.SEQUENTIAL;
+                || c.getType() == Type.DATE;
     }
 
     @Override
