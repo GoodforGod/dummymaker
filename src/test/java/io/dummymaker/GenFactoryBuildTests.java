@@ -2,6 +2,7 @@ package io.dummymaker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.dummymaker.error.GenException;
 import io.dummymaker.testdata.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,10 +18,15 @@ class GenFactoryBuildTests {
 
     @Test
     void produceLessThanZeroAmount() {
-        final GenFactory factory = GenFactory.build();
+        try {
+            final GenFactory factory = GenFactory.build();
 
-        final List<Dummy> dummies = factory.build(Dummy.class, -20);
-        assertTrue(dummies.isEmpty());
+            factory.build(Dummy.class, -20);
+
+            fail("Should not happen");
+        } catch (GenException e) {
+            assertNotNull(e.getMessage());
+        }
     }
 
     @Test

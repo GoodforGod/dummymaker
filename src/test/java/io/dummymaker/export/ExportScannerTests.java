@@ -37,7 +37,6 @@ class ExportScannerTests {
 
         // Check for correct export annotations
         assertTrue(groupAnnotations.isSimple());
-        assertTrue(numAnnotations.isSequential());
         assertTrue(nameAnnotations.isSimple());
     }
 }

@@ -104,7 +104,7 @@ class GenRulesTests extends Assertions {
         final Optional<GenRule> merged = rules.find(DummyEmbedded.class);
         assertTrue(merged.isPresent());
 
-        final Set<GenRuleField> mergedFieldRules = merged.get().getFieldRules();
+        final Set<GenRuleField> mergedFieldRules = merged.get().getSpecifiedFields();
         assertNotNull(mergedFieldRules);
         assertEquals(2, mergedFieldRules.size());
         assertTrue(mergedFieldRules.stream().anyMatch(r -> r.getNames().contains("a")));

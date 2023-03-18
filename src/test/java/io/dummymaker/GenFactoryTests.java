@@ -2,7 +2,6 @@ package io.dummymaker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyNoZeroConstructor;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -12,13 +11,6 @@ import org.junit.jupiter.api.Test;
  * @since 05.10.2019
  */
 class GenFactoryTests {
-
-    @Test
-    void emptyWhenBuildLessThanZero() {
-        final GenFactory factory = GenFactory.build();
-        final List<Dummy> dummies = factory.build(Dummy.class, -2);
-        assertTrue(dummies.isEmpty());
-    }
 
     @Test
     void emptyWhenBuildNonZeroConstructor() {
