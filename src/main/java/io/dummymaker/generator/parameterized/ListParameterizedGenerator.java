@@ -48,7 +48,7 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
 
     @Override
     public Object get(@NotNull GenParameters parameters) {
-        if (parameters.fieldType().generics().isEmpty()) {
+        if (parameters.parameterType().generics().isEmpty()) {
             return get();
         }
 
@@ -60,11 +60,11 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
         for (int i = 0; i < size; i++) {
             final Object element = (generator != null)
                     ? generator.get()
-                    : parameters.fieldTypeBuilder().build(parameters.fieldType().generics().get(0).raw());
+                    : parameters.genericBuilder().build(parameters.parameterType().generics().get(0).raw());
 
             if (element != null) {
                 if (collector.isEmpty()) {
-                    collector = buildCollector(parameters.fieldType(), size);
+                    collector = buildCollector(parameters.parameterType(), size);
                 }
 
                 collector.add(element);

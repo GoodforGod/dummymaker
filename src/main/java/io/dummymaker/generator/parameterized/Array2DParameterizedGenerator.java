@@ -61,14 +61,14 @@ public final class Array2DParameterizedGenerator implements ParameterizedGenerat
 
     @Override
     public Object get(@NotNull GenParameters parameters) {
-        if (!parameters.fieldType().raw().getTypeName().endsWith("[][]")) {
+        if (!parameters.parameterType().raw().getTypeName().endsWith("[][]")) {
             return null;
         }
 
-        final Class<?> componentType = parameters.fieldType().raw().getComponentType().getComponentType();
+        final Class<?> componentType = parameters.parameterType().raw().getComponentType().getComponentType();
         return getCollector(componentType, () -> (generator != null)
                 ? generator.get()
-                : parameters.fieldTypeBuilder().build(componentType));
+                : parameters.genericBuilder().build(componentType));
     }
 
     @Override

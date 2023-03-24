@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Anton Kurako (GoodforGod)
  * @since 13.11.2022
  */
-public interface GenTypeBuilder {
+public interface GenParameterBuilder {
 
     /**
      * @param type to generate
@@ -15,5 +15,5 @@ public interface GenTypeBuilder {
      * @param <T> erasure
      */
     @Nullable
-    <T> T build(@NotNull Class<T> type);
+    <T> T build(@NotNull Class<?> type);
 }

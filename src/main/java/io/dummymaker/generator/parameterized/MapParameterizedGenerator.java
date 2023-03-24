@@ -53,7 +53,7 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
 
     @Override
     public Object get(@NotNull GenParameters parameters) {
-        if (parameters.fieldType().generics().size() != 2) {
+        if (parameters.parameterType().generics().size() != 2) {
             return get();
         }
 
@@ -61,22 +61,22 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
                 ? RandomUtils.random(min, max)
                 : fixed;
 
-        final GenType keyType = parameters.fieldType().generics().get(0);
-        final GenType valueType = parameters.fieldType().generics().get(1);
+        final GenType keyType = parameters.parameterType().generics().get(0);
+        final GenType valueType = parameters.parameterType().generics().get(1);
 
         Map<Object, Object> collector = Collections.emptyMap();
         for (int i = 0; i < size; i++) {
             final Object key = (keyGenerator != null)
                     ? keyGenerator.get()
-                    : parameters.fieldTypeBuilder().build(keyType.raw());
+                    : parameters.genericBuilder().build(keyType.raw());
 
             final Object value = (valueGenerator != null)
                     ? valueGenerator.get()
-                    : parameters.fieldTypeBuilder().build(valueType.raw());
+                    : parameters.genericBuilder().build(valueType.raw());
 
             if (key != null) {
                 if (collector.isEmpty()) {
-                    collector = buildCollector(parameters.fieldType(), size);
+                    collector = buildCollector(parameters.parameterType(), size);
                 }
 
                 collector.put(key, value);

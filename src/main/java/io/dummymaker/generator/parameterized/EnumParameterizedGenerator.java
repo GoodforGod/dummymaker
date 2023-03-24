@@ -37,7 +37,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
             predicate = s -> true;
         }
 
-        final Field[] fields = parameters.fieldType().raw().getFields();
+        final Field[] fields = parameters.parameterType().raw().getFields();
         final List<Field> candidates = Arrays.stream(fields)
                 .filter(f -> predicate.test(f.getName()))
                 .collect(Collectors.toList());
@@ -47,8 +47,8 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
         }
 
         final int index = RandomUtils.random(candidates.size());
-        final Enum e = Enum.valueOf((Class<? extends Enum>) parameters.fieldType().raw(), candidates.get(index).getName());
-        if (CharSequence.class.isAssignableFrom(parameters.fieldType().raw())) {
+        final Enum e = Enum.valueOf((Class<? extends Enum>) parameters.parameterType().raw(), candidates.get(index).getName());
+        if (CharSequence.class.isAssignableFrom(parameters.parameterType().raw())) {
             return parameters.namingCase().apply(e.toString()).toString();
         } else {
             return e;

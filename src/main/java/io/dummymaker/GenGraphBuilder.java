@@ -16,10 +16,10 @@ import org.jetbrains.annotations.Nullable;
 final class GenGraphBuilder {
 
     private final GenRules rules;
-    private final GenScanner scanner;
+    private final GenFieldScanner scanner;
     private final int depthByDefault;
 
-    GenGraphBuilder(GenScanner scanner, GenRules rules, int depthByDefault) {
+    GenGraphBuilder(GenFieldScanner scanner, GenRules rules, int depthByDefault) {
         this.scanner = scanner;
         this.rules = rules;
         this.depthByDefault = depthByDefault;
@@ -32,8 +32,16 @@ final class GenGraphBuilder {
      * @return graph of auto depth values
      */
     GenNode build(Class<?> target) {
-        final GenType type = SimpleGenType.ofClass(target);
-        final GenPayload payload = buildPayload(type, null);
+        final GenType type = GenType.ofClass(target);
+        final Optional<GenRule> rule = rules.find(target);
+        final int depth = rule.flatMap(GenRule::getDepth)
+                .orElseGet(() -> Arrays.stream(target.getDeclaredAnnotations())
+                        .filter(a -> a instanceof GenDepth)
+                        .map(a -> ((GenDepth) a).value())
+                        .findAny()
+                        .orElse(depthByDefault));
+
+        final GenClass payload = buildPayload(type, null, depth, true);
         final GenNode root = GenNode.ofRoot(payload);
         return scanRecursively(root);
     }
@@ -45,24 +53,28 @@ final class GenGraphBuilder {
      * @return parent node with all children
      */
     private GenNode scanRecursively(GenNode parent) {
-        final List<GenType> flatten = parent.value().type().flatten();
-        for (GenType type : flatten) {
-            final List<GenNode> nodes = scanner.scan(type).stream()
-                    .filter(container -> container.isEmbedded() || container.isComplex())
-                    .flatMap(container -> {
-                        final List<GenType> flattenTypes = container.type().flatten();
-                        return Stream.concat(flattenTypes.stream(), Stream.of(container.type()));
+        final List<GenType> flattenTypes = parent.value().type().flatten().stream()
+                .filter(scanner::isEmbedded)
+                .collect(Collectors.toList());
+
+        for (GenType flatType : flattenTypes) {
+            final List<GenNode> nodes = scanner.scan(flatType).stream()
+                    .filter(field -> field.isEmbedded() || field.isComplex())
+                    .flatMap(field -> {
+                        final List<GenType> fieldFlattenTypes = field.type().flatten();
+                        return Stream.concat(fieldFlattenTypes.stream(), Stream.of(field.type()))
+                                .distinct()
+                                .filter(scanner::isEmbedded)
+                                .map(type -> buildPayload(type, parent.value(), field.depth().orElse(null), field.isEmbedded()));
                     })
-                    .distinct()
-                    .map(flatType -> buildPayload(flatType, parent.value()))
                     .map(payload -> GenNode.of(payload, parent))
                     .collect(Collectors.toList());
 
             final Set<GenNode> nodesToScan = new HashSet<>();
             for (GenNode node : nodes) {
-                final Optional<GenNode> alreadyInGraph = find(parent, buildFilter(node.value().type()));
-                if (alreadyInGraph.isPresent()) {
-                    parent.add(alreadyInGraph.get());
+                final Optional<GenNode> nodeAlreadyInGraph = find(parent, buildFilter(node.value().type()));
+                if (nodeAlreadyInGraph.isPresent()) {
+                    parent.add(nodeAlreadyInGraph.get());
                 } else {
                     parent.add(node);
                     nodesToScan.add(node);
@@ -75,45 +87,62 @@ final class GenGraphBuilder {
             }
         }
 
+        final List<GenParameter> parameters = parent.value().constructor().parameters().stream()
+                .filter(p -> scanner.isEmbedded(p.type()))
+                .collect(Collectors.toList());
+
+        for (GenParameter parameter : parameters) {
+            final Set<GenNode> nodesToScan = new HashSet<>();
+            for (GenType flatParameterType : parameter.type().flatten()) {
+                if (scanner.isEmbedded(flatParameterType)) {
+                    final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth(), true);
+                    final GenNode node = GenNode.of(payload, parent);
+
+                    final Optional<GenNode> nodeAlreadyInGraph = find(parent, buildFilter(node.value().type()));
+                    if (nodeAlreadyInGraph.isPresent()) {
+                        parent.add(nodeAlreadyInGraph.get());
+                    } else {
+                        parent.add(node);
+                        nodesToScan.add(node);
+                    }
+                }
+            }
+
+            for (GenNode node : nodesToScan) {
+                final GenNode genNode = scanRecursively(node);
+                parent.add(genNode);
+            }
+        }
+
         return parent;
     }
 
-    /**
-     * Builds payload for target class
-     *
-     * @param target        to scan
-     * @param parentPayload parent payload
-     * @return payload for target class
-     */
-    private GenPayload buildPayload(GenType target, @Nullable GenPayload parentPayload) {
-        // First check rules for auto depth then check annotation if present
-        Class<?> plain = target.raw();
-        if (plain.getTypeName().endsWith("[][]")) {
-            plain = plain.getComponentType().getComponentType();
-        } else if (plain.getTypeName().endsWith("[]")) {
-            plain = plain.getComponentType();
+    private GenClass buildPayload(GenType target,
+                                  @Nullable GenClass parentPayload,
+                                  @Nullable Integer depth,
+                                  boolean isEmbedded) {
+        Class<?> raw = target.raw();
+        if (raw.getTypeName().endsWith("[][]")) {
+            raw = raw.getComponentType().getComponentType();
+        } else if (raw.getTypeName().endsWith("[]")) {
+            raw = raw.getComponentType();
         }
 
-        final Class<?> targetType = plain;
-        final Optional<GenRule> rule = rules.find(targetType);
-        final int depth = rule.flatMap(GenRule::getDepth)
-                .orElseGet(() -> Arrays.stream(targetType.getDeclaredAnnotations())
-                        .filter(a -> a instanceof GenDepth)
-                        .map(a -> ((GenDepth) a).value())
-                        .findAny()
-                        .orElseGet(() -> parentPayload == null
-                                ? depthByDefault
-                                : parentPayload.depth()));
+        final int payloadDepth = Optional.ofNullable(depth)
+                .orElseGet(() -> parentPayload == null
+                        ? depthByDefault
+                        : parentPayload.depth());
 
-        final List<GenContainer> containers = scanner.scan(SimpleGenType.ofClass(targetType));
-        return new GenPayload(target, depth, containers);
+        final GenType type = GenType.ofClass(raw);
+        final List<GenField> fields = scanner.scan(type);
+        return new GenClass(isEmbedded, target, payloadDepth, fields);
     }
 
     private Optional<GenNode> find(GenNode node, Predicate<GenNode> filter) {
         final GenNode root = node.root();
 
         final Set<GenNode> visited = new HashSet<>();
-        if (node != root) {
+        if (node == root) {
             visited.add(root);
             if (filter.test(root)) {
                 return Optional.of(root);

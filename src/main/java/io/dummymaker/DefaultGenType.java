@@ -12,44 +12,46 @@ import org.jetbrains.annotations.NotNull;
  * @author Anton Kurako (GoodforGod)
  * @since 30.11.2022
  */
-final class SimpleGenType implements GenType {
+final class DefaultGenType implements GenType {
 
     private final Type type;
     private final Class<?> value;
     private final List<GenType> generics;
 
-    private SimpleGenType(Type type, Class<?> value, List<GenType> generics) {
+    private DefaultGenType(Type type, Class<?> value, List<GenType> generics) {
         this.type = type;
         this.value = value;
         this.generics = generics;
     }
 
-    static SimpleGenType ofClass(Class<?> type) {
-        return new SimpleGenType(type, type, Collections.emptyList());
+    static DefaultGenType ofClass(@NotNull Class<?> type) {
+        return new DefaultGenType(type, type, Collections.emptyList());
     }
 
-    static SimpleGenType ofType(Type type) {
-        if (type instanceof TypeVariable) {
+    static DefaultGenType ofType(@NotNull Type type) {
+        if (type instanceof Class) {
+            return new DefaultGenType(type, (Class<?>) type, Collections.emptyList());
+        } else if (type instanceof TypeVariable) {
             if (((TypeVariable<?>) type).getGenericDeclaration() instanceof Class) {
-                return new SimpleGenType(type, ((Class) ((TypeVariable<?>) type).getGenericDeclaration()),
+                return new DefaultGenType(type, ((Class<?>) ((TypeVariable<?>) type).getGenericDeclaration()),
                         Collections.emptyList());
             } else {
-                return new SimpleGenType(type, Object.class, Collections.emptyList());
+                return new DefaultGenType(type, Object.class, Collections.emptyList());
             }
         } else if (type instanceof ParameterizedType) {
             final List<GenType> generics = Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
-                    .map(SimpleGenType::ofType)
+                    .map(GenType::ofType)
                     .collect(Collectors.toList());
 
-            return new SimpleGenType(type, ((Class<?>) ((ParameterizedType) type).getRawType()), generics);
+            return new DefaultGenType(type, ((Class<?>) ((ParameterizedType) type).getRawType()), generics);
         } else if (type instanceof WildcardType) {
-            return new SimpleGenType(type, Object.class, Collections.emptyList());
+            return new DefaultGenType(type, Object.class, Collections.emptyList());
         } else {
-            return new SimpleGenType(type, (Class<?>) type, Collections.emptyList());
+            return new DefaultGenType(type, (Class<?>) type, Collections.emptyList());
         }
     }
 
-    private Class<?> plain() {
+    private Class<?> plainRawType() {
         final Class<?> raw = raw();
         if (raw.getTypeName().endsWith("[][]")) {
             return raw.getComponentType().getComponentType();
@@ -63,7 +65,7 @@ final class SimpleGenType implements GenType {
     @Override
     public @NotNull List<GenType> flatten() {
         final List<GenType> flat = new ArrayList<>();
-        flat.add(ofClass(plain()));
+        flat.add(GenType.ofClass(plainRawType()));
 
         generics.stream()
                 .flatMap(type -> type.flatten().stream())
@@ -91,9 +93,9 @@ final class SimpleGenType implements GenType {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof SimpleGenType))
+        if (!(o instanceof DefaultGenType))
             return false;
-        SimpleGenType that = (SimpleGenType) o;
+        DefaultGenType that = (DefaultGenType) o;
         return Objects.equals(value, that.value) && Objects.equals(generics, that.generics);
     }
 

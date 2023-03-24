@@ -3,7 +3,6 @@ package io.dummymaker;
 import static io.dummymaker.util.CastUtils.castObject;
 
 import io.dummymaker.cases.NamingCase;
-import io.dummymaker.error.GenConstructionException;
 import io.dummymaker.error.GenException;
 import io.dummymaker.generator.GenParameters;
 import io.dummymaker.generator.Generator;
@@ -12,9 +11,7 @@ import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.util.CastUtils;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -57,7 +54,7 @@ final class DefaultGenFactory implements GenFactory {
         this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(seed));
         this.zeroArgConstructor = new ZeroArgClassConstructor();
         this.fullArgConstructor = new FullArgClassConstructor(generatorSupplier);
-        final GenScanner scanner = new GenScanner(generatorSupplier, rules, isAutoByDefault, depthByDefault);
+        final GenFieldScanner scanner = new GenFieldScanner(generatorSupplier, rules, isAutoByDefault, depthByDefault);
         this.graphBuilder = new GenGraphBuilder(scanner, rules, depthByDefault);
     }
 
@@ -96,7 +93,12 @@ final class DefaultGenFactory implements GenFactory {
                     .filter(Objects::nonNull);
         }
 
-        return stream(() -> instantiate(target), size);
+        final GenNode graph = graphBuilder.build(target);
+        final GenContext context = GenContext.ofNew(graph.value().depth(), graph);
+        final Supplier<T> instanceSupplier = getInstanceSupplier(graph.value(), context);
+        return Stream.generate(instanceSupplier)
+                .limit(size)
+                .map(instance -> fillInstance(instance, context));
     }
 
     @Override
@@ -124,30 +126,28 @@ final class DefaultGenFactory implements GenFactory {
         return Stream.generate(supplier)
                 .limit(size)
                 .filter(Objects::nonNull)
-                .map(value -> fillValueFields(value, context));
+                .map(instance -> fillInstance(instance, context));
     }
 
     @Nullable
-    <T> T fillValueFields(@Nullable T value, GenContext context) {
-        if (value == null || context.graph() == null) {
+    <T> T fillInstance(@Nullable T instance, GenContext context) {
+        if (instance == null || context.graph() == null) {
             return null;
         }
 
         try {
-            final List<GenContainer> fields = context.graph().value().fields();
-            for (GenContainer fieldMeta : fields) {
-                final Field field = fieldMeta.field();
-                field.setAccessible(true);
+            final List<GenField> fields = context.graph().value().fields();
+            for (GenField field : fields) {
                 if (!overrideDefaultValues) {
-                    final Object fieldDefaultValue = field.get(value);
+                    final Object fieldDefaultValue = field.getDefaultValue(instance);
                     if (fieldDefaultValue != null) {
                         continue;
                     }
                 }
 
-                final Object generated = generateFieldValue(fieldMeta, context);
+                final Object generated = generateFieldValue(field, context);
                 if (generated != null) {
-                    field.set(value, generated);
+                    field.setValue(instance, generated);
                 }
             }
         } catch (GenException e) {
@@ -156,73 +156,32 @@ final class DefaultGenFactory implements GenFactory {
             }
         } catch (Exception e) {
             if (!ignoreErrors) {
-                throw new GenException("Error occurred while generating '" + value.getClass() + "' field value due to: ", e);
+                throw new GenException("Error occurred while generating '" + instance.getClass() + "' field value due to: ", e);
             }
         }
 
-        return value;
+        return instance;
     }
 
-    private Object generateFieldValue(GenContainer fieldMeta, GenContext context) {
-        final Field field = fieldMeta.field();
-        final Generator<?> generator = fieldMeta.getGenerator();
-        final Localisation matchedLocalisation = (localisation == null)
-                ? tryMatchLocalisation(field)
-                : localisation;
+    Object generateFieldValue(GenField field, GenContext context) {
+        return generateFieldValue(field.generator(), field.type(), field.name(), context);
+    }
 
+    Object generateFieldValue(Generator<?> valueGenerator, GenType valueType, String valueName, GenContext context) {
         Object generated;
 
-        if (generator instanceof EmbeddedGenerator) {
-            generated = generateEmbeddedObject(fieldMeta, context);
-        } else if (generator instanceof SequenceGenerator) {
-            final Object sequence = generator.get();
-            generated = CastUtils.castToNumber(sequence, field.getType());
-        } else if (generator instanceof ParameterizedGenerator) {
-            // may stackOverFlow if ton of embedded will be generated
-            final GenTypeBuilder genTypeBuilder = new GenTypeBuilder() {
+        if (valueGenerator instanceof EmbeddedGenerator) {
+            generated = generateEmbeddedObject(valueType, context);
+        } else if (valueGenerator instanceof SequenceGenerator) {
+            final Object sequence = valueGenerator.get();
+            generated = CastUtils.castToNumber(sequence, valueType.raw());
+        } else if (valueGenerator instanceof ParameterizedGenerator) {
+            final Localisation matchedLocalisation = (localisation == null)
+                    ? tryMatchLocalisation(valueName)
+                    : localisation;
 
-                @Override
-                public <T> @Nullable T build(@NotNull Class<T> type) {
-                    final Generator<?> suitableGenerator = generatorSupplier.get(type);
-                    if (suitableGenerator instanceof EmbeddedGenerator) {
-                        final GenContext embeddedContext = GenContext.ofChild(context, type);
-                        if (embeddedContext.depthCurrent() <= embeddedContext.depthMax()) {
-                            final T instantiate = instantiate(type);
-                            return fillValueFields(instantiate, embeddedContext);
-                        } else {
-                            return null;
-                        }
-                    } else if (suitableGenerator instanceof ParameterizedGenerator) {
-                        final GenTypeBuilder thisGenTypeBuilder = this;
-                        return (T) ((ParameterizedGenerator<?>) suitableGenerator).get(new GenParameters() {
-
-                            @Override
-                            public @NotNull Localisation localisation() {
-                                return matchedLocalisation;
-                            }
-
-                            @Override
-                            public @NotNull NamingCase namingCase() {
-                                return namingCase;
-                            }
-
-                            @Override
-                            public @NotNull GenType fieldType() {
-                                return SimpleGenType.ofClass(type);
-                            }
-
-                            @Override
-                            public @NotNull GenTypeBuilder fieldTypeBuilder() {
-                                return thisGenTypeBuilder;
-                            }
-                        });
-                    } else {
-                        return (T) suitableGenerator.get();
-                    }
-                }
-            };
-
-            generated = ((ParameterizedGenerator) generator).get(new GenParameters() {
+            final GenParameterBuilder genParameterBuilder = getGenParameterBuilder(matchedLocalisation, context);
+            generated = ((ParameterizedGenerator) valueGenerator).get(new GenParameters() {
 
                 @Override
                 public @NotNull Localisation localisation() {
@@ -235,52 +194,102 @@ final class DefaultGenFactory implements GenFactory {
                 }
 
                 @Override
-                public @NotNull GenType fieldType() {
-                    return fieldMeta.type();
+                public @NotNull GenType parameterType() {
+                    return valueType;
                 }
 
                 @Override
-                public @NotNull GenTypeBuilder fieldTypeBuilder() {
-                    return genTypeBuilder;
+                public @NotNull GenParameterBuilder genericBuilder() {
+                    return genParameterBuilder;
                 }
             });
         } else {
-            generated = generator.get();
+            generated = valueGenerator.get();
         }
 
-        return castObject(generated, field.getType());
+        return castObject(generated, valueType.raw());
     }
 
-    private Object generateEmbeddedObject(GenContainer fieldMeta, GenContext context) {
+    private GenParameterBuilder getGenParameterBuilder(@NotNull Localisation localisation, @NotNull GenContext context) {
+        return new GenParameterBuilder() {
+
+            @Override
+            public <T> @Nullable T build(@NotNull Class<?> type) {
+                final Generator<?> suitableGenerator = generatorSupplier.get(type);
+                if (suitableGenerator instanceof EmbeddedGenerator) {
+                    return (T) generateEmbeddedObject(GenType.ofClass(type), context);
+                } else if (suitableGenerator instanceof ParameterizedGenerator) {
+                    final GenParameterBuilder thisGenParameterBuilder = this;
+                    return (T) ((ParameterizedGenerator<?>) suitableGenerator).get(new GenParameters() {
+
+                        @Override
+                        public @NotNull Localisation localisation() {
+                            return localisation;
+                        }
+
+                        @Override
+                        public @NotNull NamingCase namingCase() {
+                            return namingCase;
+                        }
+
+                        @Override
+                        public @NotNull GenType parameterType() {
+                            return GenType.ofClass(type);
+                        }
+
+                        @Override
+                        public @NotNull GenParameterBuilder genericBuilder() {
+                            return thisGenParameterBuilder;
+                        }
+                    });
+                } else {
+                    return (T) suitableGenerator.get();
+                }
+            }
+        };
+    }
+
+    private Object generateEmbeddedObject(GenType type, GenContext context) {
         if (context.depthCurrent() <= context.depthMax()) {
-            final Class<?> childType = fieldMeta.field().getType();
+            final Class<?> childType = type.raw();
             if (childType.getPackage().getName().startsWith("java.")) {
                 return null;
             }
 
-            final Object childValue = instantiate(childType);
-            return fillValueFields(childValue, GenContext.ofChild(context, childType));
+            final GenContext childContext = GenContext.ofChild(context, childType);
+            final GenClass childClass;
+            try {
+                childClass = childContext.graph().value();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            final Supplier<Object> childValue = getInstanceSupplier(childClass, childContext);
+            return fillInstance(childValue.get(), childContext);
         } else {
             return null;
         }
     }
 
     @NotNull
-    private Localisation tryMatchLocalisation(Field field) {
-        if (PATTERN_LOCALISATION_EN.matcher(field.getName()).matches()) {
+    private Localisation tryMatchLocalisation(String fieldName) {
+        if (PATTERN_LOCALISATION_EN.matcher(fieldName).matches()) {
             return Localisation.ENGLISH;
-        } else if (PATTERN_LOCALISATION_RU.matcher(field.getName()).matches()) {
+        } else if (PATTERN_LOCALISATION_RU.matcher(fieldName).matches()) {
             return Localisation.RUSSIAN;
-        } else {
-            return Localisation.ENGLISH;
         }
+
+        return Localisation.ENGLISH;
     }
 
-    private <T> T instantiate(Class<T> target) {
-        try {
-            return zeroArgConstructor.instantiate(target);
-        } catch (GenConstructionException e) {
-            return fullArgConstructor.instantiate(target);
-        }
+    private <T> Supplier<T> getInstanceSupplier(GenClass genClass, GenContext context) {
+        final GenConstructor constructor = genClass.constructor();
+        final Object[] constructorParameters = constructor.parameters().stream()
+                .map(parameter -> {
+                    final Generator<?> generator = generatorSupplier.get(parameter.type().raw(), parameter.name());
+                    return generateFieldValue(generator, parameter.type(), parameter.name(), context);
+                })
+                .toArray(Object[]::new);
+
+        return () -> constructor.instantiate(constructorParameters);
     }
 }

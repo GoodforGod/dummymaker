@@ -12,20 +12,20 @@ final class GenNode {
 
     private final GenNode parent;
     private final Set<GenNode> nodes = new HashSet<>();
-    private final GenPayload value;
+    private final GenClass value;
     private final boolean isRoot;
 
-    private GenNode(GenPayload value, GenNode parent, boolean isRoot) {
+    private GenNode(GenClass value, GenNode parent, boolean isRoot) {
         this.value = value;
         this.parent = parent;
         this.isRoot = isRoot;
     }
 
-    public static GenNode ofRoot(GenPayload value) {
+    public static GenNode ofRoot(GenClass value) {
         return new GenNode(value, null, true);
     }
 
-    public static GenNode of(GenPayload value, GenNode parent) {
+    public static GenNode of(GenClass value, GenNode parent) {
         return new GenNode(value, parent, false);
     }
 
@@ -34,7 +34,7 @@ final class GenNode {
         return this;
     }
 
-    public GenPayload value() {
+    public GenClass value() {
         return value;
     }
 

@@ -44,14 +44,14 @@ public final class ArrayParameterizedGenerator implements ParameterizedGenerator
 
     @Override
     public Object get(@NotNull GenParameters parameters) {
-        if (!parameters.fieldType().raw().getTypeName().endsWith("[]")) {
+        if (!parameters.parameterType().raw().getTypeName().endsWith("[]")) {
             return null;
         }
 
-        final Class<?> componentType = parameters.fieldType().raw().getComponentType();
+        final Class<?> componentType = parameters.parameterType().raw().getComponentType();
         return getCollector(componentType, () -> (generator != null)
                 ? generator.get()
-                : parameters.fieldTypeBuilder().build(componentType));
+                : parameters.genericBuilder().build(componentType));
     }
 
     @Override

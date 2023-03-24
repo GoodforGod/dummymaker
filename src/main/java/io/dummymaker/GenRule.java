@@ -35,8 +35,8 @@ public final class GenRule {
     }
 
     @NotNull
-    public static GenRule ofClass(@NotNull Class<?> target, boolean isAuto) {
-        return ofClassInner(target, isAuto, null);
+    public static GenRule ofClass(@NotNull Class<?> target, boolean isGenAuto) {
+        return ofClassInner(target, isGenAuto, null);
     }
 
     @NotNull
@@ -45,17 +45,18 @@ public final class GenRule {
     }
 
     @NotNull
-    public static GenRule ofClass(@NotNull Class<?> target, boolean isAuto, int depth) {
-        return ofClassInner(target, isAuto, depth);
+    public static GenRule ofClass(@NotNull Class<?> target, boolean isGenAuto, int depth) {
+        return ofClassInner(target, isGenAuto, depth);
     }
 
     private static GenRule ofClassInner(@NotNull Class<?> target, @Nullable Boolean isAuto, @Nullable Integer depth) {
-        if (GLOBAL_MARKER.equals(target)) {
-            throw new IllegalArgumentException(GLOBAL_MARKER + " can't be GenRule type");
+        if (GLOBAL_MARKER.equals(target) || void.class.equals(target)) {
+            throw new IllegalArgumentException(GLOBAL_MARKER + " can't be GenRule target class type");
         }
 
         if (depth != null && (depth < 1 || depth > GenDepth.MAX)) {
-            throw new IllegalArgumentException("Depth must be between 1 and 50, but was " + depth + " for " + target);
+            throw new IllegalArgumentException(
+                    "Depth must be between 1 and " + GenDepth.MAX + ", but was " + depth + " for " + target);
         }
 
         return new GenRule(target, isAuto, depth);
@@ -67,14 +68,14 @@ public final class GenRule {
     }
 
     @NotNull
-    public GenRule registerFields(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
+    public GenRule registerFieldNames(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldNames);
         this.specifiedFields.add(rule);
         return this;
     }
 
     @NotNull
-    public GenRule registerType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
+    public GenRule registerFieldType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
         this.specifiedFields.add(rule);
         return this;

@@ -19,13 +19,13 @@ public interface GenType {
     List<GenType> flatten();
 
     /**
-     * @return RAW type as class
+     * @return Plain type as class
      */
     @NotNull
     Class<?> raw();
 
     /**
-     * @return RAW type
+     * @return Type
      */
     @NotNull
     Type type();
@@ -35,4 +35,14 @@ public interface GenType {
      */
     @NotNull
     List<GenType> generics();
+
+    @NotNull
+    static GenType ofClass(@NotNull Class<?> type) {
+        return DefaultGenType.ofClass(type);
+    }
+
+    @NotNull
+    static GenType ofType(@NotNull Type type) {
+        return DefaultGenType.ofType(type);
+    }
 }

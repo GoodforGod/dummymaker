@@ -1,7 +1,7 @@
 package io.dummymaker.generator;
 
+import io.dummymaker.GenParameterBuilder;
 import io.dummymaker.GenType;
-import io.dummymaker.GenTypeBuilder;
 import io.dummymaker.cases.NamingCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +27,11 @@ public interface GenParameters {
      * @return field type
      */
     @NotNull
-    GenType fieldType();
+    GenType parameterType();
 
     /**
      * @return that can be used for complex field generation
      */
     @NotNull
-    GenTypeBuilder fieldTypeBuilder();
+    GenParameterBuilder genericBuilder();
 }

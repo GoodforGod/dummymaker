@@ -63,7 +63,7 @@ public final class TimeParameterizedGenerator implements ParameterizedGenerator<
 
     @Override
     public Object get(@NotNull GenParameters parameters) {
-        final Class<?> fieldClass = parameters.fieldType().raw();
+        final Class<?> fieldClass = parameters.parameterType().raw();
         if (ZoneOffset.class.isAssignableFrom(fieldClass)) {
             return zonedOffsetGenerator.get();
         } else if (DayOfWeek.class.isAssignableFrom(fieldClass)) {

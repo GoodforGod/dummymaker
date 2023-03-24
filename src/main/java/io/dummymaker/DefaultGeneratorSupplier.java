@@ -57,14 +57,16 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
 
         TYPE_TO_GENERATORS.put(CharSequence.class, TYPE_TO_GENERATORS.get(String.class));
 
+        TYPE_TO_GENERATORS.put(void.class, Collections.singletonList(new NullGenerator()));
+        TYPE_TO_GENERATORS.put(Void.class, Collections.singletonList(new NullGenerator()));
+
         TYPE_TO_GENERATORS.put(Object.class, Collections.singletonList(new ObjectGenerator()));
         TYPE_TO_GENERATORS.put(Boolean.class, Collections.singletonList(new BooleanGenerator()));
         TYPE_TO_GENERATORS.put(Byte.class, Collections.singletonList(new ByteGenerator()));
         TYPE_TO_GENERATORS.put(Character.class, Arrays.asList(new CharacterGenerator(), new CharGenerator()));
         TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator((short) 0, Short.MAX_VALUE)));
-        TYPE_TO_GENERATORS.put(Integer.class,
-                Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE), new IntegerSmallGenerator(),
-                        new PostalGenerator(), new MccGenerator()));
+        TYPE_TO_GENERATORS.put(Integer.class, Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE),
+                new IntegerSmallGenerator(), new PostalGenerator(), new MccGenerator()));
         TYPE_TO_GENERATORS.put(Long.class, Arrays.asList(new LongGenerator(0, Long.MAX_VALUE),
                 new UnixTimeGenerator(GenTime.MIN, GenTime.MAX)));
         TYPE_TO_GENERATORS.put(Float.class, Collections.singletonList(new FloatSmallGenerator()));
@@ -102,7 +104,6 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
         TYPE_TO_GENERATORS.put(Year.class, Collections.singletonList(new YearGenerator(GenTime.MIN, GenTime.MAX)));
         TYPE_TO_GENERATORS.put(YearMonth.class, Collections.singletonList(new YearMonthGenerator(GenTime.MIN, GenTime.MAX)));
 
-        TYPE_TO_GENERATORS.put(Void.class, Collections.singletonList(new NullGenerator()));
         TYPE_TO_GENERATORS.put(URI.class, Collections.singletonList(new UriGenerator()));
         TYPE_TO_GENERATORS.put(URL.class, Collections.singletonList(new UrlGenerator()));
         TYPE_TO_GENERATORS.put(UUID.class, Collections.singletonList(new UuidGenerator()));
