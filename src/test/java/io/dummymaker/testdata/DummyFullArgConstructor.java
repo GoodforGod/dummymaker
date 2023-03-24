@@ -1,7 +1,6 @@
 package io.dummymaker.testdata;
 
 import io.dummymaker.annotation.GenAuto;
-import io.dummymaker.annotation.GenIgnore;
 import io.dummymaker.annotation.parameterized.GenList;
 import io.dummymaker.annotation.parameterized.GenMap;
 import io.dummymaker.annotation.parameterized.GenSet;
@@ -15,11 +14,10 @@ import java.util.Set;
  * @since 27.02.2018
  */
 @GenAuto
-public class DummyNoZeroConstructor {
+public class DummyFullArgConstructor {
 
-    @GenIgnore
-    private Integer amount;
-    private Dummy dummy;
+    private final Integer amount;
+    private final Dummy dummy;
 
     @GenMap(key = EmbeddedGenerator.class, value = EmbeddedGenerator.class)
     private Map<String, Object> map;
@@ -28,9 +26,30 @@ public class DummyNoZeroConstructor {
     private List<String> objectsFix;
 
     @GenSet(fixed = 1, value = EmbeddedGenerator.class)
-    private Set<DummyNoZeroConstructor> stringsFix;
+    private Set<DummyFullArgConstructor> stringsFix;
 
-    public DummyNoZeroConstructor(Integer amount) {
+    public DummyFullArgConstructor(Integer amount, Dummy dummy) {
         this.amount = amount;
+        this.dummy = dummy;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public Dummy getDummy() {
+        return dummy;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
+    }
+
+    public List<String> getObjectsFix() {
+        return objectsFix;
+    }
+
+    public Set<DummyFullArgConstructor> getStringsFix() {
+        return stringsFix;
     }
 }

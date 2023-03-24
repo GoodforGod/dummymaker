@@ -30,22 +30,6 @@ class GenFactoryBuildTests {
     }
 
     @Test
-    void noZeroConstructorList() {
-        final GenFactory factory = GenFactory.build();
-
-        final List<DummyNoZeroConstructor> dummies = factory.build(DummyNoZeroConstructor.class, 20);
-        assertEquals(20, dummies.size());
-    }
-
-    @Test
-    void noZeroConstructorSingle() {
-        final GenFactory factory = GenFactory.build();
-
-        final DummyNoZeroConstructor dummy = factory.build(DummyNoZeroConstructor.class);
-        assertNotNull(dummy);
-    }
-
-    @Test
     void produceListOfTwo() {
         final GenFactory factory = GenFactory.build();
 

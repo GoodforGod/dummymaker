@@ -1,6 +1,6 @@
 package io.dummymaker.export;
 
-import io.dummymaker.testdata.DummyNoZeroConstructor;
+import io.dummymaker.testdata.DummyExport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ public class BasicExporterValidationTests extends Assertions {
     @MethodSource("data")
     @ParameterizedTest
     void exportNotExportable(Exporter exporter) {
-        DummyNoZeroConstructor d = new DummyNoZeroConstructor(null);
+        DummyExport d = new DummyExport();
         String s = exporter.exportAsString(d);
         if (exporter instanceof CsvExporter)
             assertTrue(s.isEmpty());
@@ -38,9 +38,9 @@ public class BasicExporterValidationTests extends Assertions {
     @MethodSource("data")
     @ParameterizedTest
     void exportNotExportableList(Exporter exporter) {
-        List<DummyNoZeroConstructor> dummyNoZeroConstructors = Arrays.asList(
-                new DummyNoZeroConstructor(null),
-                new DummyNoZeroConstructor(null));
+        List<DummyExport> dummyNoZeroConstructors = Arrays.asList(
+                new DummyExport(),
+                new DummyExport());
 
         String s = exporter.exportAsString(dummyNoZeroConstructors);
         if (exporter instanceof CsvExporter)

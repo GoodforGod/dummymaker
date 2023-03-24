@@ -18,8 +18,8 @@ class DummyGlobalRulesTests extends Assertions {
     void validFieldsGeneration() {
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerType(ByteGenerator::new, int.class)
-                        .registerFields(NounGenerator::new, "name"))
+                        .registerFieldType(ByteGenerator::new, int.class)
+                        .registerFieldNames(NounGenerator::new, "name"))
                 .build();
 
         final DummyEmbedded dummy = factory.build(DummyEmbedded.class);

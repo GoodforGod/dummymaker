@@ -24,9 +24,9 @@ public class Dummy {
 
     private static final int IGNORED_INT = 1;
 
-    public static long IGNORED_LONG = 2;
+    private static long IGNORED_LONG = 2;
 
-    private final int ignoredAuto = 10;
+    private static final int IGNORED_AUTO = 10;
 
     /**
      * Used for scanners test, to check for correct fields
@@ -81,7 +81,7 @@ public class Dummy {
     }
 
     public int getIgnoredAuto() {
-        return ignoredAuto;
+        return IGNORED_AUTO;
     }
 
     @GenExportName("socialGroup")

@@ -21,7 +21,7 @@ class UniqueExporterTests extends Assertions {
                 : 2;
 
         final GenRule rule = GenRule.ofClass(DummyEmbeddedIntoSimple.class, false)
-                .registerFields(() -> generator, "number");
+                .registerFieldNames(() -> generator, "number");
 
         final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbeddedIntoSimple dummy = factory.build(DummyEmbeddedIntoSimple.class);

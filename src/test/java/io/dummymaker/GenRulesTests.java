@@ -20,7 +20,7 @@ class GenRulesTests extends Assertions {
         final Generator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFields(() -> generator, "name");
+                .registerFieldNames(() -> generator, "name");
 
         final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
@@ -35,7 +35,7 @@ class GenRulesTests extends Assertions {
         final Generator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerType(() -> generator, String.class);
+                .registerFieldType(() -> generator, String.class);
 
         final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
@@ -49,10 +49,10 @@ class GenRulesTests extends Assertions {
     @Test
     void genFieldRuleNotEqualsForTypeTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerType(ByteGenerator::new, int.class);
+                .registerFieldType(ByteGenerator::new, int.class);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerType(ByteGenerator::new, byte.class);
+                .registerFieldType(ByteGenerator::new, byte.class);
 
         assertNotEquals(rule1, rule2);
     }
@@ -60,10 +60,10 @@ class GenRulesTests extends Assertions {
     @Test
     void genFieldRuleNotEqualsForNamedTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFields(ByteGenerator::new, "a");
+                .registerFieldNames(ByteGenerator::new, "a");
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFields(ByteGenerator::new, "a1");
+                .registerFieldNames(ByteGenerator::new, "a1");
 
         assertNotEquals(rule1, rule2);
     }
@@ -71,10 +71,10 @@ class GenRulesTests extends Assertions {
     @Test
     void genFieldRuleAreEqualsForTypeTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerType(ByteGenerator::new, int.class);
+                .registerFieldType(ByteGenerator::new, int.class);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerType(ByteGenerator::new, int.class);
+                .registerFieldType(ByteGenerator::new, int.class);
 
         assertEquals(rule1, rule2);
     }
@@ -82,10 +82,10 @@ class GenRulesTests extends Assertions {
     @Test
     void genFieldRuleAreEqualsForNamedTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFields(ByteGenerator::new, "a");
+                .registerFieldNames(ByteGenerator::new, "a");
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFields(ByteGenerator::new, "a");
+                .registerFieldNames(ByteGenerator::new, "a");
 
         assertEquals(rule1, rule2);
     }
@@ -93,10 +93,10 @@ class GenRulesTests extends Assertions {
     @Test
     void rulesMergeValid() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, true, 2)
-                .registerFields(ByteGenerator::new, "a");
+                .registerFieldNames(ByteGenerator::new, "a");
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, true, 2)
-                .registerFields(ByteGenerator::new, "aa");
+                .registerFieldNames(ByteGenerator::new, "aa");
 
         final GenRules rules = GenRules.of(Arrays.asList(rule1, rule2));
         assertNotNull(rules);
