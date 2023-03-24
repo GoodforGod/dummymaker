@@ -26,13 +26,11 @@ final class GenFieldScanner {
     private final GeneratorSupplier generatorSupplier;
     private final GenRules rules;
     private final boolean isAutoByDefault;
-    private final int depthByDefault;
 
-    GenFieldScanner(GeneratorSupplier generatorSupplier, GenRules rules, boolean isAutoByDefault, int depthByDefault) {
+    GenFieldScanner(GeneratorSupplier generatorSupplier, GenRules rules, boolean isAutoByDefault) {
         this.generatorSupplier = generatorSupplier;
         this.rules = rules;
         this.isAutoByDefault = isAutoByDefault;
-        this.depthByDefault = depthByDefault;
     }
 
     boolean isEmbedded(GenType type) {

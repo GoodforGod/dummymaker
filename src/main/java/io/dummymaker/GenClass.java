@@ -9,21 +9,15 @@ import java.util.Objects;
  */
 final class GenClass {
 
-    private final boolean embedded;
     private final int depth;
     private final GenType type;
     private final List<GenField> fields;
     private GenConstructor constructor;
 
-    GenClass(boolean embedded, GenType type, int depth, List<GenField> fields) {
-        this.embedded = embedded;
+    GenClass(GenType type, int depth, List<GenField> fields) {
         this.type = type;
         this.depth = depth;
         this.fields = fields;
-    }
-
-    boolean isEmbedded() {
-        return embedded;
     }
 
     int depth() {

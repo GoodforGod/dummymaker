@@ -29,8 +29,6 @@ final class DefaultGenFactory implements GenFactory {
     private static final Pattern PATTERN_LOCALISATION_EN = Pattern.compile("(Eng?|English)$");
     private static final Pattern PATTERN_LOCALISATION_RU = Pattern.compile("(Ru|Russian)$");
 
-    private final ClassConstructor zeroArgConstructor;
-    private final ClassConstructor fullArgConstructor;
     private final GenGraphBuilder graphBuilder;
     private final GeneratorSupplier generatorSupplier;
     private final NamingCase namingCase;
@@ -52,9 +50,7 @@ final class DefaultGenFactory implements GenFactory {
         this.overrideDefaultValues = overrideDefaultValues;
         this.localisation = localisation;
         this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(seed));
-        this.zeroArgConstructor = new ZeroArgClassConstructor();
-        this.fullArgConstructor = new FullArgClassConstructor(generatorSupplier);
-        final GenFieldScanner scanner = new GenFieldScanner(generatorSupplier, rules, isAutoByDefault, depthByDefault);
+        final GenFieldScanner scanner = new GenFieldScanner(generatorSupplier, rules, isAutoByDefault);
         this.graphBuilder = new GenGraphBuilder(scanner, rules, depthByDefault);
     }
 
@@ -257,12 +253,7 @@ final class DefaultGenFactory implements GenFactory {
             }
 
             final GenContext childContext = GenContext.ofChild(context, childType);
-            final GenClass childClass;
-            try {
-                childClass = childContext.graph().value();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            final GenClass childClass = childContext.graph().value();
             final Supplier<Object> childValue = getInstanceSupplier(childClass, childContext);
             return fillInstance(childValue.get(), childContext);
         } else {

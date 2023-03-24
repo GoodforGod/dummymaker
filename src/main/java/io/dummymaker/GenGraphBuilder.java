@@ -41,7 +41,7 @@ final class GenGraphBuilder {
                         .findAny()
                         .orElse(depthByDefault));
 
-        final GenClass payload = buildPayload(type, null, depth, true);
+        final GenClass payload = buildPayload(type, null, depth);
         final GenNode root = GenNode.ofRoot(payload);
         return scanRecursively(root);
     }
@@ -65,7 +65,7 @@ final class GenGraphBuilder {
                         return Stream.concat(fieldFlattenTypes.stream(), Stream.of(field.type()))
                                 .distinct()
                                 .filter(scanner::isEmbedded)
-                                .map(type -> buildPayload(type, parent.value(), field.depth().orElse(null), field.isEmbedded()));
+                                .map(type -> buildPayload(type, parent.value(), field.depth().orElse(null)));
                     })
                     .map(payload -> GenNode.of(payload, parent))
                     .collect(Collectors.toList());
@@ -95,7 +95,7 @@ final class GenGraphBuilder {
             final Set<GenNode> nodesToScan = new HashSet<>();
             for (GenType flatParameterType : parameter.type().flatten()) {
                 if (scanner.isEmbedded(flatParameterType)) {
-                    final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth(), true);
+                    final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth());
                     final GenNode node = GenNode.of(payload, parent);
 
                     final Optional<GenNode> nodeAlreadyInGraph = find(parent, buildFilter(node.value().type()));
@@ -119,8 +119,7 @@ final class GenGraphBuilder {
 
     private GenClass buildPayload(GenType target,
                                   @Nullable GenClass parentPayload,
-                                  @Nullable Integer depth,
-                                  boolean isEmbedded) {
+                                  @Nullable Integer depth) {
         Class<?> raw = target.raw();
         if (raw.getTypeName().endsWith("[][]")) {
             raw = raw.getComponentType().getComponentType();
@@ -135,7 +134,7 @@ final class GenGraphBuilder {
 
         final GenType type = GenType.ofClass(raw);
         final List<GenField> fields = scanner.scan(type);
-        return new GenClass(isEmbedded, target, payloadDepth, fields);
+        return new GenClass(target, payloadDepth, fields);
     }
 
     private Optional<GenNode> find(GenNode node, Predicate<GenNode> filter) {

@@ -5,6 +5,7 @@ import io.dummymaker.error.GenException;
 import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -26,8 +27,29 @@ final class GenConstructor {
     }
 
     List<GenParameter> parameters() {
+        if (isRecord(type.raw())) {
+            return Arrays.stream(constructor.getParameters())
+                    .map(parameter -> new GenParameter(GenType.ofType(parameter.getParameterizedType()), parameter.getName()))
+                    .collect(Collectors.toList());
+        }
+
         return Arrays.stream(constructor.getParameters())
-                .map(parameter -> new GenParameter(GenType.ofType(parameter.getParameterizedType()), parameter.getName()))
+                .map(parameter -> {
+                    final String parameterCandidateName = parameter.isNamePresent()
+                            ? parameter.getName()
+                            : Arrays.stream(type.raw().getDeclaredFields())
+                                    .filter(f -> Modifier.isFinal(f.getModifiers()))
+                                    .filter(f -> f.getType().equals(parameter.getType()))
+                                    .map(Field::getName)
+                                    .findFirst()
+                                    .orElseGet(() -> Arrays.stream(type.raw().getDeclaredFields())
+                                            .filter(f -> f.getType().equals(parameter.getType()))
+                                            .map(Field::getName)
+                                            .findFirst()
+                                            .orElse(parameter.getName()));
+
+                    return new GenParameter(GenType.ofType(parameter.getParameterizedType()), parameterCandidateName);
+                })
                 .collect(Collectors.toList());
     }
 
