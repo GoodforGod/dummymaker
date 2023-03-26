@@ -61,7 +61,7 @@ public final class CollectionUtils {
     public static <T> T random(@NotNull T[] array) {
         return (array.length == 0)
                 ? null
-                : array[RandomUtils.random(array.length)];
+                : array[RandomUtils.random(array.length - 1)];
     }
 
     /**
@@ -78,7 +78,7 @@ public final class CollectionUtils {
             return null;
         }
 
-        final int random = RandomUtils.random(collection.size());
+        final int random = RandomUtils.random(collection.size() - 1);
         if (collection instanceof List) {
             return ((List<T>) collection).get(random);
         } else {

@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utils for object casting
@@ -300,5 +301,16 @@ public final class CastUtils {
 
             return UNKNOWN;
         }
+    }
+
+    public static boolean isPrimitive(@NotNull Class<?> type) {
+        return type.isAssignableFrom(boolean.class)
+                || type.isAssignableFrom(byte.class)
+                || type.isAssignableFrom(short.class)
+                || type.isAssignableFrom(char.class)
+                || type.isAssignableFrom(int.class)
+                || type.isAssignableFrom(long.class)
+                || type.isAssignableFrom(float.class)
+                || type.isAssignableFrom(double.class);
     }
 }

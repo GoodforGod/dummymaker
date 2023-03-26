@@ -17,54 +17,58 @@ public final class RandomUtils {
     }
 
     /**
-     * @param max to get (excluded)
-     * @return random from 0 to max (excluded)
+     * @param max to get (inclusive)
+     * @return random from 0 to max (inclusive)
      */
     public static int random(int max) {
         return (int) generateRandom(0, max);
     }
 
     /**
-     * @param max to get (excluded)
-     * @return random from 0 to max (excluded)
+     * @param max to get (inclusive)
+     * @return random from 0 to max (inclusive)
      */
     public static long random(long max) {
         return generateRandom(0, max);
     }
 
     /**
-     * @param from to get (inclusive)
-     * @param to   to get (inclusive)
-     * @return random from min (included) to max (excluded)
+     * @param min to get (inclusive)
+     * @param max to get (inclusive)
+     * @return random from min (inclusive) to max (inclusive)
      */
-    public static int random(int from, int to) {
-        return (int) generateRandom(from, to);
-    }
-
-    /**
-     * @param from to get (inclusive)
-     * @param to   to get (inclusive)
-     * @return random from min (included) to max (excluded)
-     */
-    public static long random(long from, long to) {
-        return generateRandom(from, to);
+    public static int random(int min, int max) {
+        return (int) generateRandom(min, max);
     }
 
     /**
      * @param min to get (inclusive)
-     * @param max to get (exclusive)
-     * @return random from min (included) to max (excluded)
+     * @param max to get (inclusive)
+     * @return random from min (inclusive) to max (inclusive)
+     */
+    public static long random(long min, long max) {
+        return generateRandom(min, max);
+    }
+
+    /**
+     * @param min to get (inclusive)
+     * @param max to get (inclusive)
+     * @return random from min (inclusive) to max (inclusive)
      */
     private static long generateRandom(long min, long max) {
         final long usedMin = (min < 1)
                 ? 0
                 : min;
         final long usedMax = (max < 1)
-                ? 1
+                ? 0
                 : max;
+
+        if (usedMin == usedMax) {
+            return usedMin;
+        }
 
         return (usedMin >= usedMax)
                 ? usedMin
-                : ThreadLocalRandom.current().nextLong(usedMin, usedMax);
+                : ThreadLocalRandom.current().nextLong(usedMin, usedMax) + 1;
     }
 }
