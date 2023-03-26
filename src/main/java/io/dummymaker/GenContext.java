@@ -1,7 +1,5 @@
 package io.dummymaker;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * @author Anton Kurako (GoodforGod)
  * @since 17.11.2022
@@ -11,11 +9,22 @@ final class GenContext {
     private final int depthMax;
     private final int depthCurrent;
     private final GenNode graph;
+    private final GenRulesContext rules;
+    private final GeneratorSupplier generatorSupplier;
+    private final GenGraphBuilder graphBuilder;
 
-    private GenContext(int depthMax, int depthCurrent, GenNode graph) {
+    private GenContext(int depthMax,
+                       int depthCurrent,
+                       GenNode graph,
+                       GenRulesContext rules,
+                       GeneratorSupplier generatorSupplier,
+                       GenGraphBuilder graphBuilder) {
         this.depthMax = depthMax;
         this.depthCurrent = depthCurrent;
         this.graph = graph;
+        this.rules = rules;
+        this.generatorSupplier = generatorSupplier;
+        this.graphBuilder = graphBuilder;
     }
 
     static GenContext ofChild(GenContext context, Class<?> target) {
@@ -36,7 +45,8 @@ final class GenContext {
                         .findFirst()
                         .orElse(null));
 
-        return new GenContext(context.depthMax(), context.depthCurrent() + 1, node);
+        return new GenContext(context.depthMax(), context.depthCurrent() + 1, node, context.rules(), context.generatorSupplier(),
+                context.graphBuilder());
     }
 
     static GenContext ofParameterized(GenContext context, GenType target) {
@@ -45,22 +55,44 @@ final class GenContext {
                 .findFirst()
                 .orElse(null);
 
-        return new GenContext(context.depthMax(), context.depthCurrent(), node);
+        return new GenContext(context.depthMax(), context.depthCurrent(), node, context.rules(), context.generatorSupplier(),
+                context.graphBuilder());
     }
 
-    static GenContext ofNew(int depthMax, GenNode root) {
-        return new GenContext(depthMax, 1, root);
+    static GenContext ofUnknown(GenNode root, GenContext context) {
+        return new GenContext(context.depthMax(), context.depthCurrent(), root, context.rules(), context.generatorSupplier(),
+                context.graphBuilder());
     }
 
-    public int depthMax() {
+    static GenContext ofNew(int depthMax,
+                            GenNode root,
+                            GenRulesContext rules,
+                            GeneratorSupplier generatorSupplier,
+                            GenGraphBuilder graphBuilder) {
+        return new GenContext(depthMax, 1, root, rules, generatorSupplier, graphBuilder);
+    }
+
+    GeneratorSupplier generatorSupplier() {
+        return generatorSupplier;
+    }
+
+    GenGraphBuilder graphBuilder() {
+        return graphBuilder;
+    }
+
+    GenRulesContext rules() {
+        return rules;
+    }
+
+    int depthMax() {
         return depthMax;
     }
 
-    public int depthCurrent() {
+    int depthCurrent() {
         return depthCurrent;
     }
 
-    public @NotNull GenNode graph() {
+    GenNode graph() {
         return graph;
     }
 }

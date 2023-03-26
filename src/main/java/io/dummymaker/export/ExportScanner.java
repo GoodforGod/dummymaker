@@ -28,16 +28,16 @@ final class ExportScanner {
 
     private static class ScanField {
 
-        private final Field field;
+        private final Field value;
         private final GenType type;
 
-        private ScanField(Field field, GenType type) {
-            this.field = field;
+        private ScanField(Field value, GenType type) {
+            this.value = value;
             this.type = type;
         }
 
-        public Field field() {
-            return field;
+        public Field value() {
+            return value;
         }
 
         public GenType type() {
@@ -48,9 +48,9 @@ final class ExportScanner {
     @NotNull
     public List<ExportField> scan(Class<?> target) {
         return getExportFields(target).stream()
-                .filter(scanField -> Arrays.stream(scanField.field().getDeclaredAnnotations())
+                .filter(scanField -> Arrays.stream(scanField.value().getDeclaredAnnotations())
                         .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
-                .map(scanField -> FACTORY.build(scanField.field(), scanField.type()))
+                .map(scanField -> FACTORY.build(scanField.value(), scanField.type()))
                 .collect(Collectors.toList());
     }
 

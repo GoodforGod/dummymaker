@@ -8,37 +8,33 @@ import java.util.function.Supplier;
  * Gen rules for specific field
  *
  * @author Anton Kurako (GoodforGod)
- * @see GenRules
+ * @see GenRule
  * @since 21.11.2022
  */
 final class GenRuleField {
 
     private final Class<?> fieldType;
-    private final Set<String> fieldNames;
+    private final String fieldName;
     private final Supplier<Generator<?>> generatorSupplier;
 
-    GenRuleField(Supplier<Generator<?>> generatorSupplier, String... fieldNames) {
-        this.fieldNames = new HashSet<>(Arrays.asList(fieldNames));
+    GenRuleField(Supplier<Generator<?>> generatorSupplier, String fieldName) {
+        this.fieldName = fieldName;
         this.fieldType = null;
         this.generatorSupplier = generatorSupplier;
     }
 
     GenRuleField(Supplier<Generator<?>> generatorSupplier, Class<?> fieldType) {
-        this.fieldNames = Collections.emptySet();
+        this.fieldName = null;
         this.fieldType = fieldType;
         this.generatorSupplier = generatorSupplier;
-    }
-
-    boolean isTyped() {
-        return fieldType != null;
     }
 
     Class<?> getType() {
         return fieldType;
     }
 
-    Set<String> getNames() {
-        return fieldNames;
+    String getName() {
+        return fieldName;
     }
 
     Supplier<Generator<?>> getGeneratorSupplier() {
@@ -53,11 +49,11 @@ final class GenRuleField {
             return false;
         GenRuleField that = (GenRuleField) o;
         return Objects.equals(fieldType, that.fieldType) &&
-                Objects.equals(fieldNames, that.fieldNames);
+                Objects.equals(fieldName, that.fieldName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fieldType, fieldNames);
+        return Objects.hash(fieldType, fieldName);
     }
 }

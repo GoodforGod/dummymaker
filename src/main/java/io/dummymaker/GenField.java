@@ -3,7 +3,6 @@ package io.dummymaker;
 import io.dummymaker.annotation.GenCustom;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
@@ -20,20 +19,13 @@ final class GenField {
 
     private final Field field;
     private final GenType type;
-    private final Annotation marker;
     private final boolean isComplex;
     private final Generator<?> generator;
     @Nullable
     private final Integer depth;
 
-    private GenField(Field field,
-                     GenType type,
-                     Annotation marker,
-                     boolean isComplex,
-                     Generator<?> generator,
-                     Integer depth) {
+    private GenField(Field field, GenType type, boolean isComplex, Generator<?> generator, Integer depth) {
         this.field = field;
-        this.marker = marker;
         this.type = type;
         this.isComplex = isComplex;
         this.generator = generator;
@@ -44,9 +36,8 @@ final class GenField {
                              GenType type,
                              Generator<?> generator,
                              boolean isComplex,
-                             @Nullable Integer depth,
-                             Annotation marker) {
-        return new GenField(field, type, marker, isComplex, generator, depth);
+                             @Nullable Integer depth) {
+        return new GenField(field, type, isComplex, generator, depth);
     }
 
     static GenField ofRule(Field field,
@@ -54,16 +45,15 @@ final class GenField {
                            Generator<?> generator,
                            boolean isComplex,
                            @Nullable Integer depth) {
-        return new GenField(field, type, null, isComplex, generator, depth);
+        return new GenField(field, type, isComplex, generator, depth);
     }
 
     static GenField ofAuto(Field field,
                            GenType type,
                            Generator<?> generator,
                            boolean isComplex,
-                           Integer depth,
-                           @Nullable Annotation marker) {
-        return new GenField(field, type, marker, isComplex, generator, depth);
+                           Integer depth) {
+        return new GenField(field, type, isComplex, generator, depth);
     }
 
     boolean isEmbedded() {
@@ -94,10 +84,6 @@ final class GenField {
 
     GenType type() {
         return type;
-    }
-
-    Annotation marker() {
-        return marker;
     }
 
     Optional<Integer> depth() {

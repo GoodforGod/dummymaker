@@ -3,7 +3,6 @@ package io.dummymaker;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Rules for field type and field name generators overrides Allows to override gen auto generator
@@ -23,35 +22,31 @@ final class GenRules {
         this.rules = rules;
     }
 
-    public static @NotNull GenRules of(@NotNull List<GenRule> rules) {
+    static @NotNull GenRules of(@NotNull List<GenRule> rules) {
         final Map<Class<?>, List<GenRule>> collected = rules.stream()
                 .collect(Collectors.groupingBy(GenRule::getTarget));
 
+        final Optional<GenRule> global = rules.stream()
+                .filter(GenRule::isGlobal)
+                .findFirst();
+
         // Merge rules if they have same target class
         final List<GenRule> genRules = collected.values().stream()
-                .map(r -> r.stream().reduce(GenRule::merge).orElse(null))
+                .map(r -> r.stream().reduce(GenRule::merge)
+                        .map(rule -> global.map(rule::merge).orElse(rule))
+                        .orElse(null))
                 .filter(Objects::nonNull)
+                .map(GenRule::build)
                 .collect(Collectors.toList());
 
         return new GenRules(genRules);
     }
 
-    @NotNull
-    Optional<GenRule> find(@Nullable Class<?> target) {
-        if (target == null) {
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(rules.stream()
-                .filter(r -> target.isAssignableFrom(r.getTarget()))
-                .findFirst()
-                .orElseGet(() -> rules.stream()
-                        .filter(GenRule::isGlobal)
-                        .findFirst()
-                        .orElse(null)));
-    }
-
     List<GenRule> rules() {
         return rules;
+    }
+
+    GenRulesContext context() {
+        return new GenRulesContext(this);
     }
 }

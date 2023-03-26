@@ -1,16 +1,8 @@
 package io.dummymaker;
 
 import io.dummymaker.error.GenConstructionException;
-import io.dummymaker.error.GenException;
-import io.dummymaker.util.CastUtils;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -20,37 +12,12 @@ final class GenConstructor {
 
     private final GenType type;
     private final Constructor<?> constructor;
+    private final List<GenParameter> parameters;
 
-    GenConstructor(GenType type) {
+    GenConstructor(GenType type, Constructor<?> constructor, List<GenParameter> parameters) {
         this.type = type;
-        this.constructor = getConstructor(type.raw());
-    }
-
-    List<GenParameter> parameters() {
-        if (isRecord(type.raw())) {
-            return Arrays.stream(constructor.getParameters())
-                    .map(parameter -> new GenParameter(GenType.ofType(parameter.getParameterizedType()), parameter.getName()))
-                    .collect(Collectors.toList());
-        }
-
-        return Arrays.stream(constructor.getParameters())
-                .map(parameter -> {
-                    final String parameterCandidateName = parameter.isNamePresent()
-                            ? parameter.getName()
-                            : Arrays.stream(type.raw().getDeclaredFields())
-                                    .filter(f -> Modifier.isFinal(f.getModifiers()))
-                                    .filter(f -> f.getType().equals(parameter.getType()))
-                                    .map(Field::getName)
-                                    .findFirst()
-                                    .orElseGet(() -> Arrays.stream(type.raw().getDeclaredFields())
-                                            .filter(f -> f.getType().equals(parameter.getType()))
-                                            .map(Field::getName)
-                                            .findFirst()
-                                            .orElse(parameter.getName()));
-
-                    return new GenParameter(GenType.ofType(parameter.getParameterizedType()), parameterCandidateName);
-                })
-                .collect(Collectors.toList());
+        this.constructor = constructor;
+        this.parameters = parameters;
     }
 
     <T> T instantiate(Object... parameters) {
@@ -62,49 +29,11 @@ final class GenConstructor {
         }
     }
 
-    private static Constructor<?> getConstructor(Class<?> target) {
-        try {
-            if (isRecord(target)) {
-                final Class<?>[] constructorTypes = Arrays.stream(target.getDeclaredFields())
-                        .map(Field::getType)
-                        .toArray(Class<?>[]::new);
-
-                return target.getDeclaredConstructor(constructorTypes);
-            }
-
-            // search for zero arg constructor
-            final Optional<Constructor<?>> zeroArgConstructor = Arrays.stream(target.getDeclaredConstructors())
-                    .filter(c -> c.getParameterCount() == 0)
-                    .findFirst();
-            if (zeroArgConstructor.isPresent()) {
-                return zeroArgConstructor.get();
-            }
-
-            // search for potential inner class constructor
-            final Optional<Constructor<?>> innerClassArgConstructor = Arrays.stream(target.getDeclaredConstructors())
-                    .filter(c -> c.getParameterCount() == 1)
-                    .filter(c -> CastUtils.CastType.of(c.getParameterTypes()[0]).equals(CastUtils.CastType.UNKNOWN))
-                    .findFirst();
-            if (innerClassArgConstructor.isPresent()) {
-                return innerClassArgConstructor.get();
-            }
-
-            // search for full arg constructor
-            final Optional<Constructor<?>> fullArgConstructor = Arrays.stream(target.getDeclaredConstructors())
-                    .max(Comparator.comparingInt(Constructor::getParameterCount));
-            if (fullArgConstructor.isPresent()) {
-                return fullArgConstructor.get();
-            }
-
-            throw new GenConstructionException("Can't instantiate '" + target + "', suitable constructor not found");
-        } catch (GenException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new GenConstructionException("Exception occurred during '" + target + "' class constructor search due to: ", e);
-        }
+    GenType type() {
+        return type;
     }
 
-    private static boolean isRecord(Class<?> target) {
-        return target.getSuperclass() != null && target.getSuperclass().getCanonicalName().equals("java.lang.Record");
+    List<GenParameter> parameters() {
+        return parameters;
     }
 }

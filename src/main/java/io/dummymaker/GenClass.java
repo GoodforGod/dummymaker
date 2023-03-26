@@ -11,13 +11,14 @@ final class GenClass {
 
     private final int depth;
     private final GenType type;
+    private final GenConstructor constructor;
     private final List<GenField> fields;
-    private GenConstructor constructor;
 
-    GenClass(GenType type, int depth, List<GenField> fields) {
+    GenClass(GenType type, int depth, GenConstructor constructor, List<GenField> fields) {
         this.type = type;
         this.depth = depth;
         this.fields = fields;
+        this.constructor = constructor;
     }
 
     int depth() {
@@ -33,9 +34,6 @@ final class GenClass {
     }
 
     GenConstructor constructor() {
-        if (constructor == null) {
-            constructor = new GenConstructor(type());
-        }
         return constructor;
     }
 

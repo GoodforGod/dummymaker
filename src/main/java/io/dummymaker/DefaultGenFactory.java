@@ -11,7 +11,8 @@ import io.dummymaker.generator.ParameterizedGenerator;
 import io.dummymaker.generator.simple.EmbeddedGenerator;
 import io.dummymaker.generator.simple.number.SequenceGenerator;
 import io.dummymaker.util.CastUtils;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -29,13 +30,15 @@ final class DefaultGenFactory implements GenFactory {
     private static final Pattern PATTERN_LOCALISATION_EN = Pattern.compile("(Eng?|English)$");
     private static final Pattern PATTERN_LOCALISATION_RU = Pattern.compile("(Ru|Russian)$");
 
-    private final GenGraphBuilder graphBuilder;
+    private final GenRules rules;
     private final GeneratorSupplier generatorSupplier;
     private final NamingCase namingCase;
     private final boolean ignoreErrors;
     private final boolean overrideDefaultValues;
     @Nullable
     private final Localisation localisation;
+    private final boolean isAutoByDefault;
+    private final int depthByDefault;
 
     DefaultGenFactory(long seed,
                       GenRules rules,
@@ -45,13 +48,14 @@ final class DefaultGenFactory implements GenFactory {
                       boolean overrideDefaultValues,
                       NamingCase namingCase,
                       @Nullable Localisation localisation) {
+        this.rules = rules;
         this.namingCase = namingCase;
         this.ignoreErrors = ignoreErrors;
         this.overrideDefaultValues = overrideDefaultValues;
         this.localisation = localisation;
-        this.generatorSupplier = new RuleBasedGeneratorSupplier(rules, new DefaultGeneratorSupplier(seed));
-        final GenFieldScanner scanner = new GenFieldScanner(generatorSupplier, rules, isAutoByDefault);
-        this.graphBuilder = new GenGraphBuilder(scanner, rules, depthByDefault);
+        this.generatorSupplier = new DefaultGeneratorSupplier(seed);
+        this.isAutoByDefault = isAutoByDefault;
+        this.depthByDefault = depthByDefault;
     }
 
     @Override
@@ -82,16 +86,19 @@ final class DefaultGenFactory implements GenFactory {
             return Stream.empty();
         }
 
-        final Generator<?> generator = generatorSupplier.get(target);
+        final GenRulesContext rulesContext = rules.context();
+        final Generator<?> generator = rulesContext.findClass(target)
+                .flatMap(rule -> rule.find(target))
+                .orElseGet(() -> generatorSupplier.get(target));
+
         if (!(generator instanceof EmbeddedGenerator)) {
             return Stream.generate(() -> (T) generator.get())
                     .limit(size)
                     .filter(Objects::nonNull);
         }
 
-        final GenNode graph = graphBuilder.build(target);
-        final GenContext context = GenContext.ofNew(graph.value().depth(), graph);
-        final Supplier<T> instanceSupplier = getInstanceSupplier(graph.value(), context);
+        final GenContext context = getContext(target, rulesContext);
+        final Supplier<T> instanceSupplier = getInstanceSupplier(context.graph().value(), context);
         return Stream.generate(instanceSupplier)
                 .limit(size)
                 .map(instance -> fillInstance(instance, context));
@@ -110,19 +117,33 @@ final class DefaultGenFactory implements GenFactory {
             return Stream.empty();
         }
 
-        final Generator<?> generator = generatorSupplier.get(first.getClass());
+        final Class<?> target = first.getClass();
+        final GenRulesContext rulesContext = rules.context();
+        final Generator<?> generator = rulesContext.findClass(target)
+                .flatMap(rule -> rule.find(target))
+                .orElseGet(() -> generatorSupplier.get(target));
+
         if (!(generator instanceof EmbeddedGenerator)) {
             return Stream.generate(supplier)
                     .limit(size)
                     .filter(Objects::nonNull);
         }
 
-        final GenNode graph = graphBuilder.build(first.getClass());
-        final GenContext context = GenContext.ofNew(graph.value().depth(), graph);
+        final GenContext context = getContext(target, rulesContext);
         return Stream.generate(supplier)
                 .limit(size)
                 .filter(Objects::nonNull)
                 .map(instance -> fillInstance(instance, context));
+    }
+
+    private GenContext getContext(Class<?> target, GenRulesContext rulesContext) {
+        final GenFieldScanner fieldScanner = new GenFieldScanner(generatorSupplier, rulesContext, isAutoByDefault);
+        final GenConstructorScanner constructorScanner = new GenConstructorScanner(generatorSupplier, rulesContext,
+                isAutoByDefault);
+        final GenGraphBuilder graphBuilder = new GenGraphBuilder(constructorScanner, fieldScanner, rulesContext, depthByDefault);
+
+        final GenNode graph = graphBuilder.build(target);
+        return GenContext.ofNew(graph.value().depth(), graph, rulesContext, generatorSupplier, graphBuilder);
     }
 
     @Nullable
@@ -160,10 +181,10 @@ final class DefaultGenFactory implements GenFactory {
     }
 
     Object generateFieldValue(GenField field, GenContext context) {
-        return generateFieldValue(field.generator(), field.type(), field.name(), context);
+        return generateFieldValue(field.type(), field.name(), field.generator(), context);
     }
 
-    Object generateFieldValue(Generator<?> valueGenerator, GenType valueType, String valueName, GenContext context) {
+    Object generateFieldValue(GenType valueType, String valueName, Generator<?> valueGenerator, GenContext context) {
         Object generated;
 
         if (valueGenerator instanceof EmbeddedGenerator) {
@@ -176,7 +197,7 @@ final class DefaultGenFactory implements GenFactory {
                     ? tryMatchLocalisation(valueName)
                     : localisation;
 
-            final GenParameterBuilder genParameterBuilder = getGenParameterBuilder(matchedLocalisation, context);
+            final GenParameterBuilder genParameterBuilder = getGenParameterBuilder(valueType, valueName, context);
             generated = ((ParameterizedGenerator) valueGenerator).get(new GenParameters() {
 
                 @Override
@@ -206,21 +227,42 @@ final class DefaultGenFactory implements GenFactory {
         return castObject(generated, valueType.raw());
     }
 
-    private GenParameterBuilder getGenParameterBuilder(@NotNull Localisation localisation, @NotNull GenContext context) {
+    private GenParameterBuilder getGenParameterBuilder(GenType valueType, String valueName, GenContext context) {
+        final Class<?> parentType = context.graph().value().type().raw();
+        final Localisation matchedLocalisation = (localisation == null)
+                ? tryMatchLocalisation(valueName)
+                : localisation;
+
         return new GenParameterBuilder() {
 
             @Override
-            public <T> @Nullable T build(@NotNull Class<?> type) {
-                final Generator<?> suitableGenerator = generatorSupplier.get(type);
-                if (suitableGenerator instanceof EmbeddedGenerator) {
-                    return (T) generateEmbeddedObject(GenType.ofClass(type), context);
-                } else if (suitableGenerator instanceof ParameterizedGenerator) {
-                    final GenParameterBuilder thisGenParameterBuilder = this;
-                    return (T) ((ParameterizedGenerator<?>) suitableGenerator).get(new GenParameters() {
+            public <T> @Nullable T build(@NotNull Class<T> type) {
+                final Generator<?> generator = context.rules().findClass(parentType)
+                        .flatMap(rule -> rule.find(type))
+                        .orElseGet(() -> context.generatorSupplier().get(type, valueName));
+
+                Object generated;
+
+                if (generator instanceof EmbeddedGenerator) {
+                    final GenContext checkUnknownContext = GenContext.ofChild(context, type);
+                    if (checkUnknownContext.graph() == null) {
+                        if (context.depthCurrent() >= context.depthMax() || type.getPackage().getName().startsWith("java.")) {
+                            generated = null;
+                        } else {
+                            final GenNode graph = context.graphBuilder().build(type);
+                            final GenContext childContext = GenContext.ofUnknown(graph, context);
+                            generated = generateEmbeddedObject(GenType.ofClass(type), childContext);
+                        }
+                    } else {
+                        generated = generateEmbeddedObject(GenType.ofClass(type), context);
+                    }
+                } else if (generator instanceof ParameterizedGenerator) {
+                    final GenParameterBuilder self = this;
+                    generated = ((ParameterizedGenerator<?>) generator).get(new GenParameters() {
 
                         @Override
                         public @NotNull Localisation localisation() {
-                            return localisation;
+                            return matchedLocalisation;
                         }
 
                         @Override
@@ -235,24 +277,26 @@ final class DefaultGenFactory implements GenFactory {
 
                         @Override
                         public @NotNull GenParameterBuilder genericBuilder() {
-                            return thisGenParameterBuilder;
+                            return self;
                         }
                     });
                 } else {
-                    return (T) suitableGenerator.get();
+                    generated = generator.get();
                 }
+
+                return castObject(generated, type);
             }
         };
     }
 
     private Object generateEmbeddedObject(GenType type, GenContext context) {
         if (context.depthCurrent() <= context.depthMax()) {
-            final Class<?> childType = type.raw();
-            if (childType.getPackage().getName().startsWith("java.")) {
+            final Class<?> typeRaw = type.raw();
+            if (typeRaw.getPackage().getName().startsWith("java.")) {
                 return null;
             }
 
-            final GenContext childContext = GenContext.ofChild(context, childType);
+            final GenContext childContext = GenContext.ofChild(context, typeRaw);
             final GenClass childClass = childContext.graph().value();
             final Supplier<Object> childValue = getInstanceSupplier(childClass, childContext);
             return fillInstance(childValue.get(), childContext);
@@ -275,10 +319,7 @@ final class DefaultGenFactory implements GenFactory {
     private <T> Supplier<T> getInstanceSupplier(GenClass genClass, GenContext context) {
         final GenConstructor constructor = genClass.constructor();
         final Object[] constructorParameters = constructor.parameters().stream()
-                .map(parameter -> {
-                    final Generator<?> generator = generatorSupplier.get(parameter.type().raw(), parameter.name());
-                    return generateFieldValue(generator, parameter.type(), parameter.name(), context);
-                })
+                .map(parameter -> generateFieldValue(parameter.type(), parameter.name(), parameter.generator(), context))
                 .toArray(Object[]::new);
 
         return () -> constructor.instantiate(constructorParameters);

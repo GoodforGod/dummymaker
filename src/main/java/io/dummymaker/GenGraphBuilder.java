@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,12 +16,17 @@ import org.jetbrains.annotations.Nullable;
  */
 final class GenGraphBuilder {
 
-    private final GenRules rules;
-    private final GenFieldScanner scanner;
+    private final GenRulesContext rules;
+    private final GenConstructorScanner constructorScanner;
+    private final GenFieldScanner fieldScanner;
     private final int depthByDefault;
 
-    GenGraphBuilder(GenFieldScanner scanner, GenRules rules, int depthByDefault) {
-        this.scanner = scanner;
+    GenGraphBuilder(GenConstructorScanner constructorScanner,
+                    GenFieldScanner fieldScanner,
+                    GenRulesContext rules,
+                    int depthByDefault) {
+        this.constructorScanner = constructorScanner;
+        this.fieldScanner = fieldScanner;
         this.rules = rules;
         this.depthByDefault = depthByDefault;
     }
@@ -31,10 +37,10 @@ final class GenGraphBuilder {
      * @param target to build graph of
      * @return graph of auto depth values
      */
-    GenNode build(Class<?> target) {
+    GenNode build(@NotNull Class<?> target) {
         final GenType type = GenType.ofClass(target);
-        final Optional<GenRule> rule = rules.find(target);
-        final int depth = rule.flatMap(GenRule::getDepth)
+        final Optional<GenRuleContext> rule = rules.findClass(target);
+        final int depth = rule.flatMap(GenRuleContext::getDepth)
                 .orElseGet(() -> Arrays.stream(target.getDeclaredAnnotations())
                         .filter(a -> a instanceof GenDepth)
                         .map(a -> ((GenDepth) a).value())
@@ -54,17 +60,17 @@ final class GenGraphBuilder {
      */
     private GenNode scanRecursively(GenNode parent) {
         final List<GenType> flattenTypes = parent.value().type().flatten().stream()
-                .filter(scanner::isEmbedded)
+                .filter(type -> fieldScanner.isEmbedded(parent.value().type(), type))
                 .collect(Collectors.toList());
 
         for (GenType flatType : flattenTypes) {
-            final List<GenNode> nodes = scanner.scan(flatType).stream()
+            final List<GenNode> nodes = fieldScanner.scan(flatType).stream()
                     .filter(field -> field.isEmbedded() || field.isComplex())
                     .flatMap(field -> {
                         final List<GenType> fieldFlattenTypes = field.type().flatten();
                         return Stream.concat(fieldFlattenTypes.stream(), Stream.of(field.type()))
                                 .distinct()
-                                .filter(scanner::isEmbedded)
+                                .filter(type -> fieldScanner.isEmbedded(flatType, type))
                                 .map(type -> buildPayload(type, parent.value(), field.depth().orElse(null)));
                     })
                     .map(payload -> GenNode.of(payload, parent))
@@ -88,13 +94,13 @@ final class GenGraphBuilder {
         }
 
         final List<GenParameter> parameters = parent.value().constructor().parameters().stream()
-                .filter(p -> scanner.isEmbedded(p.type()))
+                .filter(parameter -> fieldScanner.isEmbedded(parent.value().type(), parameter.type()))
                 .collect(Collectors.toList());
 
         for (GenParameter parameter : parameters) {
             final Set<GenNode> nodesToScan = new HashSet<>();
             for (GenType flatParameterType : parameter.type().flatten()) {
-                if (scanner.isEmbedded(flatParameterType)) {
+                if (fieldScanner.isEmbedded(parent.value().type(), flatParameterType)) {
                     final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth());
                     final GenNode node = GenNode.of(payload, parent);
 
@@ -133,8 +139,9 @@ final class GenGraphBuilder {
                         : parentPayload.depth());
 
         final GenType type = GenType.ofClass(raw);
-        final List<GenField> fields = scanner.scan(type);
-        return new GenClass(target, payloadDepth, fields);
+        final List<GenField> fields = fieldScanner.scan(type);
+        final GenConstructor constructor = constructorScanner.scan(type);
+        return new GenClass(target, payloadDepth, constructor, fields);
     }
 
     private Optional<GenNode> find(GenNode node, Predicate<GenNode> filter) {

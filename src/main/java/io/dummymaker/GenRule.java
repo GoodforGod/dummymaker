@@ -1,5 +1,6 @@
 package io.dummymaker;
 
+import io.dummymaker.annotation.GenAuto;
 import io.dummymaker.annotation.GenDepth;
 import io.dummymaker.generator.Generator;
 import java.util.*;
@@ -15,18 +16,32 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class GenRule {
 
-    private static final Class<?> GLOBAL_MARKER = Void.class;
+    static final Class<?> GLOBAL_MARKER = Void.class;
 
     private final Integer depth;
     private final Boolean isAuto;
     private final Class<?> target;
-    private final Set<String> excludedFields = new HashSet<>();
-    private final Set<GenRuleField> specifiedFields = new HashSet<>();
+    private final Set<String> excludedFields;
+    private final Set<GenRuleField> specifiedFields;
 
     private GenRule(Class<?> target, Boolean isAuto, Integer depth) {
         this.isAuto = isAuto;
         this.target = target;
         this.depth = depth;
+        this.excludedFields = new HashSet<>();
+        this.specifiedFields = new HashSet<>();
+    }
+
+    private GenRule(Integer depth,
+                    Boolean isAuto,
+                    Class<?> target,
+                    Set<String> excludedFields,
+                    Set<GenRuleField> specifiedFields) {
+        this.depth = depth;
+        this.isAuto = isAuto;
+        this.target = target;
+        this.excludedFields = excludedFields;
+        this.specifiedFields = specifiedFields;
     }
 
     @NotNull
@@ -44,6 +59,12 @@ public final class GenRule {
         return ofClassInner(target, null, depth);
     }
 
+    /**
+     * @param target    class to which rule is applied
+     * @param isGenAuto specify than class is applicable for auto generation {@link GenAuto}
+     * @param depth     specify class maximum depth {@link GenDepth}
+     * @return class specific rule
+     */
     @NotNull
     public static GenRule ofClass(@NotNull Class<?> target, boolean isGenAuto, int depth) {
         return ofClassInner(target, isGenAuto, depth);
@@ -62,18 +83,33 @@ public final class GenRule {
         return new GenRule(target, isAuto, depth);
     }
 
+    /**
+     * @return global rule that is applied to all classes
+     */
     @NotNull
     public static GenRule ofGlobal() {
         return new GenRule(GLOBAL_MARKER, null, null);
     }
 
+    /**
+     * @param generatorSupplier that will be applied to fields by their names
+     * @param fieldNames        to register generator for
+     * @return self
+     */
     @NotNull
     public GenRule registerFieldNames(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
-        final GenRuleField rule = new GenRuleField(generatorSupplier, fieldNames);
-        this.specifiedFields.add(rule);
+        for (String fieldName : fieldNames) {
+            final GenRuleField rule = new GenRuleField(generatorSupplier, fieldName);
+            this.specifiedFields.add(rule);
+        }
         return this;
     }
 
+    /**
+     * @param generatorSupplier that will be applied to fields by their type
+     * @param fieldType         to register generator for
+     * @return self
+     */
     @NotNull
     public GenRule registerFieldType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
         final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
@@ -81,78 +117,32 @@ public final class GenRule {
         return this;
     }
 
+    /**
+     * @param fieldNames to exclude from generating random values
+     * @return self
+     */
     @NotNull
     public GenRule excludeFields(@NotNull String... fieldNames) {
         this.excludedFields.addAll(Arrays.asList(fieldNames));
         return this;
     }
 
-    @NotNull
-    Optional<Generator<?>> find(@NotNull Class<?> type, @NotNull String fieldName) {
-        if (isExcluded(fieldName)) {
-            return Optional.empty();
-        }
-
-        final Optional<Generator<?>> namedGenerator = specifiedFields.stream()
-                .filter(r -> r.getNames().contains(fieldName))
-                .findAny()
-                .map(rule -> rule.getGeneratorSupplier().get());
-
-        if (namedGenerator.isPresent()) {
-            return namedGenerator;
-        }
-
-        return find(type);
-    }
-
-    @NotNull
-    Optional<Generator<?>> find(Class<?> type) {
-        if (type == null) {
-            return Optional.empty();
-        }
-
-        final Optional<? extends Generator<?>> equalType = specifiedFields.stream()
-                .filter(GenRuleField::isTyped)
-                .filter(rule -> type.equals(rule.getType()))
-                .findAny()
-                .map(r -> r.getGeneratorSupplier().get());
-
-        if (equalType.isPresent()) {
-            return Optional.of(equalType.get());
-        }
-
-        return specifiedFields.stream()
-                .filter(GenRuleField::isTyped)
-                .filter(rule -> type.isAssignableFrom(rule.getType()))
-                .findAny()
-                .map(r -> r.getGeneratorSupplier().get());
+    GenRule build() {
+        return new GenRule(depth, isAuto, target, Collections.unmodifiableSet(excludedFields),
+                Collections.unmodifiableSet(specifiedFields));
     }
 
     @NotNull
     GenRule merge(@NotNull GenRule rule) {
-        if (!getTarget().equals(rule.getTarget())) {
-            return this;
+        if (getTarget().equals(rule.getTarget()) || rule.isGlobal()) {
+            this.specifiedFields.addAll(rule.specifiedFields);
+            this.excludedFields.addAll(rule.excludedFields);
         }
-
-        for (GenRuleField fieldRule : rule.specifiedFields) {
-            for (GenRuleField innerFieldRule : specifiedFields) {
-                if (fieldRule.equals(innerFieldRule) && fieldRule.isTyped()) {
-                    throw new IllegalArgumentException("Multiple Rules describe same type: " + fieldRule.getType());
-                }
-            }
-        }
-
-        this.specifiedFields.addAll(rule.specifiedFields);
-        this.excludedFields.addAll(rule.excludedFields);
         return this;
     }
 
     boolean isGlobal() {
         return GLOBAL_MARKER.equals(target);
-    }
-
-    boolean isExcluded(String fieldName) {
-        return excludedFields.contains(fieldName);
     }
 
     Optional<Integer> getDepth() {

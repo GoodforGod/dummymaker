@@ -2,7 +2,6 @@ package io.dummymaker;
 
 import static io.dummymaker.util.CollectionUtils.getIndexWithSalt;
 
-import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.parameterized.*;
 import io.dummymaker.generator.simple.*;
@@ -52,7 +51,7 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
                 new JobGenerator(), new LevelGenerator(), new LoginGenerator(), new MccGenerator(), new MerchantGenerator(),
                 new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
                 new PhoneGenerator(false), new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(),
-                new StatusGenerator(), new StreetGenerator(), new StringGenerator(6, 12), new SurnameGenerator(),
+                new StatusGenerator(), new StreetGenerator(), new StringGenerator(), new SurnameGenerator(),
                 new TagGenerator(), new TypeGenerator(), new VersionGenerator(), new IPv4Generator(), new IPv6Generator()));
 
         TYPE_TO_GENERATORS.put(CharSequence.class, TYPE_TO_GENERATORS.get(String.class));
@@ -64,11 +63,10 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
         TYPE_TO_GENERATORS.put(Boolean.class, Collections.singletonList(new BooleanGenerator()));
         TYPE_TO_GENERATORS.put(Byte.class, Collections.singletonList(new ByteGenerator()));
         TYPE_TO_GENERATORS.put(Character.class, Arrays.asList(new CharacterGenerator(), new CharGenerator()));
-        TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator((short) 0, Short.MAX_VALUE)));
-        TYPE_TO_GENERATORS.put(Integer.class, Arrays.asList(new IntegerGenerator(0, Integer.MAX_VALUE),
+        TYPE_TO_GENERATORS.put(Short.class, Collections.singletonList(new ShortGenerator()));
+        TYPE_TO_GENERATORS.put(Integer.class, Arrays.asList(new IntegerGenerator(),
                 new IntegerSmallGenerator(), new PostalGenerator(), new MccGenerator()));
-        TYPE_TO_GENERATORS.put(Long.class, Arrays.asList(new LongGenerator(0, Long.MAX_VALUE),
-                new UnixTimeGenerator(GenTime.MIN, GenTime.MAX)));
+        TYPE_TO_GENERATORS.put(Long.class, Arrays.asList(new LongGenerator(), new UnixTimeGenerator()));
         TYPE_TO_GENERATORS.put(Float.class, Collections.singletonList(new FloatSmallGenerator()));
         TYPE_TO_GENERATORS.put(Double.class, Collections.singletonList(new DoubleSmallGenerator()));
         TYPE_TO_GENERATORS.put(BigInteger.class, Collections.singletonList(new BigIntegerGenerator()));
@@ -83,26 +81,27 @@ final class DefaultGeneratorSupplier implements GeneratorSupplier {
         TYPE_TO_GENERATORS.put(float.class, TYPE_TO_GENERATORS.get(Float.class));
         TYPE_TO_GENERATORS.put(double.class, TYPE_TO_GENERATORS.get(Double.class));
 
-        TYPE_TO_GENERATORS.put(Time.class, Collections.singletonList(new TimeSqlGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(Timestamp.class, Collections.singletonList(new TimestampGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(Date.class, Collections.singletonList(new DateGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(java.sql.Date.class, Collections.singletonList(new DateSqlGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(Instant.class, Collections.singletonList(new InstantGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(LocalTime.class, Collections.singletonList(new LocalTimeGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(LocalDate.class, Collections.singletonList(new LocalDateGenerator(GenTime.MIN, GenTime.MAX)));
+        TYPE_TO_GENERATORS.put(Duration.class, Collections.singletonList(new DurationGenerator()));
+        TYPE_TO_GENERATORS.put(Time.class, Collections.singletonList(new TimeSqlGenerator()));
+        TYPE_TO_GENERATORS.put(Timestamp.class, Collections.singletonList(new TimestampGenerator()));
+        TYPE_TO_GENERATORS.put(Date.class, Collections.singletonList(new DateGenerator()));
+        TYPE_TO_GENERATORS.put(java.sql.Date.class, Collections.singletonList(new DateSqlGenerator()));
+        TYPE_TO_GENERATORS.put(Instant.class, Collections.singletonList(new InstantGenerator()));
+        TYPE_TO_GENERATORS.put(LocalTime.class, Collections.singletonList(new LocalTimeGenerator()));
+        TYPE_TO_GENERATORS.put(LocalDate.class, Collections.singletonList(new LocalDateGenerator()));
         TYPE_TO_GENERATORS.put(LocalDateTime.class,
-                Collections.singletonList(new LocalDateTimeGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(OffsetTime.class, Collections.singletonList(new OffsetTimeGenerator(GenTime.MIN, GenTime.MAX)));
+                Collections.singletonList(new LocalDateTimeGenerator()));
+        TYPE_TO_GENERATORS.put(OffsetTime.class, Collections.singletonList(new OffsetTimeGenerator()));
         TYPE_TO_GENERATORS.put(OffsetDateTime.class,
-                Collections.singletonList(new OffsetDateTimeGenerator(GenTime.MIN, GenTime.MAX)));
+                Collections.singletonList(new OffsetDateTimeGenerator()));
         TYPE_TO_GENERATORS.put(ZoneOffset.class, Collections.singletonList(new ZonedOffsetGenerator()));
         TYPE_TO_GENERATORS.put(ZonedDateTime.class,
-                Collections.singletonList(new ZonedDateTimeGenerator(GenTime.MIN, GenTime.MAX)));
+                Collections.singletonList(new ZonedDateTimeGenerator()));
         TYPE_TO_GENERATORS.put(DayOfWeek.class, Collections.singletonList(new DayOfWeekGenerator()));
-        TYPE_TO_GENERATORS.put(Month.class, Collections.singletonList(new MonthGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(MonthDay.class, Collections.singletonList(new MonthDayGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(Year.class, Collections.singletonList(new YearGenerator(GenTime.MIN, GenTime.MAX)));
-        TYPE_TO_GENERATORS.put(YearMonth.class, Collections.singletonList(new YearMonthGenerator(GenTime.MIN, GenTime.MAX)));
+        TYPE_TO_GENERATORS.put(Month.class, Collections.singletonList(new MonthGenerator()));
+        TYPE_TO_GENERATORS.put(MonthDay.class, Collections.singletonList(new MonthDayGenerator()));
+        TYPE_TO_GENERATORS.put(Year.class, Collections.singletonList(new YearGenerator()));
+        TYPE_TO_GENERATORS.put(YearMonth.class, Collections.singletonList(new YearMonthGenerator()));
 
         TYPE_TO_GENERATORS.put(URI.class, Collections.singletonList(new UriGenerator()));
         TYPE_TO_GENERATORS.put(URL.class, Collections.singletonList(new UrlGenerator()));
