@@ -101,13 +101,13 @@ class GenRulesTests extends Assertions {
         final GenRules rules = GenRules.of(Arrays.asList(rule1, rule2));
         assertNotNull(rules);
 
-        final Optional<GenRule> merged = rules.find(DummyEmbedded.class);
+        final Optional<GenRuleContext> merged = rules.context().findClass(DummyEmbedded.class);
         assertTrue(merged.isPresent());
 
-        final Set<GenRuleField> mergedFieldRules = merged.get().getSpecifiedFields();
+        final Set<GenRuleFieldContext> mergedFieldRules = merged.get().getSpecifiedFields();
         assertNotNull(mergedFieldRules);
         assertEquals(2, mergedFieldRules.size());
-        assertTrue(mergedFieldRules.stream().anyMatch(r -> r.getNames().contains("a")));
-        assertTrue(mergedFieldRules.stream().anyMatch(r -> r.getNames().contains("aa")));
+        assertTrue(mergedFieldRules.stream().anyMatch(r -> r.getName().contains("a")));
+        assertTrue(mergedFieldRules.stream().anyMatch(r -> r.getName().contains("aa")));
     }
 }

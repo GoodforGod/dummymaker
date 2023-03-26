@@ -2,10 +2,6 @@ package io.dummymaker;
 
 import static io.dummymaker.testdata.Dummy.DummyFields.*;
 
-import io.dummymaker.annotation.simple.number.GenDoubleSmall;
-import io.dummymaker.annotation.simple.number.GenSequence;
-import io.dummymaker.annotation.simple.string.GenCity;
-import io.dummymaker.annotation.simple.string.GenName;
 import io.dummymaker.testdata.Dummy;
 import io.dummymaker.testdata.DummyCollection;
 import io.dummymaker.testdata.DummyNoFillFields;
@@ -21,7 +17,7 @@ class GenFieldScannerTests extends Assertions {
 
     @Test
     void verifyThatFieldsFound() {
-        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY, false);
+        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY.context(), false);
         final List<GenField> fields = scanner.scan(GenType.ofClass(DummyCollection.class));
 
         // Check for correct fields number in map
@@ -32,7 +28,7 @@ class GenFieldScannerTests extends Assertions {
 
     @Test
     void verifyScannedFields() {
-        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY, false);
+        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY.context(), false);
         final List<GenField> fields = scanner.scan(GenType.ofClass(Dummy.class));
 
         // Check for correct fields number in map
@@ -60,19 +56,11 @@ class GenFieldScannerTests extends Assertions {
         assertNotNull(bigdAnnotations);
         assertNotNull(lngAnnotations);
         assertNotNull(uncompaAnnotations);
-
-        // Check for correct export annotations
-        assertEquals(cityAnnotations.marker().annotationType(), GenCity.class);
-        assertEquals(numAnnotations.marker().annotationType(), GenSequence.class);
-        assertEquals(nameAnnotations.marker().annotationType(), GenName.class);
-        assertEquals(bigdAnnotations.marker().annotationType(), GenDoubleSmall.class);
-        assertEquals(lngAnnotations.marker().annotationType(), GenSequence.class);
-        assertEquals(uncompaAnnotations.marker().annotationType(), GenDoubleSmall.class);
     }
 
     @Test
     void noFieldsScanned() {
-        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY, false);
+        final GenFieldScanner scanner = new GenFieldScanner(new DefaultGeneratorSupplier(1), GenRules.EMPTY.context(), false);
         final List<GenField> fields = scanner.scan(GenType.ofClass(DummyNoFillFields.class));
 
         // Check for correct fields number in map

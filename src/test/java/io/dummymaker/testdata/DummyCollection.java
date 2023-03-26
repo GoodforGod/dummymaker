@@ -22,7 +22,7 @@ public class DummyCollection {
     @GenSet(value = BooleanGenerator.class)
     private Set<String> strings;
 
-    private Set<String> stringsAuto;
+    private Set<String> emails;
 
     @GenMap
     private Map<String, Object> map;
