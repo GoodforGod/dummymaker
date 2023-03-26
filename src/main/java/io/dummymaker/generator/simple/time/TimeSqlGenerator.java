@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import java.sql.Time;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 public final class TimeSqlGenerator implements Generator<Time> {
 
     private final LocalTimeGenerator localTimeGenerator;
+
+    public TimeSqlGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public TimeSqlGenerator(long from, long to) {
         this.localTimeGenerator = new LocalTimeGenerator(from, to);

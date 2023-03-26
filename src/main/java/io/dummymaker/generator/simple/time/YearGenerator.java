@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import java.time.Year;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 public final class YearGenerator implements Generator<Year> {
 
     private final LocalDateTimeGenerator localDateTimeGenerator;
+
+    public YearGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public YearGenerator(long from, long to) {
         this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);

@@ -15,6 +15,10 @@ public final class FloatGenerator implements Generator<Float> {
     private final float from;
     private final float to;
 
+    public FloatGenerator() {
+        this(Float.MIN_VALUE, Float.MAX_VALUE);
+    }
+
     public FloatGenerator(float from, float to) {
         this.from = from;
         this.to = to;

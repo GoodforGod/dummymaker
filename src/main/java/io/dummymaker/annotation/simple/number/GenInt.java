@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Range;
 public @interface GenInt {
 
     @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
-    int from() default Integer.MIN_VALUE;
+    int from() default 0;
 
     @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
     int to() default Integer.MAX_VALUE;

@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.number;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.RandomUtils;
 import java.util.regex.Pattern;
@@ -19,6 +20,10 @@ public final class UnixTimeGenerator implements Generator<Long> {
 
     private final long from;
     private final long to;
+
+    public UnixTimeGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public UnixTimeGenerator(long from, long to) {
         this.from = from;

@@ -24,6 +24,10 @@ public final class StringGenerator implements Generator<CharSequence> {
     private final int min;
     private final int max;
 
+    public StringGenerator() {
+        this(6, 12);
+    }
+
     public StringGenerator(int min, int max) {
         if (min < 1) {
             throw new IllegalArgumentException("Min can't be less than 1, but was: " + min);

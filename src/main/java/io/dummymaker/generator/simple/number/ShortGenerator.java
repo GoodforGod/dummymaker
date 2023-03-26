@@ -16,6 +16,10 @@ public final class ShortGenerator implements Generator<Short> {
     private final short from;
     private final short to;
 
+    public ShortGenerator() {
+        this((short) 0, Short.MAX_VALUE);
+    }
+
     public ShortGenerator(short from, short to) {
         this.from = from;
         this.to = to;

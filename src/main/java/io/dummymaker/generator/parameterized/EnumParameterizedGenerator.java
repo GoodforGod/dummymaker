@@ -46,7 +46,7 @@ public final class EnumParameterizedGenerator implements ParameterizedGenerator<
             return null;
         }
 
-        final int index = RandomUtils.random(candidates.size());
+        final int index = RandomUtils.random(candidates.size() - 1);
         final Enum e = Enum.valueOf((Class<? extends Enum>) parameters.parameterType().raw(), candidates.get(index).getName());
         if (CharSequence.class.isAssignableFrom(parameters.parameterType().raw())) {
             return parameters.namingCase().apply(e.toString()).toString();

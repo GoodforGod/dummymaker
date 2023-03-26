@@ -2,6 +2,7 @@ package io.dummymaker.generator.simple.time;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
@@ -19,6 +20,10 @@ public final class LocalDateGenerator implements Generator<LocalDate> {
     private static final Pattern PATTERN = Pattern.compile("birth(date)?|date", CASE_INSENSITIVE);
 
     private final LocalDateTimeGenerator localDateTimeGenerator;
+
+    public LocalDateGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public LocalDateGenerator(long from, long to) {
         this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Range;
 public @interface GenShort {
 
     @Range(from = Short.MIN_VALUE, to = Short.MAX_VALUE)
-    short from() default Short.MIN_VALUE;
+    short from() default 0;
 
     @Range(from = Short.MIN_VALUE, to = Short.MAX_VALUE)
     short to() default Short.MAX_VALUE;

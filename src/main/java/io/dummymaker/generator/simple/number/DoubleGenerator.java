@@ -15,6 +15,10 @@ public final class DoubleGenerator implements Generator<Double> {
     private final double from;
     private final double to;
 
+    public DoubleGenerator() {
+        this(Double.MIN_VALUE, Double.MAX_VALUE);
+    }
+
     public DoubleGenerator(double from, double to) {
         this.from = from;
         this.to = to;

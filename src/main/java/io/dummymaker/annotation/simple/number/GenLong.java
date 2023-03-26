@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Range;
 public @interface GenLong {
 
     @Range(from = Long.MIN_VALUE, to = Integer.MAX_VALUE)
-    long from() default Long.MIN_VALUE;
+    long from() default 0;
 
     @Range(from = Long.MIN_VALUE, to = Integer.MAX_VALUE)
     long to() default Long.MAX_VALUE;

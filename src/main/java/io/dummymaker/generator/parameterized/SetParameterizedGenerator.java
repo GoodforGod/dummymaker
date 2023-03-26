@@ -31,6 +31,14 @@ public final class SetParameterizedGenerator implements ParameterizedGenerator<O
         this(min, max, -1, null);
     }
 
+    public SetParameterizedGenerator(int min, int max, @Nullable Generator<?> generator) {
+        this(min, max, -1, generator);
+    }
+
+    public SetParameterizedGenerator(int fixed, @Nullable Generator<?> generator) {
+        this(1, 3, fixed, generator);
+    }
+
     public SetParameterizedGenerator(int min, int max, int fixed, @Nullable Generator<?> generator) {
         if (min < 1) {
             throw new IllegalArgumentException("Min can't be less than 1, but was: " + min);

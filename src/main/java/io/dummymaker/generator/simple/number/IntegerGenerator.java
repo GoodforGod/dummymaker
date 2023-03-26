@@ -21,6 +21,10 @@ public final class IntegerGenerator implements Generator<Integer> {
     private final int from;
     private final int to;
 
+    public IntegerGenerator() {
+        this(0, Integer.MAX_VALUE);
+    }
+
     public IntegerGenerator(int from, int to) {
         this.from = from;
         this.to = to;

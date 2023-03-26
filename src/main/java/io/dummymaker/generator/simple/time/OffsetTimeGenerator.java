@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.RandomUtils;
 import java.time.OffsetTime;
@@ -16,6 +17,10 @@ import org.jetbrains.annotations.NotNull;
 public final class OffsetTimeGenerator implements Generator<OffsetTime> {
 
     private final LocalTimeGenerator localTimeGenerator;
+
+    public OffsetTimeGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public OffsetTimeGenerator(long from, long to) {
         this.localTimeGenerator = new LocalTimeGenerator(from, to);

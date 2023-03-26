@@ -24,6 +24,10 @@ public final class LocalDateTimeGenerator implements Generator<LocalDateTime> {
     private final long from;
     private final long to;
 
+    public LocalDateTimeGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
+
     public LocalDateTimeGenerator(long from, long to) {
         this.from = from;
         this.to = to;

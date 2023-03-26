@@ -35,6 +35,19 @@ public final class MapParameterizedGenerator implements ParameterizedGenerator<O
 
     public MapParameterizedGenerator(int min,
                                      int max,
+                                     @Nullable Generator<?> keyGenerator,
+                                     @Nullable Generator<?> valueGenerator) {
+        this(min, max, -1, keyGenerator, valueGenerator);
+    }
+
+    public MapParameterizedGenerator(int fixed,
+                                     @Nullable Generator<?> keyGenerator,
+                                     @Nullable Generator<?> valueGenerator) {
+        this(1, 3, fixed, keyGenerator, valueGenerator);
+    }
+
+    public MapParameterizedGenerator(int min,
+                                     int max,
                                      int fixed,
                                      @Nullable Generator<?> keyGenerator,
                                      @Nullable Generator<?> valueGenerator) {

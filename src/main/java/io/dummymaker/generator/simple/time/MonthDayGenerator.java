@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import java.time.LocalDateTime;
 import java.time.MonthDay;
@@ -15,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
 public final class MonthDayGenerator implements Generator<MonthDay> {
 
     private final LocalDateTimeGenerator localDateTimeGenerator;
+
+    public MonthDayGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public MonthDayGenerator(long from, long to) {
         this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);

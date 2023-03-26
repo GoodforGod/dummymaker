@@ -16,6 +16,10 @@ public final class LongGenerator implements Generator<Long> {
     private final long from;
     private final long to;
 
+    public LongGenerator() {
+        this(0, Long.MAX_VALUE);
+    }
+
     public LongGenerator(long from, long to) {
         this.from = from;
         this.to = to;

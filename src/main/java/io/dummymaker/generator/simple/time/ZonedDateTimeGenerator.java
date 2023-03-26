@@ -1,5 +1,6 @@
 package io.dummymaker.generator.simple.time;
 
+import io.dummymaker.annotation.parameterized.GenTime;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.util.RandomUtils;
 import java.time.ZoneOffset;
@@ -16,6 +17,10 @@ import org.jetbrains.annotations.NotNull;
 public final class ZonedDateTimeGenerator implements Generator<ZonedDateTime> {
 
     private final LocalDateTimeGenerator localDateTimeGenerator;
+
+    public ZonedDateTimeGenerator() {
+        this(GenTime.MIN, GenTime.MAX);
+    }
 
     public ZonedDateTimeGenerator(long from, long to) {
         this.localDateTimeGenerator = new LocalDateTimeGenerator(from, to);
