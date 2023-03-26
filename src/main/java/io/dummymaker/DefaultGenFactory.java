@@ -197,7 +197,7 @@ final class DefaultGenFactory implements GenFactory {
                     ? tryMatchLocalisation(valueName)
                     : localisation;
 
-            final GenParameterBuilder genParameterBuilder = getGenParameterBuilder(valueType, valueName, context);
+            final GenParameterBuilder genParameterBuilder = getGenParameterBuilder(valueName, context);
             generated = ((ParameterizedGenerator) valueGenerator).get(new GenParameters() {
 
                 @Override
@@ -227,7 +227,7 @@ final class DefaultGenFactory implements GenFactory {
         return castObject(generated, valueType.raw());
     }
 
-    private GenParameterBuilder getGenParameterBuilder(GenType valueType, String valueName, GenContext context) {
+    private GenParameterBuilder getGenParameterBuilder(String valueName, GenContext context) {
         final Class<?> parentType = context.graph().value().type().raw();
         final Localisation matchedLocalisation = (localisation == null)
                 ? tryMatchLocalisation(valueName)
