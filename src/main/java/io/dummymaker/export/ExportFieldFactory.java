@@ -3,6 +3,7 @@ package io.dummymaker.export;
 import io.dummymaker.GenType;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.util.CastUtils;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -74,7 +75,8 @@ final class ExportFieldFactory {
                 || type.equals(Date.class)
                 || type.equals(java.sql.Date.class)
                 || type.equals(Timestamp.class)
-                || type.equals(Time.class)) {
+                || type.equals(Time.class)
+                || type.equals(Duration.class)) {
             return ExportField.Type.DATE;
         } else if (Iterable.class.isAssignableFrom(type)) {
             return ExportField.Type.COLLECTION;

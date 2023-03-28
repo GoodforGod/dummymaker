@@ -39,7 +39,7 @@ public final class CsvExporter extends AbstractExporter {
     public static final class Builder {
 
         private NamingCase fieldNamingCase = NamingCases.DEFAULT;
-        private boolean hasHeader = false;
+        private boolean hasHeader = true;
         private String separator = String.valueOf(DEFAULT_SEPARATOR);
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
 

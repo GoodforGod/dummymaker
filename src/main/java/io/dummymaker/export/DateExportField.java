@@ -24,6 +24,10 @@ final class DateExportField extends ExportField {
     }
 
     String getFormatted(Object date) {
+        if(date instanceof Duration) {
+            return String.valueOf(((Duration) date).toMillis());
+        }
+
         final DateTimeFormatter formatter = getDateFormatter(date, this.formatter);
         if (date instanceof Date) {
             return LocalDateTime.ofInstant(Instant.ofEpochMilli(((Date) date).getTime()), TimeZone.getDefault().toZoneId())

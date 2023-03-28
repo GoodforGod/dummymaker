@@ -129,6 +129,7 @@ public final class SqlExporter extends AbstractExporter {
             typeMap.put(CharSequence.class, "VARCHAR");
             typeMap.put(UUID.class, "UUID");
             typeMap.put(Object.class, "VARCHAR");
+            typeMap.put(Duration.class, "BIGINT");
             typeMap.put(Time.class, "TIME");
             typeMap.put(LocalTime.class, "TIME");
             typeMap.put(LocalDate.class, "DATE");
