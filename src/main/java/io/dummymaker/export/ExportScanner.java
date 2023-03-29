@@ -4,13 +4,12 @@ import io.dummymaker.GenType;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.cases.NamingCase;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Scanner for special export annotations and produces export containers Which are used in exporters
@@ -82,7 +81,8 @@ final class ExportScanner {
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
                 .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .filter(fieldPredicate)
-                .filter(f -> Arrays.stream(f.getDeclaredAnnotations()).noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
+                .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
+                        .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
                 .flatMap(f -> {
                     if (f.getGenericType() instanceof TypeVariable && target instanceof ParameterizedType) {
                         final TypeVariable<? extends Class<?>>[] typeParameters = targetClass.getTypeParameters();

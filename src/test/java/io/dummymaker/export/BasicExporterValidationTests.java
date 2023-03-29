@@ -18,7 +18,7 @@ public class BasicExporterValidationTests extends Assertions {
 
     public static Stream<Arguments> data() {
         return Stream.of(
-                Arguments.of(CsvExporter.build()),
+                Arguments.of(CsvExporter.builder().withHeader(false).build()),
                 Arguments.of(JsonExporter.build()),
                 Arguments.of(XmlExporter.build()),
                 Arguments.of(SqlExporter.build()));

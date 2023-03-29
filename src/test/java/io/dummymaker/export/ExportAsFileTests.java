@@ -22,7 +22,7 @@ public class ExportAsFileTests extends ExportAssert {
     public static Stream<Arguments> data() {
         return Stream.of(
                 Arguments.of(JsonExporter.build(), new JsonValidatorChecker(), Format.JSON, 1, 1, 2),
-                Arguments.of(CsvExporter.build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2),
+                Arguments.of(CsvExporter.builder().withHeader(false).build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2),
                 Arguments.of(SqlExporter.build(), new SqlValidatorChecker(), Format.SQL, 9, 9, 10),
                 Arguments.of(XmlExporter.build(), new XmlValidatorChecker(), Format.XML, 5, 7, 12));
     }

@@ -1,7 +1,6 @@
 package io.dummymaker.testdata;
 
 import io.dummymaker.annotation.GenIgnore;
-import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 import io.dummymaker.annotation.simple.number.GenDoubleSmall;
@@ -85,7 +84,6 @@ public class Dummy {
     }
 
     @GenExportName("socialGroup")
-    @GenExportForce
     @GenIgnore
     private String group = "100";
 

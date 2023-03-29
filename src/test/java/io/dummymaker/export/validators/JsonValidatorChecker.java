@@ -50,6 +50,14 @@ public class JsonValidatorChecker implements ValidatorChecker {
     }
 
     @Override
+    public void isTwoDummiesWithNumFieldValid(String[] dummies) {
+        final String expectedNumField = NUM.exportName();
+
+        assertTrue(dummies[0].matches("\\[\\{\"" + expectedNumField + "\":[0-9]+},"));
+        assertTrue(dummies[1].matches("\\{\"" + expectedNumField + "\":[0-9]+}]"));
+    }
+
+    @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy) {
         final String expectedNameField = strategy.apply(NAME.exportName()).toString();
         final String expectedGroupField = GROUP.exportName();

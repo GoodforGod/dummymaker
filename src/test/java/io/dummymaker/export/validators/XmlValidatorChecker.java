@@ -51,6 +51,21 @@ public class XmlValidatorChecker implements ValidatorChecker {
     }
 
     @Override
+    public void isTwoDummiesWithNumFieldValid(String[] dummies) {
+        final NamingCase strategy = NamingCases.DEFAULT;
+        final String expectedNumField = strategy.apply(NUM.exportName()).toString();
+
+        assertTrue(dummies[0].matches("<[a-zA-Z]+" + strategy.apply("List") + ">"));
+        assertTrue(dummies[1].matches("<[a-zA-Z]+>"));
+        assertTrue(dummies[2].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[3].matches("</[a-zA-Z]+>"));
+        assertTrue(dummies[4].matches("<[a-zA-Z]+>"));
+        assertTrue(dummies[5].matches("\\t<" + expectedNumField + ">" + "[0-9]+" + "</" + expectedNumField + ">"));
+        assertTrue(dummies[6].matches("</[a-zA-Z]+>"));
+        assertTrue(dummies[7].matches("</[a-zA-Z]+" + strategy.apply("List") + ">"));
+    }
+
+    @Override
     public void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy) {
         final String expectedNameField = strategy.apply(NAME.exportName()).toString();
         final String expectedGroupField = GROUP.exportName();

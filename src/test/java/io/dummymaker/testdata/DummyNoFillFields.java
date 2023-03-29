@@ -1,6 +1,5 @@
 package io.dummymaker.testdata;
 
-import io.dummymaker.annotation.export.GenExportForce;
 import io.dummymaker.annotation.export.GenExportIgnore;
 import io.dummymaker.annotation.export.GenExportName;
 
@@ -13,7 +12,6 @@ import io.dummymaker.annotation.export.GenExportName;
 public class DummyNoFillFields {
 
     @GenExportName("socialGroup")
-    @GenExportForce
     private String group = "100";
 
     @GenExportIgnore

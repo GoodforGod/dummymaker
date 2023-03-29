@@ -25,7 +25,7 @@ public class ExportAsStringTests extends Assertions {
     public static Stream<Arguments> data() {
         return Stream.of(
                 Arguments.of(JsonExporter.build(), new JsonValidatorChecker(), 1, 1, 2),
-                Arguments.of(CsvExporter.build(), new CsvValidatorChecker(), 3, 3, 2),
+                Arguments.of(CsvExporter.builder().withHeader(false).build(), new CsvValidatorChecker(), 3, 3, 2),
                 Arguments.of(SqlExporter.build(), new SqlValidatorChecker(), 9, 9, 10),
                 Arguments.of(XmlExporter.build(), new XmlValidatorChecker(), 5, 7, 12));
     }
@@ -156,6 +156,44 @@ public class ExportAsStringTests extends Assertions {
         final Stream<Dummy> dummies = factory.stream(Dummy.class, 2);
 
         final String dummyAsString = exporter.streamToString(dummies, Dummy.class);
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] strings = dummyAsString.split("\n");
+        assertEquals(listSplitLength, strings.length);
+
+        validator.isTwoDummiesValid(strings);
+    }
+
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportListOfDummiesWithIncludes(Exporter exporter,
+                                         ValidatorChecker validator,
+                                         int singleSplitLength,
+                                         int singleListSplitLength,
+                                         int listSplitLength) {
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
+
+        final String dummyAsString = exporter.exportAsString(dummies);
+        assertNotNull(dummyAsString);
+        assertFalse(dummyAsString.isEmpty());
+
+        final String[] strings = dummyAsString.split("\n");
+        assertEquals(listSplitLength, strings.length);
+
+        validator.isTwoDummiesValid(strings);
+    }
+
+    @MethodSource("data")
+    @ParameterizedTest
+    void exportListOfDummiesWithExcludes(Exporter exporter,
+                                         ValidatorChecker validator,
+                                         int singleSplitLength,
+                                         int singleListSplitLength,
+                                         int listSplitLength) {
+        final List<Dummy> dummies = factory.build(Dummy.class, 2);
+
+        final String dummyAsString = exporter.exportAsString(dummies);
         assertNotNull(dummyAsString);
         assertFalse(dummyAsString.isEmpty());
 

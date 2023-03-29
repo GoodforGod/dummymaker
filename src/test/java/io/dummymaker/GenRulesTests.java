@@ -1,9 +1,11 @@
 package io.dummymaker;
 
+import io.dummymaker.export.*;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.testdata.DummyEmbedded;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +16,24 @@ import org.junit.jupiter.api.Test;
  * @since 20.10.2019
  */
 class GenRulesTests extends Assertions {
+
+    @Test
+    void test() {
+        class Account {
+
+            public Integer number;
+            public String type;
+            public String name;
+        }
+
+        GenFactory factory = GenFactory.build();
+        List<Account> accounts = factory.build(Account.class, 2);
+
+        Exporter exporter = SqlExporter.build();
+
+        String value = exporter.exportAsString(accounts);
+        System.out.println(value);
+    }
 
     @Test
     void genLambdaGeneratorRuleForNamedField() {

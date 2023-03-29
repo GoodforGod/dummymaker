@@ -22,7 +22,7 @@ class CsvExportAsFileTests extends FileExportAssert {
     private final Format format = Format.CSV;
 
     public CsvExportAsFileTests() {
-        super(CsvExporter.build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2);
+        super(CsvExporter.builder().withHeader(false).build(), new CsvValidatorChecker(), Format.CSV, 3, 3, 2);
     }
 
     @Test

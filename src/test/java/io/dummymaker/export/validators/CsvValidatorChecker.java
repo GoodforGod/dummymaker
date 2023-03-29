@@ -57,6 +57,20 @@ public class CsvValidatorChecker implements ValidatorChecker {
         assertTrue(valueArray2[2].matches("[a-zA-Z0-9]+"));
     }
 
+    @Override
+    public void isTwoDummiesWithNumFieldValid(String[] dummies) {
+        String[] valueArray1 = dummies[0].split(",");
+
+        // first line values check
+        assertEquals(1, valueArray1.length);
+        assertTrue(valueArray1[0].matches("[0-9]+"));
+
+        // second line values check
+        String[] valueArray2 = dummies[1].split(",");
+        assertEquals(1, valueArray2.length);
+        assertTrue(valueArray2[0].matches("[0-9]+"));
+    }
+
     public void isSingleDummyValidWithHeader(String[] dummy, char separator) {
         String[] headerArray = dummy[0].split(String.valueOf(separator));
         String[] valueArray = dummy[1].split(String.valueOf(separator));

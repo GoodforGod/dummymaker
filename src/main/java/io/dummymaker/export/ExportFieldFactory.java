@@ -21,16 +21,15 @@ import java.util.UUID;
  */
 final class ExportFieldFactory {
 
-    private ExportFieldFactory() { }
+    private ExportFieldFactory() {}
 
     static ExportField build(Field field, GenType genType, NamingCase namingCase) {
         final ExportField.Type type = getType(genType.raw());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
-                .map(name -> namingCase.apply(name).toString())
                 .findFirst()
-                .orElse(field.getName());
+                .orElseGet(() -> namingCase.apply(field.getName()).toString());
 
         return build(field, type, exportName);
     }

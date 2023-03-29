@@ -25,15 +25,18 @@ public class SqlValidatorChecker implements ValidatorChecker {
 
     @Override
     public void isSingleDummyValid(String[] dummy) {
+        final NamingCase strategy = NamingCases.SNAKE_LOWER_CASE;
+
         assertTrue(dummy[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
         assertTrue(dummy[1].matches("\\t" + GROUP.exportName() + "\\tVARCHAR,"));
-        assertTrue(dummy[2].matches("\\t" + NUM.exportName() + "\\tINT,"));
-        assertTrue(dummy[3].matches("\\t" + NAME.exportName() + "\\tVARCHAR,"));
+        assertTrue(dummy[2].matches("\\t" + strategy.apply(NUM.exportName()) + "\\tINT,"));
+        assertTrue(dummy[3].matches("\\t" + strategy.apply(NAME.exportName()) + "\\tVARCHAR,"));
         assertTrue(dummy[4].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
         assertTrue(dummy[5].matches("\\);"));
         assertTrue(dummy[6].matches(""));
-        assertTrue(dummy[7].matches("INSERT INTO dummy\\(" + GROUP.exportName() + ", " + NUM.exportName() + ", "
-                + NAME.exportName() + "\\) VALUES"));
+        assertTrue(dummy[7].matches("INSERT INTO dummy\\(" + GROUP.exportName() + ", "
+                + strategy.apply(NUM.exportName()) + ", "
+                + strategy.apply(NAME.exportName()) + "\\) VALUES"));
         assertTrue(dummy[8].matches("\\('100', [0-9]+, '[a-zA-Z]+'\\);"));
     }
 
@@ -52,6 +55,20 @@ public class SqlValidatorChecker implements ValidatorChecker {
     @Override
     public void isTwoDummiesValid(String[] dummies) {
         isTwoDummiesValidWithNamingStrategy(dummies, NamingCases.DEFAULT);
+    }
+
+    @Override
+    public void isTwoDummiesWithNumFieldValid(String[] dummies) {
+        final String expectedNumField = NUM.exportName();
+
+        assertTrue(dummies[0].matches("CREATE TABLE IF NOT EXISTS dummy\\("));
+        assertTrue(dummies[1].matches("\\t" + expectedNumField + "\\tINT,"));
+        assertTrue(dummies[2].matches("\\tPRIMARY KEY \\([a-zA-Z]+\\)"));
+        assertTrue(dummies[3].matches("\\);"));
+        assertTrue(dummies[4].matches(""));
+        assertTrue(dummies[5].matches("INSERT INTO dummy\\(" + expectedNumField + "\\) VALUES"));
+        assertTrue(dummies[6].matches("\\([0-9]+\\),"));
+        assertTrue(dummies[7].matches("\\([0-9]+\\);"));
     }
 
     @Override

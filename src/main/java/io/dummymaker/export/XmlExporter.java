@@ -3,7 +3,6 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -77,13 +76,13 @@ public final class XmlExporter extends AbstractExporter {
         }
 
         @NotNull
-        public Builder includeFields(@NotNull String ... fields) {
+        public Builder includeFields(@NotNull String... fields) {
             return includeFields(Arrays.asList(fields));
         }
 
         @NotNull
         public Builder includeFields(@NotNull Collection<String> fields) {
-            if(!fieldsExclude.isEmpty()) {
+            if (!fieldsExclude.isEmpty()) {
                 throw new IllegalStateException("Can't Include Fields when Exclude Fields is present!");
             }
 
@@ -92,13 +91,13 @@ public final class XmlExporter extends AbstractExporter {
         }
 
         @NotNull
-        public Builder excludeFields(@NotNull String ... fields) {
+        public Builder excludeFields(@NotNull String... fields) {
             return excludeFields(Arrays.asList(fields));
         }
 
         @NotNull
         public Builder excludeFields(@NotNull Collection<String> fields) {
-            if(!fieldsInclude.isEmpty()) {
+            if (!fieldsInclude.isEmpty()) {
                 throw new IllegalStateException("Can't Exclude Fields when Include Fields is present!");
             }
 

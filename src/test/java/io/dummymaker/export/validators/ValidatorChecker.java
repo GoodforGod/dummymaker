@@ -16,6 +16,8 @@ public interface ValidatorChecker {
 
     void isTwoDummiesValid(String[] dummies);
 
+    void isTwoDummiesWithNumFieldValid(String[] dummies);
+
     void isTwoDummiesValidWithNamingStrategy(String[] dummies, NamingCase strategy);
 
     void isDummyTimeValid(String[] dummy);

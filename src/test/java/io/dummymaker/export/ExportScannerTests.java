@@ -3,8 +3,10 @@ package io.dummymaker.export;
 import static io.dummymaker.testdata.Dummy.DummyFields.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.dummymaker.cases.NamingCases;
 import io.dummymaker.testdata.Dummy;
 import java.util.Collection;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,7 +17,7 @@ class ExportScannerTests {
 
     @Test
     void verifyThatExportFieldsContains() {
-        final ExportScanner scanner = new ExportScanner();
+        final ExportScanner scanner = new ExportScanner(Collections.emptySet(), Collections.emptySet(), NamingCases.DEFAULT);
         final Collection<ExportField> fields = scanner.scan(Dummy.class);
 
         // Check for correct fields number in map

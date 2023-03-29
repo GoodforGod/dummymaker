@@ -22,7 +22,7 @@ class CsvExportAsStringTests extends StringExportAssert {
     private final CsvValidatorChecker validation = new CsvValidatorChecker();
 
     public CsvExportAsStringTests() {
-        super(CsvExporter.build(), new CsvValidatorChecker(), 3, 2);
+        super(CsvExporter.builder().withHeader(false).build(), new CsvValidatorChecker(), 3, 2);
     }
 
     @Test
