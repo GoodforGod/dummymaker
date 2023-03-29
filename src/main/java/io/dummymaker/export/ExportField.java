@@ -71,12 +71,6 @@ class ExportField {
     }
 
     public String getName() {
-        return getName(NamingCases.DEFAULT);
-    }
-
-    public String getName(NamingCase naming) {
-        return StringUtils.isEmpty(exportName)
-                ? naming.apply(field.getName()).toString()
-                : exportName;
+        return exportName;
     }
 }

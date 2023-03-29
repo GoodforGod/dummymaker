@@ -2,8 +2,8 @@ package io.dummymaker.export;
 
 import io.dummymaker.GenType;
 import io.dummymaker.annotation.export.GenExportName;
+import io.dummymaker.cases.NamingCase;
 import io.dummymaker.util.CastUtils;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,18 +21,21 @@ import java.util.UUID;
  */
 final class ExportFieldFactory {
 
-    public ExportField build(Field field, GenType genType) {
+    private ExportFieldFactory() { }
+
+    static ExportField build(Field field, GenType genType, NamingCase namingCase) {
         final ExportField.Type type = getType(genType.raw());
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())
+                .map(name -> namingCase.apply(name).toString())
                 .findFirst()
-                .orElse("");
+                .orElse(field.getName());
 
         return build(field, type, exportName);
     }
 
-    private ExportField build(Field field, ExportField.Type type, String fieldExportName) {
+    private static ExportField build(Field field, ExportField.Type type, String fieldExportName) {
         if (type.equals(ExportField.Type.DATE) && field != null) {
             return new DateExportField(field, type, fieldExportName);
         }

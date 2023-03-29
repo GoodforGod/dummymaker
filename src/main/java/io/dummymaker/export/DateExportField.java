@@ -24,7 +24,7 @@ final class DateExportField extends ExportField {
     }
 
     String getFormatted(Object date) {
-        if(date instanceof Duration) {
+        if (date instanceof Duration) {
             return String.valueOf(((Duration) date).toMillis());
         }
 

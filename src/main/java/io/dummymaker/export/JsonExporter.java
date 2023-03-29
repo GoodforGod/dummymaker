@@ -3,7 +3,11 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -15,12 +19,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class JsonExporter extends AbstractExporter {
 
-    private JsonExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction) {
-        super(fieldNamingCase, writerFunction);
+    private JsonExporter(Set<String> fieldsInclude,
+                         Set<String> fieldsExclude,
+                         NamingCase fieldNamingCase, Function<String, Writer> writerFunction) {
+        super(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction);
     }
 
     public static final class Builder {
 
+        private final Set<String> fieldsInclude = new HashSet<>();
+        private final Set<String> fieldsExclude = new HashSet<>();
         private NamingCase fieldNamingCase = NamingCases.DEFAULT;
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
 
@@ -43,8 +51,38 @@ public final class JsonExporter extends AbstractExporter {
         }
 
         @NotNull
+        public Builder includeFields(@NotNull String ... fields) {
+            return includeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder includeFields(@NotNull Collection<String> fields) {
+            if(!fieldsExclude.isEmpty()) {
+                throw new IllegalStateException("Can't Include Fields when Exclude Fields is present!");
+            }
+
+            this.fieldsInclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull String ... fields) {
+            return excludeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull Collection<String> fields) {
+            if(!fieldsInclude.isEmpty()) {
+                throw new IllegalStateException("Can't Exclude Fields when Include Fields is present!");
+            }
+
+            this.fieldsExclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
         public JsonExporter build() {
-            return new JsonExporter(fieldNamingCase, writerFunction);
+            return new JsonExporter(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction);
         }
     }
 
@@ -119,7 +157,7 @@ public final class JsonExporter extends AbstractExporter {
                     final String value = getValue(t, c);
                     return StringUtils.isEmpty(value)
                             ? ""
-                            : wrap(c.getName(fieldNamingCase)) + ":" + value;
+                            : wrap(c.getName()) + ":" + value;
                 })
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(","));

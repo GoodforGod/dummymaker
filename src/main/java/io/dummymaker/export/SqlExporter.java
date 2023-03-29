@@ -44,17 +44,21 @@ public final class SqlExporter extends AbstractExporter {
      */
     private final Map<Class<?>, String> dataTypes;
 
-    private SqlExporter(NamingCase fieldNamingCase,
+    private SqlExporter(Set<String> fieldsInclude,
+                        Set<String> fieldsExclude,
+                        NamingCase fieldNamingCase,
                         @NotNull Function<String, Writer> writerFunction,
                         int batchSize,
                         Map<Class<?>, String> dataTypes) {
-        super(fieldNamingCase, writerFunction);
+        super(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction);
         this.batchSize = batchSize;
         this.dataTypes = dataTypes;
     }
 
     public static final class Builder {
 
+        private final Set<String> fieldsInclude = new HashSet<>();
+        private final Set<String> fieldsExclude = new HashSet<>();
         private NamingCase fieldNamingCase = NamingCases.SNAKE_LOWER_CASE;
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private int batchSize = 999;
@@ -101,8 +105,38 @@ public final class SqlExporter extends AbstractExporter {
         }
 
         @NotNull
+        public Builder includeFields(@NotNull String ... fields) {
+            return includeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder includeFields(@NotNull Collection<String> fields) {
+            if(!fieldsExclude.isEmpty()) {
+                throw new IllegalStateException("Can't Include Fields when Exclude Fields is present!");
+            }
+
+            this.fieldsInclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull String ... fields) {
+            return excludeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull Collection<String> fields) {
+            if(!fieldsInclude.isEmpty()) {
+                throw new IllegalStateException("Can't Exclude Fields when Include Fields is present!");
+            }
+
+            this.fieldsExclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
         public SqlExporter build() {
-            return new SqlExporter(fieldNamingCase, writerFunction, batchSize, dataTypes);
+            return new SqlExporter(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction, batchSize, dataTypes);
         }
 
         private static Map<Class<?>, String> buildDefaultDataTypeMap() {
@@ -183,7 +217,7 @@ public final class SqlExporter extends AbstractExporter {
      * @return sql create table (name - type)
      */
     private String translateContainerToSqlType(ExportField container) {
-        final String field = container.getName(fieldNamingCase);
+        final String field = container.getName();
         final Class<?> fieldType = extractType(container.getType(), container.getField());
         switch (container.getType()) {
             case DATE:
@@ -209,7 +243,7 @@ public final class SqlExporter extends AbstractExporter {
                 .append("(");
 
         final String names = containers.stream()
-                .map(c -> c.getName(fieldNamingCase))
+                .map(ExportField::getName)
                 .collect(Collectors.joining(", "));
 
         return builder.append(names)
@@ -310,7 +344,7 @@ public final class SqlExporter extends AbstractExporter {
         // Write primary key constraint
         return builder.append(",\n")
                 .append("\tPRIMARY KEY (")
-                .append(fieldNamingCase.apply(primaryKeyField))
+                .append(primaryKeyField)
                 .append(")\n);\n\n")
                 .toString();
     }

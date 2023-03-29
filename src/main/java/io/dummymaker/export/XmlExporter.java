@@ -3,7 +3,11 @@ package io.dummymaker.export;
 import io.dummymaker.cases.NamingCase;
 import io.dummymaker.cases.NamingCases;
 import io.dummymaker.util.StringUtils;
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,15 +26,19 @@ public final class XmlExporter extends AbstractExporter {
 
     private final Function<String, String> listTagSuffix;
 
-    private XmlExporter(NamingCase fieldNamingCase,
+    private XmlExporter(Set<String> fieldsInclude,
+                        Set<String> fieldsExclude,
+                        NamingCase fieldNamingCase,
                         Function<String, Writer> writerFunction,
                         Function<String, String> listTagSuffix) {
-        super(fieldNamingCase, writerFunction);
+        super(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction);
         this.listTagSuffix = listTagSuffix;
     }
 
     public static final class Builder {
 
+        private final Set<String> fieldsInclude = new HashSet<>();
+        private final Set<String> fieldsExclude = new HashSet<>();
         private NamingCase fieldNamingCase = NamingCases.DEFAULT;
         private Function<String, Writer> writerFunction = fileName -> new SimpleFileWriter(false, fileName);
         private Function<String, String> listTagSuffix = name -> name + DEFAULT_TAG_LIST_SUFFIX;
@@ -69,8 +77,38 @@ public final class XmlExporter extends AbstractExporter {
         }
 
         @NotNull
+        public Builder includeFields(@NotNull String ... fields) {
+            return includeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder includeFields(@NotNull Collection<String> fields) {
+            if(!fieldsExclude.isEmpty()) {
+                throw new IllegalStateException("Can't Include Fields when Exclude Fields is present!");
+            }
+
+            this.fieldsInclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull String ... fields) {
+            return excludeFields(Arrays.asList(fields));
+        }
+
+        @NotNull
+        public Builder excludeFields(@NotNull Collection<String> fields) {
+            if(!fieldsInclude.isEmpty()) {
+                throw new IllegalStateException("Can't Exclude Fields when Include Fields is present!");
+            }
+
+            this.fieldsExclude.addAll(fields);
+            return this;
+        }
+
+        @NotNull
         public XmlExporter build() {
-            return new XmlExporter(fieldNamingCase, writerFunction, listTagSuffix);
+            return new XmlExporter(fieldsInclude, fieldsExclude, fieldNamingCase, writerFunction, listTagSuffix);
         }
     }
 
@@ -129,7 +167,7 @@ public final class XmlExporter extends AbstractExporter {
                         return "";
                     }
 
-                    final String tag = c.getName(fieldNamingCase);
+                    final String tag = c.getName();
                     return "\t" + openXmlTag(tag) + value + closeXmlTag(tag);
                 })
                 .collect(Collectors.joining("\n"));

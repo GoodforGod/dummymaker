@@ -4,6 +4,8 @@ import io.dummymaker.cases.NamingCase;
 import io.dummymaker.error.GenExportException;
 import io.dummymaker.util.CollectionUtils;
 import io.dummymaker.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -11,7 +13,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Core exporter class with mapping and converting functionality
@@ -23,14 +24,16 @@ abstract class AbstractExporter implements Exporter {
 
     private static final String DEFAULT_EMPTY_VALUE = "";
 
-    protected final ExportScanner scanner = new ExportScanner();
-
+    protected final ExportScanner scanner;
     protected final NamingCase fieldNamingCase;
     protected final Function<String, Writer> writerFunction;
 
-    AbstractExporter(NamingCase fieldNamingCase, Function<String, Writer> writerFunction) {
+    AbstractExporter(Set<String> fieldsInclude, Set<String> fieldsExclude,
+                     NamingCase fieldNamingCase,
+                     Function<String, Writer> writerFunction) {
         this.fieldNamingCase = fieldNamingCase;
         this.writerFunction = writerFunction;
+        this.scanner = new ExportScanner(fieldsInclude, fieldsExclude, fieldNamingCase);
     }
 
     protected abstract @NotNull String getExtension();
@@ -50,8 +53,9 @@ abstract class AbstractExporter implements Exporter {
     }
 
     protected <T> @NotNull String getValue(T t, ExportField container) {
-        if (t == null)
+        if (t == null) {
             return DEFAULT_EMPTY_VALUE;
+        }
 
         try {
             final Field field = container.getField();

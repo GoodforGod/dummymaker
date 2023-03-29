@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @since 06.07.2017
  */
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = { ElementType.FIELD })
+@Target(value = ElementType.FIELD)
 public @interface GenExportName {
 
     String value();
