@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +22,8 @@ public final class CastUtils {
 
     public static Object castToNumber(Object value, Class<?> fieldType) {
         try {
-            switch (CastType.of(fieldType)) {
+            final CastType castType = CastType.of(fieldType);
+            switch (castType) {
                 case BYTE:
                     return Byte.valueOf(String.valueOf(value));
                 case SHORT:
@@ -231,7 +233,6 @@ public final class CastUtils {
     private static boolean areEquals(Class<?> firstClass, Class<?> secondClass) {
         final CastType firstType = CastType.of(firstClass);
         final CastType secondType = CastType.of(secondClass);
-
         return (firstType.equals(CastType.UNKNOWN) || secondType.equals(CastType.UNKNOWN))
                 ? firstClass.equals(secondClass)
                 : firstType.equals(secondType);
@@ -244,12 +245,25 @@ public final class CastUtils {
                                     boolean isTypeEquals,
                                     boolean isTypeObject,
                                     boolean isTypeString) {
-        if (isTypeEquals || isTypeObject)
-            return ((T) castObject);
-        else if (isTypeString)
-            return ((T) String.valueOf(castObject));
-        else if (isTypeAssignable)
+        if (isTypeEquals || isTypeObject) {
+            return (T) castObject;
+        } else if (isTypeString) {
+            return (T) String.valueOf(castObject);
+        } else if (isTypeAssignable) {
             return fieldType.cast(castObject);
+        }
+
+        final Optional<Class<?>> analog = getPrimitiveOrBoxedAnalog(fieldType);
+        if (analog.isPresent()) {
+            try {
+                final Object result = analog.get().cast(castObject);
+                if (result != null) {
+                    return (T) result;
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+        }
 
         // Try to force cast anyway
         try {
@@ -312,5 +326,43 @@ public final class CastUtils {
                 || type.isAssignableFrom(long.class)
                 || type.isAssignableFrom(float.class)
                 || type.isAssignableFrom(double.class);
+    }
+
+    public static Optional<Class<?>> getPrimitiveOrBoxedAnalog(@NotNull Class<?> type) {
+        if (Boolean.class.isAssignableFrom(type)) {
+            return Optional.of(boolean.class);
+        } else if (boolean.class.isAssignableFrom(type)) {
+            return Optional.of(Boolean.class);
+        } else if (Byte.class.isAssignableFrom(type)) {
+            return Optional.of(byte.class);
+        } else if (byte.class.isAssignableFrom(type)) {
+            return Optional.of(Byte.class);
+        } else if (Short.class.isAssignableFrom(type)) {
+            return Optional.of(short.class);
+        } else if (short.class.isAssignableFrom(type)) {
+            return Optional.of(Short.class);
+        } else if (Character.class.isAssignableFrom(type)) {
+            return Optional.of(char.class);
+        } else if (char.class.isAssignableFrom(type)) {
+            return Optional.of(Character.class);
+        } else if (Integer.class.isAssignableFrom(type)) {
+            return Optional.of(int.class);
+        } else if (int.class.isAssignableFrom(type)) {
+            return Optional.of(Integer.class);
+        } else if (Long.class.isAssignableFrom(type)) {
+            return Optional.of(long.class);
+        } else if (long.class.isAssignableFrom(type)) {
+            return Optional.of(Long.class);
+        } else if (Float.class.isAssignableFrom(type)) {
+            return Optional.of(float.class);
+        } else if (float.class.isAssignableFrom(type)) {
+            return Optional.of(Float.class);
+        } else if (Double.class.isAssignableFrom(type)) {
+            return Optional.of(double.class);
+        } else if (double.class.isAssignableFrom(type)) {
+            return Optional.of(Double.class);
+        }
+
+        return Optional.empty();
     }
 }
