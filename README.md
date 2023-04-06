@@ -7,7 +7,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=ncloc)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 
-DummyMaker is a library that generates random Java Classes / Records for you.
+DummyMaker is a library that generates random Java Classes / Records / Sealed Interfaces for you.
 
 Library can even do simple export in [*CSV/JSON/XML/SQL*](#export) formats.
 

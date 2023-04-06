@@ -95,6 +95,13 @@ final class DefaultGenFactory implements GenFactory {
             return Stream.generate(() -> (T) generator.get())
                     .limit(size)
                     .filter(Objects::nonNull);
+        } else if (target.isInterface()) {
+            final GenType permittedType = DefaultGenType.ofInterface(target).orElse(null);
+            if (permittedType == null) {
+                return Stream.empty();
+            } else {
+                return (Stream<T>) stream(permittedType.raw(), size);
+            }
         }
 
         final GenContext context = getContext(target, rulesContext);
@@ -244,17 +251,40 @@ final class DefaultGenFactory implements GenFactory {
                 Object generated;
 
                 if (generator instanceof EmbeddedGenerator) {
-                    final GenContext checkUnknownContext = GenContext.ofChild(context, type);
-                    if (checkUnknownContext.graph() == null) {
-                        if (context.depthCurrent() >= context.depthMax() || type.getPackage().getName().startsWith("java.")) {
+                    if (context.depthCurrent() > context.depthMax() || !isJavaInternal(GenType.ofClass(type))) {
+                        generated = null;
+                    } else if (type.isInterface()) {
+                        final GenType permittedType = DefaultGenType.ofInterface(type).orElse(null);
+                        if (permittedType == null) {
                             generated = null;
                         } else {
-                            final GenNode graph = context.graphBuilder().build(type);
-                            final GenContext childContext = GenContext.ofUnknown(graph, context);
-                            generated = generateEmbeddedObject(GenType.ofClass(type), childContext);
+                            final Generator<?> permittedGenerator = context.rules().findClass(parentType)
+                                    .flatMap(rule -> rule.find(permittedType))
+                                    .orElseGet(() -> context.generatorSupplier().get(permittedType.raw(), valueName));
+
+                            if (permittedGenerator instanceof EmbeddedGenerator) {
+                                final GenContext checkUnknownContext = GenContext.ofChild(context, permittedType.raw());
+                                if (checkUnknownContext.graph() == null) {
+                                    final GenNode graph = context.graphBuilder().build(permittedType.raw());
+                                    final GenContext childContext = GenContext.ofUnknown(graph, context);
+                                    generated = generateEmbeddedObject(permittedType, childContext);
+                                } else {
+                                    generated = generateEmbeddedObject(permittedType, context);
+                                }
+                            } else {
+                                generated = permittedGenerator.get();
+                            }
                         }
                     } else {
-                        generated = generateEmbeddedObject(GenType.ofClass(type), context);
+                        final GenType genType = GenType.ofClass(type);
+                        final GenContext checkUnknownContext = GenContext.ofChild(context, genType.raw());
+                        if (checkUnknownContext.graph() == null) {
+                            final GenNode graph = context.graphBuilder().build(genType.raw());
+                            final GenContext childContext = GenContext.ofUnknown(graph, context);
+                            generated = generateEmbeddedObject(genType, childContext);
+                        } else {
+                            generated = generateEmbeddedObject(genType, context);
+                        }
                     }
                 } else if (generator instanceof ParameterizedGenerator) {
                     final GenParameterBuilder self = this;
@@ -289,20 +319,30 @@ final class DefaultGenFactory implements GenFactory {
         };
     }
 
-    private Object generateEmbeddedObject(GenType type, GenContext context) {
-        if (context.depthCurrent() <= context.depthMax()) {
-            final Class<?> typeRaw = type.raw();
-            if (typeRaw.getPackage().getName().startsWith("java.")) {
-                return null;
-            }
+    private boolean canGenerateEmbedded(GenType type, GenContext context) {
+        final Class<?> typeRaw = type.raw();
+        return context.depthCurrent() <= context.depthMax()
+                && !typeRaw.isInterface()
+                && !isJavaInternal(type);
+    }
 
-            final GenContext childContext = GenContext.ofChild(context, typeRaw);
-            final GenClass childClass = childContext.graph().value();
-            final Supplier<Object> childValue = getInstanceSupplier(childClass, childContext);
-            return fillInstance(childValue.get(), childContext);
-        } else {
+    private boolean isJavaInternal(GenType type) {
+        final Class<?> typeRaw = type.raw();
+        return typeRaw.getPackage().getName().equals("java")
+                || typeRaw.getPackage().getName().equals("javax")
+                || typeRaw.getPackage().getName().equals("jdk")
+                || typeRaw.getPackage().getName().equals("sun");
+    }
+
+    private Object generateEmbeddedObject(GenType type, GenContext context) {
+        if (!canGenerateEmbedded(type, context)) {
             return null;
         }
+
+        final GenContext childContext = GenContext.ofChild(context, type.raw());
+        final GenClass childClass = childContext.graph().value();
+        final Supplier<Object> childValue = getInstanceSupplier(childClass, childContext);
+        return fillInstance(childValue.get(), childContext);
     }
 
     @NotNull

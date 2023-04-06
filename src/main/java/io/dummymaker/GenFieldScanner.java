@@ -82,14 +82,16 @@ final class GenFieldScanner {
                     return expectedDepth;
                 });
 
-        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(field.type().raw(), field.value().getName()));
+        final String fieldName = field.value().getName();
+        final Class<?> fieldType = field.type().raw();
+        final Optional<Generator<?>> ruleGenerator = rule.flatMap(r -> r.find(fieldType, fieldName));
         if (ruleGenerator.isPresent()) {
             return Optional.of(GenField.ofRule(field.value(), field.type(), ruleGenerator.get(), isComplex, depth));
         }
 
         for (Annotation marker : field.value().getDeclaredAnnotations()) {
             if (IS_AUTO.test(marker)) {
-                final Generator<?> generator = generatorSupplier.get(field.type().raw(), field.value().getName());
+                final Generator<?> generator = generatorSupplier.get(fieldType, fieldName);
                 return Optional.of(GenField.ofAuto(field.value(), field.type(), generator, isComplex, depth));
             }
 
@@ -114,7 +116,16 @@ final class GenFieldScanner {
         }
 
         if (rule.flatMap(GenRuleContext::isAuto).orElse(isAutoByDefault)) {
-            final Generator<?> generator = generatorSupplier.get(field.type().raw(), field.value().getName());
+            final Generator<?> generator = generatorSupplier.get(fieldType, fieldName);
+            if (generator instanceof EmbeddedGenerator && fieldType.isInterface()) {
+                return DefaultGenType.ofInterface(fieldType)
+                        .map(type -> {
+                            final Generator<?> permittedGenerator = rule.flatMap(r -> r.find(type.raw(), fieldName))
+                                    .orElseGet(() -> generatorSupplier.get(type.raw(), fieldName));
+                            return GenField.ofAuto(field.value(), type, permittedGenerator, isComplex, depth);
+                        });
+            }
+
             return Optional.of(GenField.ofAuto(field.value(), field.type(), generator, isComplex, depth));
         }
 

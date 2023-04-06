@@ -1,9 +1,6 @@
 package io.dummymaker;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +45,23 @@ final class DefaultGenType implements GenType {
             return new DefaultGenType(type, Object.class, Collections.emptyList());
         } else {
             return new DefaultGenType(type, (Class<?>) type, Collections.emptyList());
+        }
+    }
+
+    static Optional<GenType> ofInterface(@NotNull Class<?> interfaceType) {
+        if (!interfaceType.isInterface()) {
+            return Optional.empty();
+        }
+
+        try {
+            final Method permittedMethod = Class.class.getMethod("getPermittedSubclasses");
+            final Class<?>[] permitted = (Class<?>[]) permittedMethod.invoke(interfaceType);
+            return Arrays.stream(permitted)
+                    .filter(c -> !c.isInterface())
+                    .map(GenType::ofClass)
+                    .findFirst();
+        } catch (Exception e) {
+            return Optional.empty();
         }
     }
 
