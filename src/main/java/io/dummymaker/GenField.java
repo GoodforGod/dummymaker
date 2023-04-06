@@ -89,4 +89,9 @@ final class GenField {
     Optional<Integer> depth() {
         return Optional.ofNullable(depth);
     }
+
+    @Override
+    public String toString() {
+        return "[field=" + field.getName() + ", type=" + type + ']';
+    }
 }

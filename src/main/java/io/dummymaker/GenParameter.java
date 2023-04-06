@@ -29,4 +29,9 @@ final class GenParameter {
     Generator<?> generator() {
         return generator;
     }
+
+    @Override
+    public String toString() {
+        return "[name=" + name + ", type=" + type + ']';
+    }
 }

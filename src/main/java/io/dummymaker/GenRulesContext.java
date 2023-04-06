@@ -38,8 +38,4 @@ final class GenRulesContext {
                 .filter(GenRuleContext::isGlobal)
                 .findFirst();
     }
-
-    List<GenRuleContext> rules() {
-        return rules;
-    }
 }

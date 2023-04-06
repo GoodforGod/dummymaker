@@ -1,7 +1,9 @@
 package io.dummymaker;
 
 import io.dummymaker.generator.Generator;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Gen rules for specific field
@@ -16,10 +18,10 @@ final class GenRuleFieldContext {
     private final String name;
     private final Generator<?> generator;
 
-    GenRuleFieldContext(GenRuleField ruleField) {
+    GenRuleFieldContext(GenRuleField ruleField, Map<Supplier<Generator<?>>, Generator<?>> generatorMap) {
         this.type = ruleField.getType();
         this.name = ruleField.getName();
-        this.generator = ruleField.getGeneratorSupplier().get();
+        this.generator = generatorMap.computeIfAbsent(ruleField.getGeneratorSupplier(), Supplier::get);
     }
 
     boolean isTyped() {
@@ -52,5 +54,14 @@ final class GenRuleFieldContext {
     @Override
     public int hashCode() {
         return Objects.hash(type, name);
+    }
+
+    @Override
+    public String toString() {
+        if (type != null) {
+            return "[type=" + type + ']';
+        } else {
+            return "[name=" + name + ']';
+        }
     }
 }

@@ -56,4 +56,13 @@ final class GenRuleField {
     public int hashCode() {
         return Objects.hash(fieldType, fieldName);
     }
+
+    @Override
+    public String toString() {
+        if (fieldType != null) {
+            return "[type=" + fieldType + ']';
+        } else {
+            return "[name=" + fieldName + ']';
+        }
+    }
 }

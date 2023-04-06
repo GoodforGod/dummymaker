@@ -28,8 +28,8 @@ public final class GenRule {
         this.isAuto = isAuto;
         this.target = target;
         this.depth = depth;
-        this.excludedFields = new HashSet<>();
-        this.specifiedFields = new HashSet<>();
+        this.excludedFields = new LinkedHashSet<>();
+        this.specifiedFields = new LinkedHashSet<>();
     }
 
     private GenRule(Integer depth,
@@ -92,12 +92,109 @@ public final class GenRule {
     }
 
     /**
-     * @param generatorSupplier that will be applied to fields by their names
-     * @param fieldNames        to register generator for
+     * @param field             name where generator will be applied to
+     * @param generatorSupplier to apply for field with specified name
      * @return self
      */
     @NotNull
-    public GenRule registerFieldNames(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull String... fieldNames) {
+    public GenRule generateForNames(@NotNull String field,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull String field5,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4, field5), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull String field5,
+                                    @NotNull String field6,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4, field5, field6), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull String field5,
+                                    @NotNull String field6,
+                                    @NotNull String field7,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4, field5, field6, field7), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull String field5,
+                                    @NotNull String field6,
+                                    @NotNull String field7,
+                                    @NotNull String field8,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4, field5, field6, field7, field8), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForNames(@NotNull String field1,
+                                    @NotNull String field2,
+                                    @NotNull String field3,
+                                    @NotNull String field4,
+                                    @NotNull String field5,
+                                    @NotNull String field6,
+                                    @NotNull String field7,
+                                    @NotNull String field8,
+                                    @NotNull String field9,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForNames(Arrays.asList(field1, field2, field3, field4, field5, field6, field7, field8, field9),
+                generatorSupplier);
+    }
+
+    /**
+     * @param fieldNames        where generator will be applied to
+     * @param generatorSupplier to apply for field with specified name
+     * @return self
+     */
+    @NotNull
+    public GenRule generateForNames(@NotNull Collection<String> fieldNames,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
         for (String fieldName : fieldNames) {
             final GenRuleField rule = new GenRuleField(generatorSupplier, fieldName);
             this.specifiedFields.add(rule);
@@ -106,14 +203,112 @@ public final class GenRule {
     }
 
     /**
-     * @param generatorSupplier that will be applied to fields by their type
-     * @param fieldType         to register generator for
+     * @param type              where generator will be applied to
+     * @param generatorSupplier to apply for field with specified name
      * @return self
      */
     @NotNull
-    public GenRule registerFieldType(@NotNull Supplier<Generator<?>> generatorSupplier, @NotNull Class<?> fieldType) {
-        final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
-        this.specifiedFields.add(rule);
+    public GenRule generateForTypes(@NotNull Class<?> type,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Class<?> type5,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4, type5), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Class<?> type5,
+                                    @NotNull Class<?> type6,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4, type5, type6), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Class<?> type5,
+                                    @NotNull Class<?> type6,
+                                    @NotNull Class<?> type7,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4, type5, type6, type7), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Class<?> type5,
+                                    @NotNull Class<?> type6,
+                                    @NotNull Class<?> type7,
+                                    @NotNull Class<?> type8,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4, type5, type6, type7, type8), generatorSupplier);
+    }
+
+    @NotNull
+    public GenRule generateForTypes(@NotNull Class<?> type1,
+                                    @NotNull Class<?> type2,
+                                    @NotNull Class<?> type3,
+                                    @NotNull Class<?> type4,
+                                    @NotNull Class<?> type5,
+                                    @NotNull Class<?> type6,
+                                    @NotNull Class<?> type7,
+                                    @NotNull Class<?> type8,
+                                    @NotNull Class<?> type9,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        return generateForTypes(Arrays.asList(type1, type2, type3, type4, type5, type6, type7, type8, type9), generatorSupplier);
+    }
+
+    /**
+     * @param fieldTypes        where generator will be applied to
+     * @param generatorSupplier to apply for field with specified name
+     * @return self
+     */
+    @NotNull
+    public GenRule generateForTypes(@NotNull List<Class<?>> fieldTypes,
+                                    @NotNull Supplier<Generator<?>> generatorSupplier) {
+        for (Class<?> fieldType : fieldTypes) {
+            final GenRuleField rule = new GenRuleField(generatorSupplier, fieldType);
+            this.specifiedFields.add(rule);
+        }
         return this;
     }
 
@@ -132,8 +327,7 @@ public final class GenRule {
                 Collections.unmodifiableSet(specifiedFields));
     }
 
-    @NotNull
-    GenRule merge(@NotNull GenRule rule) {
+    GenRule merge(GenRule rule) {
         if (getTarget().equals(rule.getTarget()) || rule.isGlobal()) {
             this.specifiedFields.addAll(rule.specifiedFields);
             this.excludedFields.addAll(rule.excludedFields);
@@ -172,13 +366,16 @@ public final class GenRule {
         if (!(o instanceof GenRule))
             return false;
         GenRule genRule = (GenRule) o;
-        return Objects.equals(depth, genRule.depth) && Objects.equals(isAuto, genRule.isAuto)
-                && Objects.equals(target, genRule.target) && Objects.equals(excludedFields, genRule.excludedFields)
-                && Objects.equals(specifiedFields, genRule.specifiedFields);
+        return Objects.equals(target, genRule.target);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(depth, isAuto, target, excludedFields, specifiedFields);
+        return Objects.hash(target);
+    }
+
+    @Override
+    public String toString() {
+        return "[type=" + target + ']';
     }
 }

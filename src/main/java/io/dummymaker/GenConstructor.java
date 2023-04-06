@@ -20,6 +20,7 @@ final class GenConstructor {
         this.parameters = parameters;
     }
 
+    @SuppressWarnings("unchecked")
     <T> T instantiate(Object... parameters) {
         try {
             constructor.setAccessible(true);
@@ -35,5 +36,10 @@ final class GenConstructor {
 
     List<GenParameter> parameters() {
         return parameters;
+    }
+
+    @Override
+    public String toString() {
+        return "[type=" + type + ']';
     }
 }

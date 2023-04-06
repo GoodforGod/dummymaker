@@ -95,4 +95,11 @@ final class GenContext {
     GenNode graph() {
         return graph;
     }
+
+    @Override
+    public String toString() {
+        return (graph == null)
+                ? "[depthMax=" + depthMax + ", depthCurrent=" + depthCurrent + ']'
+                : "[depthMax=" + depthMax + ", depthCurrent=" + depthCurrent + ", graph=" + graph.value() + ']';
+    }
 }

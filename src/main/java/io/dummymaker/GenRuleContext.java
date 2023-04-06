@@ -1,9 +1,8 @@
 package io.dummymaker;
 
 import io.dummymaker.generator.Generator;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,8 +25,10 @@ final class GenRuleContext {
         this.isAuto = rule.isAuto().orElse(null);
         this.target = rule.getTarget();
         this.excludedFields = rule.getExcludedFields();
+
+        final Map<Supplier<Generator<?>>, Generator<?>> generatorMap = new IdentityHashMap<>();
         this.specifiedFields = rule.getSpecifiedFields().stream()
-                .map(GenRuleFieldContext::new)
+                .map(ruleField -> new GenRuleFieldContext(ruleField, generatorMap))
                 .collect(Collectors.toSet());
     }
 
@@ -117,5 +118,10 @@ final class GenRuleContext {
     @Override
     public int hashCode() {
         return Objects.hash(depth, isAuto, target, excludedFields, specifiedFields);
+    }
+
+    @Override
+    public String toString() {
+        return "[type=" + target + ']';
     }
 }

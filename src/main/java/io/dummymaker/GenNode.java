@@ -21,32 +21,32 @@ final class GenNode {
         this.isRoot = isRoot;
     }
 
-    public static GenNode ofRoot(GenClass value) {
+    static GenNode ofRoot(GenClass value) {
         return new GenNode(value, null, true);
     }
 
-    public static GenNode of(GenClass value, GenNode parent) {
+    static GenNode of(GenClass value, GenNode parent) {
         return new GenNode(value, parent, false);
     }
 
-    public GenNode add(GenNode child) {
+    GenNode add(GenNode child) {
         this.nodes.add(child);
         return this;
     }
 
-    public GenClass value() {
+    GenClass value() {
         return value;
     }
 
-    public GenNode parent() {
+    GenNode parent() {
         return parent;
     }
 
-    public Set<GenNode> nodes() {
+    Set<GenNode> nodes() {
         return nodes;
     }
 
-    public GenNode root() {
+    GenNode root() {
         return (isRoot)
                 ? this
                 : parent.root();
@@ -70,9 +70,9 @@ final class GenNode {
     @Override
     public String toString() {
         if (parent == null) {
-            return "Root Value: " + value.type();
+            return "[root=" + value.type() + "]";
         } else {
-            return "Value: " + value.type();
+            return "[value=" + value.type() + "]";
         }
     }
 }

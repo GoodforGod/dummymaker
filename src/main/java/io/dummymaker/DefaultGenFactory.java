@@ -53,7 +53,7 @@ final class DefaultGenFactory implements GenFactory {
         this.ignoreErrors = ignoreErrors;
         this.overrideDefaultValues = overrideDefaultValues;
         this.localisation = localisation;
-        this.generatorSupplier = new DefaultGeneratorSupplier(seed);
+        this.generatorSupplier = new GeneratorSupplier(seed);
         this.isAutoByDefault = isAutoByDefault;
         this.depthByDefault = depthByDefault;
     }
@@ -251,29 +251,14 @@ final class DefaultGenFactory implements GenFactory {
                 Object generated;
 
                 if (generator instanceof EmbeddedGenerator) {
-                    if (context.depthCurrent() > context.depthMax() || !isJavaInternal(GenType.ofClass(type))) {
+                    if (context.depthCurrent() > context.depthMax() || isJavaInternal(GenType.ofClass(type))) {
                         generated = null;
                     } else if (type.isInterface()) {
                         final GenType permittedType = DefaultGenType.ofInterface(type).orElse(null);
                         if (permittedType == null) {
                             generated = null;
                         } else {
-                            final Generator<?> permittedGenerator = context.rules().findClass(parentType)
-                                    .flatMap(rule -> rule.find(permittedType))
-                                    .orElseGet(() -> context.generatorSupplier().get(permittedType.raw(), valueName));
-
-                            if (permittedGenerator instanceof EmbeddedGenerator) {
-                                final GenContext checkUnknownContext = GenContext.ofChild(context, permittedType.raw());
-                                if (checkUnknownContext.graph() == null) {
-                                    final GenNode graph = context.graphBuilder().build(permittedType.raw());
-                                    final GenContext childContext = GenContext.ofUnknown(graph, context);
-                                    generated = generateEmbeddedObject(permittedType, childContext);
-                                } else {
-                                    generated = generateEmbeddedObject(permittedType, context);
-                                }
-                            } else {
-                                generated = permittedGenerator.get();
-                            }
+                            return (T) build(permittedType.raw());
                         }
                     } else {
                         final GenType genType = GenType.ofClass(type);
