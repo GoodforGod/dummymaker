@@ -13,7 +13,7 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofClass(DummyRules.class)
-                        .registerFieldNames(() -> () -> value, "code", "name"))
+                        .generateForNames("code", "name", () -> () -> value))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);
@@ -30,9 +30,9 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerFieldNames(() -> () -> "WRONG", "code", "name"))
+                        .generateForNames("code", "name", () -> () -> "WRONG"))
                 .addRule(GenRule.ofClass(DummyRules.class)
-                        .registerFieldNames(() -> () -> value, "code", "name"))
+                        .generateForNames("code", "name", () -> () -> value))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);
@@ -49,7 +49,7 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerFieldNames(() -> () -> value, "code", "name"))
+                        .generateForNames("code", "name", () -> () -> value))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);
@@ -62,9 +62,9 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerFieldNames(() -> () -> value, "code", "name"))
+                        .generateForNames("code", "name", () -> () -> value))
                 .addRule(GenRule.ofClass(DummyRules.class)
-                        .registerFieldNames(() -> () -> 11111, "number"))
+                        .generateForNames("number", () -> () -> 11111))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);
@@ -78,7 +78,7 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofClass(DummyRules.class)
-                        .registerFieldType(() -> () -> value, String.class))
+                        .generateForTypes(String.class, () -> () -> value))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);
@@ -94,7 +94,7 @@ class GenFactoryRulesTests {
         final String value = "CORRECT";
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerFieldType(() -> () -> value, String.class))
+                        .generateForTypes(String.class, () -> () -> value))
                 .build();
 
         final DummyRules dummyRules = factory.build(DummyRules.class);

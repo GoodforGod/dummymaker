@@ -12,7 +12,7 @@ class DummyNamingCaseAppliedTests extends Assertions {
     void allValuesInUpperCase() {
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofClass(DummySimple.class)
-                        .registerFieldNames(NameGenerator::new, "name", "female"))
+                        .generateForNames("name", "female", NameGenerator::new))
                 .applyCase(NamingCases.UPPER_CASE)
                 .build();
 
@@ -32,7 +32,7 @@ class DummyNamingCaseAppliedTests extends Assertions {
     void allValuesInLowerCase() {
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofClass(DummySimple.class)
-                        .registerFieldNames(NameGenerator::new, "name", "female"))
+                        .generateForNames("name", "female", NameGenerator::new))
                 .applyCase(NamingCases.LOWER_CASE)
                 .build();
 

@@ -15,7 +15,7 @@ class DummyCustomTests extends Assertions {
     void allCustomFieldsCorrect() throws InterruptedException {
         final GenFactory factory = GenFactory.builder()
                 .addRule(GenRule.ofGlobal()
-                        .registerFieldType(DummyCustom.QueueGenerator::new, BlockingQueue.class))
+                        .generateForTypes(BlockingQueue.class, DummyCustom.QueueGenerator::new))
                 .build();
 
         final DummyCustom build = factory.build(DummyCustom.class);

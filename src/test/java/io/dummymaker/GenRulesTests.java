@@ -1,13 +1,12 @@
 package io.dummymaker;
 
-import io.dummymaker.export.*;
 import io.dummymaker.generator.Generator;
 import io.dummymaker.generator.simple.number.ByteGenerator;
 import io.dummymaker.testdata.DummyEmbedded;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,21 +17,33 @@ import org.junit.jupiter.api.Test;
 class GenRulesTests extends Assertions {
 
     @Test
-    void test() {
-        class Account {
+    void ruleGeneratorIsInstantiatedOneTimePerRun() {
+        class DummyOneTime {
 
-            public Integer number;
-            public String type;
-            public String name;
+            Short asShort;
+            short asShortPrime;
+            Integer asInt;
+            int asIntPrime;
+            Long asLong;
+            long asLongPrime;
         }
 
-        GenFactory factory = GenFactory.build();
-        List<Account> accounts = factory.build(Account.class, 2);
+        final GenRule rule = GenRule.ofClass(DummyOneTime.class, false)
+                .generateForTypes(Long.class, long.class, Integer.class, int.class, Short.class, short.class, () -> {
+                    final AtomicInteger atomic = new AtomicInteger();
+                    return atomic::incrementAndGet;
+                });
 
-        Exporter exporter = SqlExporter.build();
+        final GenFactory factory = GenFactory.builder().addRule(rule).build();
+        final DummyOneTime dummy = factory.build(DummyOneTime::new);
 
-        String value = exporter.exportAsString(accounts);
-        System.out.println(value);
+        assertNotNull(dummy);
+        assertEquals(1, dummy.asShort.intValue());
+        assertEquals(2, dummy.asShortPrime);
+        assertEquals(3, dummy.asInt);
+        assertEquals(4, dummy.asIntPrime);
+        assertEquals(5, dummy.asLong);
+        assertEquals(6, dummy.asLongPrime);
     }
 
     @Test
@@ -40,7 +51,7 @@ class GenRulesTests extends Assertions {
         final Generator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldNames(() -> generator, "name");
+                .generateForNames("name", () -> generator);
 
         final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
@@ -55,7 +66,7 @@ class GenRulesTests extends Assertions {
         final Generator<String> generator = () -> "BILL";
 
         final GenRule rule = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldType(() -> generator, String.class);
+                .generateForTypes(String.class, () -> generator);
 
         final GenFactory factory = GenFactory.builder().addRule(rule).build();
         final DummyEmbedded dummy = factory.build(DummyEmbedded::new);
@@ -67,34 +78,34 @@ class GenRulesTests extends Assertions {
     }
 
     @Test
-    void genFieldRuleNotEqualsForTypeTargets() {
+    void genFieldRuleEqualsForTypeTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldType(ByteGenerator::new, int.class);
+                .generateForTypes(int.class, ByteGenerator::new);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldType(ByteGenerator::new, byte.class);
+                .generateForTypes(byte.class, ByteGenerator::new);
 
-        assertNotEquals(rule1, rule2);
+        assertEquals(rule1, rule2);
     }
 
     @Test
-    void genFieldRuleNotEqualsForNamedTargets() {
+    void genFieldRuleEqualsForNamedTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldNames(ByteGenerator::new, "a");
+                .generateForNames("a", ByteGenerator::new);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldNames(ByteGenerator::new, "a1");
+                .generateForNames("a1", ByteGenerator::new);
 
-        assertNotEquals(rule1, rule2);
+        assertEquals(rule1, rule2);
     }
 
     @Test
     void genFieldRuleAreEqualsForTypeTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldType(ByteGenerator::new, int.class);
+                .generateForTypes(int.class, ByteGenerator::new);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldType(ByteGenerator::new, int.class);
+                .generateForTypes(int.class, ByteGenerator::new);
 
         assertEquals(rule1, rule2);
     }
@@ -102,10 +113,10 @@ class GenRulesTests extends Assertions {
     @Test
     void genFieldRuleAreEqualsForNamedTargets() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldNames(ByteGenerator::new, "a");
+                .generateForNames("a", ByteGenerator::new);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, false)
-                .registerFieldNames(ByteGenerator::new, "a");
+                .generateForNames("a", ByteGenerator::new);
 
         assertEquals(rule1, rule2);
     }
@@ -113,10 +124,10 @@ class GenRulesTests extends Assertions {
     @Test
     void rulesMergeValid() {
         final GenRule rule1 = GenRule.ofClass(DummyEmbedded.class, true, 2)
-                .registerFieldNames(ByteGenerator::new, "a");
+                .generateForNames("a", ByteGenerator::new);
 
         final GenRule rule2 = GenRule.ofClass(DummyEmbedded.class, true, 2)
-                .registerFieldNames(ByteGenerator::new, "aa");
+                .generateForNames("aa", ByteGenerator::new);
 
         final GenRules rules = GenRules.of(Arrays.asList(rule1, rule2));
         assertNotNull(rules);
