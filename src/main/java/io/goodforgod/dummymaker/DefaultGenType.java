@@ -58,7 +58,7 @@ final class DefaultGenType implements GenType {
             final Class<?>[] permitted = (Class<?>[]) permittedMethod.invoke(interfaceType);
             return Arrays.stream(permitted)
                     .filter(c -> !c.isInterface())
-                    .map(GenType::ofClass)
+                    .map(c -> ((GenType) DefaultGenType.ofClass(c)))
                     .findFirst();
         } catch (Exception e) {
             return Optional.empty();
@@ -79,10 +79,10 @@ final class DefaultGenType implements GenType {
     @Override
     public @NotNull List<GenType> flatten() {
         final List<GenType> flat = new ArrayList<>();
-        flat.add(GenType.ofClass(plainRawType()));
+        flat.add(ofClass(plainRawType()));
 
         generics.stream()
-                .flatMap(type -> type.flatten().stream())
+                .flatMap(t -> t.flatten().stream())
                 .forEach(flat::add);
 
         return flat;
@@ -91,11 +91,6 @@ final class DefaultGenType implements GenType {
     @Override
     public @NotNull Class<?> raw() {
         return value;
-    }
-
-    @Override
-    public @NotNull Type type() {
-        return type;
     }
 
     @Override
@@ -124,7 +119,7 @@ final class DefaultGenType implements GenType {
             return value.getSimpleName();
         } else {
             return generics.stream()
-                    .map(Object::toString)
+                    .map(GenType::toString)
                     .collect(Collectors.joining(", ", value.getSimpleName() + "<", ">"));
         }
     }

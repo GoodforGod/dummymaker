@@ -38,7 +38,7 @@ final class GenGraphBuilder {
      * @return graph of auto depth values
      */
     GenNode build(@NotNull Class<?> target) {
-        final GenType type = GenType.ofClass(target);
+        final GenType type = DefaultGenType.ofClass(target);
         final Optional<GenRuleContext> rule = rules.findClass(target);
         final int depth = rule.flatMap(GenRuleContext::getDepth)
                 .orElseGet(() -> Arrays.stream(target.getDeclaredAnnotations())
@@ -138,7 +138,7 @@ final class GenGraphBuilder {
                         ? depthByDefault
                         : parentPayload.depth());
 
-        final GenType type = GenType.ofClass(raw);
+        final GenType type = DefaultGenType.ofClass(raw);
         final List<GenField> fields = fieldScanner.scan(type);
         final GenConstructor constructor = constructorScanner.scan(type);
         return new GenClass(target, payloadDepth, constructor, fields);

@@ -1,6 +1,5 @@
 package io.goodforgod.dummymaker.export;
 
-import io.goodforgod.dummymaker.GenType;
 import io.goodforgod.dummymaker.annotation.export.GenExportName;
 import io.goodforgod.dummymaker.cases.NamingCase;
 import io.goodforgod.dummymaker.util.CastUtils;
@@ -23,8 +22,8 @@ final class ExportFieldFactory {
 
     private ExportFieldFactory() {}
 
-    static ExportField build(Field field, GenType genType, NamingCase namingCase) {
-        final ExportField.Type type = getType(genType.raw());
+    static ExportField build(Field field, Class<?> genType, NamingCase namingCase) {
+        final ExportField.Type type = getType(genType);
         final String exportName = Arrays.stream(field.getDeclaredAnnotations())
                 .filter(a -> GenExportName.class.equals(a.annotationType()))
                 .map(a -> ((GenExportName) a).value())

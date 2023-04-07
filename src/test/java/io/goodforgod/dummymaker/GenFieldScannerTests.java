@@ -18,7 +18,7 @@ class GenFieldScannerTests extends Assertions {
     @Test
     void verifyThatFieldsFound() {
         final GenFieldScanner scanner = new GenFieldScanner(new GeneratorSupplier(1), GenRules.EMPTY.context(), false);
-        final List<GenField> fields = scanner.scan(GenType.ofClass(DummyCollection.class));
+        final List<GenField> fields = scanner.scan(DefaultGenType.ofClass(DummyCollection.class));
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -29,7 +29,7 @@ class GenFieldScannerTests extends Assertions {
     @Test
     void verifyScannedFields() {
         final GenFieldScanner scanner = new GenFieldScanner(new GeneratorSupplier(1), GenRules.EMPTY.context(), false);
-        final List<GenField> fields = scanner.scan(GenType.ofClass(Dummy.class));
+        final List<GenField> fields = scanner.scan(DefaultGenType.ofClass(Dummy.class));
 
         // Check for correct fields number in map
         assertNotNull(fields);
@@ -61,7 +61,7 @@ class GenFieldScannerTests extends Assertions {
     @Test
     void noFieldsScanned() {
         final GenFieldScanner scanner = new GenFieldScanner(new GeneratorSupplier(1), GenRules.EMPTY.context(), false);
-        final List<GenField> fields = scanner.scan(GenType.ofClass(DummyNoFillFields.class));
+        final List<GenField> fields = scanner.scan(DefaultGenType.ofClass(DummyNoFillFields.class));
 
         // Check for correct fields number in map
         assertNotNull(fields);

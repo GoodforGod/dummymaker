@@ -60,7 +60,7 @@ final class ExportScanner {
     @NotNull
     public List<ExportField> scan(Class<?> target) {
         return getExportFields(target).stream()
-                .map(scanField -> ExportFieldFactory.build(scanField.value(), scanField.type(), namingCase))
+                .map(scanField -> ExportFieldFactory.build(scanField.value(), scanField.type().raw(), namingCase))
                 .collect(Collectors.toList());
     }
 

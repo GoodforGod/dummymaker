@@ -251,7 +251,7 @@ final class DefaultGenFactory implements GenFactory {
                 Object generated;
 
                 if (generator instanceof EmbeddedGenerator) {
-                    if (context.depthCurrent() > context.depthMax() || isJavaInternal(GenType.ofClass(type))) {
+                    if (context.depthCurrent() > context.depthMax() || isJavaInternal(DefaultGenType.ofClass(type))) {
                         generated = null;
                     } else if (type.isInterface()) {
                         final GenType permittedType = DefaultGenType.ofInterface(type).orElse(null);
@@ -261,7 +261,7 @@ final class DefaultGenFactory implements GenFactory {
                             return (T) build(permittedType.raw());
                         }
                     } else {
-                        final GenType genType = GenType.ofClass(type);
+                        final GenType genType = DefaultGenType.ofClass(type);
                         final GenContext checkUnknownContext = GenContext.ofChild(context, genType.raw());
                         if (checkUnknownContext.graph() == null) {
                             final GenNode graph = context.graphBuilder().build(genType.raw());
@@ -287,7 +287,7 @@ final class DefaultGenFactory implements GenFactory {
 
                         @Override
                         public @NotNull GenType parameterType() {
-                            return GenType.ofClass(type);
+                            return DefaultGenType.ofClass(type);
                         }
 
                         @Override

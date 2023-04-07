@@ -25,21 +25,10 @@ public interface GenType {
     Class<?> raw();
 
     /**
-     * @return Type
-     */
-    @NotNull
-    Type type();
-
-    /**
      * @return type generics
      */
     @NotNull
     List<GenType> generics();
-
-    @NotNull
-    static GenType ofClass(@NotNull Class<?> type) {
-        return DefaultGenType.ofClass(type);
-    }
 
     @NotNull
     static GenType ofType(@NotNull Type type) {

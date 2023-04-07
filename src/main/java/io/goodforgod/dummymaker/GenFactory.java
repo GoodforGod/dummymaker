@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 /**
- * Factory that generates data objects Core that handles all top level logic
+ * Factory that generates random classes
  *
  * @author Anton Kurako (GoodforGod)
  * @since 21.07.2019
@@ -19,11 +19,11 @@ import org.jetbrains.annotations.Range;
 public interface GenFactory {
 
     /**
-     * Instantiates class instance and populate its fields
+     * Instantiates class instance and generate random field values
      *
-     * @param target class to build and fill with data
-     * @param <T>    object type
-     * @return generates class filled with data
+     * @param target class to instantiate
+     * @param <T>    class type to instantiate
+     * @return class with random field values
      */
     <T> T build(@NotNull Class<T> target);
 
@@ -33,32 +33,42 @@ public interface GenFactory {
     <T> T build(@NotNull Supplier<T> supplier);
 
     /**
-     * Instantiates class instance and populate its fields
+     * Instantiates classes instance and generate random field values
      *
-     * @param target class to build and fill with data
-     * @param amount of objects to produce
-     * @param <T>    object type
-     * @return generates class filled with data
+     * @param target class to instantiate
+     * @param amount of instances
+     * @param <T>    class type to instantiate
+     * @return list of classes with random field values
      */
     <T> @NotNull List<T> build(@NotNull Class<T> target, @Range(from = 0, to = Integer.MAX_VALUE) int amount);
 
     /**
-     * {@link #build(Class, int)}
+     * Gen instance from supplier and generate random field values
+     *
+     * @param supplier to use for creation class instances
+     * @param amount   of instances
+     * @param <T>      class type to instantiate
+     * @return list of classes with random field values
      */
     <T> @NotNull List<T> build(@NotNull Supplier<T> supplier, @Range(from = 0, to = Integer.MAX_VALUE) int amount);
 
     /**
      * Instantiates class instance and populate its fields
      *
-     * @param target class to build and fill with data
-     * @param amount of objects to produce
-     * @param <T>    object type
-     * @return generates class filled with data
+     * @param target class to instantiate
+     * @param amount of instances
+     * @param <T>    class type to instantiate
+     * @return stream of classes with random field values
      */
     <T> @NotNull Stream<T> stream(@NotNull Class<T> target, @Range(from = 0, to = Long.MAX_VALUE) long amount);
 
     /**
-     * {@link #stream(Class, long)}
+     * Gen instance from supplier and generate random field values
+     *
+     * @param supplier to use for creation class instances
+     * @param amount   of instances
+     * @param <T>      class type to instantiate
+     * @return stream of classes with random field values
      */
     <T> @NotNull Stream<T> stream(@NotNull Supplier<T> supplier, @Range(from = 0, to = Long.MAX_VALUE) long amount);
 
