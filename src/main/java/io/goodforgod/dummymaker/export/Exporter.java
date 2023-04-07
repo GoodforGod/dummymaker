@@ -15,28 +15,30 @@ import org.jetbrains.annotations.Nullable;
 public interface Exporter {
 
     /**
-     * Allow exporting single object
+     * Exporting single object to file
      *
      * @param value object to export
      */
     void exportAsFile(@Nullable Object value);
 
     /**
-     * Allow exporting collection of objects
+     * Exporting collection of objects to file
      *
      * @param collection objects to export
      */
     void exportAsFile(@NotNull Collection<?> collection);
 
     /**
-     * Allow exporting steam of objects
+     * Exporting steam of objects to file
      *
      * @param stream of objects to export
+     * @param type   value type class
+     * @param <T>    value type
      */
     <T> void streamToFile(@NotNull Stream<T> stream, Class<T> type);
 
     /**
-     * Allow exporting single object as a single string value
+     * Exporting single object as string value
      *
      * @param value object to export
      * @return object string representation
@@ -45,7 +47,7 @@ public interface Exporter {
     String exportAsString(@Nullable Object value);
 
     /**
-     * Allow exporting collection of objects as single a string value
+     * Exporting collection of objects as string value
      *
      * @param collection objects to export
      * @return objects string representation
@@ -54,9 +56,11 @@ public interface Exporter {
     String exportAsString(@NotNull Collection<?> collection);
 
     /**
-     * Allow exporting steam of objects as single a string value
+     * Exporting steam of objects as string value
      *
      * @param stream of objects to export
+     * @param type   value type class
+     * @param <T>    value type
      * @return objects string representation
      */
     @NotNull

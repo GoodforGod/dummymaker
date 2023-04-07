@@ -11,6 +11,8 @@ DummyMaker is a library that generates random Java Classes / Records / Sealed In
 
 Library can even do simple export in [*CSV/JSON/XML/SQL*](#export) formats.
 
+Library have no dependencies.
+
 ## Dependency :rocket:
 
 **Gradle**

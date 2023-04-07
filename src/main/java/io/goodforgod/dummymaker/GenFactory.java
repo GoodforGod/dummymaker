@@ -28,7 +28,11 @@ public interface GenFactory {
     <T> T build(@NotNull Class<T> target);
 
     /**
-     * {@link #build(Class)}
+     * Generate instance from supplier and generate random field values
+     *
+     * @param supplier to use for creation class instances
+     * @param <T>      class type to instantiate
+     * @return class with random field values
      */
     <T> T build(@NotNull Supplier<T> supplier);
 
@@ -43,7 +47,7 @@ public interface GenFactory {
     <T> @NotNull List<T> build(@NotNull Class<T> target, @Range(from = 0, to = Integer.MAX_VALUE) int amount);
 
     /**
-     * Gen instance from supplier and generate random field values
+     * Generate instance from supplier and generate random field values
      *
      * @param supplier to use for creation class instances
      * @param amount   of instances
@@ -63,7 +67,7 @@ public interface GenFactory {
     <T> @NotNull Stream<T> stream(@NotNull Class<T> target, @Range(from = 0, to = Long.MAX_VALUE) long amount);
 
     /**
-     * Gen instance from supplier and generate random field values
+     * Generate stream of instances from supplier and generate random field values for each
      *
      * @param supplier to use for creation class instances
      * @param amount   of instances

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Bundle {
 
     /**
+     * @param localisation to use for random value generation
      * @return random bundle value
      */
     @NotNull
