@@ -65,10 +65,11 @@ public final class ListParameterizedGenerator implements ParameterizedGenerator<
                 : fixed;
 
         List<Object> collector = Collections.emptyList();
+        final Class<?> paramTypeRaw = parameters.parameterType().generics().get(0).raw();
         for (int i = 0; i < size; i++) {
             final Object element = (generator != null)
                     ? generator.get()
-                    : parameters.genericBuilder().build(parameters.parameterType().generics().get(0).raw());
+                    : parameters.genericBuilder().build(paramTypeRaw);
 
             if (element != null) {
                 if (collector.isEmpty()) {

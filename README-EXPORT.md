@@ -1,3 +1,4 @@
+Documentation is relative to DummyMaker versions 1+ and 3+.
 
 ## Content
 - [Exporters](#exporters)

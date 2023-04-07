@@ -28,27 +28,26 @@ implementation "com.github.goodforgod:dummymaker:4.0.0"
 ```
 
 ## Content
-- [GenFactory Examples](#factory-example)
-  - [Methods](#factory-methods)
-  - [Configuration](#gen-auto-annotation)
-  - [GenRule](#gen-auto-annotation)
-    - [Class](#auto-rule)
-    - [Global](#global-rule)
-- [GenAnnotation Examples](#annotation-examples)
-  - [Standard](#array-annotations)
-  - [Special](#special-annotations)
+- [GenFactory Examples](#factory-examples)
+  - [Configuration](#configuration)
+  - [GenRule](#genrules)
+    - [Class](#class)
+    - [Global](#global)
+- [GenAnnotation Examples](#genannotation-examples)
+  - [Standard](#standard)
+  - [Special](#special)
 - [Export](#export)
-  - [JSON](#export)
-  - [CSV](#export)
-  - [SQL](#export)
-  - [XML](#export)
-  - [Annotations](#export)
-  - [Writer](#export)
-- [Customization Examples](#customization)
-  - [Simple Generator](#igenerator)
-  - [Parameterized Generator](#icomplexgenerator)
-  - [Custom Annotation](#gen-custom-annotation)
-  - [Custom Annotation Factory](#gen-complex-annotation)
+  - [Annotations](#annotations)
+  - [JSON](#json)
+  - [CSV](#csv)
+  - [SQL](#sql)
+  - [XML](#xml)
+  - [Writer](#writer)
+- [Customization Examples](#customization-examples)
+  - [Simple Generator](#simple-generator)
+  - [Parameterized Generator](#parameterized-generator)
+  - [Custom Annotation](#custom-annotation)
+  - [Custom Annotation Factory](#custom-annotation-factory)
 - [Previous Versions](#previous-versions)
 
 ## Factory Examples
@@ -148,7 +147,7 @@ Example how to add specific *Generator* for fields by their names:
 ```java
 GenFactory factory = GenFactory.builder()
         .addRule(GenRule.ofClass(Account.class)
-                .registerFieldNames(() -> new NameGenerator(), "type", "name"))
+                .generateForNames("type", "name", () -> new NameGenerator()))
         .build();
 
 Account account = factory.build(Account.class);
@@ -162,7 +161,7 @@ Example how to add specific *Generator* for all types:
 ```java
 GenFactory factory = GenFactory.builder()
         .addRule(GenRule.ofGlobal()
-                .registerFieldType(() -> new NameGenerator(), String.class))
+                .generateForTypes(String.class, () -> new NameGenerator()))
         .build();
 
 Account account = factory.build(Account.class);
@@ -412,15 +411,15 @@ public class IntegerMyGenerator implements Generator<Integer> {
 *Generator* sometimes require more context to use for random value generation, than it is possible to implement *ParameterizedGenerator*.
 
 ```java
-public final class MyParameterizedGenerator implements ParameterizedGenerator<Integer> {
+public final class MyParameterizedGenerator implements ParameterizedGenerator<String> {
 
     @Override
-    public Object get(@NotNull GenParameters parameters) {
-        return parameters.namingCase.apply("myValue");
+    public String get(@NotNull GenParameters parameters) {
+        return parameters.namingCase().apply("myValue");
     }
 
     @Override
-    public Object get() {
+    public String get() {
         return "myValue";
     }
 }
@@ -442,502 +441,37 @@ class Account {
 
 ### Custom Annotation Factory
 
+*AnnotationGeneratorFactory* is used when you need to instantiate generate with arguments from annotation.
 
+*AnnotationGeneratorFactory* must have zero argument constructor.
 
+*@GenCustomFactory* is used to indicate which factory for which annotation to use.
 
-
-
-
+Given annotation:
 ```java
-public class IntegerSmallGenerator implements IGenerator<Integer> {
-
-    private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
-
-    @Override
-    public Pattern pattern() {
-        return pattern;
-    }
-
-    @Override
-    public Integer generate() {
-        return ThreadLocalRandom.current().nextInt(1, 101);
-    }
-}
-```
-
-### IComplexGenerator
-
-Is used to build complex values for fields,
-when simple *IGenerator* implementation is insufficient,
-*Gen* annotation require special parameters or when you need to access field.
-
-```java
-public class CustomComplexGenerator implements IComplexGenerator {
-
-    @Override
-    public Object generate(Annotation annotation, Field field, IGenStorage storage, int depth) {
-        final int from = GenInteger.class.equals(annotation.annotationType()) 
-                ? ((GenInteger) annotation).from() 
-                : 0;
-        
-        final int to = GenInteger.class.equals(annotation.annotationType()) 
-                ? ((GenInteger) annotation).to() 
-                : Integer.MAX_VALUE;
-
-        return ThreadLocalRandom.current().nextInt(from, to);
-    }
-
-    @Override
-    public Object generate() {
-        return new IntegerGenerator().generate();
-    }
-}
-```
-
-### Gen Custom Annotation
-
-For custom *IGenerator*s or *IComplexGenerator*s that don't require special annotation
-fields just use **@GenCustom** annotation that is provided by library to mark fields with your
-custom generators.
-
-```java
-public class User {
-
-    @GenCustom(CustomComplexGenerator.class)
-    private String number;
-}
-```
-
-
-### Gen Complex Annotation
-
-Is required when you need properties for your *IComplexGenerator*.
-
-```java
-@ComplexGen(CustomComplexGenerator.class)
+@GenCustomFactory(CustomIntegerAnnotationGeneratorFactory.class)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface GenInteger {
+public @interface GenIntCustom {
 
-    int from() default Integer.MIN_VALUE;
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
+    int from() default 0;
 
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
     int to() default Integer.MAX_VALUE;
 }
 ```
 
-
-
-
-
-
-
-
-
-## Factory example Old
-
-Example how to produce *1001* Users in no time.
-
-All user data is automatically generated and proper generators 
-are selected due to *@GenAuto* annotation.
-
-Class that is instantiated by factory via *build* method **must** 
-have zero argument constructor (*Can be private*).
-
+Respected *AnnotationGeneratorFactory* should look like:
 ```java
-@GenAuto
-public class User {
- 
-    /**
-     * All fields will have unique data after being processed by factory
-     */
-    private int number;
-    private String name;
-    private String surname;
-    private List<User> relatives;
-}
-
-public static List<User> getUsers() {
-    final GenFactory factory = GenFactory.build();
-
-    User user = factory.build(User.class);
-
-    // All users have unique data in their fields
-    List<User> users = factory.build(User.class, 1000);
-    
-    return users;
-}
-```
-
-### Factory Methods
-
-Factory not only instantiate classes but also provides other
-contracts to manipulate with objects like using supplier.
-
-```java
-final GenFactory factory = GenFactory.build();
-
-Set<User> users = factory.stream(() -> new User(), 1)
-                            .collect(Collectors.toSet());
-
-User user = new User();
-User filled = factory.fill(user);
-```
-
-There are more other contracts available just check *GenFactory*.
-
-Also, factory can export huge amount of data in one attempt when data cannot be proceeded inmemory via *export* contract.
-
-In such case export that is provided *should* append file with each export execution. 
-Default *IWriter* doesn't do that by default, so such option should be activated.
-
-```java
-final GenFactory factory = GenFactory.build();
-final JsonExporter exporter = new JsonExporter(fileName -> new FileWriter(fileName, false)); // do not delete file before write
-
-factory.export(User.class, 100_000_000_000L, exporter);
-```
-
-### Gen Auto Annotation
-
-*@GenAuto* annotation provides *depth* field that is required for embedded
-fields such as *relatives* in this example.
-
-For such class, each *User* will have field *relatives* filled with data
-up to level *3* in depth.
-Because each User will have other users as its data and such data can be represented
-as a tree. So leaf that has its depth of *3* from root will be the last who have
-field *relatives* filled with data.
-
-Maximum depth allowed is *20* (Check @GenAuto.MAX parameter).
-
-```java
-@GenAuto(depth = 3)
-public class User {
-
-    private int number;
-    private String name;
-    private String surname;
-    private List<User> relatives;
-}
-```
-
-## Factory configuration
-
-In case you have no intention or opportunity to annotate class 
-even with *@GenAuto* annotation, you can configure all generators
-and fields you want to fill or ignore with factory *GenRules* configuration.
-
-### Manual Rule
-
-In case you want to fill only specific field to be filled with data
-you can configure such behavior via *GenRule* for specific class.
-
-```java
-GenRule rule = GenRule.of(User.class)
-                .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class);
-
-GenFactory factory = new GenFactory(rule);
-User user = factory.build(User.class);
-```
-
-In this case only *name* and *number* fields will be filled with data, 
-as they are the only one specified per *GenRule* configuration.
-
-### Auto Rule
-
-In case you want factory automatically fill fields based on their types
-and names, you can setup *auto* (same as *GenAuto* annotation).
-
-Second argument specifies depth of complex objects generation, [check this section for more info](#gen-auto-annotation).
-
-```java
-GenRule rule = GenRule.auto(User.class, 2)
-                .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class);
-
-GenFactory factory = new GenFactory(rule);
-User user = factory.build(User.class);
-```
-
-In this case fields *name* and *number* will be filled as previously but
-also all other fields will be automatically filled.
-
-```java
-GenRule rule = GenRule.auto(User.class, 2);
-
-GenFactory factory = new GenFactory(rule);
-User user = factory.build(User.class);
-```
-
-This will have same affect as previous , due to fields *name* and *number*
-been automatically filled.
-
-### Global Rule
-
-In case you have a lot of common fields with same values in different classes
-you can setup *global*  for all classes that will be filled.
-
-```java
-GenRule rule = GenRule.global(2)
-                .add(NameGenerator.class, "name")
-                .add(ShortGenerator.class, int.class);
-
-GenFactory factory = new GenFactory(rule);
-User user = factory.build(User.class);
-```
-
-In this case all fields with name *name* in all classes will be
-filled using *NameGenerator* and same for *int* fields with *ShortGenerator*.
-
-### Lambda Rule
-
-You can add anonymous generator or lambda generator as run for your *GenRules* configuration.
-
-```java
-final IGenerator<String> generator = () -> ThreadLocalRandom.current().nextBoolean()
-        ? "Bob"
-        : "Bill";
-
-GenRule rule = GenRule.auto(User.class, 1)
-                .add(generator, "name");
-
-GenFactory factory = new GenFactory(rule);
-User user = factory.build(User.class);
-```
-
-## Annotation Examples
-
-There are a lot of generators available such as *IntegerGenerator, LongGenerator, CityGenerator, etc.*
-
-All generators can be found in package *io.dummymaker.generator*.
-
-As well as all annotations such as *GenInteger, GenLong, GenCity, etc.* can be found in package *io.dummymaker.annotation.simple*.
-
-### Array Annotations
-
-Responsible for filling array data, can be applied as annotation or
-[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
-
-
-```java
-public class User {
-
-    @GenArray
-    private int[] numbers;
-    
-    @GenArray
-    private int[][] numberArrays;
-}
-```
-
-
-### Collection Annotations
-
-Responsible for filling collection data, can be applied as annotation or
-[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
-
-
-```java
-public class User {
-
-    @GenList
-    private List<Integer> numberList;
-    
-    @GenSet
-    private Set<Integer> numberSet;
-    
-    @GenMap
-    private Map<Integer, String> numberMap;
-}
-```
-
-
-### Time Annotation
-
-Responsible for filling time data, can be applied as annotation or
-[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
-
-**GenTime** annotation is used to create time/dateTime/timestamps for field.
-Automatically identify field time *type* and generate value for it. 
-
-Supported time fields types:
-* *LocalDate*
-* *LocalTime*
-* *LocalDateTime*
-* *Date (java.util.Date)*
-* *Timestamp (java.sql.Timestamp)*
-
-```java
-public class User {
-
-    @GenTime
-    private Timestamp timestamp;
-    
-    @GenTime
-    private LocalDateTime dateTime;
-}
-```
-
-
-#### Date Time Formatter
-
-You cas specify formatter to export dates \ times.
-
-```java
-public class User {
-
-    @GenTime(formatter = "HH:mm")
-    private LocalTime localTime;
-    
-    @GenTime(formatter = "yyyy-MM HH:mm")
-    private LocalDateTime dateTime;
-}
-```
-
-#### Date Time As Unix Time
-
-You can export dates \ times as unix time format.
-
-```java
-public class User {
-
-    @GenTime(exportAsUnixTime = true)
-    private Timestamp timestamp;
-    
-    @GenTime(exportAsUnixTime = true)
-    private LocalDateTime dateTime;
-}
-```
-
-### Embedded Annotation
-
-Responsible for filling complex data, can be applied as annotation or
-[*GenRule*](#manual-rule). Will be used automatically via [*@GenAuto*](#gen-auto-annotation) or auto [*GenRule*](#auto-rule).
-
-```java
-public class User {
-
-    @GenEmbedded
-    private User parent;
-}
-```
-
-### Special Annotations
-
-* ***GenExportForce*** allow to *force* export object field, even if it is not generated by *Gen*Annotation.
-
-* ***GenExportIgnore*** allow to *ignore* object's field during export.
-
-* ***GenExportRename*** allow to rename Dummy export field name or Class Name (Annotate constructor to rename class export name).
-
-* ***GenIgnore*** field will not be filled with value when generated.
-
-* ***GenEnum*** generates Enum field value.
-
-* ***GenSequence*** annotation with option (*from*) used to numerate Dummies fields as sequence (Works on *Integer/Long/String* field types).
-
-* ***GenCustom*** used to mark [field with custom generators](#gen-custom-annotation).
-
-## Export
-
-Information about different exporters can be [found here](/README-EXPORT.md).
-
-## Customization
-
-You can extend basic functionality with your own annotations and generators. All infrastructure will support custom generators, annotations, generate factories with no doubt.
-
-You need to:
-* Create generator via *IGenerator* or *IComplexGenerator* interface.
-* Annotated class field with **GenCustom** (or your annotation) with your generator.
-* *Magic*.
-* Done.
-
-### IGenerator
-
-Simple generator that produce specific value.
-
-Generator can have pattern to register it for *@GenAuto* discovery.
-
-```java
-public class IntegerSmallGenerator implements IGenerator<Integer> {
-
-    private final Pattern pattern = Pattern.compile("age|grade|group", CASE_INSENSITIVE);
+public final class IntegerAnnotationGeneratorFactory implements CustomIntegerAnnotationGeneratorFactory<GenIntCustom> {
 
     @Override
-    public Pattern pattern() {
-        return pattern;
-    }
-
-    @Override
-    public Integer generate() {
-        return ThreadLocalRandom.current().nextInt(1, 101);
+    public @NotNull Generator<Integer> get(GenIntCustom annotation) {
+        return new IntegerGenerator(annotation.from(), annotation.to());
     }
 }
 ```
-
-### IComplexGenerator
-
-Is used to build complex values for fields, 
-when simple *IGenerator* implementation is insufficient,
-*Gen* annotation require special parameters or when you need to access field. 
-
-```java
-public class CustomComplexGenerator implements IComplexGenerator {
-
-    @Override
-    public Object generate(Annotation annotation, Field field, IGenStorage storage, int depth) {
-        final int from = GenInteger.class.equals(annotation.annotationType()) 
-                ? ((GenInteger) annotation).from() 
-                : 0;
-        
-        final int to = GenInteger.class.equals(annotation.annotationType()) 
-                ? ((GenInteger) annotation).to() 
-                : Integer.MAX_VALUE;
-
-        return ThreadLocalRandom.current().nextInt(from, to);
-    }
-
-    @Override
-    public Object generate() {
-        return new IntegerGenerator().generate();
-    }
-}
-```
-
-### Gen Custom Annotation
-
-For custom *IGenerator*s or *IComplexGenerator*s that don't require special annotation
-fields just use **@GenCustom** annotation that is provided by library to mark fields with your
-custom generators.
-
-```java
-public class User {
-
-    @GenCustom(CustomComplexGenerator.class)
-    private String number;
-}
-```
-
-
-### Gen Complex Annotation
-
-Is required when you need properties for your *IComplexGenerator*.
-
-```java
-@ComplexGen(CustomComplexGenerator.class)
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface GenInteger {
-
-    int from() default Integer.MIN_VALUE;
-
-    int to() default Integer.MAX_VALUE;
-}
-```
-
-In case you want custom annotation for simple generator you can do it as well, 
-just use *@PrimeGen* instead of *@ComplexGen* to mark your annotation.
 
 ## Previous Versions
 

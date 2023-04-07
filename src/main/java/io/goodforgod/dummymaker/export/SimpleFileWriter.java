@@ -57,7 +57,7 @@ public final class SimpleFileWriter implements io.goodforgod.dummymaker.export.W
     }
 
     @Override
-    public void write(final String value) {
+    public void write(String value) {
         if (StringUtils.isEmpty(value)) {
             return;
         }
