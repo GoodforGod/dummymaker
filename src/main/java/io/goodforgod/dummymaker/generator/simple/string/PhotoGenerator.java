@@ -4,6 +4,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.goodforgod.dummymaker.generator.Generator;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates photo as base64
@@ -23,7 +24,9 @@ public final class PhotoGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

@@ -35,12 +35,10 @@ public final class MerchantGenerator implements ParameterizedGenerator<CharSeque
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -20;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(20)
+                .build();
     }
 }

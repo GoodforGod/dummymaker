@@ -39,7 +39,9 @@ public final class ProductGenerator implements ParameterizedGenerator<CharSequen
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

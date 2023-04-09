@@ -37,7 +37,9 @@ public final class RoleGenerator implements ParameterizedGenerator<CharSequence>
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

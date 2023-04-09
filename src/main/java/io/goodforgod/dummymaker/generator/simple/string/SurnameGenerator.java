@@ -37,12 +37,10 @@ public final class SurnameGenerator implements ParameterizedGenerator<CharSequen
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -10;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(60)
+                .build();
     }
 }

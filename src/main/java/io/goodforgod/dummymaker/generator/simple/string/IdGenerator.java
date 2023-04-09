@@ -21,12 +21,10 @@ public final class IdGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -100;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(100)
+                .build();
     }
 }

@@ -6,8 +6,6 @@ import io.goodforgod.dummymaker.generator.simple.number.FloatGenerator;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Custom annotation dummy tester
@@ -40,7 +38,7 @@ public class DummyCustom {
         private final FloatGenerator generator = new FloatGenerator(0, 1);
 
         @Override
-        public @Nullable Queue get(@NotNull GenParameters parameters) {
+        public Queue get(GenParameters parameters) {
             return get();
         }
 

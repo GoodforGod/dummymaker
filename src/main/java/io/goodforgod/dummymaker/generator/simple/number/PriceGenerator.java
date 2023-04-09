@@ -6,6 +6,7 @@ import io.goodforgod.dummymaker.generator.Generator;
 import io.goodforgod.dummymaker.util.RandomUtils;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -25,12 +26,10 @@ public final class PriceGenerator implements Generator<BigDecimal> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -40;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(40)
+                .build();
     }
 }

@@ -46,12 +46,10 @@ public final class FullnameGenerator implements ParameterizedGenerator<CharSeque
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -60;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(60)
+                .build();
     }
 }

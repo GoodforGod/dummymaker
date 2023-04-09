@@ -58,12 +58,10 @@ public final class PhoneGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -65;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(65)
+                .build();
     }
 }

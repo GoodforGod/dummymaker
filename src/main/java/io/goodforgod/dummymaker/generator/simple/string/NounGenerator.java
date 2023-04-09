@@ -39,12 +39,10 @@ public final class NounGenerator implements ParameterizedGenerator<CharSequence>
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -10;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(10)
+                .build();
     }
 }

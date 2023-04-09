@@ -23,12 +23,10 @@ public final class DoubleSmallGenerator implements Generator<Double> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -40;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(40)
+                .build();
     }
 }

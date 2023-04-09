@@ -24,7 +24,9 @@ public final class IPv4Generator implements Generator<CharSequence> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

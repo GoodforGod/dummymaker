@@ -31,8 +31,10 @@ public final class UnixTimeGenerator implements Generator<Long> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 
     @Override

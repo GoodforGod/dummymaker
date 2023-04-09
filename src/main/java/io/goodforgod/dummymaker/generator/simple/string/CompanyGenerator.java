@@ -37,12 +37,10 @@ public final class CompanyGenerator implements ParameterizedGenerator<CharSequen
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -5;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(5)
+                .build();
     }
 }

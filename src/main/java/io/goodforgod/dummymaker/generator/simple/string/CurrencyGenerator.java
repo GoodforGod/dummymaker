@@ -34,12 +34,10 @@ public final class CurrencyGenerator implements ParameterizedGenerator<CharSeque
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -30;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(30)
+                .build();
     }
 }

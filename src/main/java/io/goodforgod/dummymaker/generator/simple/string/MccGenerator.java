@@ -7,6 +7,7 @@ import io.goodforgod.dummymaker.bundle.MerchantBundle;
 import io.goodforgod.dummymaker.generator.Generator;
 import io.goodforgod.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bank MCC (Merchant Category Code) generator
@@ -25,7 +26,9 @@ public final class MccGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

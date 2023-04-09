@@ -45,7 +45,9 @@ public final class TypeGenerator implements ParameterizedGenerator<CharSequence>
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

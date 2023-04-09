@@ -46,8 +46,8 @@ final class GeneratorSupplier {
                 new DescriptionGenerator(), new DistrictGenerator(), new DocumentGenerator(), new EmailGenerator(),
                 new EthAddressGenerator(), new EthTxHashGenerator(), new ExtensionGenerator(), new FileGenerator(),
                 new FormatGenerator(), new FrequencyGenerator(), new FullnameGenerator(), new GenderGenerator(),
-                new HexDataGenerator(), new HexNumberGenerator(), new HouseGenerator(), new IdBigGenerator(), new IdGenerator(),
-                new JobGenerator(), new LevelGenerator(), new LoginGenerator(),
+                new HexDataGenerator(), new HexNumberGenerator(), new HouseGenerator(), new IdBigGenerator(),
+                new IdGenerator(), new JobGenerator(), new LevelGenerator(), new LoginGenerator(),
                 new io.goodforgod.dummymaker.generator.simple.number.MccGenerator(), new MerchantGenerator(),
                 new MiddleNameGenerator(), new NameGenerator(), new NounGenerator(), new PasswordGenerator(),
                 new PhoneGenerator(false), new PhotoGenerator(), new ProductGenerator(), new RoleGenerator(),
@@ -81,6 +81,8 @@ final class GeneratorSupplier {
         TYPE_TO_GENERATORS.put(float.class, TYPE_TO_GENERATORS.get(Float.class));
         TYPE_TO_GENERATORS.put(double.class, TYPE_TO_GENERATORS.get(Double.class));
 
+        TYPE_TO_GENERATORS.put(Calendar.class, Collections.singletonList(new CalendarGenerator()));
+        TYPE_TO_GENERATORS.put(Period.class, Collections.singletonList(new PeriodGenerator()));
         TYPE_TO_GENERATORS.put(Duration.class, Collections.singletonList(new DurationGenerator()));
         TYPE_TO_GENERATORS.put(Time.class, Collections.singletonList(new TimeSqlGenerator()));
         TYPE_TO_GENERATORS.put(Timestamp.class, Collections.singletonList(new TimestampGenerator()));
@@ -174,8 +176,8 @@ final class GeneratorSupplier {
 
         return TYPE_TO_GENERATORS.values().stream()
                 .flatMap(Collection::stream)
-                .filter(g -> g.pattern() != null && g.pattern().matcher(fieldName).find())
-                .sorted(Generator::compareTo)
+                .filter(g -> g.hints().pattern() != null && g.hints().pattern().matcher(fieldName).find())
+                .sorted((g1, g2) -> Integer.compare(g2.hints().priority(), g1.hints().priority())) // DESC
                 .filter(g -> CastUtils.castObject(g.get(), type) != null)
                 .findFirst()
                 .orElseGet(() -> getRandomGenerator(type, fieldName));

@@ -35,12 +35,10 @@ public final class LocalDateGenerator implements Generator<LocalDate> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -60;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(50)
+                .build();
     }
 }

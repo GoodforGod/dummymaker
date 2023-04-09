@@ -33,7 +33,9 @@ public final class EmailGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

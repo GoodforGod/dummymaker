@@ -7,6 +7,7 @@ import io.goodforgod.dummymaker.bundle.ExtensionBundle;
 import io.goodforgod.dummymaker.generator.Generator;
 import io.goodforgod.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Generates files extensions
@@ -26,7 +27,9 @@ public final class ExtensionGenerator implements Generator<CharSequence> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

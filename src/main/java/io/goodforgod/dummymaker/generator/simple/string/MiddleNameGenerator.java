@@ -36,12 +36,10 @@ public final class MiddleNameGenerator implements ParameterizedGenerator<CharSeq
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -60;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(60)
+                .build();
     }
 }

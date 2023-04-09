@@ -7,6 +7,7 @@ import io.goodforgod.dummymaker.bundle.MccBundle;
 import io.goodforgod.dummymaker.generator.Generator;
 import io.goodforgod.dummymaker.generator.Localisation;
 import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Anton Kurako (GoodforGod)
@@ -23,12 +24,10 @@ public final class MccGenerator implements Generator<Integer> {
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -40;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(40)
+                .build();
     }
 }

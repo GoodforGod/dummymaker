@@ -36,12 +36,10 @@ public final class FileGenerator implements ParameterizedGenerator<CharSequence>
     }
 
     @Override
-    public Pattern pattern() {
-        return PATTERN;
-    }
-
-    @Override
-    public int order() {
-        return -10;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .withPriority(10)
+                .build();
     }
 }

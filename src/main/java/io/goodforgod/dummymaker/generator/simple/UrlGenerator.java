@@ -58,7 +58,9 @@ public final class UrlGenerator implements ParameterizedGenerator<URL> {
     }
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 }

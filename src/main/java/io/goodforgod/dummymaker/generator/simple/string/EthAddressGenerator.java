@@ -18,8 +18,10 @@ public final class EthAddressGenerator implements Generator<CharSequence> {
     private static final Pattern PATTERN = Pattern.compile("eth(ereum)?|etc", CASE_INSENSITIVE);
 
     @Override
-    public @NotNull Pattern pattern() {
-        return PATTERN;
+    public @NotNull Hints hints() {
+        return Hints.builder()
+                .withPattern(PATTERN)
+                .build();
     }
 
     @Override
