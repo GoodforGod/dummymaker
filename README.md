@@ -1,13 +1,13 @@
 # DummyMaker
 
-[![Java minimum version library is compatible](https://img.shields.io/badge/Java-1.8%2B-blue?logo=openjdk)](https://openjdk.org/projects/jdk8/)
+[![Minimum required Java version](https://img.shields.io/badge/Java-1.8%2B-blue?logo=openjdk)](https://openjdk.org/projects/jdk8/)
 [![GitHub Action](https://github.com/goodforgod/dummymaker/workflows/Java%20CI/badge.svg)](https://github.com/GoodforGod/dummymaker/actions?query=workflow%3A%22Java+CI%22)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=alert_status)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=coverage)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=GoodforGod_dummymaker&metric=ncloc)](https://sonarcloud.io/dashboard?id=GoodforGod_dummymaker)
 
-DummyMaker is a library that generates random Java Classes / Records / Sealed Interfaces for you.
+DummyMaker is a library that generates random Java Classes / Records / Sealed Interfaces / Sealed Classes for you.
 
 Library can even do simple export in [*CSV/JSON/XML/SQL*](#export) formats.
 
@@ -38,6 +38,7 @@ implementation "com.github.goodforgod:dummymaker:4.0.0"
 - [GenAnnotation Examples](#genannotation-examples)
   - [Standard](#standard)
   - [Special](#special)
+- [Generators](#generators)
 - [Export](#export)
   - [Annotations](#annotations)
   - [JSON](#json)
@@ -51,6 +52,47 @@ implementation "com.github.goodforgod:dummymaker:4.0.0"
   - [Custom Annotation](#custom-annotation)
   - [Custom Annotation Factory](#custom-annotation-factory)
 - [Previous Versions](#previous-versions)
+
+## When to use?
+
+There are plenty of use cases where *DummyMaker* is useful:
+- Generating a random data to populate database
+- Generating a random data to for tests
+- Generating a high number of data to load-test a web service
+- Generating a high number of data to text file (CSV, XML, JSON, SQL, etc)
+- etc..
+
+Simple example on how you would create class with random data using constructor *manually*:
+```java
+Street street = new Street(12, 1, "Revolution Sq");
+Address address = new Address(street, "123456", "Saint-Petersburg");
+Person person = new Person("Foo", "Bar", "foo.bar@ya.ru", address);
+```
+
+And if classes do not provide constructors with parameters:
+```java
+Street street = new Street();
+street.setNumber(12);
+street.setType(1);
+street.setName("Revolution Sq");
+
+Address address = new Address();
+address.setStreet(street);
+address.setZipCode("123456");
+address.setCity("Saint-Petersburg");
+
+Person person = new Person();
+person.setFirstName("Foo");
+person.setLastName("Bar");
+person.setEmail("foo.bar@ya.ru");
+person.setAddress(address);
+```
+
+Using *DummyMaker* library, it is easy to generate *Person* class with all inner classes with random data for all fields:
+```java
+GenFactory factory = GenFactory.build();
+Person person = factory.build(Person.class);
+```
 
 ## Factory Examples
 
@@ -141,6 +183,18 @@ class Account {
 }
 ```
 
+Example on how to generate specific random value for any field:
+```java
+List<String> values = Arrays.asList("1", "5", "9");
+
+GenFactory factory = GenFactory.builder()
+        .addRule(GenRule.ofClass(Account.class)
+                .generateForNames("type", () -> CollectionUtils.random(values)))
+        .build();
+
+Account account = factory.build(Account.class);
+```
+
 #### Class
 
 Class specific Rule is applied **only** for specific Class.
@@ -179,7 +233,7 @@ Check [*io.dummymaker.annotation*](https://github.com/GoodforGod/dummymaker/tree
 
 ### Standard
 
-Using annotations like *GenEmail*, *GenId*, *GenName*, etc., it allows mark out which *Generator* to use for which field.
+Using annotations like `@GenEmail`, `@GenId`, `@GenName`, etc., it allows mark out which *Generator* to use for which field.
 
 ```java
 class Account {
@@ -203,20 +257,20 @@ Account account = factory.build(Account.class);
 ### Special
 
 Library provides annotations that allow to provide special behavior when generating random values of typically used for complex values generation:
-- GenSequence - generates sequence number value (when each individual field value should be incremented by 1).
-- GenArray - generates random array value.
-- GenArray2D - generates random double array value.
-- GenEnum - generates random Enum value (should be annotated for Enum fields)
-- GenList - generates random List value.
-- GenSet - generates random Set value.
-- GenMap - generates random Map value.
-- GenTime - generates random Time value java.time.* package and old Java Data API.
-- GenUnixTime - generates random UnixTime in millis.
+- `@GenSequence` - generates sequence number value (when each individual field value should be incremented by 1).
+- `@GenArray` - generates random array value.
+- `@GenArray2D` - generates random double array value.
+- `@GenEnum` - generates random Enum value (should be annotated for Enum fields)
+- `@GenList` - generates random List value.
+- `@GenSet` - generates random Set value.
+- `@GenMap` - generates random Map value.
+- `@GenTime` - generates random Time value java.time.* package and old Java Data API.
+- `@GenUnixTime` - generates random UnixTime in millis.
 
 Configuration annotations:
-- GenIgnore - indicates that field will be excluded from random value generation.
-- GenAuto - indicates that class should be Auto generated (generators swill be automatically selected if not marked out)
-- GenDepth - configures maximum Depth when generating embedded class values.
+- `@GenIgnore` - indicates that field will be excluded from random value generation.
+- `@GenAuto` - indicates that class should be Auto generated (generators swill be automatically selected if not marked out)
+- `@GenDepth` - configures maximum Depth when generating embedded class values.
 
 ```java
 @GenAuto
@@ -245,6 +299,153 @@ GenFactory factory = GenFactory.build();
 Account account = factory.build(Account.class);
 ```
 
+## Generators
+
+Library provides lots of generators:
+
+<details>
+<summary>String Generators</summary>
+
+```java
+AddressFullGenerator.java
+AddressGenerator.java
+BtcAddressGenerator.java
+BtcTxHashGenerator.java
+CadastralGenerator.java
+CategoryGenerator.java
+CityGenerator.java
+CompanyGenerator.java
+CountryGenerator.java
+CurrencyGenerator.java
+DescriptionGenerator.java
+DistrictGenerator.java
+DocumentGenerator.java
+EmailGenerator.java
+EthAddressGenerator.java
+EthTxHashGenerator.java
+ExtensionGenerator.java
+FileGenerator.java
+FormatGenerator.java
+FrequencyGenerator.java
+FullnameGenerator.java
+GenderGenerator.java
+HexDataGenerator.java
+HexNumberGenerator.java
+HouseGenerator.java
+IdBigGenerator.java
+IdGenerator.java
+IPv4Generator.java
+IPv6Generator.java
+JobGenerator.java
+JsonGenerator.java
+LevelGenerator.java
+LoginGenerator.java
+MccGenerator.java
+MerchantGenerator.java
+MiddleNameGenerator.java
+NameGenerator.java
+NounGenerator.java
+PasswordGenerator.java
+PhoneGenerator.java
+PhotoGenerator.java
+ProductGenerator.java
+RoleGenerator.java
+StatusGenerator.java
+StreetGenerator.java
+StringGenerator.java
+StringValuesGenerator.java
+SurnameGenerator.java
+TagGenerator.java
+TypeGenerator.java
+VersionGenerator.java
+```
+
+</details>
+
+<details>
+<summary>Number Generators</summary>
+
+```java
+BigDecimalGenerator.java
+BigIntegerGenerator.java
+ByteGenerator.java
+CharacterGenerator.java
+CharGenerator.java
+DoubleGenerator.java
+DoubleSmallGenerator.java
+FloatGenerator.java
+FloatSmallGenerator.java
+IntegerGenerator.java
+IntegerSmallGenerator.java
+LongGenerator.java
+MccGenerator.java
+PostalGenerator.java
+PriceGenerator.java
+SequenceGenerator.java
+ShortGenerator.java
+UnixTimeGenerator.java
+```
+
+</details>
+
+<details>
+<summary>Time Generators</summary>
+
+```java
+CalendarGenerator.java
+DateGenerator.java
+DateSqlGenerator.java
+DayOfWeekGenerator.java
+DurationGenerator.java
+InstantGenerator.java
+LocalDateGenerator.java
+LocalDateTimeGenerator.java
+LocalTimeGenerator.java
+MonthDayGenerator.java
+MonthGenerator.java
+OffsetDateTimeGenerator.java
+OffsetTimeGenerator.java
+PeriodGenerator.java
+TimeSqlGenerator.java
+TimestampGenerator.java
+YearGenerator.java
+YearMonthGenerator.java
+ZonedDateTimeGenerator.java
+ZonedOffsetGenerator.java
+```
+
+</details>
+
+<details>
+<summary>Other Generators</summary>
+
+```java
+BooleanGenerator.java
+EmbeddedGenerator.java
+NullGenerator.java
+ObjectGenerator.java
+UriGenerator.java
+UrlGenerator.java
+UuidGenerator.java
+```
+
+</details>
+
+<details>
+<summary>Parameterized Generators</summary>
+
+```java
+Array2DParameterizedGenerator.java
+ArrayParameterizedGenerator.java
+EnumParameterizedGenerator.java
+ListParameterizedGenerator.java
+MapParameterizedGenerator.java
+SetParameterizedGenerator.java
+TimeParameterizedGenerator.java
+```
+
+</details>
+
 ## Export
 
 Library provides simple *Exporter* classes to export objects in *CSV*, *JSON*, *XML* and even *SQL* formats.
@@ -266,8 +467,8 @@ class Account {
 ### Annotations
 
 Library provides special export annotations:
-- GenExportIgnore - allow to *ignore* object's field during export.
-- GenExportRename - allow to rename Dummy export Field Name.
+- `@GenExportIgnore` - allow to *ignore* object's field during export.
+- `@GenExportRename` - allow to rename Dummy export Field Name.
 
 ### JSON
 
@@ -429,9 +630,9 @@ public final class MyParameterizedGenerator implements ParameterizedGenerator<St
 
 ### Custom Annotation
 
-You can apply custom *Generator* not only using [GenRules](#genrules) but also using *@GenCustom* annotation.
+You can apply custom *Generator* not only using [GenRules](#genrules) but also using `@GenCustom` annotation.
 
-*@GenCustom* annotation require *Generator* 
+`@GenCustom` annotation require *Generator* 
 
 ```java
 class Account {
@@ -447,7 +648,7 @@ class Account {
 
 *AnnotationGeneratorFactory* must have zero argument constructor.
 
-*@GenCustomFactory* is used to indicate which factory for which annotation to use.
+`@GenCustomFactory` is used to indicate which factory for which annotation to use.
 
 Given annotation:
 ```java
