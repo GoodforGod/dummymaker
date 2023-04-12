@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 07.03.2018
  */

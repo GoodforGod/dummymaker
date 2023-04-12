@@ -4,7 +4,10 @@ import io.goodforgod.dummymaker.GenType;
 import io.goodforgod.dummymaker.annotation.export.GenExportIgnore;
 import io.goodforgod.dummymaker.annotation.export.GenExportName;
 import io.goodforgod.dummymaker.cases.NamingCase;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -83,19 +86,9 @@ final class ExportScanner {
                 .filter(fieldPredicate)
                 .filter(f -> Arrays.stream(f.getDeclaredAnnotations())
                         .noneMatch(a -> GenExportIgnore.class.equals(a.annotationType())))
-                .flatMap(f -> {
-                    if (f.getGenericType() instanceof TypeVariable && target instanceof ParameterizedType) {
-                        final TypeVariable<? extends Class<?>>[] typeParameters = targetClass.getTypeParameters();
-                        for (int i = 0; i < typeParameters.length; i++) {
-                            if (typeParameters[i].getTypeName().equals(f.getGenericType().getTypeName())) {
-                                return Stream.of(new ScanField(f,
-                                        GenType.ofType(((ParameterizedType) target).getActualTypeArguments()[i])));
-                            }
-                        }
-                    }
-
-                    return Stream.of(new ScanField(f, GenType.ofType(f.getGenericType())));
-                })
+                .flatMap(f -> GenType.ofType(f.getGenericType())
+                        .map(v -> Stream.of(new ScanField(f, v)))
+                        .orElse(Stream.empty()))
                 .collect(Collectors.toList());
 
         superFields.addAll(targetFields);

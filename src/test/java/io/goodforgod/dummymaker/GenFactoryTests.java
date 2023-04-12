@@ -2,6 +2,8 @@ package io.goodforgod.dummymaker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.goodforgod.dummymaker.error.GenException;
+import io.goodforgod.dummymaker.testdata.DummyAbstract;
 import io.goodforgod.dummymaker.testdata.DummyFullArgConstructor;
 import io.goodforgod.dummymaker.testdata.DummyZeroArgConstructor;
 import java.util.List;
@@ -40,6 +42,12 @@ class GenFactoryTests {
         assertNotNull(dummy.getMap());
         assertNotNull(dummy.getObjectsFix());
         assertNotNull(dummy.getStringsFix());
+    }
+
+    @Test
+    void buildAbstractSingle() {
+        final GenFactory factory = GenFactory.build();
+        assertThrows(GenException.class, () -> factory.build(DummyAbstract.class));
     }
 
     @Test

@@ -4,8 +4,6 @@ import io.goodforgod.dummymaker.annotation.export.GenExportIgnore;
 import io.goodforgod.dummymaker.annotation.export.GenExportName;
 
 /**
- * "default comment"
- *
  * @author GoodforGod
  * @since 03.03.2018
  */

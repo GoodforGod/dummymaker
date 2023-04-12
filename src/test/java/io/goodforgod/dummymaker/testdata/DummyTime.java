@@ -8,12 +8,6 @@ import java.time.*;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-/**
- * "default comment"
- *
- * @author GoodforGod
- * @since 07.03.2018
- */
 public class DummyTime {
 
     public static final String ISO_TIME_PATTERN = "[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{0,3})?";

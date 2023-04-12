@@ -117,13 +117,10 @@ final class GenFieldScanner {
 
         if (rule.flatMap(GenRuleContext::isAuto).orElse(isAutoByDefault)) {
             final Generator<?> generator = generatorSupplier.get(fieldType, fieldName);
-            if (generator instanceof EmbeddedGenerator && fieldType.isInterface()) {
-                return DefaultGenType.ofInterface(fieldType)
-                        .map(type -> {
-                            final Generator<?> permittedGenerator = rule.flatMap(r -> r.find(type.raw(), fieldName))
-                                    .orElseGet(() -> generatorSupplier.get(type.raw(), fieldName));
-                            return GenField.ofAuto(field.value(), type, permittedGenerator, isComplex, depth);
-                        });
+            if (generator instanceof EmbeddedGenerator) {
+                final Generator<?> permittedGenerator = rule.flatMap(r -> r.find(field.type().raw(), fieldName))
+                        .orElseGet(() -> generatorSupplier.get(field.type().raw(), fieldName));
+                return Optional.of(GenField.ofAuto(field.value(), field.type(), permittedGenerator, isComplex, depth));
             }
 
             return Optional.of(GenField.ofAuto(field.value(), field.type(), generator, isComplex, depth));
@@ -179,19 +176,9 @@ final class GenFieldScanner {
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
                 .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .filter(f -> !Modifier.isFinal(f.getModifiers()))
-                .flatMap(f -> {
-                    if (f.getGenericType() instanceof TypeVariable && target instanceof ParameterizedType) {
-                        final TypeVariable<? extends Class<?>>[] typeParameters = targetClass.getTypeParameters();
-                        for (int i = 0; i < typeParameters.length; i++) {
-                            if (typeParameters[i].getTypeName().equals(f.getGenericType().getTypeName())) {
-                                return Stream.of(new ScanField(f,
-                                        GenType.ofType(((ParameterizedType) target).getActualTypeArguments()[i])));
-                            }
-                        }
-                    }
-
-                    return Stream.of(new ScanField(f, GenType.ofType(f.getGenericType())));
-                })
+                .flatMap(f -> GenType.ofType(f.getGenericType())
+                        .map(v -> Stream.of(new ScanField(f, v)))
+                        .orElse(Stream.empty()))
                 .collect(Collectors.toList());
 
         superFields.addAll(targetFields);

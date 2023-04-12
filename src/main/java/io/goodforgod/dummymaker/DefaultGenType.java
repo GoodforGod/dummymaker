@@ -21,45 +21,62 @@ final class DefaultGenType implements GenType {
         this.generics = generics;
     }
 
-    static DefaultGenType ofClass(@NotNull Class<?> type) {
-        return new DefaultGenType(type, type, Collections.emptyList());
+    static Optional<GenType> ofInstantiatable(@NotNull Class<?> type) {
+        final Optional<GenType> sealedClass = ofSealed(type);
+        if (sealedClass.isPresent()) {
+            return sealedClass;
+        }
+
+        if (type.isInterface() || Modifier.isAbstract(type.getModifiers())) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new DefaultGenType(type, type, Collections.emptyList()));
     }
 
-    static DefaultGenType ofType(@NotNull Type type) {
+    static GenType ofClass(@NotNull Class<?> type) {
+        final Optional<GenType> sealedClass = ofSealed(type);
+        return sealedClass.orElseGet(() -> new DefaultGenType(type, type, Collections.emptyList()));
+    }
+
+    static Optional<GenType> ofType(@NotNull Type type) {
         if (type instanceof Class) {
-            return new DefaultGenType(type, (Class<?>) type, Collections.emptyList());
+            return Optional.of(ofClass((Class<?>) type));
         } else if (type instanceof TypeVariable) {
             if (((TypeVariable<?>) type).getGenericDeclaration() instanceof Class) {
-                return new DefaultGenType(type, ((Class<?>) ((TypeVariable<?>) type).getGenericDeclaration()),
-                        Collections.emptyList());
+                return Optional.of(new DefaultGenType(type,
+                        ((Class<?>) ((TypeVariable<?>) type).getGenericDeclaration()),
+                        Collections.emptyList()));
+            } else if (((TypeVariable<?>) type).getGenericDeclaration() instanceof WildcardType) {
+                return Optional.of(new DefaultGenType(type, Object.class, Collections.emptyList()));
             } else {
-                return new DefaultGenType(type, Object.class, Collections.emptyList());
+                return Optional.empty();
             }
         } else if (type instanceof ParameterizedType) {
             final List<GenType> generics = Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
                     .map(GenType::ofType)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .collect(Collectors.toList());
 
-            return new DefaultGenType(type, ((Class<?>) ((ParameterizedType) type).getRawType()), generics);
+            return Optional.of(new DefaultGenType(type,
+                    ((Class<?>) ((ParameterizedType) type).getRawType()),
+                    generics));
         } else if (type instanceof WildcardType) {
-            return new DefaultGenType(type, Object.class, Collections.emptyList());
+            return Optional.of(new DefaultGenType(type, Object.class, Collections.emptyList()));
         } else {
-            return new DefaultGenType(type, (Class<?>) type, Collections.emptyList());
+            return Optional.empty();
         }
     }
 
-    static Optional<GenType> ofInterface(@NotNull Class<?> interfaceType) {
-        if (!interfaceType.isInterface()) {
-            return Optional.empty();
-        }
-
+    private static Optional<GenType> ofSealed(@NotNull Class<?> type) {
         try {
             final Method permittedMethod = Class.class.getMethod("getPermittedSubclasses");
-            final Class<?>[] permitted = (Class<?>[]) permittedMethod.invoke(interfaceType);
+            final Class<?>[] permitted = (Class<?>[]) permittedMethod.invoke(type);
             return Arrays.stream(permitted)
-                    .filter(c -> !c.isInterface())
-                    .map(c -> ((GenType) DefaultGenType.ofClass(c)))
-                    .findFirst();
+                    .map(DefaultGenType::ofType)
+                    .findFirst()
+                    .flatMap(v -> v);
         } catch (Exception e) {
             return Optional.empty();
         }

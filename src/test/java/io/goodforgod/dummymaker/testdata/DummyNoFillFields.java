@@ -4,8 +4,6 @@ import io.goodforgod.dummymaker.annotation.export.GenExportIgnore;
 import io.goodforgod.dummymaker.annotation.export.GenExportName;
 
 /**
- * Dummy Object used as data to proceed in tests This object HAS NO FIELDS TO POPULATE
- *
  * @author GoodforGod
  * @since 18.08.2017
  */

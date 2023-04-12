@@ -2,6 +2,7 @@ package io.goodforgod.dummymaker;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +32,7 @@ public interface GenType {
     List<GenType> generics();
 
     @NotNull
-    static GenType ofType(@NotNull Type type) {
+    static Optional<GenType> ofType(@NotNull Type type) {
         return DefaultGenType.ofType(type);
     }
 }

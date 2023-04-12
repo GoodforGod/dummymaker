@@ -2,10 +2,6 @@ package io.goodforgod.dummymaker.testdata;
 
 import io.goodforgod.dummymaker.annotation.simple.number.GenSequence;
 
-/**
- * @author GoodforGod
- * @since 15.09.2019
- */
 public class DummySimple {
 
     @GenSequence

@@ -1,7 +1,6 @@
 package io.goodforgod.dummymaker;
 
 import io.goodforgod.dummymaker.error.GenConstructionException;
-import io.goodforgod.dummymaker.error.GenException;
 import io.goodforgod.dummymaker.generator.Generator;
 import io.goodforgod.dummymaker.util.CastUtils;
 import java.lang.reflect.Constructor;
@@ -60,7 +59,9 @@ final class GenConstructorScanner {
                                         .orElse(parameter.getName()));
                     }
 
-                    final GenType parameterType = GenType.ofType(parameter.getParameterizedType());
+                    final GenType parameterType = GenType.ofType(parameter.getParameterizedType())
+                            .orElseGet(() -> DefaultGenType.ofClass(parameter.getType()));
+
                     final Optional<GenRuleContext> typeRule = rules.findClass(type);
                     final Optional<Generator<?>> ruleGenerator = typeRule.flatMap(r -> r.find(parameterType));
                     if (ruleGenerator.isPresent()) {
@@ -109,13 +110,11 @@ final class GenConstructorScanner {
             if (fullArgConstructor.isPresent()) {
                 return fullArgConstructor.get();
             }
-
-            throw new GenConstructionException("Can't instantiate '" + target + "', suitable constructor not found");
-        } catch (GenException e) {
-            throw e;
         } catch (Exception e) {
             throw new GenConstructionException("Exception occurred during '" + target + "' class constructor search due to: ", e);
         }
+
+        throw new GenConstructionException("Can't instantiate '" + target + "', suitable constructor not found");
     }
 
     private static boolean isRecord(Class<?> target) {

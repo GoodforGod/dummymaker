@@ -13,6 +13,7 @@ import io.goodforgod.dummymaker.generator.simple.number.SequenceGenerator;
 import io.goodforgod.dummymaker.util.CastUtils;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -95,13 +96,11 @@ final class DefaultGenFactory implements GenFactory {
             return Stream.generate(() -> (T) generator.get())
                     .limit(size)
                     .filter(Objects::nonNull);
-        } else if (target.isInterface()) {
-            final GenType permittedType = DefaultGenType.ofInterface(target).orElse(null);
-            if (permittedType == null) {
-                return Stream.empty();
-            } else {
-                return (Stream<T>) stream(permittedType.raw(), size);
-            }
+        }
+
+        final Optional<GenType> genType = DefaultGenType.ofInstantiatable(target);
+        if (!genType.isPresent()) {
+            throw new GenException("Type can't be instantiated: " + target);
         }
 
         final GenContext context = getContext(target, rulesContext);
@@ -145,9 +144,10 @@ final class DefaultGenFactory implements GenFactory {
 
     private GenContext getContext(Class<?> target, GenRulesContext rulesContext) {
         final GenFieldScanner fieldScanner = new GenFieldScanner(generatorSupplier, rulesContext, isAutoByDefault);
-        final GenConstructorScanner constructorScanner = new GenConstructorScanner(generatorSupplier, rulesContext,
-                isAutoByDefault);
-        final GenGraphBuilder graphBuilder = new GenGraphBuilder(constructorScanner, fieldScanner, rulesContext, depthByDefault);
+        final GenConstructorScanner constructorScanner = new GenConstructorScanner(generatorSupplier,
+                rulesContext, isAutoByDefault);
+        final GenGraphBuilder graphBuilder = new GenGraphBuilder(constructorScanner, fieldScanner, rulesContext,
+                depthByDefault, ignoreErrors);
 
         final GenNode graph = graphBuilder.build(target);
         return GenContext.ofNew(graph.value().depth(), graph, rulesContext, generatorSupplier, graphBuilder);
@@ -251,17 +251,15 @@ final class DefaultGenFactory implements GenFactory {
                 Object generated;
 
                 if (generator instanceof EmbeddedGenerator) {
-                    if (context.depthCurrent() > context.depthMax() || isJavaInternal(DefaultGenType.ofClass(type))) {
+                    final Optional<GenType> realType = DefaultGenType.ofInstantiatable(type);
+                    if (!realType.isPresent()) {
+                        return null;
+                    }
+
+                    if (context.depthCurrent() > context.depthMax() || isJavaInternal(realType.get())) {
                         generated = null;
-                    } else if (type.isInterface()) {
-                        final GenType permittedType = DefaultGenType.ofInterface(type).orElse(null);
-                        if (permittedType == null) {
-                            generated = null;
-                        } else {
-                            return (T) build(permittedType.raw());
-                        }
                     } else {
-                        final GenType genType = DefaultGenType.ofClass(type);
+                        final GenType genType = realType.get();
                         final GenContext checkUnknownContext = GenContext.ofChild(context, genType.raw());
                         if (checkUnknownContext.graph() == null) {
                             final GenNode graph = context.graphBuilder().build(genType.raw());
@@ -305,18 +303,18 @@ final class DefaultGenFactory implements GenFactory {
     }
 
     private boolean canGenerateEmbedded(GenType type, GenContext context) {
-        final Class<?> typeRaw = type.raw();
+        final Optional<GenType> realType = DefaultGenType.ofInstantiatable(type.raw());
         return context.depthCurrent() <= context.depthMax()
-                && !typeRaw.isInterface()
-                && !isJavaInternal(type);
+                && realType.isPresent();
     }
 
     private boolean isJavaInternal(GenType type) {
         final Class<?> typeRaw = type.raw();
-        return typeRaw.getPackage().getName().equals("java")
-                || typeRaw.getPackage().getName().equals("javax")
-                || typeRaw.getPackage().getName().equals("jdk")
-                || typeRaw.getPackage().getName().equals("sun");
+        final String packageName = typeRaw.getPackage().getName();
+        return packageName.equals("java")
+                || packageName.equals("javax")
+                || packageName.equals("jdk")
+                || packageName.equals("sun");
     }
 
     private Object generateEmbeddedObject(GenType type, GenContext context) {
@@ -349,7 +347,15 @@ final class DefaultGenFactory implements GenFactory {
                             parameter.generator(), context))
                     .toArray(Object[]::new);
 
-            return constructor.instantiate(constructorParameters);
+            try {
+                return constructor.instantiate(constructorParameters);
+            } catch (Exception e) {
+                if (ignoreErrors) {
+                    return (T) (Supplier<T>) () -> null;
+                } else {
+                    throw e;
+                }
+            }
         };
     }
 }

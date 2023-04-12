@@ -8,8 +8,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Custom annotation dummy tester
- *
  * @author GoodforGod
  * @since 12.10.2019
  */

@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author GoodforGod
- * @since 27.02.2018
- */
 @GenAuto
 public class DummyZeroArgConstructor {
 

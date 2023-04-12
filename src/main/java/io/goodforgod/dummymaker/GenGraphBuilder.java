@@ -20,15 +20,18 @@ final class GenGraphBuilder {
     private final GenConstructorScanner constructorScanner;
     private final GenFieldScanner fieldScanner;
     private final int depthByDefault;
+    private final boolean ignoreErrors;
 
     GenGraphBuilder(GenConstructorScanner constructorScanner,
                     GenFieldScanner fieldScanner,
                     GenRulesContext rules,
-                    int depthByDefault) {
+                    int depthByDefault,
+                    boolean ignoreErrors) {
         this.constructorScanner = constructorScanner;
         this.fieldScanner = fieldScanner;
         this.rules = rules;
         this.depthByDefault = depthByDefault;
+        this.ignoreErrors = ignoreErrors;
     }
 
     /**
@@ -71,7 +74,17 @@ final class GenGraphBuilder {
                         return Stream.concat(fieldFlattenTypes.stream(), Stream.of(field.type()))
                                 .distinct()
                                 .filter(type -> fieldScanner.isEmbedded(flatType, type))
-                                .map(type -> buildPayload(type, parent.value(), field.depth().orElse(null)));
+                                .map(type -> {
+                                    try {
+                                        return buildPayload(type, parent.value(), field.depth().orElse(null));
+                                    } catch (Exception e) {
+                                        if (ignoreErrors) {
+                                            return null;
+                                        } else {
+                                            throw e;
+                                        }
+                                    }
+                                });
                     })
                     .map(payload -> GenNode.of(payload, parent))
                     .collect(Collectors.toList());
@@ -101,15 +114,21 @@ final class GenGraphBuilder {
             final Set<GenNode> nodesToScan = new HashSet<>();
             for (GenType flatParameterType : parameter.type().flatten()) {
                 if (fieldScanner.isEmbedded(parent.value().type(), flatParameterType)) {
-                    final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth());
-                    final GenNode node = GenNode.of(payload, parent);
+                    try {
+                        final GenClass payload = buildPayload(flatParameterType, parent.value(), parent.value().depth());
+                        final GenNode node = GenNode.of(payload, parent);
 
-                    final Optional<GenNode> nodeAlreadyInGraph = find(parent, buildFilter(node.value().type()));
-                    if (nodeAlreadyInGraph.isPresent()) {
-                        parent.add(nodeAlreadyInGraph.get());
-                    } else {
-                        parent.add(node);
-                        nodesToScan.add(node);
+                        final Optional<GenNode> nodeAlreadyInGraph = find(parent, buildFilter(node.value().type()));
+                        if (nodeAlreadyInGraph.isPresent()) {
+                            parent.add(nodeAlreadyInGraph.get());
+                        } else {
+                            parent.add(node);
+                            nodesToScan.add(node);
+                        }
+                    } catch (Exception e) {
+                        if (!ignoreErrors) {
+                            throw e;
+                        }
                     }
                 }
             }
@@ -126,11 +145,13 @@ final class GenGraphBuilder {
     private GenClass buildPayload(GenType target,
                                   @Nullable GenClass parentPayload,
                                   @Nullable Integer depth) {
-        Class<?> raw = target.raw();
-        if (raw.getTypeName().endsWith("[][]")) {
-            raw = raw.getComponentType().getComponentType();
-        } else if (raw.getTypeName().endsWith("[]")) {
-            raw = raw.getComponentType();
+        final Class<?> raw;
+        if (target.raw().getTypeName().endsWith("[][]")) {
+            raw = target.raw().getComponentType().getComponentType();
+        } else if (target.raw().getTypeName().endsWith("[]")) {
+            raw = target.raw().getComponentType();
+        } else {
+            raw = target.raw();
         }
 
         final int payloadDepth = Optional.ofNullable(depth)

@@ -9,10 +9,6 @@ import io.goodforgod.dummymaker.annotation.simple.number.GenLong;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author GoodforGod
- * @since 26.04.2018
- */
 @GenDepth(2)
 @GenAuto
 public class DummyAuto {

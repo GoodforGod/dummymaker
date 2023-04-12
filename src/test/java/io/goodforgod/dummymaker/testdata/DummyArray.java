@@ -4,10 +4,6 @@ import io.goodforgod.dummymaker.annotation.export.GenExportIgnore;
 import io.goodforgod.dummymaker.annotation.parameterized.GenArray;
 import io.goodforgod.dummymaker.annotation.parameterized.GenArray2D;
 
-/**
- * @author GoodforGod
- * @since 15.09.2019
- */
 public class DummyArray {
 
     @GenExportIgnore

@@ -4,10 +4,6 @@ import io.goodforgod.dummymaker.annotation.parameterized.GenUnixTime;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/**
- * @author GoodforGod
- * @since 07.03.2018
- */
 public class DummyUnixTime {
 
     public enum Fields {
