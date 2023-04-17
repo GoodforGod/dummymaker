@@ -8,10 +8,6 @@ package io.goodforgod.dummymaker.error;
  */
 public final class GenExportException extends GenException {
 
-    public GenExportException(String message) {
-        super(message);
-    }
-
     public GenExportException(String message, Throwable cause) {
         super(message, cause);
     }

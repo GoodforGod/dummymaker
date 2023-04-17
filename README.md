@@ -306,7 +306,7 @@ Library provides lots of generators:
 <details>
 <summary>String Generators</summary>
 
-```java
+```
 AddressFullGenerator.java
 AddressGenerator.java
 BtcAddressGenerator.java
@@ -365,7 +365,7 @@ VersionGenerator.java
 <details>
 <summary>Number Generators</summary>
 
-```java
+```
 BigDecimalGenerator.java
 BigIntegerGenerator.java
 ByteGenerator.java
@@ -391,7 +391,7 @@ UnixTimeGenerator.java
 <details>
 <summary>Time Generators</summary>
 
-```java
+```
 CalendarGenerator.java
 DateGenerator.java
 DateSqlGenerator.java
@@ -419,7 +419,7 @@ ZonedOffsetGenerator.java
 <details>
 <summary>Other Generators</summary>
 
-```java
+```
 BooleanGenerator.java
 EmbeddedGenerator.java
 NullGenerator.java
@@ -434,7 +434,7 @@ UuidGenerator.java
 <details>
 <summary>Parameterized Generators</summary>
 
-```java
+```
 Array2DParameterizedGenerator.java
 ArrayParameterizedGenerator.java
 EnumParameterizedGenerator.java
