@@ -3,6 +3,7 @@ package io.goodforgod.dummymaker.generator.simple.string;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 
 import io.goodforgod.dummymaker.generator.Generator;
+import io.goodforgod.dummymaker.generator.simple.number.CharacterGenerator;
 import io.goodforgod.dummymaker.util.RandomUtils;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -17,22 +18,20 @@ import org.jetbrains.annotations.NotNull;
 public final class PasswordGenerator implements Generator<CharSequence> {
 
     private static final Pattern PATTERN = Pattern.compile("pass(word)?", CASE_INSENSITIVE);
+    private static final CharacterGenerator CHARACTER_GENERATOR = new CharacterGenerator();
 
     @Override
     public @NotNull String get() {
         final int length = RandomUtils.random(6, 20);
-        final StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             final boolean isNumber = ThreadLocalRandom.current().nextBoolean();
             if (isNumber) {
-                builder.append(ThreadLocalRandom.current().nextInt(0, 10));
+                final int number = ThreadLocalRandom.current().nextInt(0, 10);
+                builder.append(number);
             } else {
-                final int character = ThreadLocalRandom.current().nextInt(65, 123);
-                if (character > 90 && character < 97) {
-                    builder.append(((char) character + 6));
-                } else {
-                    builder.append(((char) character));
-                }
+                final char character = CHARACTER_GENERATOR.get();
+                builder.append(character);
             }
         }
         return builder.toString();

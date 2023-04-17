@@ -7,7 +7,6 @@ import io.goodforgod.dummymaker.generator.GenParameters;
 import io.goodforgod.dummymaker.generator.Localisation;
 import io.goodforgod.dummymaker.generator.ParameterizedGenerator;
 import io.goodforgod.dummymaker.util.CollectionUtils;
-import io.goodforgod.dummymaker.util.RandomUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,17 +39,22 @@ public final class CharacterGenerator implements ParameterizedGenerator<Characte
                 return parameters.namingCase().apply(ruLetter.toString()).charAt(0);
             }
         } else {
-            return parameters.namingCase().apply(get().toString()).toString().charAt(0);
+            final Character character = get();
+            if (parameters.namingCase() == NamingCases.DEFAULT) {
+                return character;
+            } else {
+                return parameters.namingCase().apply(character.toString()).toString().charAt(0);
+            }
         }
     }
 
     @Override
     public @NotNull Character get() {
-        boolean b = ThreadLocalRandom.current().nextBoolean();
-        char c = (char) RandomUtils.random(97, 122);
-        return (b)
-                ? Character.toUpperCase(c)
-                : c;
+        final char character = (char) ThreadLocalRandom.current().nextInt(97, 122);
+        final boolean isUpper = ThreadLocalRandom.current().nextBoolean();
+        return (isUpper)
+                ? Character.toUpperCase(character)
+                : character;
     }
 
     @Override

@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SqlExporter extends AbstractExporter {
 
     private static final Pattern ID_PATTERN = Pattern.compile("id|[gu]?uid");
-    private static final Pattern ID_SUFFIX_PATTERN = Pattern.compile("id|[gu]?uid$");
+    private static final Pattern ID_SUFFIX_PATTERN = Pattern.compile("(id$)|([gu]?uid$)");
 
     /**
      * Insert values limit per single insert query (due to 1000 row insert limit in SQL)
@@ -40,7 +40,7 @@ public final class SqlExporter extends AbstractExporter {
 
     /**
      * Java & Sql Type Representation Map is used to convert Java Field Data Type to Sql Data Type You
-     * can add your specific values here by using constructor with Map'String, String'
+     * can add your specific values here by using constructor with Map[String, String]
      */
     private final Map<Class<?>, String> dataTypes;
 

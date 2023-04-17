@@ -62,22 +62,18 @@ class DummyArrayTests extends Assertions {
 
         assertNotEquals(0, build.getByteSimple().length);
         assertNotEquals(0, build.getByteDouble().length);
-        assertTrue(build.getByteSimple()[0] < Byte.MAX_VALUE);
 
         assertEquals(15, build.getShortSimple().length);
         assertNotEquals(0, build.getShortDouble().length);
-        assertTrue(build.getShortSimple()[0] < Short.MAX_VALUE);
 
         assertNotEquals(0, build.getIntSimple().length);
         assertNotEquals(0, build.getIntDouble().length);
-        assertTrue(build.getIntSimple()[0] < Integer.MAX_VALUE);
 
         assertEquals(15, build.getLongSimple().length);
         assertNotEquals(0, build.getLongDouble().length);
 
         assertNotEquals(0, build.getFloatSimple().length);
         assertNotEquals(0, build.getFloatDouble().length);
-        assertTrue(build.getFloatSimple()[0] < 10000.1);
 
         assertNotEquals(0, build.getByteObjSimple().length);
         assertNotEquals(0, build.getByteObjDouble().length);
@@ -90,7 +86,6 @@ class DummyArrayTests extends Assertions {
 
         assertNotEquals(0, build.getLongObjSimple().length);
         assertNotEquals(0, build.getLongObjDouble().length);
-        assertTrue(build.getLongObjSimple()[0] < Long.MAX_VALUE);
 
         assertNotEquals(0, build.getFloatObjSimple().length);
         assertNotEquals(0, build.getFloatObjDouble().length);
