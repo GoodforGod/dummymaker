@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public final class MccGenerator implements Generator<Integer> {
 
     private static final Bundle BUNDLE = new MccBundle();
-    private static final Pattern PATTERN = Pattern.compile("mcc", CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("mcc|MerchantCategoryCode", CASE_INSENSITIVE);
 
     @Override
     public Integer get() {

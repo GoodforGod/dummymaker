@@ -52,6 +52,7 @@ class GeneratorPatternValidTests {
                 { new BtcTxHashGenerator(), String.class, compile("[a-zA-Z0-9]{64}") },
                 { new CityGenerator(), String.class, compile("[a-zA-Z\\-]+") },
                 { new MccGenerator(), Integer.class, compile("[0-9]{4}") },
+                { new StringValuesGenerator(Collections.singletonList("OPS")), String.class, compile("OPS") },
                 { new CadastralGenerator(), String.class, compile("[0-9]{2}:[0-9]{2}:[0-9]{6,7}:[0-9]{2}") },
                 { new PasswordGenerator(), String.class, compile("[0-9a-zA-Z]{6,20}") },
                 { new CompanyGenerator(), String.class, compile(".+(\\t.+)?") },
@@ -72,7 +73,6 @@ class GeneratorPatternValidTests {
                 { new SurnameGenerator(), String.class, compile("[a-zA-Z]+") },
                 { new LoginGenerator(), String.class, compile("[0-9a-zA-Z_]+") },
                 { new NounGenerator(), String.class, compile("[0-9a-zA-Z]+") },
-                { new MccGenerator(), Integer.class, compile("[0-9]+") },
                 { new IPv4Generator(), String.class, compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+") },
                 {
                         new IPv6Generator(),
