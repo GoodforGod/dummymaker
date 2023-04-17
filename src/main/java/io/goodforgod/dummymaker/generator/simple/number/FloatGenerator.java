@@ -26,6 +26,6 @@ public final class FloatGenerator implements Generator<Float> {
 
     @Override
     public @NotNull Float get() {
-        return ThreadLocalRandom.current().nextFloat(from, to);
+        return (float) ThreadLocalRandom.current().nextDouble(from, to);
     }
 }
