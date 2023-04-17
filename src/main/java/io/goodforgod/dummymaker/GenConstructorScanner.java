@@ -59,7 +59,7 @@ final class GenConstructorScanner {
                                         .orElse(parameter.getName()));
                     }
 
-                    final GenType parameterType = GenType.ofType(parameter.getParameterizedType())
+                    final GenType parameterType = DefaultGenType.ofType(parameter.getParameterizedType())
                             .orElseGet(() -> DefaultGenType.ofClass(parameter.getType()));
 
                     final Optional<GenRuleContext> typeRule = rules.findClass(type);

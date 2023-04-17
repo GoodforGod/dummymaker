@@ -162,7 +162,7 @@ final class GenFieldScanner {
     @NotNull
     private List<ScanField> getValidFields(Type target) {
         if (target == null || Object.class.equals(target)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         final Class<?> targetClass = (target instanceof ParameterizedType)
@@ -176,12 +176,16 @@ final class GenFieldScanner {
                 .filter(f -> !Modifier.isNative(f.getModifiers()))
                 .filter(f -> !Modifier.isSynchronized(f.getModifiers()))
                 .filter(f -> !Modifier.isFinal(f.getModifiers()))
-                .flatMap(f -> GenType.ofType(f.getGenericType())
+                .flatMap(f -> DefaultGenType.ofType(f.getGenericType())
                         .map(v -> Stream.of(new ScanField(f, v)))
                         .orElse(Stream.empty()))
                 .collect(Collectors.toList());
 
-        superFields.addAll(targetFields);
-        return superFields;
+        if (superFields.isEmpty()) {
+            return targetFields;
+        } else {
+            superFields.addAll(targetFields);
+            return superFields;
+        }
     }
 }

@@ -43,18 +43,16 @@ final class DefaultGenType implements GenType {
         if (type instanceof Class) {
             return Optional.of(ofClass((Class<?>) type));
         } else if (type instanceof TypeVariable) {
-            if (((TypeVariable<?>) type).getGenericDeclaration() instanceof Class) {
-                return Optional.of(new DefaultGenType(type,
-                        ((Class<?>) ((TypeVariable<?>) type).getGenericDeclaration()),
-                        Collections.emptyList()));
-            } else if (((TypeVariable<?>) type).getGenericDeclaration() instanceof WildcardType) {
-                return Optional.of(new DefaultGenType(type, Object.class, Collections.emptyList()));
+            final GenericDeclaration genericDeclaration = ((TypeVariable<?>) type).getGenericDeclaration();
+            if (genericDeclaration instanceof Type) {
+                return ofType((Type) genericDeclaration)
+                        .map(r -> new DefaultGenType(type, r.raw(), r.generics()));
             } else {
                 return Optional.empty();
             }
         } else if (type instanceof ParameterizedType) {
             final List<GenType> generics = Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
-                    .map(GenType::ofType)
+                    .map(DefaultGenType::ofType)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toList());
@@ -95,6 +93,10 @@ final class DefaultGenType implements GenType {
 
     @Override
     public @NotNull List<GenType> flatten() {
+        if (generics.isEmpty()) {
+            return Collections.singletonList(ofClass(plainRawType()));
+        }
+
         final List<GenType> flat = new ArrayList<>();
         flat.add(ofClass(plainRawType()));
 

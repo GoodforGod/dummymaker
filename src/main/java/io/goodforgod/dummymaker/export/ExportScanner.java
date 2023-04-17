@@ -70,7 +70,7 @@ final class ExportScanner {
     @NotNull
     private List<ScanField> getExportFields(Type target) {
         if (target == null || Object.class.equals(target)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         final Class<?> targetClass = (target instanceof ParameterizedType)
@@ -91,7 +91,11 @@ final class ExportScanner {
                         .orElse(Stream.empty()))
                 .collect(Collectors.toList());
 
-        superFields.addAll(targetFields);
-        return superFields;
+        if (superFields.isEmpty()) {
+            return targetFields;
+        } else {
+            superFields.addAll(targetFields);
+            return superFields;
+        }
     }
 }
