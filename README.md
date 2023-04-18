@@ -38,6 +38,7 @@ implementation "com.github.goodforgod:dummymaker:4.0.0"
 - [GenAnnotation Examples](#genannotation-examples)
   - [Standard](#standard)
   - [Special](#special)
+- [GenAnnotations](#genannotations)
 - [Generators](#generators)
 - [Export](#export)
   - [Annotations](#annotations)
@@ -299,6 +300,147 @@ GenFactory factory = GenFactory.build();
 Account account = factory.build(Account.class);
 ```
 
+## GenAnnotations
+
+Library provides lots of *GenAnnotations*:
+
+<details>
+<summary>String Annotations</summary>
+
+```
+@GenAddress
+@GenAddressFull
+@GenBtcAddress
+@GenBtcTxHash
+@GenCadastral
+@GenCategory
+@GenCity
+@GenCompany
+@GenCountry
+@GenCurrency
+@GenDescription
+@GenDistrict
+@GenEmail
+@GenEthAddress
+@GenEthTxHash
+@GenFrequency
+@GenFullname
+@GenGender
+@GenHexData
+@GenHexNumber
+@GenHouse
+@GenId
+@GenIdBig
+@GenIPv4
+@GenIPv6
+@GenJob
+@GenJson
+@GenLevel
+@GenLogin
+@GenMcc
+@GenMerchant
+@GenMiddleName
+@GenName
+@GenNickname
+@GenNoun
+@GenPass
+@GenPassword
+@GenPhone
+@GenPhoto
+@GenProduct
+@GenRole
+@GenStatus
+@GenStreet
+@GenString
+@GenStringValues
+@GenSurname
+@GenTag
+@GenVersion
+```
+
+</details>
+
+<details>
+<summary>Number Annotations</summary>
+
+```
+@GenBigDecimal
+@GenBigInteger
+@GenByte
+@GenChar
+@GenCharacter
+@GenDouble
+@GenDoubleSmall
+@GenFloat
+@GenFloatSmall
+@GenInt
+@GenLong
+@GenMcc
+@GenPostal
+@GenPrice
+@GenSequence
+@GenShort
+```
+
+</details>
+
+<details>
+<summary>Time Annotations</summary>
+
+```
+@GenCalendar
+@GenDate
+@GenDateSql
+@GenDayOfWeek
+@GenDuration
+@GenInstant
+@GenLocalDate
+@GenLocalDateTime
+@GenLocalTime
+@GenMonth
+@GenMonthDay
+@GenOffsetDateTime
+@GenOffsetTime
+@GenPeriod
+@GenTimeSql
+@GenTimestamp
+@GenYear
+@GenYearMonth
+@GenZonedDateTime
+@GenZonedOffset
+```
+
+</details>
+
+<details>
+<summary>Other Annotations</summary>
+
+```
+@GenBoolean
+@GenNull
+@GenUri
+@GenUrl
+@GenUuid
+```
+
+</details>
+
+<details>
+<summary>Parameterized Generators</summary>
+
+```
+@GenArray
+@GenArray2D
+@GenEnum
+@GenList
+@GenMap
+@GenSet
+@GenTime
+@GenUnixTime
+```
+
+</details>
+
 ## Generators
 
 Library provides lots of generators:
@@ -432,7 +574,7 @@ UuidGenerator.java
 </details>
 
 <details>
-<summary>Parameterized Generators</summary>
+<summary>Parameterized Annotations</summary>
 
 ```
 Array2DParameterizedGenerator.java
