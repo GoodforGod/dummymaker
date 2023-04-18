@@ -4,7 +4,13 @@ plugins {
     id "java-library"
 
     id "org.sonarqube" version "3.3"
-    id "com.diffplug.spotless" version "6.1.0"
+    id "com.diffplug.spotless" version "6.12.0"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 group = groupId
@@ -13,39 +19,16 @@ version = artifactVersion
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-spotless {
-    java {
-        encoding("UTF-8")
-        importOrder()
-        removeUnusedImports()
-        eclipse("4.21.0").configFile("${projectDir}/config/codestyle.xml")
-    }
-}
-
-sonarqube {
-    properties {
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.organization", "goodforgod"
-        property "sonar.projectKey", "GoodforGod_dummymaker"
-    }
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
-    implementation "org.jetbrains:annotations:23.0.0"
-    implementation "org.slf4j:slf4j-api:1.7.36"
-    implementation "javax.inject:javax.inject:1"
+    compileOnly "org.jetbrains:annotations:23.0.0"
 
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.11"
-    testImplementation "junit:junit:4.13.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.9.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.1"
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat("full")
@@ -58,6 +41,23 @@ test {
     }
 }
 
+spotless {
+    java {
+        encoding("UTF-8")
+        importOrder()
+        removeUnusedImports()
+        eclipse("4.21.0").configFile("${rootDir}/config/codestyle.xml")
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.organization", "goodforgod"
+        property "sonar.projectKey", "GoodforGod_dummymaker"
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -66,7 +66,7 @@ publishing {
             pom {
                 name = "DummyMaker"
                 url = "https://github.com/GoodforGod/dummymaker"
-                description = "Library can fill Java Classes with random data and also export data in CSV/JSON/XML/SQL formats"
+                description = "Random Java Class/Record generator library."
 
                 license {
                     name = "MIT License"
